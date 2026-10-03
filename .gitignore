@@ -1,0 +1,11 @@
+# Secrets and local environment files; a future safe example may be tracked.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini
