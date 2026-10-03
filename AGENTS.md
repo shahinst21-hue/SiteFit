@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phase 0 is preserved in commit `5e35f57`; Phase 1 is complete. The user authorised Phase 2 public UX plus Blog/SEO architecture. Implementation and actual verification are tracked in `docs/phase-2-status.md`. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. Three benchmark addresses are still non-blocking. No application migrations, auth flows, payments, analysis, data integrations or AI exist. Phase 3 and all later phases require a new instruction.
+Phases 0–2 are complete, including the user-authorised Blog/SEO foundation. Phase 0 is preserved in `5e35f57`; Phase 2 implementation merged through PR #2 with successful post-merge CI. See `docs/phase-2-status.md` for actual results and limits. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. Three benchmark addresses are still non-blocking. No application migrations, auth flows, payments, analysis, data integrations or AI exist. Phase 3 and all later phases require a new instruction.
 
 ## Working rules
 

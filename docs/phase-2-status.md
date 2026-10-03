@@ -1,6 +1,6 @@
-# Phase 2 verification record
+# Phase 2 completion record
 
-Recorded 2026-10-03. Scope: UX Foundation and Public Website, plus the user's additional first-class Blog/SEO architecture requirement. Phase 3 and all later backend phases remain unstarted. Local implementation/validation is complete; remote CI and protected merge are pending at this record's initial commit.
+Recorded 2026-10-03. Scope: UX Foundation and Public Website, plus the user's additional first-class Blog/SEO architecture requirement. Phase 2 acceptance gates are verified, including protected implementation merge and post-merge CI. Phase 3 and all later backend phases remain unstarted. This completion record follows the same protected PR/CI workflow.
 
 ## Pages and UX
 
@@ -34,11 +34,16 @@ Unique Metadata API titles/descriptions/canonicals, Open Graph/social cards, gen
 - At 390 px, browser exercise covered menu open/close, empty address/business errors, field focus, keyboard radio/button progression, invalid margin, preserved address/type/economics across Back, blank versus zero, review, honest finish and reset.
 - Console error/warning capture was empty for tested pages/journey. Focus outlines, skip link/landmarks, native labels/fieldset, textual status/errors, table caption/headers and keyboard-scroll region support accessibility basics. No formal WCAG/screen-reader certification or measured Core Web Vitals claim is made.
 - A real check found streamed missing-article HTTP 200. Scoping loading to the checker and early `notFound()` metadata resolution fixed it; runtime now returns 404/noindex. CI runs these HTTP checks after its build.
-- Before commit, documentation links, secret patterns/actual local values, generated files and phase boundaries are reviewed. Actual environment files/Vercel metadata remain ignored; `SITE_URL` is blank in the tracked template.
+- Staged documentation links, actual local values, environment exclusions, generated files and phase boundaries passed review. All reachable committed history was checked against actual locally configured environment values with no matches. Actual environment files/Vercel metadata remain ignored; `SITE_URL` is blank in the tracked template. No dependency was added and audit reported zero findings.
+- The final built browser check verified the skip link focuses `main-content`; required fields expose required semantics. Desktop Home and mobile Pricing screenshots were saved outside Git as local review artifacts. Temporary viewport overrides were reset.
 
 ## Remote delivery
 
-Branch: `phase-2-public-ux`, from clean, updated `main` at `2cadc14`. Required workflow: branch push → PR → successful required CI → permitted merge → clean updated `main`. Remote CI, Preview and final merge evidence will be added after those checks pass. Production auto-deployment remains disabled.
+Implementation branch `phase-2-public-ux` started from clean, updated `main` at `2cadc14`. Commit `c2bea37` introduced Phase 2. [PR #2](https://github.com/shahinst21-hue/SiteFit/pull/2) merged through existing protection as `3e9c11f`; updated `main` was clean. [Push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37150721762), [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37150763201) and [post-merge main CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37150978531) completed successfully, including the actual production-server public route/SEO checks.
+
+[Verified Phase 2 Preview](https://sitefit-3anewlh7d-shahinst21-hues-projects.vercel.app), deployment `dpl_Dj62ABXeNi4b7PzipykoR2F8GP6W`, was READY with target null (Preview), from the implementation commit. Authenticated CLI requests verified Home, checker, Blog and article HTTP 200/noindex; article canonical and JSON-LD; missing article HTTP 404; published-only sitemap and Preview robots. Vercel authentication remains enabled. The Linux build succeeded. No Production release was activated; automatic deployment from `main` remains disabled.
+
+Completion documentation uses `phase-2-completion-record` and a separate protected PR so it records already-observed merge/CI results. Its own required CI and final clean-main state are checked again at delivery. No further implementation phase is included.
 
 ## Deferred work and limitations
 
@@ -48,19 +53,31 @@ Blog publishing is local content plus rebuild today. A future controlled writer 
 
 ## Definition of Done
 
-- [x] Public navigation and Home positioning work.
-- [x] How It Works and centrally configured Pricing exist.
-- [x] Check a Location, Login UI, Privacy, Terms, Methodology and Contact exist.
-- [x] Wizard includes Address, Business Type, Economics and Analysis steps.
-- [x] Required/optional validation, Back/Next preservation and reset work.
-- [x] Loading, empty, recoverable error and disabled/unavailable states are represented appropriately.
-- [x] Responsive layouts and accessibility basics are checked.
-- [x] No fake analysis or later-phase backend is implemented.
-- [x] Blog index/articles, typed source boundary, rich content/images/CTAs and future publishing design exist.
-- [x] Unique metadata, social images, safe JSON-LD, published-only sitemap and indexing policy work.
-- [x] Local lint, typecheck, tests, production build and HTTP checks pass.
-- [ ] Remote CI passes for the final Phase 2 revision.
-- [x] Relevant documentation and known limits are recorded.
-- [ ] Protected PR merged and final `main` clean.
+- [x] Public navigation works.
+- [x] Home clearly explains SiteFit.
+- [x] How It Works exists.
+- [x] Pricing exists.
+- [x] Check a Location flow exists.
+- [x] Login UI exists.
+- [x] Privacy exists.
+- [x] Terms exists.
+- [x] Methodology exists.
+- [x] Contact exists.
+- [x] Wizard has Address, Business Type, Economics and Analysis steps.
+- [x] Form validation, Back/Next preservation and reset work.
+- [x] Loading, empty and error states are represented appropriately.
+- [x] Responsive layout works at checked mobile/tablet/desktop widths.
+- [x] Accessibility basics are implemented and checked.
+- [x] Pricing comes from central configuration.
+- [x] No fake analysis is presented as real.
+- [x] No later-phase backend is implemented.
+- [x] Lint passes.
+- [x] Strict type checking passes.
+- [x] All 22 tests pass.
+- [x] Production build and actual HTTP/SEO checks pass.
+- [x] Remote push, PR and post-merge CI pass.
+- [x] Relevant documentation is updated.
+- [x] Implementation repository is clean after protected merge; completion-record delivery uses the same gated workflow.
+- [x] Additional Blog routes, rich typed model/provider, images/CTAs, metadata/social/JSON-LD, sitemap/robots and future controlled publishing/quality-gate architecture are complete.
 
-Outstanding Phase 2 human actions: none. Remaining remote checks are Codex work, not a request for credentials or aesthetic approval.
+Outstanding Phase 2 human actions: none. All known limitations above are the authorised preview boundary or later launch prerequisites, not unresolved Phase 2 failures.

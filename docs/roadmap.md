@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phases 0 and 1 are complete. Phase 2 public UX and the additionally authorised Blog/SEO foundation are implemented, with verification in [phase-2-status.md](phase-2-status.md). Phases 3–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03. Phases 0–2 are complete, including the additionally authorised Blog/SEO foundation. Actual checks are in [phase-2-status.md](phase-2-status.md). Phases 3–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -23,7 +23,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 2: UX Foundation and Public Website
 
-- Status: frontend implementation and local validation complete; protected PR/remote CI delivery is tracked in [phase-2-status.md](phase-2-status.md).
+- Status: complete. Local checks, browser UX/responsiveness, remote CI and authenticated Preview passed. Implementation merged through protected PR #2; post-merge CI passed and `main` was clean. Completion documentation also uses the protected PR workflow. See [phase-2-status.md](phase-2-status.md).
 - Objective: establish the public experience and consistent navigation.
 - Codex implements: required public pages, four-step frontend wizard, responsive/accessibility foundations and honest availability/empty/error/loading states. The user additionally authorised the Blog index/article frontend, structured content provider/model, safe rich rendering, metadata, JSON-LD, sitemap/robots and documentation for later controlled publishing.
 - Human action: no aesthetic approval needed; SiteFit name and implementation judgement are explicitly authorised. Real contact details and reviewed legal policies are later launch requirements, not blockers for the requested development placeholders.
