@@ -17,17 +17,23 @@
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
     "check:supabase": "node scripts/check-supabase.ts",
     "check:public": "node scripts/check-public-site.ts",
+    "check:auth:hosted": "node scripts/check-auth-hosted.ts",
+    "check:database": "node --test tests/database.test.ts",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:status": "supabase status"
   },
   "dependencies": {
     "@next/env": "^16.3.8",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.2",
     "next": "16.3.8",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
     "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24.19.1",

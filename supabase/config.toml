@@ -15,9 +15,9 @@ port = 54322
 shadow_port = 54320
 major_version = 17
 
-# Application migrations and seeds begin in Phase 3.
+# Migration-managed application schema. No product seed data.
 [db.migrations]
-enabled = false
+enabled = true
 schema_paths = []
 
 [db.seed]
@@ -33,12 +33,28 @@ api_url = "http://127.0.0.1"
 enabled = true
 port = 54324
 
-# Local platform services only; no application auth flows or storage buckets.
+# Development magic-link Auth. No social providers or application storage buckets.
 [auth]
 enabled = true
 site_url = "http://localhost:3000"
-additional_redirect_urls = []
-enable_signup = false
+additional_redirect_urls = [
+  "http://localhost:3000/auth/confirm",
+  "http://localhost:3000/auth/callback",
+  "http://127.0.0.1:3000/auth/confirm",
+  "http://127.0.0.1:3000/auth/callback",
+  "https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/auth/confirm",
+  "https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/auth/callback",
+]
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+otp_expiry = 3600
+
+# Hosted free-tier default email templates are immutable without custom SMTP.
+# Use the default ConfirmationURL + PKCE callback. sign-in.html is an optional
+# token-hash confirmation template for a later authorised custom SMTP setup.
 
 [storage]
 enabled = true

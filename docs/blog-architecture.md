@@ -1,6 +1,6 @@
 # Blog and editorial content architecture
 
-Implemented in Phase 2 on 2026-10-03 under the user's additional Blog/SEO requirement. No CMS, database, content-write API, agent, scheduler, upload backend or publication service is implemented.
+Implemented in Phase 2 on 2026-10-03 under the user's additional Blog/SEO requirement. Phase 3 adds migration-managed Blog persistence and RLS. No CMS, content-write API, agent, scheduler, upload backend or publication service is implemented.
 
 ## Current read boundary
 
@@ -33,6 +33,10 @@ Articles are server-rendered/statically generated with no client article rendere
 References: [Metadata API](https://nextjs.org/docs/app/api-reference/functions/generate-metadata), [sitemap](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap), [robots](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots), [Image](https://nextjs.org/docs/app/api-reference/components/image).
 
 ## Future controlled publishing interface — not implemented
+
+Phase 3 creates `public.blog_posts` with UUID identity, unique stable slug, structured JSONB body/author/images/CTA, all existing metadata fields, publication/modification/scheduling timestamps and the four statuses. JSONB top-level checks are database shape guards; they are not a complete content quality or ingestion validator. Anonymous/authenticated readers have SELECT only, filtered by RLS to published posts whose publication date has arrived. Draft/scheduled/archived/future rows are hidden. Ordinary accounts have no editorial write privileges; no admin role is invented.
+
+The two Phase 2 articles intentionally stay in the existing local repository. Moving local fixtures would introduce an unnecessary availability/cache dependency before editorial publishing exists. The database is not a second automatically published source. A future Supabase adapter implements the existing `ContentRepository`; its mapper converts snake_case rows to `BlogPost` (`content` to rich blocks, `featured_image`/`og_image` to image assets, JSONB `author`/`cta`, and publication dates to ISO strings). Generated types exist in `lib/supabase/database.types.ts`. It must validate raw JSONB completely, use the published-only public client/RLS, reject invalid blocks, and connect publication events to cache invalidation before selection in `lib/content/index.ts`. No Blog-page redesign is required. Access-controlled writers/preview and quality gates below remain required.
 
 The eventual content agent submits structured data: title, stable slug, rich blocks/body, featured image reference/dimensions/alt, SEO fields, category/tags, CTA, named author, publication date, canonical and status. It must never write frontend code, scripts or executable markup.
 

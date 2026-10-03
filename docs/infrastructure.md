@@ -14,29 +14,29 @@ That directory inventory records Phase 1. Phase 2 adds the public frontend, reus
 
 ## Developer commands
 
-| Command | Purpose |
-| --- | --- |
-| `npm ci` | Install exactly from the lockfile. |
-| `npm run dev` | Start local Next.js development server. |
-| `npm run lint` | ESLint, with warnings treated as failures. |
-| `npm run typecheck` | Generate Next route types, then strict TypeScript without emitting code. Works before a production build. |
-| `npm test` | Run isolated Node unit tests without credentials or live requests. |
-| `npm run build` | Create a production Next.js build without account access. |
-| `npm run start` | Serve the existing production build. |
-| `npm run check` | Run lint, types, tests and build in order, failing on any check. |
-| `npm run check:supabase` | Read-only configured Data API probe with timeout and redacted failures. |
-| `npm run check:public` | Check actual public HTTP routes, SEO and 404s against a running production server. Optional argument: origin. |
-| `npm run supabase:start` | Start local Supabase; requires running Docker. |
-| `npm run supabase:stop` | Stop local Supabase. |
-| `npm run supabase:status` | Inspect local stack; output may contain local keys, so do not paste or commit it. |
+| Command                   | Purpose                                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `npm ci`                  | Install exactly from the lockfile.                                                                            |
+| `npm run dev`             | Start local Next.js development server.                                                                       |
+| `npm run lint`            | ESLint, with warnings treated as failures.                                                                    |
+| `npm run typecheck`       | Generate Next route types, then strict TypeScript without emitting code. Works before a production build.     |
+| `npm test`                | Run isolated Node unit tests without credentials or live requests.                                            |
+| `npm run build`           | Create a production Next.js build without account access.                                                     |
+| `npm run start`           | Serve the existing production build.                                                                          |
+| `npm run check`           | Run lint, types, tests and build in order, failing on any check.                                              |
+| `npm run check:supabase`  | Read-only configured Data API probe with timeout and redacted failures.                                       |
+| `npm run check:public`    | Check actual public HTTP routes, SEO and 404s against a running production server. Optional argument: origin. |
+| `npm run supabase:start`  | Start local Supabase; requires running Docker.                                                                |
+| `npm run supabase:stop`   | Stop local Supabase.                                                                                          |
+| `npm run supabase:status` | Inspect local stack; output may contain local keys, so do not paste or commit it.                             |
 
 ## Environment separation
 
-| Environment | Application/runtime | Data and credentials |
-| --- | --- | --- |
-| Local | `npm run dev` on localhost; a local production build is also available. | Docker-backed Supabase or an approved development-only hosted project. Actual values belong in ignored `.env.local`. |
-| Preview | Vercel non-production deployment from a branch/PR or CLI. `NODE_ENV=production` here describes build mode, not business environment. | Separate development/preview Supabase project or branch with non-production data. Configure only Vercel Preview-scoped values. Never reuse production credentials/data. |
-| Production | Vercel production deployment, only when separately authorised. | Dedicated production Supabase project/data and Production-scoped settings. No live service is created or activated in Phase 1. |
+| Environment | Application/runtime                                                                                                                  | Data and credentials                                                                                                                                                    |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local       | `npm run dev` on localhost; a local production build is also available.                                                              | Docker-backed Supabase or an approved development-only hosted project. Actual values belong in ignored `.env.local`.                                                    |
+| Preview     | Vercel non-production deployment from a branch/PR or CLI. `NODE_ENV=production` here describes build mode, not business environment. | Separate development/preview Supabase project or branch with non-production data. Configure only Vercel Preview-scoped values. Never reuse production credentials/data. |
+| Production  | Vercel production deployment, only when separately authorised.                                                                       | Dedicated production Supabase project/data and Production-scoped settings. No live service is created or activated in Phase 1.                                          |
 
 Do not set `NODE_ENV=preview`; let Next.js manage its standard modes. Vercel supplies `VERCEL_ENV`; it is not a user-configured variable in this repository. Future business-environment validation must be added when product behaviour depends on it. Phase 1 has no browser-facing environment values and no environment-specific business logic.
 
@@ -46,13 +46,19 @@ Do not set `NODE_ENV=preview`; let Next.js manage its standard modes. Vercel sup
 
 ## Introduced environment variables
 
-| Variable | Consumer | Requirement and exposure |
-| --- | --- | --- |
-| `SUPABASE_URL` | Node-only `check:supabase` script | Required only for the probe. Actual project origin; HTTPS except HTTP loopback for Docker development. No paths, embedded credentials, query or fragment. No public prefix. |
-| `SUPABASE_PUBLISHABLE_KEY` | Node-only `check:supabase` script | Required only for the probe. Current publishable key from the selected project; legacy anon/service-role and privileged secret keys are intentionally rejected. No public prefix, logging or client bundling. |
-| `SITE_URL` | Server metadata/sitemap/robots in Phase 2 | Optional non-secret HTTPS public origin for a future Production domain. Local fallback is localhost; Vercel Preview uses its supplied deployment URL. No public indexing without explicit Production origin. |
+| Variable                   | Consumer                                  | Requirement and exposure                                                                                                                                                                                      |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SUPABASE_URL`             | Node-only `check:supabase` script         | Required only for the probe. Actual project origin; HTTPS except HTTP loopback for Docker development. No paths, embedded credentials, query or fragment. No public prefix.                                   |
+| `SUPABASE_PUBLISHABLE_KEY` | Node-only `check:supabase` script         | Required only for the probe. Current publishable key from the selected project; legacy anon/service-role and privileged secret keys are intentionally rejected. No public prefix, logging or client bundling. |
+| `SITE_URL`                 | Server metadata/sitemap/robots in Phase 2 | Optional non-secret HTTPS public origin for a future Production domain. Local fallback is localhost; Vercel Preview uses its supplied deployment URL. No public indexing without explicit Production origin.  |
 
 No privileged Supabase key is required or introduced. No Stripe, Google, AI or database-password variables are introduced before their phase. Even though a Supabase publishable key is designed for public applications, Phase 1 has no browser need for it, so it stays in the Node script environment. Later auth work must establish the appropriate client/server boundary and RLS rather than reusing this diagnostic as an auth client.
+
+The table above records Phase 1 consumers. In Phase 3 the same two env names configure the Supabase server and browser Auth clients. Login deliberately serialises only the validated URL/publishable key into its client props; no `NEXT_PUBLIC` duplicate or privileged application setting is needed. Actual values remain outside Git and source uploads. Vercel Preview-only settings are encrypted and refer to development; Production settings are not changed. Missing configuration disables sign-in while public builds/pages remain available. `SITE_URL` stays optional metadata configuration, not the runtime Auth redirect origin.
+
+Development migrations are enabled; signups/email confirmations are enabled with one-hour OTP expiry and explicit localhost/127.0.0.1 callback/confirmation allowlists. Hosted default mail uses the same-browser PKCE callback; custom template upload is blocked on this free project without custom SMTP. That provider restriction is documented, not bypassed or upgraded. Preview callback URLs must be added explicitly after an actual deployment exists. Keep Vercel sign-in protection intact. No wildcard redirect or Production callback is needed.
+
+Additional Phase 3 commands: `npm run check:database` (fresh PostgreSQL schema/security execution); `npm run check:auth:hosted` (explicit development Auth/application integration check with a running server, authenticated CLI and disposable accounts). The latter obtains a privileged verification credential transiently from the CLI into Node memory only; it is never an application environment variable, browser client, logged value or committed secret. Inbox delivery remains a separate human/browser check. Migration/type/security commands are documented in [database.md](database.md).
 
 The check loads `.env.local` using Next's development env precedence. Process environment takes priority. When verifying Preview or Production settings, run it with securely supplied process variables for that environment; the script is not a public HTTP route and is not automatically run during build/CI. Missing values fail before any request.
 

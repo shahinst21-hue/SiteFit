@@ -2,30 +2,30 @@
 
 Recorded 2026-10-03 from the user's approved Phase 0 contract. “Accepted” means the direction is approved; actual implementation and external verification are recorded in phase-1-status.md. Phase 1 foundations are complete; later product services remain planned. Each entry's date is the record date, not a claim about an earlier decision.
 
-| ID | Date | Status | Decision | Reason and consequence |
-| --- | --- | --- | --- | --- |
-| D01 | 2026-10-03 | Accepted | London first; UK-only MVP. | Constrain initial coverage; geography expansion requires approval. |
-| D02 | 2026-10-03 | Accepted | Three categories: Coffee Shop; Restaurant; Hair Salon or Beauty Salon. | The salon category is combined; no additional verticals without approval. |
-| D03 | 2026-10-03 | Accepted | Single Location Due Diligence Report first. | Assess one property and business context, not portfolios. |
-| D04 | 2026-10-03 | Accepted | £29 initial Full Report pricing assumption. | Implement configurable price later; never hardcode it in application business logic. |
-| D05 | 2026-10-03 | Accepted | Pay per report rather than subscription. | Free Snapshot precedes paid Full Report; no subscription product in MVP. |
-| D06 | 2026-10-03 | Accepted | Vercel hosting. | Phase 1 protected Preview verified; Production activation remains separately authorised. |
-| D07 | 2026-10-03 | Accepted | Next.js App Router and TypeScript. | Use strict mode; single web application, created only in Phase 1. |
-| D08 | 2026-10-03 | Accepted | Supabase Postgres, Auth and Storage. | Phase 1 development preparation; schema/auth/RLS in Phase 3; no migrations now. |
-| D09 | 2026-10-03 | Accepted | Stripe Checkout. | Verified server-side payment events control entitlement; implement in Phase 7. |
-| D10 | 2026-10-03 | Accepted | Provider abstracted AI. | OpenAI may be first; application logic must not bind to one model provider. |
-| D11 | 2026-10-03 | Accepted | Google Places for place information; Google address resolution or Geocoding. | Verify endpoint capabilities, costs and permitted use before Phase 4 integration. |
-| D12 | 2026-10-03 | Accepted | No proprietary footfall in MVP. | Mobility proxies must not be presented as premises footfall. |
-| D13 | 2026-10-03 | Accepted | AI as analyst rather than data source. | Synthesise supplied evidence; never invent observations. |
-| D14 | 2026-10-03 | Accepted | Deterministic economics. | Code calculates core metrics with explicit inputs, units, formula versions and tests. |
-| D15 | 2026-10-03 | Accepted | Evidence backed important claims. | Retain traceability from claim to evidence, permitted source and derivation. |
-| D16 | 2026-10-03 | Accepted | Unknown is a valid result. | Missing data remains Unknown or Insufficient Evidence; absence is not zero. |
-| D17 | 2026-10-03 | Accepted | No success probability. | Decision support reduces uncertainty; it does not predict business success. |
-| D18 | 2026-10-03 | Accepted | No enterprise platform before market validation. | Exclude enterprise dashboard, franchise/portfolio tools and complex enterprise functionality. |
-| D19 | 2026-10-03 | Accepted | External providers behind internal adapters. | Changing providers must not break application-level logic; introduce boundaries in relevant phases. |
-| D20 | 2026-10-03 | Accepted | Tailwind and a lightweight component library, preferably shadcn/ui. | Keep dependencies minimal; preference does not require unused components in Phase 1. |
-| D21 | 2026-10-03 | Accepted | Prefer public data and low cost APIs; avoid fragile property-site scraping. | Verify permitted commercial use, availability and cost before each integration. |
-| D22 | 2026-10-03 | Accepted | Conceptual benchmark fixtures with human-supplied addresses later. | Benchmark A/B/C are defined in product.md; absence of addresses does not block Phase 0 foundation. |
+| ID  | Date       | Status   | Decision                                                                     | Reason and consequence                                                                              |
+| --- | ---------- | -------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| D01 | 2026-10-03 | Accepted | London first; UK-only MVP.                                                   | Constrain initial coverage; geography expansion requires approval.                                  |
+| D02 | 2026-10-03 | Accepted | Three categories: Coffee Shop; Restaurant; Hair Salon or Beauty Salon.       | The salon category is combined; no additional verticals without approval.                           |
+| D03 | 2026-10-03 | Accepted | Single Location Due Diligence Report first.                                  | Assess one property and business context, not portfolios.                                           |
+| D04 | 2026-10-03 | Accepted | £29 initial Full Report pricing assumption.                                  | Implement configurable price later; never hardcode it in application business logic.                |
+| D05 | 2026-10-03 | Accepted | Pay per report rather than subscription.                                     | Free Snapshot precedes paid Full Report; no subscription product in MVP.                            |
+| D06 | 2026-10-03 | Accepted | Vercel hosting.                                                              | Phase 1 protected Preview verified; Production activation remains separately authorised.            |
+| D07 | 2026-10-03 | Accepted | Next.js App Router and TypeScript.                                           | Use strict mode; single web application, created only in Phase 1.                                   |
+| D08 | 2026-10-03 | Accepted | Supabase Postgres, Auth and Storage.                                         | Phase 1 development preparation; schema/auth/RLS in Phase 3; no migrations now.                     |
+| D09 | 2026-10-03 | Accepted | Stripe Checkout.                                                             | Verified server-side payment events control entitlement; implement in Phase 7.                      |
+| D10 | 2026-10-03 | Accepted | Provider abstracted AI.                                                      | OpenAI may be first; application logic must not bind to one model provider.                         |
+| D11 | 2026-10-03 | Accepted | Google Places for place information; Google address resolution or Geocoding. | Verify endpoint capabilities, costs and permitted use before Phase 4 integration.                   |
+| D12 | 2026-10-03 | Accepted | No proprietary footfall in MVP.                                              | Mobility proxies must not be presented as premises footfall.                                        |
+| D13 | 2026-10-03 | Accepted | AI as analyst rather than data source.                                       | Synthesise supplied evidence; never invent observations.                                            |
+| D14 | 2026-10-03 | Accepted | Deterministic economics.                                                     | Code calculates core metrics with explicit inputs, units, formula versions and tests.               |
+| D15 | 2026-10-03 | Accepted | Evidence backed important claims.                                            | Retain traceability from claim to evidence, permitted source and derivation.                        |
+| D16 | 2026-10-03 | Accepted | Unknown is a valid result.                                                   | Missing data remains Unknown or Insufficient Evidence; absence is not zero.                         |
+| D17 | 2026-10-03 | Accepted | No success probability.                                                      | Decision support reduces uncertainty; it does not predict business success.                         |
+| D18 | 2026-10-03 | Accepted | No enterprise platform before market validation.                             | Exclude enterprise dashboard, franchise/portfolio tools and complex enterprise functionality.       |
+| D19 | 2026-10-03 | Accepted | External providers behind internal adapters.                                 | Changing providers must not break application-level logic; introduce boundaries in relevant phases. |
+| D20 | 2026-10-03 | Accepted | Tailwind and a lightweight component library, preferably shadcn/ui.          | Keep dependencies minimal; preference does not require unused components in Phase 1.                |
+| D21 | 2026-10-03 | Accepted | Prefer public data and low cost APIs; avoid fragile property-site scraping.  | Verify permitted commercial use, availability and cost before each integration.                     |
+| D22 | 2026-10-03 | Accepted | Conceptual benchmark fixtures with human-supplied addresses later.           | Benchmark A/B/C are defined in product.md; absence of addresses does not block Phase 0 foundation.  |
 
 ## Proposed mechanics, not accepted business decisions
 
@@ -33,17 +33,17 @@ The table design, pipeline mechanics and test procedures in the other documents 
 
 ## Open decisions and human inputs
 
-| Input/decision | Needed by | Current treatment |
-| --- | --- | --- |
-| Three real London benchmark addresses | Before real-property benchmark validation, including Phase 4 | HUMAN INPUT REQUIRED; non-blocking for Phase 0 and infrastructure-only Phase 1. |
-| Operational definition of London coverage | Phase 4 geography enforcement | London first is accepted; boundary implementation needs agreement. |
-| Visitor-to-account transition and ownership | Phase 3 | Do not assume guest purchases or mandatory registration. |
-| Free Snapshot section allocation and paid boundary | Phase 6 | Products accepted; exact allocation unapproved. |
-| Tax, refunds and entitlement duration | Phase 7 | £29 is an initial configurable assumption, not a settled policy. |
-| Provider licensing, retention, costs and capabilities | Before relevant Phase 4/5/8/9 integrations | Verify per dataset/endpoint and intended storage/display/export. |
-| Formula definitions and scenario assumptions | Phase 10 | Deterministic calculations accepted; actual formulas need approval. |
-| Evidence sufficiency/freshness and AI wording rules | Relevant engine phases, hardened in Phase 11/12 | No invented thresholds; unknowns remain visible. |
-| Privacy, deletion, analytics, budget and launch targets | Relevant storage/operations/marketing/launch phases | Document and approve before dependent implementation. |
+| Input/decision                                          | Needed by                                                    | Current treatment                                                                                                                                                                                     |
+| ------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Three real London benchmark addresses                   | Before real-property benchmark validation, including Phase 4 | HUMAN INPUT REQUIRED; non-blocking for Phase 0 and infrastructure-only Phase 1.                                                                                                                       |
+| Operational definition of London coverage               | Phase 4 geography enforcement                                | London first is accepted; boundary implementation needs agreement.                                                                                                                                    |
+| Visitor-to-account transition and ownership             | Phase 3, later submission/payment UX                         | Public exploration stays open; private records require verified account ownership. No guest-purchase or mandatory public registration flow is introduced. Exact later sign-in placement remains open. |
+| Free Snapshot section allocation and paid boundary      | Phase 6                                                      | Products accepted; exact allocation unapproved.                                                                                                                                                       |
+| Tax, refunds and entitlement duration                   | Phase 7                                                      | £29 is an initial configurable assumption, not a settled policy.                                                                                                                                      |
+| Provider licensing, retention, costs and capabilities   | Before relevant Phase 4/5/8/9 integrations                   | Verify per dataset/endpoint and intended storage/display/export.                                                                                                                                      |
+| Formula definitions and scenario assumptions            | Phase 10                                                     | Deterministic calculations accepted; actual formulas need approval.                                                                                                                                   |
+| Evidence sufficiency/freshness and AI wording rules     | Relevant engine phases, hardened in Phase 11/12              | No invented thresholds; unknowns remain visible.                                                                                                                                                      |
+| Privacy, deletion, analytics, budget and launch targets | Relevant storage/operations/marketing/launch phases          | Document and approve before dependent implementation.                                                                                                                                                 |
 
 No open decision above prevents the authorised documentation foundation. GitHub, Vercel, Supabase, Google and Stripe access will be requested only when needed in authorised later work.
 
@@ -51,16 +51,16 @@ No open decision above prevents the authorised documentation foundation. GitHub,
 
 Recorded 2026-10-03 within the authorised infrastructure scope; approved product decisions above are unchanged.
 
-| ID | Date | Status | Decision | Reason and consequence |
-| --- | --- | --- | --- | --- |
-| D23 | 2026-10-03 | Accepted | npm with committed lockfile and Node 24.x/npm 11.x. | No prior package manager existed. Conventional tooling, matching installed Node and Vercel-supported runtime; use `npm ci` in CI/deployment. |
-| D24 | 2026-10-03 | Accepted | Node built-in test runner and native TypeScript stripping. | Minimal framework-free tests; separate strict type checking covers stripped types. |
-| D25 | 2026-10-03 | Accepted | Supabase CLI and read-only Data API diagnostic only. | No runtime SDK, privileged key or application schema needed in Phase 1; future Auth/client design stays in Phase 3. |
-| D26 | 2026-10-03 | Accepted | Build without external credentials; diagnostic variables remain Node-only. | Local and CI shell checks are reproducible; no premature public environment values. Missing configuration fails only the optional probe. |
-| D27 | 2026-10-03 | Accepted | Minimal root App Router layout; defer empty component/service directories. | Alias and Tailwind support future components without unused libraries or business abstractions. |
-| D28 | 2026-10-03 | Accepted | Supported ESLint 10 with minimal JavaScript/TypeScript rules. | Avoid an unnecessary unpatched transitive dependency in the full framework preset; reassess UI-specific rules in Phase 2. See infrastructure.md for scope and the advisory. |
-| D29 | 2026-10-03 | Accepted | Verify publishable-key Data API access through an absent diagnostic relation. | Hosted OpenAPI introspection requires a privileged key; `PGRST205` establishes schema-cache access without credentials escalation, migrations or application data reads. |
-| D30 | 2026-10-03 | Accepted | Initial `main` push runs CI without an automatic Vercel production deployment. | Git-triggered deployments from `main` are disabled; explicit CLI Preview verification meets Phase 1. Production activation remains separately authorised. |
+| ID  | Date       | Status   | Decision                                                                       | Reason and consequence                                                                                                                                                      |
+| --- | ---------- | -------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D23 | 2026-10-03 | Accepted | npm with committed lockfile and Node 24.x/npm 11.x.                            | No prior package manager existed. Conventional tooling, matching installed Node and Vercel-supported runtime; use `npm ci` in CI/deployment.                                |
+| D24 | 2026-10-03 | Accepted | Node built-in test runner and native TypeScript stripping.                     | Minimal framework-free tests; separate strict type checking covers stripped types.                                                                                          |
+| D25 | 2026-10-03 | Accepted | Supabase CLI and read-only Data API diagnostic only.                           | No runtime SDK, privileged key or application schema needed in Phase 1; future Auth/client design stays in Phase 3.                                                         |
+| D26 | 2026-10-03 | Accepted | Build without external credentials; diagnostic variables remain Node-only.     | Local and CI shell checks are reproducible; no premature public environment values. Missing configuration fails only the optional probe.                                    |
+| D27 | 2026-10-03 | Accepted | Minimal root App Router layout; defer empty component/service directories.     | Alias and Tailwind support future components without unused libraries or business abstractions.                                                                             |
+| D28 | 2026-10-03 | Accepted | Supported ESLint 10 with minimal JavaScript/TypeScript rules.                  | Avoid an unnecessary unpatched transitive dependency in the full framework preset; reassess UI-specific rules in Phase 2. See infrastructure.md for scope and the advisory. |
+| D29 | 2026-10-03 | Accepted | Verify publishable-key Data API access through an absent diagnostic relation.  | Hosted OpenAPI introspection requires a privileged key; `PGRST205` establishes schema-cache access without credentials escalation, migrations or application data reads.    |
+| D30 | 2026-10-03 | Accepted | Initial `main` push runs CI without an automatic Vercel production deployment. | Git-triggered deployments from `main` are disabled; explicit CLI Preview verification meets Phase 1. Production activation remains separately authorised.                   |
 
 These are implementation choices within the authorised Phase 1 direction, not new product rules. Current package versions and exact dependencies are recorded in the complete cross-platform lockfile. Remote verification passed as documented in [phase-1-status.md](phase-1-status.md). Main-branch protection and authenticated Preview access are enforced; production activation remains separately authorised.
 
@@ -68,14 +68,26 @@ These are implementation choices within the authorised Phase 1 direction, not ne
 
 Recorded 2026-10-03 within the user's public UX and additional Blog/SEO authorisation.
 
-| ID | Status | Decision | Reason and consequence |
-| --- | --- | --- | --- |
-| D31 | Accepted | Central brand/pricing config and small native UI components. | SiteFit name and initial GBP price remain easy to change; no UI/global-state dependency needed. |
-| D32 | Accepted | Four business choices map to three approved categories. | Preserve separate Hair/Beauty inputs while keeping the combined salon analysis category. |
-| D33 | Accepted | Page-memory wizard and versioned unresolved-input contract. | Back/Next preserves entries; blank differs from zero; no transmission, storage or fake calculation. |
-| D34 | Accepted | Structured rich blocks and asynchronous Blog read repository. | Source can become Supabase/CMS/API without rewriting presentation. No executable content, backend or publishing agent now. |
-| D35 | Accepted | Phase 2 metadata/sitemap/robots under the additional SEO requirement. | Published-only content and script-safe JSON-LD; no invented domain; Local/Preview stay noindex; public indexing needs explicit production origin. |
-| D36 | Accepted | Scoped loading boundary and early not-found metadata validation. | Actual missing-article HTTP 200 from root streaming was fixed; route checks now require 404. |
+| ID  | Status   | Decision                                                                                          | Reason and consequence                                                                                                                                                                                    |
+| --- | -------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D31 | Accepted | Central brand/pricing config and small native UI components.                                      | SiteFit name and initial GBP price remain easy to change; no UI/global-state dependency needed.                                                                                                           |
+| D32 | Accepted | Four business choices map to three approved categories.                                           | Preserve separate Hair/Beauty inputs while keeping the combined salon analysis category.                                                                                                                  |
+| D33 | Accepted | Page-memory wizard and versioned unresolved-input contract.                                       | Back/Next preserves entries; blank differs from zero; no transmission, storage or fake calculation.                                                                                                       |
+| D34 | Accepted | Structured rich blocks and asynchronous Blog read repository.                                     | Source can become Supabase/CMS/API without rewriting presentation. No executable content, backend or publishing agent now.                                                                                |
+| D35 | Accepted | Phase 2 metadata/sitemap/robots under the additional SEO requirement.                             | Published-only content and script-safe JSON-LD; no invented domain; Local/Preview stay noindex; public indexing needs explicit production origin.                                                         |
+| D36 | Accepted | Scoped loading boundary and early not-found metadata validation.                                  | Actual missing-article HTTP 200 from root streaming was fixed; route checks now require 404.                                                                                                              |
 | D37 | Accepted | Retain minimal ESLint and dependency-free Node tests; add actual public-route smoke checks to CI. | Full framework preset's earlier advisory remains a reason to avoid it; native controls, strict types, unit logic and browser checks cover current UI. No forced dependency downgrade or unused framework. |
 
 Legal pages and contact are authorised development placeholders, not invented legal/business identity or launch readiness. Free Snapshot exact contents and commercial policy remain open for their original phases. Future publication validation and editorial approval are documented, not implemented or presumed.
+
+## Phase 3 engineering decisions
+
+| ID  | Status   | Decision                                                                                           | Reason and consequence                                                                                                                                                                                                |
+| --- | -------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D38 | Accepted | Keep public exploration open; require verified identity for private persistence.                   | No change to the existing checker journey. No analysis creation/purchase route or guest ownership claim yet.                                                                                                          |
+| D39 | Accepted | Supabase SSR browser/request-scoped server clients; publishable configuration only in application. | Existing private env names remain; only intentionally public values are passed to Login. Verified identity and RLS protect access.                                                                                    |
+| D40 | Accepted | Default hosted magic-link email with PKCE callback and local destination allowlist.                | Free-tier default mail rejects custom templates. Same-browser verifier required; optional token-hash confirmation uses POST to resist mail scanners.                                                                  |
+| D41 | Accepted | Ownership through analysis; append-only input versions and restricted derived writes.              | Avoid duplicate owner columns; column grants prevent client paid/status/ownership escalation. Composite FKs prevent cross-analysis provenance.                                                                        |
+| D42 | Accepted | Restrict deletion of analyses/evidence/financial references.                                       | No accidental financial/evidence cascade. Only an otherwise-unreferenced minimal profile cascades from Auth deletion; retention/deletion workflow remains future policy.                                              |
+| D43 | Accepted | Blog schema/RLS now; retain local public articles.                                                 | Persistent structured model prepares a replaceable provider without adding a CMS, publishing service or premature runtime dependency.                                                                                 |
+| D44 | Accepted | Isolated PostgreSQL rebuild/security tests plus same hosted SQL and actual Auth/session probes.    | PGlite is a dev-only dependency; platform stubs do not substitute for hosted verification. Disposable Auth fixtures use a CLI-held credential only in Node test scripts. Inbox/browser verification remains separate. |

@@ -1,54 +1,59 @@
 import Link from "next/link";
 import { PageIntro } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
+import { LoginForm } from "@/components/login-form";
+import { readPublicSupabaseConfig } from "@/lib/supabase/config";
+import { verifiedUser } from "@/lib/supabase/server";
+import { authFailure, authMessages } from "@/lib/auth/flow";
+import { signOut } from "@/app/auth/actions";
 export const metadata = pageMetadata("/login");
-export default function Login() {
+export const dynamic = "force-dynamic";
+export default async function Login({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const { user, unavailable } = await verifiedUser();
+  const params = await searchParams;
+  const failure = authFailure(params.error);
   return (
     <div className="page-wrap narrow-page">
       <PageIntro
         eyebrow="YOUR SITEFIT ACCOUNT"
-        title="A place for your next decision."
+        title={user ? "You're signed in." : "A place for your next decision."}
       >
         <p>
-          Account access is not open yet. You can explore the location checker
-          without signing in.
+          {user
+            ? "Your account is ready. Location analysis and reports are not available yet."
+            : "Sign in with an email link. You can also explore the location checker without an account."}
         </p>
       </PageIntro>
-      <section className="simple-panel" aria-label="Sign-in preview">
-        <div className="field">
-          <label htmlFor="email">Email address</label>
-          <input
-            id="email"
-            type="email"
-            disabled
-            placeholder="Email address"
-            autoComplete="email"
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            disabled
-            placeholder="Password"
-            autoComplete="current-password"
-          />
-        </div>
-        <button
-          className="button button-primary"
-          disabled
-          aria-describedby="login-availability"
-        >
-          Sign in
-        </button>
-        <p id="login-availability" className="field-help">
-          Sign-in is not available yet. This page does not collect credentials.
+      {failure && (
+        <p className="field-error" role="alert">
+          {authMessages[failure]}
         </p>
-        <Link href="/check-location" className="text-link">
-          Explore the location checker ↗
-        </Link>
-      </section>
+      )}
+      {params.signed_out === "1" && <p role="status">You're signed out.</p>}
+      {user ? (
+        <section className="simple-panel">
+          <p>Signed in as {user.email}</p>
+          <Link className="text-link" href="/account">
+            Open your account ↗
+          </Link>
+          <form action={signOut}>
+            <button className="button button-secondary" type="submit">
+              Sign out
+            </button>
+          </form>
+        </section>
+      ) : (
+        <LoginForm
+          config={unavailable ? null : readPublicSupabaseConfig(process.env)}
+        />
+      )}
+      <Link href="/check-location" className="text-link">
+        Explore the location checker ↗
+      </Link>
     </div>
   );
 }

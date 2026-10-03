@@ -21,9 +21,9 @@ const paths = [
 ];
 const titles = new Set<string>();
 const links = new Set<string>();
-async function get(path: string) {
+async function get(path: string, manual = false) {
   return fetch(new URL(path, base), {
-    redirect: "error",
+    redirect: manual ? "manual" : "error",
     signal: AbortSignal.timeout(15000),
   });
 }
@@ -86,6 +86,34 @@ for (const path of ["/missing-public-page", "/blog/missing-article"]) {
   assert.match(await response.text(), /noindex/);
 }
 const xml = await (await get("/sitemap.xml")).text();
+const account = await get("/account", true);
+assert.equal(
+  account.status,
+  307,
+  "Anonymous account access must redirect before streaming",
+);
+assert.equal(
+  new URL(account.headers.get("location")!, base).pathname,
+  "/login",
+);
+const callback = await get(
+  "/auth/callback?error=denied&error_description=untrusted-provider-error&next=https://example.invalid",
+  true,
+);
+assert.equal(callback.status, 303);
+assert.equal(
+  new URL(callback.headers.get("location")!, base).pathname,
+  "/login",
+);
+assert.ok(
+  !(callback.headers.get("location") ?? "").includes(
+    "untrusted-provider-error",
+  ),
+);
+assert.match(callback.headers.get("cache-control") ?? "", /no-store/);
+const confirm = await get("/auth/confirm");
+assert.equal(confirm.status, 200);
+assert.match(await confirm.text(), /Request a new sign-in link/);
 for (const post of posts)
   assert.ok(
     xml.includes(`/blog/${post.slug}`),
