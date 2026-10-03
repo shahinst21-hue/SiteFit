@@ -1,6 +1,6 @@
 # Phase 3 implementation and verification record
 
-Recorded 2026-10-03. Scope: Supabase Database and Authentication only, including the additionally requested Blog persistence. Phase 4 and all later implementation remain unstarted. Phase 3 is blocked on real inbox/browser PKCE verification; independent implementation and verification are complete. The PR remains draft/unmerged until that gate passes.
+Recorded 2026-10-03. Scope: Supabase Database and Authentication only, including the additionally requested Blog persistence. Phase 4 and all later implementation remain unstarted. The user has confirmed successful real inbox/browser PKCE verification. Final validation and protected delivery remain the completion steps.
 
 ## Authentication
 
@@ -30,8 +30,10 @@ Blog JSONB supports the Phase 2 rich model, images/author/CTAs and all metadata.
 - Final clean `npm ci`, lint, strict typecheck, 27 tests and production build passed. npm's Windows optional-dependency lock inconsistency was resolved by full generation/installation in a pristine directory; no existing dependency versions changed and audit reported zero vulnerabilities. Remote Linux delivery remains a separate gate.
 - Production runtime public checks passed: twelve pages/articles, twelve internal paths, existing SEO/JSON-LD/sitemap/robots/social/404 checks, anonymous Account redirect, fixed failed callback redirect/no-store, incomplete-link retry page.
 - Actual encrypted Supabase settings were configured in Vercel Preview only. Verified development localhost and actual stable Preview callback/confirmation URLs are explicitly allowlisted in tracked config and applied with CLI. Production and automatic main deployments remain unchanged.
-- Browser checks on the production build verified empty/invalid email validation, keyboard submit, focus on the invalid field, signed-out Account redirect, fixed invalid-link messaging and incomplete-link retry. Login at 320/768/1440 and confirmation at 320 px had no horizontal overflow, one H1 and real labels; no password field. Console warnings/errors were empty for these checks. A Login screenshot was saved outside Git and viewport overrides reset. A complete inbox/authenticated browser journey is still unverified.
+- Browser checks on the production build verified empty/invalid email validation, keyboard submit, focus on the invalid field, signed-out Account redirect, fixed invalid-link messaging and incomplete-link retry. Login at 320/768/1440 and confirmation at 320 px had no horizontal overflow, one H1 and real labels; no password field. Console warnings/errors were empty for these checks. A Login screenshot was saved outside Git and viewport overrides reset. The user subsequently verified the complete hosted inbox/authenticated browser journey below.
 - Hosted public Auth settings confirmed email/signups enabled, email confirmation required and Google/Apple/Facebook disabled. Declared configuration diff has zero remaining updates; undeclared platform settings are preserved.
+- After the user's manual confirmation, clean `npm ci` and `npm run check` passed again: lint, strict types, all 27 tests (including fresh PostgreSQL reconstruction/security execution) and production build. Audit reported zero vulnerabilities. Production `check:public` and the hosted SQL ownership suite passed again; SQL fixtures rolled back. All 39 relative documentation links resolve, local environment/service metadata remain ignored, and tracked files/all reachable history contain no actual locally configured values.
+- The hosted Auth/application session probe also passed again after manual confirmation: one-time tokens, verified identities, profile isolation, replay rejection, session cookies, protected Account and sign-out. All disposable accounts were removed.
 
 ## Remote delivery
 
@@ -39,21 +41,23 @@ Implementation commit `cdb4124` is pushed on `phase-3-database-auth`. [Draft PR 
 
 [Phase 3 Preview](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app) is the actual stable branch alias. Implementation deployment `dpl_6M9MqFDqC5wDCkMXTe59NbNsYwez`, [deployment URL](https://sitefit-bq92plct1-shahinst21-hues-projects.vercel.app), is READY/Preview from `cdb4124`. Authenticated CLI requests verified Home/Login/Blog/article HTTP 200/noindex, enabled Login form, signed-out Account HTTP 307 to Login, and failed callback HTTP 303/fixed local error. Vercel protection is retained; no Production deployment. The branch alias is the appropriate inbox-test target and its redirects are allowlisted. Documentation/config changes may update its deployment while preserving the URL.
 
-PR #4 remains draft and unmerged because the required inbox/browser gate is unverified, not because CI failed. `main` remains the verified Phase 2 state `6ca698a` and matches origin. Independent work is committed; no further engineering/credential input is needed before the human email test. Post-test review, protected merge, post-merge CI and clean-main verification remain final delivery steps.
+The inbox/browser gate is now verified. PR #4 will be marked ready and merged only after required CI passes for its final head. Protected merge, post-merge CI and clean-main verification remain final delivery steps.
 
-## HUMAN ACTION REQUIRED
+## Manual Magic Link and PKCE verification
 
-What I need:
-Verify that a real development magic-link email arrives and completes the default PKCE callback in a browser.
+On 2026-10-03, the user explicitly confirmed successful manual verification of the real hosted Magic Link flow:
 
-Why:
-The Phase 3 request explicitly requires working hosted Magic Link and callback verification. Generated/admin tokens prove Auth/session boundaries but cannot prove inbox delivery or the default emailed-link browser journey. No recipient or mailbox access was supplied; an asynchronous recipient request has no answer yet. Supabase's default development SMTP may restrict recipients to organisation members.
+1. The Magic Link email was received successfully.
+2. The link was opened in the same browser profile that initiated login.
+3. The default PKCE authentication callback completed successfully.
+4. The authenticated Account page was accessible.
+5. Authentication persisted after browser refresh.
+6. Sign-out completed successfully.
+7. Reusing the already consumed Magic Link failed as expected.
 
-What you should do:
-Open [Preview Login](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/login) in your normal browser and sign in to Vercel if prompted. Enter the email associated with your Supabase organisation membership and request a link. Open the received link in the same browser, verify your account page, refresh it, sign out and open the used link again to confirm the retry/error state. If delivery is rejected, report the displayed error; configuring custom SMTP is required only if this allowed development recipient cannot receive mail or broader recipients are needed. Do not upgrade or provide a credential in chat.
+This is user-reported real email/browser evidence, separate from the automated generated-token probe. It closes the required hosted inbox delivery and default PKCE gates. No email address, Magic Link, token or credential is recorded.
 
-What to send back:
-Confirm email received, signed-in account/refresh worked, sign-out worked and the used link failed safely, or provide the on-screen failure. Do not paste the magic link, token, password or API key.
+Outstanding Phase 3 human actions: none.
 
 ## Deferred work and limits
 
@@ -62,8 +66,8 @@ No Google/address resolution, providers, Free Snapshot, payment checkout/webhook
 ## Definition of Done
 
 - [x] Supabase Auth is implemented.
-- [ ] Magic Link inbox/browser flow works against hosted development.
-- [ ] Default PKCE authentication callback verified end-to-end.
+- [x] Magic Link inbox/browser flow works against hosted development.
+- [x] Default PKCE authentication callback verified end-to-end.
 - [x] Application sign-out works in hosted-backed runtime checks.
 - [x] Initial schema exists through migrations.
 - [x] Application schema reconstructs from migration history.
@@ -75,10 +79,10 @@ No Google/address resolution, providers, Free Snapshot, payment checkout/webhook
 - [x] Non-published Blog rows are protected.
 - [x] TypeScript database integration is coherent.
 - [x] Changed/new/staged source and documentation secret review passed; actual local values and service metadata are excluded. Final committed review is checked at delivery.
-- [x] Lint passed during implementation.
-- [x] Strict type checking passed during implementation.
-- [x] All 27 tests passed during implementation.
-- [x] Production build passed during implementation.
+- [x] Lint passed again after manual verification.
+- [x] Strict type checking passed again after manual verification.
+- [x] All 27 tests passed again after manual verification.
+- [x] Production build passed again after manual verification.
 - [x] Remote push/PR CI passes, including Linux installation/database/runtime checks.
 - [x] Hosted development migration and SQL policies are verified.
 - [x] Documentation is updated.

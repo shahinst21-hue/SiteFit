@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phases 0–2 are complete. Phase 3 is authorised and in progress on `phase-3-database-auth`; see `docs/phase-3-status.md` for observed gates and outstanding inbox verification. The development schema, migrations, Auth code and RLS are implemented and hosted SQL security checks pass. Do not mark Phase 3 complete until all its gates pass. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. No analysis, address/provider integration, payment execution, reports or publishing agent exists. Phase 4 and later require a new instruction.
+Phases 0–2 are complete. Phase 3 is authorised and in progress on `phase-3-database-auth`; see `docs/phase-3-status.md` for observed gates. The user has verified the real hosted inbox/browser PKCE flow. The development schema, migrations, Auth code and RLS are implemented and hosted SQL security checks pass; final validation and protected delivery remain. Do not mark Phase 3 complete until all its gates pass. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. No analysis, address/provider integration, payment execution, reports or publishing agent exists. Phase 4 and later require a new instruction.
 
 ## Working rules
 
