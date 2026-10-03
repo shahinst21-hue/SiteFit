@@ -27,8 +27,6 @@ With that production server running, use `npm run check:public` for real route/m
 
 See [docs/infrastructure.md](docs/infrastructure.md) for environments, Supabase, Vercel, CI and secure configuration. `.env.example` contains names with empty values; never put real values in tracked files. See [docs/phase-1-status.md](docs/phase-1-status.md) for completed Phase 1 verification and documented limits.
 
-The [verified Preview](https://sitefit-6ry6vgwxj-shahinst21-hues-projects.vercel.app) requires Vercel sign-in. Changes to protected `main` require a PR and successful [GitHub Actions checks](https://github.com/shahinst21-hue/SiteFit/actions). Automatic Production deployment from `main` is disabled.
+The [verified Phase 2 Preview](https://sitefit-3anewlh7d-shahinst21-hues-projects.vercel.app) requires Vercel sign-in. Changes to protected `main` require a PR and successful [GitHub Actions checks](https://github.com/shahinst21-hue/SiteFit/actions). Automatic Production deployment from `main` is disabled.
 
-Read [AGENTS.md](AGENTS.md) and all project documents before development. Phase 1 completion never authorises starting Phase 2.
-
-Phase 2 was explicitly authorised. Its completion never authorises Phase 3; automatic Production release remains disabled.
+Read [AGENTS.md](AGENTS.md) and all project documents before development. Phase 2 was explicitly authorised and is complete. Its completion never authorises Phase 3; automatic Production release remains disabled.
