@@ -70,7 +70,7 @@ References: [Supabase CLI](https://supabase.com/docs/guides/local-development/cl
 
 The checkout is now linked to `sitefit` under the user's Vercel account and connected to the actual GitHub repository. GitHub's default branch is `main`, so the local baseline branch is aligned to it for the initial push. Automatic Vercel deployments from `main` are disabled in `vercel.json` to keep this infrastructure task Preview-only; other branches can still produce Previews and explicit CLI Preview deployment is available. Enabling automatic production releases needs separate authorisation. The current shell has no remote Supabase variable consumer, so no credentials are copied to Preview or Production settings unnecessarily.
 
-Human setup when access is available:
+Setup procedure (completed for this checkout and Preview):
 
 1. Sign in to Vercel and import the actual repository as a Next.js project, root directory `.`. Use Node.js 24.x and the committed configuration. Alternatively log in/link using Vercel CLI under the intended account.
 2. Treat the repository's current branch as the production branch only after explicit agreement; do not trigger a production release to satisfy the Preview requirement. Use a separate review branch/PR or a CLI Preview deployment.
@@ -83,9 +83,9 @@ References: [Vercel project configuration](https://vercel.com/docs/project-confi
 
 The workflow runs on push and pull requests with read-only contents permission, disabled persisted checkout credentials, immutable action revisions, Node 24 and npm lockfile caching. Required lint, typecheck, tests and build run in separate steps with normal failure propagation. It needs no application secrets. Local execution of the same scripts is verification of the checks, not a remote Actions run.
 
-The user authorised `https://github.com/shahinst21-hue/SiteFit.git` as `origin` and granted push access. Authenticated API checks confirmed repository admin rights; it is public and uses `main` as the default branch. After a successful Actions run, configure a branch rule/ruleset for `main` requiring pull requests and the `Lint, types, tests and build` check. Actual CI/protection results are recorded in phase-1-status.md. Account-plan limitations, if returned by GitHub, are documented rather than treated as an unnecessary Phase 1 blocker.
+The user authorised `https://github.com/shahinst21-hue/SiteFit.git` as `origin` and granted push access. Authenticated API checks confirmed repository admin rights; it is public and uses `main` as the default branch. Successful Actions runs are verified. Protection on `main` requires PRs, strict `Lint, types, tests and build` checks, conversation resolution and admin enforcement, and prohibits force pushes/deletions. Zero external approval reviews are required for this single-maintainer repository. Actual CI/protection results are recorded in [phase-1-status.md](phase-1-status.md); no account-plan limitation blocked configuration.
 
-## Outstanding verification
+## Verification limits
 
 See [phase-1-status.md](phase-1-status.md) for observed remote CI, branch protection, Vercel Preview and Supabase results. Docker-backed Supabase validation remains unavailable without Docker/Podman; hosted development connectivity is verified and no application schema is needed in this phase.
 

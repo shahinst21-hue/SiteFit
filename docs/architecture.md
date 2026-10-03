@@ -1,6 +1,6 @@
 # Planned architecture
 
-Recorded 2026-10-03. The architectural directions below are accepted; detailed mechanics are proposals to refine in their implementation phases. Phase 1 adds a minimal Next.js shell and local tooling/configuration described in [infrastructure.md](infrastructure.md). Remote services remain unconnected/unverified; the analysis product is not implemented.
+Recorded 2026-10-03. The architectural directions below are accepted; detailed mechanics are proposals to refine in their implementation phases. Phase 1 adds a minimal Next.js shell and tooling/configuration described in [infrastructure.md](infrastructure.md). GitHub CI/protection, Vercel Preview and hosted development Supabase connectivity are verified. The analysis product remains unimplemented; Production release is not activated.
 
 ## Frontend and backend
 

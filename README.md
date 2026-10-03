@@ -23,6 +23,8 @@ This runs ESLint, strict type checking, Node's built-in unit tests and the produ
 
 ## Infrastructure
 
-See [docs/infrastructure.md](docs/infrastructure.md) for environments, Supabase, Vercel, CI, secure configuration and outstanding account actions. `.env.example` contains names with empty values; never put real values in tracked files. See [docs/phase-1-status.md](docs/phase-1-status.md) for observed validation and outstanding verification.
+See [docs/infrastructure.md](docs/infrastructure.md) for environments, Supabase, Vercel, CI and secure configuration. `.env.example` contains names with empty values; never put real values in tracked files. See [docs/phase-1-status.md](docs/phase-1-status.md) for completed Phase 1 verification and documented limits.
+
+The [verified Preview](https://sitefit-6ry6vgwxj-shahinst21-hues-projects.vercel.app) requires Vercel sign-in. Changes to protected `main` require a PR and successful [GitHub Actions checks](https://github.com/shahinst21-hue/SiteFit/actions). Automatic Production deployment from `main` is disabled.
 
 Read [AGENTS.md](AGENTS.md) and all project documents before development. Phase 1 completion never authorises starting Phase 2.
