@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phases 0–2 are complete; Phase 3 is authorised and in progress. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and observed checks. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03. Phases 0–3 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and the completed Definition of Done. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -31,7 +31,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 3: Supabase Database and Authentication
 
-- Status: the user has verified real hosted Magic Link delivery, same-browser PKCE, Account access/refresh, sign-out and consumed-link rejection. Implementation, hosted migrations/RLS/Auth-session probes, local validation, remote CI and protected Preview pass. Final validation and protected PR #4 delivery remain. No Phase 4 work.
+- Status: complete. The user verified real hosted Magic Link delivery, same-browser PKCE, Account access/refresh, sign-out and consumed-link rejection. Hosted migrations/RLS/Auth-session probes, local validation, remote CI and protected Preview pass. PR #4 merged through branch protection; post-merge CI passed and main was clean/matching origin. Completion documentation uses the same gated workflow. No Phase 4 work.
 - Objective: establish persistent records and enforceable ownership.
 - Codex implements: minimum required schema, migrations, Supabase Auth flows, RLS/storage foundations and schema/access tests; extend the proposed schema only as needed.
 - Human action: hosted inbox/browser magic-link verification is complete; none outstanding for Phase 3. Existing CLI access supports development migrations/configuration. Public exploration remains open; private persistence requires verified identity. Exact future sign-in placement, purchase policy and retention periods remain decisions for the features that use them; this phase creates no saved-checker/purchase flow.

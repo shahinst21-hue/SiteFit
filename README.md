@@ -1,6 +1,6 @@
 # SiteFit
 
-Development preview of the London-first Single Location Due Diligence Report. Phase 2 provides the public website, four-step memory-only location checker and structured SEO Blog. Phase 3 adds migration-managed development persistence and email authentication; its verification is in progress. Analysis, payments, report generation and all later features remain unimplemented.
+Development preview of the London-first Single Location Due Diligence Report. Phase 2 provides the public website, four-step memory-only location checker and structured SEO Blog. Phase 3 is complete and adds verified migration-managed development persistence and email authentication. Analysis, payments, report generation and all later features remain unimplemented.
 
 ## Local development
 
@@ -31,6 +31,6 @@ See [docs/infrastructure.md](docs/infrastructure.md) for environments, Supabase,
 
 The [verified Phase 2 Preview](https://sitefit-3anewlh7d-shahinst21-hues-projects.vercel.app) requires Vercel sign-in. Changes to protected `main` require a PR and successful [GitHub Actions checks](https://github.com/shahinst21-hue/SiteFit/actions). Automatic Production deployment from `main` is disabled.
 
-The [Phase 3 Preview Login](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/login) is verified with development configuration. The user confirmed real Magic Link delivery, same-browser PKCE callback, Account access, refresh persistence, sign-out and consumed-link rejection. [PR #4](https://github.com/shahinst21-hue/SiteFit/pull/4) awaits final validation and protected merge. See the Phase 3 status record for the verification evidence; never paste a sign-in link or credentials into chat.
+The [Phase 3 Preview Login](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/login) is verified with development configuration. The user confirmed real Magic Link delivery, same-browser PKCE callback, Account access, refresh persistence, sign-out and consumed-link rejection. [PR #4](https://github.com/shahinst21-hue/SiteFit/pull/4) merged through branch protection and post-merge CI passed. See the Phase 3 status record for the verification evidence; never paste a sign-in link or credentials into chat.
 
-Read [AGENTS.md](AGENTS.md) and all project documents before development. Phase 3 is explicitly authorised and in progress; [docs/phase-3-status.md](docs/phase-3-status.md) records actual results and outstanding gates. Phase 4 is not authorised. Automatic Production release remains disabled.
+Read [AGENTS.md](AGENTS.md) and all project documents before development. Phases 0–3 are complete; [docs/phase-3-status.md](docs/phase-3-status.md) records the completed Definition of Done. Phase 4 is not authorised. Automatic Production release remains disabled.

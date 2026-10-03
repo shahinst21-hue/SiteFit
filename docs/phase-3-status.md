@@ -1,6 +1,6 @@
-# Phase 3 implementation and verification record
+# Phase 3 completion record
 
-Recorded 2026-10-03. Scope: Supabase Database and Authentication only, including the additionally requested Blog persistence. Phase 4 and all later implementation remain unstarted. The user has confirmed successful real inbox/browser PKCE verification. Final validation and protected delivery remain the completion steps.
+Recorded 2026-10-03. Scope: Supabase Database and Authentication only, including the additionally requested Blog persistence. All Phase 3 acceptance gates are verified, including the user's real hosted Magic Link/PKCE test, protected implementation merge and post-merge CI. Phase 4 and all later implementation remain unstarted. This completion record follows the same protected PR/CI workflow.
 
 ## Authentication
 
@@ -37,11 +37,11 @@ Blog JSONB supports the Phase 2 rich model, images/author/CTAs and all metadata.
 
 ## Remote delivery
 
-Implementation commit `cdb4124` is pushed on `phase-3-database-auth`. [Draft PR #4](https://github.com/shahinst21-hue/SiteFit/pull/4) is attached to the task. [Push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37154774709) and [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37154799613) passed, including clean Linux installation, migration/security tests, types, build and actual public HTTP checks. The final evidence/configuration commit uses the same CI gates.
+Implementation commit `cdb4124`, configuration/evidence commit `7afc0c3` and manual-verification record `e1c5628` were pushed on `phase-3-database-auth`. [PR #4](https://github.com/shahinst21-hue/SiteFit/pull/4) was converted from draft and merged through existing branch protection as `153ad192cc52559b227b5cd8657766f1bb61d6ff`. [Final push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37155857218), [final PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37155860071) and [post-merge main CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37155978529) completed successfully, including clean Linux installation, migration/security tests, types, build and actual public HTTP checks. Local `main` matched `origin/main` at the merge and had a clean working tree.
 
-[Phase 3 Preview](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app) is the actual stable branch alias. Implementation deployment `dpl_6M9MqFDqC5wDCkMXTe59NbNsYwez`, [deployment URL](https://sitefit-bq92plct1-shahinst21-hues-projects.vercel.app), is READY/Preview from `cdb4124`. Authenticated CLI requests verified Home/Login/Blog/article HTTP 200/noindex, enabled Login form, signed-out Account HTTP 307 to Login, and failed callback HTTP 303/fixed local error. Vercel protection is retained; no Production deployment. The branch alias is the appropriate inbox-test target and its redirects are allowlisted. Documentation/config changes may update its deployment while preserving the URL.
+[Phase 3 Preview](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app) is the actual stable branch alias, with explicitly allowlisted Auth redirects. Final implementation deployment `dpl_B7Rx8frjfiPVfU1EFqCJEedAdagi`, [deployment URL](https://sitefit-9xfanklrl-shahinst21-hues-projects.vercel.app), is READY with target null (Preview), from `e1c5628`. Authenticated CLI requests again verified Home/Login/Blog HTTP 200, Login email form/noindex, signed-out Account HTTP 307 to Login, and failed callback HTTP 303/same-origin fixed invalid-link error/no-store. Earlier implementation checks also covered article markup/noindex. Vercel protection is retained; no Production deployment.
 
-The inbox/browser gate is now verified. PR #4 will be marked ready and merged only after required CI passes for its final head. Protected merge, post-merge CI and clean-main verification remain final delivery steps.
+Completion documentation uses `phase-3-completion-record` and a separate protected PR to record already-observed merge/CI results. Its own required CI and final clean-main state are checked again at delivery. Branch protection remains strict required `Lint, types, tests and build`, required PRs, admin enforcement and conversation resolution, with no force pushes/deletions. No product, architecture, dependency or migration changes were made after the user's manual confirmation.
 
 ## Manual Magic Link and PKCE verification
 
@@ -78,13 +78,13 @@ No Google/address resolution, providers, Free Snapshot, payment checkout/webhook
 - [x] Published Blog architecture can be publicly readable.
 - [x] Non-published Blog rows are protected.
 - [x] TypeScript database integration is coherent.
-- [x] Changed/new/staged source and documentation secret review passed; actual local values and service metadata are excluded. Final committed review is checked at delivery.
+- [x] Tracked source/documentation and all reachable committed history passed private-value review; actual local values and service metadata are excluded. Completion-record review is checked again at delivery.
 - [x] Lint passed again after manual verification.
 - [x] Strict type checking passed again after manual verification.
 - [x] All 27 tests passed again after manual verification.
 - [x] Production build passed again after manual verification.
-- [x] Remote push/PR CI passes, including Linux installation/database/runtime checks.
+- [x] Remote push/PR and post-merge main CI pass, including Linux installation/database/runtime checks.
 - [x] Hosted development migration and SQL policies are verified.
 - [x] Documentation is updated.
-- [ ] Protected merge completed and main clean/matching origin.
+- [x] Protected implementation merge completed and main verified clean/matching origin; completion-record delivery uses the same gated workflow.
 - [x] Phase 4 has not started.
