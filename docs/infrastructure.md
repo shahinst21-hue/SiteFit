@@ -10,6 +10,8 @@ Next.js automatic agent-rule generation is disabled in `next.config.ts` so `npm 
 
 `app/` contains only layout, global CSS and the homepage placeholder. `scripts/` contains a Node-only connectivity check; lint prevents application imports from this directory. `supabase/` holds local development configuration; `tests/` uses Node's built-in runner and native TypeScript stripping, with strict type checking run separately. `docs/` records scope and configuration. `components/` and `lib/` are deferred until real files need them; no empty business abstractions were created.
 
+That directory inventory records Phase 1. Phase 2 adds the public frontend, reusable presentation components, wizard/content/SEO contracts and a public-route smoke script. Supabase and secret boundaries are unchanged; see [phase-2-status.md](phase-2-status.md).
+
 ## Developer commands
 
 | Command | Purpose |
@@ -23,6 +25,7 @@ Next.js automatic agent-rule generation is disabled in `next.config.ts` so `npm 
 | `npm run start` | Serve the existing production build. |
 | `npm run check` | Run lint, types, tests and build in order, failing on any check. |
 | `npm run check:supabase` | Read-only configured Data API probe with timeout and redacted failures. |
+| `npm run check:public` | Check actual public HTTP routes, SEO and 404s against a running production server. Optional argument: origin. |
 | `npm run supabase:start` | Start local Supabase; requires running Docker. |
 | `npm run supabase:stop` | Stop local Supabase. |
 | `npm run supabase:status` | Inspect local stack; output may contain local keys, so do not paste or commit it. |
@@ -47,6 +50,7 @@ Do not set `NODE_ENV=preview`; let Next.js manage its standard modes. Vercel sup
 | --- | --- | --- |
 | `SUPABASE_URL` | Node-only `check:supabase` script | Required only for the probe. Actual project origin; HTTPS except HTTP loopback for Docker development. No paths, embedded credentials, query or fragment. No public prefix. |
 | `SUPABASE_PUBLISHABLE_KEY` | Node-only `check:supabase` script | Required only for the probe. Current publishable key from the selected project; legacy anon/service-role and privileged secret keys are intentionally rejected. No public prefix, logging or client bundling. |
+| `SITE_URL` | Server metadata/sitemap/robots in Phase 2 | Optional non-secret HTTPS public origin for a future Production domain. Local fallback is localhost; Vercel Preview uses its supplied deployment URL. No public indexing without explicit Production origin. |
 
 No privileged Supabase key is required or introduced. No Stripe, Google, AI or database-password variables are introduced before their phase. Even though a Supabase publishable key is designed for public applications, Phase 1 has no browser need for it, so it stays in the Node script environment. Later auth work must establish the appropriate client/server boundary and RLS rather than reusing this diagnostic as an auth client.
 

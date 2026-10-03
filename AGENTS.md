@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phase 0 documentation foundation is complete and preserved in commit `5e35f57`. Phase 1 foundations and external verification are complete; see `docs/phase-1-status.md` for actual results and limits. `main` is protected: deliver changes through a PR and the required CI check. Vercel Preview is authenticated; automatic Production deployment from `main` is disabled. Three real benchmark addresses remain non-blocking for infrastructure work. No product UX, application migrations, auth flows, payments, data integrations or AI exist. Phase 2 and all later phases are not started and require a new user instruction.
+Phase 0 is preserved in commit `5e35f57`; Phase 1 is complete. The user authorised Phase 2 public UX plus Blog/SEO architecture. Implementation and actual verification are tracked in `docs/phase-2-status.md`. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. Three benchmark addresses are still non-blocking. No application migrations, auth flows, payments, analysis, data integrations or AI exist. Phase 3 and all later phases require a new instruction.
 
 ## Working rules
 
@@ -40,6 +40,8 @@ Request non-secret confirmation or the required business information.
 ## Developer validation
 
 Use Node.js 24.x, npm 11.x and `npm ci`. Run `npm run check` for lint, strict types, Node unit tests and production build. Use `npm run dev` for the shell. Read `docs/infrastructure.md` before environment or service work. Never import Node-only `scripts/` into the application. The shell builds without Supabase credentials; `npm run check:supabase` requires real values privately configured. CI, deployment and live connectivity need separate actual verification.
+
+After building, start the app and run `npm run check:public` for real HTTP/metadata/404 checks (also run in CI). Inspect responsive and keyboard behaviour in a browser. Read `docs/blog-architecture.md` before content changes. Blog pages must consume structured posts through the repository boundary; never introduce arbitrary HTML/MDX execution or agent-written frontend code. Keep unconnected features and legal drafts honest, and published content separate from drafts. Wizard entries remain page memory only in Phase 2. Hair/Beauty selections share the approved salon category. Pricing and display name belong in `lib/site-config.ts`.
 
 ## Phase 0 documentation-only validation
 

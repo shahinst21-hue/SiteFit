@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phase 0 documentation foundation and Phase 1 infrastructure are complete, with verification tracked in [phase-1-status.md](phase-1-status.md). Phases 2–17 are planning only and not started. Implement one phase per authorised task; passing a gate does not authorise starting the next phase. Record actual validation and unresolved human dependencies before marking a phase complete.
+Recorded 2026-10-03. Phases 0 and 1 are complete. Phase 2 public UX and the additionally authorised Blog/SEO foundation are implemented, with verification in [phase-2-status.md](phase-2-status.md). Phases 3–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -23,10 +23,11 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 2: UX Foundation and Public Website
 
+- Status: frontend implementation and local validation complete; protected PR/remote CI delivery is tracked in [phase-2-status.md](phase-2-status.md).
 - Objective: establish the public experience and consistent navigation.
-- Codex implements: accessible UI foundations, public website and entry UX reflecting the accepted positioning and supported categories; honest preview/empty/error states.
-- Human action: approve customer-facing copy, visual assets and any material content decision.
-- Definition of Done: responsive public UI and navigation pass relevant accessibility and interaction checks; no fabricated reports or unsupported claims; later engines and payment flows are not implemented.
+- Codex implements: required public pages, four-step frontend wizard, responsive/accessibility foundations and honest availability/empty/error/loading states. The user additionally authorised the Blog index/article frontend, structured content provider/model, safe rich rendering, metadata, JSON-LD, sitemap/robots and documentation for later controlled publishing.
+- Human action: no aesthetic approval needed; SiteFit name and implementation judgement are explicitly authorised. Real contact details and reviewed legal policies are later launch requirements, not blockers for the requested development placeholders.
+- Definition of Done: all required pages and navigation work; wizard validation/state preservation pass; price is centrally configured; responsive/accessibility checks and lint/types/tests/build/remote CI pass; Blog content/SEO architecture works; documentation and protected merge are complete; no fake analysis or later-phase backend exists.
 
 ## Phase 3: Supabase Database and Authentication
 
@@ -122,7 +123,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 ## Phase 16: SEO, Analytics and Marketing Infrastructure
 
 - Objective: make the public product discoverable and measurable.
-- Codex implements: public metadata/indexing controls, approved analytics and consent behaviour, and marketing infrastructure within accepted scope.
+- Codex implements: broader discovery/marketing hardening beyond the user-authorised Phase 2 Blog/metadata foundation, plus approved analytics and consent behaviour. The publishing agent/CMS remains separate future work requiring authorisation.
 - Human action: approve analytics/privacy choices and marketing claims; domain/service account access where needed.
 - Definition of Done: private reports remain protected and non-indexable; public metadata is correct; tracking follows approved policy; no unsupported success claims or sensitive-input analytics.
 

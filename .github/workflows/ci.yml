@@ -34,3 +34,14 @@ jobs:
         run: npm test
       - name: Production build
         run: npm run build
+      - name: Public route and SEO smoke checks
+        shell: bash
+        run: |
+          node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3000 > "$RUNNER_TEMP/sitefit-public.log" 2>&1 &
+          sitefit_server_pid=$!
+          trap 'kill "$sitefit_server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:3000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          npm run check:public

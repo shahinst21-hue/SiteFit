@@ -1,6 +1,6 @@
 # Planned architecture
 
-Recorded 2026-10-03. The architectural directions below are accepted; detailed mechanics are proposals to refine in their implementation phases. Phase 1 adds a minimal Next.js shell and tooling/configuration described in [infrastructure.md](infrastructure.md). GitHub CI/protection, Vercel Preview and hosted development Supabase connectivity are verified. The analysis product remains unimplemented; Production release is not activated.
+Recorded 2026-10-03. Architectural directions are accepted; later mechanics remain proposals. Phase 1 infrastructure is described in [infrastructure.md](infrastructure.md). Phase 2 now adds the public website, frontend-only wizard and authorised Blog/SEO foundation; see [phase-2-status.md](phase-2-status.md). GitHub protection and authenticated Preview remain in place. Analysis services are unimplemented; Production is not activated.
 
 ## Frontend and backend
 
@@ -58,6 +58,18 @@ docs/         Product, architecture, decisions and validation records
 ```
 
 Phase 1 creates `app/`, `scripts/`, `tests/`, `supabase/` and CI configuration alongside `docs/`. `components/` and `lib/` are deferred until useful files need them. Future folders must not be populated with business logic before their phase. No monorepo, mobile app, analysis engine, payment flow or authentication flow is implemented.
+
+Phase 2 introduces useful presentation components and `lib/` contracts: public site/pricing configuration, wizard validation/normalisation, Blog domain/provider and metadata helpers. Phase 1 directory statements above are historical. Pages remain small server components, with client state confined to navigation and the checker. Native controls avoid an unnecessary component/global-state dependency.
+
+## Phase 2 frontend and content boundaries
+
+Public routes cover Home, How It Works, Pricing, Check a Location, Login, Privacy, Terms, Methodology, Contact and Blog/articles. Root layout owns navigation, preview availability, skip link, main landmark and footer. Shared pricing, CTA and report-outline components serve actual reuse cases. System typography and Tailwind's existing CSS pipeline implement the calm presentation.
+
+`lib/wizard.ts` owns a versioned `LocationCheckInput` contract, validators and explicit units. The address is an unresolved entered string. Four UI business identifiers map to three categories. Optional numerical inputs use null for missing and retain zero; rent/rates/staff/other costs are annual GBP, floor area m², margin %, opening days/week, hours/day and investment one-off. This is input validation, not financial calculation or an approved economic-model policy. Technical input bounds limit numbers/length, and can be revisited with Phase 10 rules. React state preserves entries between steps on the page; there is no localStorage, server persistence, request submission or address/provider call. Completion states that analysis is unavailable.
+
+Login is disabled UI only. Contact is an honest availability page without a fabricated inbox or sending route. Privacy/Terms are structured development drafts with internal review notes; legal/controller/contact/retention and purchase-policy approval are required before launch, not implied by these pages.
+
+The additional Blog requirement explicitly authorises basic SEO in Phase 2. See [blog-architecture.md](blog-architecture.md) for the serialisable rich-content model, read provider, publication filter, safe renderer, image boundaries, canonical/indexing strategy and future controlled publishing pipeline. No CMS/API/database/scheduler/agent is implemented. Replacing the adapter preserves the Blog UI; future publication events must also update route/sitemap/metadata caches.
 
 ## Phase 1 implementation boundary
 
