@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phase 0 documentation foundation is complete; Phase 1 local foundations are implemented with verification tracked in [phase-1-status.md](phase-1-status.md). Phases 2–17 are planning only and not started. Implement one phase per authorised task; passing a gate does not authorise starting the next phase. Record actual validation and unresolved human dependencies before marking a phase complete.
+Recorded 2026-10-03. Phase 0 documentation foundation and Phase 1 infrastructure are complete, with verification tracked in [phase-1-status.md](phase-1-status.md). Phases 2–17 are planning only and not started. Implement one phase per authorised task; passing a gate does not authorise starting the next phase. Record actual validation and unresolved human dependencies before marking a phase complete.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -14,7 +14,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 1: Repository, Infrastructure and Environments
 
-- Status: local foundations implemented; external configuration/verification pending. Phase 1 remains incomplete until its outstanding gates are resolved. See [infrastructure.md](infrastructure.md) and [phase-1-status.md](phase-1-status.md).
+- Status: complete. Local checks, remote CI, branch protection, hosted development Supabase connectivity and a protected Vercel Preview are verified. Docker-backed local services remain unavailable and are a documented non-blocking limitation. See [infrastructure.md](infrastructure.md) and [phase-1-status.md](phase-1-status.md).
 
 - Objective: create a minimal, production-quality development and deployment foundation.
 - Codex implements: Next.js App Router shell, strict TypeScript, Tailwind, minimal directory structure, safe environment example and ignores, Supabase development configuration, Vercel deployment preparation, and CI for lint, type checks, legitimate tests and production build. Update developer commands and configuration documentation.

@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phase 0 documentation foundation is complete and preserved in commit `5e35f57`. Phase 1 local foundations are implemented; see `docs/phase-1-status.md` for validation and outstanding external verification. Three real benchmark addresses remain non-blocking for infrastructure work. No product UX, application migrations, auth flows, payments, data integrations or AI exist. Phase 2 and all later phases are not started and require a new user instruction.
+Phase 0 documentation foundation is complete and preserved in commit `5e35f57`. Phase 1 foundations and external verification are complete; see `docs/phase-1-status.md` for actual results and limits. `main` is protected: deliver changes through a PR and the required CI check. Vercel Preview is authenticated; automatic Production deployment from `main` is disabled. Three real benchmark addresses remain non-blocking for infrastructure work. No product UX, application migrations, auth flows, payments, data integrations or AI exist. Phase 2 and all later phases are not started and require a new user instruction.
 
 ## Working rules
 

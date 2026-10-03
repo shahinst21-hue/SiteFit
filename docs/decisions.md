@@ -1,6 +1,6 @@
 # Architecture Decision Log
 
-Recorded 2026-10-03 from the user's approved Phase 0 contract. “Accepted” means the direction is approved, not implemented. No external service is configured. Each entry's date is the record date, not a claim about an earlier decision.
+Recorded 2026-10-03 from the user's approved Phase 0 contract. “Accepted” means the direction is approved; actual implementation and external verification are recorded in phase-1-status.md. Phase 1 foundations are complete; later product services remain planned. Each entry's date is the record date, not a claim about an earlier decision.
 
 | ID | Date | Status | Decision | Reason and consequence |
 | --- | --- | --- | --- | --- |
@@ -9,7 +9,7 @@ Recorded 2026-10-03 from the user's approved Phase 0 contract. “Accepted” me
 | D03 | 2026-10-03 | Accepted | Single Location Due Diligence Report first. | Assess one property and business context, not portfolios. |
 | D04 | 2026-10-03 | Accepted | £29 initial Full Report pricing assumption. | Implement configurable price later; never hardcode it in application business logic. |
 | D05 | 2026-10-03 | Accepted | Pay per report rather than subscription. | Free Snapshot precedes paid Full Report; no subscription product in MVP. |
-| D06 | 2026-10-03 | Accepted | Vercel hosting. | Prepare environments in Phase 1; access/deployment remains unconfigured. |
+| D06 | 2026-10-03 | Accepted | Vercel hosting. | Phase 1 protected Preview verified; Production activation remains separately authorised. |
 | D07 | 2026-10-03 | Accepted | Next.js App Router and TypeScript. | Use strict mode; single web application, created only in Phase 1. |
 | D08 | 2026-10-03 | Accepted | Supabase Postgres, Auth and Storage. | Phase 1 development preparation; schema/auth/RLS in Phase 3; no migrations now. |
 | D09 | 2026-10-03 | Accepted | Stripe Checkout. | Verified server-side payment events control entitlement; implement in Phase 7. |
@@ -62,4 +62,4 @@ Recorded 2026-10-03 within the authorised infrastructure scope; approved product
 | D29 | 2026-10-03 | Accepted | Verify publishable-key Data API access through an absent diagnostic relation. | Hosted OpenAPI introspection requires a privileged key; `PGRST205` establishes schema-cache access without credentials escalation, migrations or application data reads. |
 | D30 | 2026-10-03 | Accepted | Initial `main` push runs CI without an automatic Vercel production deployment. | Git-triggered deployments from `main` are disabled; explicit CLI Preview verification meets Phase 1. Production activation remains separately authorised. |
 
-These are implementation choices within the authorised Phase 1 direction, not new product rules. Current package versions and exact dependencies are recorded in the lockfile. Remote verification remains pending as documented in [phase-1-status.md](phase-1-status.md).
+These are implementation choices within the authorised Phase 1 direction, not new product rules. Current package versions and exact dependencies are recorded in the complete cross-platform lockfile. Remote verification passed as documented in [phase-1-status.md](phase-1-status.md). Main-branch protection and authenticated Preview access are enforced; production activation remains separately authorised.
