@@ -31,7 +31,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 3: Supabase Database and Authentication
 
-- Status: implementation and hosted migrations/RLS are verified; final inbox/browser magic-link test and remote delivery are pending. No Phase 4 work.
+- Status: blocked on the real inbox/browser PKCE magic-link check. Implementation, hosted migrations/RLS/Auth-session probes, local validation, remote CI and protected Preview pass. Draft PR #4 stays unmerged until the inbox gate passes. No Phase 4 work.
 - Objective: establish persistent records and enforceable ownership.
 - Codex implements: minimum required schema, migrations, Supabase Auth flows, RLS/storage foundations and schema/access tests; extend the proposed schema only as needed.
 - Human action: complete the hosted inbox/browser magic-link test. Existing CLI access supports development migrations/configuration. Public exploration remains open; private persistence requires verified identity. Exact future sign-in placement, purchase policy and retention periods remain decisions for the features that use them; this phase creates no saved-checker/purchase flow.
