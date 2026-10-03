@@ -1,6 +1,6 @@
 # Planned architecture
 
-Recorded 2026-10-03. The architectural directions below are accepted; detailed mechanics are proposals to refine in their implementation phases. Currently only Git and documentation exist. No service is connected or provisioned.
+Recorded 2026-10-03. The architectural directions below are accepted; detailed mechanics are proposals to refine in their implementation phases. Phase 1 adds a minimal Next.js shell and local tooling/configuration described in [infrastructure.md](infrastructure.md). Remote services remain unconnected/unverified; the analysis product is not implemented.
 
 ## Frontend and backend
 
@@ -57,4 +57,8 @@ tests/        Tests introduced with relevant implementation
 docs/         Product, architecture, decisions and validation records
 ```
 
-Only `docs/` exists today. Future folders must not be populated with business logic before their phase. No monorepo, mobile app, analysis engine, payment flow or authentication flow is implemented in Phase 0.
+Phase 1 creates `app/`, `scripts/`, `tests/`, `supabase/` and CI configuration alongside `docs/`. `components/` and `lib/` are deferred until useful files need them. Future folders must not be populated with business logic before their phase. No monorepo, mobile app, analysis engine, payment flow or authentication flow is implemented.
+
+## Phase 1 implementation boundary
+
+The shell uses strict TypeScript, Tailwind/PostCSS and root `@/*` imports suitable for future lightweight components. The Supabase preparation is CLI configuration and a Node-only, read-only Data API diagnostic; there is no application database client, schema or auth flow. Local/Preview/Production configuration is specified in [infrastructure.md](infrastructure.md), with actual verification in [phase-1-status.md](phase-1-status.md). No runtime product pipeline or provider abstraction is created prematurely.

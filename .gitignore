@@ -9,3 +9,19 @@
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Dependencies and generated tooling output
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+*.log
+.vercel/
+supabase/.temp/
+supabase/.branches/
+
+.vercel
+.env*
+!.env.example

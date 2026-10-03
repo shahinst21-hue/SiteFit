@@ -1,0 +1,8 @@
+# Deployment source never includes local credentials or generated output.
+.env*
+.git/
+node_modules/
+.next/
+coverage/
+*.log
+*.tsbuildinfo

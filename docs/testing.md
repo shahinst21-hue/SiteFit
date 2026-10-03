@@ -1,6 +1,6 @@
 # Future testing strategy
 
-Recorded 2026-10-03. Planning only: no application, test runner, automated tests or CI are implemented in Phase 0. Phase 1 introduces legitimate checks appropriate to its minimal shell. Later phases add tests alongside implemented behaviour, not speculative suites or tests that merely mirror code.
+Recorded 2026-10-03. The strategy below covers future phases. Phase 0 introduced no executable tests. Phase 1 now introduces lint, strict types, Node unit tests and production build scripts with a GitHub Actions workflow. Later phases add tests alongside implemented behaviour, not speculative suites or tests that merely mirror code.
 
 ## Validation by layer
 
@@ -48,3 +48,9 @@ Check the eight documents, internal links, accepted decisions and planned phase 
 - Git is initialised. Documentation and `.gitignore` are untracked and ready for review/staging; no commit or remote was created. Application lint/type checks/tests/build and live infrastructure checks are not applicable to this documentation-only phase.
 
 The Phase 0 documentation Definition of Done passes. Real-property benchmark validation remains pending user-supplied addresses and later implementation; Phases 1–17 remain not started.
+
+## Phase 1 checks
+
+Use `npm run check`, or its individual lint, typecheck, test and build commands. `next typegen` makes type checking possible on a fresh installation before building. Node's built-in test runner executes `.test.ts` files; TypeScript stripping does not type-check, so the separate strict check is required. The diagnostic tests exercise missing/malformed configuration, privileged-key rejection, request boundaries, response validation and redacted failures, with all requests stubbed against a reserved `.invalid` host and inert test-only strings. They do not prove live connectivity.
+
+Required checks are also defined in `.github/workflows/ci.yml`; remote execution needs an actual GitHub repository. Run `npm run check:supabase` only after actual values are stored securely, and separately verify the deployed Vercel Preview. Record observed results and unavailable checks in [phase-1-status.md](phase-1-status.md). The earlier Phase 0 record is historical, not the current repository inventory.

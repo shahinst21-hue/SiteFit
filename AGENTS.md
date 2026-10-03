@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phase 0 documentation foundation is complete. Three real benchmark addresses remain outstanding human inputs, explicitly non-blocking for that foundation. No application, infrastructure, migrations, integrations or automated tests exist. Phase 1 and all later phases are planned only and require a new user instruction to begin.
+Phase 0 documentation foundation is complete and preserved in commit `5e35f57`. Phase 1 local foundations are implemented; see `docs/phase-1-status.md` for validation and outstanding external verification. Three real benchmark addresses remain non-blocking for infrastructure work. No product UX, application migrations, auth flows, payments, data integrations or AI exist. Phase 2 and all later phases are not started and require a new user instruction.
 
 ## Working rules
 
@@ -37,6 +37,10 @@ Give exact steps, including secure storage locations if credentials are needed.
 What to send back:
 Request non-secret confirmation or the required business information.
 
-## Documentation-only validation
+## Developer validation
+
+Use Node.js 24.x, npm 11.x and `npm ci`. Run `npm run check` for lint, strict types, Node unit tests and production build. Use `npm run dev` for the shell. Read `docs/infrastructure.md` before environment or service work. Never import Node-only `scripts/` into the application. The shell builds without Supabase credentials; `npm run check:supabase` requires real values privately configured. CI, deployment and live connectivity need separate actual verification.
+
+## Phase 0 documentation-only validation
 
 Check the eight required documents exist, cross-references resolve, terminology and phase boundaries agree, benchmark addresses remain explicitly unfilled, no implementation was introduced, no credentials exist, and Git status is understood. Application lint, type checks, tests and builds begin in Phase 1.

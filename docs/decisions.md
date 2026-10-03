@@ -46,3 +46,20 @@ The table design, pipeline mechanics and test procedures in the other documents 
 | Privacy, deletion, analytics, budget and launch targets | Relevant storage/operations/marketing/launch phases | Document and approve before dependent implementation. |
 
 No open decision above prevents the authorised documentation foundation. GitHub, Vercel, Supabase, Google and Stripe access will be requested only when needed in authorised later work.
+
+## Phase 1 engineering decisions
+
+Recorded 2026-10-03 within the authorised infrastructure scope; approved product decisions above are unchanged.
+
+| ID | Date | Status | Decision | Reason and consequence |
+| --- | --- | --- | --- | --- |
+| D23 | 2026-10-03 | Accepted | npm with committed lockfile and Node 24.x/npm 11.x. | No prior package manager existed. Conventional tooling, matching installed Node and Vercel-supported runtime; use `npm ci` in CI/deployment. |
+| D24 | 2026-10-03 | Accepted | Node built-in test runner and native TypeScript stripping. | Minimal framework-free tests; separate strict type checking covers stripped types. |
+| D25 | 2026-10-03 | Accepted | Supabase CLI and read-only Data API diagnostic only. | No runtime SDK, privileged key or application schema needed in Phase 1; future Auth/client design stays in Phase 3. |
+| D26 | 2026-10-03 | Accepted | Build without external credentials; diagnostic variables remain Node-only. | Local and CI shell checks are reproducible; no premature public environment values. Missing configuration fails only the optional probe. |
+| D27 | 2026-10-03 | Accepted | Minimal root App Router layout; defer empty component/service directories. | Alias and Tailwind support future components without unused libraries or business abstractions. |
+| D28 | 2026-10-03 | Accepted | Supported ESLint 10 with minimal JavaScript/TypeScript rules. | Avoid an unnecessary unpatched transitive dependency in the full framework preset; reassess UI-specific rules in Phase 2. See infrastructure.md for scope and the advisory. |
+| D29 | 2026-10-03 | Accepted | Verify publishable-key Data API access through an absent diagnostic relation. | Hosted OpenAPI introspection requires a privileged key; `PGRST205` establishes schema-cache access without credentials escalation, migrations or application data reads. |
+| D30 | 2026-10-03 | Accepted | Initial `main` push runs CI without an automatic Vercel production deployment. | Git-triggered deployments from `main` are disabled; explicit CLI Preview verification meets Phase 1. Production activation remains separately authorised. |
+
+These are implementation choices within the authorised Phase 1 direction, not new product rules. Current package versions and exact dependencies are recorded in the lockfile. Remote verification remains pending as documented in [phase-1-status.md](phase-1-status.md).

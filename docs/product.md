@@ -1,6 +1,6 @@
 # SiteFit Product Contract
 
-Status: Accepted product direction, recorded 2026-10-03. Documentation only; no product has been implemented.
+Status: Accepted product direction, recorded 2026-10-03. Phase 1 adds only an infrastructure placeholder; the product journey remains unimplemented. Scope is unchanged.
 
 ## Problem, customer and use moment
 
