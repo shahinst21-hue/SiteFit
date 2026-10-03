@@ -34,9 +34,11 @@ export default function Privacy() {
         </p>
         <h2>Accounts, payments and tracking</h2>
         <p>
-          This preview has no active sign-in, payment collection, marketing
-          analytics or mailing list. Hosting and browser behaviour are separate
-          from these unimplemented features.
+          Optional email sign-in uses Supabase Auth to process your email and
+          establish a session. Session cookies keep you signed in. SiteFit
+          stores an application profile linked to your account without
+          duplicating your authentication email. No payment collection,
+          marketing analytics or mailing list is active.
         </p>
         <h2>Retention and sharing</h2>
         <p>
@@ -53,7 +55,8 @@ export default function Privacy() {
         <h2>Changes before launch</h2>
         <p>
           This draft must be replaced with reviewed information reflecting the
-          live product before accounts, analysis or purchases become available.
+          live product before public launch, analysis or purchases become
+          available.
         </p>
       </div>
     </div>

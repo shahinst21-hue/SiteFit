@@ -8,6 +8,8 @@ export default function robots(): MetadataRoute.Robots {
           allow: "/",
           disallow: [
             "/login",
+            "/account",
+            "/auth/",
             "/check-location",
             "/preview/",
             "/admin/",

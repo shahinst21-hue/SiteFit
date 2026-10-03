@@ -12,7 +12,7 @@ Planned backend: server-side Next.js handlers and application services separatin
 
 Supabase Postgres holds application records; Supabase Auth provides identity; Supabase Storage holds permitted report artifacts. Proposed entities and lifecycle are in [database.md](database.md). Phase 1 prepares development configuration only. Actual schema, migrations, authentication flows and RLS belong to Phase 3.
 
-The visitor-to-account transition and report ownership policy remain open for Phase 3 approval. Do not assume guest purchase or mandatory registration. Database and storage access must enforce the resulting policy, with privileged server access kept outside browser code.
+Phase 3 keeps public browsing and the in-memory checker accessible without registration. Private persistence is owned by a verified Auth identity. No analysis submission or guest purchase flow exists yet, so exact sign-in placement in those later journeys remains undecided. Database access enforces ownership; privileged access stays outside browser/application code.
 
 ## Payments
 
@@ -67,7 +67,17 @@ Public routes cover Home, How It Works, Pricing, Check a Location, Login, Privac
 
 `lib/wizard.ts` owns a versioned `LocationCheckInput` contract, validators and explicit units. The address is an unresolved entered string. Four UI business identifiers map to three categories. Optional numerical inputs use null for missing and retain zero; rent/rates/staff/other costs are annual GBP, floor area m², margin %, opening days/week, hours/day and investment one-off. This is input validation, not financial calculation or an approved economic-model policy. Technical input bounds limit numbers/length, and can be revisited with Phase 10 rules. React state preserves entries between steps on the page; there is no localStorage, server persistence, request submission or address/provider call. Completion states that analysis is unavailable.
 
-Login is disabled UI only. Contact is an honest availability page without a fabricated inbox or sending route. Privacy/Terms are structured development drafts with internal review notes; legal/controller/contact/retention and purchase-policy approval are required before launch, not implied by these pages.
+Login was disabled UI in Phase 2; Phase 3 replaces it with email magic links. Contact remains an honest availability page without a fabricated inbox or sending route. Privacy/Terms remain development drafts, updated to describe development Auth cookies/email processing. Legal/controller/contact/retention and purchase-policy review is required before launch, not implied by these pages.
+
+## Phase 3 authentication and data foundation
+
+`lib/supabase/browser.ts` creates the browser SSR client using intentionally publishable configuration supplied by the server-rendered Login page. `server.ts` is guarded by `server-only` and creates a cookie client per request. There is no application admin client/service-role variable. `proxy.ts` refreshes sessions only on Login, Account and Auth paths; public marketing/article routes remain static and independent of Auth availability. Proxy preserves refreshed cookies and private/no-store headers. Account/Login verify identity with `getUser()` rather than trusting cookie session objects; protected Account redirects signed-out visitors before rendering.
+
+Magic-link requests use `signInWithOtp` and the default hosted email template, returning to `/auth/callback` with a PKCE code. The same browser must retain its verifier cookie. The callback exchanges the code, writes session cookies and redirects only to allowlisted local destinations. Invalid/expired/replayed or wrong-browser links return a fixed error with a new-link option. `/auth/confirm` supports a token-hash email link with explicit confirmation POST, used for integration tests and available for a later authorised custom SMTP template; GET does not consume a token. Default free-tier email templates cannot be customised, so this alternative is not the current email-delivery path. No password/social UI is introduced.
+
+`/account` is a small verified signed-in state, profile read and sign-out, with an honest report-unavailable state. It is noindex and outside the sitemap. Sign-out uses a same-origin Next Server Action and Supabase local-session revocation; failures permit retry. Auth responses are private/no-store and no-referrer. Supabase SSR session cookies are browser-readable by design; Secure is used on HTTPS and SameSite=Lax. They are not claimed to be HttpOnly. No user-specific server client is shared between requests.
+
+The fifteen-table schema, enums, constraints, ownership, grants, RLS and deletion choices are documented in [database.md](database.md), installed through committed migrations. Input versions are distinct from sourced/calculated data. Derived writes, lifecycle/payment changes and operational events are restricted to future trusted services; ordinary clients cannot advance an analysis or forge a paid report. No location-checker persistence or processing endpoint is implemented.
 
 The additional Blog requirement explicitly authorises basic SEO in Phase 2. See [blog-architecture.md](blog-architecture.md) for the serialisable rich-content model, read provider, publication filter, safe renderer, image boundaries, canonical/indexing strategy and future controlled publishing pipeline. No CMS/API/database/scheduler/agent is implemented. Replacing the adapter preserves the Blog UI; future publication events must also update route/sitemap/metadata caches.
 

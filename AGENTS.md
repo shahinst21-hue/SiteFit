@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phases 0–2 are complete, including the user-authorised Blog/SEO foundation. Phase 0 is preserved in `5e35f57`; Phase 2 implementation merged through PR #2 with successful post-merge CI. See `docs/phase-2-status.md` for actual results and limits. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. Three benchmark addresses are still non-blocking. No application migrations, auth flows, payments, analysis, data integrations or AI exist. Phase 3 and all later phases require a new instruction.
+Phases 0–2 are complete. Phase 3 is authorised and in progress on `phase-3-database-auth`; see `docs/phase-3-status.md` for observed gates and outstanding inbox verification. The development schema, migrations, Auth code and RLS are implemented and hosted SQL security checks pass. Do not mark Phase 3 complete until all its gates pass. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. No analysis, address/provider integration, payment execution, reports or publishing agent exists. Phase 4 and later require a new instruction.
 
 ## Working rules
 
@@ -42,6 +42,8 @@ Request non-secret confirmation or the required business information.
 Use Node.js 24.x, npm 11.x and `npm ci`. Run `npm run check` for lint, strict types, Node unit tests and production build. Use `npm run dev` for the shell. Read `docs/infrastructure.md` before environment or service work. Never import Node-only `scripts/` into the application. The shell builds without Supabase credentials; `npm run check:supabase` requires real values privately configured. CI, deployment and live connectivity need separate actual verification.
 
 After building, start the app and run `npm run check:public` for real HTTP/metadata/404 checks (also run in CI). Inspect responsive and keyboard behaviour in a browser. Read `docs/blog-architecture.md` before content changes. Blog pages must consume structured posts through the repository boundary; never introduce arbitrary HTML/MDX execution or agent-written frontend code. Keep unconnected features and legal drafts honest, and published content separate from drafts. Wizard entries remain page memory only in Phase 2. Hair/Beauty selections share the approved salon category. Pricing and display name belong in `lib/site-config.ts`.
+
+Phase 3 clients use publishable credentials only. The login page deliberately exposes the publishable configuration; privileged keys never enter application code. Create a new server client per request; authorise using verified identity and database RLS. Public pages/checker stay public. Read `docs/database.md` before migrations. Never edit applied migration history. Run `npm run check:database` for a fresh PostgreSQL rebuild/security suite and the documented hosted SQL suite separately. `npm run check:auth:hosted` is an explicit development-only integration probe requiring a running production server and authenticated CLI; its admin credential stays in process memory, its synthetic accounts are deleted, and it does not prove inbox delivery. Do not run it in CI/Production. Do not merge Phase 3 while required hosted/end-to-end gates are outstanding.
 
 ## Phase 0 documentation-only validation
 

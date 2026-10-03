@@ -1,0 +1,42 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readdir, readFile } from "node:fs/promises";
+import { PGlite } from "@electric-sql/pglite";
+test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visibility", async () => {
+  const db = new PGlite();
+  try {
+    // Minimal platform objects only; all application SQL is the actual migration history.
+    await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
+      create schema auth; create table auth.users(id uuid primary key,email text,aud text,role text);
+      create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+      grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
+    const dir = new URL("../supabase/migrations/", import.meta.url);
+    const files = (await readdir(dir))
+      .filter((file) => file.endsWith(".sql"))
+      .sort();
+    assert.ok(files.length);
+    assert.equal(
+      new Set(files.map((file) => file.split("_")[0])).size,
+      files.length,
+    );
+    for (const file of files)
+      await db.exec(await readFile(new URL(file, dir), "utf8"));
+    await db.exec(
+      await readFile(
+        new URL("../supabase/tests/ownership.sql", import.meta.url),
+        "utf8",
+      ),
+    );
+    for (const table of ["public.analyses", "auth.users"])
+      assert.equal(
+        (
+          await db.query<{ count: number }>(
+            `select count(*)::int as count from ${table}`,
+          )
+        ).rows[0].count,
+        0,
+      );
+  } finally {
+    await db.close();
+  }
+});

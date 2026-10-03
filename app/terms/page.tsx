@@ -18,8 +18,9 @@ export default function Terms() {
         <h2>The current service</h2>
         <p>
           You can read public pages and explore a location-entry journey. No
-          property analysis, account access, purchase or report delivery is
-          available.
+          property analysis, purchase or report delivery is available. Optional
+          email sign-in is available for development verification; an account
+          does not create a report or purchase entitlement.
         </p>
         <h2>Preview information</h2>
         <p>

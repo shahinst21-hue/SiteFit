@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phases 0–2 are complete, including the additionally authorised Blog/SEO foundation. Actual checks are in [phase-2-status.md](phase-2-status.md). Phases 3–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03. Phases 0–2 are complete; Phase 3 is authorised and in progress. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and observed checks. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -31,9 +31,10 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 3: Supabase Database and Authentication
 
+- Status: implementation and hosted migrations/RLS are verified; final inbox/browser magic-link test and remote delivery are pending. No Phase 4 work.
 - Objective: establish persistent records and enforceable ownership.
 - Codex implements: minimum required schema, migrations, Supabase Auth flows, RLS/storage foundations and schema/access tests; extend the proposed schema only as needed.
-- Human action: approve visitor/account transition, ownership and initial retention policy; supply project access and auth redirect settings securely.
+- Human action: complete the hosted inbox/browser magic-link test. Existing CLI access supports development migrations/configuration. Public exploration remains open; private persistence requires verified identity. Exact future sign-in placement, purchase policy and retention periods remain decisions for the features that use them; this phase creates no saved-checker/purchase flow.
 - Definition of Done: reproducible migrations; auth works under approved policy; cross-user access is rejected; privileged credentials remain server side; future schema stays documented rather than speculative implementation.
 
 ## Phase 4: Address Resolution and Property Identity
