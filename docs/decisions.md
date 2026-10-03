@@ -63,3 +63,19 @@ Recorded 2026-10-03 within the authorised infrastructure scope; approved product
 | D30 | 2026-10-03 | Accepted | Initial `main` push runs CI without an automatic Vercel production deployment. | Git-triggered deployments from `main` are disabled; explicit CLI Preview verification meets Phase 1. Production activation remains separately authorised. |
 
 These are implementation choices within the authorised Phase 1 direction, not new product rules. Current package versions and exact dependencies are recorded in the complete cross-platform lockfile. Remote verification passed as documented in [phase-1-status.md](phase-1-status.md). Main-branch protection and authenticated Preview access are enforced; production activation remains separately authorised.
+
+## Phase 2 engineering decisions
+
+Recorded 2026-10-03 within the user's public UX and additional Blog/SEO authorisation.
+
+| ID | Status | Decision | Reason and consequence |
+| --- | --- | --- | --- |
+| D31 | Accepted | Central brand/pricing config and small native UI components. | SiteFit name and initial GBP price remain easy to change; no UI/global-state dependency needed. |
+| D32 | Accepted | Four business choices map to three approved categories. | Preserve separate Hair/Beauty inputs while keeping the combined salon analysis category. |
+| D33 | Accepted | Page-memory wizard and versioned unresolved-input contract. | Back/Next preserves entries; blank differs from zero; no transmission, storage or fake calculation. |
+| D34 | Accepted | Structured rich blocks and asynchronous Blog read repository. | Source can become Supabase/CMS/API without rewriting presentation. No executable content, backend or publishing agent now. |
+| D35 | Accepted | Phase 2 metadata/sitemap/robots under the additional SEO requirement. | Published-only content and script-safe JSON-LD; no invented domain; Local/Preview stay noindex; public indexing needs explicit production origin. |
+| D36 | Accepted | Scoped loading boundary and early not-found metadata validation. | Actual missing-article HTTP 200 from root streaming was fixed; route checks now require 404. |
+| D37 | Accepted | Retain minimal ESLint and dependency-free Node tests; add actual public-route smoke checks to CI. | Full framework preset's earlier advisory remains a reason to avoid it; native controls, strict types, unit logic and browser checks cover current UI. No forced dependency downgrade or unused framework. |
+
+Legal pages and contact are authorised development placeholders, not invented legal/business identity or launch readiness. Free Snapshot exact contents and commercial policy remain open for their original phases. Future publication validation and editorial approval are documented, not implemented or presumed.

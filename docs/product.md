@@ -1,6 +1,6 @@
 # SiteFit Product Contract
 
-Status: Accepted product direction, recorded 2026-10-03. Phase 1 adds only an infrastructure placeholder; the product journey remains unimplemented. Scope is unchanged.
+Status: Accepted product direction, recorded 2026-10-03. Phase 2 implements the public website, frontend-only journey and Blog/SEO foundation. Live analysis and all later services remain unimplemented. Scope is unchanged.
 
 ## Problem, customer and use moment
 
@@ -9,6 +9,8 @@ People considering leasing commercial premises need to understand a location's s
 ## Geography and initial verticals
 
 The MVP is UK only and London first. Launch supports three business categories: Coffee Shop; Restaurant; Hair Salon or Beauty Salon (one combined category). Expansion beyond London or these categories needs explicit approval.
+
+The authorised Phase 2 interface presents Hair Salon and Beauty Salon as separate user choices with stable identifiers, mapping both to the single approved salon category. This refines the entry UX and does not expand the business-category model.
 
 ## User journey and products
 

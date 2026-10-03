@@ -1,0 +1,43 @@
+# Blog and editorial content architecture
+
+Implemented in Phase 2 on 2026-10-03 under the user's additional Blog/SEO requirement. No CMS, database, content-write API, agent, scheduler, upload backend or publication service is implemented.
+
+## Current read boundary
+
+`lib/content/model.ts` defines serialisable `BlogPost`, image, inline, block and CTA contracts. `lib/content/repository.ts` exposes asynchronous `listPublished`, `getPublished` and `related` operations. `lib/content/index.ts` selects the read-only local adapter. Server-rendered index/article pages consume normalised posts through that boundary, not article-specific React components.
+
+Two original general-guidance articles demonstrate the frontend. They contain no real-property observations or invented report results. The author/publisher is the SiteFit brand, not an invented expert. Dates record the actual content creation day. Local SVGs are illustrations, with explicit alt descriptions. No fake testimonials, ratings or guarantees are used.
+
+The repository supports category/tag filtering, bounded pagination, featured flags, publication ordering and related-content selection. The index currently shows featured and recent articles; filtering controls and pagination UI are deferred until the corpus warrants them. An empty state exists for zero posts, and a single post appears without an empty recent section. Slugs are clean, stable, human-readable and independent of dates/IDs.
+
+Only `published` posts with a valid publication date at or before the current time reach public reads, related lists or sitemap. Draft, scheduled, future-dated and archived posts are hidden; unknown/unpublished URLs return HTTP 404 and noindex. The scheduled status anticipates a later scheduler, but changing time alone is not a publishing system. With local static content, edits/status changes require a validated rebuild/deployment.
+
+## Content and rendering
+
+The discriminated block format supports H2/H3 headings, paragraphs, bold/emphasis, ordered/unordered lists, internal/external links, images/captions, quotes, tables, callouts and reusable CTAs. The page owns the single H1. Text is React-escaped; there is no raw article HTML, MDX execution or arbitrary frontend code in content. CTAs are data with label, href, optional heading/supporting text and primary/secondary variant; labels such as Check a Location, Get a Free Snapshot or See What the Report Includes can reuse the renderer. Current CTAs describe preview availability honestly.
+
+Local validation rejects duplicate slugs, missing SEO fields, invalid image dimensions/alt, unsafe link/CTA schemes, malformed tables and invalid publication metadata. Canonicals exclude tracking queries/fragments. This is a trusted-local-content validator, not a complete untrusted-JSON ingestion schema or factual-claim verifier. Future writers must validate raw input before treating it as `BlogPost`.
+
+Images carry source URL, width and height, with featured/inline alt text and optional captions. Local assets use `next/image`, intrinsic dimensions, responsive sizes and priority only where appropriate. Next serves SVGs without raster optimisation. External HTTPS image URLs are supported through direct browser delivery; no arbitrary remote image proxy/SSRF surface is created. After storage is chosen, approve exact asset hosts/paths and configure Next `remotePatterns` to enable raster optimisation. Validate MIME type, size, licence and alt text at the future upload boundary. No permanent Git storage assumption exists.
+
+## Metadata, indexing and delivery
+
+`lib/seo.ts` centralises route metadata, article canonicals and truthful BlogPosting JSON-LD. Articles have independent SEO title/description, Open Graph title/description/image, social-card metadata, publication/modification dates and author information. The generic `/social-image` PNG is a fallback; a post-specific image can override it without a file-based metadata override. JSON-LD escapes `<` and Unicode line separators to prevent a closing-script injection, following [Next's JSON-LD guidance](https://nextjs.org/docs/app/guides/json-ld).
+
+`SITE_URL` is an optional non-secret, server-side HTTPS origin for a future production domain. No domain has been invented. Without it, Local uses localhost and Vercel uses its supplied deployment URL. Local and Preview are noindex; public indexing requires both Vercel Production and a configured HTTPS `SITE_URL`. A production configuration allows published Blog articles and public pages; login/checker and draft legal pages remain noindex. Robots excludes future `/preview/`, `/admin/`, `/api/` surfaces. These paths are exclusions only, not implemented services or access controls. Preview deployment authentication remains enabled.
+
+`app/sitemap.ts` enumerates the repository's published posts across all pages, rather than a maintained list of article URLs. Article modification dates/images are included when known. Login, checker and draft legal pages are excluded. The sitemap is regenerated during current local-content builds. A future dynamic adapter must connect publication/update/archive events to cache invalidation or rebuilds so routes, static params, sitemap and metadata reflect the same published revision. Scheduled items must remain private until a validated publication event.
+
+Articles are server-rendered/statically generated with no client article renderer. Only shared navigation and the checker need client state. System fonts require no external fetch; images reserve space and client dependencies are minimal. Root loading was deliberately moved to the checker: a broad streamed loading boundary caused an unknown article to return HTTP 200. Metadata and page reads now call `notFound()` and actual runtime tests require HTTP 404.
+
+References: [Metadata API](https://nextjs.org/docs/app/api-reference/functions/generate-metadata), [sitemap](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap), [robots](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots), [Image](https://nextjs.org/docs/app/api-reference/components/image).
+
+## Future controlled publishing interface — not implemented
+
+The eventual content agent submits structured data: title, stable slug, rich blocks/body, featured image reference/dimensions/alt, SEO fields, category/tags, CTA, named author, publication date, canonical and status. It must never write frontend code, scripts or executable markup.
+
+The planned lifecycle is create draft → validate structure/content/SEO → editorial preview → approved publish; subsequent operations include update, unpublish/archive, schedule, asset upload and publication logging. The controlled write service will need authenticated authorisation, complete runtime schema validation, idempotency, unique slugs/IDs, versioning, status-transition rules, an audit trail and safe failure handling. No credential or provider has been selected for it.
+
+A quality gate must check duplicate topics and slugs, required metadata, broken internal/external links, missing alt text, content completeness, unsupported factual claims, appropriate internal linking and CTA validity. Automated generation must not imply automatic permission to publish. Keep drafts and previews private and noindex. Define human editorial approval and evidence/licensing policy before connecting an agent.
+
+The source may later be Supabase, a headless CMS or an approved publishing API returning the same normalised model. Publication events must invalidate the relevant page, listing, metadata and sitemap caches (or trigger a validated deployment). Preserve revision consistency and avoid exposing drafts through metadata or related queries. Published slug changes require an approved redirect map from old to new URLs, with consistent canonicals/sitemap. Redirect persistence, scheduling workers, image storage, logging, content-write endpoints and editorial administration are all future work.
