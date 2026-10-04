@@ -42,7 +42,7 @@ The line break is visual only: `paid` transitions to `collecting_full_data`. `fa
 | collecting_full_data | Gather permitted full-report evidence and premises observations.                     |
 | calculating          | Run deterministic calculations; missing inputs yield explicit insufficient evidence. |
 | generating_report    | Build and validate evidence-backed structured report.                                |
-| ready                | Validated report available under ownership and entitlement controls.                 |
+| ready                | Validated, persisted historical report; reads use the frozen snapshot under ownership and entitlement controls. |
 | failed               | Record stage and safe failure reason; preserve entitlement and retry context.        |
 
 This is a proposed processing lifecycle, not the complete payment state machine. Payment cancellation, refunds, disputes, retry/resumption and concurrent workers require explicit rules in their phases. Enforce legal transitions server side; retries must not duplicate payment or corrupt report versions. Missing individual sources may allow a report with Unknown sections if product rules permit; they do not imply all analysis must fail.
@@ -52,6 +52,29 @@ This is a proposed processing lifecycle, not the complete payment state machine.
 The migration defines foreign keys, unique checkout/payment/idempotency references, explicit status constraints, database timestamps and version links. Payment amounts use integer minor units with a three-letter currency. Units/formula/rounding policies remain Phase 10 decisions; this phase calculates nothing.
 
 RLS rejects cross-user access. Public browsing/checker remain anonymous and memory-only; private records require an authenticated owner. Exact later submission/purchase sign-in placement remains open. Raw payload retention, evidence sharing, deletion and report expiry need later licensing/privacy decisions. No retention duration or fabricated provider identifiers are approved. No application Storage buckets or public artifact URLs are created.
+
+## Accepted historical report persistence contract
+
+[D60](decisions.md), accepted 2026-10-04, requires completed analyses and ready purchased Full Reports to preserve the original result. The existing tables provide provenance relationships; the report writer, complete metadata contract and freeze enforcement remain planned for their authorised phases. This documentation adds no migration and does not claim the current RLS or version columns prevent a trusted service from modifying a ready report.
+
+The required persisted chain is `User → Analysis → Selected Property → Business Type → User Inputs → Data Snapshots → Evidence → Deterministic Metrics → AI Interpretation → Final Structured Report → Report Sections → PDF Export`. Bind each report to its exact analysis and input/model/evidence versions. Preserve an analysis-specific selected-property representation and business type, because Phase 4's canonical `properties` row may refresh on later selection. Historical rendering must not read changing address details from that row as if they were the original inputs.
+
+Required metadata, where applicable, maps to the foundation as follows:
+
+| Historical information | Existing foundation and later implementation requirement |
+| --- | --- |
+| Analysis timestamp and selected property/business/input versions | `analyses.created_at`, property/business fields and `analysis_inputs.version` provide a foundation; explicitly capture the analysis event timestamp and frozen property/business representation when processing is implemented. |
+| Retrieval timestamps, source/provider identifiers and permitted normalised snapshots | `data_snapshots.retrieved_at`, `source`, `dataset_version`, `normalised_data` and `provider_metadata`; validate the provider-specific provenance contract before writing. |
+| Evidence references and deterministic metrics | `evidence_items` links to snapshots/inputs; `economic_models` stores exact inputs, outputs and `model_version`; report claims must reference the evidence used. |
+| AI interpretation, AI provider/model and prompt version | No dedicated AI execution record exists today. Later implementation must persist the validated interpretation and execution metadata, linked to the exact evidence/metrics and report; `reports.provenance` is a possible metadata boundary, not an implemented AI writer. |
+| Final structured report, schema/version and generation timestamp | `reports.version`, `schema_version`, `provenance` and `report_sections.structured_content` provide a foundation; explicitly persist generation time rather than treating mutable `updated_at` as that event. |
+| PDF export | `pdf_exports` references the exact report/analysis. Exports render the frozen report/sections; export retries or renewed access do not recalculate metrics or regenerate AI. |
+
+Future trusted services must validate and persist the complete report, sections and required lineage before finalising `ready`, and enforce a consistent finalisation boundary. After finalisation, reject mutations that would change the historical inputs, property/business representation, permitted snapshots, evidence, metrics, AI interpretation or report/sections. Ready reads perform ownership/entitlement checks and return stored content only: no provider retrieval, recalculation, AI generation or overwrite. Required schema/enforcement changes must use new migrations in the relevant phase; never edit applied migration history.
+
+A later check by the same user for the same canonical property creates a new `analyses.id` and a new report version or equivalent historical snapshot. The first analysis/report stays unchanged, including a report generated on 4 October 2026. The existing `reports` uniqueness is `(analysis_id, version)`; canonical property identity must not become a uniqueness rule that prevents repeated analyses. Retries of an unfinished job are distinct from a new check and cannot overwrite a ready result.
+
+For every provider, record whether SiteFit may retain each of raw responses, normalised data, derived metrics, source references and retrieval timestamps, with the permitted retention duration for each. `permitted_raw_reference` and `expires_at` do not grant storage permission. Keep only licensed representations and sufficient permitted provenance; temporary postcode candidates are not analysis snapshots and are not automatically persisted. The selected property alone is retained by the current address flow. Licence-required expiry/deletion must be explicit and must never silently replace a historical result with current data or trigger AI regeneration. Resolve retention compatibility before adopting a provider; legal retention/deletion and access policy details remain subject to their later approvals.
 
 ## Final ownership and access model
 
