@@ -19,7 +19,7 @@ Actual provider checks on 2026-10-04:
 
 Free health passed. Safe request IDs: England lookup a5484000-665f-4196-acc7-4f7eaed8aa87 / resolve 8fe4a8c6-ddf1-4cb3-b621-67ad64747fb9; Scotland 88524f80-1a94-4050-8f6c-65fb2c960d71 / 96fb5453-da7e-48b2-b01d-ff3212c9cdfa; Wales 105f4f9e-7c8d-4d9a-a1ee-d97db526fc6f / 3dd3aacf-3e9e-42fe-bdfb-e721488ff23d; NI focused rerun 03e28d54-deee-4d0f-bff7-eff58be21306 / eea3d591-8ddd-4ba6-a3ec-4ed0041eb0f8. The initial NI probe incorrectly required optional country; corrected the probe after inspecting field-presence metadata, then reran only NI. No geography was invented. Candidate counts are observations, not permanent expected counts. A separate actual built-app anonymous KT2 7AU browser search returned all 31 candidates.
 
-Node 24.12.0/npm 11.6.2; npm ci passed with zero audited vulnerabilities. npm run check passed: lint, strict types, 43 tests and production build (23 routes). npm run check:public passed: 13 public pages/articles, 13 internal paths, metadata/JSON-LD/sitemap/robots/social image/404s and all four safe address-route boundaries. No paid provider request runs in normal CI. Fresh PostgreSQL rebuild includes ownership and property-identity SQL suites. Both hosted rolled-back SQL suites passed; migration histories match; no fixtures remain. Hosted Auth integration passed again: verified identity, session/Account/refresh/sign-out, one-time replay rejection and isolation; disposable accounts were deleted. Real inbox and same-browser PKCE verification remains the prior human evidence in phase-3-status.md.
+Node 24.12.0/npm 11.6.2; npm ci passed with zero audited vulnerabilities. npm run check passed: lint, strict types, 43 tests and production build (23 routes). npm run check:public passed: 13 public pages/articles, 13 internal paths, metadata/JSON-LD/sitemap/robots/social image/404s and all four safe address-route boundaries. No paid provider request runs in normal CI. Fresh PostgreSQL rebuild includes ownership and property-identity SQL suites. Both hosted rolled-back SQL suites passed; migration histories match; test transactions rolled back. Hosted Auth integration passed again: verified identity, session/Account/refresh/sign-out, one-time replay rejection and isolation; disposable accounts were deleted. Real inbox and same-browser PKCE verification remains the prior human evidence in phase-3-status.md.
 
 Responsive browser checks at 360, 375, 390, 430, 768 and 1440px found no horizontal overflow with the 31 real candidates, 31 synthetic long labels and the manual form. Real candidate buttons are at least 72px high; labels wrap fully. Keyboard Enter selects an exact synthetic candidate, focus moves to Business Type, Back preserves the UUID/list, and Continue reaches the existing Snapshot without a repeated lookup/resolve. Invalid postcode/manual submission focuses the first invalid field; labelled native controls, live status and alert messages are present. Synthetic fixtures verified empty results, provider failure, genuine pending-search disabled controls and manual-unverified Snapshot labelling. These ignored local fixtures are not deployed and are not evidence of real application database persistence. Current real selection fails safely on missing repository configuration before spending a UDPRN request.
 
@@ -33,7 +33,9 @@ Four representative postcodes do not establish every UK address. NI optional geo
 
 ## Delivery
 
-Draft PR, remote CI and Preview deployment evidence will be recorded after push. No merge is permitted while real persistence and Preview integration remain unverified. Production auto-deployment remains disabled and Preview access stays protected.
+Implementation commit 7e1210e9f7ca05273792498e1add67d3d854e6ff is pushed in [draft PR #10](https://github.com/shahinst21-hue/SiteFit/pull/10). Both [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37209995592) and [push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37209863764) completed successfully. Strict required checks/admin enforcement/PR protection remain verified. Documentation-only follow-up delivery is subject to the same required CI. The working branch is committed and clean; protected main remains at the baseline. No merge is permitted while real persistence and Preview integration remain unverified. Production auto-deployment remains disabled and Preview access stays protected.
+
+Actual implementation [Vercel Preview](https://sitefit-fhrjsy6u2-shahinst21-hues-projects.vercel.app/check-location) is READY at the implementation SHA. Unauthenticated HTTP redirects (302) to vercel.com; access protection remains intact. Authenticated diagnostics return HTTP 200 for /check-location, /blog and /login, Preview noindex, actual postcode form and existing publishable Auth configuration. Valid postcode lookup and selected-reference resolve return safe HTTP 503 configuration failures without any key/provider detail. The Preview browser form was inspected; this confirms deployed shell and safe failure, **not successful address integration**. Production was not deployed. The missing environment gate remains unresolved.
 
 ## Definition of Done
 
@@ -77,7 +79,7 @@ Checked entries identify evidence above; unchecked entries still require a real 
 - [x] Type checking passes.
 - [x] Tests pass.
 - [x] Production build passes.
-- [ ] Remote CI passes.
+- [x] Remote CI passes.
 - [ ] Preview integration works.
 - [x] Documentation is updated.
 - [ ] Repository is clean after protected merge.
