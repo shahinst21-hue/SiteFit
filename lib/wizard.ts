@@ -147,12 +147,12 @@ export function validateStep(step: number, draft: WizardDraft): FieldErrors {
     if (!address) errors.address = "Enter the commercial property address.";
     else if (
       address.length < 8 ||
-      address.length > 300 ||
+      address.length > 500 ||
       !/[a-z]/i.test(address) ||
       !/\d/.test(address)
     )
       errors.address =
-        "Include a street address and postcode, using 8–300 characters.";
+        "Include a street address and postcode, using 8–500 characters.";
   }
   if (
     (step === 1 || step === 3) &&

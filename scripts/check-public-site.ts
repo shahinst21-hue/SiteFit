@@ -144,6 +144,35 @@ const bytes = Buffer.from(await image.arrayBuffer());
 assert.ok(bytes.length > 1000);
 assert.equal(bytes.readUInt32BE(16), 1200);
 assert.equal(bytes.readUInt32BE(20), 630);
+// Address route boundaries only: no valid paid lookup or live key in normal CI.
+for (const operation of ["lookup", "search", "resolve", "manual"]) {
+  const route = new URL(`/api/addresses/${operation}`, base);
+  const unsupported = await fetch(route, {
+    redirect: "error",
+    signal: AbortSignal.timeout(10000),
+  });
+  assert.equal(unsupported.status, 405);
+  const invalid = await fetch(route, {
+    method: "POST",
+    headers: { origin: route.origin, "content-type": "application/json" },
+    body: "{}",
+    redirect: "error",
+    signal: AbortSignal.timeout(10000),
+  });
+  assert.equal(invalid.status, 400);
+  assert.match(invalid.headers.get("cache-control") ?? "", /no-store/);
+  const crossOrigin = await fetch(route, {
+    method: "POST",
+    headers: {
+      origin: "https://foreign.invalid",
+      "content-type": "application/json",
+    },
+    body: "{}",
+    redirect: "error",
+    signal: AbortSignal.timeout(10000),
+  });
+  assert.equal(crossOrigin.status, 403);
+}
 console.log(
-  `PASS: ${paths.length} public pages/articles, ${links.size} internal paths, metadata, JSON-LD, sitemap, robots, social image and 404s.`,
+  `PASS: ${paths.length} public pages/articles, ${links.size} internal paths, metadata, JSON-LD, sitemap, robots, social image, 404s and four safe address-route boundaries.`,
 );

@@ -48,6 +48,8 @@ additional_redirect_urls = [
   "https://sitefit-git-phase-2-5-product-redesign-shahinst21-hues-projects.vercel.app/auth/callback",
   "https://sitefit-git-codex-phase-3-5-bra-62a5c3-shahinst21-hues-projects.vercel.app/auth/confirm",
   "https://sitefit-git-codex-phase-3-5-bra-62a5c3-shahinst21-hues-projects.vercel.app/auth/callback",
+  "https://sitefit-git-codex-phase-4-addre-2a7d1a-shahinst21-hues-projects.vercel.app/auth/confirm",
+  "https://sitefit-git-codex-phase-4-addre-2a7d1a-shahinst21-hues-projects.vercel.app/auth/callback",
 ]
 enable_signup = true
 

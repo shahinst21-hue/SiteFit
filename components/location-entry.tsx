@@ -9,7 +9,7 @@ import {
   type FormEvent,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { emptyDraft, validateStep } from "@/lib/wizard";
+import { normalisePostcode } from "@/lib/addresses/model";
 import { Arrow } from "./ui";
 import { Icon } from "./icon";
 const EntryContext = createContext<{
@@ -42,19 +42,19 @@ export function LocationEntry() {
   const router = useRouter();
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const issue = validateStep(0, { ...emptyDraft(), address: value }).address;
-    if (issue) {
-      setError(issue);
+    const postcode = normalisePostcode(value);
+    if (!postcode) {
+      setError("Enter a valid UK postcode.");
       document.getElementById("hero-address")?.focus();
       return;
     }
-    entry.setAddress(value.trim());
+    entry.setAddress(postcode);
     setError("");
     router.push("/check-location");
   }
   return (
     <form className="hero-entry" onSubmit={submit} noValidate>
-      <label htmlFor="hero-address">Property address</label>
+      <label htmlFor="hero-address">Enter a UK postcode</label>
       <div className="hero-entry-controls">
         <span className="entry-search">
           <Icon name="pin" />
@@ -63,9 +63,10 @@ export function LocationEntry() {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             required
-            maxLength={300}
-            autoComplete="off"
-            placeholder="Property address and postcode"
+            maxLength={20}
+            autoComplete="postal-code"
+            spellCheck={false}
+            placeholder="e.g. KT2 7AU"
             aria-invalid={!!error}
             aria-describedby={error ? "hero-address-error" : "hero-entry-note"}
           />

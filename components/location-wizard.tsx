@@ -1,5 +1,11 @@
 "use client";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import Link from "next/link";
 import {
   businessTypes,
@@ -17,6 +23,8 @@ import { Icon, type IconName } from "./icon";
 import { LocationVisual } from "./location-visual";
 import { useLocationEntry } from "./location-entry";
 import { formatPrice, site } from "@/lib/site-config";
+import { AddressLookup, initialAddressLookup } from "./address-lookup";
+import type { PropertySelection } from "@/lib/addresses/model";
 const priorities = {
   "coffee-shop": [
     "Check morning and lunchtime activity, repeat custom and complementary workplaces.",
@@ -41,11 +49,14 @@ const priorities = {
 };
 export function LocationWizard() {
   const entry = useLocationEntry();
-  const [draft, setDraft] = useState(() => ({
-    ...emptyDraft(),
-    address: entry.address,
-  }));
-  const [step, setStep] = useState(() => (entry.address ? 1 : 0));
+  const [draft, setDraft] = useState(emptyDraft);
+  const [property, setProperty] = useState<PropertySelection | null>(null);
+  const [lookupState, setLookupState] = useState(() =>
+    initialAddressLookup(entry.address),
+  );
+  const [initialSearch, setInitialSearch] = useState(entry.address);
+  const consumeInitialSearch = useCallback(() => setInitialSearch(""), []);
+  const [step, setStep] = useState(0);
   useEffect(() => entry.clear(), [entry.clear]);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [economics, setEconomics] = useState(false);
@@ -72,6 +83,10 @@ export function LocationWizard() {
   }
   function advance(event: FormEvent) {
     event.preventDefault();
+    if (!property) {
+      setStep(0);
+      return;
+    }
     if (!fail(step === 1 ? snapshotErrors(draft) : validateStep(0, draft)))
       setStep(step + 1);
   }
@@ -95,6 +110,9 @@ export function LocationWizard() {
   }
   function reset() {
     setDraft(emptyDraft());
+    setProperty(null);
+    setLookupState(initialAddressLookup());
+    setInitialSearch("");
     setStep(0);
     setErrors({});
     setEconomics(false);
@@ -232,105 +250,86 @@ export function LocationWizard() {
                 </button>
               </div>
             </form>
+          ) : step === 0 ? (
+            <AddressLookup
+              state={lookupState}
+              setState={setLookupState}
+              selected={property}
+              initialSearch={initialSearch}
+              onInitialSearch={consumeInitialSearch}
+              onSelect={(selected) => {
+                setProperty(selected);
+                setDraft((current) => ({
+                  ...current,
+                  address: selected.formattedAddress,
+                }));
+                setErrors({});
+                setStep(1);
+              }}
+            />
           ) : step < 2 ? (
             <form onSubmit={advance} noValidate>
-              {step === 0 ? (
-                <>
-                  <p className="muted">
-                    Enter the commercial address and postcode. No financial
-                    details or account needed.
-                  </p>
-                  <div className="field">
-                    <label htmlFor="address">Property address</label>
-                    <textarea
-                      id="address"
-                      name="address"
-                      rows={2}
-                      required
-                      maxLength={300}
-                      autoComplete="off"
-                      value={draft.address}
-                      placeholder="Street address, town or city, postcode"
-                      onChange={(e) =>
-                        setDraft({ ...draft, address: e.target.value })
-                      }
-                      aria-invalid={!!errors.address}
-                      aria-describedby={`address-help${errors.address ? " address-error" : ""}`}
-                    />
-                    <p id="address-help" className="field-help">
-                      Use the full address shown in the listing. This entry does
-                      not resolve or verify the property.
-                    </p>
-                    {errors.address && (
-                      <p className="field-error" id="address-error">
-                        {errors.address}
-                      </p>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p className="address-context">{draft.address}</p>
-                  <fieldset>
-                    <legend className="muted">
-                      Choose the closest match. Your business shapes which
-                      questions matter.
-                    </legend>
-                    <div
-                      className="business-options"
-                      id="businessType"
-                      tabIndex={-1}
-                    >
-                      {businessTypes.map((t, i) => (
-                        <label
-                          className={`business-option ${draft.businessType === t.id ? "selected" : ""}`}
-                          key={t.id}
-                        >
-                          <input
-                            type="radio"
-                            name="businessType"
-                            value={t.id}
-                            checked={draft.businessType === t.id}
-                            required
-                            onChange={() =>
-                              setDraft({ ...draft, businessType: t.id })
-                            }
-                            aria-invalid={!!errors.businessType}
-                            aria-describedby={
-                              errors.businessType
-                                ? "businessType-error"
-                                : undefined
+              <>
+                <p className="address-context">{draft.address}</p>
+                <fieldset>
+                  <legend className="muted">
+                    Choose the closest match. Your business shapes which
+                    questions matter.
+                  </legend>
+                  <div
+                    className="business-options"
+                    id="businessType"
+                    tabIndex={-1}
+                  >
+                    {businessTypes.map((t, i) => (
+                      <label
+                        className={`business-option ${draft.businessType === t.id ? "selected" : ""}`}
+                        key={t.id}
+                      >
+                        <input
+                          type="radio"
+                          name="businessType"
+                          value={t.id}
+                          checked={draft.businessType === t.id}
+                          required
+                          onChange={() =>
+                            setDraft({ ...draft, businessType: t.id })
+                          }
+                          aria-invalid={!!errors.businessType}
+                          aria-describedby={
+                            errors.businessType
+                              ? "businessType-error"
+                              : undefined
+                          }
+                        />
+                        <span className="business-icon" aria-hidden="true">
+                          <Icon
+                            name={
+                              (
+                                [
+                                  "coffee",
+                                  "restaurant",
+                                  "hair",
+                                  "beauty",
+                                ] as IconName[]
+                              )[i]
                             }
                           />
-                          <span className="business-icon" aria-hidden="true">
-                            <Icon
-                              name={
-                                (
-                                  [
-                                    "coffee",
-                                    "restaurant",
-                                    "hair",
-                                    "beauty",
-                                  ] as IconName[]
-                                )[i]
-                              }
-                            />
-                          </span>
-                          <span>
-                            <strong>{t.label}</strong>
-                            <span>{t.description}</span>
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                    {errors.businessType && (
-                      <p id="businessType-error" className="field-error">
-                        {errors.businessType}
-                      </p>
-                    )}
-                  </fieldset>
-                </>
-              )}
+                        </span>
+                        <span>
+                          <strong>{t.label}</strong>
+                          <span>{t.description}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.businessType && (
+                    <p id="businessType-error" className="field-error">
+                      {errors.businessType}
+                    </p>
+                  )}
+                </fieldset>
+              </>
               <div className="wizard-actions">
                 {step > 0 && (
                   <button
@@ -345,7 +344,7 @@ export function LocationWizard() {
                   </button>
                 )}
                 <button type="submit" className="button button-primary">
-                  {step === 0 ? "Choose business type" : "View Free Snapshot"}
+                  View Free Snapshot
                   <Arrow />
                 </button>
               </div>
@@ -357,8 +356,10 @@ export function LocationWizard() {
                   <span className="badge">Your location brief</span>
                   <h3>{draft.address}</h3>
                   <p>
-                    {chosen?.label} <span aria-hidden="true">·</span> Entered
-                    address, not verified
+                    {chosen?.label} <span aria-hidden="true">·</span>{" "}
+                    {property?.resolution === "provider_verified"
+                      ? "Postal address confirmed"
+                      : "Manually entered address · unverified"}
                   </p>
                   <div className="summary-priority">
                     <span className="icon-disc green">
