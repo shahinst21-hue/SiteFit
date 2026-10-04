@@ -1,6 +1,6 @@
 # SiteFit
 
-SiteFit is a UK-wide commercial location decision product. The Phase 2.5 experience uses an anonymous Address → Business Type → Free Snapshot journey, optional progressive economics, a fictional Sample Report and a structured SEO Blog. Phase 3 provides verified migration-managed development persistence and email authentication. Real address resolution, analysis, payments and report generation remain later phases; the current Snapshot organises the user’s brief and relevant checks without inventing local evidence.
+SiteFit is a UK-wide commercial location decision product. Phase 3.5 refines the approved temporary brand, product-led Homepage, anonymous Address → Business Type → Free Snapshot journey, optional progressive economics, fictional Sample Report and structured SEO Resources. Phase 3 provides verified migration-managed development persistence and email authentication. Real address resolution, analysis, payments and report generation remain later phases; the current Snapshot organises the user’s brief and relevant checks without inventing local evidence.
 
 ## Local development
 
@@ -21,7 +21,7 @@ npm run check
 
 This runs ESLint, strict type checking, Node's built-in unit tests and the production build, stopping on the first failure. Individual commands: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`. To serve a production build: `npm run start`.
 
-With that production server running, use `npm run check:public` for real route/metadata/404 checks. Current mobile-first, responsive and keyboard checks are documented in [docs/phase-2.5-status.md](docs/phase-2.5-status.md). Read [docs/blog-architecture.md](docs/blog-architecture.md) before changing editorial content or its source.
+With that production server running, use `npm run check:public` for real route/metadata/404 checks. Phase 3.5 validation and delivery are recorded in [docs/phase-3.5-status.md](docs/phase-3.5-status.md); the prior responsive and keyboard baseline is in [docs/phase-2.5-status.md](docs/phase-2.5-status.md). Read [docs/blog-architecture.md](docs/blog-architecture.md) before changing editorial content or its source.
 
 `npm run check:database` reconstructs the schema and executes real PostgreSQL ownership/Blog policies. See [docs/database.md](docs/database.md) for hosted migration, RLS and type-generation commands. With the production server on 127.0.0.1:3000 and authenticated CLI, `npm run check:auth:hosted` explicitly tests development Auth/application sessions using disposable accounts. It does not send email or prove inbox delivery. Do not run it against Production or in CI.
 

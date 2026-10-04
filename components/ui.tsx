@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
-import { site } from "@/lib/site-config";
 
 export function Arrow({ className = "" }: { className?: string }) {
   return (
@@ -79,14 +79,13 @@ export function ClosingCTA() {
 }
 export function Wordmark() {
   return (
-    <span className="wordmark">
-      <span className="wordmark-symbol" aria-hidden="true">
-        s<span>f</span>
-      </span>
-      {site.name}
-      <span className="wordmark-dot" aria-hidden="true">
-        .
-      </span>
-    </span>
+    <Image
+      className="wordmark"
+      src="/brand/sitefit-wordmark.svg"
+      alt="SiteFit"
+      width={4094}
+      height={927}
+      priority
+    />
   );
 }

@@ -45,6 +45,14 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Human action: no additional design approval required. Real providers, legal/support launch inputs and financial rules remain later gates.
 - Definition of Done: minimal anonymous journey; economics optional/skippable; UK-wide copy; truthful mature evidence language; 390px-first responsive/keyboard checks; £0/£29 configuration; Blog/SEO/Auth regression; lint/types/tests/build/runtime/remote CI; documented results and protected merge/clean main. No Phase 4 backend.
 
+## Phase 3.5: Brand, UI and UX refinement
+
+- Status: authorised implementation; validation and protected delivery are in progress. See [phase-3.5-status.md](phase-3.5-status.md).
+- Objective: refine the approved temporary brand, product-led Homepage, anonymous wizard, Snapshot, optional economics, Pricing, fictional Sample Report, Resources/articles and shared/Auth surfaces.
+- Codex implements: original reference-informed presentation and reusable components; one-use React-memory Home entry; local published-resource search/category/sort. No new backend, persistence or service dependency.
+- Definition of Done: consistent supplied wordmark; materially stronger coherent UI/UX; 390px-first responsive/keyboard checks; preserved £0/£29, evidence truth, Auth and Blog/SEO; lint/types/tests/build/public runtime/remote CI; documented actual results; protected PR merge and clean matching main.
+- Phase 4 remains a separate unauthorised gate.
+
 ## Phase 4: Address Resolution and Property Identity
 
 - Objective: resolve a supplied address to a reviewable property identity.

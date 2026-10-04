@@ -52,3 +52,7 @@ Check the eight required documents exist, cross-references resolve, terminology 
 ## Phase 2.5 rules
 
 UK-wide launch, Mobile First (390px first), mature language and £29 decision value are authoritative. Anonymous flow: address → business type → Snapshot; economics optional afterwards with three primary fields, progressive secondary fields and skip. Only decision-relevant output. Preserve provenance/limitations and label fictional Sample Report/schematic maps; never claim a sample measures the entered location. No customer-facing beta/development banners or live-provider claims. Keep entries in page memory; no address in URLs/storage. Do not edit applied migrations or add providers, real Snapshot collection, checkout, calculations, AI engine, PDF or publishing bot. Preserve Blog/SEO and hosted Auth; validate mobile widths and protected CI delivery.
+
+## Phase 3.5 rules
+
+Brand/UI/UX refinement is authorised and in progress. Use the supplied temporary wordmark consistently; reference images guide visual direction, never evidence, copy, scores or live integrations. Preserve Phase 2.5 principles. Homepage address handoff is one-use React memory only. Resource controls filter published read results only. See `docs/phase-3.5-status.md`; Phase 4 remains unauthorised.

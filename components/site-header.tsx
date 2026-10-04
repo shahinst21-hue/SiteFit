@@ -2,39 +2,51 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Wordmark } from "./ui";
-
+import { Wordmark, Arrow } from "./ui";
 const links = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/blog", label: "Blog" },
   { href: "/sample-report", label: "Sample Report" },
 ];
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
-  const menu = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false),
+    [resources, setResources] = useState(false);
+  const menu = useRef<HTMLButtonElement>(null),
+    resourceToggle = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  function close() {
+    setOpen(false);
+    setResources(false);
+  }
   return (
     <header
       className="site-header"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          setOpen(false);
-          menu.current?.focus();
+      onKeyDown={(e) => {
+        if (e.key === "Escape") {
+          if (resources) {
+            setResources(false);
+            resourceToggle.current?.focus();
+          } else {
+            setOpen(false);
+            menu.current?.focus();
+          }
         }
       }}
     >
       <div className="header-inner">
-        <Link href="/" aria-label="SiteFit home" onClick={() => setOpen(false)}>
+        <Link href="/" aria-label="SiteFit home" onClick={close}>
           <Wordmark />
         </Link>
         <button
-          type="button"
           className="menu-toggle"
+          type="button"
           ref={menu}
           aria-expanded={open}
           aria-controls="public-navigation"
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setOpen(!open);
+            setResources(false);
+          }}
         >
           {open ? "Close" : "Menu"}
           <span aria-hidden="true">{open ? "×" : "☰"}</span>
@@ -44,30 +56,55 @@ export function SiteHeader() {
           aria-label="Main navigation"
           className={open ? "public-nav is-open" : "public-nav"}
         >
-          {links.map((link) => (
+          {links.map((l) => (
             <Link
-              key={link.href}
-              href={link.href}
-              aria-current={pathname.startsWith(link.href) ? "page" : undefined}
-              onClick={() => setOpen(false)}
+              key={l.href}
+              href={l.href}
+              aria-current={pathname.startsWith(l.href) ? "page" : undefined}
+              onClick={close}
             >
-              {link.label}
+              {l.label}
             </Link>
           ))}
+          <div className="nav-resources">
+            <button
+              type="button"
+              ref={resourceToggle}
+              className="resource-toggle"
+              aria-expanded={resources}
+              aria-controls="resource-links"
+              onClick={() => setResources(!resources)}
+            >
+              Resources <span aria-hidden="true">⌄</span>
+            </button>
+            <div
+              id="resource-links"
+              className="resource-links"
+              hidden={!resources}
+            >
+              <Link
+                href="/blog"
+                onClick={close}
+                aria-current={pathname.startsWith("/blog") ? "page" : undefined}
+              >
+                Guides & articles
+                <span>Practical reading before the lease</span>
+              </Link>
+              <Link href="/methodology" onClick={close}>
+                Methodology<span>How evidence informs a decision</span>
+              </Link>
+            </div>
+          </div>
           <Link
             href="/login"
             className="login-link"
             aria-current={pathname === "/login" ? "page" : undefined}
-            onClick={() => setOpen(false)}
+            onClick={close}
           >
-            Login
+            Sign in
           </Link>
-          <Link
-            href="/check-location"
-            className="nav-cta"
-            onClick={() => setOpen(false)}
-          >
-            Check a Location <span aria-hidden="true">↗</span>
+          <Link href="/check-location" className="nav-cta" onClick={close}>
+            Check a Location <Arrow />
           </Link>
         </nav>
       </div>

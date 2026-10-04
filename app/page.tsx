@@ -1,111 +1,204 @@
 import Link from "next/link";
-import { ButtonLink, ClosingCTA } from "@/components/ui";
+import { ButtonLink, ClosingCTA, Wordmark } from "@/components/ui";
 import { PricingCards } from "@/components/pricing-cards";
 import { LocationVisual } from "@/components/location-visual";
+import { LocationEntry } from "@/components/location-entry";
+import { Icon, type IconName } from "@/components/icon";
 import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata("/");
+const checks: [IconName, string, string, string][] = [
+  [
+    "demand",
+    "Customer demand",
+    "Connect the customer occasion to the people and activity around a location.",
+    "green",
+  ],
+  [
+    "shop",
+    "Competitive context",
+    "Compare the offering, positioning and useful commercial clusters.",
+    "amber",
+  ],
+  [
+    "access",
+    "Access & transport",
+    "Check the routes and trading hours that matter to your customers.",
+    "blue",
+  ],
+  [
+    "shield",
+    "Premises & risk",
+    "Bring permissions, fit-out constraints and lease questions into view.",
+    "rose",
+  ],
+  [
+    "clock",
+    "History & evidence",
+    "Separate dated observations from assumptions about a property’s past.",
+    "violet",
+  ],
+  [
+    "cost",
+    "Business economics",
+    "Frame costs and scenarios around the figures you choose to supply.",
+    "green",
+  ],
+];
 export default function Home() {
   return (
-    <div className="page-wrap">
+    <div className="page-wrap home-page">
       <section className="home-hero">
         <div className="hero-content">
-          <p className="eyebrow">A CLEARER COMMERCIAL LEASE DECISION</p>
-          <h1>
-            Check the location.
-            <br />
-            <em>Before you commit.</em>
-          </h1>
+          <p className="eyebrow">UK-WIDE COMMERCIAL LOCATION DECISIONS</p>
+          <h1>Choose your next location with clarity.</h1>
           <p className="hero-copy">
-            Found a space for your coffee shop, restaurant or salon? Put demand,
-            competition, access and costs in the context of your business.
+            Start with your property and business. Build a focused brief around
+            customers, competition, access and the questions to resolve before a
+            lease.
           </p>
-          <ButtonLink href="/check-location">
-            Check a location — free
-          </ButtonLink>
-          <p className="hero-footnote">
-            UK-wide focus · Just an address and business type
-            <br />
-            No account or financial details needed to start
-          </p>
-          <Link href="/sample-report" className="text-link">
-            See a Sample Report ↗
+          <LocationEntry />
+          <Link className="text-link" href="/sample-report">
+            Explore a Sample Report ↗
           </Link>
+          <div className="hero-benefits">
+            <span>
+              <Icon name="pin" />
+              One location
+            </span>
+            <span>
+              <Icon name="evidence" />
+              Evidence-led approach
+            </span>
+            <span>
+              <Icon name="document" />
+              Practical next checks
+            </span>
+          </div>
         </div>
         <LocationVisual />
       </section>
-      <section className="trust-strip" aria-label="Our approach">
-        <span>Evidence before assumptions</span>
-        <span>Relevant to your business</span>
-        <span>Clear about the gaps</span>
-        <Link href="/methodology">How we assess evidence ↗</Link>
+      <section className="trust-strip" aria-label="Evidence standards">
+        <p className="eyebrow">EVIDENCE WITH CONTEXT</p>
+        <div>
+          <Icon name="document" />
+          <span>
+            <strong>Official records</strong>
+            <small>Dates and geography matter</small>
+          </span>
+        </div>
+        <div>
+          <Icon name="shop" />
+          <span>
+            <strong>Local business context</strong>
+            <small>Observation before inference</small>
+          </span>
+        </div>
+        <div>
+          <Icon name="shield" />
+          <span>
+            <strong>Transparent reasoning</strong>
+            <small>Gaps remain visible</small>
+          </span>
+        </div>
+        <Link className="text-link" href="/methodology">
+          Our methodology ↗
+        </Link>
       </section>
-      <section className="section-block">
+      <section className="section-block value-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">BEYOND A PIN ON A MAP</p>
-            <h2>
-              Focus on what changes
-              <br />
-              your decision.
-            </h2>
+            <p className="eyebrow">WHAT MATTERS TO THE DECISION</p>
+            <h2>Make the important questions visible.</h2>
           </div>
           <p>
-            A busy street is not automatically the right street. The useful
-            question is how the location fits your business, costs and
-            customers.
+            A location needs to fit your business. These are the factors to
+            investigate, with verified evidence wherever an assessment is made.
           </p>
         </div>
-        <div className="three-columns">
-          {[
-            [
-              "01",
-              "The right demand",
-              "Consider who uses the area, when they visit and whether their needs fit your business.",
-            ],
-            [
-              "02",
-              "The competitive context",
-              "Distinguish useful commercial clusters from direct competition. A count alone tells only part of the story.",
-            ],
-            [
-              "03",
-              "The risks worth checking",
-              "Bring evidence gaps, access constraints and lease questions into view before they become costly assumptions.",
-            ],
-          ].map(([n, title, text]) => (
-            <article className="feature" key={n}>
-              <span className="feature-index">{n}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
+        <div className="value-grid">
+          {checks.map(([icon, title, text, tone]) => (
+            <article className="feature" key={title}>
+              <span className={`icon-disc ${tone}`}>
+                <Icon name={icon} />
+              </span>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
             </article>
           ))}
         </div>
       </section>
+      <section className="sample-teaser">
+        <div className="teaser-copy">
+          <p className="eyebrow">SEE THE REASONING</p>
+          <h2>
+            A clearer brief.
+            <br />A better next question.
+          </h2>
+          <p>
+            Explore how a Full Report brings opportunities, opposing evidence
+            and practical checks into one decision. This fictional example shows
+            the depth of the format.
+          </p>
+          <ButtonLink href="/sample-report">
+            Explore the Sample Report
+          </ButtonLink>
+          <p className="fine-print">
+            Fictional scenario · illustrative evidence
+          </p>
+        </div>
+        <div className="teaser-report">
+          <div className="teaser-toolbar">
+            <Wordmark />
+            <span className="badge">Sample Report</span>
+          </div>
+          <div className="teaser-title">
+            <span className="icon-disc amber">
+              <Icon name="coffee" />
+            </span>
+            <div>
+              <h3>Coffee Shop · Market Quarter</h3>
+              <p>A fictional daytime-led proposition</p>
+            </div>
+          </div>
+          <div className="teaser-report-grid">
+            <LocationVisual compact />
+            <div className="teaser-reasoning">
+              <span className="badge positive">Opportunity</span>
+              <h3>Repeat weekday visits</h3>
+              <p>Complementary uses may fit the customer occasion.</p>
+              <span className="badge caution">Check first</span>
+              <h3>The approach route</h3>
+              <p>Visibility and access could change the picture.</p>
+              <Link href="/sample-report" className="text-link">
+                Read the sample reasoning ↗
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="how-strip">
         <div>
-          <p className="eyebrow">START SIMPLE</p>
-          <h2>
-            Your next decision
-            <br />
-            starts with two details.
-          </h2>
+          <p className="eyebrow">TWO DETAILS TO START</p>
+          <h2>Keep the first step simple.</h2>
           <ButtonLink href="/check-location" secondary>
-            Start your Free Snapshot
+            Start a Free Snapshot
           </ButtonLink>
         </div>
         <ol>
           {[
             [
-              "Enter the address",
-              "The commercial property you are considering, anywhere in the UK.",
+              "Enter the property",
+              "The address of the commercial space you are considering.",
             ],
             [
               "Choose your business",
               "Coffee Shop, Restaurant, Hair Salon or Beauty Salon.",
             ],
             [
-              "Review your Snapshot",
-              "Frame the local questions and next checks. Add costs only when you want to go deeper.",
+              "Review the priorities",
+              "Organise the checks; add financial details only when useful.",
             ],
           ].map(([title, text], i) => (
             <li key={title}>
@@ -121,34 +214,14 @@ export default function Home() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">ONE LOCATION. ONE-OFF PRICING.</p>
-            <h2>
-              Start with the essentials.
-              <br />
-              Look deeper before you sign.
-            </h2>
+            <p className="eyebrow">A CLEAR NEXT STEP</p>
+            <h2>Start free. Understand the deeper value.</h2>
           </div>
-          <Link className="text-link" href="/sample-report">
-            Explore the Sample Report ↗
+          <Link className="text-link" href="/pricing">
+            Compare the options ↗
           </Link>
         </div>
         <PricingCards />
-      </section>
-      <section className="evidence-strip">
-        <p className="eyebrow">REASONING YOU CAN FOLLOW</p>
-        <h2>
-          What supports the location?
-          <br />
-          What challenges it?
-        </h2>
-        <p>
-          Good decision support puts positive evidence beside risks, separates
-          facts from interpretation and makes the next check clear. It does not
-          predict business success.
-        </p>
-        <Link href="/methodology" className="text-link">
-          Read the methodology ↗
-        </Link>
       </section>
       <ClosingCTA />
     </div>

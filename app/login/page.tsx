@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PageIntro } from "@/components/ui";
+import { PageIntro, Wordmark } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { LoginForm } from "@/components/login-form";
 import { readPublicSupabaseConfig } from "@/lib/supabase/config";
@@ -18,6 +18,10 @@ export default async function Login({
   const failure = authFailure(params.error);
   return (
     <div className="page-wrap narrow-page">
+      <div className="auth-brand">
+        <Wordmark />
+        <span className="badge">Your account</span>
+      </div>
       <PageIntro
         eyebrow="YOUR SITEFIT ACCOUNT"
         title={user ? "You're signed in." : "Sign in to SiteFit."}
