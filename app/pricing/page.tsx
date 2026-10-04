@@ -1,20 +1,65 @@
 import { PageIntro } from "@/components/ui";
 import { PricingCards } from "@/components/pricing-cards";
 import { pageMetadata } from "@/lib/seo";
+import { Icon, type IconName } from "@/components/icon";
+import { formatPrice, site } from "@/lib/site-config";
 export const metadata = pageMetadata("/pricing");
 export default function Pricing() {
   return (
-    <div className="page-wrap">
-      <PageIntro
-        eyebrow="SIMPLE, ONE-OFF PRICING"
-        title="A clearer decision. No subscription."
-      >
-        <p>
-          Start free. Understand the deeper evidence and reasoning before
-          considering a Full Report.
-        </p>
-      </PageIntro>
-      <PricingCards />
+    <div className="page-wrap pricing-page">
+      <section className="pricing-layout">
+        <PageIntro
+          eyebrow="SIMPLE, ONE-OFF PRICING"
+          title="A clearer decision. No subscription."
+        >
+          <p>
+            Start with a Free Snapshot for{" "}
+            <strong>{formatPrice(site.pricing.snapshot)}</strong>. Explore the
+            depth of a{" "}
+            <strong>{formatPrice(site.pricing.fullReport)} Full Report</strong>,
+            one-off, before your lease decision.
+          </p>
+        </PageIntro>
+        <PricingCards />
+      </section>
+      <section className="pricing-value">
+        <div>
+          <p className="eyebrow">THE VALUE OF A CLOSER LOOK</p>
+          <h2>Turn detail into a better decision.</h2>
+        </div>
+        {(
+          [
+            [
+              "evidence",
+              "Deeper evidence",
+              "Understand the basis and limits of important claims.",
+            ],
+            [
+              "cost",
+              "Explicit assumptions",
+              "Put optional costs and scenarios in context.",
+            ],
+            [
+              "shield",
+              "Balanced reasoning",
+              "Weigh supporting evidence against risks and gaps.",
+            ],
+            [
+              "document",
+              "Practical questions",
+              "Know what to verify before you commit.",
+            ],
+          ] as [IconName, string, string][]
+        ).map(([icon, title, text]) => (
+          <article key={title}>
+            <span className="icon-disc green">
+              <Icon name={icon} />
+            </span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </section>
       <section className="faq-section">
         <h2>Before you decide</h2>
         <details>

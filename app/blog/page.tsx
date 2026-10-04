@@ -1,53 +1,69 @@
 import Link from "next/link";
 import { PageIntro } from "@/components/ui";
 import { PostCard } from "@/components/blog-content";
+import { ResourceBrowser } from "@/components/resource-browser";
 import { contentRepository } from "@/lib/content";
 import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata("/blog");
 export default async function Blog() {
-  const { posts } = await contentRepository.listPublished();
-  const featured = posts.find((post) => post.featured) ?? posts[0];
-  const recent = posts.filter((post) => post.slug !== featured?.slug);
+  const posts = [];
+  let page = 1;
+  let total: number;
+  do {
+    const result = await contentRepository.listPublished({
+      page,
+      pageSize: 50,
+    });
+    posts.push(...result.posts);
+    total = result.total;
+    page++;
+  } while (posts.length < total);
+  const featured = posts.find((p) => p.featured) ?? posts[0];
   return (
     <div className="page-wrap blog-index">
-      <PageIntro
-        eyebrow="THE SITEFIT JOURNAL"
-        title="Before the keys are yours."
-      >
-        <p>
-          Practical reading for your next commercial space. Better questions,
-          clearer evidence and the things still worth checking.
-        </p>
-      </PageIntro>
-      {!featured ? (
-        <section className="simple-panel">
-          <h2>No published articles match this selection.</h2>
+      <section className="resource-hero">
+        <PageIntro
+          eyebrow="SITEFIT RESOURCES"
+          title="Build a clearer view of your next location."
+        >
           <p>
-            Read our methodology for guidance on location evidence and{" "}
-            <Link href="/methodology" className="text-link">
-              our approach to evidence
-            </Link>
-            .
+            Practical guides to the evidence, questions and assumptions behind a
+            commercial lease decision.
           </p>
-        </section>
-      ) : (
-        <>
-          <PostCard post={featured} featured />
-          {recent.length > 0 && (
-            <section className="section-block">
-              <p className="eyebrow">MORE FROM THE JOURNAL</p>
-              <div className="post-grid">
-                {recent.map((post) => (
-                  <PostCard key={post.id} post={post} />
-                ))}
-              </div>
-            </section>
-          )}
-        </>
-      )}
+          <Link href="/check-location" className="text-link">
+            Put your next property in context ↗
+          </Link>
+        </PageIntro>
+        {featured && <PostCard post={featured} featured />}
+      </section>
+      <ResourceBrowser
+        items={posts.map(
+          ({ id, title, excerpt, category, tags, datePublished, ...post }) => ({
+            id,
+            title,
+            excerpt,
+            category,
+            tags,
+            datePublished,
+            card: (
+              <PostCard
+                post={{
+                  id,
+                  title,
+                  excerpt,
+                  category,
+                  tags,
+                  datePublished,
+                  ...post,
+                }}
+              />
+            ),
+          }),
+        )}
+      />
       <div className="quiet-note">
-        General guidance, not an assessment of a particular property. Our
-        articles do not replace professional advice.
+        General guidance, not an assessment of a particular property. Articles
+        do not replace professional advice.
       </div>
     </div>
   );

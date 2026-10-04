@@ -1,6 +1,6 @@
 # SiteFit Product Contract
 
-Authoritative direction updated 2026-10-04 for Phase 2.5. This supersedes conflicting Phase 0–3 assumptions. SiteFit is a production-quality commercial product, not a disposable MVP. Phases 0–3 are complete; Phase 2.5 updates the experience before Phase 4. Implementation and live service readiness are recorded internally, never presented as customer-facing beta language.
+Authoritative direction updated 2026-10-04 for Phase 2.5, with the owner's Phase 3.5 brand/UI refinement direction. This supersedes conflicting Phase 0–3 assumptions. SiteFit is a production-quality commercial product, not a disposable MVP. Phases 0–3 and Phase 2.5 are complete; Phase 3.5 refines that experience before Phase 4. Implementation and live service readiness are recorded internally, never presented as customer-facing beta language.
 
 ## Customer and decision
 
@@ -51,6 +51,8 @@ Sample Report content is visibly labelled Sample Report, with fictional scenario
 Mobile First is mandatory: solve 390px first, then 360/375px, 430px, 768px and 1440px. Apply to every customer screen, including Account and Blog articles. Hero sequence: clear proposition, short explanation, address/direct check action, trust, then product visual. Main CTA must be quickly reachable. Each location step has one decision. Stack Snapshot cards; disclose evidence and economics progressively; avoid horizontal scrolling, tiny targets, form zoom and administrative sidebars.
 
 A modern analytical SiteFit identity uses strong action hierarchy, location/evidence visual language, clean cards, contrast and simple navigation. Reference direction guides principles, not copied wording, branding, exact type, colour or illustrations. Avoid editorial/luxury, generic SaaS, estate-agency or GIS presentation.
+
+Phase 3.5 applies the supplied temporary SITEFIT wordmark consistently, with light backgrounds, near-black text, bright lime actions and soft analytical accents. Approved references inform product-led Home, wizard, Snapshot, Pricing, Resources and Sample Report compositions; they do not authorise copied wording, fabricated metrics, source partnerships or another brand identity. The original schematic maps and fictional report retain visible limitations. This refinement adds no Phase 4 functionality.
 
 Performance is part of this rule: server rendering, lightweight client state, system fonts, reserved image dimensions and no unnecessary maps, icon packages, animation, third-party scripts or large assets. Measure rather than claim Core Web Vitals.
 

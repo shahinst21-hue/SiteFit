@@ -106,3 +106,9 @@ These owner instructions supersede conflicting historical assumptions, including
 | D50 | Accepted | Mature wording and professional evidence limitations.                           | No beta/development banners; no unconnected source claims or samples presented as real findings.                                 |
 | D51 | Accepted | Mobile First mandatory.                                                         | Design 390px first; verify 360/375, 430, 768, 1440; performance and accessibility count.                                         |
 | D52 | Accepted | Focused Phase 2.5 frontend before Phase 4.                                      | Labelled fictional samples/schematic visuals; no resolver/providers/Stripe/calculation/AI/CMS backend.                           |
+
+## Phase 3.5 refinement decisions — 2026-10-04
+
+- D53 (accepted owner direction): supplied temporary SITEFIT wordmark; light/near-black visual system with bright action accent, soft analytical colours and product-led map/report/resource compositions. Preserve original SiteFit wording and the Phase 2.5 truth/phase boundaries; reference scores and live-source claims are not approved evidence.
+- D54 (implementation choice within authorised Hero input): single-use React-memory address handoff from Home to checker, cleared on consumption/route exit/reload. No address in URL/storage/server submission; no resolver or persistent draft.
+- D55 (authorised resource controls): local search/category/sort over published repository results, without a content writer or new route. Preserve server article rendering, publication filtering and SEO.

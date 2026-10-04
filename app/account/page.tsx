@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { PageIntro } from "@/components/ui";
+import { PageIntro, Wordmark } from "@/components/ui";
+import { Icon } from "@/components/icon";
 import { verifiedUser } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
 export const dynamic = "force-dynamic";
@@ -19,6 +20,10 @@ export default async function Account() {
     .maybeSingle();
   return (
     <div className="page-wrap narrow-page">
+      <div className="auth-brand">
+        <Wordmark />
+        <span className="badge positive">Signed in</span>
+      </div>
       <PageIntro
         eyebrow="YOUR SITEFIT ACCOUNT"
         title={
@@ -30,6 +35,9 @@ export default async function Account() {
         <p>Signed in as {user.email}</p>
       </PageIntro>
       <section className="simple-panel">
+        <span className="icon-disc green">
+          <Icon name="document" />
+        </span>
         <h2>Your next location</h2>
         <p>
           No saved reports in this account. Start with a Free Snapshot to

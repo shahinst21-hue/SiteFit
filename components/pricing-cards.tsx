@@ -1,9 +1,13 @@
 import { formatPrice, site } from "@/lib/site-config";
 import { ButtonLink } from "./ui";
+import { Icon } from "./icon";
 export function PricingCards() {
   return (
     <div className="pricing-grid">
       <section className="price-card">
+        <span className="icon-disc green">
+          <Icon name="document" />
+        </span>
         <p className="eyebrow">FRAME YOUR FIRST QUESTIONS</p>
         <h2>Free Snapshot</h2>
         <p className="price">
@@ -24,6 +28,12 @@ export function PricingCards() {
         </ButtonLink>
       </section>
       <section className="price-card price-card-featured">
+        <span className="price-label badge positive">
+          A deeper decision brief
+        </span>
+        <span className="icon-disc amber">
+          <Icon name="evidence" />
+        </span>
         <p className="eyebrow">UNDERSTAND THE LEASE DECISION</p>
         <h2>Full Report</h2>
         <p className="price">
