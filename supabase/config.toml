@@ -44,6 +44,8 @@ additional_redirect_urls = [
   "http://127.0.0.1:3000/auth/callback",
   "https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/auth/confirm",
   "https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/auth/callback",
+  "https://sitefit-git-phase-2-5-product-redesign-shahinst21-hues-projects.vercel.app/auth/confirm",
+  "https://sitefit-git-phase-2-5-product-redesign-shahinst21-hues-projects.vercel.app/auth/callback",
 ]
 enable_signup = true
 

@@ -1,6 +1,6 @@
 # Phase 2.5 product and experience record
 
-Started 2026-10-04 from clean main at `130b4dcb5d83ccb5c170e2f2748ad24780a25627` on `phase-2-5-product-redesign`. Contract/architecture/roadmap/decisions were updated before UI code. Local implementation and validation are complete; remote CI, Preview and protected merge remain pending until observed.
+Started 2026-10-04 from clean main at `130b4dcb5d83ccb5c170e2f2748ad24780a25627` on `phase-2-5-product-redesign`. Contract/architecture/roadmap/decisions were updated before UI code. Local implementation and validation are complete; initial remote CI and Preview verification have passed; final-head CI and protected merge remain pending until observed.
 
 ## Product direction and implementation
 
@@ -35,7 +35,7 @@ Blog repository/publication filtering, safe structured rendering, article model 
 
 ## Delivery
 
-Dedicated branch: `phase-2-5-product-redesign`. Required protected-main check: `Lint, types, tests and build`, strict and administrator-enforced. PR, actual remote CI/Preview evidence and protected merge will be recorded after observation. Automatic Production deployment from main remains disabled.
+Dedicated branch: `phase-2-5-product-redesign`. Required protected-main check: `Lint, types, tests and build`, strict and administrator-enforced. [PR #6](https://github.com/shahinst21-hue/SiteFit/pull/6) is open and ready for review. Initial head `46db1ee` passed push and PR required CI ([PR run](https://github.com/shahinst21-hue/SiteFit/actions/runs/37183638761)). Vercel deployment `dpl_H8kH53c9GyP3CwhmUyx9tYurVRBJ` is READY for that SHA at the [stable branch Preview](https://sitefit-git-phase-2-5-product-redesign-shahinst21-hues-projects.vercel.app). Auth environment variables remain encrypted and Preview-only. The exact branch `/auth/confirm` and `/auth/callback` redirects were added to development `sitefit-dev`; reviewed config push changed only those allowlist entries and post-push diff reports zero declared updates. Final-head checks and protected merge will be recorded after observation. Automatic Production deployment from main remains disabled.
 
 ## Known limitations and deferred work
 
