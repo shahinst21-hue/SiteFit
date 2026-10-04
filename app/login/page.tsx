@@ -20,12 +20,12 @@ export default async function Login({
     <div className="page-wrap narrow-page">
       <PageIntro
         eyebrow="YOUR SITEFIT ACCOUNT"
-        title={user ? "You're signed in." : "A place for your next decision."}
+        title={user ? "You're signed in." : "Sign in to SiteFit."}
       >
         <p>
           {user
-            ? "Your account is ready. Location analysis and reports are not available yet."
-            : "Sign in with an email link. You can also explore the location checker without an account."}
+            ? "Open your account or start a new location check."
+            : "Use a one-time email link. Your Free Snapshot does not require an account."}
         </p>
       </PageIntro>
       {failure && (
@@ -52,7 +52,7 @@ export default async function Login({
         />
       )}
       <Link href="/check-location" className="text-link">
-        Explore the location checker ↗
+        Start a Free Snapshot ↗
       </Link>
     </div>
   );

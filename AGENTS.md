@@ -4,7 +4,7 @@ Read all files in `docs/` before making changes. `docs/product.md` is the Produc
 
 ## Current state
 
-Phases 0–3 are complete; see `docs/phase-3-status.md` for the verified Definition of Done. The development schema, migrations, Auth code and RLS are implemented, hosted security/session checks pass, and the user verified real Magic Link delivery and same-browser PKCE. Implementation merged through protected PR #4 and post-merge CI passed; completion documentation follows the same gated workflow. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. No analysis, address/provider integration, payment execution, reports or publishing agent exists. Phase 4 and later require a new instruction.
+Phases 0–3 are complete; Phase 2.5 product-direction/UI redesign is authorised and in progress; see `docs/phase-3-status.md` for the verified Definition of Done. The development schema, migrations, Auth code and RLS are implemented, hosted security/session checks pass, and the user verified real Magic Link delivery and same-browser PKCE. Implementation merged through protected PR #4 and post-merge CI passed; completion documentation follows the same gated workflow. `main` is protected: deliver changes through a PR and required CI. Vercel Preview is authenticated; automatic Production deployment from `main` remains disabled. No analysis, address/provider integration, payment execution, reports or publishing agent exists. Phase 4 and later require a new instruction. The updated 2026-10-04 Product Contract supersedes conflicting historical London-first/prototype assumptions.
 
 ## Working rules
 
@@ -48,3 +48,7 @@ Phase 3 clients use publishable credentials only. The login page deliberately ex
 ## Phase 0 documentation-only validation
 
 Check the eight required documents exist, cross-references resolve, terminology and phase boundaries agree, benchmark addresses remain explicitly unfilled, no implementation was introduced, no credentials exist, and Git status is understood. Application lint, type checks, tests and builds begin in Phase 1.
+
+## Phase 2.5 rules
+
+UK-wide launch, Mobile First (390px first), mature language and £29 decision value are authoritative. Anonymous flow: address → business type → Snapshot; economics optional afterwards with three primary fields, progressive secondary fields and skip. Only decision-relevant output. Preserve provenance/limitations and label fictional Sample Report/schematic maps; never claim a sample measures the entered location. No customer-facing beta/development banners or live-provider claims. Keep entries in page memory; no address in URLs/storage. Do not edit applied migrations or add providers, real Snapshot collection, checkout, calculations, AI engine, PDF or publishing bot. Preserve Blog/SEO and hosted Auth; validate mobile widths and protected CI delivery.

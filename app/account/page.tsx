@@ -32,8 +32,9 @@ export default async function Account() {
       <section className="simple-panel">
         <h2>Your next location</h2>
         <p>
-          Location analysis and saved reports are not available yet. You can
-          explore the checker now; entries are not saved.
+          No saved reports in this account. Start with a Free Snapshot to
+          organise your next location decision. Location entries stay on the
+          current page.
         </p>
         {error && (
           <p role="status">
@@ -42,7 +43,7 @@ export default async function Account() {
           </p>
         )}
         <Link className="button button-primary" href="/check-location">
-          Explore the location checker ↗
+          Start a Free Snapshot ↗
         </Link>
         <form action={signOut}>
           <button className="button button-secondary" type="submit">

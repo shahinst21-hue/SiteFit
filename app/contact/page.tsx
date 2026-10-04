@@ -5,48 +5,46 @@ export const metadata = pageMetadata("/contact");
 export default function Contact() {
   return (
     <div className="page-wrap">
-      <PageIntro eyebrow="CONTACT" title="Questions before you begin?">
-        <p>
-          SiteFit is in early preview. A direct contact channel will be
-          published before launch; there is no monitored inbox or message form
-          on this site yet.
-        </p>
+      <PageIntro
+        eyebrow="HELP AND CONTACT"
+        title="Find the right answer before you start."
+      >
+        <p>Guidance on your location check, report evidence and account.</p>
       </PageIntro>
       <div className="three-columns contact-cards">
-        <section className="simple-panel">
-          <h2>Using the preview</h2>
-          <p>
-            Explore the address, business type and economics steps. Nothing is
-            submitted or analysed.
-          </p>
-          <Link href="/how-it-works" className="text-link">
-            How it works ↗
-          </Link>
-        </section>
-        <section className="simple-panel">
-          <h2>Reports and availability</h2>
-          <p>
-            The Free Snapshot and Full Report are planned products. Neither is
-            available to generate or buy today.
-          </p>
-          <Link href="/pricing" className="text-link">
-            See planned pricing ↗
-          </Link>
-        </section>
-        <section className="simple-panel">
-          <h2>Evidence and limitations</h2>
-          <p>
-            See how sources, estimates and unknowns are intended to appear in
-            the report.
-          </p>
-          <Link href="/methodology" className="text-link">
-            Read our approach ↗
-          </Link>
-        </section>
+        {[
+          [
+            "Your location check",
+            "Start with an address and business type. Add economics only after your Snapshot, if it helps your investigation.",
+            "/how-it-works",
+            "How it works",
+          ],
+          [
+            "Report evidence",
+            "See how a report can connect opportunities, risks, evidence gaps and the questions to ask before signing.",
+            "/sample-report",
+            "View Sample Report",
+          ],
+          [
+            "Your account",
+            "Sign in using a one-time email link. Open it in the same browser and request a new link if it has expired.",
+            "/login",
+            "Account sign-in",
+          ],
+        ].map(([title, text, href, label]) => (
+          <section className="simple-panel" key={title}>
+            <h2>{title}</h2>
+            <p>{text}</p>
+            <Link className="text-link" href={href}>
+              {label} ↗
+            </Link>
+          </section>
+        ))}
       </div>
-      <p className="fine-print">
-        Please do not send personal or property documents through the preview. A
-        secure support process has not been introduced.
+      <p className="quiet-note">
+        For lease, planning or financial advice, consult an appropriately
+        qualified professional. This page does not accept messages or document
+        uploads.
       </p>
     </div>
   );

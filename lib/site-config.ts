@@ -2,7 +2,7 @@ export const site = {
   name: "SiteFit",
   tagline: "Check a commercial location before you commit.",
   currency: "GBP",
-  pricing: { snapshot: 0, fullReport: 2900 }, // Minor units; initial pricing assumption.
+  pricing: { snapshot: 0, fullReport: 2900 }, // Minor units; centrally configured product pricing.
 } as const;
 
 export function formatPrice(minorUnits: number) {
@@ -18,60 +18,66 @@ export const publicPages = [
     path: "/",
     title: "Check a commercial location before you commit",
     description:
-      "Investigate a London commercial location before signing a lease. Explore SiteFit's planned Free Snapshot and Single Location Due Diligence Report.",
+      "Assess a commercial location in the UK before committing to a lease. Frame demand, competition, access and costs with SiteFit.",
   },
   {
     path: "/how-it-works",
     title: "How it works",
     description:
-      "From a property address to the questions worth asking: see the planned SiteFit journey and explore the location checker.",
+      "Start with an address and business type, review a Free Snapshot, then explore deeper evidence and optional economics.",
   },
   {
     path: "/pricing",
     title: "Pricing",
     description:
-      "Explore the planned Free Snapshot and one-off Full Report. Clear initial pricing, with no subscriptions or payments available in this preview.",
+      "Compare the £0 Free Snapshot with a £29 one-off Full Report: prioritised risks, business context, evidence and practical next checks.",
   },
   {
     path: "/check-location",
     title: "Check a Location",
     description:
-      "Prepare a commercial address, business type and optional costs in the SiteFit location checker. Reports are not available yet.",
+      "Enter a UK commercial property address and choose your business type. Start a Free Snapshot without an account or financial inputs.",
   },
   {
     path: "/login",
     title: "Login",
     description:
-      "Account access is coming to SiteFit. Explore the public location-checking journey while sign-in is unavailable.",
+      "Sign in securely to your SiteFit account with a one-time email link. No password required.",
   },
   {
     path: "/methodology",
     title: "Our methodology",
     description:
-      "Understand SiteFit's approach to sources, estimates, unknowns and practical checks before committing to a commercial lease.",
+      "Understand how SiteFit distinguishes evidence, estimates and AI interpretation, and keeps important limitations visible.",
   },
   {
     path: "/contact",
     title: "Contact",
     description:
-      "Find answers about the SiteFit preview, availability and planned support for commercial location checks.",
+      "Find answers about location checks, report evidence and SiteFit accounts before assessing a commercial property.",
   },
   {
     path: "/privacy",
     title: "Privacy",
     description:
-      "Read the development privacy notice for the SiteFit preview, including how the frontend handles information you enter.",
+      "Understand how SiteFit handles location entries, optional financial details, account information and session cookies.",
   },
   {
     path: "/terms",
     title: "Terms",
     description:
-      "Read the development terms for exploring SiteFit's public preview. Live reports, accounts and purchases are not available.",
+      "Read SiteFit service information, sample report limitations and guidance on responsible commercial-property decisions.",
   },
   {
     path: "/blog",
     title: "The SiteFit Journal",
     description:
-      "Practical reading for your next commercial space: viewing questions, evidence and the gaps to investigate before signing a lease.",
+      "Practical guidance for a commercial lease: viewing questions, location evidence and the checks that matter before signing.",
+  },
+  {
+    path: "/sample-report",
+    title: "Sample Report",
+    description:
+      "Explore a clearly labelled fictional SiteFit report: key opportunities, risks, evidence, financial assumptions and practical lease questions.",
   },
 ] as const;

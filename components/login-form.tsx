@@ -47,8 +47,8 @@ export function LoginForm({ config }: { config: PublicSupabaseConfig | null }) {
     <section className="simple-panel" aria-label="Email sign-in">
       {!config && (
         <p role="status">
-          Sign-in is temporarily unavailable. You can still explore the location
-          checker.
+          We could not connect to sign-in. Please try again later, or start a
+          Free Snapshot without an account.
         </p>
       )}
       {state === "sent" ? (
@@ -60,8 +60,7 @@ export function LoginForm({ config }: { config: PublicSupabaseConfig | null }) {
             after one hour and work once.
           </p>
           <p className="field-help">
-            Email delivery in this development preview may be restricted. No
-            password is needed.
+            Check your spam folder if needed. No password is required.
           </p>
           <button
             type="button"

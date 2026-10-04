@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phases 0–3 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and the completed Definition of Done. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03. Phases 0–3 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and the completed Definition of Done. Phase 2.5 is authorised and in progress under the updated UK-wide, Mobile First contract. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -8,7 +8,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 - Objective: establish approved scope, architectural direction and conceptual benchmark scenarios.
 - Codex implements: initialise Git and create the eight required documents; record accepted decisions, proposed schema, future tests and explicit unknowns. No application or infrastructure.
-- Human action: supply real London property addresses for Benchmarks A, B and C later. No credentials required. These inputs explicitly do not block documentation completion.
+- Human action: supply real UK property addresses for Benchmarks A, B and C later. No credentials required. These inputs explicitly do not block documentation completion.
 - Definition of Done: eight documents exist and agree; all approved rules are recorded; conceptual benchmarks have no invented addresses; unknowns are recorded; no later phase or secrets are introduced; Git status is checked.
 - Status: documentation foundation complete on 2026-10-03; three benchmark addresses remain outstanding and non-blocking. No executable benchmark results exist.
 
@@ -37,12 +37,20 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Human action: hosted inbox/browser magic-link verification is complete; none outstanding for Phase 3. Existing CLI access supports development migrations/configuration. Public exploration remains open; private persistence requires verified identity. Exact future sign-in placement, purchase policy and retention periods remain decisions for the features that use them; this phase creates no saved-checker/purchase flow.
 - Definition of Done: reproducible migrations; auth works under approved policy; cross-user access is rejected; privileged credentials remain server side; future schema stays documented rather than speculative implementation.
 
+## Phase 2.5: Product direction, UI and conversion redesign
+
+- Status: authorised and in progress; see [phase-2.5-status.md](phase-2.5-status.md).
+- Objective: a mature analytical product experience, UK-wide and Mobile First, with credible £29 decision value.
+- Implements: contract/architecture/decision updates before code; Homepage, navigation, Address → Business Type → Snapshot, optional progressive economics, Pricing, Sample Report, Blog/article readability, Login/Account and coherent controls.
+- Human action: no additional design approval required. Real providers, legal/support launch inputs and financial rules remain later gates.
+- Definition of Done: minimal anonymous journey; economics optional/skippable; UK-wide copy; truthful mature evidence language; 390px-first responsive/keyboard checks; £0/£29 configuration; Blog/SEO/Auth regression; lint/types/tests/build/runtime/remote CI; documented results and protected merge/clean main. No Phase 4 backend.
+
 ## Phase 4: Address Resolution and Property Identity
 
 - Objective: resolve a supplied address to a reviewable property identity.
-- Codex implements: Google address resolution/Geocoding and place boundary, user confirmation, ambiguity handling, canonical property references and London scope checks.
-- Human action: Google Cloud/Maps access, billing, restricted keys in secure settings, verified usage terms; benchmark addresses if still absent. Approve the operational London boundary before enforcing it.
-- Definition of Done: real supplied London addresses resolve or return explicit ambiguity/failure; unsupported geography is handled; keys are protected; no inference of premises suitability from an address match.
+- Codex implements: Google address resolution/Geocoding and place boundary, user confirmation, ambiguity handling, canonical property references and UK nation/region/local-authority identity checks.
+- Human action: Google Cloud/Maps access, billing, restricted keys in secure settings, verified usage terms; benchmark addresses if still absent. Verify UK coverage and jurisdiction-specific resolver capabilities; no London-only boundary.
+- Definition of Done: real supplied UK addresses resolve or return explicit ambiguity/failure; unsupported geography is handled; keys are protected; no inference of premises suitability from an address match.
 
 ## Phase 5: Data Integration Framework
 
@@ -130,7 +138,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 17: Beta and Production Launch
 
-- Objective: validate the complete MVP with users and launch under explicit approval.
+- Objective: validate the complete commercial product with users and launch under explicit approval.
 - Codex implements: benchmark and beta fixes, release checks, launch/runbook documentation and deployment work within authorised access.
 - Human action: supply all benchmark properties if still absent, approve measurable launch criteria, beta feedback, live billing/domain/account activation and production release.
 - Definition of Done: end-to-end real-property benchmark review and critical paths pass; evidence gaps are disclosed; launch criteria and remaining risks are approved; deployed production and payment/delivery are actually verified; no phase is marked complete on intended rather than observed results.

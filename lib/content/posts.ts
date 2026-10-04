@@ -6,7 +6,7 @@ const cta: ContentCTA = {
   href: "/check-location",
   heading: "Start with the space you have in mind.",
   supportingText:
-    "Explore the address and business inputs. Reports are not available in this preview.",
+    "Start with a commercial address and business type. Use your Snapshot to focus the questions that matter.",
   variant: "primary",
 };
 const shared = {

@@ -6,14 +6,16 @@ import {
   nextStep,
   normaliseInput,
   validateStep,
+  snapshotErrors,
+  visibleEconomics,
+  steps,
 } from "../lib/wizard.ts";
 import { formatPrice, site } from "../lib/site-config.ts";
 const valid = () => ({
   ...emptyDraft(),
-  address: "10 Test Street, London, TEST 1AA",
+  address: "10 Test Street, Belfast, BT1 1AA",
   businessType: "coffee-shop" as const,
 });
-
 test("required address blocks progression; the unresolved entered address is retained", () => {
   const draft = emptyDraft();
   assert.equal(nextStep(0, draft), 0);
@@ -56,8 +58,8 @@ test("optional economics preserve unknowns, zero and explicit units without calc
     openingHours: "per-day",
     investment: "one-off",
   });
-  assert.equal(nextStep(2, emptyDraft()), 3);
-  assert.equal(nextStep(3, draft), 3);
+  assert.equal(nextStep(2, valid()), 2);
+  assert.equal(nextStep(2, draft), 2);
 });
 test("economics reject negative, nonfinite, scientific, comma, precision and bounded values", () => {
   for (const raw of [
@@ -102,4 +104,40 @@ test("pricing is configured once in minor units with GBP presentation", () => {
   assert.equal(site.pricing.fullReport, 2900);
   assert.equal(formatPrice(site.pricing.fullReport), "£29");
   assert.equal(formatPrice(site.pricing.snapshot), "£0");
+});
+test("Snapshot requires only address/business and ignores absent or invalid optional economics", () => {
+  const draft = valid();
+  assert.deepEqual(steps, [
+    "Property Address",
+    "Business Type",
+    "Free Snapshot",
+  ]);
+  assert.deepEqual(snapshotErrors(draft), {});
+  draft.economics.grossMargin = "invalid-unsaved-entry";
+  assert.deepEqual(snapshotErrors(draft), {});
+  assert.equal(nextStep(1, draft), 2);
+  assert.ok(validateStep(2, draft).grossMargin);
+  assert.ok(snapshotErrors({ ...draft, address: "" }).address);
+  assert.ok(snapshotErrors({ ...draft, businessType: "" }).businessType);
+});
+test("Economics disclosure starts with three highest-value fields and expands without duplicates", () => {
+  assert.deepEqual(
+    visibleEconomics(false).map((f) => f.id),
+    ["annualRent", "averageTransactionValue", "businessRates"],
+  );
+  assert.equal(visibleEconomics(true).length, 10);
+  assert.equal(new Set(visibleEconomics(true).map((f) => f.id)).size, 10);
+  assert.deepEqual(validateStep(2, valid()), {});
+});
+test("Address entry accepts four-nation examples without a London restriction or resolution claim", () => {
+  for (const address of [
+    "10 Test Street, Manchester, M1 1AA",
+    "10 Test Street, Edinburgh, EH1 1AA",
+    "10 Test Street, Cardiff, CF10 1AA",
+    "10 Test Street, Belfast, BT1 1AA",
+  ]) {
+    const draft = { ...valid(), address };
+    assert.deepEqual(snapshotErrors(draft), {});
+    assert.equal(normaliseInput(draft).address.resolution, "unresolved");
+  }
 });

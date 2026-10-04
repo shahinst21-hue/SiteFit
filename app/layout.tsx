@@ -21,10 +21,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           Skip to content
         </a>
         <SiteHeader />
-        <div className="preview-banner">
-          Early preview <span aria-hidden="true">·</span> Explore the journey.
-          Reports and purchases are not available yet.
-        </div>
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>

@@ -31,6 +31,16 @@ for (const path of paths) {
   const response = await get(path);
   assert.equal(response.status, 200, `${path}: expected HTTP 200`);
   const html = await response.text();
+  assert.doesNotMatch(
+    html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]*>/g, " "),
+    /early preview|development preview|London first|reports are not available yet|coming soon|prototype|feature unavailable/i,
+    path + ": obsolete customer wording",
+  );
+  if (path === "/sample-report") {
+    assert.match(html, /Fictional scenario/);
+    assert.match(html, /illustrative evidence/);
+    assert.equal((html.match(/class="report-section-body"/g) ?? []).length, 16);
+  }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `${path}: missing or duplicate title`);
   titles.add(title);
@@ -86,6 +96,10 @@ for (const path of ["/missing-public-page", "/blog/missing-article"]) {
   assert.match(await response.text(), /noindex/);
 }
 const xml = await (await get("/sitemap.xml")).text();
+assert.ok(
+  xml.includes("/sample-report"),
+  "Sample Report missing from public sitemap",
+);
 const account = await get("/account", true);
 assert.equal(
   account.status,

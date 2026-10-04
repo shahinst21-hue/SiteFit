@@ -66,11 +66,11 @@ export function ClosingCTA() {
         <h2>
           Start with the address.
           <br />
-          Keep the questions open.
+          Know what to check.
         </h2>
         <p>
-          Explore the location checker for your coffee shop, restaurant or
-          salon.
+          Start with the location and business type for your coffee shop,
+          restaurant or salon.
         </p>
       </div>
       <ButtonLink href="/check-location">Check a Location</ButtonLink>

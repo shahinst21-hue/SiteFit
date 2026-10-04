@@ -1,183 +1,154 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink, ClosingCTA } from "@/components/ui";
 import { PricingCards } from "@/components/pricing-cards";
-import { ReportOutline } from "@/components/report-outline";
+import { LocationVisual } from "@/components/location-visual";
 import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata("/");
 export default function Home() {
   return (
     <div className="page-wrap">
       <section className="home-hero">
-        <div>
-          <p className="eyebrow">BEFORE YOU SIGN THE LEASE</p>
+        <div className="hero-content">
+          <p className="eyebrow">A CLEARER COMMERCIAL LEASE DECISION</p>
           <h1>
-            Check a commercial location <em>before you commit.</em>
+            Check the location.
+            <br />
+            <em>Before you commit.</em>
           </h1>
           <p className="hero-copy">
-            Found a space for your coffee shop, restaurant or salon? Bring the
-            location, the costs and the unanswered questions into one clearer
-            picture.
+            Found a space for your coffee shop, restaurant or salon? Put demand,
+            competition, access and costs in the context of your business.
           </p>
-          <div className="button-row">
-            <ButtonLink href="/check-location">Check a Location</ButtonLink>
-            <Link href="/how-it-works#report" className="text-link">
-              See what the report includes <span aria-hidden="true">↗</span>
-            </Link>
-          </div>
+          <ButtonLink href="/check-location">
+            Check a location — free
+          </ButtonLink>
           <p className="hero-footnote">
-            London first <span>•</span> One location at a time <span>•</span> No
-            success predictions
+            UK-wide focus · Just an address and business type
+            <br />
+            No account or financial details needed to start
           </p>
+          <Link href="/sample-report" className="text-link">
+            See a Sample Report ↗
+          </Link>
         </div>
-        <div className="hero-visual">
-          <div className="visual-topline">
-            <span>A CLOSER LOOK AT YOUR NEXT SPACE</span>
-            <span aria-hidden="true">↗</span>
-          </div>
-          <Image
-            src="/images/shopfront.svg"
-            alt="Illustrated commercial shopfront. This is not a real property or analysis result."
-            width={1200}
-            height={760}
-            priority
-          />
-          <div className="visual-caption">
-            <span>Beyond the shopfront.</span>
-            <p>
-              The context, the costs,
-              <br />
-              the things still worth asking.
-            </p>
-          </div>
-          <div className="visual-bottomline">
-            <span>LOCATION + BUSINESS + EVIDENCE</span>
-            <span>01 / 01</span>
-          </div>
-        </div>
+        <LocationVisual />
       </section>
-      <section className="intro-strip">
-        <p>
-          You found a property.
-          <br />
-          <strong>Now ask the right questions.</strong>
-        </p>
-        <p>
-          A commercial lease is a big commitment. SiteFit is being built to help
-          you investigate a location before you sign, with evidence, practical
-          checks and room for uncertainty.
-        </p>
+      <section className="trust-strip" aria-label="Our approach">
+        <span>Evidence before assumptions</span>
+        <span>Relevant to your business</span>
+        <span>Clear about the gaps</span>
+        <Link href="/methodology">How we assess evidence ↗</Link>
       </section>
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">A CLEARER WAY TO INVESTIGATE</p>
-            <h2>Look at the whole picture.</h2>
+            <p className="eyebrow">BEYOND A PIN ON A MAP</p>
+            <h2>
+              Focus on what changes
+              <br />
+              your decision.
+            </h2>
           </div>
-          <Link href="/methodology" className="text-link">
-            Our approach ↗
-          </Link>
+          <p>
+            A busy street is not automatically the right street. The useful
+            question is how the location fits your business, costs and
+            customers.
+          </p>
         </div>
         <div className="three-columns">
-          <div className="feature">
-            <span className="feature-index">01 — THE LOCATION</span>
-            <h3>Who and what is around you?</h3>
-            <p>
-              Planned catchment, competition, complementary businesses and
-              access context, where reliable data is available.
-            </p>
-          </div>
-          <div className="feature">
-            <span className="feature-index">02 — THE BUSINESS</span>
-            <h3>What do the costs depend on?</h3>
-            <p>
-              Your inputs will inform transparent economics and scenarios.
-              Missing figures stay unknown.
-            </p>
-          </div>
-          <div className="feature">
-            <span className="feature-index">03 — THE QUESTIONS</span>
-            <h3>What still needs a closer look?</h3>
-            <p>
-              Evidence gaps, in-person checks and questions for the landlord or
-              agent, without a promise of success.
-            </p>
-          </div>
+          {[
+            [
+              "01",
+              "The right demand",
+              "Consider who uses the area, when they visit and whether their needs fit your business.",
+            ],
+            [
+              "02",
+              "The competitive context",
+              "Distinguish useful commercial clusters from direct competition. A count alone tells only part of the story.",
+            ],
+            [
+              "03",
+              "The risks worth checking",
+              "Bring evidence gaps, access constraints and lease questions into view before they become costly assumptions.",
+            ],
+          ].map(([n, title, text]) => (
+            <article className="feature" key={n}>
+              <span className="feature-index">{n}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
         </div>
       </section>
       <section className="how-strip">
         <div>
-          <p className="eyebrow">HOW IT WILL WORK</p>
+          <p className="eyebrow">START SIMPLE</p>
           <h2>
-            From an address
+            Your next decision
             <br />
-            to a better-informed decision.
+            starts with two details.
           </h2>
-          <Link href="/how-it-works" className="text-link">
-            See the journey ↗
-          </Link>
+          <ButtonLink href="/check-location" secondary>
+            Start your Free Snapshot
+          </ButtonLink>
         </div>
         <ol>
-          <li>
-            <span>01</span>
-            <div>
-              <h3>Tell us about the space</h3>
-              <p>
-                Enter an address, choose your business and add the costs you
-                know.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span>02</span>
-            <div>
-              <h3>Start with a Free Snapshot</h3>
-              <p>
-                A planned initial view of available evidence and limitations.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span>03</span>
-            <div>
-              <h3>Go deeper with a Full Report</h3>
-              <p>
-                A planned one-off report to organise the evidence and your next
-                checks.
-              </p>
-            </div>
-          </li>
+          {[
+            [
+              "Enter the address",
+              "The commercial property you are considering, anywhere in the UK.",
+            ],
+            [
+              "Choose your business",
+              "Coffee Shop, Restaurant, Hair Salon or Beauty Salon.",
+            ],
+            [
+              "Review your Snapshot",
+              "Frame the local questions and next checks. Add costs only when you want to go deeper.",
+            ],
+          ].map(([title, text], i) => (
+            <li key={title}>
+              <span>0{i + 1}</span>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </li>
+          ))}
         </ol>
-      </section>
-      <ReportOutline />
-      <section className="evidence-strip">
-        <p className="eyebrow">EVIDENCE BEFORE ASSUMPTIONS</p>
-        <h2>
-          Knowing what is unknown
-          <br />
-          is part of the answer.
-        </h2>
-        <p>
-          Not all sources are equally reliable. SiteFit&apos;s approach
-          separates sourced information, estimates and interpretation. Missing
-          facts stay missing.
-        </p>
-        <Link href="/methodology" className="text-link">
-          Read our methodology ↗
-        </Link>
       </section>
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">ONE LOCATION. NO SUBSCRIPTION.</p>
-            <h2>Start free. Go deeper when ready.</h2>
+            <p className="eyebrow">ONE LOCATION. ONE-OFF PRICING.</p>
+            <h2>
+              Start with the essentials.
+              <br />
+              Look deeper before you sign.
+            </h2>
           </div>
-          <p>
-            Planned products, with clear initial pricing. Neither tier is
-            available to generate or purchase yet.
-          </p>
+          <Link className="text-link" href="/sample-report">
+            Explore the Sample Report ↗
+          </Link>
         </div>
         <PricingCards />
+      </section>
+      <section className="evidence-strip">
+        <p className="eyebrow">REASONING YOU CAN FOLLOW</p>
+        <h2>
+          What supports the location?
+          <br />
+          What challenges it?
+        </h2>
+        <p>
+          Good decision support puts positive evidence beside risks, separates
+          facts from interpretation and makes the next check clear. It does not
+          predict business success.
+        </p>
+        <Link href="/methodology" className="text-link">
+          Read the methodology ↗
+        </Link>
       </section>
       <ClosingCTA />
     </div>
