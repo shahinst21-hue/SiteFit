@@ -55,4 +55,4 @@ UK-wide launch, Mobile First (390px first), mature language and £29 decision va
 
 ## Phase 3.5 rules
 
-Brand/UI/UX refinement is authorised and in progress. Use the supplied temporary wordmark consistently; reference images guide visual direction, never evidence, copy, scores or live integrations. Preserve Phase 2.5 principles. Homepage address handoff is one-use React memory only. Resource controls filter published read results only. See `docs/phase-3.5-status.md`; Phase 4 remains unauthorised.
+Brand/UI/UX refinement is complete; implementation merged through protected PR #8 and post-merge CI passed. Use the supplied temporary wordmark consistently; reference images guide visual direction, never evidence, copy, scores or live integrations. Preserve Phase 2.5 principles. Homepage address handoff is one-use React memory only. Resource controls filter published read results only. See `docs/phase-3.5-status.md`; Phase 4 remains unauthorised.
