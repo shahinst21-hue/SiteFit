@@ -94,7 +94,7 @@ The anonymous acquisition path requires only address and business type, followed
 Future analysis ordering is Source Data → Normalised Data → Deterministic Metrics → Evidence Objects → AI Interpretation → Validated Report. AI interprets conflicts, implications and business-specific risks from validated evidence; it cannot calculate finances or invent sources. Report presentation prioritises summary/opportunity/risk/gaps/next checks and section navigation on mobile. Decision relevance controls displayed fields, not provider response size.
 
 Mobile First starts at 390px, with 360/375, 430, 768 and 1440 validation. System fonts, server-rendered public/report sample content, native controls and code-native schematic visuals avoid map/font/icon packages. Schematic maps and fictional Sample Report findings are labelled; real-address Snapshot evidence stays explicitly unverified. No live collection, analysis scoring, checkout or publication service in this phase.
-## Phase 4 address boundary (implemented; deployment gate pending)
+## Phase 4 address boundary (implemented and verified)
 
 The anonymous Location step posts to four server-only address routes: lookup, search, resolve and manual. The wizard consumes SiteFit candidates and a normalised PropertySelection, never Postio response objects. Postcode search is an explicit action; optional address autocomplete starts at four characters, debounces and cancels stale requests. Candidates and wizard entries remain in page memory. Back preserves the selected UUID and list without repeating a paid request.
 

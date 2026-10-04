@@ -104,7 +104,7 @@ See [phase-1-status.md](phase-1-status.md) for observed remote CI, branch protec
 ## Lint dependencies
 
 ESLint 10 uses JavaScript recommended rules and TypeScript ESLint recommended rules, plus the infrastructure-import restriction. TypeScript 6.0 is within the current parser's compatibility range. The full Next/React lint preset is deferred: its glob dependency has an [unpatched advisory](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) at this record date. It is unnecessary for the server-rendered placeholder and would add avoidable dependencies. Reassess framework/React-specific rules when Phase 2 introduces interactive UI; do not downgrade Next.js or use forced dependency overrides to silence the audit.
-## Phase 4 server environment and external gate
+## Phase 4 server environment and verified Preview
 
 Phase 4 adds blank template names ADDRESS_LOOKUP_PROVIDER, POSTIO_API_KEY and SUPABASE_SECRET_KEY. Provider selection defaults to postio; unknown configured providers fail closed. POSTIO_API_KEY is used only by the server factory/explicit local probe and sent as x-api-key to the fixed Postio origin. SUPABASE_SECRET_KEY must be the development sb_secret_ key: server-only, separate from publishable Auth configuration, never serialised or placed in a NEXT_PUBLIC setting. No privileged key is required to build, but selected/manual persistence requires it at runtime. Do not obtain/store a privileged application credential through the diagnostic CLI probe.
 

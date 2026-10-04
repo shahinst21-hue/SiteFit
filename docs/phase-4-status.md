@@ -1,6 +1,6 @@
 # Phase 4 status — address resolution and property identity
 
-Updated 2026-10-04. **All implementation, security and real end-to-end gates VERIFIED; final protected delivery pending.** No Phase 5 work started. Implementation is on codex/phase-4-address-resolution, based on clean protected main 5d210990a4ab5b67f8568f491e761960e72c2777. Protected merge follows final required CI.
+Updated 2026-10-04. **PHASE 4 COMPLETE.** All implementation, security, live end-to-end and protected implementation-delivery gates passed. No Phase 5 work started. Implementation branch codex/phase-4-address-resolution merged through protected PR #10. The completion record follows the same protected documentation workflow.
 
 ## Implementation and evidence
 
@@ -39,14 +39,15 @@ After npm ci (zero audit vulnerabilities), npm run check passed again: lint, str
 
 To preserve hosted Auth on the new observed stable Preview alias, only its exact callback/confirmation URLs were added to the existing development allowlist. Reviewed config diff had one declared change; push applied only that property and preserved the nine undeclared remote defaults. The post-push diff verified zero declared updates and the same nine undeclared differences. No wildcard, Production callback or SMTP setting was added.
 
-## Delivery and limits
+## Verified delivery and limits
 
-Implementation PR is [#10](https://github.com/shahinst21-hue/SiteFit/pull/10). Previous final documentation head 65c00c00be2b8aeb2b41aadd7d5551484e659e17 passed both [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37211752015) and [push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37211749124). This evidence/configuration update follows the same required CI and protected merge workflow. Actual merge and final clean-main synchronization are recorded after they occur; no direct main commit or protection override is allowed.
+[PR #10](https://github.com/shahinst21-hue/SiteFit/pull/10) was converted from draft after the real end-to-end gates passed. Final head d32806adb36c1f52cf2903f337f3d3633a8db72a passed [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37216380660) and [push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37216376857). Required Lint, types, tests and build checks were verified successful immediately before the exact-head protected squash merge. GitHub accepted the protected merge as 4afce2575c5bb33fa157c4854fb80ee4ccc2fe36. No admin override, direct main commit or force push was used.
 
+[Post-merge main CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37216771257) passed at 4afce2575c5bb33fa157c4854fb80ee4ccc2fe36. Main was fast-forwarded to that exact origin/main commit and the working tree was clean. This documentation-only completion record is delivered through its own required CI/PR; final main/origin and cleanliness are checked again after that delivery. Production auto-deployment remains disabled; Phase 5 is not authorised.
 No human action remains outstanding. Four representative postcodes do not establish every UK address; NI optional geography remains unknown. Postal verification does not prove building coordinates, commercial use, occupancy or demand. Throttles are per-process rather than distributed; public Production abuse controls need review before rollout. No bulk cache/PAF inventory exists; later redistribution/export needs licence review. Phase 5, analysis/data collection, financial computation, payments, AI, real reports/PDF and publishing automation have not started.
 ## Definition of Done
 
-Checked entries identify actual evidence above. Only the final protected delivery check remains pending at the time of this pre-merge record.
+All 44 entries passed with the evidence above; the implementation merge and post-merge synchronization are verified. Completion documentation delivery uses the same protected workflow.
 - [x] Real Postio connectivity works.
 - [x] POSTIO_API_KEY remains server side.
 - [x] Postcode input works.
@@ -89,5 +90,5 @@ Checked entries identify actual evidence above. Only the final protected deliver
 - [x] Remote CI passes.
 - [x] Preview integration works.
 - [x] Documentation is updated.
-- [ ] Repository is clean after protected merge.
+- [x] Repository is clean after protected merge.
 - [x] Phase 5 has not started.
