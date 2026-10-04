@@ -28,7 +28,7 @@ export function GET() {
         {site.tagline}
       </div>
       <div style={{ fontSize: 24, display: "flex" }}>
-        London first · One location at a time
+        UK commercial locations · Evidence before assumptions
       </div>
     </div>,
     size,

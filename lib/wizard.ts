@@ -29,10 +29,8 @@ export type BusinessCategory = (typeof businessTypes)[number]["category"];
 export const steps = [
   "Property Address",
   "Business Type",
-  "Business Economics",
-  "Analysis",
+  "Free Snapshot",
 ] as const;
-
 export const economicsFields = [
   {
     id: "annualRent",
@@ -117,7 +115,10 @@ export type FieldErrors = Partial<
 >;
 export type LocationCheckInput = {
   version: 1;
-  address: { entered: string; resolution: "unresolved" };
+  address: {
+    entered: string;
+    resolution: "unresolved";
+  };
   businessType: BusinessType;
   businessCategory: BusinessCategory;
   economics: Record<EconomicsKey, number | null>;
@@ -130,7 +131,6 @@ export type LocationCheckInput = {
     investment: "one-off";
   };
 };
-
 export function emptyDraft(): WizardDraft {
   return {
     address: "",
@@ -140,7 +140,6 @@ export function emptyDraft(): WizardDraft {
     ) as EconomicsDraft,
   };
 }
-
 export function validateStep(step: number, draft: WizardDraft): FieldErrors {
   const errors: FieldErrors = {};
   if (step === 0 || step === 3) {
@@ -179,13 +178,30 @@ export function validateStep(step: number, draft: WizardDraft): FieldErrors {
   }
   return errors;
 }
-
-export function nextStep(step: number, draft: WizardDraft) {
-  return Object.keys(validateStep(step, draft)).length === 0
-    ? Math.min(step + 1, 3)
-    : step;
+export const primaryEconomics = [
+  "annualRent",
+  "averageTransactionValue",
+  "businessRates",
+] as const;
+export function visibleEconomics(expanded: boolean) {
+  return expanded
+    ? [
+        ...primaryEconomics.map((id) =>
+          economicsFields.find((f) => f.id === id)!,
+        ),
+        ...economicsFields.filter(
+          (f) => !primaryEconomics.some((id) => id === f.id),
+        ),
+      ]
+    : primaryEconomics.map((id) => economicsFields.find((f) => f.id === id)!);
 }
-
+export function snapshotErrors(draft: WizardDraft): FieldErrors {
+  return { ...validateStep(0, draft), ...validateStep(1, draft) };
+}
+export function nextStep(step: number, draft: WizardDraft) {
+  const errors = step === 2 ? snapshotErrors(draft) : validateStep(step, draft);
+  return Object.keys(errors).length === 0 ? Math.min(step + 1, 2) : step;
+}
 export function normaliseInput(draft: WizardDraft): LocationCheckInput {
   if (Object.keys(validateStep(3, draft)).length)
     throw new Error("Review your address, business type and optional costs.");

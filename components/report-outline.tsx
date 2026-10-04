@@ -21,7 +21,7 @@ export function ReportOutline() {
     <section id="report" className="section-block">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">THE PLANNED FULL REPORT</p>
+          <p className="eyebrow">INSIDE THE FULL REPORT</p>
           <h2>
             A location has more
             <br />
@@ -29,8 +29,8 @@ export function ReportOutline() {
           </h2>
         </div>
         <p>
-          Sixteen areas to help organise your decision. Source coverage varies;
-          unanswered questions stay visible.
+          Decision-relevant sections organise the reasoning. Source coverage
+          varies; unanswered questions stay visible.
         </p>
       </div>
       <ol className="report-grid">
@@ -44,8 +44,8 @@ export function ReportOutline() {
         ))}
       </ol>
       <p className="fine-print">
-        Report structure shown for guidance. Analysis and reports are not
-        available yet; this is not a result for a property.
+        Report structure shown for guidance. See the fictional Sample Report for
+        the format and reasoning; this is not a property result.
       </p>
     </section>
   );

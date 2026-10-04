@@ -13,11 +13,11 @@ export function SiteFooter() {
           <p>
             A closer look before a big commitment.
             <br />
-            London first. One location at a time.
+            Commercial location decisions across the UK.
           </p>
         </div>
         <nav aria-label="Footer navigation">
-          <Link href="/blog">Journal</Link>
+          <Link href="/blog">Blog</Link>
           <Link href="/methodology">Methodology</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/privacy">Privacy</Link>
@@ -25,7 +25,9 @@ export function SiteFooter() {
         </nav>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} {site.name}</span>
+        <span>
+          © {new Date().getFullYear()} {site.name}
+        </span>
         <span>Decision support. No guarantees of business success.</span>
       </div>
     </footer>

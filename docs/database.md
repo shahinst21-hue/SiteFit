@@ -95,3 +95,9 @@ Anonymous and authenticated SELECT are permitted only when `status='published'` 
 7. Run local/remote validation and the explicit hosted Auth probe/inbox browser test. Document observed results.
 
 Rebuild tests bootstrap only minimal Supabase platform objects, then apply the exact committed application SQL. A real local Supabase `db reset` needs Docker, still unavailable here; hosted Postgres 17.11 and isolated PostgreSQL rebuild/security tests are verified separately. No hosted reset or destructive rebuild is attempted.
+
+## Phase 2.5 geographic and input review
+
+Reviewed 2026-10-04: the applied schema contains no London-only restriction. Properties use generic address/postcode and coordinate bounds; evidence carries geographic context. UK nation/region/local-authority/provider-routing fields are future resolver decisions, introduced only when needed with a new migration. Applied Phase 3 migration history remains immutable.
+
+The customer journey no longer mirrors all analysis-input columns. Address/business type alone precede initial value; economics remains optional after Snapshot. Missing numeric inputs remain null, zero remains zero, and calculations require their actual dependencies. No persistence endpoint, derived outputs, guest-ownership exception or schema modification is introduced in Phase 2.5.

@@ -21,9 +21,9 @@ export default async function Blog() {
       </PageIntro>
       {!featured ? (
         <section className="simple-panel">
-          <h2>The first articles are on their way.</h2>
+          <h2>No published articles match this selection.</h2>
           <p>
-            There are no published articles yet. In the meantime, explore{" "}
+            Read our methodology for guidance on location evidence and{" "}
             <Link href="/methodology" className="text-link">
               our approach to evidence
             </Link>

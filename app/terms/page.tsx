@@ -1,61 +1,57 @@
 import { PageIntro } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata("/terms");
-// Development placeholder: identity, governing terms, tax/refunds and liability require legal review before launch.
+// Contracting entity, tax/refunds, entitlement and liability need owner/legal review before sales.
 export default function Terms() {
   return (
     <div className="page-wrap narrow-page">
       <PageIntro
-        eyebrow="DEVELOPMENT NOTICE"
-        title="Terms for exploring SiteFit."
+        eyebrow="SERVICE INFORMATION"
+        title="Using SiteFit responsibly."
       >
         <p>
-          Draft terms for an early preview. This is not an offer to sell a live
-          report. Last updated 3 October 2026.
+          Information about the website and the limits of its guidance. Updated
+          4 October 2026.
         </p>
       </PageIntro>
       <div className="prose">
-        <h2>The current service</h2>
+        <h2>Your location brief</h2>
         <p>
-          You can read public pages and explore a location-entry journey. No
-          property analysis, purchase or report delivery is available. Optional
-          email sign-in is available for development verification; an account
-          does not create a report or purchase entitlement.
+          The location check organises the address and business type you enter,
+          with relevant verification questions. Local evidence has not been
+          verified for that address. Optional economics stays on the page and
+          produces no calculated financial result.
         </p>
-        <h2>Preview information</h2>
+        <h2>Samples and editorial guidance</h2>
         <p>
-          Planned features and initial pricing describe the intended product.
-          They do not establish availability, final coverage or a final purchase
-          agreement. Editorial content is general guidance, not an assessment of
-          a real property.
+          The Sample Report is a clearly labelled fictional scenario. It is not
+          an assessment of a real property. Blog articles provide general
+          guidance. Neither establishes premises suitability, demand or business
+          success.
         </p>
-        <h2>Decisions and professional review</h2>
+        <h2>Before a lease commitment</h2>
         <p>
-          SiteFit does not predict business success. Investigate premises in
-          person, verify documents and seek appropriate qualified advice before
-          relying on information about a commercial commitment.
+          Inspect the premises, verify source documents and consult
+          appropriately qualified advisers on lease, planning and financial
+          matters. SiteFit does not guarantee an outcome.
         </p>
-        <h2>Acceptable exploration</h2>
+        <h2>Accounts and prices</h2>
         <p>
-          Use the preview for its intended purpose and avoid entering sensitive
-          information. There is no upload or support-message service here.
+          Email sign-in establishes your account session; it does not create
+          report or purchase entitlement. Displayed prices describe the product
+          proposition. No payment is collected through this website.
         </p>
-        <h2>Pricing and purchases</h2>
+        <h2>Responsible use</h2>
         <p>
-          No payment is collected in this preview. Final tax treatment, refunds,
-          entitlement, delivery and purchase terms must be settled before sales
-          open.
+          Do not submit sensitive documents or misuse the website. The location
+          checker keeps entries in page memory and clears them on navigation or
+          reload.
         </p>
-        <h2>Identity, rights and liability</h2>
+        <h2>Purchase and legal terms</h2>
         <p>
-          The contracting entity, governing terms, applicable customer rights
-          and appropriate liability provisions remain to be reviewed and
-          confirmed. This draft does not claim that legal review has occurred.
-        </p>
-        <h2>Before the live service opens</h2>
-        <p>
-          Reviewed terms reflecting the actual service must replace this
-          development placeholder before launch.
+          This information is not a purchase agreement or a claim of completed
+          legal review. Contracting identity, tax, refunds, delivery, rights and
+          liability require specific terms before a transaction.
         </p>
       </div>
     </div>

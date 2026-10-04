@@ -6,35 +6,32 @@ export default function HowItWorks() {
   return (
     <div className="page-wrap">
       <PageIntro
-        eyebrow="THE JOURNEY"
-        title="A closer look, one step at a time."
+        eyebrow="HOW SITEFIT WORKS"
+        title="Two details to start. Better questions to follow."
       >
-        <p>
-          Start with the property you have found. Build a picture of the
-          location, the costs and the questions that remain.
-        </p>
+        <p>Bring the location into focus before adding the financial detail.</p>
       </PageIntro>
       <ol className="journey-list">
         {[
           [
             "Enter the property address",
-            "Use the commercial address and postcode. In this preview you enter it yourself; address search and resolution will come later.",
+            "Use the commercial address and postcode, anywhere in the UK.",
           ],
           [
             "Choose your business",
-            "Coffee Shop, Restaurant, Hair Salon or Beauty Salon. Your intended use gives the investigation its context.",
+            "Coffee Shop, Restaurant, Hair Salon or Beauty Salon. Your intended use shapes the relevant checks.",
           ],
           [
-            "Add the costs you know",
-            "Rent, rates, staff costs and other optional inputs. Leave missing information blank. No calculations run in this preview.",
+            "Review your Free Snapshot",
+            "Start with your location brief, key questions and evidence limitations. No account or economics required.",
           ],
           [
-            "Review your entries",
-            "Finish the preview with an on-page summary. Your information is not submitted, and the analysis engine is not connected.",
+            "Go deeper when it helps",
+            "Add optional costs after the Snapshot. Explore the Sample Report to see how supporting evidence, risks and next checks fit together.",
           ],
-        ].map(([title, text], index) => (
+        ].map(([title, text], i) => (
           <li key={title}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span>0{i + 1}</span>
             <div>
               <h2>{title}</h2>
               <p>{text}</p>
@@ -42,14 +39,6 @@ export default function HowItWorks() {
           </li>
         ))}
       </ol>
-      <div className="availability-note">
-        <strong>What comes after the preview?</strong>
-        <p>
-          The planned journey continues with a Free Snapshot, then an optional
-          one-off Full Report. Reports, payments and delivery are not available
-          yet.
-        </p>
-      </div>
       <ReportOutline />
       <ClosingCTA />
     </div>

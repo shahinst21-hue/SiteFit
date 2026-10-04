@@ -7,43 +7,46 @@ export default function Pricing() {
     <div className="page-wrap">
       <PageIntro
         eyebrow="SIMPLE, ONE-OFF PRICING"
-        title="One location. A clearer picture."
+        title="A clearer decision. No subscription."
       >
         <p>
-          Begin with a Free Snapshot, then choose a Full Report when you want to
-          investigate further. No subscription or multiple paid plans.
+          Start free. Understand the deeper evidence and reasoning before
+          considering a Full Report.
         </p>
       </PageIntro>
       <PricingCards />
       <section className="faq-section">
-        <h2>A few things to know</h2>
+        <h2>Before you decide</h2>
         <details>
-          <summary>Can I buy a report today?</summary>
+          <summary>What makes the Full Report different?</summary>
           <p>
-            No. This is an early preview of the journey. Reports, checkout and
-            payment processing are not available yet.
+            The value is in connecting business-specific evidence to the lease
+            decision: which signals matter, how risks change the picture and
+            what to verify. The Sample Report illustrates this reasoning.
           </p>
         </details>
         <details>
-          <summary>Is this the final pricing?</summary>
+          <summary>Do I need to provide financial details?</summary>
           <p>
-            The displayed Full Report price is the initial assumption. Final
-            pricing, tax treatment and purchase terms will be confirmed before
-            sales open.
+            No. Address and business type are enough to start. Economics is
+            optional afterwards; calculations must depend on the figures
+            actually supplied.
           </p>
         </details>
         <details>
-          <summary>Will every report have data for every section?</summary>
+          <summary>Will every section have verified evidence?</summary>
           <p>
-            Coverage depends on available and permitted sources. Gaps will stay
-            visible as Unknown or Insufficient Evidence.
+            Source coverage varies by location and geography. Insufficient
+            verified evidence must be stated clearly; missing observations are
+            never replaced by invented facts.
           </p>
         </details>
         <details>
-          <summary>Does a report predict success?</summary>
+          <summary>Does SiteFit predict business success?</summary>
           <p>
-            No. SiteFit is intended to support a decision by organising evidence
-            and questions. It cannot guarantee a business outcome.
+            No. Decision support helps you understand evidence and assumptions.
+            It does not guarantee a business outcome or replace professional
+            advice.
           </p>
         </details>
       </section>

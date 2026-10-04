@@ -1,20 +1,29 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Wordmark } from "./ui";
 
 const links = [
   { href: "/how-it-works", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/blog", label: "Journal" },
-  { href: "/methodology", label: "Methodology" },
+  { href: "/blog", label: "Blog" },
+  { href: "/sample-report", label: "Sample Report" },
 ];
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const menu = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   return (
-    <header className="site-header">
+    <header
+      className="site-header"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          setOpen(false);
+          menu.current?.focus();
+        }
+      }}
+    >
       <div className="header-inner">
         <Link href="/" aria-label="SiteFit home" onClick={() => setOpen(false)}>
           <Wordmark />
@@ -22,6 +31,7 @@ export function SiteHeader() {
         <button
           type="button"
           className="menu-toggle"
+          ref={menu}
           aria-expanded={open}
           aria-controls="public-navigation"
           onClick={() => setOpen(!open)}

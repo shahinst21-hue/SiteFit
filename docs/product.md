@@ -1,88 +1,65 @@
 # SiteFit Product Contract
 
-Status: Accepted product direction, recorded 2026-10-03. Phase 2 implements the public website, frontend-only journey and Blog/SEO foundation. Live analysis and all later services remain unimplemented. Scope is unchanged.
+Authoritative direction updated 2026-10-04 for Phase 2.5. This supersedes conflicting Phase 0–3 assumptions. SiteFit is a production-quality commercial product, not a disposable MVP. Phases 0–3 are complete; Phase 2.5 updates the experience before Phase 4. Implementation and live service readiness are recorded internally, never presented as customer-facing beta language.
 
-## Problem, customer and use moment
+## Customer and decision
 
-People considering leasing commercial premises need to understand a location's strengths, weaknesses and gaps in available evidence before committing. The initial customer is someone assessing a property for a Coffee Shop, Restaurant, or Hair Salon or Beauty Salon. SiteFit helps reduce uncertainty before signing a commercial lease; it does not predict business success.
+SiteFit helps someone considering a commercial lease evaluate a specific location before committing. Positioning: “Check a commercial location before you commit.” Support Coffee Shop, Restaurant, and the combined Hair Salon or Beauty Salon category. Hair and Beauty remain separate interface choices mapped to the same analysis category. No unsupported business-success probability.
 
-## Geography and initial verticals
+## United Kingdom from launch
 
-The MVP is UK only and London first. Launch supports three business categories: Coffee Shop; Restaurant; Hair Salon or Beauty Salon (one combined category). Expansion beyond London or these categories needs explicit approval.
+Design for England, Scotland, Wales and Northern Ireland. London is a valid example, never a product limit. No London restriction in copy, forms, rules, database, SEO, reports or analytics. Route future providers by nation, region, local authority, dataset geography and verified coverage. TfL is relevant within its coverage, not a national default. National ambition does not imply every source supplies equivalent coverage: identify gaps professionally and retain source/geography provenance.
 
-The authorised Phase 2 interface presents Hair Salon and Beauty Salon as separate user choices with stable identifiers, mapping both to the single approved salon category. This refines the entry UX and does not expand the business-category model.
+## Commercial quality and £29 value
 
-## User journey and products
+Free Snapshot: £0. Full Report: £29, one-off, no consumer subscription. Pricing stays centrally configured. The paid value is prioritised, business-specific interpretation of evidence around a lease decision, rather than raw API responses, map listings, census tables or generic AI prose. Each input, output and section must improve that decision. Avoid complexity without customer value. The product must be credible enough for serious marketing and content investment; UI quality does not substitute for later verified services and launch gates.
 
-The planned journey is: enter a commercial property address, select a business type, optionally supply economics, receive a Free Snapshot, pay for a Full Report, and receive an evidence backed Single Location Due Diligence Report.
+A Full Report should connect local and business-specific demand, competition and competitive strength, commercial clustering, access, transport/catchment/mobility, defensible premises/survival evidence, planning/local change, risks, economics/required sales or transactions, scenarios, supporting/opposing evidence, critical gaps and practical verification. Do not infer closure causes or survival from an incomplete register. Include a factor only where it improves the decision and its evidence supports the claim.
 
-Optional economics include rent, business rates, average customer spend, gross margin, staffing costs and operating hours. Units, periods and missing inputs must be explicit; absence is not zero.
+## Acquisition and minimal input
 
-### Free Snapshot
+Property Address → Business Type → Free Snapshot → deeper engagement → optional economics → Full Report purchase/persistence as appropriate.
 
-A free initial view of the location and available evidence, with visible limitations and unknowns. Its exact section allocation, depth and free-to-paid boundary remain proposals to approve before Phase 6; no entitlement or content rules are invented in Phase 0.
+Only address and business type are required before initial value. No rent, rates, size, transaction value, margin, costs, hours or investment gate. Initial value must not require an account; verified identity protects later private persistence. Do not turn the internal database model into a customer form.
 
-### Full Report
+Economics is optional after the Snapshot. Initially offer annual rent, average transaction value and business rates. “Add more financial details” reveals margin, staff/other costs, days/hours, property size and investment. Provide a clear skip/back path. Empty optional inputs remain blank, not a wall of “Unknown”. Preserve zero versus missing and explicit units. Later calculations omit or qualify outputs whose necessary inputs are missing. No financial calculation is introduced in Phase 2.5.
 
-A paid, evidence backed assessment of one location for the chosen business type. Initial pricing assumption: £29 per Full Report. Price must later be configurable and never hardcoded into application business logic. Tax treatment, refund policy and entitlement duration are unresolved business inputs for the relevant later phases.
+## Decision-oriented output
 
-## Full Report structure
+Prefer insight → explanation → evidence → implication. Prioritise the meaningful few signals rather than a dashboard of returned data. Mobile Snapshot order: location summary, demand, competition, accessibility, key risk, relevant additional factors and deeper-analysis action. No vanity counts, unsupported scores or charts without decision value.
 
-1. Location Snapshot
-2. Customer Catchment
-3. Demand Signals
-4. Competition
-5. Complementary Businesses
-6. Accessibility
-7. Mobility Signals
-8. Premises History
-9. Local Business Signals
-10. Economics
-11. Scenario Analysis
-12. Evidence Supporting the Location
-13. Evidence Against the Location
-14. Unknowns
-15. Things to Check in Person
-16. Questions for the Landlord or Agent
+The Full Report retains the sixteen section keys: Location Snapshot; Customer Catchment; Demand Signals; Competition; Complementary Businesses; Accessibility; Mobility Signals; Premises History; Local Business Signals; Economics; Scenario Analysis; Evidence Supporting the Location; Evidence Against the Location; Unknowns; Things to Check in Person; Questions for the Landlord or Agent. Section presence does not promise available evidence. Mobile starts with summary, opportunity, risk, critical gap and next checks, then section navigation and accessible evidence details. It is a readable web report, not a scaled-down PDF.
 
-Sections must show unavailable evidence explicitly. Listing a section does not promise that a source will provide its data for every property.
+## AI-native, evidence-controlled
 
-## Positioning
+Source Data → Normalised Data → Deterministic Metrics → Evidence Objects → AI Interpretation → Validated Report.
 
-Primary: “Check a commercial location before you commit.”
+AI interprets structured evidence, combines signals, identifies patterns/contradictions, adapts to business type, weighs positive/negative evidence, prioritises risks, explains trade-offs and produces concise narratives and useful landlord questions. It behaves as an analyst, not a database. Version provider/model, prompts, input/evidence/calculation lineage and validated output when implemented.
 
-Alternative customer-facing concept: “Found a shop? Check the location before you sign.”
+AI must not invent data, footfall, premises history, closure causes or source references; alter deterministic calculations; conceal uncertainty; or output unsupported success probabilities. Important claims must trace to permitted evidence, dates, geography, limitations and derivation. Separate source class from claim type and label AI inference. Missing evidence is not zero or verified absence.
 
-SiteFit is a decision support product. Unsupported success probabilities, including “87 percent chance of success”, are prohibited.
+## Mature language and truthful trust
 
-## Evidence philosophy
+Use concise, natural British English. Every page explains what it is, why it matters and what to do next. No customer-facing beta, early preview, prototype, coming-soon, implementation status or apologetic availability banners. Confidence comes from clear reasoning, methodology, evidence quality and professional design, never fabricated integrations, testimonials or certainty.
 
-Distinguish facts, official data, commercial data, modelled estimates, AI inference, user supplied information, and unknown information. These are not mutually exclusive: a factual observation can come from an official or commercial source. Record provenance separately from claim type rather than forcing one ambiguous label.
+Say “Insufficient verified evidence is available to assess this factor”, “No verified occupancy history was identified for this period” only when that search actually occurred, or precisely state evidence has not been verified. Measured footfall absence must not imply transport/activity proxies are measured footfall. Production source claims must reflect actual retrieval, not the candidate register.
 
-Every important report claim must eventually be traceable to evidence, its date, geographic relevance, limitations and derivation. Missing information stays Unknown or Insufficient Evidence. Distinguish no evidence found from verified absence. Evidence may support or oppose a location; uncertainty must remain visible. Source reliability does not imply a property's business viability.
+Sample Report content is visibly labelled Sample Report, with fictional scenario and illustrative evidence distinguished from real observations. Never attach sample findings to a customer's entered address. Before real retrieval exists, a Snapshot can organise the user-supplied brief and relevant verification questions, but cannot claim local demand, competitors or risks have been measured.
 
-## AI responsibilities and prohibited behaviour
+## Mobile First and visual quality
 
-AI may synthesise supplied evidence, explain deterministic results, articulate uncertainty and propose questions or in-person checks. It acts as an analyst rather than a data source. Inferences must be labelled and linked to their supporting evidence.
+Mobile First is mandatory: solve 390px first, then 360/375px, 430px, 768px and 1440px. Apply to every customer screen, including Account and Blog articles. Hero sequence: clear proposition, short explanation, address/direct check action, trust, then product visual. Main CTA must be quickly reachable. Each location step has one decision. Stack Snapshot cards; disclose evidence and economics progressively; avoid horizontal scrolling, tiny targets, form zoom and administrative sidebars.
 
-AI must never invent missing observations, source references, property history or financial inputs. It must not calculate core financial metrics, replace deterministic calculations, hide uncertainty or predict success probabilities. Changing the AI provider must not change application-level product rules.
+A modern analytical SiteFit identity uses strong action hierarchy, location/evidence visual language, clean cards, contrast and simple navigation. Reference direction guides principles, not copied wording, branding, exact type, colour or illustrations. Avoid editorial/luxury, generic SaaS, estate-agency or GIS presentation.
 
-## MVP scope and boundaries
+Performance is part of this rule: server rendering, lightweight client state, system fonts, reserved image dimensions and no unnecessary maps, icon packages, animation, third-party scripts or large assets. Measure rather than claim Core Web Vitals.
 
-Web based, single location analysis, pay per report, London first, and a small set of business types. Prefer public data and low cost APIs where practical and permitted. The approved future providers and architecture are described in [architecture.md](architecture.md); candidates are assessed in [data-sources.md](data-sources.md).
+## Content, SEO and boundaries
 
-Explicitly out of scope: mobile application; enterprise dashboard; complex GIS; proprietary footfall data; professional subscriptions; franchise tools; portfolio tools; monitoring; national historical property database; predictive success models; complex enterprise functionality. Avoid fragile property-website scraping in the MVP. No enterprise platform before market validation.
+Blog remains a strategic acquisition channel. Preserve structured rich content/images/CTAs, metadata/canonicals, structured data, published-only reads, sitemap and future scheduling/agent capability. No bot/CMS or thin mass-generated UK location pages in Phase 2.5. Geographic SEO is a future evidence/quality-controlled design, not automatically generated inventory.
 
-## Success criteria
+Phase 2.5 changes contract, copy, visuals, minimal journey, Snapshot presentation, optional economics, Sample Report and regressions only. No real address resolution, provider integration, Snapshot collection, Stripe, financial/evidence/AI engines, PDF, publication service or later backend. Development infrastructure stays separate from Production. Legal identity, approved policies, support channel, payment terms and actual evidence coverage remain launch prerequisites; mature copy must not fabricate these.
 
-The future MVP lets a London user follow the complete journey and receive a usable single-location report. Important claims have inspectable evidence, unknowns remain visible, financial outputs are deterministic and reproducible, and the report provides practical next checks without success predictions. Payment and delivery must work reliably under the later acceptance tests. Quantitative adoption, conversion, cost and satisfaction targets are not approved yet; establish them before beta launch rather than inventing thresholds now.
+## Benchmarks and success
 
-## Phase 0 benchmark scenarios
-
-| Fixture | Business type | London property address | Intended later review |
-| --- | --- | --- | --- |
-| Benchmark A | Coffee Shop | HUMAN INPUT REQUIRED | Review catchment, competition, complementary businesses and economics with evidence and unknowns. |
-| Benchmark B | Restaurant | HUMAN INPUT REQUIRED | Review demand signals, competition, accessibility and premises evidence without assuming permission or suitability. |
-| Benchmark C | Hair Salon or Beauty Salon | HUMAN INPUT REQUIRED | Review local context, competitors, accessibility and user economics without assuming demand. |
-
-These are conceptual fixtures, not executable tests. No actual address, observation, financial value or expected property outcome has been invented. The user will supply three real London properties later. Record supplied economics and dates separately, then review evidence coverage and expected outputs before using them as regression benchmarks. Their absence does not prevent completion of the Phase 0 documentation foundation.
+Future real-property tests must cover the three categories and geographical variation across the four UK nations; actual addresses/economics remain HUMAN INPUT REQUIRED for the relevant later phases. Existing London examples can remain clearly scoped samples. Do not invent expected outcomes. Success requires decision-quality evidence, auditable reasoning, deterministic economics, meaningful gaps and practical next checks, plus verified purchase/delivery when authorised. Quantitative marketing/launch targets need approval.

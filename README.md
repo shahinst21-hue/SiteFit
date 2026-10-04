@@ -1,6 +1,6 @@
 # SiteFit
 
-Development preview of the London-first Single Location Due Diligence Report. Phase 2 provides the public website, four-step memory-only location checker and structured SEO Blog. Phase 3 is complete and adds verified migration-managed development persistence and email authentication. Analysis, payments, report generation and all later features remain unimplemented.
+SiteFit is a UK-wide commercial location decision product. The Phase 2.5 experience uses an anonymous Address → Business Type → Free Snapshot journey, optional progressive economics, a fictional Sample Report and a structured SEO Blog. Phase 3 provides verified migration-managed development persistence and email authentication. Real address resolution, analysis, payments and report generation remain later phases; the current Snapshot organises the user’s brief and relevant checks without inventing local evidence.
 
 ## Local development
 
@@ -21,7 +21,7 @@ npm run check
 
 This runs ESLint, strict type checking, Node's built-in unit tests and the production build, stopping on the first failure. Individual commands: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`. To serve a production build: `npm run start`.
 
-With that production server running, use `npm run check:public` for real route/metadata/404 checks. Browser-responsive and keyboard checks are documented in [docs/phase-2-status.md](docs/phase-2-status.md). Read [docs/blog-architecture.md](docs/blog-architecture.md) before changing editorial content or its source.
+With that production server running, use `npm run check:public` for real route/metadata/404 checks. Current mobile-first, responsive and keyboard checks are documented in [docs/phase-2.5-status.md](docs/phase-2.5-status.md). Read [docs/blog-architecture.md](docs/blog-architecture.md) before changing editorial content or its source.
 
 `npm run check:database` reconstructs the schema and executes real PostgreSQL ownership/Blog policies. See [docs/database.md](docs/database.md) for hosted migration, RLS and type-generation commands. With the production server on 127.0.0.1:3000 and authenticated CLI, `npm run check:auth:hosted` explicitly tests development Auth/application sessions using disposable accounts. It does not send email or prove inbox delivery. Do not run it against Production or in CI.
 
@@ -33,4 +33,4 @@ The [verified Phase 2 Preview](https://sitefit-3anewlh7d-shahinst21-hues-project
 
 The [Phase 3 Preview Login](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/login) is verified with development configuration. The user confirmed real Magic Link delivery, same-browser PKCE callback, Account access, refresh persistence, sign-out and consumed-link rejection. [PR #4](https://github.com/shahinst21-hue/SiteFit/pull/4) merged through branch protection and post-merge CI passed. See the Phase 3 status record for the verification evidence; never paste a sign-in link or credentials into chat.
 
-Read [AGENTS.md](AGENTS.md) and all project documents before development. Phases 0–3 are complete; [docs/phase-3-status.md](docs/phase-3-status.md) records the completed Definition of Done. Phase 4 is not authorised. Automatic Production release remains disabled.
+Read [AGENTS.md](AGENTS.md) and all project documents before development. Phases 0–3 are complete; Phase 2.5 delivery is recorded in [docs/phase-2.5-status.md](docs/phase-2.5-status.md); [docs/phase-3-status.md](docs/phase-3-status.md) records the completed Definition of Done. Phase 4 is not authorised. Automatic Production release remains disabled.

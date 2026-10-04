@@ -5,62 +5,74 @@ export default function Methodology() {
   return (
     <div className="page-wrap">
       <PageIntro
-        eyebrow="OUR APPROACH"
-        title="Evidence, with the gaps left visible."
+        eyebrow="OUR METHODOLOGY"
+        title="Evidence first. Interpretation second."
       >
         <p>
-          A useful location investigation should make it easier to see what is
-          supported, what is estimated and what still needs checking.
+          The quality of a location decision depends on what supports the
+          reasoning, not how many data points appear on a screen.
         </p>
       </PageIntro>
       <div className="editorial-grid">
         <aside>
           <p className="eyebrow">THE PRINCIPLE</p>
           <p className="editorial-aside">
-            Unknown is
-            <br />a valid answer.
+            A useful answer
+            <br />
+            shows its limits.
           </p>
         </aside>
         <div className="prose">
-          <h2>Multiple sources, different levels of confidence</h2>
+          <h2>Relevance before volume</h2>
           <p>
-            SiteFit is being designed to bring together permitted location
-            information and your own inputs. Sources will be assessed for date,
-            coverage, relevance and limitations. No external location
-            integrations are connected in this preview.
+            Assess a source for its date, geographic coverage, business
+            relevance, permitted use and limitations. A source is useful only if
+            it helps answer a decision-relevant question. Current location
+            briefs use the details you enter; schematic visuals and Sample
+            Reports are explicitly illustrative.
           </p>
-          <h2>Separate information from interpretation</h2>
+          <h2>Coverage follows geography</h2>
           <p>
-            Official and commercial sources describe provenance. Measured
-            observations, estimates, user inputs and interpretation describe
-            different kinds of claims. A reliable source does not establish that
-            a business will succeed at a property.
+            England, Scotland, Wales and Northern Ireland can require different
+            evidence sources. A regional transport indicator cannot stand in for
+            national coverage. Source claims must identify the actual geography
+            and retrieval behind them.
           </p>
-          <h2>Keep missing information missing</h2>
+          <h2>Separate observation from interpretation</h2>
           <p>
-            No evidence found is different from verified absence. Gaps should
-            appear as Unknown or Insufficient Evidence, with practical next
-            checks. We will not fill a missing fact with a plausible story.
+            Official or commercial describes provenance. Observed, estimated,
+            user-supplied or inferred describes the claim. A reliable source
+            does not establish that a business will succeed at a particular
+            property.
           </p>
-          <h2>Transparent economics</h2>
+          <h2>State the evidence gap precisely</h2>
           <p>
-            Core financial calculations will use explicit inputs, units and
-            deterministic methods. Scenarios will describe assumptions, rather
-            than forecasts of success. This preview captures optional inputs and
-            performs no economic analysis.
+            Insufficient verified evidence is a valid outcome. It is different
+            from verified absence. Transport activity is not measured premises
+            footfall; a business listing does not establish sales or a cause of
+            closure.
           </p>
-          <h2>AI as an analyst, not a source</h2>
+          <h2>Transparent financial reasoning</h2>
           <p>
-            The planned role of AI is to explain supplied evidence and
-            calculations. It must not invent observations, property history,
-            sources or missing financial inputs. No AI reporting is active
-            today.
+            Financial conclusions require explicit inputs, units and
+            deterministic methods. Missing inputs should omit or qualify
+            dependent calculations. Scenario assumptions must be visible and
+            must not be presented as forecasts.
           </p>
-          <h2>A starting point for a decision</h2>
+          <h2>AI acts as an analyst</h2>
           <p>
-            SiteFit will support investigation. It will not predict success or
-            replace a viewing, verified documents or appropriate professional
-            advice about a lease, property or finances.
+            The analysis standard is source data, normalised data, deterministic
+            metrics, evidence, AI interpretation and a validated report. AI can
+            compare signals, identify contradictions and explain implications.
+            It must not invent history, data, sources, financial results or
+            success probabilities.
+          </p>
+          <h2>Verify before committing</h2>
+          <p>
+            Use the questions to guide a viewing and document review. Confirm
+            lease, planning and financial matters with appropriately qualified
+            advisers. Important conclusions need accessible evidence and
+            practical next checks.
           </p>
         </div>
       </div>
