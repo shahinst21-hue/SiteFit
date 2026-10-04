@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phases 0–3 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and the completed Definition of Done. Phase 2.5 is authorised and in progress under the updated UK-wide, Mobile First contract. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03. Phases 0–3 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and the completed Definition of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -39,7 +39,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 2.5: Product direction, UI and conversion redesign
 
-- Status: authorised and in progress; see [phase-2.5-status.md](phase-2.5-status.md).
+- Status: complete. The minimal journey, progressive economics, mature UK-wide experience and fictional Sample Report passed local/runtime/hosted Auth/browser checks, final-head CI, protected PR #6 merge and post-merge CI. See [phase-2.5-status.md](phase-2.5-status.md).
 - Objective: a mature analytical product experience, UK-wide and Mobile First, with credible £29 decision value.
 - Implements: contract/architecture/decision updates before code; Homepage, navigation, Address → Business Type → Snapshot, optional progressive economics, Pricing, Sample Report, Blog/article readability, Login/Account and coherent controls.
 - Human action: no additional design approval required. Real providers, legal/support launch inputs and financial rules remain later gates.
