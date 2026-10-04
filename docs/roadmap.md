@@ -51,13 +51,14 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Objective: refine the approved temporary brand, product-led Homepage, anonymous wizard, Snapshot, optional economics, Pricing, fictional Sample Report, Resources/articles and shared/Auth surfaces.
 - Codex implements: original reference-informed presentation and reusable components; one-use React-memory Home entry; local published-resource search/category/sort. No new backend, persistence or service dependency.
 - Definition of Done: consistent supplied wordmark; materially stronger coherent UI/UX; 390px-first responsive/keyboard checks; preserved £0/£29, evidence truth, Auth and Blog/SEO; lint/types/tests/build/public runtime/remote CI; documented actual results; protected PR merge and clean matching main.
-- Phase 4 remains a separate unauthorised gate.
+- Phase 4 required a separate instruction; it was subsequently authorised and completed as recorded below.
 
 ## Phase 4: Address Resolution and Property Identity
 
 - Objective: resolve a supplied address to a reviewable property identity.
-- Codex implements: Google address resolution/Geocoding and place boundary, user confirmation, ambiguity handling, canonical property references and UK nation/region/local-authority identity checks.
-- Human action: Google Cloud/Maps access, billing, restricted keys in secure settings, verified usage terms; benchmark addresses if still absent. Verify UK coverage and jurisdiction-specific resolver capabilities; no London-only boundary.
+- Status: complete. See phase-4-status.md for real Postio, development persistence, security, Preview and protected-delivery evidence.
+- Codex implements: Postio behind an internal provider boundary; explicit postcode Search → exact postal address selection → current server-side UDPRN resolve → canonical UUID → Business Type. Optional genuine autocomplete and manual-unverified fallback; preserve missing UK geography and coordinate precision. No mandatory confirmation step or analysis.
+- Human action completed: Postio account/local key and development Supabase server secret; Preview-only secure server variables. No Google Cloud/Maps credentials required. Four representative nations verified with provider limitations retained.
 - Definition of Done: real supplied UK addresses resolve or return explicit ambiguity/failure; unsupported geography is handled; keys are protected; no inference of premises suitability from an address match.
 
 ## Phase 5: Data Integration Framework
