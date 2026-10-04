@@ -1,6 +1,6 @@
 # Phase 3.5 brand, UI and UX refinement
 
-Started 2026-10-04 from clean main `6494d611ed9f4e18bbf73c634563b21440b5a8ae` on `codex/phase-3-5-brand-refinement`. Local implementation, remote CI and authenticated Preview checks are verified. Protected delivery remains pending and will be recorded after observation. Phase 4 is not authorised.
+Completed 2026-10-04. Started from clean main `6494d611ed9f4e18bbf73c634563b21440b5a8ae` on `codex/phase-3-5-brand-refinement`. Local implementation, remote CI, authenticated Preview and protected implementation delivery are verified. Phase 4 is not authorised.
 
 ## Approved direction and temporary logo
 
@@ -52,11 +52,11 @@ The prior human verification of real inbox delivery and same-browser PKCE remain
 
 ## Delivery
 
-Main protection is verified: strict required `Lint, types, tests and build`, PR requirement, conversation resolution and admin enforcement; zero external approval reviews; no force push. [PR #8](https://github.com/shahinst21-hue/SiteFit/pull/8) is ready, with [push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37190523116) and [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37190554187) passing on implementation head `e01ee4f555be65fcee31fefd6f7214e11cbfdab4`. CI must pass again on the final PR head before merge.
+Main protection is verified: strict required `Lint, types, tests and build`, PR requirement, conversation resolution and admin enforcement; zero external approval reviews; no force push. [PR #8](https://github.com/shahinst21-hue/SiteFit/pull/8) merged through the required workflow with [push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37191202658) and [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37191204518) passing on final implementation head `51a1fbe9d9c4aee738dc30436b6b97a60d324221`. Merge `3d34eb04b53be709500449b6ad4cc833c600f6e2` also passed [post-merge CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37191350324). Local main was fast-forwarded to exactly origin/main at that merge and its tracked/untracked working tree was verified clean. This completion record follows a separate protected documentation PR with required CI; the final synchronization is rechecked after its merge.
 
-The actual Git Preview is Ready at [the implementation deployment](https://sitefit-is24tmvtd-shahinst21-hues-projects.vercel.app), with [the observed branch alias](https://sitefit-git-codex-phase-3-5-bra-62a5c3-shahinst21-hues-projects.vercel.app). Deployment protection remains enabled. Authenticated Vercel CLI requests verify Home, Pricing, Resources, Sample Report and configured/noindex Login (200), anonymous Account redirect (307 to Login), and invalid callback (303, no-store). Vercel development credentials remain encrypted and Preview-only, with no new application variable or Production activation.
+The actual Git Preview is Ready at [the final implementation deployment](https://sitefit-rauj6rcsx-shahinst21-hues-projects.vercel.app), on exact head `51a1fbe9d9c4aee738dc30436b6b97a60d324221`, with [the observed branch alias](https://sitefit-git-codex-phase-3-5-bra-62a5c3-shahinst21-hues-projects.vercel.app). Deployment protection remains enabled. Authenticated Vercel CLI requests verify Home, Pricing, Resources, Sample Report and configured/noindex Login (200), anonymous Account redirect (307 to Login), invalid callback (303, no-store) and loaded branded stylesheet (200) on the initial implementation Preview; Home and configured Login were verified again on the final implementation Preview. Vercel development credentials remain encrypted and Preview-only, with no new application variable or Production activation.
 
-Only the exact observed branch alias's `/auth/confirm` and `/auth/callback` URLs were added to the development Supabase allowlist. The reviewed config diff contained one declared redirect-list update; after push, zero declared changes remain and the nine undeclared hosted-default differences are unchanged. No wildcard, SMTP, migration, privileged key or Auth implementation change. Protected merge, final-main CI and clean origin synchronization remain pending.
+Only the exact observed branch alias's `/auth/confirm` and `/auth/callback` URLs were added to the development Supabase allowlist. The reviewed config diff contained one declared redirect-list update; after push, zero declared changes remain and the nine undeclared hosted-default differences are unchanged. No wildcard, SMTP, migration, privileged key or Auth implementation change. The four existing Auth unit checks were rerun after the allowlist update and passed.
 
 ## Known limitations and deferred functionality
 
@@ -86,6 +86,6 @@ No resolver, provider, real Snapshot collection, Stripe, economic/evidence/AI en
 - [x] Typecheck passes.
 - [x] Tests pass.
 - [x] Production build passes.
-- [ ] Remote CI passes on the final head.
+- [x] Remote CI passes on the final implementation head and merged main.
 - [x] Documentation updated.
-- [ ] Repository clean after protected merge; main matches origin.
+- [x] Repository clean after protected implementation merge; main matches origin. Completion documentation uses the same protected workflow, with final synchronization rechecked before the completion response.

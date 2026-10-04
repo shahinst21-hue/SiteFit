@@ -47,7 +47,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 3.5: Brand, UI and UX refinement
 
-- Status: authorised implementation; validation and protected delivery are in progress. See [phase-3.5-status.md](phase-3.5-status.md).
+- Status: complete. Local/runtime/hosted Auth/browser checks, final-head CI, authenticated Preview, protected PR #8 merge and post-merge CI pass. Completion documentation follows the same protected workflow. See [phase-3.5-status.md](phase-3.5-status.md).
 - Objective: refine the approved temporary brand, product-led Homepage, anonymous wizard, Snapshot, optional economics, Pricing, fictional Sample Report, Resources/articles and shared/Auth surfaces.
 - Codex implements: original reference-informed presentation and reusable components; one-use React-memory Home entry; local published-resource search/category/sort. No new backend, persistence or service dependency.
 - Definition of Done: consistent supplied wordmark; materially stronger coherent UI/UX; 390px-first responsive/keyboard checks; preserved £0/£29, evidence truth, Auth and Blog/SEO; lint/types/tests/build/public runtime/remote CI; documented actual results; protected PR merge and clean matching main.
