@@ -27,7 +27,13 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
         "utf8",
       ),
     );
-    for (const table of ["public.analyses", "auth.users"])
+    await db.exec(
+      await readFile(
+        new URL("../supabase/tests/property-identity.sql", import.meta.url),
+        "utf8",
+      ),
+    );
+    for (const table of ["public.analyses", "public.properties", "auth.users"])
       assert.equal(
         (
           await db.query<{ count: number }>(

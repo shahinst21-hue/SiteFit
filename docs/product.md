@@ -2,6 +2,8 @@
 
 Authoritative direction updated 2026-10-04 for Phase 2.5, with the owner's Phase 3.5 brand/UI refinement direction. This supersedes conflicting Phase 0–3 assumptions. SiteFit is a production-quality commercial product, not a disposable MVP. Phases 0–3 and Phase 2.5 are complete; Phase 3.5 refines that experience before Phase 4. Implementation and live service readiness are recorded internally, never presented as customer-facing beta language.
 
+The owner's subsequent Phase 4 instruction authorises only address resolution/property identity: postcode-first Postio lookup, exact premises selection, server resolution, canonical identity and a clearly unverified manual fallback. The existing Phase 3.5 brand and anonymous journey remain. This supersedes historical Google-first resolver assumptions and the earlier memory-only address boundary for the selected property; economics/business selection remain page memory and no location analysis is authorised. Phase 5 requires a separate instruction.
+
 ## Customer and decision
 
 SiteFit helps someone considering a commercial lease evaluate a specific location before committing. Positioning: “Check a commercial location before you commit.” Support Coffee Shop, Restaurant, and the combined Hair Salon or Beauty Salon category. Hair and Beauty remain separate interface choices mapped to the same analysis category. No unsupported business-success probability.

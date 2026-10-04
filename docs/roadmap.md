@@ -150,3 +150,6 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Codex implements: benchmark and beta fixes, release checks, launch/runbook documentation and deployment work within authorised access.
 - Human action: supply all benchmark properties if still absent, approve measurable launch criteria, beta feedback, live billing/domain/account activation and production release.
 - Definition of Done: end-to-end real-property benchmark review and critical paths pass; evidence gaps are disclosed; launch criteria and remaining risks are approved; deployed production and payment/delivery are actually verified; no phase is marked complete on intended rather than observed results.
+## Phase 4 execution gate (2026-10-04)
+
+Phase 4 address resolution/property identity is explicitly authorised and implemented on a dedicated branch. Postio and new development migration/security tests are verified; real canonical persistence through the running application and Preview integration require missing secure server environment configuration. Phase 4 remains blocked until these end-to-end gates and protected merge/final-main checks pass. Detailed checklist: phase-4-status.md. Completion does not authorise Phase 5; no analysis/provider data collection, payment, financial computation, report generation, PDF or publishing agent is introduced.

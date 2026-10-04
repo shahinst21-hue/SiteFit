@@ -1,4 +1,5 @@
 @import "tailwindcss";
+/* Phase 4 address entry reuses the approved Phase 3.5 visual system. */
 :root {
   --ink: #12151d;
   --muted: #626b7c;
@@ -2934,5 +2935,124 @@ th {
   *:after {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+/* Postal address lookup: complete list, wrapping labels and large native targets. */
+.postcode-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.postcode-controls input {
+  min-width: 0;
+  text-transform: uppercase;
+}
+.postcode-controls .button {
+  flex-shrink: 0;
+}
+.address-status {
+  margin: 14px 0;
+  font-weight: 600;
+}
+.address-results {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 20px;
+  display: grid;
+  gap: 8px;
+  max-height: 28rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.address-result {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  padding: 18px 16px;
+  min-height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.address-result > svg {
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+}
+.address-result > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+.address-result small {
+  display: block;
+  margin-top: 4px;
+  font-weight: 700;
+}
+.address-result:hover,
+.address-result.selected {
+  border-color: #83bb53;
+  background: #f3fbe9;
+}
+.address-result:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+.address-alternatives {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  padding-top: 8px;
+}
+.address-alternatives button {
+  min-height: 44px;
+  text-align: left;
+  white-space: normal;
+}
+.selected-property {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+  background: #f3fbe9;
+  border: 1px solid #bbd9a9;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 22px;
+}
+.selected-property > svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.selected-property > div {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.selected-property p {
+  margin: 6px 0 0;
+}
+.selected-property .button {
+  width: 100%;
+}
+.address-context {
+  overflow-wrap: anywhere;
+}
+@media (min-width: 430px) {
+  .postcode-controls {
+    flex-direction: row;
+  }
+}
+@media (min-width: 768px) {
+  .selected-property .button {
+    width: auto;
   }
 }

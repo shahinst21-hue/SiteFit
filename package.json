@@ -19,6 +19,7 @@
     "check:public": "node scripts/check-public-site.ts",
     "check:auth:hosted": "node scripts/check-auth-hosted.ts",
     "check:database": "node --test tests/database.test.ts",
+    "verify:addresses": "node scripts/verify-addresses.ts",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:status": "supabase status"

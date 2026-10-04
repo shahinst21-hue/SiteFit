@@ -112,3 +112,10 @@ These owner instructions supersede conflicting historical assumptions, including
 - D53 (accepted owner direction): supplied temporary SITEFIT wordmark; light/near-black visual system with bright action accent, soft analytical colours and product-led map/report/resource compositions. Preserve original SiteFit wording and the Phase 2.5 truth/phase boundaries; reference scores and live-source claims are not approved evidence.
 - D54 (implementation choice within authorised Hero input): single-use React-memory address handoff from Home to checker, cleared on consumption/route exit/reload. No address in URL/storage/server submission; no resolver or persistent draft.
 - D55 (authorised resource controls): local search/category/sort over published repository results, without a content writer or new route. Preserve server article rendering, publication filtering and SEO.
+
+## Phase 4 accepted direction — 2026-10-04
+
+- D56 (owner direction, supersedes D11 for address resolution): Postio is the initial UK address provider behind a replaceable internal boundary. Explicit postcode Search → exact address selection → current server resolution → Business Type. Optional address autocomplete and manual fallback remain secondary.
+- D57 (owner direction): SiteFit owns the stable canonical UUID. Provider + delivery-point identifier has database uniqueness. UDPRN is separate from nullable future verified UPRN; current coordinates are postcode centroids, never rooftop positions.
+- D58 (security implementation): anonymous callers use bounded same-origin server routes. Only server-normalised selected records reach a service-role-only atomic database function; existing client grants/RLS remain unchanged. A separately stored server secret is required for runtime writes. No anonymous Supabase write grant or guest account.
+- D59 (data/cost implementation): candidates remain page memory; only the selected address is retained. No bulk address cache, automatic paid retries, analytics address transmission or later analysis collection. Provider request IDs may be logged with safe outcome codes, never raw results or keys.
