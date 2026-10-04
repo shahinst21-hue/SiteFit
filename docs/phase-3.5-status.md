@@ -1,6 +1,6 @@
 # Phase 3.5 brand, UI and UX refinement
 
-Started 2026-10-04 from clean main `6494d611ed9f4e18bbf73c634563b21440b5a8ae` on `codex/phase-3-5-brand-refinement`. Local implementation and validation are verified. Remote CI, Preview and protected delivery are pending and will be recorded after observation. Phase 4 is not authorised.
+Started 2026-10-04 from clean main `6494d611ed9f4e18bbf73c634563b21440b5a8ae` on `codex/phase-3-5-brand-refinement`. Local implementation, remote CI and authenticated Preview checks are verified. Protected delivery remains pending and will be recorded after observation. Phase 4 is not authorised.
 
 ## Approved direction and temporary logo
 
@@ -52,7 +52,11 @@ The prior human verification of real inbox delivery and same-browser PKCE remain
 
 ## Delivery
 
-Main protection is verified: strict required `Lint, types, tests and build`, PR requirement, conversation resolution and admin enforcement; zero external approval reviews; no force push. Vercel development credentials remain encrypted and Preview-only, with no new application variable. Final-head CI, actual Preview and protected merge remain pending.
+Main protection is verified: strict required `Lint, types, tests and build`, PR requirement, conversation resolution and admin enforcement; zero external approval reviews; no force push. [PR #8](https://github.com/shahinst21-hue/SiteFit/pull/8) is ready, with [push CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37190523116) and [PR CI](https://github.com/shahinst21-hue/SiteFit/actions/runs/37190554187) passing on implementation head `e01ee4f555be65fcee31fefd6f7214e11cbfdab4`. CI must pass again on the final PR head before merge.
+
+The actual Git Preview is Ready at [the implementation deployment](https://sitefit-is24tmvtd-shahinst21-hues-projects.vercel.app), with [the observed branch alias](https://sitefit-git-codex-phase-3-5-bra-62a5c3-shahinst21-hues-projects.vercel.app). Deployment protection remains enabled. Authenticated Vercel CLI requests verify Home, Pricing, Resources, Sample Report and configured/noindex Login (200), anonymous Account redirect (307 to Login), and invalid callback (303, no-store). Vercel development credentials remain encrypted and Preview-only, with no new application variable or Production activation.
+
+Only the exact observed branch alias's `/auth/confirm` and `/auth/callback` URLs were added to the development Supabase allowlist. The reviewed config diff contained one declared redirect-list update; after push, zero declared changes remain and the nine undeclared hosted-default differences are unchanged. No wildcard, SMTP, migration, privileged key or Auth implementation change. Protected merge, final-main CI and clean origin synchronization remain pending.
 
 ## Known limitations and deferred functionality
 
