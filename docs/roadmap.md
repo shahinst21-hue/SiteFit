@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03. Phases 0–3 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and the completed Definition of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phases 4–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–4 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phases 5–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -120,9 +120,19 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 ## Phase 13: Full Report UI, PDF and Delivery
 
 - Objective: deliver the paid report consistently across web and PDF.
-- Codex implements: approved 16-section report UI, permitted PDF generation/storage, secure delivery and version-consistent regeneration.
+- Codex implements: approved 16-section report UI, permitted PDF generation/storage and secure delivery from the persisted ready report and sections. PDF rendering/retries use that frozen snapshot without provider retrieval, recalculation or AI regeneration.
 - Human action: approve report template and delivery/account policy; external delivery account access if a service is selected.
-- Definition of Done: authorised paid users access the right report; UI/PDF agree on evidence, calculations and unknowns; PDF layout and links are verified; failed exports recover without duplicate charges or leakage.
+- Definition of Done: authorised paid users access the original stored report; UI/PDF agree on evidence, calculations and unknowns; reopening performs no collection/calculation/AI generation; a later analysis leaves the earlier report unchanged; PDF layout and links are verified; failed exports recover without duplicate charges, historical-content changes or leakage.
+
+## Accepted cross-phase gate: historical report snapshots
+
+[D60](decisions.md), accepted 2026-10-04, binds later implementation to the persistence contract in [architecture.md](architecture.md) and [database.md](database.md). Recording this requirement does not start Phase 5 or authorise any later phase.
+
+- Phase 5 and each later provider integration must document storage permission and retention duration for raw responses, normalised data, derived metrics, source references and retrieval timestamps. Verify that permitted historical representations/provenance support the report contract; resolve incompatible terms before adoption. Temporary search candidates outside the analysis are not automatically persisted.
+- Collection and evidence phases must retain the permitted source snapshots, retrieval timestamps, identifiers and evidence references used by the particular analysis. Preserve its selected-property representation, business type and exact user-input versions independently of mutable canonical property data.
+- Phase 10 must store deterministic outputs and economic model version against those exact inputs/evidence. Phase 12 must persist validated AI interpretation, AI provider/model, prompt version, report schema version and report generation timestamp with the complete lineage before ready; analysis timestamp must also be explicit. Ready reads cannot invoke either engine.
+- Phase 13 must demonstrate that reopening a ready report reads its stored content, and UI/PDF use the same frozen report/sections. Change current property/provider data, model/prompt versions and cache availability in tests: the historical report remains unchanged and read-time provider/calculator/AI call counts stay zero. Repeating a check creates a new Analysis and Report version or equivalent snapshot; retries cannot overwrite the earlier ready result.
+- Reliability/security validation must enforce the freeze through trusted write paths as well as ordinary client access. Test export retries, ownership/entitlements and retention handling without silent regeneration or replacement of historical content. Licence-required expiry/deletion must follow an explicit policy rather than a refresh fallback.
 
 ## Phase 14: Reliability, Cost Control and Internal Admin
 

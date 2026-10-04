@@ -36,7 +36,23 @@ Keep source snapshots, normalised evidence and report claims distinguishable. Li
 
 ## Report generation
 
-Persist a versioned report and sections derived from a specific input/evidence/calculation version. Validate important claims and output schema before publishing. UI and PDF should express the same evidence and unknowns. Delivery and regeneration must respect ownership, payment and provider usage restrictions. Phase 13 implements UI, PDF and delivery; no renderer is selected here.
+Accepted architectural decision [D60](decisions.md): a completed analysis and its purchased Full Report are persistent historical snapshots. Validate claims and the structured output, persist the complete report and sections, then mark them ready. Reopening a ready report reads that stored snapshot under ownership and entitlement controls. It must not refetch external providers, recalculate metrics with current data, regenerate AI interpretation or silently overwrite the original report. A provider refresh, changed model/prompt or expired cache is not a reason to regenerate a ready report.
+
+Preserve this chain, with versioned references and permitted stored representations:
+
+```text
+User → Analysis → Selected Property → Business Type → User Inputs
+     → Data Snapshots → Evidence → Deterministic Metrics → AI Interpretation
+     → Final Structured Report → Report Sections → PDF Export
+```
+
+Pin the selected property's representation and business type to the analysis; a reference to the mutable canonical property alone is insufficient. Preserve the applicable input versions, source snapshots, evidence references, deterministic outputs and validated AI interpretation that produced the report. Record analysis timestamp, data retrieval timestamps, source/provider identifiers, permitted normalised snapshots, evidence references, economic model version, AI provider/model, prompt version, report schema version and report generation timestamp. UI and PDF use the same stored report and sections, including their original evidence and unknowns. Rendering or retrying a PDF export from that snapshot must not rerun collection, calculation or AI; renewing access to an export does not change its content.
+
+If the same user checks the same property later, create a new Analysis and a new Report version or equivalent independent historical snapshot. For example, Analysis 1's report generated on 4 October 2026 remains unchanged when Analysis 2 generates a report at a later date. Canonical property reuse does not imply analysis/report reuse. Processing retries must not overwrite an already ready snapshot.
+
+Historical persistence remains subject to provider licensing and retention. Before adopting each provider, explicitly record permission and retention duration separately for raw responses, normalised data, derived metrics, source references and retrieval timestamps. Do not assume permanent raw storage. Persist only permitted representations and enough permitted provenance to explain the report. Resolve any conflict between provider terms and the historical-report promise before adopting the source; do not conceal expired/unavailable material by replacing it with current data. Temporary search candidates outside the analysis are not automatically persisted: a postcode search returning 30 addresses retains the user's selected property, not the candidate inventory.
+
+These are accepted requirements for later implementation, not a claim that a report engine or database freeze exists today. See [database.md](database.md) for the persistence contract and [roadmap.md](roadmap.md) for implementation gates. Phase 13 implements UI, PDF and delivery; no renderer is selected here. This documentation update does not begin Phase 5.
 
 ## Security principles
 
