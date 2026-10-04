@@ -31,6 +31,8 @@ See [docs/infrastructure.md](docs/infrastructure.md) for environments, Supabase,
 
 The [verified Phase 2 Preview](https://sitefit-3anewlh7d-shahinst21-hues-projects.vercel.app) requires Vercel sign-in. Changes to protected `main` require a PR and successful [GitHub Actions checks](https://github.com/shahinst21-hue/SiteFit/actions). Automatic Production deployment from `main` is disabled.
 
+The current [Phase 2.5 Preview](https://sitefit-git-phase-2-5-product-redesign-shahinst21-hues-projects.vercel.app) is verified with protected access and development Auth configuration. [PR #6](https://github.com/shahinst21-hue/SiteFit/pull/6) and post-merge CI passed.
+
 The [Phase 3 Preview Login](https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/login) is verified with development configuration. The user confirmed real Magic Link delivery, same-browser PKCE callback, Account access, refresh persistence, sign-out and consumed-link rejection. [PR #4](https://github.com/shahinst21-hue/SiteFit/pull/4) merged through branch protection and post-merge CI passed. See the Phase 3 status record for the verification evidence; never paste a sign-in link or credentials into chat.
 
-Read [AGENTS.md](AGENTS.md) and all project documents before development. Phases 0–3 are complete; Phase 2.5 delivery is recorded in [docs/phase-2.5-status.md](docs/phase-2.5-status.md); [docs/phase-3-status.md](docs/phase-3-status.md) records the completed Definition of Done. Phase 4 is not authorised. Automatic Production release remains disabled.
+Read [AGENTS.md](AGENTS.md) and all project documents before development. Phases 0–3 and Phase 2.5 are complete; Phase 2.5 delivery is recorded in [docs/phase-2.5-status.md](docs/phase-2.5-status.md); [docs/phase-3-status.md](docs/phase-3-status.md) records the completed Definition of Done. Phase 4 is not authorised. Automatic Production release remains disabled.
