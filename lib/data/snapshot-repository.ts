@@ -1,9 +1,9 @@
 import "server-only";
-import { createClient } from "@supabase/supabase-js";
-import type { Database, Json } from "../supabase/database.types.ts";
+import type { Json } from "../supabase/database.types.ts";
 import type { CollectionContext, ProviderResult, SnapshotRepository, SourceId, StoredSnapshot } from "./contracts.ts";
 import { SourceError } from "./errors.ts";
 import { object, uuid, validateContext, validateResult } from "./validation.ts";
+import { frameworkClient } from "./server-client.ts";
 
 type Preparation = Pick<CollectionContext, "region" | "geography" | "releases">;
 function json(value: unknown): Json { return value as Json; }
@@ -15,12 +15,8 @@ function decode(value: unknown): StoredSnapshot {
   return { id: row.id, analysisId: row.analysis_id, inputId: row.input_id, collectionKey: row.collection_key, requestHash: row.request_sha256, result };
 }
 export function snapshotRepository(): SnapshotRepository & { prepare(analysisId: string, userSupplied: Json, context: Preparation): Promise<CollectionContext> } {
-  const url = process.env.SUPABASE_URL?.trim(), key = process.env.SUPABASE_SECRET_KEY?.trim();
-  if (!url || !key || !/^sb_secret_[A-Za-z0-9_-]+$/.test(key)) throw new SourceError("configuration_missing");
-  try { const parsed = new URL(url); if (parsed.protocol !== "https:" || parsed.pathname !== "/" || parsed.username || parsed.password || parsed.search || parsed.hash) throw new Error(); }
-  catch { throw new SourceError("configuration_missing"); }
   // Separate short-lived privileged client; no Auth cookie/session and no browser consumer.
-  const client = createClient<Database>(url, key, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  const client = frameworkClient();
   return {
     async prepare(analysisId, userSupplied, context) {
       if (!uuid(analysisId)) throw new SourceError("invalid_request");

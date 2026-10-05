@@ -1,5 +1,11 @@
 -- Development-only integrity suite. Every fixture rolls back; no real analysis/report generated.
 begin;
+-- Synthetic ready boundary for context binding only, never a real London coverage claim.
+insert into source_data.dataset_releases(id,provider_id,dataset_id,version,subset_id,sha256,schema_version,source_url,retrieved_at,licence_metadata,manifest)
+ values('10000000-0000-0000-0000-000000000004','synthetic','london-geography','framework-fixture','london',repeat('a',64),1,'https://example.org/synthetic',now(),'{"normalised":{"allowed":true}}','{"synthetic":true}');
+insert into source_data.geography_features(release_id,geography_type,geography_code,name,geometry,source_reference)
+ values('10000000-0000-0000-0000-000000000004','region','E12000007','Synthetic boundary',gis.st_multi(gis.st_geomfromtext('POLYGON((-1 50,1 50,1 52,-1 52,-1 50))',4326)),'https://example.org/synthetic');
+select public.activate_sitefit_release('10000000-0000-0000-0000-000000000004',1);
 create function pg_temp.framework_assert(ok boolean,message text) returns void language plpgsql as $$
 begin if ok is distinct from true then raise exception 'Framework assertion: %',message; end if; end $$;
 insert into auth.users(id,email,aud,role) values

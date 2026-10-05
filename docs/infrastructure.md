@@ -117,3 +117,5 @@ Phase 4 adds only the observed stable branch alias’s exact Auth confirmation/c
 ## Phase 5 authorised environment work — 2026-10-05
 
 The revised plan is approved; [status](phase-5-status.md) records actual work. TfL live proof requires a server-only `TFL_APP_KEY`, securely configured by the owner in ignored `.env.local` (Preview only if needed), never printed or requested in chat. Public ONS/FSA require no application key. Non-secret collection region/probe guards will be introduced only at their steps; no public collector or production activation. Source quotas are process-local bounds initially, not global rate guarantees. No queue vendor, shared live cache, recurring commercial service or paid integration is enabled. Hosted development PostGIS capability/import quotas and CI spatial compatibility must be genuinely verified.
+
+Spatial test capability: dev-only @electric-sql/pglite-postgis 0.2.8 matches PGlite 0.5.8. Windows and Linux CI use actual PostGIS, never mocked/skipped migrations. Hosted development now has PostGIS in gis; source_data and gis remain outside exposed Data API schemas.

@@ -907,6 +907,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_sitefit_release: {
+        Args: { p_expected_rows: number; p_release_id: string }
+        Returns: Json
+      }
       append_sitefit_snapshot: {
         Args: {
           p_analysis_id: string
@@ -950,6 +954,44 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      import_sitefit_geographies: {
+        Args: { p_release_id: string; p_rows: Json }
+        Returns: number
+      }
+      import_sitefit_statistics: {
+        Args: {
+          p_geography_release_id: string
+          p_release_id: string
+          p_rows: Json
+        }
+        Returns: number
+      }
+      lookup_sitefit_geography: {
+        Args: {
+          p_latitude: number
+          p_longitude: number
+          p_precision: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      lookup_sitefit_population: {
+        Args: {
+          p_code: string
+          p_geography_release_id: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      nearby_sitefit_geographies: {
+        Args: {
+          p_latitude: number
+          p_longitude: number
+          p_radius_metres: number
+          p_release_id: string
+        }
+        Returns: Json
       }
       prepare_sitefit_input: {
         Args: { p_analysis_id: string; p_context: Json; p_user_supplied: Json }
@@ -1022,6 +1064,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      stage_sitefit_release: { Args: { p_manifest: Json }; Returns: Json }
     }
     Enums: {
       analysis_status:
