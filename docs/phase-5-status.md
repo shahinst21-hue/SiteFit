@@ -8,7 +8,7 @@ Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase
 | --- | --- | --- |
 | 5.0 | Complete | London-only authority and approved source direction reconciled; three official policy records created. Document links and whitespace review passed. Node 24.12/npm 11.6, clean npm ci (zero audit findings), lint/types passed. Exact ONS artefacts remain a 5.5 gate; no commercial service enabled. |
 | 5.1 | Complete | Version-1 context/result/observation/metadata contracts validate null-vs-zero, source dates, licence permissions, precision, explicit result variants and resolvable observation paths. Unknown payload fields rejected. Four independent focused tests, lint/types and production build passed. No transport/customer route. |
-| 5.2 | Not started | Compatible real PostGIS test/runtime capability. |
+| 5.2 | Local complete; Linux CI pending | PGlite 0.5.8 with dev-only PostGIS plugin 0.2.8 passed genuine isolated-schema, EPSG:27700 transform, geography metre-distance and GiST checks on Windows; full existing migration/security rebuild passed. Hosted development offers PostGIS 3.3.7 (not yet installed). npm audit zero; lint/types/build passed. Linux capability is gated by exact-head CI before new spatial migrations. |
 | 5.3 | Not started | Immutable existing input/snapshot integrity migration. |
 | 5.4 | Not started | Private spatial/release schema. |
 | 5.5 | Not started | Verified London baseline import. |

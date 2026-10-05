@@ -2,8 +2,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
+import { postgis } from "@electric-sql/pglite-postgis";
 test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visibility", async () => {
-  const db = new PGlite();
+  const db = new PGlite({ extensions: { postgis } });
   try {
     // Minimal platform objects only; all application SQL is the actual migration history.
     await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
