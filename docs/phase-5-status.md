@@ -6,8 +6,8 @@ Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase
 
 | Step | State | Actual evidence / remaining gate |
 | --- | --- | --- |
-| 5.0 | In progress | London-only authority reconciled; official provider policies reviewed and recorded. Exact ONS artefacts/attributions remain an import gate. TfL controlled live verification requires an owner-configured development key; none is configured locally. |
-| 5.1 | Not started | Contracts and runtime validation. |
+| 5.0 | Complete | London-only authority and approved source direction reconciled; three official policy records created. Document links and whitespace review passed. Node 24.12/npm 11.6, clean npm ci (zero audit findings), lint/types passed. Exact ONS artefacts remain a 5.5 gate; no commercial service enabled. |
+| 5.1 | Complete | Version-1 context/result/observation/metadata contracts validate null-vs-zero, source dates, licence permissions, precision, explicit result variants and resolvable observation paths. Unknown payload fields rejected. Four independent focused tests, lint/types and production build passed. No transport/customer route. |
 | 5.2 | Not started | Compatible real PostGIS test/runtime capability. |
 | 5.3 | Not started | Immutable existing input/snapshot integrity migration. |
 | 5.4 | Not started | Private spatial/release schema. |
