@@ -8,6 +8,8 @@ Phases 0–3 are complete; Phase 2.5 product-direction/UI redesign is complete; 
 
 ## Working rules
 
+The owner approved the revised `docs/phase5_plan.md` on 2026-10-05 and authorised Steps 5.0–5.9. V1 analysis coverage is London only, superseding historical UK-wide rules below; generic UK address acceptance and existing customer UI/copy remain unchanged in Phase 5. Use existing immutable input versions and unique snapshots, not deferred request/lease/job/billing/reservation/distributed cache infrastructure. Phase 6 remains unauthorised. See `docs/phase-5-status.md` for actual progress and gates.
+
 - Work one Phase at a time. Never start the next Phase before the current Definition of Done passes. Completion does not itself authorise starting another Phase.
 - Never change product scope without explicit user approval. Document non-critical unknowns; do not silently turn proposals into accepted business decisions.
 - Never invent missing data. Preserve Unknown or Insufficient Evidence, and distinguish observed facts, source types, estimates, inference and user inputs.

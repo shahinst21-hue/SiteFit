@@ -2,7 +2,7 @@
 
 Authoritative direction updated 2026-10-04 for Phase 2.5, with the owner's Phase 3.5 brand/UI refinement direction. This supersedes conflicting Phase 0–3 assumptions. SiteFit is a production-quality commercial product, not a disposable MVP. Phases 0–3 and Phase 2.5 are complete; Phase 3.5 refines that experience before Phase 4. Implementation and live service readiness are recorded internally, never presented as customer-facing beta language.
 
-The owner's subsequent Phase 4 instruction authorises only address resolution/property identity: postcode-first Postio lookup, exact premises selection, server resolution, canonical identity and a clearly unverified manual fallback. The existing Phase 3.5 brand and anonymous journey remain. This supersedes historical Google-first resolver assumptions and the earlier memory-only address boundary for the selected property; economics/business selection remain page memory and no location analysis is authorised. Phase 5 requires a separate instruction.
+The owner's subsequent Phase 4 instruction authorises only address resolution/property identity: postcode-first Postio lookup, exact premises selection, server resolution, canonical identity and a clearly unverified manual fallback. The existing Phase 3.5 brand and anonymous journey remain. This supersedes historical Google-first resolver assumptions and the earlier memory-only address boundary for the selected property; economics/business selection remain page memory and no location analysis is authorised. Phase 5 is now separately authorised under the revised approved plan (2026-10-05); no customer analysis engine is authorised.
 
 ## Customer and decision
 
@@ -10,7 +10,7 @@ SiteFit helps someone considering a commercial lease evaluate a specific locatio
 
 ## United Kingdom from launch
 
-Design for England, Scotland, Wales and Northern Ireland. London is a valid example, never a product limit. No London restriction in copy, forms, rules, database, SEO, reports or analytics. Route future providers by nation, region, local authority, dataset geography and verified coverage. TfL is relevant within its coverage, not a national default. National ambition does not imply every source supplies equivalent coverage: identify gaps professionally and retain source/geography provenance.
+Owner-approved Phase 5 direction (2026-10-05): SiteFit V1 analysis coverage is administrative Greater London, including all 32 boroughs and City of London. This supersedes D45's UK-wide launch scope. Generic UK address acceptance remains distinct from verified analysis coverage; retain extensible region/geography/version contracts for later approved English expansion. TfL is a London source, not a national default. The Phase 5 instruction keeps existing UI, customer copy, pricing and design unchanged; implementing real analysis and its coverage presentation belongs to Phase 6 or later, separately authorised.
 
 ## Commercial quality and £29 value
 
@@ -66,4 +66,4 @@ Phase 2.5 changes contract, copy, visuals, minimal journey, Snapshot presentatio
 
 ## Benchmarks and success
 
-Future real-property tests must cover the three categories and geographical variation across the four UK nations; actual addresses/economics remain HUMAN INPUT REQUIRED for the relevant later phases. Existing London examples can remain clearly scoped samples. Do not invent expected outcomes. Success requires decision-quality evidence, auditable reasoning, deterministic economics, meaningful gaps and practical next checks, plus verified purchase/delivery when authorised. Quantitative marketing/launch targets need approval.
+V1 real-property tests must cover the three categories and geographical variation within Greater London; four-nation tests belong to a later approved expansion; actual addresses/economics remain HUMAN INPUT REQUIRED for the relevant later phases. Existing London examples can remain clearly scoped samples. Do not invent expected outcomes. Success requires decision-quality evidence, auditable reasoning, deterministic economics, meaningful gaps and practical next checks, plus verified purchase/delivery when authorised. Quantitative marketing/launch targets need approval.

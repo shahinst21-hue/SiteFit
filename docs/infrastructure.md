@@ -113,3 +113,7 @@ The user completed local POSTIO_API_KEY/SUPABASE_SECRET_KEY and Preview-only dev
 The selected-address RPC is privileged because existing RLS denies ordinary client property writes; it does not relax Auth ownership. Fail-closed behaviour is tested. A successful keyless Preview build cannot satisfy real address persistence or Preview integration. See phase-4-status.md for verified runtime evidence and protected delivery.
 
 Phase 4 adds only the observed stable branch alias’s exact Auth confirmation/callback URLs to development; reviewed push changes one declared allowlist property and preserves nine undeclared remote defaults. No wildcard or Production callback is added.
+
+## Phase 5 authorised environment work — 2026-10-05
+
+The revised plan is approved; [status](phase-5-status.md) records actual work. TfL live proof requires a server-only `TFL_APP_KEY`, securely configured by the owner in ignored `.env.local` (Preview only if needed), never printed or requested in chat. Public ONS/FSA require no application key. Non-secret collection region/probe guards will be introduced only at their steps; no public collector or production activation. Source quotas are process-local bounds initially, not global rate guarantees. No queue vendor, shared live cache, recurring commercial service or paid integration is enabled. Hosted development PostGIS capability/import quotas and CI spatial compatibility must be genuinely verified.

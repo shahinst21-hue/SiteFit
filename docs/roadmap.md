@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–4 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phases 5–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–4 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phase 5 is authorised and in progress under the revised approved plan; Phases 6–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -62,6 +62,8 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Definition of Done: real supplied UK addresses resolve or return explicit ambiguity/failure; unsupported geography is handled; keys are protected; no inference of premises suitability from an address match.
 
 ## Phase 5: Data Integration Framework
+
+- Current authority: owner approved revised [phase5_plan.md](phase5_plan.md) Steps 5.0–5.9 on 2026-10-05. London-only V1, proportional framework and three proof adapters; [phase-5-status.md](phase-5-status.md) records actual gates. Deferred hardening needs a concrete trigger, and Phase 6 remains unauthorised.
 
 - Objective: collect external data with a stable evidence contract.
 - Codex implements: adapter boundaries when needed, normalised result/provenance contract, availability states, timeouts, rate limits, permitted caching and source contract tests. Define evidence IDs and source-to-observation links now for later engines.
