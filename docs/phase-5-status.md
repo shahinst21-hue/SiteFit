@@ -11,7 +11,7 @@ Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase
 | 5.2 | Complete | PGlite 0.5.8 with dev-only PostGIS plugin 0.2.8 passed genuine isolated-schema, EPSG:27700 transform, geography metre-distance and GiST checks on Windows and both Linux CI runs at 7099cfe. Existing migration/security rebuild passed; hosted offers PostGIS 3.3.7 (not yet installed). Audit zero; lint/types/build passed. |
 | 5.3 | Complete | `20261005110000_data_snapshot_integrity.sql` passed fresh full rebuild/ownership/property/framework suites and hosted development dry-run/apply/rolled-back framework SQL. Generated public types and server-only repository compile. Two independent privileged clients raced synthetic append in hosted development: one UUID/outcome, exact replay, ready collection/late-write denial passed; fixtures removed and triggers restored. Trusted UPDATE/DELETE and TRUNCATE are blocked. Lint/types/build passed. No lifecycle/lease tables. |
 | 5.4 | Complete | `20261005120000_london_spatial_releases.sql` adds isolated gis/source_data, immutable releases/features/statistics, bounded service-only import/activation/lookup RPCs and context-release/geography validation. Fresh full PostGIS suites, hosted dry-run/apply/rolled-back spatial/framework SQL, generated public types, five focused contracts/geography tests, lint/types/build passed. CRS/metres, shared edges, outside coverage, null/suppression, version reuse/new version, incomplete activation and private-role access are checked. |
-| 5.5 | Not started | Verified London baseline import. |
+| 5.5 | In progress | Official full-resolution OA2021 BFC V8/Region2021 BFC/lookup V3 and Nomis TS001 selected; OGL and boundary notices recorded. Bounded London-only importer and two corruption/CRS/join tests, lint/types/build pass. Actual hosted import is running; activation/storage/query evidence pending. |
 | 5.6 | Not started | Policy/transport/cache/telemetry. |
 | 5.7a | Not started | ONS local adapter. |
 | 5.7b | Not started | TfL adapter; live key dependent gate outstanding. |
@@ -27,7 +27,7 @@ Deferred request lifecycle tables, lease tokens, distributed ownership, generic 
 
 ## External dependencies and costs
 
-TfL key: store securely in ignored `.env.local` as `TFL_APP_KEY` for the development proof, and Preview-only settings if the authorised verification needs it. No secret is requested in chat. No commercial subscription is purchased or enabled. ONS public statistics, TfL open transport and FSA data are the intended free official proofs, subject to exact licences, quotas and artefact checks. Unknown costs stay unknown. Continue independent work while the TfL live gate remains pending.
+Owner confirmed TfL keys configured locally; expected server-only variable mapped privately without printing values. Actual live proof is still pending. TfL key: store securely in ignored `.env.local` as `TFL_APP_KEY` for the development proof, and Preview-only settings if the authorised verification needs it. No secret is requested in chat. No commercial subscription is purchased or enabled. ONS public statistics, TfL open transport and FSA data are the intended free official proofs, subject to exact licences, quotas and artefact checks. Unknown costs stay unknown. Continue independent work while the TfL live gate remains pending.
 
 ## Definition of Done
 
@@ -35,4 +35,4 @@ All fourteen [plan gates](phase5_plan.md#phase-5-definition-of-done) remain outs
 
 ## Deviations
 
-None so far. Any concrete blocker or triggered hardening reconsideration must be recorded before changing the approved architecture.
+Step 5.5 encountered an actual official BFC V8 invalid self-touching ring (OA E00018302). The first import correctly stopped inactive after 17,200 features. A narrow third migration adds explicitly versioned, opt-in PostGIS MakeValid polygon normalisation only when the EPSG:27700 area difference is ≤0.01m²; the observed source case differs by 3.64e-12m². Materially changed/empty/invalid repairs remain rejected. Original response checksums, algorithm revision and per-repaired-row runtime/area metadata preserve provenance. This is a necessary source-normalisation repair, not deferred execution hardening; it changes no ready history or product scope. Independent synthetic zero-area and materially changed polygon tests are required before resuming.
