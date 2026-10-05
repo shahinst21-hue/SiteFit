@@ -1,0 +1,452 @@
+# Phase 5 implementation plan: Data Integration Framework
+
+Prepared 2026-10-05. **Planning only; implementation awaits explicit approval.** Assessed baseline: `9f0cd5b976b3bc0687047cd5a203d8d77156db2f`, clean `main`, matching `origin/main` after fetch. This document contains recommendations, not implemented services, migrations, verified new integrations or accepted financial/report rules.
+
+The owner's new instruction makes **SiteFit V1 London only**. This supersedes the UK-wide launch direction for future implementation. Preserve a path to other English locations through configuration, adapters and dataset coverage. Do not change application code, UI, user-facing copy, pricing, visual design, credentials or deployed configuration during this planning task. The accepted historical-report decision D60 remains binding. Approval of this plan will be required before executing any step below.
+
+The owner's additional provider-selection rule is authoritative: prefer free official sources when their accuracy, coverage and reliability are sufficient. Paid data is justified where no adequate free source exists or where it materially improves a decision-relevant output. Evaluate that incremental report value alongside cost per report, rather than choosing on price alone. Avoid fixed recurring provider costs before revenue unless technically unavoidable; prefer usage-based pricing during validation. The plan records this direction without purchasing a service or introducing pricing/product changes.
+
+## A. Current repository state
+
+### Inspection and evidence
+
+Reviewed the repository instructions, documents in `docs/`, both applied migrations, generated database types, address provider/service/repository/route boundaries, wizard/input models, environment template and configured local variable names, tests and CI. The requested `docs/data_sources.md` does not exist; the actual register is [data-sources.md](data-sources.md). Prior phase documents contain historical descriptions that must be read alongside their later amendments. Relevant authority: [product.md](product.md), [decisions.md](decisions.md), [architecture.md](architecture.md), [database.md](database.md), [roadmap.md](roadmap.md), [testing.md](testing.md), [infrastructure.md](infrastructure.md) and [phase-4-status.md](phase-4-status.md).
+
+On 2026-10-05, Node `24.12.0`, npm `11.6.2` and `npm test` were actually checked: **43 tests passed**, including a fresh migration rebuild and PostgreSQL ownership/property security suites. Lint, strict types, production build, hosted Auth/SQL and deployed Postio evidence are previously verified phase records; they were not rerun or reproved by this planning assessment. No live Postio calls, new dataset downloads, hosted database writes or account changes were made for planning. Public provider documentation was reviewed separately; that is not proof of an adapter's operational availability.
+
+### What Phase 4 actually completed
+
+| Area | Observed implementation | Limit |
+| --- | --- | --- |
+| Address boundary | `lib/addresses/provider.ts` defines `AddressLookupProvider`; `postio.ts` validates unknown responses into SiteFit address types; `server-provider.ts` selects Postio. | This is an address adapter, not a general data integration framework. |
+| Anonymous server endpoints | Four Node POST routes: `/api/addresses/lookup`, `/search`, `/resolve`, `/manual`; `http.ts` validates origin, body, postcode/reference and request bounds. | No analysis submission, job, entitlement or report endpoint. |
+| Selected property persistence | `service.ts` resolves the selected identifier server side; `repository.ts` uses a separate request-scoped secret-key client and `resolve_sitefit_property`. | Only selected properties persist; candidates/business/economics remain page memory. |
+| Canonical identity | Unique `(address_provider, provider_address_id)` and atomic UPSERT preserve UUID/creation time; Postio UDPRN is stored independently of UPRN. | No address-to-UPRN matcher. Manual entries get distinct UUIDs; no speculative deduplication. |
+| Geography/coordinates | Nullable country/components; Postio coordinates explicitly `postcode_centroid`; manual coordinates unknown. | No verified property-level point, official geography mapping, spatial engine or walkable catchment. |
+| Provider resilience | Fixed HTTPS host, no redirects, streaming response limit 2 MB, 12-second timeout, cancellation, safe errors/request IDs, no automatic paid retries. | No shared retry taxonomy, freshness, licence policy, cost ledger or persistent provider cache. |
+| Abuse controls | Per-process IP/operation/global counters in `routes.ts`. | Not a cross-instance quota or durable cost reservation. |
+| Frontend | `address-lookup.tsx` calls SiteFit endpoints; `location-wizard.tsx` keeps selected `PropertySelection` separately from `WizardDraft`. | Existing Snapshot organises a brief and unverified checks; it has no real local analysis. |
+| External verification | Phase 4 records actual protected Preview anonymous selection, hosted canonical persistence/reuse, manual entry and secret-exposure checks; PRs #10/#11 completed delivery. | Historical evidence, not a new live check today; four nation examples do not prove exhaustive coverage. |
+
+The initial migration `20261003210000_initial_sitefit_schema.sql` creates fifteen public tables, enum lifecycles, ownership RLS, client column grants and composite provenance foreign keys. The second, `20261004120000_property_address_identity.sql`, adds postal identity/provenance and the service-role-only RPC. No applied history is to be edited.
+
+Relevant existing tables: `profiles`, `properties`, `analyses`, `analysis_inputs`, `data_snapshots`, `evidence_items`, `competitors`, `premises_events`, `economic_models`, `reports`, `report_sections`, `payments`, `pdf_exports`, `system_events`, `blog_posts`. Most analysis/report tables are foundations with no product writer. `data_snapshots` has analysis/source/version/retrieval/observation/availability, normalised/provider/cost JSON, permitted raw reference and expiry. `evidence_items` links snapshots/inputs. Models/reports reference input versions; sections/PDFs reference their report. Client derived writes are denied, but trusted-service historical freeze is **not implemented**.
+
+### Contradictions and technical debt to resolve deliberately
+
+1. `AGENTS.md`, Product Contract, D45, architecture, data register and several tests describe UK-wide launch. The new London-only instruction governs this plan. After plan approval, first reconcile operational documentation and record the scope supersession; retain historical phase evidence. Do not rewrite UI/copy or remove the generic UK postcode/address parser. Address acceptance is separate from analysis coverage.
+2. D11's original Google direction is superseded for addresses by D56 and for the persistent POI core by the owner's current Foursquare OS Places direction. Record the latter before implementation; Google is a possible licensed supplement, not the historical database.
+3. No PostGIS extension, spatial tables, Foursquare/OS/Valhalla integration, versioned bulk dataset, transport/population adapter, collection runner, source cache or dataset importer exists. Do not infer availability from a source register.
+4. `ResolvedAddress.uprn` is literally typed `null`; coordinate precision allows only `postcode_centroid | unknown`. Database properties allow future UPRN/building/rooftop values. Create a separate analysis property-context contract rather than pretending the Postio DTO already supplies enrichment.
+5. The Phase 4 UPSERT preserves enriched UPRN but refreshes latitude/longitude/precision/source from Postio on reselection. Future exact-coordinate enrichment must be an independently versioned observation, not a value this postal refresh can demote. Pin its chosen representation per analysis.
+6. `LocationCheckInput` version 1 still expresses an unresolved entered address; the wizard stores resolved selection separately. Future submission must explicitly carry a selected property reference and a validated versioned context, reloaded server side. Do not repurpose version 1 or trust browser coordinates. Phase 5 does not connect this submission flow.
+7. `data_snapshots` JSON checks enforce object shape only; no semantic contract, source policy/version enforcement, request identity, dataset release FK or freeze exists. `expires_at` is not permission to retain data, and `updated_at` is not a report-generation timestamp.
+8. PGlite currently applies all migrations without spatial extensions. PostGIS requires a real compatible extension/test path; silently skipping spatial migrations would invalidate the existing rebuild claim.
+9. No guest analysis ownership policy, account transition, Free Snapshot allocation, report sufficiency rules, financial formulas or export/retention policy has been approved. Framework work must not settle them accidentally.
+
+### Existing configuration and tests
+
+The tracked `.env.example` contains blank names only: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SITE_URL`, `ADDRESS_LOOKUP_PROVIDER`, `POSTIO_API_KEY`, `SUPABASE_SECRET_KEY`. Local ignored configuration was inspected for **names and configured/unconfigured status only**: Supabase URL/publishable/secret, Postio key and tooling `VERCEL_OIDC_TOKEN` are populated. No values were printed. `SITE_URL`/provider selection can remain optional; default provider is Postio. Existing documentation records the two server keys as Preview-only. Remote settings were not inspected afresh. No TfL, Foursquare, OS, Google, routing, AI or Stripe application variable exists in the template.
+
+Tests cover address validation/normalisation, synthetic transport failures, server trust boundaries, manual fallback, real SQL RLS/identity execution, Auth, wizard/pricing, content/SEO, resource search, environment safety and Supabase diagnostics. `scripts/check-public-site.ts` checks real HTTP/metadata/404/address boundaries. `verify-addresses.ts` is an explicit potentially billable development probe, not CI. Hosted SQL/Auth checks are separate. CI runs Node 24/npm 11, `npm ci`, lint, types, tests, production build and public HTTP checks without paid provider access. Main requires PR/CI; protected Preview and disabled automatic Production deployment remain unchanged.
+
+## B. Phase 5 objective and boundaries
+
+**Objective:** establish a server-side, licence-aware data retrieval framework that produces validated, provenance-rich, immutable source snapshots for later analysis engines, and prove it with a small set of real London sources.
+
+In scope after approval:
+
+- Versioned internal observation/result/error/quality/provenance contracts and a small explicit source registry.
+- Server-only adapter construction, bounded transport, controlled retries, source eligibility, permitted caching, request/cost telemetry and a finite collection batch helper.
+- Immutable analysis collection context, append-only snapshots, same-analysis references and durable request idempotency/leases.
+- A versioned bulk import path for a London geography/ONS population proof, with PostGIS-backed spatial lookup and release manifests.
+- Three new proof adapters described in F: ONS local, TfL live and conditional FSA live. Preserve Postio's already implemented address boundary.
+- Unit/contract/database/security tests, actual opt-in development probes and documentation with verified permissions/limits.
+
+Out of scope:
+
+- New customer routes, UI/copy/design/prices, broader geographic launch or new business categories.
+- Free Snapshot engine/presentation or sufficiency scoring (Phase 6); payment/entitlements (7); comprehensive Full Location Data (8); premises history research (9).
+- Revenue/spend/footfall estimates, commercial viability scoring, economic formulas (10), full claim adjudication/contradiction engine (11), AI calls/prompts/report writer (12), real report UI/PDF/delivery (13).
+- Universal ETL platform, general plugin loader, new queue vendor, always-on crawler, scheduler/CMS, all-source catalog ingestion, national address inventory or speculative caches of postcode candidates.
+- Deploying Valhalla, ingesting every POI/feed, live Google enrichment or licensing/budget commitments without their later gates.
+
+Phase 5 may define hooks for these services, but must not create their execution. It does not create customer analyses or advance them to `free_ready`, `paid`, `calculating`, `generating_report` or `ready`. Development probes use isolated owned test analyses; no anonymous database grant or new customer ownership policy.
+
+## C. Proposed architecture
+
+### Modules and boundaries
+
+Keep one repository and native Node fetch/tests. Proposed files are created only when their step needs them:
+
+```text
+lib/data/
+  contracts.ts             versioned serialisable SiteFit contracts
+  validation.ts            runtime envelope and domain validation
+  errors.ts                safe error taxonomy
+  registry.ts              explicit source definitions; no discovery/reflection
+  policy.ts                versioned licence/retention/attribution decisions
+  coverage.ts              generic region/precision/eligibility checks
+  regions/london.ts        V1 coverage configuration and manifest references
+  transport.ts             bounded fetch, timeout, retry decisions
+  cache.ts                 bounded permitted normalised cache; injected clock
+  collect.ts               bounded independent-source batch; no analysis engine
+  snapshot-repository.ts   server-only request/context/snapshot RPC boundary
+  telemetry.ts             allowlisted operational event fields
+  adapters/ons-local.ts    local release lookup into internal area observations
+  adapters/tfl.ts          TfL DTO parsing/normalisation only
+  adapters/fsa.ts          FSA DTO parsing/normalisation only
+lib/spatial/
+  model.ts                 CRS/point/coverage/precision contracts
+  repository.ts            server-only bounded spatial RPCs
+  geography.ts             versioned geography assignment; explicit ambiguity
+scripts/data/
+  import-london-baseline.ts  operator-run bulk importer, never an app import
+  verify-framework.ts       opt-in development probe, no customer report
+tests/data-*.test.ts        deterministic contracts/transport/batch/cache tests
+tests/fixtures/data/       synthetic or explicitly permitted redacted fixtures
+supabase/tests/data-framework.sql
+supabase/tests/spatial.sql
+docs/provider-policies/    one reviewed provider/dataset policy per enabled source
+```
+
+External DTO types stay private to each adapter, parsed from `unknown`; SiteFit consumers receive only internal schemas. Constructors, secret readers, repositories and live server entry points use `server-only`. Pure contracts/parsers accept injected transport/clock for Node tests. React calls only existing SiteFit routes; it must not import this framework or provider SDKs. Extend lint restrictions for client/components imports when implemented. Do not import `scripts/` into `lib/` or application code.
+
+### Adapter/result contract
+
+Recommended signatures (design sketch, not application code):
+
+```ts
+type SourceId = "ons-population" | "tfl-stop-points" | "fsa-establishments";
+type Outcome = "success" | "partial" | "empty" | "unavailable"
+  | "unsupported" | "not_applicable" | "policy_blocked";
+
+interface DataAdapter<TPayload> {
+  source: SourceDefinition;
+  supports(context: CollectionContext): Eligibility;
+  retrieve(request: SourceRequest, execution: ExecutionContext):
+    Promise<ProviderResult<TPayload>>;
+}
+
+type ProviderResult<T> =
+  | { outcome: "success" | "partial"; payload: T;
+      observations: ObservationRef[]; meta: RetrievalMetadata;
+      limitations: string[]; error: SafeSourceError | null }
+  | { outcome: "empty"; payload: null;
+      observations: []; meta: RetrievalMetadata; limitations: string[];
+      error: null }
+  | { outcome: "unavailable" | "unsupported" | "not_applicable"
+      | "policy_blocked"; payload: null;
+      observations: []; meta: RetrievalMetadata; limitations: string[];
+      error: SafeSourceError | null };
+```
+
+`SourceDefinition` contains provider/dataset/operation IDs, contract/adapter/normalisation versions, source class, approved coverage and minimum precision, applicable business categories, required context, permitted policy revision, expected release cadence, rate/concurrency/response/page limits and cost-unit semantics. A curated registry resolves internal source IDs; no user-supplied provider URL/name can construct an adapter.
+
+`CollectionContext` is a frozen, validated representation of analysis ID, canonical property ID, selected property/address provenance, nullable verified UPRN, point/CRS/source/precision, geography codes with boundary version/assignment method, business type/category, exact input version, analysis timestamp and pinned dataset release IDs. It contains no secrets or entitlements invented by Phase 5. `SourceRequest` adds collection key, operation, approved query bounds and canonical context hash. `ExecutionContext` injects abort signal, correlation ID, clock, bounded transport, cache and policy; it contains no customer display logic.
+
+### Normalised payloads and observation lineage
+
+Initial schemas, each with `schemaVersion: 1`:
+
+| Payload | Required internal fields | Limits on meaning |
+| --- | --- | --- |
+| `AreaPopulation` | Geography code/type/version; measure code; non-negative integer count or explicit null; units `persons`; population universe; effective period; release ID; observation references. | Resident population at the source date; no demand/spending/footfall calculation. |
+| `TransportAccessPoints` | Items with provider-scoped stable ID, name, internal mode plus optional original category, optional coordinates/precision, observed metadata and source reference; complete/truncated coverage indicator. | Stop locations/modes do not establish walking time, service frequency or customers. |
+| `FoodEstablishments` | Items with provider-scoped establishment ID, authority ID, business name/type, optional permitted address/point, dataset/date metadata and match/coverage limitations. | Register observations, not exhaustive competitor counts, current occupancy or survival. Omit rating imagery; rating interpretation is unnecessary for this proof. |
+
+Each data item carries an `ObservationRef`: local deterministic observation ID, snapshot-local path/record key, original source record ID where permitted, public source reference without credentials, effective/observed date, units and geography, source class, evidence kind (`direct_register`, `measured`, `modelled`, `inferred`) and limitations. Source type and evidence kind are separate: official does not mean measured footfall. Phase 5 defines a resolvable reference envelope; Phase 11 determines claim-level sufficiency. Later evidence rows resolve `(analysis_id, snapshot_id, observation_id)` to these records and never invent source IDs.
+
+Empty is an observed response within the query's stated coverage, not proof that no businesses/stops exist. Unavailable has no observed absence. Missing numerical values are null with reason, never zero; incomplete paging is partial, never a complete inventory. Reject an envelope that says success while omitting required provenance. No AI is involved in normalisation or calculation.
+
+### Retrieval metadata
+
+| Category | Mandatory or explicitly nullable fields |
+| --- | --- |
+| Provenance | Source/provider/dataset IDs; adapter and normalisation versions; operation; permitted original record references; correlation/request ID; internal contract version; dataset release FK/version/checksum when local. |
+| Time | `retrievedAt` for this lookup; `sourceRetrievedAt` for original upstream acquisition/cache origin; observed/effective period; source publication/update time if supplied; analysis timestamp in the frozen context. Do not manufacture unknown source dates. |
+| Quality | Geographic precision and CRS; coverage region/geography level/known truncation; missing fields; direct/modelled/inferred kind; freshness assessment and its rule version; explicit match ambiguity and limitations. No invented combined confidence score. |
+| Freshness | `assessedAt`, `fresh | stale | unknown`, reason, age basis (observation/effective/publication), maximum permitted lookup age where configured. A recent download does not make Census 2021 a current population measurement. |
+| Licensing | Provider policy ID/version/terms URL/review date; separate permissions and retention for raw, normalised, derived, references and timestamps; attribution and export constraints; cache TTL ceiling; raw disposition. |
+| Cache | `bypass | miss | hit | local_release`, key digest, origin acquisition time, cache expiry and policy revision; payload remains separately copied/pinned into the analysis snapshot when allowed. |
+| Cost | Request/credit units, money decimal/currency if known, `observed | estimated | unknown`, price/version reference and billing uncertainty; cache-hit upstream calls/cost are zero only for this lookup, not historical acquisition. |
+| Operations | Provider status/HTTP code, safe error classification, duration ms, attempt/page count, retry-after and provider request ID if safe. Store operational details in the request ledger, with only necessary safe provenance exposed to snapshot owners. |
+
+Raw responses exist only in bounded process memory by default and are discarded after normalisation. The adapter's raw DTO never escapes into a generic report payload. No raw object store is introduced by the initial Phase 5 proposal. A future raw archive needs its own reviewed permission, private access, expiry and deletion path.
+
+### Error taxonomy and retry rules
+
+Use `invalid_request`, `unsupported_geography`, `insufficient_precision`, `not_applicable`, `configuration_missing`, `authentication_failed`, `permission_denied`, `rate_limited`, `timeout`, `cancelled`, `network_error`, `provider_unavailable`, `invalid_response`, `dataset_missing`, `dataset_stale`, `licence_blocked`, `budget_exceeded`, `persistence_failed`, `lease_lost`. Error records contain code/source/operation/retryability/safe status/request ID; never response text, URL query, credentials or raw exception stacks.
+
+Retry only idempotent reads on reviewed providers: at most two attempts, bounded jitter/backoff and `Retry-After` within the batch deadline. No retry on 400/401/403, malformed payload, unsupported context, licence denial or cancellation. Do not retry a possibly billable timed-out request without a provider-specific billing/idempotency policy. Postio's no-paid-retry behaviour remains. A missing critical context/policy/database permission fails the request safely; a noncritical source failure remains a per-source unavailable result.
+
+## D. Database changes proposed
+
+**No migration is created in this task.** The existing snapshots/evidence/report tables are a useful foundation but insufficient for typed semantic validation, immutable collection context, dataset activation/version pinning and cross-instance request deduplication. Add only the following for the recommended proof; later POI/routing/economic/report schemas belong to their phases.
+
+### Planned migration 1: request/context/snapshot integrity
+
+Names below are exact proposed names; implementation assigns a new timestamp and does not edit either applied migration.
+
+1. `public.analysis_data_contexts`: `id uuid PRIMARY KEY`; `analysis_id uuid NOT NULL` FK analyses RESTRICT; `version integer NOT NULL CHECK > 0`; `property_id uuid NOT NULL` FK properties RESTRICT; `input_id uuid NOT NULL`; `schema_version integer NOT NULL CHECK > 0`; `context jsonb NOT NULL` object; `context_sha256 text NOT NULL` 64 lowercase hex; `analysis_timestamp timestamptz NOT NULL`; `created_at timestamptz NOT NULL DEFAULT now()`. Unique `(analysis_id,version)` and `(analysis_id,id)`; composite FK `(analysis_id,input_id)` to inputs; add `UNIQUE(id,property_id)` on analyses and composite FK `(analysis_id,property_id)` to ensure exact property linkage. Context includes frozen business/property/point/geography/inputs and release pins. No duplicate owner column. Versions allow later optional economics to append a new input/context before completion without changing the earlier Snapshot's context.
+2. `public.source_requests`: `id uuid PRIMARY KEY`; `analysis_id uuid NOT NULL`, `context_id uuid NOT NULL`, with composite FK `(analysis_id,context_id)` to contexts RESTRICT; `collection_key text NOT NULL` bounded; `source_id`, `provider_id`, `dataset_id`, `operation`, `adapter_version` bounded text NOT NULL; `request_sha256 text NOT NULL`; `state text NOT NULL` in `pending,running,completed,failed`; `outcome text NULL` with result enum; `lease_token uuid NULL`, `lease_until timestamptz NULL`; `attempts jsonb NOT NULL DEFAULT '[]'` array of bounded allowlisted attempt summaries; `duration_ms bigint NULL CHECK >= 0`; `cost_metadata jsonb NOT NULL DEFAULT '{}'` object; `error_code text NULL`; `created_at`, `completed_at timestamptz`. Unique `(analysis_id,collection_key,source_id,request_sha256)` and `(analysis_id,id)`; index pending/lease time and analysis/source/time. Request hash includes the exact immutable context ID/hash. Attempts record each actual network page/retry, safe status, dates, duration, cost units and uncertainty; never provider payloads.
+3. Extend `public.data_snapshots`: nullable `request_id uuid`, `dataset_release_id uuid`; `contract_version integer NOT NULL DEFAULT 1 CHECK > 0`; nullable `adapter_version text`, `normalisation_version text`, `source_retrieved_at timestamptz`, `effective_from timestamptz`, `effective_to timestamptz`, `payload_sha256 text`; object JSONB `licence_metadata`, `quality_metadata`, `cache_metadata` with `{}` defaults for historical foundation rows. Composite FK `(analysis_id,request_id)` to requests; unique `(analysis_id,request_id)` for one final snapshot per logical source request. Existing `retrieved_at` remains this lookup time and `observed_at` remains an observation time. Check effective range/hash shape; writer requires a fully validated version-1 metadata contract for new framework rows. Keep current `availability` values: success/empty → available, partial → partial, unavailable → unavailable, unsupported/not-applicable/policy-blocked → unknown with precise outcome in metadata; empty has explicit empty evidence, not a zero business claim.
+4. New narrow service-only transactional RPCs: claim request/lease, commit validated result plus snapshot and completion atomically, mark safe operational failure. Fixed empty search paths and explicit grants. Same request replay returns the existing snapshot; stale lease token cannot commit. No direct client request/context/snapshot writes. A partial snapshot is terminal for that collection key; an explicitly approved recollection uses a new collection key and appends a new snapshot, never updates the old payload.
+5. Enforce immutability with triggers, not merely repository convention: context and source snapshot payload/lineage cannot UPDATE/DELETE; changing the analysis property/business or an existing context's input binding after context creation is rejected. New optional input/context versions may be appended by a future authorised service before analysis completion. Freeze guards lock/check the parent analysis row in the same transaction to avoid a finalisation/write race. An analysis at `ready`, or with a ready Full Report, cannot start collection or acquire new source snapshots/contexts. A ready Free Snapshot's reference set stays frozen while later authorised paid collection can append independent versions to the unfinished analysis; it cannot rewrite the earlier report. Operational request lease/status updates are allowed only for unfinished requests and do not change historical content. Explicit retention deletion remains a separate restricted, audited policy path, not general service-role mutation or a silent refresh.
+
+All new private public tables enable RLS and revoke PUBLIC/anon/authenticated writes. Context SELECT follows owned analysis. The request ledger has **no ordinary-client SELECT** (cost, safe operational details and policy decisions are internal). Existing snapshot owner SELECT remains, so only owner-safe permitted normalised data/provenance goes there. Do not place secrets, private raw paths or unrestricted diagnostic payloads in its JSON. Existing snapshot/input/evidence composite FKs remain.
+
+### Planned migration 2: versioned local data and spatial foundations
+
+Install PostGIS in a dedicated non-exposed `gis` schema after verifying existing extensions; no extension drop/recreation. Supabase documents this isolation requirement in its [PostGIS guidance](https://supabase.com/docs/guides/database/extensions/postgis). Create a non-exposed `source_data` schema, revoked from client roles, for:
+
+- `source_data.dataset_releases`: UUID PK; `provider_id`, `dataset_id`, `version`, `subset_id`, `sha256`, `schema_version`, `source_url` without secrets, `source_published_at` nullable, `retrieved_at`, `effective_from/to` nullable, `imported_at`, `row_count`, `state` (`loading,ready,failed`), object `licence_metadata`, `manifest`, and `supersedes_release_id` nullable RESTRICT FK. Unique `(provider_id,dataset_id,version,subset_id,sha256)`. Release contents/manifests become immutable at ready. Dataset activation is a reviewed versioned configuration pin, not an UPDATE of earlier records. `data_snapshots.dataset_release_id` references this table RESTRICT.
+- `source_data.geography_features`: `release_id` FK RESTRICT, `geography_type`, `geography_code`, `name`, `parent_code` nullable, `geometry gis.geometry(MultiPolygon,4326)`, source-record reference and object properties. PK `(release_id,geography_type,geography_code)`; GiST geometry index; bounds/validity checks. Pin authoritative London region/LAD and OA 2021 boundary releases and the OA-to-LAD lookup relationship in the import manifest. No generic London column in the core property table.
+- `source_data.area_statistics`: `release_id` FK RESTRICT, `geography_release_id` FK RESTRICT, `geography_type`, `geography_code`, `measure_code`, `value numeric NULL`, `unit`, `population_universe`, effective period and object `quality_metadata`. PK `(release_id,geography_type,geography_code,measure_code)`; composite FK to the matching geography feature; explicit missing/suppressed values instead of zero. Initial dataset is TS001 only. Later demographics/income/workplace tables need their own schemas or measures and validation, not an unbounded arbitrary JSON store.
+
+Use service-only spatial RPCs with bounded queries and safe DTOs; do not expose tables/private schemas to the Data API. WGS84 is transport/storage CRS; use PostGIS geography for metre distances and an explicitly recorded projected CRS such as EPSG:27700 for any later area computation. Longitude comes first. Framework point-in-polygon/nearest queries are not walking isochrones or population-weighted catchment calculations. On a shared polygon edge return ambiguity/qualifying metadata; do not pick the first row silently. If an approximate coordinate cannot identify the exact property geography, label the assignment as a centroid proxy or decline it according to source requirements.
+
+### Values stored on every source lookup
+
+Record analysis/context/property binding, input version, provider/dataset/operation, dataset release/version or explicit unknown, lookup time, original acquisition time, observed/effective date, normalised payload and observation references, licence-policy revision/retention, raw disposition (`discarded`, `not_returned`, `forbidden`; no raw storage in the proof), cache origin/expiry, precision/coverage/freshness and contract/adapter/normalisation versions. Request attempts hold cost/credit status, duration, safe provider status and error classification even when there is no usable payload. A local lookup records release ID/checksum and lookup duration, not an invented external request charge. An unsuccessful request can create an unavailable snapshot if permitted metadata retention allows it; infrastructure persistence failure creates an operational failure, never a pretend snapshot.
+
+### Historical analysis/report chain
+
+`User → Analysis → frozen property/business/input context → data snapshot IDs → evidence IDs → deterministic model/version → stored AI output/metadata → report/version/sections → PDF`.
+
+Phase 5 implements only the context/source-snapshot foundation and guards against collection for ready records. Evidence references are contract-level; model execution, AI provider/model/prompt metadata, report generation timestamps and complete ready-report/section freeze must be implemented and tested in Phases 10–13 under D60. Retain report input/model FKs and later add exact used snapshot/evidence references. Reopening will read stored content, never call `collect`. Changing current properties, source/cache data or the active dataset release cannot change old snapshot content. A later customer check creates a new analysis even if the canonical property UUID is reused. Expired raw/cache material is not a regeneration trigger. If permitted historical content cannot be retained, reject that provider use or design an explicitly approved limited representation before promising the report.
+
+Preserve the approved economics-after-Snapshot journey: later phases can append an input version and an immutable context version while that analysis is unfinished. Requests/snapshots and eventually models/reports reference the exact version used; a ready Free Snapshot is never overwritten by optional economics or Full Report collection. This is distinct from rerunning a completed analysis later, which requires a new Analysis. Phase 5 defines versioning support but implements neither the input submission flow nor the free-to-paid state machine.
+
+## E. Data source classification matrix
+
+Categories are additive: **Framework**, **Phase 5 adapter**, **Later phase**, **Bulk**, **Live**, **Conditional**, **Commercial later**, **Not V1**. Refresh below is either a published cadence explicitly cited or a **proposed operational review/ingestion interval**, not a guarantee or licence grant. Every source still requires endpoint/field/coverage/retention/export validation before enablement. OGL/open-source naming alone does not establish rights to every supplied asset or personal field.
+
+Section references use the existing sixteen report keys. Every source also supports `unknowns`, `in-person-checks` and `landlord-questions` through disclosed limitations; supporting/against evidence requires a later validated interpretation.
+
+| Source/category | Purpose and access/credentials | Live versus local; refresh | Retention and verification | Fallback and later sections |
+| --- | --- | --- | --- | --- |
+| Postio: existing address layer; Framework dependency | Current postcode/UDPRN REST; existing server key. | Live explicit selection; no bulk candidates; resolve when selected. | Existing selected capture verified; PAF raw/export/redistribution needs separate review. [Postio terms](https://postio.co.uk/paf-end-user-terms). | Manual unverified; no guessed UPRN. `location-snapshot`. |
+| Property enrichment: OS Places/AddressBase or licensed equivalent; Later 6 prerequisite/8, Live, Conditional | Verified UPRN/address/point match; OS account/key and permitted commercial plan, not configured. [OS Places](https://www.ordnancesurvey.co.uk/products/os-places-api). | Selected-property live enrichment, permitted cache; review on new analysis. | Exact endpoint, premises match, attribution, long-term derived/coordinate retention and cost unverified. Preserve Postio selection. | Unknown/ambiguous match; disable exact premises joins. `location-snapshot`, catchment, accessibility, premises context. |
+| OS Open UPRN; Later 8, Bulk | UPRN-to-point lookup once UPRN is known; public downloadable CSV/GeoPackage, no app API key expected. | Local versioned London subset; published six-week update cycle. | [Official product](https://www.ordnancesurvey.co.uk/products/os-open-uprn). Coordinate/identifier data does not by itself match postal text/UDPRN to UPRN; validate licence/precision and chosen files. | Never nearest-point guess an identity. Property/catchment context. |
+| PostGIS; Framework dependency, Phase 5 | Internal spatial computation; Supabase SQL/CLI service access, not an external evidence provider. | Local database extension; migration version, no per-report downloads. | Verify hosted extension privileges and CI spatial parity. | No JS approximate-distance substitute masquerading as verified geometry. Catchment/access/geography foundations. |
+| ONS official boundary/code lookups; Framework, Phase 5 supporting bulk | Region/LAD/OA mapping from [Open Geography Portal](https://geoportal.statistics.gov.uk/); public assets. | Versioned local London subset; new release/revision, monthly release checks proposed. | Portal identified; exact asset URL, boundary resolution and per-asset OS/OGL notices not yet verified. Pin compatible 2021 OA lookup/version. | Ambiguous/unknown geography; no postcode-prefix London gate. Property/catchment/geography. |
+| ONSPD/NSPL; Later 6/8, Bulk | Postcode-to-statistical geography from official download; usually no key. | Quarterly releases per [ONS](https://www.ons.gov.uk/methodology/geography/geographicalproducts/postcodeproducts); local permitted subset. | Check Royal Mail/OS constituent terms and geography vintage. Postcodes can straddle boundaries; this is not property-level assignment. | Approximate geography with limitations; no exact site join. Catchment/demand context. |
+| ONS Census 2021 TS001; Phase 5 adapter, Bulk | OA usual-resident counts from [Nomis bulk](https://www.nomisweb.co.uk/sources/census_2021_bulk); no API key expected for bulk. | Local London OA release; census-period data, ingest only revisions; monthly release check proposed. | Download shape established, exact selected archive/checksum/attribution still to verify. No current-demand claim. | Dataset missing/stale/area not mapped; return explicit gap. `customer-catchment`, `demand-signals`. |
+| Census profile tables (age/household etc.); Later 6/8, Bulk | Approved ONS tables via same official bulk family; public. | Local versioned London areas; release/revision. | Table/geography/disclosure compatibility needs validation, not automatic import of every table. | Missing/suppressed stays null. Catchment/demand. |
+| ONS annual population estimates; Later 8, Bulk | More recent resident estimates from [ONS OA population releases](https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/censusoutputareapopulationestimatessupportinginformation/mid2021); public. | Local release as published; annual family, exact selected current edition pending. | Estimates distinct from census counts; no fabricated blending/update of old reports. | Use dated census only if later sufficiency policy permits. Catchment/demand. |
+| Daytime/workplace: ONS/Nomis workplace/workday/commuting, BRES; Later 8, Bulk | Official area employment/workplace measures; public source catalogues; chosen access/registration pending. | Local release; annual or census-period depending on measure, must confirm. | Pandemic/census work pattern and suppression limitations; not real-time daytime presence. | Unknown workplace demand; no guessed conversion. `demand-signals`, `mobility-signals`, local business. |
+| Purchasing power: ONS small-area income, GLA income/deprivation; Later 8, Bulk | Area income/proxy context, [GLA catalogue](https://data.london.gov.uk/) and ONS releases; chosen product not verified. | Local edition, proposed annual/release checks. | Modelled estimates and geographic granularity; exact file/licence pending. Not spend at a shop. | Unknown or explicit dated proxy. Demand/economics input context. |
+| Spending potential: permitted public aggregates; Later 8/10, Bulk | ONS consumer expenditure/GLA contextual series; exact defensible small-area measure unselected. | Local releases; annual/release review proposed. | Do not manufacture local transaction totals from national averages; derivation requires Phase 10 approval. | Unknown potential; no automatic revenue. Demand/economics/scenarios. |
+| Measured spend/footfall/commercial demographics; Commercial later, Not V1 requirement | Licensed payment/mobile/footfall vendors or restricted high-street partnerships; account/contract. | As contracted; cadence unknown. | Availability, prices and historical/PDF rights unverified. | Public proxies labelled as proxies, or Unknown. No customer promise dependent on this. |
+| Foursquare OS Places; preferred POI core, Later 8, Bulk | Persistent POI/category records via Places Portal/Iceberg export; account/token now described in [access documentation](https://docs.foursquare.com/data-products/docs/access-fsq-os-places). | London local release, proposed monthly release check/deltas; no global serving database. | [OS schema/licence](https://docs.foursquare.com/data-products/docs/places-os-data-schema) describes Apache 2.0; verify actual portal terms/fields/retention/attribution and London completeness. Not integrated. | Partial POI coverage; FSA for food subset only, not substitute all-category coverage. Competition/complementary/local business. |
+| Google Places; Later optional supplement, Live, Conditional, Commercial later | Targeted supplemental place details with account/key/budget. | Live permitted fields; cache only per reviewed policy. | [Google policy](https://developers.google.com/maps/documentation/places/web-service/policies) restricts content storage; ID exceptions do not permit permanent full content snapshots. Historical/PDF compatibility must pass. | Skip optional enrichment; preserve licensed POI core. Competition context. |
+| OSM + Valhalla; preferred routing, Later 8, Bulk + internal API | London OSM extract and controlled Valhalla service; self-host no data API key, service infrastructure needed. | Local pinned graph, proposed weekly/monthly builds, reused queries. | [OSM licence](https://www.openstreetmap.org/copyright) and [Valhalla isochrones](https://valhalla.github.io/valhalla/api/isochrone/); inspect ODbL derived database/service terms. Graph build/version and entrance snapping matter. No public demo SLA. | Unknown walking catchment; a circle is explicitly a different method, never walking time. Catchment/accessibility. |
+| TfL StopPoint; Phase 5 adapter, Live | London stop IDs/modes/locations via [Unified API](https://api-portal.tfl.gov.uk/); register app key for controlled integration; app_id no longer required per portal. | Live proof, proposed 24-hour static-record cache only if terms permit; no arrivals polling. | Exact StopPoint query/schema and [TfL terms](https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service) need endpoint/licence verification before adapter enablement. | Source unavailable/partial; no measured walking time or footfall. `accessibility`. |
+| TfL usage/PTAL/transport context datasets; Later 8, Bulk | Official TfL/GLA published transport aggregates; endpoint/file availability differs. | Local pinned releases, annual/release review proposed. | PTAL vintage/methodology, station identifier joins and display rights require validation. | Unknown indicator; do not infer PTAL from stop proximity. Accessibility/mobility. |
+| NaPTAN; Later 8, Bulk | Stop identity locations via [DfT download/API](https://naptan.dft.gov.uk/); public downloads, no registration for download. | Local London subset; proposed daily/weekly import according to need. | [Catalogue](https://www.data.gov.uk/dataset/ff93ffc1-6656-47d8-9155-85ea0b8f2251/naptan) identifies OGL/daily source updates; still validate selected schema/active flags. | Missing stop record; no assumptions on active services. Accessibility. |
+| ORR station usage; Later 8, Bulk | Annual ticket-based entry/exit/interchange estimates via [ORR tables](https://dataportal.orr.gov.uk/statistics/usage/estimates-of-station-usage/); public. | Local annual release/version; no per-analysis download. | Station matching/estimation/revisions/licence checks; not footfall outside the premises. | Unknown mobility proxy. `mobility-signals`. |
+| FSA establishments/FHRS; Phase 5 adapter, Live, Conditional | Official food establishment IDs/types/locations; [API v2](https://api.ratings.food.gov.uk/help) needs version header, no key/registration per current docs. | Live bounded proof for Coffee/Restaurant; daily updates documented; consider borough bulk ingestion later. | [Data](https://ratings.food.gov.uk/open-data) can omit private-address locations and recycle IDs; [terms](https://ratings.food.gov.uk/terms-and-conditions) require current or dated ratings. No logos/rating imagery or unsupported historic occupier inference. | Not applicable to salon collection; empty/partial food register. Competition/local business/evidence context later. |
+| EPC non-domestic; Later 8/9, Bulk or Conditional live | [Current official service](https://get-energy-performance-data.communities.gov.uk/) offers bulk and developer API; bulk account via GOV.UK One Login; API auth details need current guidance. | Local permitted London releases preferred, targeted property lookup if allowed; proposed monthly release check. | Old API docs redirect. Match cert/property/UPRN where supplied; expired/replaced certs are not current evidence. Licence/personal-data restrictions must be checked. | No certificate ≠ compliant/exempt; verify landlord evidence. Premises/history/unknowns. |
+| VOA Business Rates; Later 8/10, Bulk, Conditional | [Rating list epochs/change files](https://voaratinglists.blob.core.windows.net/html/rlidata.htm); no app key expected, terms acceptance required. | Local London extracts; publication page describes periodic epochs/change updates; validate schedule/version at integration. | **Restricted licence; not OGL.** Verify permitted report/retention use before import. Rateable value is not rent or actual bill after relief. | User-supplied rates remain distinct; no inferred payable bill. Economics/premises context. |
+| Planning London Datahub/Planning Data/boroughs; Later 8/9, Bulk + Conditional live | [GLA](https://data.london.gov.uk/) and [Planning Data datasets](https://www.planning.data.gov.uk/dataset/); public exports/APIs vary, credentials/access to exact feeds unverified. | Local constraints/releases and bounded current application queries; proposed weekly/monthly review. | Borough completeness, dates, property matching and reuse differ. Constraint polygon ≠ permission for a use. | Unknown coverage; direct authority/landlord checks, no fragile website scraping. Premises/local business/against/unknowns. |
+| Heritage NHLE/conservation/GLA archaeology; Later 8, Bulk, Conditional | [Historic England open hub](https://historicengland.org.uk/listing/the-list/data-downloads/) offers spatial downloads/APIs, OGL with notices; borough layers separate. | Versioned local London subsets; proposed monthly release check. | Exact listed extent/point and conservation layer coverage must be checked; proximity ≠ designation of this unit. | Unknown designation/match, verify authority. Against evidence/landlord checks/premises context. |
+| Flood risk: EA long-term risk layers; Later 8, Bulk/Conditional live | [EA data portal](https://environment.data.gov.uk/); exact risk dataset/format/key requirements unselected. | Local approved risk release, release-based refresh. | [Real-time flood monitoring](https://environment.data.gov.uk/flood-monitoring/doc/reference) is not the long-term property flood-risk dataset. Per-layer licensing, surface water/river/sea scale and defence assumptions need validation. | Unknown risk, no low-risk claim from no alert. Against/unknowns/landlord checks. |
+| Labour cost benchmarks: ONS ASHE + statutory wage inputs; Later 10, Bulk | [ASHE releases](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/ashe1997to2015selectedestimates); chosen London occupation tables/public wage effective dates need verification. | Local versioned annual/revised releases and effective policy dates. | Wage observations differ from employer total costs and user inputs; no default staffing assumptions yet. | User costs or missing metric; no AI calculation. Economics/scenarios. |
+| Borough licensing registers; Later 8/9, Conditional source | Food/alcohol/late-night/special-treatment requirements; authority-specific files/APIs or direct permitted research; no uniform feed/account proven. | Local releases or bounded live query, cadence per authority unknown. | Business activity/permission distinctions; exact record access/retention before implementation. Restaurant/beauty activity does not automatically imply one licence type. | Unknown; questions to authority/landlord. Premises/history/landlord checks. |
+| Premises history evidence; Later 9, Conditional | Permitted dated planning/licensing/VOA/EPC/FSA observations, user documents; no single reliable historic occupancy API selected. | Append dated events from licensed sources; on new analysis only. | Entity/unit/date matching and retention; register change does not prove trading failure or closure cause. | Insufficient verified history. `premises-history`. |
+| Local business activity: Companies House/ONS business demography; Later 8/9, Conditional + Bulk | [Companies House API](https://developer.company-information.service.gov.uk/) needs key; public statistical releases separately chosen. | Targeted reliable company matches; bulk area indicators annual/release. | Registered office ≠ trading premises; sole traders missing; personal data and rate limits need policy. | No match/Unknown; no occupancy inference. `local-business-signals`. |
+| Retail centre/high-street context: GLA/borough spatial layers; Later 8, Bulk | Public catalogue centre polygons where licensed; restricted commercial high-street products separately excluded. | Local versioned London layers; proposed monthly/release check. | Exact coverage, centre boundaries and derived/display rights unverified. | No invented centre status. Location/demand/complementary/local business. |
+| Web research for evidence gaps; Later 9/11, Conditional | Bounded public permitted sources through a research adapter; chosen search provider may require key/budget. | Targeted searches on new analysis; retain only permitted dated references/excerpts/derived facts. | Robots/terms/copyright/PII/retention and source reliability; untrusted text is never instructions. | Explicit gaps; no always-on scraper or AI-invented facts. History/unknowns/checks. |
+| Evidence metadata/provider usage tracking; Framework, Phase 5 | Internal envelopes, request ledger, safe events; no third-party credential beyond database access. | Persist per request/snapshot, append versioned lineage. | Minimal operational retention policy; cost unknown stays unknown. | Safe failed record; no fabricated evidence. All later sections' provenance. |
+| AI synthesis; Later 12, Conditional live | Abstracted model provider; secure account/key/budget later. | Generate once from validated frozen evidence; persist permitted interpretation and execution versions. | No AI calls or credentials in Phase 5. Model output is interpretation, never missing source data. | Unknown/report-generation failure under future rules. All report narratives. |
+| Scotland/Wales/NI-specific feeds and rest-of-England ingestion; Not V1 | No implementation or account acquisition during London V1 planning/proof. | No expanded stored coverage. | Keep generic country/region contracts; source coverage must be explicit. | `unsupported_geography`, never substitute London data. Future explicit expansion only. |
+
+## F. First adapters recommended
+
+Implement **three new data adapters**, not every candidate source. A live official API need not be distinct from another live API merely to hit a category count.
+
+1. **ONS local TS001 plus geography baseline.** Proves official statistical semantics, dataset import/activation, PostGIS lookup, version pinning and immutable local observations. Import only London OA counts and compatible authoritative geography/lookup releases; do not calculate catchment totals or customer demand. Geography import is a dependency of this proof, not a fourth full statistical integration. [Nomis](https://www.nomisweb.co.uk/sources/census_2021_bulk) supplies separate geographic CSVs; exact source artefacts/checksums remain implementation verification. This belongs in Phase 5 because local versioned lookup is fundamental to the slow-changing-data architecture.
+2. **TfL StopPoint live retrieval.** Proves a London regional credentialed provider, fixed-host query building, rate limits, bounded cancellation, live-to-normalised transformation and cache provenance. Limit to stop locations/IDs/modes; no journey times, arrivals, passenger inference or PTAL calculation. [TfL's portal](https://api-portal.tfl.gov.uk/) describes subscription/app_key access. Verify the exact Swagger operation and licence policy before enabling. This tests regional eligibility and secure external transport now; report accessibility interpretation remains Phase 8.
+3. **FSA establishment lookup, conditional on food category.** Proves official credential-free HTTP retrieval, category eligibility, pagination/partial records and separate inspection/publication dates. Version header is required under [API guidance](https://api.ratings.food.gov.uk/help). Request only bounded establishment metadata needed for framework verification; do not create competitor ranking, occupancy history or customer rating UI. Hair/Beauty returns `not_applicable` without an upstream call. This tests conditional source omission and truthful missingness that neither TS001 nor TfL demonstrates.
+
+Reuse the existing Postio tests/address implementation rather than wrapping it in the new analysis interface or changing paid request behaviour. Defer OS matching, Foursquare ingestion and Valhalla deployment to the location-data work after their access/licensing/resource gates. They are central V1 directions, not dropped requirements. A real property-level match is a prerequisite before claiming precise site catchments/premises joins in later phases; a postcode centroid cannot meet it.
+
+### Provider value and cost acceptance
+
+For each proposed source, add these fields to its review record before enablement:
+
+| Evaluation | Evidence required |
+| --- | --- |
+| Decision-relevant output | Name the specific report field/claim/check improved; a larger raw response or more listings alone is insufficient justification. |
+| Best free official alternative | Compare matching precision, London coverage, effective dates, reliability and permitted historical/display use. Record why it is sufficient or why a material gap remains. Do not presume free means inadequate. |
+| Incremental paid value | Demonstrate the improvement on permitted London examples, such as resolving a unit's UPRN/point reliably when the free identifier dataset cannot match its postal address. Do not invent a numerical revenue uplift or convert an improvement into a success probability. |
+| Cost per new analysis/report | Record request/credit units, needed fields, pages, expected retries, permitted cache reuse, billable failures and downstream export charges; show observed unit prices or explicit unknowns. Distinguish free-check acquisition cost from incremental purchased-report cost, without inventing the Phase 6 allocation/conversion rate. |
+| Recurring cost | Identify subscriptions, minimum commitments, licences, hosting, import storage and graph refresh costs separately from API calls. Before revenue, recommend no fixed commitment unless a documented technical need cannot be met adequately another way. |
+| Validation purchasing model | Prefer a usage-based commercial option with bounded credits/spend, no automatic subscription or upgrade. If only a recurring option is viable, document alternatives and the technical necessity for user review before commitment. |
+| Acceptance | State the permitted use, measurable output improvement, per-report cost range/uncertainty and required budget approval. A cheap inadequate source fails; an expensive source without meaningful additional decision value also fails. |
+
+The initial recommended sources are official/public and selected for architectural and report relevance. Verify their current access terms rather than assuming zero cost. Postio is retained because it is already authorised and operational. Before adding paid property matching, compare adequate free official matching possibilities and their limitations; OS Open UPRN's point lookup does not itself solve address matching. Foursquare OS Places is the preferred persistent POI direction, but any portal fee/minimum commitment must be checked rather than assuming its open dataset has cost-free delivery. Google's optional supplement must pass the same incremental-value and snapshot-licensing tests. Valhalla's self-hosted software does not make its compute/storage/operations free; assess unavoidable routing infrastructure costs before selecting a hosting commitment.
+
+Stop after these three adapters pass their framework gates. If one lacks licence/access verification, complete independent steps but record its live gate as outstanding rather than adding an easier unrelated adapter and declaring the proof complete.
+
+## G. Retrieval orchestration, caching and operations
+
+Expose a trusted `collectSources(context, sourceIds, collectionKey)` helper returning per-source snapshot references/outcomes and a safe batch summary. It is invoked by an explicit development probe in Phase 5; no public analysis API, background queue or customer lifecycle is introduced.
+
+Sequence:
+
+1. Validate owned existing analysis/context and pinned property/input/releases from the server/database. Deny ready records, missing context, incompatible input versions and unsafe geography. London eligibility is configuration, not a postcode regex. Source precision/category requirements can return unsupported/not-applicable without spending.
+2. Resolve the reviewed source policy and approved request budget. Canonicalise non-secret inputs and digest them with source/operation/adapter/normalisation/policy/release versions. Idempotency includes analysis and collection key; cache keys omit analysis only for explicitly shareable public records and include geography/query bounds, schema/release and policy version.
+3. Claim a durable request lease atomically. A duplicate returns its completed snapshot or bounded in-progress outcome; it does not dispatch again. A different analysis creates its own snapshots even on a permitted cache hit. Process-local single-flight is an optimisation, not the correctness mechanism.
+4. Dispatch independent sources with concurrency **3 maximum** for the initial three-source proof; per-source concurrency **1** and a **30-second batch deadline**, proposed defaults. Configure live-source timeout **8 seconds**, at most **2 total attempts**; clamp pagination/retry to remaining time and response/page/record limits. Local database lookup timeout **2 seconds**. These are technical proof bounds, not a Vercel plan guarantee; verify runtime limits before a future HTTP worker.
+5. Use settled per-source results so one provider failure does not erase other successes. Respect cancellation, rate-limit delay and cost reservation. No automatic alternate paid provider. Schema/permission errors never become usable evidence.
+6. Validate payload/provenance/policy, compute deterministic IDs/hashes from permitted normalised material, then atomically append the snapshot and complete the request with the current lease token. Persistence failure returns no successful snapshot. Store a partial/empty/unavailable outcome honestly; record actual attempts and unknown billing where applicable.
+7. Return source outcomes to the caller. **Do not change analysis status.** Phase 6/8 orchestration later decides draft → collecting/free-ready/full-data transitions and source sufficiency; Phase 5 does not decide whether a complete analysis/report has failed. A policy/context failure can block a particular required collection without changing paid entitlements.
+
+### Cache and bulk release behaviour
+
+Implement a bounded **in-process normalised cache** behind an injected `CacheStore` in the proof; no Redis or durable shared cache table initially. Cache miss on another process is allowed; durable request leases prevent duplicates for the same logical analysis request. Cross-analysis network deduplication is not promised at this scale. Allow public shareable normalised records only when the policy explicitly permits it; never full addresses/user economics/tokens or raw provider payloads. Cap entries/bytes and namespace by schema/policy versions. Default unknown licence → cache bypass. Initial proposed static-record TTL is 24 hours for TfL/FSA only if permitted; policy can shorten it. No stale-while-revalidate for historical reports. Cache hit keeps original source acquisition/effective date, checks expiry and licence version, and creates a new analysis-bound snapshot copy when retention is allowed. Historical reads do not touch this cache.
+
+Bulk imports run as explicit operator CLI work outside Vercel request processing. Stream bounded downloads from allowlisted sources, verify archive/checksum/fields/licence, filter London records using versioned authoritative codes, stage as loading, validate row counts/geography joins/duplicates/units and mark the immutable release ready atomically. Partial import is never active. Reimport of identical artefacts reuses the release; revised content creates a new release. Retain manifests/permitted extracted rows; whole-country transfer files, if needed to obtain a public London subset, are temporary ingestion artefacts and not expanded serving coverage or automatically permanent archives. Do not schedule ingestion during Phase 5; document manual refresh and later scheduler hooks.
+
+### Idempotency/cost limits that must remain honest
+
+Database claim/commit makes snapshot persistence idempotent; it cannot guarantee exactly-once billing across a crash after an upstream response but before commit. Persist dispatch/attempt intent, mark ambiguous completion as uncertain and use a source's idempotency facility when available. No automatic billable redispatch on that ambiguity. Proposed lease length is deadline plus margin (60 seconds initially); lease expiry alone does not prove the previous provider request was unbilled. Retries and pages each count towards the budget. Live proof sources require explicitly verified quota/cost policies, not an assumed monetary zero. Paid anonymous collection is not exposed by Phase 5.
+
+Telemetry uses correlation/request/source/operation/release IDs, state, safe status, duration/attempt/cache counts, missingness and cost category. Do not log addresses, search text, user IDs/emails, full query URLs, response bodies, headers or raw errors. Preserve safe provider IDs only if they pass an allowlist. Missing source costs remain unknown rather than invented. Use existing `system_events` for minimal internal lifecycle events; the ledger holds detailed allowlisted attempt accounting. Production distributed abuse controls and job scheduling need their later rollout gate.
+
+## H. London scope with later England expansion
+
+Recommended V1 service region: the **administrative Greater London region**, comprising the 32 boroughs and City of London, using a pinned official boundary/LAD-code manifest. This operational definition is a recommendation for plan approval, not a postcode-prefix rule. TfL network reach, a London post town, `E/SE/SW` postcodes or a rectangle are not substitutes for that boundary. Do not exclude Kingston or other outer boroughs merely because their postcodes are not central-London prefixes.
+
+Acceptable London-specific elements: `regions/london.ts`, an allowlist of verified authority/region codes, London-only dataset subsets, TfL eligibility, borough-source catalogue, refresh policies and deployment source enablement. Core contracts retain country/region/geography code+version/CRS/coverage/precision without hardcoded London branches. New English coverage later means another region configuration and dataset/source policy, not a new analysis table or rewriting adapter result types.
+
+Unknown/approximate property location remains unknown/provisional. Phase 5 internal probes can query a centroid as area context while explicitly retaining `postcode_centroid` precision; they cannot certify the selected premises lies within an exact boundary or fabricate an OA/property match. Later exact-property analysis must enforce suitable precision/matching and fail or qualify boundary ambiguity. A London property catchment crossing the service-region boundary must expose missing/truncated coverage; do not silently import the rest of England or sum an incomplete catchment as complete. The production expansion decision is later and explicit.
+
+## I. Testing strategy and objectively testable Definition of Done
+
+### Fixtures and real London references
+
+Reuse Phase 4's **KT2 7AU** postal context and selected canonical UUID `2b5f2e12-8d0a-4523-a5a9-0f2ad4daa555` / provider identifier `12091144` from the recorded development verification where that row still exists and reuse is permitted. Verify its current existence and official administrative geography before a live probe; do not recreate/guess the address or treat a postcode centroid as its rooftop. Recorded manual UUID `b7976e98-d31a-4920-8115-ef192905b493` tests unknown/manual precision. These are address references, not approved Coffee/Restaurant/Salon outcome benchmarks. Edinburgh/Cardiff/Belfast Phase 4 postcodes become negative analysis-coverage tests while generic address parsing continues to work. Oxford Street/example Sample Reports are fictional or unresolved examples, not real benchmark premises.
+
+For deterministic tests use synthetic points, OAs, polygons, provider IDs and business records clearly labelled synthetic. Include a minimal legally permitted real-source response fixture only after its fixture retention policy is approved, with acquisition date and source/schema version. Never commit secret headers, personal contact data, all candidate addresses or raw licensed responses as fixtures. Test static ONS fixture expected totals against independently specified CSV observations, not against the implementation's own transformation.
+
+### Test layers
+
+| Layer | Cases and required evidence |
+| --- | --- |
+| Unit contracts/quality | All result variants; null vs zero; observation references/units; source/evidence-kind separation; effective/retrieval/publication dates; unknown version; missing source fields; freshness by observation date, not download time; policy raw prohibition. |
+| Transport contracts | Timeout/caller cancellation, auth/config failure, 429/Retry-After, 5xx/network, redirect, wrong MIME/invalid JSON, malformed/oversized/truncated stream, pagination budget and exact attempt bounds. Assert no retry on auth/invalid schema or unapproved billable ambiguity. |
+| Adapter fixtures | TfL ID/mode/location mapping; FSA header/paging/missing geocodes/recycled-ID limitations/food vs salon eligibility; ONS CSV fields/units/area universe/duplicate/suppression/join mismatch. Zero calls for not-applicable/unsupported/policy-blocked. |
+| Batch/cache | Parallel cap, one failure plus other success, deadline/abort, normalised cache hit and origin acquisition time, TTL/policy invalidation, stale cache bypass, no cross-user private cache, duplicate logical request, distinct new analysis and partial outcome replay. |
+| Database/security | Fresh complete migrations; own/other/anon/service-role tests; same-analysis input/property/request/snapshot FKs; duplicate concurrent claim/commit; stale lease rejection; ready collection denied; context/snapshot UPDATE/DELETE denied even via ordinary trusted write path; licensed deletion controlled separately. |
+| Spatial/bulk integration | Real PostGIS extension, CRS axis order and metre distance; independent polygon fixtures, inside/outside/on-edge/multiple matches; GiST lookup plan on representative London import; version pins/old-release reads; corrupt/partial imports cannot activate; repeated import no duplicate release. |
+| Optional live development probes | Actual TfL/FSA requests and real locally ingested London ONS lookup through the same normalised/persistence path; safe counts/IDs/field presence/timestamps/versions only. No fixed live business counts or claims about suitability. Hosted SQL verifies policy/lease/immutability; rolled-back fixtures/disposable analyses removed after checks. |
+| Regression and delivery | `npm ci`, `npm run check`, production `npm run check:public`; existing Auth/Blog/address behaviour and six-width/keyboard regression if affected; hosted migration/security verification; no-secret source/bundle/HTML/log/request review; protected PR exact-head CI/merge and clean synchronized main. Paid calls stay out of CI. |
+
+PGlite currently has no spatial plugin configured. Its [extension documentation](https://pglite.dev/extensions/) lists a separate PostGIS package, so first verify compatibility with the pinned PGlite/version on Windows and Linux. Preferred approach: add the compatible audited **development-only** plugin to the existing full-migration test harness and keep separate real hosted PostGIS tests. If incompatible, use a fresh real PostgreSQL 17/PostGIS CI service for the complete migration suite, with a documented local equivalent; do not mock PostGIS or omit its migration and claim a complete rebuild. This capability check precedes spatial migrations.
+
+### Phase 5 Definition of Done
+
+These are future acceptance gates, all unchecked today:
+
+- [ ] Plan explicitly approved; London-only operational documentation and provider directions reconciled without UI/copy/pricing changes.
+- [ ] Internal contracts isolate provider DTOs and validate every payload/result; provenance resolves to permitted observations and explicit source/release versions.
+- [ ] Every enabled source has reviewed separate raw/normalised/derived/reference/timestamp permissions, durations, attribution, cache and historical-report/export compatibility; unknown policy blocks persistence.
+- [ ] Source reviews compare sufficient free official alternatives, incremental decision value and per-report cost; usage-based validation is preferred and no avoidable fixed recurring commitment is made before revenue.
+- [ ] Three real proof adapters (ONS local, TfL, conditional FSA) work through the framework in development; unavailable sources are not represented as verified integrations.
+- [ ] London local releases import/validate/activate reproducibly; changing the active version leaves earlier analysis snapshots unchanged.
+- [ ] Real PostGIS tests and fresh complete migration/security execution pass in CI and hosted development; no applied history edited or new client write grants.
+- [ ] Timeouts, authentication failures, rate limits, invalid/empty/partial responses, missing/stale datasets, unsupported precision/geography/category, raw-storage prohibition and cache hits pass independent tests.
+- [ ] Source failure preserves other outcomes; concurrency/retry/page/deadline limits are enforced; cache/lease/cost metadata is truthful and safe.
+- [ ] Duplicate concurrent requests commit one snapshot; retry/replay cannot overwrite it; new analysis creates new lineage; crash/billing uncertainty is surfaced rather than claimed exactly-once.
+- [ ] Context and snapshots are immutable; ready records cannot trigger collection; full report/AI/PDF generation remains absent and D60 later-phase obligations remain documented.
+- [ ] Privileged integrations are server-only; actual configured secrets do not appear in source, browser bundles, HTML, logs or client network requests. No new public collection route.
+- [ ] Local/CI/runtime and relevant hosted checks pass with actual evidence; protected Preview is verified where framework deployment is applicable, with no Production activation.
+- [ ] Framework status/policies/runbook updated; protected delivery completed; final main matches origin and working tree clean; Phase 6 has not started.
+
+## J. Security and operational requirements
+
+Reuse existing Supabase configuration and request-scoped privileged repository pattern. Do not serialise `SUPABASE_SECRET_KEY`, provider tokens, client construction options or raw result envelopes to React. Build/public pages must still work without external keys. Optional live checks validate development project identity before writes; no Production dataset/schema/test changes.
+
+Proposed environment/configuration after approval:
+
+| Name | Scope and purpose | Required now? |
+| --- | --- | --- |
+| Existing Supabase URL/publishable/secret and Postio names | Existing Auth/property roles unchanged; trusted new repository uses secret only server side. | Already privately configured; no values requested. |
+| `TFL_APP_KEY` | New server-only TfL subscription key; ignored `.env.local` and encrypted Preview-only development configuration. TfL uses a query parameter, so never log full request URLs. | Needed for recommended controlled live TfL proof, not planning/build/CI. |
+| `DATA_SERVICE_REGION` | Non-secret deployment configuration, initially `london`; absent/unknown must fail closed for collection, not affect public rendering. | Proposed only; no setting added. |
+| `DATA_SOURCE_PROBES_ENABLED` | Explicit development script guard; default false, forbidden in Production. Not a public endpoint toggle. | Proposed only. |
+| Import connection/access | Use authenticated Supabase CLI where supported or temporary process-only development connection supplied securely for streaming imports; do not invent a password requirement or commit a DSN. | Exact import transport validated in its step. |
+| ONS/FSA | Initial public downloads/API need no application key according to reviewed documentation. | Verify chosen endpoints before live use. |
+| Future OS/Foursquare/Valhalla/Google/AI/Stripe names | Define only in their authorised integration phase; portal/import token stays in importer memory, not customer runtime. | Not introduced by Phase 5 proof. |
+
+Rate/quota/budget settings live in reviewed source configuration, not dozens of ad hoc env knobs. Require allowed origins/paths, URL construction from validated coordinates/IDs, disabled redirects, streaming byte limits, explicit page limits and cancellation. No arbitrary URL fetch/proxy, SSRF surface or secrets in query logs. Malicious provider text is untrusted data and cannot set operations, SQL, endpoints or future AI instructions. Keep imported data/outputs outside Git unless explicitly licensed fixtures; restrict private storage/import artefacts and delete temporary data under policy.
+
+Use durable request leases for framework correctness across processes; per-source concurrency/quotas must be verified before making framework calls publicly accessible in a later phase. Existing address rate counters remain a documented Production limitation; do not silently redesign that UI/API during framework implementation. Review log retention and data minimisation separately from licensed historical report retention.
+
+## K. Implementation sequence
+
+Execute one step at a time only after plan approval. Each step's files are proposed, not created by this task; timestamps/dependency versions are selected and verified during execution.
+
+| Step | Single purpose and likely files | Dependencies | Tests and objective completion |
+| --- | --- | --- | --- |
+| 5.0 | Reconcile authority and source policies: `AGENTS.md`, product/decisions/architecture/roadmap/data-sources/testing/infrastructure; new `docs/provider-policies/{ons,tfl,fsa}.md`, initial `docs/phase-5-status.md`. | Explicit plan approval; official term/endpoint review. | Cross-links/scope consistency; permissions for all five artefact classes recorded with durations or explicit unverified blocks. No UI/application change. London decision accepted; detailed mechanics labelled proposed until implemented. |
+| 5.1 | Define internal contracts and runtime validation: `lib/data/contracts.ts`, `validation.ts`, `errors.ts`; `lib/spatial/model.ts`; `tests/data-contracts.test.ts`. | 5.0. | Independent valid/invalid result/lineage/date/null/unit/precision cases pass; no provider DTO/AI/calculation dependency escapes. Contract version 1 documented. |
+| 5.2 | Verify spatial test/runtime capability: minimal test-harness/package/CI changes only if needed; `tests/database.test.ts`, package/lockfile, `.github/workflows/ci.yml`. | 5.1; hosted extension inventory read; dependency compatibility/audit. | Same fresh migration suite works with real PostGIS on Windows/Linux path and hosted capability is confirmed. No skipped SQL or fabricated spatial success. Resolve harness choice before migrations. |
+| 5.3 | Add immutable context/request/snapshot integrity: one new migration, generated `lib/supabase/database.types.ts`, `snapshot-repository.ts`, `supabase/tests/data-framework.sql`. | 5.1/5.2. | Rebuild/hosted rolled-back suites, grants/RLS/composite FKs, concurrent claims, stale leases and immutable/ready guards pass. No analysis API/state machine. |
+| 5.4 | Add spatial/local-release schema and bounded RPCs: second new migration, generated types, `lib/spatial/repository.ts`, `geography.ts`, `supabase/tests/spatial.sql`. | 5.2/5.3; approved boundary asset policy. | CRS/bounds/edge ambiguity/versions/RLS tests pass on actual PostGIS. Private schemas not exposed; no walking/demand calculation. |
+| 5.5 | Import one London baseline release: `scripts/data/import-london-baseline.ts`, import fixtures/tests, region manifest and runbook. | 5.4; exact ONS boundary/lookup/TS001 URLs, licences and checksums verified. | Streamed import filters London, validates joins/duplicates/counts; broken import never activates; identical reimport reuses release; new version leaves old content intact. Script never imported into app. |
+| 5.6 | Implement source policy/registry, bounded transport/cache/telemetry: `policy.ts`, `registry.ts`, `coverage.ts`, `regions/london.ts`, `transport.ts`, `cache.ts`, `telemetry.ts`; focused tests. | 5.1/5.3; reviewed source limits. | Raw restriction/default-deny, redaction, timeout/retry/page budgets, eligibility and cache invalidation tests pass. Existing Postio behaviour unchanged; no extra provider requests. |
+| 5.7a | Implement ONS local adapter: `adapters/ons-local.ts`, tests. | 5.5/5.6. | Real pinned London release queries produce dated validated observations with zero external per-lookup download; unknown/missing/stale/ambiguous inputs remain explicit. |
+| 5.7b | Implement TfL adapter only: `adapters/tfl.ts`, permitted/synthetic fixtures/tests; blank `TFL_APP_KEY` template and infrastructure docs. | 5.6; exact operation/schema/terms and account key securely configured for live gate. | Contract failures/retries/quota/key-redaction pass; opt-in actual StopPoint normalisation verified. No arrivals/journey/footfall feature. Can be implemented independently of 5.7a. |
+| 5.7c | Implement FSA adapter only: `adapters/fsa.ts`, fixtures/tests. | 5.6; endpoint/terms review. | Food lookup normalises permitted records; salon makes zero calls; header/paging/missing location/partial response cases pass; live proof verified separately. No ranking/history/rating imagery. |
+| 5.8 | Compose finite retrieval batch/idempotent snapshots: `collect.ts`, `tests/data-collect.test.ts`, development `verify-framework.ts`, package probe command and status evidence. | 5.3 plus all 5.7 proof adapters. | Concurrent duplicate test commits one snapshot; partial success, cancellation, cache provenance, cost uncertainty and ready denial pass. Actual three-source development persistence verified and disposable fixture records cleaned; no analysis status advancement. |
+| 5.9 | Complete framework regression/security/operational documentation and protected delivery: tests/policies/status/runbook, safe CI changes if required. | All previous gates, required human external access resolved. | `npm ci`, lint/types/all tests/build/runtime/hosted checks and applicable Preview/secret checks observed; exact-head required CI passes before protected merge; clean main/origin; Phase 6 not begun. |
+
+Do not combine account acquisition, unrelated UI polish, multiple future source categories and framework changes in one step. If a provider gate is missing, continue independent contract/database/import work within the approved step scope, record the blocker and never declare Phase 5 complete with an unverified required adapter.
+
+## L. Risks, recommended decisions and external dependencies
+
+| Risk/open decision | Recommended treatment | Gate/owner |
+| --- | --- | --- |
+| London definition and border precision | Administrative Greater London manifest; require verified geography or explicitly provisional/unsupported context. Preserve generic contracts. | Plan approval; technical asset verification before 5.5. |
+| Property identity/exact point | Keep Postio UDPRN selection. Later licensed OS/equivalent match with ambiguity and independent versioned coordinates; OS Open UPRN alone cannot identify an address. | Account/retention/cost choice before exact site analysis in 6/8; not this proof. |
+| Licensing versus immutable report | Separate raw/normalised/derived/reference/timestamp durations, default raw discard; refuse incompatible report use. OGL imagery/personal fields/third-party notices reviewed separately. | Every source enablement; material contract/budget approval when needed. |
+| Foursquare access/dependency | Preferred persistent London POI core remains; validate portal token/export and selected release/Apache terms, don't rely on an old public S3 URL or Google cache. | Later Phase 8 access/licensing/import feasibility. |
+| Routing/performance | Keep Valhalla+OSM direction; operate pinned graph outside Vercel request build, with storage/memory/cost assessment and routing tests. | Phase 8 infrastructure approval; no public demo dependency. |
+| Spatial migrations break current tests | Capability step before migrations; compatible dev PostGIS plugin or real CI PostGIS service, always full rebuild. | 5.2, blocking spatial completion if unresolved. |
+| Data freshness/quality | Retain census vintage, source-effective dates, estimate labels, suppression and proxy precision; never infer current demand or property location from retrieval time. | Contracts/proof now; sufficiency rules in 6/11. |
+| Bulk import size/DB quota | London subsets, streaming/staging, GiST indexes, bounded queries and measured import/storage/query plans; no full-country serving inventory. | 5.5, actual dev quota verification; upgrade only with user budget approval. |
+| Cost/duplicate billing | Durable lease/snapshot idempotency, request reservations and explicit uncertain billing; no paid timeout retry by default. | 5.3/5.8; budgets approved before paid provider work. |
+| Paid source value and recurring commitments | Prefer adequate free official evidence. Require a concrete decision-output improvement and per-report cost review for paid sources; prefer metered validation and avoid fixed recurring costs before revenue unless technically unavoidable. | Source acceptance record before enablement; user approval before commercial commitment. |
+| Provider failure and partial coverage | Independent source outcomes; unavailable is not absence. No silent paid substitution or completed-report refresh. | 5.6–5.8; later report engine decides material sufficiency. |
+| Future schema migration | Nullable framework additions for existing foundation rows; new writers enforce versioned contracts; append new releases/snapshots; keep original FK/RLS semantics. | Migration/type/security review, no applied-history edits. |
+| Retention/privacy deletion | No promise of unrestricted perpetual raw data retention; licensed immutable representation plus explicit audited deletion/access policy. Reopening never regenerates deleted evidence. | Source policy now, user-approved legal/retention/access policy before launch. |
+| Real category benchmarks missing | Reuse recorded London postal references for framework plumbing; synthetic category/failure fixtures; request genuinely real category/economics expectations only in their phase. | Non-blocking for planning/framework; later 6/10 benchmark gates. |
+
+Open external dependencies for execution: exact official London region/OA/lookup assets and licences; TS001 selected release/checksum; hosted PostGIS extension capability and dev/CI plugin compatibility; TfL subscription/key/quota/terms/operation; FSA endpoint limits and permitted retained fields; development import transport/storage budget. None requires credentials in chat, none blocks producing this plan. Foursquare/OS/routing/Google/AI/Stripe access belongs later and is not acquired for planning.
+
+Decisions requiring user action: **review and explicitly approve this implementation plan before any Phase 5 execution**; securely configure a TfL development key when its live step is authorised; approve any actual commercial licence/budget or infrastructure upgrade that technical verification identifies as necessary. Keep values in ignored `.env.local` and encrypted Preview-only settings; send only non-secret completion confirmation. No new architectural question is needed now: the choices above are recommendations ready for review. New benchmark addresses, formulas, purchase policy and launch copy are not Phase 5 planning blockers.
+
+## Review checklist at the end of this plan
+
+| Requested item | Plan location and recommendation |
+| --- | --- |
+| Phase 5 objective | B: server-side licence-aware retrieval and immutable source snapshots, proved by three London adapters. |
+| In scope | B: contracts, bounded retrieval/policy/cache/ledger, context/snapshots, PostGIS/local baseline and proof adapters/tests. |
+| Out of scope | B: no UI/copy changes, Phase 6+ engines, AI/payment/report/PDF execution, national expansion or universal ETL. |
+| Current repository state | A: actual address implementation, two migrations/fifteen tables, environment-name inspection and 43 passing tests; remaining gaps explicit. |
+| Proposed architecture | C/G/H: small explicit registry, isolated adapters, typed normalisation, provenance/quality/error contracts and configurable coverage. |
+| Database changes proposed | D: context/request ledger and snapshot additions; private versioned releases/geography/statistics; real PostGIS and immutability guards; no migration created. |
+| Data source classification matrix | E: all London V1 categories, access/credentials/live-or-local/refresh/retention/fallback/section purpose and verification limits. |
+| First adapters recommended | F: ONS local TS001, TfL StopPoint and food-conditional FSA; retain existing Postio; POI/routing/property enrichment have later gates. |
+| Implementation sequence | K: individually testable 5.0–5.9 steps with files, dependencies and completion conditions. |
+| Testing strategy | I: deterministic unit/contract/SQL/spatial/cache/lease tests, opt-in actual development probes and regressions; no paid CI calls. |
+| Definition of Done | I: fourteen unchecked observable framework gates, including source value/cost acceptance; no implementation success claimed. |
+| Risks | L: precision, licensing, versions, cost, failure, performance, extension compatibility and future migrations. |
+| Open external dependencies | L: official assets/policies, real spatial capability and TfL access; later-provider access deferred. |
+| Decisions requiring user action | L: explicit plan approval, secure TfL setup when needed, material commercial/infrastructure approval only. |
+
+**STOP: Phase 5 is not implemented. Do not execute this plan until the owner has reviewed and explicitly approved it.**
