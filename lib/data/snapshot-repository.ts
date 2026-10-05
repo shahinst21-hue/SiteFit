@@ -4,6 +4,7 @@ import type { CollectionContext, ProviderResult, SnapshotRepository, SourceId, S
 import { SourceError } from "./errors.ts";
 import { object, uuid, validateContext, validateResult } from "./validation.ts";
 import { frameworkClient } from "./server-client.ts";
+import { assertPolicy } from "./policy.ts";
 
 type Preparation = Pick<CollectionContext, "region" | "geography" | "releases">;
 function json(value: unknown): Json { return value as Json; }
@@ -41,6 +42,7 @@ export function snapshotRepository(): SnapshotRepository & { prepare(analysisId:
     },
     async append(context: CollectionContext, key: string, hash: string, value: ProviderResult) {
       const result = validateResult(value);
+      assertPolicy(result.meta.licence);
       if (!result.meta.licence.normalised.allowed || !result.meta.licence.references.allowed || !result.meta.licence.timestamps.allowed) throw new SourceError("licence_blocked");
       const { data, error } = await client.rpc("append_sitefit_snapshot", { p_analysis_id: context.analysisId, p_input_id: context.inputId, p_collection_key: key, p_request_sha256: hash, p_result: json(result) });
       if (error || !data) throw new SourceError("persistence_failed");
