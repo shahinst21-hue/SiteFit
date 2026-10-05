@@ -73,9 +73,9 @@ try {
   // Re-staging proves identical validated artifacts select the same immutable identities.
   const geoAgain = await stage("london-geography", "OA2021-BFC-V8-region2021-BFC-lookup-V3-import2", geographies, `${arcgisRoot}${services.oa}/FeatureServer/0`);
   const popAgain = await stage("TS001", "Census2021-TS001-bulk-import1", counts, censusUrl, geo.id);
-  if (geoAgain.id !== geo.id || popAgain.id !== pop.id) throw new Error("Identical release reuse failed.");
+  if (geoAgain.id !== geo.id || popAgain.id !== pop.id || geoAgain.state !== "ready" || popAgain.state !== "ready") throw new Error("Identical ready release reuse failed.");
   await mkdir("supabase/.temp", { recursive: true });
-  await writeFile("supabase/.temp/london-baseline-manifest.json", JSON.stringify({ ...manifest, geography: geo, population: pop, normalisedBytes: size }, null, 2));
+  await writeFile("supabase/.temp/london-baseline-manifest.json", JSON.stringify({ ...manifest, geography: geoAgain, population: popAgain, normalisedBytes: size }, null, 2));
   await unlink("supabase/.temp/london-import-normalised.json");
   console.log(JSON.stringify({ geographyRelease: geo.id, populationRelease: pop.id, oaCount: counts.length, normalisedBytes: size, identicalReuse: true, rawPersisted: false }));
 } catch (error) { console.error(`London baseline import failed at ${stageName}. ${error instanceof Error && /^download_status_\d+$/.test(error.message) ? error.message : "No secret/provider error body logged."} Release activation is not assumed.`); process.exitCode = 1; }

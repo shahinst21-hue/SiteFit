@@ -1,6 +1,6 @@
 # Phase 5 status: Data Integration Framework
 
-Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase5_plan.md), including its proportionality reassessment, and authorised Steps 5.0–5.9. **In progress, not complete.** Phase 6 remains unauthorised. No customer analysis route, engine, payment, AI, report writer or PDF is included.
+Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase5_plan.md), including its proportionality reassessment, and authorised Steps 5.0–5.9. **Implementation and verification complete; protected delivery pending.** Phase 6 remains unauthorised. No customer analysis route, engine, payment, AI, report writer or PDF is included.
 
 ## Step evidence
 
@@ -17,7 +17,7 @@ Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase
 | 5.7b | Complete | Server-only StopPoint adapter normalises IDs/names/modes/explicit coordinates, with bounded registered-key transport. Three synthetic schema/empty/partial/auth/precision/key-redaction tests, lint/types/build pass. Actual canonical-centroid 500m query returned HTTP 200 and 22 normalised stops in one call; no raw response/key returned. Provider total/page/centre metadata are unpopulated/inconsistent, so result is honestly partial, not complete. Independent PostGIS check observed a furthest returned point at 527.109m: radius describes the provider request, not certified geodesic selection; explicit limitations retained. Framework persistence/replay follows 5.8. |
 | 5.7c | Complete | Food-conditional, server-only FSA v2 adapter retains permitted identity/type/authority/nullable geocode fields only. Three schema/category/paging/partial-failure tests, lint/types/build pass. Actual 500m centroid query returned 200 normalised records in two calls; the page cap makes this explicitly partial, not exhaustive competition. No ratings, address/contact data or raw response retained. Analysis-bound persistence follows 5.8. |
 | 5.8 | Complete | Owner-bound repository and finite three-source collector reload frozen context, pre-read stored outcomes, hash versioned requests, coalesce process-local work and append-or-return the stored winner. Seven collector tests cover race/replay/failure/cache/expiry/deadline/cancellation/tampering/persistence/serial limits. Full 76-test suite and lint/types/build pass. Opt-in hosted verify:framework passed: actual ONS 1 observation, TfL 22 stops, FSA 200 establishments persisted; exact replay makes zero provider calls; independent clients return one winner; new analysis/cache lineage, failed-source preservation/unavailable replay, owner denial, ready/late-write denial and original ready snapshot passed. Private summaries persisted; synthetic fixtures/events removed and triggers restored. |
-| 5.9 | Not started | Complete regression/security/hosted/Preview/CI/protected delivery. |
+| 5.9 | Validation complete; delivery pending | Clean npm ci/audit (zero findings), lint/strict types/all 77 tests/production build passed. Production-server public smoke (13 pages/articles, metadata, JSON-LD, sitemap/robots/social/404 and four safe address boundaries), Supabase Data API and hosted Auth/session/sign-out/replay passed; Auth fixtures removed. All five hosted SQL suites passed rolled back; local/remote five-migration history matches. Browser Home at six widths plus checker/Pricing/Sample/Blog/Login at 390px: one H1/no overflow, Menu Enter/Escape and empty-postcode keyboard error/focus passed; console errors zero. Protected Preview at 1b99734 verified, 12 actual JS assets plus HTML/logs scanned. Exact final-head CI/protected merge/post-merge clean main gate remains. |
 
 ## Architecture and scope
 
@@ -31,10 +31,38 @@ Owner confirmed TfL keys configured locally; expected server-only variable mappe
 
 ## Definition of Done
 
-All fourteen [plan gates](phase5_plan.md#phase-5-definition-of-done) remain outstanding except explicit owner approval. Completion will record actual local, CI, hosted SQL, spatial/import, integration, immutability/replay/failure and Preview evidence separately. No earlier phase's live result is treated as new Phase 5 proof.
+The first thirteen [approved plan gates](phase5_plan.md#phase-5-definition-of-done) are verified below; final protected delivery is still pending.
+
+- [x] Explicit approval, London authority and provider direction; UI/copy/pricing/design unchanged.
+- [x] Runtime-validated internal contracts and traceable permitted observations/versions.
+- [x] Reviewed five-class licences/retention/cache/attribution; unknown policy/raw persistence denied.
+- [x] Adequate free official sources and incremental value/cost reviewed; no new commercial or fixed recurring commitment.
+- [x] Real ONS/TfL/food-conditional FSA proof through framework, with partial results labelled.
+- [x] Reproducible immutable London releases/version changes and old-history preservation.
+- [x] Genuine PostGIS/fresh full migrations/security plus hosted SQL; applied history/client grants unchanged.
+- [x] Independent failure/timeout/auth/rate/schema/empty/partial/stale/precision/category/licence/cache tests.
+- [x] Failure isolation and finite concurrency/page/attempt/deadline bounds; safe summaries and honest cost metadata.
+- [x] Single persisted winner, stored partial/unavailable replay, local coalescing and independent new lineage; no exactly-once claim.
+- [x] Immutable exact input/property/snapshot binding, canonical-refresh preservation and ready/late-write denial; future report/AI/PDF freeze remains documented.
+- [x] Server-only integration; configured secrets absent from inspected source/history/client artefacts/observed requests/own logs; no public collection endpoint.
+- [x] Actual local/CI/runtime/hosted/Preview verification; Production remains disabled.
+- [ ] Final documentation/protected merge/post-merge CI, main==origin/main and clean working tree; Phase 6 remains unauthorised.
+
 
 ## Deviations
 
 Step 5.5 encountered an actual official BFC V8 invalid self-touching ring (OA E00018302). The first import correctly stopped inactive after 17,200 features. A narrow third migration adds explicitly versioned, opt-in PostGIS MakeValid polygon normalisation only when the EPSG:27700 area difference is ≤0.01m²; the observed source case differs by 3.64e-12m². Materially changed/empty/invalid repairs remain rejected. Original response checksums, algorithm revision and per-repaired-row runtime/area metadata preserve provenance. This is a necessary source-normalisation repair, not deferred execution hardening; it changes no ready history or product scope. Independent synthetic zero-area and materially changed polygon tests passed before the successful import resumed.
 
 Step 5.8 observed bounded snapshot read/write transfers sometimes exceeded two seconds, aborting safely without a successful reference. Snapshot envelope transfer now has an eight-second limit within the unchanged 30-second batch deadline; ownership/context and indexed local ONS lookups keep two seconds. This is a documented operational budget adjustment, not durable execution infrastructure or a relaxed historical-integrity gate. JSONB key-order changes also exposed a cache comparison defect; structural policy comparison and its regression fixture now pass.
+
+## Final verification details — 2026-10-05
+
+Three new applied migrations: 20261005110000_data_snapshot_integrity.sql, 20261005120000_london_spatial_releases.sql, 20261005130000_bounded_boundary_normalisation.sql. Both prior applied migrations are byte-unchanged. Remote release inventory confirms ready geography 26,370 features and population 26,369 rows; tracked manifest now records verified ready states (previous importer summary retained staging states; final summaries use confirmed re-staging).
+
+Preview: https://sitefit-9suxcu3sf-shahinst21-hues-projects.vercel.app at 1b997347b206622270b7a937a685efd1609266fe was READY. Unauthenticated access redirects to Vercel SSO (302); authenticated six HTML paths/12 actual JS assets pass noindex/secret checks, private Account redirects (307), invalid postcode fails (400) without a paid call, absent collection route returns 404. Eighteen local static artefacts and configured-key scans across tracked files/branch Git patches/HTML/bundles/observed request payloads/own Preview logs pass. Provider-owned logs were not inspected. Framework runs only from the explicitly opted-in development CLI, so no TfL Preview key/new customer data route is required.
+
+Linux push and PR CI at 1b99734 passed both required jobs including real PostGIS/fresh SQL and production HTTP smoke. Exact final-head checks and protected delivery follow PR #13; branch protection is strict, includes admins and requires the lint/types/tests/build check. No bypass or Production enablement.
+
+## Known limits and later gates
+
+Census 2021 is a dated OA resident baseline, not current demand or catchment totals. Selected point is a postcode centroid, not the premises. TfL completeness/radius selection is unverified; FSA is capped at two pages and not exhaustive competition. Source-effective/publication/release dates stay null when unavailable. Cross-border coverage is unassessed; later exact geography/sufficiency and metric rules must qualify it. TfL retention is conditional on licence validity; notices/retention/access and complete report/AI/PDF freezing remain later rollout obligations. Import is manual, near its 200MB normalised input bound, with measured capacity review before additional releases. Process quotas/cache/coalescing are not distributed guarantees. All documented durable lifecycle/lease/dispatch/ledger/reservation/shared-cache/workflow hardening remains deferred at its real triggers. No Phase 6 code or customer analysis lifecycle was started. No Phase 5 external owner action remains unresolved.

@@ -1,6 +1,6 @@
 # Phase 5 implementation plan: Data Integration Framework
 
-Prepared 2026-10-05. **Planning only; implementation awaits explicit approval.** Assessed baseline: `9f0cd5b976b3bc0687047cd5a203d8d77156db2f`, clean `main`, matching `origin/main` after fetch. This document contains recommendations, not implemented services, migrations, verified new integrations or accepted financial/report rules.
+Prepared 2026-10-05. **Approved by the owner on 2026-10-05; Steps 5.0–5.8 implemented and verified, final Step 5.9 delivery gated.** Sections describing the assessed repository/planning task are the historical approval baseline; actual implementation/evidence and deviations are recorded in [phase-5-status.md](phase-5-status.md). Assessed baseline: `9f0cd5b976b3bc0687047cd5a203d8d77156db2f`, clean `main`, matching `origin/main` after fetch. This document contains recommendations, not implemented services, migrations, verified new integrations or accepted financial/report rules.
 
 The owner's new instruction makes **SiteFit V1 London only**. This supersedes the UK-wide launch direction for future implementation. Preserve a path to other English locations through configuration, adapters and dataset coverage. Do not change application code, UI, user-facing copy, pricing, visual design, credentials or deployed configuration during this planning task. The accepted historical-report decision D60 remains binding. Approval of this plan will be required before executing any step below.
 
@@ -394,19 +394,19 @@ PGlite currently has no spatial plugin configured. Its [extension documentation]
 
 These are future acceptance gates, all unchecked today:
 
-- [ ] Plan explicitly approved; London-only operational documentation and provider directions reconciled without UI/copy/pricing changes.
-- [ ] Internal contracts isolate provider DTOs and validate every payload/result; provenance resolves to permitted observations and explicit source/release versions.
-- [ ] Every enabled source has reviewed separate raw/normalised/derived/reference/timestamp permissions, durations, attribution, cache and historical-report/export compatibility; unknown policy blocks persistence.
-- [ ] Source reviews compare sufficient free official alternatives, incremental decision value and per-report cost; usage-based validation is preferred and no avoidable fixed recurring commitment is made before revenue. Any unexpected material paid exposure triggers commercial protection review before enablement; deferred machinery is not silently waived.
-- [ ] Three real proof adapters (ONS local, TfL, conditional FSA) work through the framework in development; unavailable sources are not represented as verified integrations.
-- [ ] London local releases import/validate/activate reproducibly; changing the active version leaves earlier analysis snapshots unchanged.
-- [ ] Real PostGIS tests and fresh complete migration/security execution pass in CI and hosted development; no applied history edited or new client write grants.
-- [ ] Timeouts, authentication failures, rate limits, invalid/empty/partial responses, missing/stale datasets, unsupported precision/geography/category, raw-storage prohibition and cache hits pass independent tests.
-- [ ] Source failure preserves other outcomes; concurrency/retry/page/deadline limits are enforced; cache/execution-summary/cost metadata is truthful and safe; unknown cost stays unknown.
-- [ ] Concurrent append commits one snapshot; stored-outcome replay and process-local coalescing work; independent instances may duplicate retrieval but cannot overwrite history; new analysis creates new lineage. No exactly-once upstream/billing or crash recovery claim.
-- [ ] Context on exact input versions and snapshots are immutable; canonical refresh cannot alter them; ready records cannot trigger collection or accept late writes; full report/AI/PDF generation remains absent and D60 later-phase obligations remain documented.
-- [ ] Privileged integrations are server-only; actual configured secrets do not appear in source, browser bundles, HTML, logs or client network requests. No new public collection route.
-- [ ] Local/CI/runtime and relevant hosted checks pass with actual evidence; protected Preview is verified where framework deployment is applicable, with no Production activation.
+- [x] Plan explicitly approved; London-only operational documentation and provider directions reconciled without UI/copy/pricing changes.
+- [x] Internal contracts isolate provider DTOs and validate every payload/result; provenance resolves to permitted observations and explicit source/release versions.
+- [x] Every enabled source has reviewed separate raw/normalised/derived/reference/timestamp permissions, durations, attribution, cache and historical-report/export compatibility; unknown policy blocks persistence.
+- [x] Source reviews compare sufficient free official alternatives, incremental decision value and per-report cost; usage-based validation is preferred and no avoidable fixed recurring commitment is made before revenue. Any unexpected material paid exposure triggers commercial protection review before enablement; deferred machinery is not silently waived.
+- [x] Three real proof adapters (ONS local, TfL, conditional FSA) work through the framework in development; unavailable sources are not represented as verified integrations.
+- [x] London local releases import/validate/activate reproducibly; changing the active version leaves earlier analysis snapshots unchanged.
+- [x] Real PostGIS tests and fresh complete migration/security execution pass in CI and hosted development; no applied history edited or new client write grants.
+- [x] Timeouts, authentication failures, rate limits, invalid/empty/partial responses, missing/stale datasets, unsupported precision/geography/category, raw-storage prohibition and cache hits pass independent tests.
+- [x] Source failure preserves other outcomes; concurrency/retry/page/deadline limits are enforced; cache/execution-summary/cost metadata is truthful and safe; unknown cost stays unknown.
+- [x] Concurrent append commits one snapshot; stored-outcome replay and process-local coalescing work; independent instances may duplicate retrieval but cannot overwrite history; new analysis creates new lineage. No exactly-once upstream/billing or crash recovery claim.
+- [x] Context on exact input versions and snapshots are immutable; canonical refresh cannot alter them; ready records cannot trigger collection or accept late writes; full report/AI/PDF generation remains absent and D60 later-phase obligations remain documented.
+- [x] Privileged integrations are server-only; actual configured secrets do not appear in source, browser bundles, HTML, logs or client network requests. No new public collection route.
+- [x] Local/CI/runtime and relevant hosted checks pass with actual evidence; protected Preview is verified where framework deployment is applicable, with no Production activation.
 - [ ] Framework status/policies/runbook updated; protected delivery completed; final main matches origin and working tree clean; Phase 6 has not started.
 
 ## J. Security and operational requirements
@@ -512,4 +512,4 @@ Decisions requiring user action: **review and explicitly approve this implementa
 
 The ten mechanism decisions and retained/simplified/deferred/removed labels are in the proportionality reassessment above. `Deferred Production Hardening` gives the concrete rollout trigger and migration path for every deferral. The revised recommendation is to approve this bounded integrity foundation, not the previous durable execution platform.
 
-**STOP: Phase 5 is not implemented. Do not execute this plan until the owner has reviewed and explicitly approved it.**
+**Phase gate: owner approval authorised Phase 5 only. Do not begin Phase 6 without a new explicit instruction. Actual delivery/completion evidence belongs in phase-5-status.md.**

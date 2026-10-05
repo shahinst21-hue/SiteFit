@@ -103,3 +103,14 @@ test("per-source serial bound holds across distinct collections; telemetry failu
   await Promise.all(["one","two","three"].map(key=>run.collectSources(context(),["tfl-stop-points"],key)));
   assert.equal(maximum,1); assert.equal(s.rows.size,3); assert.equal(options.coordination.size(),0);
 });
+test("unknown/manual precision and non-food category persist explicit exclusions with zero retrievals", async () => {
+  const s = store(), local = adapter("ons-population"), transport = adapter(), food = adapter("fsa-establishments");
+  const c = context(); c.selectedProperty.point = null; c.geography = null; c.region.eligible = false; c.region.method = "unknown";
+  s.repository.context = async () => structuredClone(c);
+  const run = collector(s.repository,[local.value,transport.value,food.value],opts());
+  const unknown = await run.collectSources(c,["ons-population","tfl-stop-points","fsa-establishments"],"manual");
+  assert.ok(unknown.outcomes.every(o=>o.outcome==="unsupported"&&o.snapshot?.result.payload===null));
+  c.businessType="hair-salon";c.category="hair-beauty-salon";
+  const salon=await run.collectSources(c,["fsa-establishments"],"salon");assert.equal(salon.outcomes[0].outcome,"not_applicable");
+  assert.equal(local.calls()+transport.calls()+food.calls(),0);assert.equal(s.rows.size,4);
+});

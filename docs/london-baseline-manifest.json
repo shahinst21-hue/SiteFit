@@ -5,12 +5,12 @@
   "effectiveAt": "2021-03-21T00:00:00Z",
   "geography": {
     "id": "248a9600-59cb-4fbe-9791-d64f9cb28aa1",
-    "state": "loading",
+    "state": "ready",
     "hash": "a6021f1a5cb28848d12086ed12d8ac67a1663d0e3029cbf1da6bf9fa4d974b62"
   },
   "population": {
     "id": "c28f310e-81f9-4384-9f78-71570a308e50",
-    "state": "loading",
+    "state": "ready",
     "hash": "2f4031359bd142772694245532727eaac7753763fa75046a763fed15abdc9c93"
   },
   "oaCount": 26369,
@@ -33,5 +33,6 @@
   "attribution": [
     "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
     "Contains OS data © Crown copyright and database right 2021"
-  ]
+  ],
+  "verifiedAt": "2026-10-05"
 }
