@@ -1,5 +1,5 @@
 import { SourceError } from "./errors.ts";
-import { sourceIds } from "./contracts.ts";
+import { sourceIds, errorCodes } from "./contracts.ts";
 import type { CollectionContext, ProviderResult } from "./contracts.ts";
 import { validPoint } from "../spatial/model.ts";
 
@@ -11,7 +11,12 @@ export function text(value: unknown, max = 500): value is string {
   return typeof value === "string" && value.length > 0 && value.length <= max && Array.from(value).every(c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) !== 127);
 }
 export function uuid(value: unknown): value is string { return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value); }
-export function timestamp(value: unknown): value is string { return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.test(value) && Number.isFinite(Date.parse(value)); }
+export function timestamp(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.test(value) || !Number.isFinite(Date.parse(value))) return false;
+  const year = Number(value.slice(0,4)), month = Number(value.slice(5,7)), day = Number(value.slice(8,10));
+  const days = [31, year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28, 31,30,31,30,31,31,30,31,30,31];
+  return month >= 1 && month <= 12 && day >= 1 && day <= days[month - 1];
+}
 export function reference(value: unknown): value is string {
   if (!text(value, 1000)) return false;
   try { const u = new URL(value); return u.protocol === "https:" && !u.username && !u.password && !u.search && !u.hash; } catch { return false; }
@@ -63,7 +68,7 @@ export function validateResult(value: unknown): ProviderResult {
   demand((cost.money === null) === (cost.currency === null) && ["observed", "estimated", "unknown"].includes(String(cost.category)) && (cost.priceReference === null || reference(cost.priceReference)));
   demand(integer(execution.durationMs) && integer(execution.attempts, 20) && integer(execution.pages, 10) && (execution.httpStatus === null || integer(execution.httpStatus, 599)) && (execution.providerRequestId === null || /^[A-Za-z0-9-]{1,100}$/.test(String(execution.providerRequestId))));
   demand(strings(r.limitations) && Array.isArray(r.observations) && r.observations.length <= 500);
-  for (const observation of r.observations) { const o = object(observation); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === "official_public_data" && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
+  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === "official_public_data" && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
   if (["success", "partial"].includes(String(r.outcome))) {
     const p = object(r.payload); demand(p.schemaVersion === 1 && r.observations.length > 0);
     if (m.source === "ons-population") {
@@ -85,7 +90,7 @@ export function validateResult(value: unknown): ProviderResult {
       for (let index = 0; index < p.items.length; index++) demand(object(r.observations[index]).path === `items/${index}` && object(r.observations[index]).recordId === object(p.items[index]).id);
     }
   } else demand(r.payload === null && r.observations.length === 0);
-  if (r.error !== null) { const e = object(r.error); demand(text(e.code, 100) && typeof e.retryable === "boolean" && (e.status === null || integer(e.status, 599))); }
+  if (r.error !== null) { const e = object(r.error); keys(e,"code retryable status"); demand(errorCodes.includes(e.code as typeof errorCodes[number]) && typeof e.retryable === "boolean" && (e.status === null || integer(e.status, 599))); }
   demand(r.outcome !== "success" && r.outcome !== "empty" || r.error === null);
   // Limit persisted envelopes and disallow secret-bearing/raw diagnostic fields anywhere.
   const encoded = JSON.stringify(value); demand(encoded.length <= 2_000_000 && !/(?:sb_secret_|sk_live_|app_key=|"(?:authorization|headers|rawResponse|stack)"\s*:)/i.test(encoded));

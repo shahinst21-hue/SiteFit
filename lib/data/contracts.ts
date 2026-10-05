@@ -4,9 +4,10 @@ export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishmen
 export type SourceId = (typeof sourceIds)[number];
 export type Category = "coffee-shop" | "restaurant" | "hair-beauty-salon";
 export type Outcome = "success" | "partial" | "empty" | "unavailable" | "unsupported" | "not_applicable" | "policy_blocked";
-export type ErrorCode = "invalid_request" | "unsupported_geography" | "insufficient_precision" | "not_applicable" |
-  "configuration_missing" | "authentication_failed" | "permission_denied" | "rate_limited" | "timeout" | "cancelled" |
-  "network_error" | "provider_unavailable" | "invalid_response" | "dataset_missing" | "dataset_stale" | "licence_blocked" | "persistence_failed";
+export const errorCodes = ["invalid_request", "unsupported_geography", "insufficient_precision", "not_applicable",
+  "configuration_missing", "authentication_failed", "permission_denied", "rate_limited", "timeout", "cancelled",
+  "network_error", "provider_unavailable", "invalid_response", "dataset_missing", "dataset_stale", "licence_blocked", "persistence_failed"] as const;
+export type ErrorCode = (typeof errorCodes)[number];
 export type SafeSourceError = { code: ErrorCode; retryable: boolean; status: number | null };
 export type CollectionContext = {
   schemaVersion: 1; analysisId: string; inputId: string; inputVersion: number; analysisTimestamp: string;
