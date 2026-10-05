@@ -71,24 +71,30 @@ export type Database = {
       analysis_inputs: {
         Row: {
           analysis_id: string
+          context_schema_version: number | null
           created_at: string
           id: string
+          resolved_context: Json | null
           schema_version: number
           user_supplied: Json
           version: number
         }
         Insert: {
           analysis_id: string
+          context_schema_version?: number | null
           created_at?: string
           id?: string
+          resolved_context?: Json | null
           schema_version?: number
           user_supplied: Json
           version: number
         }
         Update: {
           analysis_id?: string
+          context_schema_version?: number | null
           created_at?: string
           id?: string
+          resolved_context?: Json | null
           schema_version?: number
           user_supplied?: Json
           version?: number
@@ -243,49 +249,91 @@ export type Database = {
       }
       data_snapshots: {
         Row: {
+          adapter_version: string | null
           analysis_id: string
           availability: string
+          cache_metadata: Json
+          collection_key: string | null
+          contract_version: number
           cost_metadata: Json | null
           created_at: string
+          dataset_release_id: string | null
           dataset_version: string | null
+          effective_from: string | null
+          effective_to: string | null
           expires_at: string | null
           id: string
+          input_id: string | null
+          licence_metadata: Json
+          normalisation_version: string | null
           normalised_data: Json | null
           observed_at: string | null
+          payload_sha256: string | null
           permitted_raw_reference: string | null
           provider_metadata: Json
+          quality_metadata: Json
+          request_sha256: string | null
           retrieved_at: string
           source: string
+          source_retrieved_at: string | null
         }
         Insert: {
+          adapter_version?: string | null
           analysis_id: string
           availability: string
+          cache_metadata?: Json
+          collection_key?: string | null
+          contract_version?: number
           cost_metadata?: Json | null
           created_at?: string
+          dataset_release_id?: string | null
           dataset_version?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
           expires_at?: string | null
           id?: string
+          input_id?: string | null
+          licence_metadata?: Json
+          normalisation_version?: string | null
           normalised_data?: Json | null
           observed_at?: string | null
+          payload_sha256?: string | null
           permitted_raw_reference?: string | null
           provider_metadata?: Json
+          quality_metadata?: Json
+          request_sha256?: string | null
           retrieved_at: string
           source: string
+          source_retrieved_at?: string | null
         }
         Update: {
+          adapter_version?: string | null
           analysis_id?: string
           availability?: string
+          cache_metadata?: Json
+          collection_key?: string | null
+          contract_version?: number
           cost_metadata?: Json | null
           created_at?: string
+          dataset_release_id?: string | null
           dataset_version?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
           expires_at?: string | null
           id?: string
+          input_id?: string | null
+          licence_metadata?: Json
+          normalisation_version?: string | null
           normalised_data?: Json | null
           observed_at?: string | null
+          payload_sha256?: string | null
           permitted_raw_reference?: string | null
           provider_metadata?: Json
+          quality_metadata?: Json
+          request_sha256?: string | null
           retrieved_at?: string
           source?: string
+          source_retrieved_at?: string | null
         }
         Relationships: [
           {
@@ -294,6 +342,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "analyses"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "data_snapshots_input_fk"
+            columns: ["analysis_id", "input_id"]
+            isOneToOne: false
+            referencedRelation: "analysis_inputs"
+            referencedColumns: ["analysis_id", "id"]
           },
         ]
       }
@@ -852,6 +907,111 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_sitefit_release: {
+        Args: { p_expected_rows: number; p_release_id: string }
+        Returns: Json
+      }
+      append_sitefit_snapshot: {
+        Args: {
+          p_analysis_id: string
+          p_collection_key: string
+          p_input_id: string
+          p_request_sha256: string
+          p_result: Json
+        }
+        Returns: {
+          adapter_version: string | null
+          analysis_id: string
+          availability: string
+          cache_metadata: Json
+          collection_key: string | null
+          contract_version: number
+          cost_metadata: Json | null
+          created_at: string
+          dataset_release_id: string | null
+          dataset_version: string | null
+          effective_from: string | null
+          effective_to: string | null
+          expires_at: string | null
+          id: string
+          input_id: string | null
+          licence_metadata: Json
+          normalisation_version: string | null
+          normalised_data: Json | null
+          observed_at: string | null
+          payload_sha256: string | null
+          permitted_raw_reference: string | null
+          provider_metadata: Json
+          quality_metadata: Json
+          request_sha256: string | null
+          retrieved_at: string
+          source: string
+          source_retrieved_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "data_snapshots"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      import_sitefit_geographies: {
+        Args: { p_release_id: string; p_rows: Json }
+        Returns: number
+      }
+      import_sitefit_statistics: {
+        Args: {
+          p_geography_release_id: string
+          p_release_id: string
+          p_rows: Json
+        }
+        Returns: number
+      }
+      lookup_sitefit_geography: {
+        Args: {
+          p_latitude: number
+          p_longitude: number
+          p_precision: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      lookup_sitefit_population: {
+        Args: {
+          p_code: string
+          p_geography_release_id: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      nearby_sitefit_geographies: {
+        Args: {
+          p_latitude: number
+          p_longitude: number
+          p_radius_metres: number
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      prepare_sitefit_input: {
+        Args: { p_analysis_id: string; p_context: Json; p_user_supplied: Json }
+        Returns: {
+          analysis_id: string
+          context_schema_version: number | null
+          created_at: string
+          id: string
+          resolved_context: Json | null
+          schema_version: number
+          user_supplied: Json
+          version: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "analysis_inputs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       resolve_sitefit_property: {
         Args: { address: Json }
         Returns: {
@@ -883,6 +1043,28 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      sitefit_assert_collectable: {
+        Args: { p_analysis_id: string }
+        Returns: {
+          business_category: Database["public"]["Enums"]["business_category"]
+          business_type: string
+          created_at: string
+          failure_code: string | null
+          id: string
+          owner_id: string
+          property_id: string | null
+          schema_version: number
+          status: Database["public"]["Enums"]["analysis_status"]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "analyses"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      stage_sitefit_release: { Args: { p_manifest: Json }; Returns: Json }
     }
     Enums: {
       analysis_status:
