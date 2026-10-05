@@ -1,6 +1,6 @@
 # Phase 5 status: Data Integration Framework
 
-Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase5_plan.md), including its proportionality reassessment, and authorised Steps 5.0–5.9. **Implementation and verification complete; protected delivery pending.** Phase 6 remains unauthorised. No customer analysis route, engine, payment, AI, report writer or PDF is included.
+Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase5_plan.md), including its proportionality reassessment, and authorised Steps 5.0–5.9. **Complete.** Implementation merged through protected PR #13 after exact-head CI and Preview verification; post-merge CI and clean main/origin synchronization passed. This completion record follows the same protected workflow. Phase 6 remains unauthorised. No customer analysis route, engine, payment, AI, report writer or PDF is included.
 
 ## Step evidence
 
@@ -17,7 +17,7 @@ Started 2026-10-05. Owner explicitly approved the revised [phase5_plan.md](phase
 | 5.7b | Complete | Server-only StopPoint adapter normalises IDs/names/modes/explicit coordinates, with bounded registered-key transport. Three synthetic schema/empty/partial/auth/precision/key-redaction tests, lint/types/build pass. Actual canonical-centroid 500m query returned HTTP 200 and 22 normalised stops in one call; no raw response/key returned. Provider total/page/centre metadata are unpopulated/inconsistent, so result is honestly partial, not complete. Independent PostGIS check observed a furthest returned point at 527.109m: radius describes the provider request, not certified geodesic selection; explicit limitations retained. Framework persistence/replay follows 5.8. |
 | 5.7c | Complete | Food-conditional, server-only FSA v2 adapter retains permitted identity/type/authority/nullable geocode fields only. Three schema/category/paging/partial-failure tests, lint/types/build pass. Actual 500m centroid query returned 200 normalised records in two calls; the page cap makes this explicitly partial, not exhaustive competition. No ratings, address/contact data or raw response retained. Analysis-bound persistence follows 5.8. |
 | 5.8 | Complete | Owner-bound repository and finite three-source collector reload frozen context, pre-read stored outcomes, hash versioned requests, coalesce process-local work and append-or-return the stored winner. Seven collector tests cover race/replay/failure/cache/expiry/deadline/cancellation/tampering/persistence/serial limits. Full 76-test suite and lint/types/build pass. Opt-in hosted verify:framework passed: actual ONS 1 observation, TfL 22 stops, FSA 200 establishments persisted; exact replay makes zero provider calls; independent clients return one winner; new analysis/cache lineage, failed-source preservation/unavailable replay, owner denial, ready/late-write denial and original ready snapshot passed. Private summaries persisted; synthetic fixtures/events removed and triggers restored. |
-| 5.9 | Validation complete; delivery pending | Clean npm ci/audit (zero findings), lint/strict types/all 77 tests/production build passed. Production-server public smoke (13 pages/articles, metadata, JSON-LD, sitemap/robots/social/404 and four safe address boundaries), Supabase Data API and hosted Auth/session/sign-out/replay passed; Auth fixtures removed. All five hosted SQL suites passed rolled back; local/remote five-migration history matches. Browser Home at six widths plus checker/Pricing/Sample/Blog/Login at 390px: one H1/no overflow, Menu Enter/Escape and empty-postcode keyboard error/focus passed; console errors zero. Protected Preview at 1b99734 verified, 12 actual JS assets plus HTML/logs scanned. Exact final-head CI/protected merge/post-merge clean main gate remains. |
+| 5.9 | Complete | Clean npm ci/audit (zero findings), lint/strict types/all 77 tests/production build passed. Production-server public smoke (13 pages/articles, metadata, JSON-LD, sitemap/robots/social/404 and four safe address boundaries), Supabase Data API and hosted Auth/session/sign-out/replay passed; Auth fixtures removed. All five hosted SQL suites passed rolled back; local/remote five-migration history matches. Browser Home at six widths plus checker/Pricing/Sample/Blog/Login at 390px: one H1/no overflow, Menu Enter/Escape and empty-postcode keyboard error/focus passed; console errors zero. Protected Preview at 1b99734 verified, 12 actual JS assets plus HTML/logs scanned. Exact final-head push/PR CI passed; protected PR #13 merged and post-merge CI passed with main==origin/main and clean tree. Completion documentation follows the same gate. |
 
 ## Architecture and scope
 
@@ -31,7 +31,7 @@ Owner confirmed TfL keys configured locally; expected server-only variable mappe
 
 ## Definition of Done
 
-The first thirteen [approved plan gates](phase5_plan.md#phase-5-definition-of-done) are verified below; final protected delivery is still pending.
+All fourteen [approved plan gates](phase5_plan.md#phase-5-definition-of-done) are verified below. Completion documentation is delivered through its own required-CI protected PR; final response separately confirms its post-merge state.
 
 - [x] Explicit approval, London authority and provider direction; UI/copy/pricing/design unchanged.
 - [x] Runtime-validated internal contracts and traceable permitted observations/versions.
@@ -46,7 +46,7 @@ The first thirteen [approved plan gates](phase5_plan.md#phase-5-definition-of-do
 - [x] Immutable exact input/property/snapshot binding, canonical-refresh preservation and ready/late-write denial; future report/AI/PDF freeze remains documented.
 - [x] Server-only integration; configured secrets absent from inspected source/history/client artefacts/observed requests/own logs; no public collection endpoint.
 - [x] Actual local/CI/runtime/hosted/Preview verification; Production remains disabled.
-- [ ] Final documentation/protected merge/post-merge CI, main==origin/main and clean working tree; Phase 6 remains unauthorised.
+- [x] Documentation updated; protected implementation merge and post-merge CI passed, main==origin/main and working tree clean; completion documentation follows the protected gate. Phase 6 remains unauthorised.
 
 
 ## Deviations
@@ -66,3 +66,11 @@ Linux push and PR CI at 1b99734 passed both required jobs including real PostGIS
 ## Known limits and later gates
 
 Census 2021 is a dated OA resident baseline, not current demand or catchment totals. Selected point is a postcode centroid, not the premises. TfL completeness/radius selection is unverified; FSA is capped at two pages and not exhaustive competition. Source-effective/publication/release dates stay null when unavailable. Cross-border coverage is unassessed; later exact geography/sufficiency and metric rules must qualify it. TfL retention is conditional on licence validity; notices/retention/access and complete report/AI/PDF freezing remain later rollout obligations. Import is manual, near its 200MB normalised input bound, with measured capacity review before additional releases. Process quotas/cache/coalescing are not distributed guarantees. All documented durable lifecycle/lease/dispatch/ledger/reservation/shared-cache/workflow hardening remains deferred at its real triggers. No Phase 6 code or customer analysis lifecycle was started. No Phase 5 external owner action remains unresolved.
+
+## Protected delivery evidence
+
+PR #13 (https://github.com/shahinst21-hue/SiteFit/pull/13) was converted from draft and merged through the enforced workflow on 2026-10-05 at 13:48:30 UTC. Exact head 47945ea327f552c1e1de7d9f6997007b7de48d94 passed push CI (https://github.com/shahinst21-hue/SiteFit/actions/runs/37318466146) and PR CI (https://github.com/shahinst21-hue/SiteFit/actions/runs/37318473083), including the genuine SQL/PostGIS rebuild and public HTTP smoke. Its protected Preview https://sitefit-kj15mzjy5-shahinst21-hues-projects.vercel.app was READY and passed the same six HTML/12 JS/Account/invalid-address/absent-collector/noindex/secret checks.
+
+Implementation squash c23862a96f57542700bb3fce4a034436bc1ac476 passed post-merge required CI (https://github.com/shahinst21-hue/SiteFit/actions/runs/37319667351). A subsequent fetch/fast-forward confirmed local main equals origin/main at that SHA and the working tree is clean. Strict branch protection and admin enforcement remain; no bypass. Vercel SSO protection remains all_except_custom_domains; committed vercel.json still disables main Git deployment. No Production activation or provider purchase. This documentation-only completion record follows another protected PR/CI merge, whose final synchronization is reported by the completing turn.
+
+PHASE 5 COMPLETE

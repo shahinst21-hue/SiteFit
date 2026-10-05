@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–4 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phase 5 is authorised and in progress under the revised approved plan; Phases 6–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
+Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–5 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phase 5 is complete under the revised approved plan (see [phase-5-status.md](phase-5-status.md)); Phases 6–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
 
@@ -166,3 +166,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 ## Phase 4 execution gate (2026-10-04)
 
 Phase 4 address resolution/property identity is explicitly authorised and implemented on a dedicated branch. Postio, development migration/security tests, actual canonical persistence/reuse and manual entry through the deployed Preview are verified after secure human configuration. Protected PR #10 merged after required CI; post-merge CI and clean main/origin synchronization passed. Phase 4 is complete. Detailed checklist: phase-4-status.md. Completion does not authorise Phase 5; no analysis/provider data collection, payment, financial computation, report generation, PDF or publishing agent is introduced.
+
+## Phase 5 execution gate — 2026-10-05
+
+Steps 5.0–5.9 are implemented and verified through protected PR #13 and required/post-merge CI. Actual ONS/TfL/FSA framework persistence, zero-call historical replay, new analysis lineage, failures/ready guards and genuine London release/PostGIS checks pass. Three migrations and the two measured implementation adjustments are recorded in phase-5-status.md. Current UI/copy/pricing/design remain unchanged; no public collector or Phase 6 engine. Phase 6 requires a new explicit owner instruction; completion does not authorise it. Deferred production mechanisms remain gated by their documented triggers.

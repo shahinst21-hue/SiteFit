@@ -1,6 +1,6 @@
 # Phase 5 implementation plan: Data Integration Framework
 
-Prepared 2026-10-05. **Approved by the owner on 2026-10-05; Steps 5.0–5.8 implemented and verified, final Step 5.9 delivery gated.** Sections describing the assessed repository/planning task are the historical approval baseline; actual implementation/evidence and deviations are recorded in [phase-5-status.md](phase-5-status.md). Assessed baseline: `9f0cd5b976b3bc0687047cd5a203d8d77156db2f`, clean `main`, matching `origin/main` after fetch. This document contains recommendations, not implemented services, migrations, verified new integrations or accepted financial/report rules.
+Prepared 2026-10-05. **Approved by the owner on 2026-10-05; Steps 5.0–5.9 implemented and verified; protected implementation delivery complete.** Sections describing the assessed repository/planning task are the historical approval baseline; actual implementation/evidence and deviations are recorded in [phase-5-status.md](phase-5-status.md). Assessed baseline: `9f0cd5b976b3bc0687047cd5a203d8d77156db2f`, clean `main`, matching `origin/main` after fetch. This document contains recommendations, not implemented services, migrations, verified new integrations or accepted financial/report rules.
 
 The owner's new instruction makes **SiteFit V1 London only**. This supersedes the UK-wide launch direction for future implementation. Preserve a path to other English locations through configuration, adapters and dataset coverage. Do not change application code, UI, user-facing copy, pricing, visual design, credentials or deployed configuration during this planning task. The accepted historical-report decision D60 remains binding. Approval of this plan will be required before executing any step below.
 
@@ -407,7 +407,7 @@ These are future acceptance gates, all unchecked today:
 - [x] Context on exact input versions and snapshots are immutable; canonical refresh cannot alter them; ready records cannot trigger collection or accept late writes; full report/AI/PDF generation remains absent and D60 later-phase obligations remain documented.
 - [x] Privileged integrations are server-only; actual configured secrets do not appear in source, browser bundles, HTML, logs or client network requests. No new public collection route.
 - [x] Local/CI/runtime and relevant hosted checks pass with actual evidence; protected Preview is verified where framework deployment is applicable, with no Production activation.
-- [ ] Framework status/policies/runbook updated; protected delivery completed; final main matches origin and working tree clean; Phase 6 has not started.
+- [x] Framework status/policies/runbook updated; protected delivery completed; final main matches origin and working tree clean; Phase 6 has not started.
 
 ## J. Security and operational requirements
 
