@@ -1,4 +1,5 @@
 import "server-only";
+import { isDeepStrictEqual } from "node:util";
 import type { LicenceMetadata, ProviderResult } from "./contracts.ts";
 import { permitted } from "./policy.ts";
 import { validateResult } from "./validation.ts";
@@ -10,7 +11,7 @@ export function normalisedCache(now: () => number = Date.now, maxEntries = 100, 
   return {
     get(key: string, licence: LicenceMetadata) {
       const entry = entries.get(key); if (!entry) return null;
-      if (entry.expires <= now() || !permitted(licence) || JSON.stringify(entry.result.meta.licence) !== JSON.stringify(licence)) { remove(key); return null; }
+      if (entry.expires <= now() || !permitted(licence) || !isDeepStrictEqual(entry.result.meta.licence, licence)) { remove(key); return null; }
       return { result: structuredClone(entry.result), expiresAt: new Date(entry.expires).toISOString() };
     },
     set(key: string, value: ProviderResult) {

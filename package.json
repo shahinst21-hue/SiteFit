@@ -23,7 +23,8 @@
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
     "supabase:status": "supabase status",
-    "import:london": "node --conditions=react-server scripts/data/import-london-baseline.ts"
+    "import:london": "node --conditions=react-server scripts/data/import-london-baseline.ts",
+    "verify:framework": "node --conditions=react-server scripts/data/verify-framework.ts"
   },
   "dependencies": {
     "@next/env": "^16.3.8",

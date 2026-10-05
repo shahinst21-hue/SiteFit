@@ -56,7 +56,7 @@ export interface DataAdapter {
 }
 export type StoredSnapshot = { id: string; analysisId: string; inputId: string; collectionKey: string; requestHash: string; result: ProviderResult };
 export interface SnapshotRepository {
-  context(analysisId: string, inputId: string): Promise<CollectionContext>;
-  find(context: CollectionContext, key: string, source: SourceId, hash: string): Promise<StoredSnapshot | null>;
-  append(context: CollectionContext, key: string, hash: string, result: ProviderResult): Promise<StoredSnapshot>;
+  context(analysisId: string, inputId: string, signal?: AbortSignal): Promise<CollectionContext>;
+  find(context: CollectionContext, key: string, source: SourceId, hash: string, signal?: AbortSignal): Promise<StoredSnapshot | null>;
+  append(context: CollectionContext, key: string, hash: string, result: ProviderResult, signal?: AbortSignal): Promise<StoredSnapshot>;
 }
