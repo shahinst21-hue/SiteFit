@@ -54,3 +54,50 @@ test('refund and dispute delivery uses current facts and never treats creation a
  f.state.refunds=[{id:'re_proof',amount:2900,status:'succeeded'} as Stripe.Refund];await processPaymentEvent(f.event,f.stripe,f.dependencies);assert.equal(f.state.commits.at(-1)?.p_reversal,'full_refund');
  f.state.refunds=[];f.state.disputes=[{status:'under_review'} as Stripe.Dispute];f.event.type='charge.dispute.created';f.event.data.object={id:'dp_proof',object:'dispute',payment_intent:'pi_proof'} as Stripe.Dispute;await processPaymentEvent(f.event,f.stripe,f.dependencies);assert.equal(f.state.commits.at(-1)?.p_reversal,'open_dispute');
 });
+
+test('delayed completion and refund-failed envelopes cannot restore a currently reversed purchase',async()=>{
+ for(const type of ['checkout.session.completed','refund.failed','charge.dispute.closed'] as const){
+  const f=setup();f.event.type=type;
+  if(type==='refund.failed')f.event.data.object={id:'re_old',object:'refund',payment_intent:'pi_proof',status:'failed'} as Stripe.Refund;
+  if(type==='charge.dispute.closed')f.event.data.object={id:'dp_old',object:'dispute',payment_intent:'pi_proof',status:'won'} as Stripe.Dispute;
+  f.state.refunds=[{id:'re_current',amount:2900,status:'succeeded'} as Stripe.Refund];
+  await processPaymentEvent(f.event,f.stripe,f.dependencies);
+  assert.equal(f.state.commits.at(-1)?.p_reversal,'full_refund');
+  f.state.disputes=[{status:'lost'} as Stripe.Dispute];
+  await processPaymentEvent(f.event,f.stripe,f.dependencies);
+  assert.equal(f.state.commits.at(-1)?.p_reversal,'lost_dispute');
+ }
+});
+
+test('a stale concurrent observation retries provider reads and confirms the new revision and reversal',async()=>{
+ const f=setup();let revision=4,reads=0;
+ f.dependencies.read=async()=>{reads++;return {...f.payment,revision};};
+ f.dependencies.confirm=async value=>{
+  if(value.p_revision!==revision)throw Error('payment_confirmation_retry');
+  f.state.commits.push(value);
+ };
+ const initialSession=f.dependencies.session;
+ f.dependencies.session=async(...args)=>{
+  const value=await initialSession(...args);
+  if(revision===4)revision=5; // Another transaction wins while this worker reads Stripe.
+  return value;
+ };
+ await assert.rejects(()=>processPaymentEvent(f.event,f.stripe,f.dependencies),/retry/);
+ assert.equal(f.state.commits.length,0);
+ f.state.refunds=[{amount:2900,status:'succeeded'} as Stripe.Refund];
+ await processPaymentEvent(f.event,f.stripe,f.dependencies);
+ assert.equal(reads,2);assert.equal(f.state.commits.length,1);
+ assert.equal(f.state.commits[0].p_revision,5);
+ assert.equal(f.state.commits[0].p_reversal,'full_refund');
+});
+
+test('reversal provider outage commits no receipt and redelivery reads the recovered current facts',async()=>{
+ const f=setup();let unavailable=true;
+ const refundReader=f.stripe.refunds as unknown as {list:()=>Promise<{data:Stripe.Refund[];has_more:boolean}>};
+ refundReader.list=async()=>{if(unavailable)throw Error('provider_unavailable');return {data:[{amount:1000,status:'succeeded'} as Stripe.Refund],has_more:false};};
+ await assert.rejects(()=>processPaymentEvent(f.event,f.stripe,f.dependencies));
+ assert.equal(f.state.commits.length,0);
+ unavailable=false;
+ await processPaymentEvent(f.event,f.stripe,f.dependencies);
+ assert.equal(f.state.commits.length,1);assert.equal(f.state.commits[0].p_reversal,'partial_refund');
+});
