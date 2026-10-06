@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "mode": "demo",
+  "generatedAt": "2026-10-06T12:00:00Z",
+  "analysisStatus": "available",
+  "property": {
+    "address": "Unit 1, Hutton House, 1 Manorgate Road, Kingston upon Thames, KT2 7AW",
+    "confirmation": "Illustrative property scenario",
+    "context": [{ "label": "Local authority", "value": "Kingston upon Thames (London)" }, { "label": "Property type", "value": "Ground floor retail · example assumption" }, { "label": "Analysis area", "value": "Example walking catchments" }],
+    "image": null
+  },
+  "businessType": "coffee-shop",
+  "overallAssessment": {
+    "headline": "Worth investigating further.",
+    "reason": "In this illustrative scenario, local demand and transport support further investigation. Competitor strength and premises suitability remain open questions.",
+    "meaning": "favourable",
+    "quality": "moderate",
+    "score": {
+      "status": "available", "value": 73, "label": "Illustrative location score",
+      "explanation": "Demo score only. Synthetic inputs and example weights demonstrate the UI; no live data or AI analysis produced this score. It is not a business success probability.",
+      "method": { "version": "demo-score-layout-v1", "authoredBy": "ai", "aiModel": "Illustrative AI method metadata; no AI execution",
+        "components": [{ "factor": "customer-base", "weight": 35, "value": 80, "evidenceReferences": ["demo-demand"] }, { "factor": "market-position", "weight": 25, "value": 60, "evidenceReferences": ["demo-market"] }, { "factor": "customer-access", "weight": 25, "value": 84, "evidenceReferences": ["demo-access"] }, { "factor": "premises", "weight": 15, "value": 60, "evidenceReferences": ["demo-premises"] }] }
+    }
+  },
+  "supportiveSignals": ["Example residential base within a 10 minute walk", "Illustrative public transport connections"],
+  "openQuestions": ["Competitor strength and differentiation", "Premises history and suitability"],
+  "coverage": "All values, geometry, interpretations and score metadata on this demo are illustrative. They do not measure this property.",
+  "map": {
+    "status": "available", "description": "Schematic demo geometry; not a surveyed property point, street map or measured catchment.", "bounds": [-0.315, 51.4, -0.285, 51.42],
+    "layers": [
+      { "id": "walk-15", "label": "15 min walk · example", "kind": "catchment", "status": "available", "colour": "#8b9ae8", "points": [], "polygons": [[[-0.312,51.407],[-0.31,51.415],[-0.303,51.418],[-0.293,51.417],[-0.288,51.411],[-0.291,51.403],[-0.302,51.401]]] },
+      { "id": "walk-10", "label": "10 min walk · example", "kind": "catchment", "status": "available", "colour": "#edaa5d", "points": [], "polygons": [[[-0.308,51.407],[-0.307,51.414],[-0.3,51.416],[-0.293,51.411],[-0.296,51.404],[-0.304,51.403]]] },
+      { "id": "walk-5", "label": "5 min walk · example", "kind": "catchment", "status": "available", "colour": "#ee737b", "points": [], "polygons": [[[-0.305,51.407],[-0.304,51.412],[-0.3,51.413],[-0.296,51.41],[-0.299,51.406]]] },
+      { "id": "coffee", "label": "Coffee shops · sample points", "kind": "competitor", "status": "available", "colour": "#2362a4", "points": [[-0.303,51.412],[-0.298,51.407],[-0.306,51.414],[-0.294,51.412],[-0.302,51.404],[-0.309,51.41]], "polygons": [] },
+      { "id": "complementary", "label": "Complementary trade · sample points", "kind": "complementary", "status": "available", "colour": "#835b98", "points": [[-0.3,51.414],[-0.295,51.407],[-0.305,51.409]], "polygons": [] },
+      { "id": "station", "label": "Transport · sample point", "kind": "transport", "status": "available", "colour": "#456a60", "points": [[-0.307,51.405]], "polygons": [] },
+      { "id": "property", "label": "Illustrative property location", "kind": "property", "status": "available", "colour": "#b82a38", "points": [[-0.3,51.409]], "polygons": [] }
+    ]
+  },
+  "transport": { "status": "available", "note": "Example places, distances and times; not verified routes.", "places": [
+    { "id": "station", "name": "Kingston Station", "mode": "Train", "distanceMetres": 500, "walkingMinutes": 7, "information": "Illustrative rail connection", "status": "available" },
+    { "id": "bus", "name": "Kingston Bus Station", "mode": "Bus", "distanceMetres": 400, "walkingMinutes": 6, "information": "Multiple routes · example", "status": "available" },
+    { "id": "riverside", "name": "Riverside Walk (Thames)", "mode": "Walking", "distanceMetres": 300, "walkingMinutes": 4, "information": "Illustrative walking connection", "status": "available" }
+  ] },
+  "factors": [
+    { "id": "customer-base", "title": "Customer Demand", "status": "available", "meaning": "favourable", "quality": "good", "finding": "A local customer base could support repeat visits.", "reason": "Example residential context supports investigation of regular coffee-shop custom.", "question": "Do local routines translate into demand at your proposed hours?", "score": null, "details": null, "implication": null, "scoreNote": null,
+      "metrics": [
+        { "id": "residents", "label": "Residents", "value": 12400, "unit": "people", "comparison": null, "description": "Within a 10 minute walk · example", "status": "available", "evidenceQuality": "good", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" },
+        { "id": "working-age", "label": "Aged 18–64", "value": 68, "unit": "%", "comparison": "Example comparator: 62%", "description": "Illustrative age mix", "status": "available", "evidenceQuality": "good", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" },
+        { "id": "daytime", "label": "Daytime population", "value": null, "unit": null, "comparison": null, "description": "No daytime population supplied", "status": "unavailable", "evidenceQuality": "insufficient", "sourceCount": null, "updatedAt": null, "sourceType": null }
+      ] },
+    { "id": "market-position", "title": "Competition", "status": "available", "meaning": "trade_off", "quality": "moderate", "finding": "Similar businesses create an established market context.", "reason": "The example mix includes independent cafés and national chains. Counts alone do not establish competitive pressure.", "question": "How would your offer compare with the strongest nearby businesses?", "score": null, "details": null, "implication": null, "scoreNote": null,
+      "metrics": [
+        { "id": "coffee-count", "label": "Coffee shops", "value": 17, "unit": null, "comparison": null, "description": "Within 15 min walk · example", "status": "available", "evidenceQuality": "moderate", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" },
+        { "id": "chains", "label": "Major chains", "value": 5, "unit": null, "comparison": null, "description": "Illustrative composition", "status": "available", "evidenceQuality": "moderate", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" },
+        { "id": "independent", "label": "Independent cafés", "value": 12, "unit": null, "comparison": null, "description": "Illustrative composition", "status": "available", "evidenceQuality": "moderate", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" }
+      ] },
+    { "id": "customer-access", "title": "Access", "status": "available", "meaning": "conditional", "quality": "good", "finding": "Transport connections could widen customer access.", "reason": "Example rail and bus connections support further investigation; useful routes still depend on trading hours.", "question": "Which journeys are useful for your customers and staff?", "score": null, "details": null, "implication": null, "scoreNote": null,
+      "metrics": [
+        { "id": "rail", "label": "Kingston Station", "value": 7, "unit": "min walk", "comparison": null, "description": "0.5 km · example", "status": "available", "evidenceQuality": "good", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" },
+        { "id": "bus", "label": "Kingston Bus Station", "value": 6, "unit": "min walk", "comparison": null, "description": "0.4 km · example", "status": "available", "evidenceQuality": "good", "sourceCount": 1, "updatedAt": "2026-10-06T12:00:00Z", "sourceType": "modelled" },
+        { "id": "routes", "label": "Service timing", "value": null, "unit": null, "comparison": null, "description": "Detailed journeys belong in the Full Report", "status": "locked", "evidenceQuality": "insufficient", "sourceCount": null, "updatedAt": null, "sourceType": null }
+      ] },
+    { "id": "premises", "title": "Premises Risk", "status": "available", "meaning": "no_basis", "quality": "limited", "finding": "Some key premises information remains unknown.", "reason": "This demo does not verify property use, physical condition or leasing constraints.", "question": "Is the premises suitable and permitted for the proposed use?", "score": null, "details": null, "implication": null, "scoreNote": null,
+      "metrics": [
+        { "id": "history", "label": "Previous tenant history", "value": null, "unit": null, "comparison": null, "description": null, "status": "unknown", "evidenceQuality": "insufficient", "sourceCount": null, "updatedAt": null, "sourceType": null },
+        { "id": "use", "label": "Planning and use class", "value": null, "unit": null, "comparison": null, "description": null, "status": "unknown", "evidenceQuality": "insufficient", "sourceCount": null, "updatedAt": null, "sourceType": null },
+        { "id": "condition", "label": "Interior layout and condition", "value": null, "unit": null, "comparison": null, "description": null, "status": "unknown", "evidenceQuality": "insufficient", "sourceCount": null, "updatedAt": null, "sourceType": null }
+      ] }
+  ],
+  "financialPreview": { "status": "available", "inputs": { "annualRent": 50000, "averageSpend": 7.5, "tradingDays": 5 } },
+  "evidenceSummary": { "sourceCount": null, "updatedAt": null, "note": "Demo fixture only; no real provider evidence." }
+}
