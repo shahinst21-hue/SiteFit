@@ -6,6 +6,7 @@ import { Icon } from "@/components/icon";
 import { verifiedUser } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
 import { purchaseOrigin } from "@/lib/payments/config";
+import { accountHistory } from "@/lib/auth/account-history";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Your account",
@@ -21,10 +22,7 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
     .maybeSingle();
   const params=await searchParams;const page=typeof params.page==='string'&&/^\d{1,3}$/.test(params.page)?Math.min(500,Number(params.page)):0;
   const { data: history, error: historyError } = await client.rpc("list_sitefit_history",{p_offset:page*20});
-  const reports = Array.isArray(history) ? history.flatMap(value => {
-    if (!value || typeof value !== "object" || Array.isArray(value) || typeof value.id !== "string" || !/^[0-9a-f-]{36}$/i.test(value.id) || typeof value.address !== "string" || typeof value.generatedAt !== "string") return [];
-    return [{ id: value.id, address: value.address, generatedAt: value.generatedAt,business:typeof value.businessType==='string'?value.businessType:'' }];
-  }) : [];
+  const reports = accountHistory(history);
   const paymentStates=purchaseOrigin(process.env)?await Promise.all(reports.map(async report=>{
     const {data}=await client.rpc('read_sitefit_purchase',{p_report:report.id});
     return data&&typeof data==='object'&&!Array.isArray(data)&&typeof data.access==='string'?data.access:null;
@@ -50,8 +48,8 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
           <Icon name="document" />
         </span>
         <h2>Your saved Snapshots</h2>
-        {reports.length ? <ul>{reports.map((report,index) => <li key={report.id}><Link href={`/snapshots/${report.id}`}>{report.address}</Link> · {report.business} · {new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" })}{paymentStates[index]&&<p>Test purchase access: {paymentStates[index]}. Full Report generation is not enabled.</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
-        <nav aria-label="Snapshot history pages">{page>0&&<Link href={`/account?page=${page-1}`}>Previous page</Link>}{reports.length===20&&page<500&&<Link href={`/account?page=${page+1}`}>Next page</Link>}</nav>
+        {reports.length ? <ul>{reports.map((report,index) => <li key={report.id}><p>{report.address} · {report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}>Open Snapshot →</Link>{paymentStates[index]&&<p>Test purchase access: {paymentStates[index]}. Full Report generation is not enabled.</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
+        <nav aria-label="Snapshot history pages">{page>0&&<Link href={`/account?page=${page-1}`}>Previous page</Link>}{Array.isArray(history)&&history.length===20&&page<500&&<Link href={`/account?page=${page+1}`}>Next page</Link>}</nav>
         {historyError && <p role="status">Saved Snapshots are temporarily unavailable. Your session is still active.</p>}
         {error && (
           <p role="status">
