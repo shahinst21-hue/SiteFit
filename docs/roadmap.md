@@ -81,10 +81,11 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 7: Payment
 
-- Objective: sell configurable Full Report entitlements through Stripe Checkout.
-- Codex implements: server-side configured pricing, checkout, verified/idempotent webhooks, payment records and entitlement guards.
-- Human action: Stripe access and secure test/live settings; approve tax treatment, refund policy and entitlement duration. Initial price assumption is £29, configurable.
-- Definition of Done: test-mode success, cancellation, failed payment, duplicate/out-of-order events and unauthorized access are tested; browser redirects cannot mark payment paid; price is not hardcoded in business logic. Live activation is a separate authorised account action.
+- Status: **planning only**; owner final policy D72 is accepted, detailed [phase7_plan.md](phase7_plan.md) awaits explicit implementation approval. Phase 6/PR #18 are complete and frozen.
+- Objective: permanent verified Google/email account → owned eligible Free Snapshot → one-off £29 Stripe **Test Mode** Checkout → durable account/analysis entitlement. Free Snapshot still requires no signup; existing guest history must survive supported upgrade/secure claim without regeneration and be recoverable on later sign-in.
+- Planned scope: server-selected Price/product, narrow payment persistence, signature-verified/idempotent webhook, bounded success/cancel/status flow and minimal account history. Payment/access state is separate from immutable analysis/report state; do not change ready analysis status to `paid`.
+- Later human action: development Google/Supabase identity linking, Stripe test Product/Price/secrets, real protected Preview webhook ingress and Auth/payment proofs. No secrets in chat; no setup is performed by this plan. Test reversal mechanisms await plan approval; live tax/refund/access/retention policies remain launch decisions.
+- Definition of Done: complete plan checklist including no-signup free regression, permanent-only purchase, real Google/email new/existing identity continuity/recovery, ownership/RLS/immutability, exact £29 test payment, signature/idempotency/concurrency/reversal, durable entitlement, no forged return grant, complete checks/hosted SQL/protected Preview/CI delivery. No Full Report, paid AI, financial calculation, PDF, report email or Phase 8 execution. **Production purchasing/live Stripe remain disabled regardless of credentials; live activation requires a later explicit gate after report delivery exists.**
 
 ## Phase 8: Full Location Data
 
