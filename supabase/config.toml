@@ -52,6 +52,7 @@ additional_redirect_urls = [
   "https://sitefit-git-codex-phase-4-addre-2a7d1a-shahinst21-hues-projects.vercel.app/auth/callback",
 ]
 enable_signup = true
+enable_anonymous_sign_ins = true
 
 [auth.email]
 enable_signup = true

@@ -18,11 +18,16 @@ export default async function Account() {
     .select("display_name")
     .eq("id", user.id)
     .maybeSingle();
+  const { data: history, error: historyError } = await client.rpc("list_sitefit_free");
+  const reports = Array.isArray(history) ? history.flatMap(value => {
+    if (!value || typeof value !== "object" || Array.isArray(value) || typeof value.id !== "string" || !/^[0-9a-f-]{36}$/i.test(value.id) || typeof value.address !== "string" || typeof value.generatedAt !== "string") return [];
+    return [{ id: value.id, address: value.address, generatedAt: value.generatedAt }];
+  }) : [];
   return (
     <div className="page-wrap narrow-page">
       <div className="auth-brand">
         <Wordmark />
-        <span className="badge positive">Signed in</span>
+        <span className="badge positive">{user.is_anonymous ? "Guest session" : "Signed in"}</span>
       </div>
       <PageIntro
         eyebrow="YOUR SITEFIT ACCOUNT"
@@ -32,18 +37,15 @@ export default async function Account() {
             : "Your account is ready."
         }
       >
-        <p>Signed in as {user.email}</p>
+        <p>{user.is_anonymous ? "Your saved Snapshots belong to this browser session. Losing its cookies or signing out can remove access." : `Signed in as ${user.email}`}</p>
       </PageIntro>
       <section className="simple-panel">
         <span className="icon-disc green">
           <Icon name="document" />
         </span>
-        <h2>Your next location</h2>
-        <p>
-          No saved reports in this account. Start with a Free Snapshot to
-          organise your next location decision. Location entries stay on the
-          current page.
-        </p>
+        <h2>Your saved Snapshots</h2>
+        {reports.length ? <ul>{reports.map(report => <li key={report.id}><Link href={`/snapshots/${report.id}`}>{report.address}</Link> · {new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" })}</li>)}</ul> : <p>No saved Snapshots yet. Start a location check to build your first view.</p>}
+        {historyError && <p role="status">Saved Snapshots are temporarily unavailable. Your session is still active.</p>}
         {error && (
           <p role="status">
             Your profile is temporarily unavailable. Your sign-in is still

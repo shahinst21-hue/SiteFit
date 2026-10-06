@@ -1,4 +1,59 @@
 @import "tailwindcss";
+/* Phase 6: result colour is independent of neutral evidence-strength badges. */
+.analysis-page { padding-bottom: 125px; }
+.analysis-property h1 { font-size: clamp(1.7rem, 3vw, 2.7rem); max-width: 980px; overflow-wrap: anywhere; line-height: 1.16; }
+.analysis-property .eyebrow { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+.analysis-property > p { margin: 10px 0; }
+.analysis-date { color: var(--muted); font-size: .85rem; }
+.analysis-early { margin: 28px 0; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); }
+.analysis-early h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1.2; margin: 8px 0 14px; }
+.result-favourable { --result-tone: #238239; --result-wash: #f2faee; }
+.result-trade_off { --result-tone: #8b691a; --result-wash: #fff9ea; }
+.result-conditional { --result-tone: #315f94; --result-wash: #f1f6fc; }
+.result-no_basis { --result-tone: #647082; --result-wash: #f5f6f8; }
+.analysis-early { background: var(--result-wash); }
+.analysis-evidence { display: inline-block; background: #eef0f4; color: #424e60; border-radius: 30px; padding: 3px 10px; font-size: .75rem; font-weight: 600; white-space: nowrap; }
+.analysis-key-gaps { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.analysis-key-gaps h3 { font-size: .9rem; margin: 0 0 8px; }
+.analysis-key-gaps ul { padding-left: 20px; margin: 0; }
+.analysis-coverage { color: var(--muted); font-size: .82rem; margin-bottom: 0; }
+.analysis-factors { display: grid; gap: 18px; }
+.analysis-factor { min-width: 0; border: 1px solid var(--line); border-top: 4px solid var(--result-tone); border-radius: var(--radius); padding: 22px; background: white; overflow-wrap: anywhere; }
+.analysis-factor-heading { display: flex; align-items: center; gap: 12px; }
+.analysis-factor-heading .icon-disc { color: var(--result-tone); background: var(--result-wash); width: 44px; height: 44px; }
+.analysis-factor-heading h2 { font-size: 1.1rem; margin: 0; }
+.analysis-score { display: flex; align-items: baseline; gap: 8px; color: var(--result-tone); margin: 16px 0; }
+.analysis-score strong { font-size: 3rem; line-height: 1; }
+.analysis-score-missing { font-size: .76rem; color: var(--muted); margin: 14px 0 10px; }
+.analysis-conclusion { font-size: 1.25rem; line-height: 1.25; margin: 10px 0; }
+.analysis-factor > p { font-size: .9rem; color: var(--muted); }
+.analysis-factor .analysis-evidence { margin-top: 8px; }
+.analysis-open-question strong { color: var(--ink); font-size: .78rem; }
+.analysis-continuation { display: flex; align-items: flex-start; gap: 6px; color: #275e34; font-size: .86rem; font-weight: 600; margin: 18px 0; }
+.analysis-continuation svg { flex-shrink: 0; width: 18px; }
+.analysis-why { font-size: .85rem; border-top: 1px solid var(--line); padding-top: 14px; }
+.analysis-why summary { cursor: pointer; font-weight: 600; min-height: 32px; }
+.analysis-why h4 { margin: 18px 0 8px; font-size: .86rem; }
+.analysis-why ul { padding-left: 18px; }
+.analysis-why a { text-decoration: underline; }
+.analysis-why small { display: block; color: var(--muted); }
+.analysis-finance { display: flex; align-items: flex-start; gap: 20px; padding: 24px; border: 1px solid #dce9d3; border-radius: var(--radius); background: #f6fbf2; margin: 24px 0; }
+.analysis-finance > .icon-disc { flex-shrink: 0; }
+.analysis-finance h2, .analysis-full-case h2 { font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 8px 0 12px; }
+.analysis-benefits { padding-left: 20px; display: grid; gap: 8px; }
+.analysis-full-case { padding: 26px; background: white; border: 1px solid var(--line); border-radius: var(--radius); }
+.analysis-full-case #report-outline { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 24px; }
+.analysis-full-case .button { width: 100%; }
+.analysis-session-note { font-size: .8rem; color: var(--muted); padding: 24px 0; }
+.analysis-session-note a { text-decoration: underline; }
+.analysis-mobile-action { position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #f5fceef5; border-top: 1px solid #dce9d3; }
+.analysis-mobile-action .button { width: 100%; font-size: .9rem; min-height: 48px; }
+.analysis-page :is(a, summary, [tabindex]) { scroll-margin-bottom: 125px; }
+@media (min-width: 768px) { .analysis-factors { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analysis-page { padding-bottom: 50px; } .analysis-mobile-action { display: none; } .analysis-benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analysis-full-case .button { width: auto; } }
+@media (min-width: 1200px) { .analysis-factors { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-height: 600px) { .analysis-mobile-action { position: static; padding: 16px 0; } .analysis-page { padding-bottom: 30px; } }
+@media (max-width: 430px) { .analysis-finance { display: block; } .analysis-finance > .icon-disc { margin-bottom: 14px; } }
+@media print { .analysis-mobile-action { display: none; } }
 /* Phase 4 address entry reuses the approved Phase 3.5 visual system. */
 :root {
   --ink: #12151d;

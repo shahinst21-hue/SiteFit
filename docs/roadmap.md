@@ -70,12 +70,12 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Human action: approve provider usage/licensing and budget; provide account access where required.
 - Definition of Done: implemented adapters have verified capabilities, bounded failures and clear provenance; unavailable/stale data is explicit; storage respects provider terms; no invented observations or fragile property scraping.
 
-## Phase 6: Free Snapshot Engine
+## Phase 6: AI-native Free Snapshot — revised proposal
 
-- Objective: produce a useful free assessment of one location.
-- Codex implements: approved subset of evidence collection and snapshot presentation, freshness and insufficient-evidence handling.
-- Human action: approve exact Free Snapshot content and free-to-paid boundary before dependent work; supply real benchmark properties.
-- Definition of Done: benchmark snapshots reflect available sources with traceable facts and visible unknowns; missing sources do not fabricate completeness; no success score or payment implementation.
+- Objective: demonstrate genuine first-level analysis and clear £29 deeper-investigation value, under D66's analysis-first/evidence-on-demand and D68/D69's result-first rules, independent result colours and closed per-section reasoning. Internal Mixed/Unclear/Not assessed are not routine customer headlines; validated implications/reasons and honest verification actions lead. The rewritten [phase6_plan.md](phase6_plan.md) and replacement designs remain proposed; no implementation authorised.
+- Proposed after approval: minimum Evidence/Data Quality, deterministic comparison and bounded section-AI/validated synthesis slices moved forward from Phases 11/12; narrow category POI proof moved from Phase 8 if needed. Persist/freeze/replay real free interpretation; final responsive uncertainty/evidence/CTA states. No full report engine, payment or economics implementation.
+- Human action: approve revised scope, claim/cohort/quality policies, guest ownership, metered AI provider/data handling/budget and any source access/licence gates. Select public London QA fixtures independently; no owner-address prerequisite.
+- Definition of Done: real category/inner-outer analytical-readiness gate, valid claim-support Evidence IDs, defensible comparisons/business relevance, measured AI evaluations/cost/runtime, historical freeze/security/source-failure/CI proofs. No unsupported score/footfall/viability, generic data viewer, or silently weakened gate. Free shows the locked three-output financial benefit and Run Financial Analysis outline without optional marketing, forms or execution. Economics use remains voluntary after verified purchase/main report. The Full Case action stays honestly non-paying until authorised payment.
 
 ## Phase 7: Payment
 
@@ -87,6 +87,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 ## Phase 8: Full Location Data
 
 - Objective: gather approved full-report location context.
+- Proposed boundary adjustment: Phase 6 may admit one narrow category-capable POI subset for free comparison; broader catchment/mobility/customer/competitive-strength investigation remains here. No additional provider is enabled by this planning proposal.
 - Codex implements: selected adapters and evidence for catchment, demand, competitors, complementary businesses, accessibility, mobility and local business signals within approved source coverage.
 - Human action: any provider permissions/budget or dataset selection that materially affects report promises.
 - Definition of Done: real benchmark coverage is checked; units, date/geography and source limitations are visible; proxies are labelled; no proprietary footfall or fabricated exhaustive coverage.
@@ -100,29 +101,31 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 10: Economic Engine
 
-- Objective: calculate reproducible financial scenarios from explicit inputs.
+- Objective: calculate reproducible supplementary financial scenarios from optional explicit inputs in a separate post-main-report Economics area (D65/D69). The free locked benefit previews break-even sales, daily customers and cost/rent sensitivity; no formulas or financial execution move into Phase 6. Entitlement verification precedes inputs/run when the paid path is enabled. Main report purchase/readiness/access does not depend on it; new supplement versions preserve all ready historical reports.
 - Codex implements: deterministic calculations, validated units/periods, versioned methods, rounding and scenario outputs with missing-input behaviour.
 - Human action: approve formulas, scenario assumptions, inclusion of costs and presentation; provide benchmark economics or approve labelled synthetic calculation-only cases.
 - Definition of Done: independent expected-value tests pass for approved formulas and boundary conditions; missing inputs remain unknown; AI performs no core financial calculation; scenarios are not forecasts of success.
 
 ## Phase 11: Evidence Engine
 
-- Objective: harden report-wide claim traceability and uncertainty handling.
-- Codex implements: validation of the Phase 5 evidence contract, claim links, derivation lineage, freshness/coverage rules and contradiction handling.
+- Objective: extend report-wide traceability and uncertainty handling beyond the proposed minimum Phase 6 core.
+- Proposed sequencing: valid Evidence IDs, claim support, quality/capability and contradiction preservation must exist before Free analysis; they cannot wait until Phase 11. This phase expands coverage/methods across the later full report rather than adding provenance for the first time.
+- Codex implements after its own approval: broader claim links/derivation/quality policies and report-wide reconciliation, reusing the minimum core.
 - Human action: approve material sufficiency/freshness policies and evidence presentation.
 - Definition of Done: important claims resolve to valid permitted evidence; official/commercial provenance and estimate/inference labels remain distinct; unsupported claims fail validation or become Unknown/Insufficient Evidence.
 
 ## Phase 12: AI Report Engine
 
-- Objective: synthesise validated evidence into an honest structured report.
-- Codex implements: AI provider abstraction, versioned prompts/schema, validation, constrained evidence references, bounded retries and failure handling.
+- Objective: expand bounded validated section analysis into the full report.
+- Proposed sequencing: the minimal AI adapter, prompt/schema versions, relevant section packets, validation/repair and validated-only synthesis move into Phase 6 to demonstrate free analytical value. This phase adds deeper subanalyses/full synthesis, not the first AI interpretation.
+- Codex implements after its own approval: full-report tasks/schemas/evaluations/cross-section reconciliation, preserving prior free history and source/metric/evidence contracts.
 - Human action: provider access and secure credentials, budget and approval of material report wording/rules.
 - Definition of Done: schema and evidence validation pass; fabricated references, missing-data invention and success probabilities are rejected; deterministic financial values remain unchanged; provider-specific objects stay behind the boundary.
 
 ## Phase 13: Full Report UI, PDF and Delivery
 
 - Objective: deliver the paid report consistently across web and PDF.
-- Codex implements: approved 16-section report UI, permitted PDF generation/storage and secure delivery from the persisted ready report and sections. PDF rendering/retries use that frozen snapshot without provider retrieval, recalculation or AI regeneration.
+- Codex implements: approved result-first report dimensions/subsections with short reason/small strength and closed per-section Why this result (D69), permitted PDF generation/storage and secure delivery from persisted ready content. Sixteen legacy storage keys are not a mandatory UI hierarchy; new keys require explicit migration. PDF rendering/retries use the frozen snapshot without provider retrieval, recalculation or AI regeneration.
 - Human action: approve report template and delivery/account policy; external delivery account access if a service is selected.
 - Definition of Done: authorised paid users access the original stored report; UI/PDF agree on evidence, calculations and unknowns; reopening performs no collection/calculation/AI generation; a later analysis leaves the earlier report unchanged; PDF layout and links are verified; failed exports recover without duplicate charges, historical-content changes or leakage.
 
@@ -170,3 +173,7 @@ Phase 4 address resolution/property identity is explicitly authorised and implem
 ## Phase 5 execution gate — 2026-10-05
 
 Steps 5.0–5.9 are implemented and verified through protected PR #13 and required/post-merge CI. Actual ONS/TfL/FSA framework persistence, zero-call historical replay, new analysis lineage, failures/ready guards and genuine London release/PostGIS checks pass. Three migrations and the two measured implementation adjustments are recorded in phase-5-status.md. Current UI/copy/pricing/design remain unchanged; no public collector or Phase 6 engine. Phase 6 requires a new explicit owner instruction; completion does not authorise it. Deferred production mechanisms remain gated by their documented triggers.
+
+## Active gate: Phase 6 (authorised 2026-10-06)
+
+Execute the revised `phase6_plan.md` Steps 6.0–6.9, including real hosted/AI/Preview verification and protected CI delivery. Status: in progress, not complete. D70 supersedes earlier no-implementation/no-score and early-POI proposals. Foursquare/PropertyData/Valhalla remain deferred. Phase 7 and Phase 8 require new explicit authority even after Phase 6 completion.

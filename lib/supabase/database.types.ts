@@ -25,6 +25,8 @@ export type Database = {
           property_id: string | null
           schema_version: number
           status: Database["public"]["Enums"]["analysis_status"]
+          submission_nonce: string | null
+          submission_sha256: string | null
           updated_at: string
         }
         Insert: {
@@ -37,6 +39,8 @@ export type Database = {
           property_id?: string | null
           schema_version?: number
           status?: Database["public"]["Enums"]["analysis_status"]
+          submission_nonce?: string | null
+          submission_sha256?: string | null
           updated_at?: string
         }
         Update: {
@@ -49,6 +53,8 @@ export type Database = {
           property_id?: string | null
           schema_version?: number
           status?: Database["public"]["Enums"]["analysis_status"]
+          submission_nonce?: string | null
+          submission_sha256?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -410,6 +416,7 @@ export type Database = {
           classification: Database["public"]["Enums"]["evidence_classification"]
           created_at: string
           derivation: Json | null
+          envelope: Json | null
           geographic_scope: Json | null
           id: string
           input_id: string | null
@@ -427,6 +434,7 @@ export type Database = {
           classification: Database["public"]["Enums"]["evidence_classification"]
           created_at?: string
           derivation?: Json | null
+          envelope?: Json | null
           geographic_scope?: Json | null
           id?: string
           input_id?: string | null
@@ -444,6 +452,7 @@ export type Database = {
           classification?: Database["public"]["Enums"]["evidence_classification"]
           created_at?: string
           derivation?: Json | null
+          envelope?: Json | null
           geographic_scope?: Json | null
           id?: string
           input_id?: string | null
@@ -785,6 +794,7 @@ export type Database = {
           analysis_id: string
           created_at: string
           economic_model_id: string | null
+          free_projection: Json | null
           id: string
           input_id: string
           provenance: Json
@@ -798,6 +808,7 @@ export type Database = {
           analysis_id: string
           created_at?: string
           economic_model_id?: string | null
+          free_projection?: Json | null
           id?: string
           input_id: string
           provenance?: Json
@@ -811,6 +822,7 @@ export type Database = {
           analysis_id?: string
           created_at?: string
           economic_model_id?: string | null
+          free_projection?: Json | null
           id?: string
           input_id?: string
           provenance?: Json
@@ -955,6 +967,18 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      finalise_sitefit_free: {
+        Args: {
+          p_analysis: string
+          p_evidence: Json
+          p_input: string
+          p_owner: string
+          p_projection: Json
+          p_provenance: Json
+          p_sections: Json
+        }
+        Returns: string
+      }
       import_sitefit_geographies: {
         Args: { p_release_id: string; p_rows: Json }
         Returns: number
@@ -967,6 +991,7 @@ export type Database = {
         }
         Returns: number
       }
+      list_sitefit_free: { Args: never; Returns: Json }
       lookup_sitefit_geography: {
         Args: {
           p_latitude: number
@@ -981,6 +1006,14 @@ export type Database = {
           p_code: string
           p_geography_release_id: string
           p_release_id: string
+        }
+        Returns: Json
+      }
+      lookup_sitefit_residential_comparison: {
+        Args: {
+          p_code: string
+          p_geography_release: string
+          p_population_release: string
         }
         Returns: Json
       }
@@ -1012,6 +1045,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      read_sitefit_free: { Args: { p_report: string }; Returns: Json }
       resolve_sitefit_property: {
         Args: { address: Json }
         Returns: {
@@ -1043,6 +1077,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      select_sitefit_analysis_releases: { Args: never; Returns: Json }
       sitefit_assert_collectable: {
         Args: { p_analysis_id: string }
         Returns: {
@@ -1055,6 +1090,8 @@ export type Database = {
           property_id: string | null
           schema_version: number
           status: Database["public"]["Enums"]["analysis_status"]
+          submission_nonce: string | null
+          submission_sha256: string | null
           updated_at: string
         }
         SetofOptions: {
@@ -1064,7 +1101,37 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      sitefit_free_frozen: { Args: { p_analysis_id: string }; Returns: boolean }
       stage_sitefit_release: { Args: { p_manifest: Json }; Returns: Json }
+      submit_sitefit_analysis: {
+        Args: {
+          p_business: string
+          p_nonce: string
+          p_owner: string
+          p_property: string
+          p_sha256: string
+        }
+        Returns: {
+          business_category: Database["public"]["Enums"]["business_category"]
+          business_type: string
+          created_at: string
+          failure_code: string | null
+          id: string
+          owner_id: string
+          property_id: string | null
+          schema_version: number
+          status: Database["public"]["Enums"]["analysis_status"]
+          submission_nonce: string | null
+          submission_sha256: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "analyses"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       analysis_status:
