@@ -16,6 +16,8 @@ Phase 3 keeps public browsing and the in-memory checker accessible without regis
 
 ## Payments
 
+Current authority D72: [Phase 7 plan](phase7_plan.md), **not implementation approval**, requires permanent verified Google/email Supabase authentication before one-off £29 Test Mode Checkout. Free acquisition remains anonymous. Prefer supported same-UUID upgrade; the plan proposes a narrow current-account access relation for existing-account conflicts, preserving frozen original owner/context/content. Payment/access state stays separate from `analyses.status`; ready `free_ready` analyses cannot be changed to `paid`. The plan extends existing payments and adds minimal event/claim records with atomic server-confirmed entitlement. No Stripe code/configuration, ownership migration, Full Report generation, Production purchasing or Phase 8 work has been introduced. Older payment/lifecycle assumptions below are historical proposals.
+
 Stripe Checkout is planned for pay-per-report purchases. Use configurable server-side pricing and verified, idempotent webhook handling; a browser redirect must not establish payment success. Initial £29 is a business assumption, not a code constant. Phase 7 must settle tax, refunds and entitlement policy before implementation depends on them.
 
 ## AI abstraction and external adapters

@@ -25,6 +25,8 @@ All fourteen core tables above now exist with persistence fields, constraints an
 
 ## Proposed analysis lifecycle
 
+**Phase 7 planning correction (D72, 2026-10-06):** the diagram below is historical, not a Phase 7 migration instruction. Actual ready Free Snapshot guards reject any analysis update, including owner/status changes. [phase7_plan.md](phase7_plan.md) recommends preserving `free_ready`, extending the existing `payments` table, minimal private event receipts and a narrow guest-account claim/access relation without changing frozen original lineage. Durable payment entitlement belongs to a verified permanent account; new-identity same-UUID upgrade is preferred. Payment status, current access disposition and future report-generation status remain separate. These mechanics are proposed only; no migration or payment/claim implementation exists. The owner's permanent-auth-before-purchase/Test Mode-only policy is accepted, superseding undecided/anonymous purchase descriptions below.
+
 ```text
 draft -> collecting_free_data -> free_ready -> awaiting_payment -> paid
       -> collecting_full_data -> calculating -> generating_report -> ready
