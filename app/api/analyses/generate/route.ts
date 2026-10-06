@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const code = error instanceof Error ? error.message : "unavailable";
     const safeCodes = new Set(["submission_unavailable", "report_read_unavailable", "analysis_configuration_missing", "property_unavailable",
       "outside_analysis_coverage", "location_precision_unavailable", "source_persistence_incomplete", "stored_section_packet_mismatch",
-      "section_analysis_incomplete", "synthesis_incomplete", "partial_report_persistence_failed", "report_persistence_failed", "generation_busy", "generation_limit"]);
+      "section_analysis_incomplete", "synthesis_incomplete", "partial_report_persistence_failed", "report_persistence_failed", "stored_input_read_unavailable", "stored_report_read_unavailable", "generation_busy", "generation_limit"]);
     console.warn("snapshot_generation", { code: safeCodes.has(code) ? code : "unavailable" });
     if (code === "outside_analysis_coverage") return reply({ error: "Location analysis currently covers London. You can choose another address." }, 422);
     if (code === "location_precision_unavailable") return reply({ error: "This address has no usable location point. Select a returned postal address to generate local analysis." }, 422);
