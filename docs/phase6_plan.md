@@ -320,45 +320,45 @@ Steps are authorised; actual started/completed/blocked states belong in phase-6-
 ## 15. Definition of Done — all required
 
 - [x] Owner approves revised scope and dependent ownership/provider/AI policies.
-- [ ] Existing source/AI access, licence, data-handling and bounded development budget gates actually pass; no secrets exposed.
-- [ ] Free demonstrates analysis rather than display or generic prose.
-- [ ] Business relevance differs across categories without invented format/customer assumptions.
-- [ ] Current-source interpretations, valid scoped residential comparison, business relevance/reconciliation and explicit market/premises gaps pass real inner/outer/category QA; four composite scores withheld until thresholds are met (D70 supersedes early POI readiness gate).
-- [ ] Four dimensions/early view modelled; premises honestly unassessed when evidence absent.
-- [ ] Every admitted 0–100 score has deterministic normalisation, complete required evidence, inspectable hypothesis weights/thresholds, original versions and audit; no predictive calibration/success probability or invented demand/footfall/trading/risk.
-- [ ] Every material claim has valid permitted same-context Evidence IDs and typed provenance/lineage.
-- [ ] Semantic support, packet membership, numeric constraints and quality caps pass; invalid IDs rejected/repaired before persistence.
-- [ ] Missing/unavailable/not-assessed/not-applicable distinct, observed zero retained.
-- [ ] Support, opposition and unresolved conflicts survive the whole pipeline.
-- [ ] Existing ONS/TfL/FSA framework proofs and source-failure isolation pass.
-- [ ] No new data provider admitted; Foursquare/PropertyData/Valhalla and complete category/catchment/premises scoring remain Phase 8.
-- [ ] London releases, CRS/boundary/precision/area/metre/GiST behaviour pass fresh/hosted PostGIS tests.
-- [ ] Cohort/method/sample/exclusions/coverage/output frozen; no false commercial-peer claim.
-- [ ] Versioned business-specific hypothesis weights are deterministic/inspectable, never prompt-chosen; no arbitrary raw-unit sums, silent missing-weight redistribution or empirical/predictive claim.
-- [ ] Section AI and validated-only synthesis pass live and adversarial evaluations.
-- [ ] Invalid/incomplete AI cannot produce fake successful analysis; successful sources/sections preserved.
-- [ ] AI model/provider/prompt/schema/packet/usage recorded and worst-case limits approved.
-- [ ] Full-chain runtime/latency/cost measured and bounded failure behaviour proven.
-- [ ] Explicit POST generation/resume only; ready GET/refresh/details/CTA/Account make zero source/calculator/AI calls.
-- [ ] Historical inputs/property/snapshots/Evidence/metrics/sections/reports remain immutable under changed releases/mappings/models/prompts/policies/cache.
-- [ ] New intentional same-property analysis gets new lineage; duplicate intent replays original.
-- [ ] Guest/sign-in ownership/race/finalise/freeze/trusted mutation/TRUNCATE/tier/cross-owner SQL pass.
-- [ ] Anonymous lookup/manual selection and existing hosted Auth still work without registration gate.
-- [ ] Safe free DTO excludes paid-only/privileged/unpermitted/unvalidated material.
-- [ ] Responsive final copy/CTA/uncertainty/evidence pass widths/keyboard/zoom/public/Blog SEO checks.
-- [ ] One Early View conclusion leads; demand/use gaps are separate below. Four factor results stay visible with reason/small independent strength and closed per-section Why; no global reasoning panel. Result colours mean favourable/trade-off/conditional/insufficient basis, never evidence strength.
-- [ ] Internal state never substitutes for the customer conclusion; implication/reason/fallback actions bind to actual Evidence IDs and reviewed rules without fabricated certainty or unsupported no-concern claims.
-- [ ] Short-copy budgets preserve material caveats; evidence support/opposition/alternative/method detail stays available free.
-- [ ] Contextual questions bind to actual unknowns/Evidence IDs and approved capabilities, never invented paid answers.
-- [ ] One dominant persistent global CTA remains accessible without overlap at short height/keyboard/200% zoom; contextual links do not repeat generic purchase buttons.
-- [ ] No fabricated threat, opportunity, score uplift, discount, deadline, scarcity or urgency; untested upside stays investigatory.
-- [ ] Central £29 one-off/no subscription retained; outline action explicitly non-paying, no fake premium content.
-- [ ] Locked financial benefit previews break-even sales/daily customers/cost sensitivity without optional marketing or fake outputs. Phase 6 action is a disclosed non-paying outline; later verified £29 entitlement -> main-report Economics inputs -> explicit supplementary run, voluntary and independent of main-report readiness. No Phase 6 financial form/calculation/payment or historical overwrite.
-- [ ] Complete local regression/security/build and exact-head/post-merge required CI actually pass.
-- [ ] Preview end-to-end/secret checks pass, Production remains disabled.
-- [ ] Protected delivery complete, main matches origin/main, clean working tree.
-- [ ] Docs/status record actual state, findings/gates/deviations.
-- [ ] Deferred hardening audit passes; no later functionality without new approval.
+- [x] Existing source/AI access, licence, data-handling and bounded development budget gates actually pass; no secrets exposed.
+- [x] Free demonstrates analysis rather than display or generic prose.
+- [x] Business relevance differs across categories without invented format/customer assumptions.
+- [x] Current-source interpretations, valid scoped residential comparison, business relevance/reconciliation and explicit market/premises gaps pass real inner/outer/category QA; four composite scores withheld until thresholds are met (D70 supersedes early POI readiness gate).
+- [x] Four dimensions/early view modelled; premises honestly unassessed when evidence absent.
+- [x] Every admitted 0–100 score has deterministic normalisation, complete required evidence, inspectable hypothesis weights/thresholds, original versions and audit; no predictive calibration/success probability or invented demand/footfall/trading/risk.
+- [x] Every material claim has valid permitted same-context Evidence IDs and typed provenance/lineage.
+- [x] Semantic support, packet membership, numeric constraints and quality caps pass; invalid IDs rejected/repaired before persistence.
+- [x] Missing/unavailable/not-assessed/not-applicable distinct, observed zero retained.
+- [x] Support, opposition and unresolved conflicts survive the whole pipeline.
+- [x] Existing ONS/TfL/FSA framework proofs and source-failure isolation pass.
+- [x] No new data provider admitted; Foursquare/PropertyData/Valhalla and complete category/catchment/premises scoring remain Phase 8.
+- [x] London releases, CRS/boundary/precision/area/metre/GiST behaviour pass fresh/hosted PostGIS tests.
+- [x] Cohort/method/sample/exclusions/coverage/output frozen; no false commercial-peer claim.
+- [x] Versioned business-specific hypothesis weights are deterministic/inspectable, never prompt-chosen; no arbitrary raw-unit sums, silent missing-weight redistribution or empirical/predictive claim.
+- [x] Section AI and validated-only synthesis pass live and adversarial evaluations.
+- [x] Invalid/incomplete AI cannot produce fake successful analysis; successful sources/sections preserved.
+- [x] AI model/provider/prompt/schema/packet/usage recorded and worst-case limits approved.
+- [x] Full-chain runtime/latency/cost measured and bounded failure behaviour proven.
+- [x] Explicit POST generation/resume only; ready GET/refresh/details/CTA/Account make zero source/calculator/AI calls.
+- [x] Historical inputs/property/snapshots/Evidence/metrics/sections/reports remain immutable under changed releases/mappings/models/prompts/policies/cache.
+- [x] New intentional same-property analysis gets new lineage; duplicate intent replays original.
+- [x] Guest/sign-in ownership/race/finalise/freeze/trusted mutation/TRUNCATE/tier/cross-owner SQL pass.
+- [x] Anonymous lookup/manual selection and existing hosted Auth still work without registration gate.
+- [x] Safe free DTO excludes paid-only/privileged/unpermitted/unvalidated material.
+- [x] Responsive final copy/CTA/uncertainty/evidence pass widths/keyboard/zoom/public/Blog SEO checks.
+- [x] One Early View conclusion leads; demand/use gaps are separate below. Four factor results stay visible with reason/small independent strength and closed per-section Why; no global reasoning panel. Result colours mean favourable/trade-off/conditional/insufficient basis, never evidence strength.
+- [x] Internal state never substitutes for the customer conclusion; implication/reason/fallback actions bind to actual Evidence IDs and reviewed rules without fabricated certainty or unsupported no-concern claims.
+- [x] Short-copy budgets preserve material caveats; evidence support/opposition/alternative/method detail stays available free.
+- [x] Contextual questions bind to actual unknowns/Evidence IDs and approved capabilities, never invented paid answers.
+- [x] One dominant persistent global CTA remains accessible without overlap at short height/keyboard/200% zoom; contextual links do not repeat generic purchase buttons.
+- [x] No fabricated threat, opportunity, score uplift, discount, deadline, scarcity or urgency; untested upside stays investigatory.
+- [x] Central £29 one-off/no subscription retained; outline action explicitly non-paying, no fake premium content.
+- [x] Locked financial benefit previews break-even sales/daily customers/cost sensitivity without optional marketing or fake outputs. Phase 6 action is a disclosed non-paying outline; later verified £29 entitlement -> main-report Economics inputs -> explicit supplementary run, voluntary and independent of main-report readiness. No Phase 6 financial form/calculation/payment or historical overwrite.
+- [x] Complete local regression/security/build and exact-head/post-merge required CI actually pass.
+- [x] Preview end-to-end/secret checks pass, Production remains disabled.
+- [x] Protected delivery complete, main matches origin/main, clean working tree.
+- [x] Docs/status record actual state, findings/gates/deviations.
+- [x] Deferred hardening audit passes; no later functionality without new approval.
 
 ## 16. QA candidates, risks and decision-changing evidence
 
@@ -393,7 +393,7 @@ No causal calibration, verified demand, exhaustive inventory, paid delivery, cur
 - [Desktop](designs/phase-6/phase6-desktop-final-direction.jpg).
 - [Mobile](designs/phase-6/phase6-mobile-final-direction.jpg).
 - [Design rationale/static sources](designs/phase-6/README.md).
-- D66–D69 accept owner principles in product/decisions/architecture. Database/roadmap distinguish proposed earlier engine slices from implemented Phase 5.
+- D66–D69 accept owner principles in product/decisions/architecture. Database/roadmap record the implemented Phase 6 core and keep later paid/data functionality deferred.
 - Approval is recorded; implementation gates are checked only against actual evidence in phase-6-status.md. Static design checks never substitute for application, live model, hosted security, Preview or CI verification.
 - Prior-turn planning edits are revised and retained. Deliver the authorised implementation through the protected branch workflow; the earlier documentation-only review boundary no longer applies.
 - **Execute authorised Phase 6 now; do not seek another design approval. Stop after completion/delivery or genuine recorded dependent blockers. Do not start Phase 7/8.**

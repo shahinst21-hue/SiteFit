@@ -162,7 +162,7 @@ Phase 5 Step 5.5 source-normalisation repair: migration `20261005130000_bounded_
 
 Step 5.8 repository factories bind a verified owner UUID and deny mismatched ownership before preparation, context reads, snapshot reads and append. The collector reloads and compares the exact frozen context; parent/readiness guards still apply atomically on append. Small ownership/context and local population lookups are bounded at two seconds; normalised snapshot envelope transfers at eight seconds under the 30-second collection deadline. Historical ready reads use stored references directly, never collectSources. No anonymous analysis ownership exception was added.
 
-## Phase 6 implementation additions (in progress)
+## Phase 6 implementation additions (verified)
 
 Migration `20261006110000_analysis_comparison_context.sql` supplies service-only compatible ready London release selection and same-local-authority Census output-area comparisons. It uses PostGIS geodesic square-metre area, retains eligible/excluded row counts and exact operands, excludes the target and missing values, and provides no commercial-peer or current-demand claim. Fresh and hosted PostGIS suites pass.
 
