@@ -6,6 +6,7 @@ import { readPublicSupabaseConfig } from "@/lib/supabase/config";
 import { verifiedUser } from "@/lib/supabase/server";
 import { authFailure, authMessages } from "@/lib/auth/flow";
 import { signOut } from "@/app/auth/actions";
+import { purchaseOrigin } from "@/lib/payments/config";
 export const metadata = pageMetadata("/login");
 export const dynamic = "force-dynamic";
 export default async function Login({
@@ -16,6 +17,7 @@ export default async function Login({
   const { user, unavailable } = await verifiedUser();
   const params = await searchParams;
   const failure = authFailure(params.error);
+  const signedIn=!!user&&!user.is_anonymous;
   return (
     <div className="page-wrap narrow-page">
       <div className="auth-brand">
@@ -24,10 +26,10 @@ export default async function Login({
       </div>
       <PageIntro
         eyebrow="YOUR SITEFIT ACCOUNT"
-        title={user ? "You're signed in." : "Sign in to SiteFit."}
+        title={signedIn ? "You're signed in." : "Sign in to SiteFit."}
       >
         <p>
-          {user
+          {signedIn
             ? "Open your account or start a new location check."
             : "Use a one-time email link. Your Free Snapshot does not require an account."}
         </p>
@@ -38,7 +40,7 @@ export default async function Login({
         </p>
       )}
       {params.signed_out === "1" && <p role="status">You're signed out.</p>}
-      {user ? (
+      {signedIn ? (
         <section className="simple-panel">
           <p>Signed in as {user.email}</p>
           <Link className="text-link" href="/account">
@@ -53,6 +55,7 @@ export default async function Login({
       ) : (
         <LoginForm
           config={unavailable ? null : readPublicSupabaseConfig(process.env)}
+          google={!!purchaseOrigin(process.env)}
         />
       )}
       <Link href="/check-location" className="text-link">

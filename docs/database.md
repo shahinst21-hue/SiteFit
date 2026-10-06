@@ -1,5 +1,15 @@
 # Phase 3 database foundation
 
+## Phase 7 implementation in progress — 2026-10-06
+
+Four forward migrations are applied to hosted development: `20261006150000_guest_account_continuity.sql` and `20261006170000_test_payment_integrity.sql`, `20261006190000_phase7_narrow_writers.sql` and `20261006200000_payment_reversal_admission.sql`. Their fresh PostgreSQL/PostGIS and hosted rollback suites pass; actual Google/email/Stripe/Preview proofs remain outstanding. See [phase-7-status.md](phase-7-status.md). No applied migration history is edited.
+
+`guest_account_claims` holds private expiring hashed continuation/browser proofs, announced Auth method, verified target receipt and immutable completed guest→permanent access lineage. Original ready analysis owners, contexts, evidence, projection and timestamps remain frozen. Current-access reads resolve the completed relation; consumed guests lose access. Same-UUID upgrades retain original ownership. Claim capabilities and raw rows are never client readable; history is exposed through bounded ownership-checked projection RPCs.
+
+The existing `payments` table now stores fixed permanent owner/report/analysis/product/Test Mode bindings, immutable private attempt parameters (including verified contact email), finite expiration, separate payment/access/reversal states and revision. Legacy rows without payment version do not qualify as Phase 7 entitlement. Pending-attempt and active-access uniqueness constrain concurrency. `payment_events` contains only minimal unique allowlisted test receipts, never raw Stripe payloads or instruments. Confirmation, receipt, access and semantic event commit together; revision comparison rejects a stale concurrent provider observation. Full refund/lost dispute remains terminal; pending/partial refunds and open disputes suspend access. Free analyses remain `free_ready`; no Full Report row is created.
+
+Authenticated clients cannot read raw payments/claims/events or invoke writer RPCs. Safe purchase reads expose only IDs, test state/access and an explicit false report-generation state. The applied narrow-writers migration removes broad service DML; mutations use checked SECURITY DEFINER RPCs. The reversal-admission correction rejects null-version access and blocks fresh purchases after lost disputes. Expanded fresh and hosted rollback tests cover early webhook binding, full-refund repurchase, won/lost dispute handling and late success. No general ledger, leases, jobs, subscriptions or distributed infrastructure is introduced.
+
 Recorded 2026-10-03. The initial fifteen-table schema is implemented in [20261003210000_initial_sitefit_schema.sql](../supabase/migrations/20261003210000_initial_sitefit_schema.sql), applied to the hosted development project and rebuilt in isolated PostgreSQL tests. Later pipeline/entitlement/retention mechanics remain planned. See [phase-3-status.md](phase-3-status.md) for actual gates. Production has not been touched.
 
 ## Initial entities

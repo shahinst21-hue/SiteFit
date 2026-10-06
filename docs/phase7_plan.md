@@ -1,6 +1,6 @@
 # Phase 7 plan — permanent accounts, Test Mode payment and entitlement
 
-Prepared 2026-10-06 against clean `main`, commit `11bdbe1952bd13ac744437f10dbdbcca715766b1`, after protected PR #18. **Planning only; implementation is not authorised.** Phase 6 and its presentation refinement are complete and frozen. Every implementation step and completion gate below is pending.
+Prepared 2026-10-06 against clean `main`, commit `11bdbe1952bd13ac744437f10dbdbcca715766b1`, after protected PR #18. **Owner approved Steps 7.0–7.9 on 2026-10-06.** Implementation evidence is recorded in [phase-7-status.md](phase-7-status.md); approval does not mean completion. Phase 6 and its presentation refinement are complete and frozen.
 
 ## 1. Authority and objective
 
@@ -16,7 +16,7 @@ The owner's later authentication/purchase policy supersedes the first payment br
 
 Objective: a permanent verified owner of an eligible stored Free Snapshot can safely initiate/reuse one intended £29 test Checkout; verified Stripe confirmation durably establishes the appropriate account/analysis entitlement, with safe retries, refunds/reversals and account recovery. The existing Snapshot and analytical lifecycle stay unchanged.
 
-Product policy above is accepted. The implementation mechanisms, limits and Test Mode refund rules below are **recommendations awaiting approval of this plan**, not implemented features or settled live commercial terms.
+Product policy and the bounded implementation mechanisms, limits and Test Mode refund rules below are approved. They are not completion evidence or settled live commercial terms. The owner's sole amendment requires the verified permanent account email as frozen server-side Checkout contact when available; it cannot establish any authentication, ownership, claim, entitlement or recovery authority.
 
 ## 2. Inspected repository baseline
 
@@ -139,7 +139,7 @@ Session parameters: hosted Checkout, `mode=payment`, one line item/quantity one,
 
 Metadata: internal payment UUID (`purchase_id`), server-resolved `analysis_id`, `product_type`, contract version, duplicated onto PaymentIntent metadata for failure/reversal correlation. `client_reference_id` can be purchase UUID. **Do not send the anonymous or permanent Supabase UUID**: internal purchase→permanent owner mapping is sufficient. No exact address, inputs, evidence, capability or Auth credentials in Stripe metadata. Binding account/analysis comes from the immutable internal record; metadata alone cannot create or retarget ownership.
 
-Recommendation: let hosted Checkout collect its payment-contact email; omit `customer_email` from the create parameters initially so retries remain identical without storing a second copy of email or depending on later account-email changes. Supabase's confirmed Google/email identity remains authoritative regardless of the Checkout email. Stripe may retain contact/payment information under its own settings; do not duplicate it in payments/events or use it as authentication, a claim token or entitlement recovery authority. No mailing list/marketing consent, report-ready mail or mandatory persistent Stripe Customer; store Customer ID only if a concrete verification need emerges. Do not create a Customer just for future convenience. A later approved prefill must preserve exact retry parameters with a documented minimal-PII policy.
+Owner-approved amendment: use the verified permanent SiteFit account email as server-side `customer_email` when available and freeze it in private immutable durable attempt parameters. Retries use that exact original value even if the account email later changes. This is contact/prefill only: Supabase permanent identity and internal account/analysis/purchase bindings establish all authority. Do not expose the frozen email in client projections, events, logs, raw errors or claim/recovery logic. Stripe may retain contact/payment information under its own settings. No marketing, report-ready mail or mandatory persistent Stripe Customer; retain contact only within the minimum necessary private attempt record.
 
 | Variable/configuration | Planned use/scope |
 | --- | --- |
@@ -183,7 +183,7 @@ Entitlement means the intended Full Report product has been purchased in **test 
 
 ## 8. Checkout retries and payment lifecycle
 
-Reserve/read one durable pending attempt transactionally **before** Stripe creation. Stripe key derives from that server attempt UUID/contract; never accept a browser idempotency key as authority. Persist the exact non-sensitive create parameters including fixed URLs/Price/expiration and the decision to omit contact-email prefill so retries do not change them. Never omit or add parameters selectively on retry. Sensitive request data must not be copied into arbitrary JSON logs.
+Reserve/read one durable pending attempt transactionally **before** Stripe creation. Stripe key derives from that server attempt UUID/contract; never accept a browser idempotency key as authority. Persist exact private create parameters including fixed URLs/Price/expiration and the verified account email when available so retries do not change them. Never omit or add parameters selectively on retry. Frozen email/contact parameters are private and must not enter client responses, operational events or arbitrary JSON logs.
 
 No database transaction stays open across Stripe HTTP. Concurrent workers get the same pending row and submit the same provider idempotency key/parameters; a normal idempotency-in-use response is retryable, not a new attempt. A crash after Stripe creation but before DB binding retries that same key. A webhook arriving first can bind the known internal attempt using validated metadata and immutable parameters in the confirmation transaction.
 
@@ -354,4 +354,4 @@ Proposed forward migrations are an account-continuity/access migration and a pay
 
 **Recommendation: ready for explicit approval of the bounded Phase 7 implementation plan**, subject to approval of the proposed account-claim mechanism and test reversal rules. It is not yet externally configured or verified. Independent implementation can proceed after approval while genuine credential/provider/ingress-dependent proof waits for the owner's secure actions. Missing Stripe/Google setup is not a blocker to this completed planning task, but cannot be waived from the implementation DoD.
 
-Planning output stops here. No Phase 7 code, migration, dependency, credentials, Checkout, webhook, Supabase setting, Vercel setting or Phase 8 work is implemented by this document. Wait for explicit owner approval before Step 7.0.
+Owner implementation approval is now recorded; follow Steps 7.0–7.9 and track actual evidence in phase-7-status.md. The plan itself does not prove code, migrations, configuration or integrations complete. Stop after Phase 7 and never start Phase 8 without separate explicit approval.

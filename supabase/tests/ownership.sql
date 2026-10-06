@@ -40,7 +40,7 @@ do $$
 declare table_name text; visible integer; changed integer; other_analysis uuid;
 begin
 select analysis_id into other_analysis from fixture where owner_id='00000000-0000-4000-8000-000000000032';
-foreach table_name in array array['profiles','properties','analyses','analysis_inputs','payments'] loop
+foreach table_name in array array['profiles','properties','analyses','analysis_inputs'] loop
 execute format('select count(*) from public.%I',table_name) into visible;
 perform pg_temp.assert_true(visible=1,'User A reads only own rows: '||table_name);
 end loop;
@@ -54,7 +54,7 @@ update public.analyses set business_type='restaurant',business_category='restaur
 perform pg_temp.assert_true(changed=0,'A cannot update B analysis');
 update public.profiles set display_name='Security test' where id=auth.uid(); get diagnostics changed=row_count;
 perform pg_temp.assert_true(changed=1,'Owner updates permitted profile field');
-foreach table_name in array array['analysis_inputs','data_snapshots','evidence_items','competitors','premises_events','economic_models','reports','report_sections','payments','pdf_exports'] loop
+foreach table_name in array array['analysis_inputs','data_snapshots','evidence_items','competitors','premises_events','economic_models','reports','report_sections','pdf_exports'] loop
 begin execute format('update public.%I set analysis_id=analysis_id',table_name); raise exception 'Client modified immutable or derived row: %',table_name; exception when insufficient_privilege then null; end;
 end loop;
 perform pg_temp.assert_true((select count(*) from public.blog_posts where slug like 'phase3-test-%')=1,'Authenticated reader sees only published past post');
@@ -65,6 +65,7 @@ begin update public.analyses set status='paid' where owner_id=auth.uid(); raise 
 begin update public.analyses set owner_id='00000000-0000-4000-8000-000000000032' where owner_id=auth.uid(); raise exception 'Client changed owner'; exception when insufficient_privilege then null; end;
 begin update public.reports set status='ready'; raise exception 'Client modified reports'; exception when insufficient_privilege then null; end;
 begin update public.payments set status='succeeded'; raise exception 'Client forged payment'; exception when insufficient_privilege then null; end;
+begin select count(*) into visible from public.payments; raise exception 'Client read private Checkout parameters'; exception when insufficient_privilege then null; end;
 begin delete from public.analyses; raise exception 'Client deleted retained records'; exception when insufficient_privilege then null; end;
 begin select count(*) into visible from public.system_events; raise exception 'Client read operational logs'; exception when insufficient_privilege then null; end;
 end $$;
@@ -85,7 +86,7 @@ select input_id into other_input from fixture where owner_id='00000000-0000-4000
 begin insert into public.reports(analysis_id,input_id,version,schema_version,tier) values(first_analysis,other_input,2,1,'full'); raise exception 'Cross-analysis provenance accepted'; exception when foreign_key_violation then null; end;
 begin delete from auth.users where id='00000000-0000-4000-8000-000000000031'; raise exception 'User deletion cascaded retained records'; exception when foreign_key_violation or sqlstate '23001' then null; end;
 end $$;
-select pg_temp.assert_true((select count(*) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r' and c.relrowsecurity)=15,'RLS on all application tables');
+select pg_temp.assert_true((select count(*)>=15 and bool_and(c.relrowsecurity) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r'),'RLS on every application table, including new private Phase 7 records');
 select pg_temp.assert_true((select enum_range(null::public.analysis_status)::text)='{draft,collecting_free_data,free_ready,awaiting_payment,paid,collecting_full_data,calculating,generating_report,ready,failed}','Approved lifecycle only');
 select set_config('request.jwt.claim.sub','',true);
 select set_config('request.jwt.claims','{"role":"anon"}',true);
