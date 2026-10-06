@@ -1,66 +1,63 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Arrow } from "./ui";
 import { Icon, type IconName } from "./icon";
+import { SnapshotMapPanel } from "./snapshot-map";
+import { SnapshotFinancePreview, SnapshotOutlineLink } from "./snapshot-finance-preview";
 import { businessTypes } from "@/lib/wizard";
 import { formatPrice, site } from "@/lib/site-config";
 import type { FreeProjection } from "@/lib/analysis/projection";
-const icons: Record<string, IconName> = { "customer-base": "demand", "market-position": "shop", "customer-access": "access", premises: "shield" };
-const strengthLabels = { limited: "Limited", insufficient: "Insufficient", sufficient: "Sufficient" };
-function Lines({ label, lines }: { label: string; lines: string[] }) {
-  return lines.length ? <div><h4>{label}</h4><ul>{lines.map(line => <li key={line}>{line}</li>)}</ul></div> : null;
+import { factorTitles, metricValue, scoreIsDisplayable, snapshotFromStored, type EvidenceQuality as Quality, type FactorId, type SnapshotFactor, type SnapshotMetric, type SnapshotView } from "@/lib/snapshot/model";
+const icons: Record<FactorId, IconName> = { "customer-base": "demand", "market-position": "shop", "customer-access": "access", premises: "shield" };
+const qualityLabels: Record<Quality, string> = { good: "Good", moderate: "Moderate", limited: "Limited", insufficient: "Insufficient" };
+function date(value: string) { return new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/London" }); }
+function Lines({ label, lines }: { label: string; lines: string[] }) { return lines.length ? <div><h4>{label}</h4><ul>{lines.map(line => <li key={line}>{line}</li>)}</ul></div> : null; }
+export function EvidenceQuality({ quality, sourceCount = null, updatedAt = null }: { quality: Quality; sourceCount?: number | null; updatedAt?: string | null }) {
+  return <span className="sf-quality" title={[sourceCount !== null ? `${sourceCount} supporting source${sourceCount === 1 ? "" : "s"}` : null, updatedAt ? `Updated ${date(updatedAt)}` : null].filter(Boolean).join(" · ") || undefined}>Evidence: {qualityLabels[quality]}</span>;
 }
-export function FreeSnapshot({ report }: { report: FreeProjection }) {
+export function SnapshotMetricRow({ metric }: { metric: SnapshotMetric }) {
+  return <div className={`sf-metric sf-metric-${metric.status}`}><div className="sf-metric-value">{metric.status === "loading" ? <span className="sf-skeleton" aria-label="Loading metric" /> : <><strong>{metricValue(metric)}</strong>{metric.status === "available" && metric.unit && <span>{metric.unit}</span>}{metric.status === "locked" && <Icon name="document" />}</>}</div><div><span className="sf-metric-label">{metric.label}</span>{metric.description && <small>{metric.description}</small>}{metric.comparison && <small>{metric.comparison}</small>}</div></div>;
+}
+function Reasoning({ factor, demo }: { factor: SnapshotFactor; demo: boolean }) {
+  const why = factor.details;
+  return <details className="sf-evidence-details" id={`evidence-${factor.id}`}><summary>Why this result?</summary>{factor.implication && <p>{factor.implication}</p>}{factor.scoreNote && <p>{factor.scoreNote}</p>}
+    {why ? <><Lines label="What supports the result" lines={why.support} /><Lines label="What pushes against it" lines={why.opposition} /><Lines label="Another explanation" lines={why.alternatives} /><Lines label="What remains unknown" lines={why.unknowns} />
+      {why.comparison && <div><h4>Residential comparison</h4><p>{why.comparison.description}</p>{why.comparison.density !== null && <p>{Math.round(why.comparison.density).toLocaleString("en-GB")} {why.comparison.units}</p>}{why.comparison.percentile !== null && <p>Descriptive distribution position: {Math.round(why.comparison.percentile)}th percentile among {why.comparison.peers} other Census areas. This is not a customer-demand or commercial-performance score.</p>}<Lines label="Comparison limits" lines={why.comparison.limitations} /></div>}
+      {why.observations.length > 0 && <div><h4>All stored observations</h4>{why.observations.map((o, i) => <p key={i}>{o.label}: {o.value === null ? "Unknown" : typeof o.value === "number" ? o.value.toLocaleString("en-GB") : o.value} {o.units} · {o.scope}{o.effectiveAt && <> · Effective {date(o.effectiveAt)}</>}</p>)}</div>}
+      {why.sources.length > 0 && <div><h4>Sources and dates</h4>{why.sources.map((s, i) => <div key={i}><p>{s.url ? <a href={s.url} rel="noreferrer" target="_blank">{s.provider} · {s.dataset}</a> : `${s.provider} · ${s.dataset}`}{s.retrievedAt && <> · Retrieved {date(s.retrievedAt)}</>}</p>{s.notices.map(n => <small key={n}>{n}</small>)}</div>)}</div>}
+    </> : <p>{demo ? "Illustrative fixture only. No provider retrieval, real evidence references or property investigation supports these example findings." : "Verified evidence details are not available for this factor."}</p>}
+    {factor.metrics.some(m => m.status === "available") && <div><h4>Metric provenance</h4>{factor.metrics.filter(m => m.status === "available").map(m => <p key={m.id}>{m.label} · {m.sourceType ?? "Source type not supplied"} · {qualityLabels[m.evidenceQuality]}{m.sourceCount !== null ? ` · ${m.sourceCount} source(s)` : ""}{m.updatedAt ? ` · Effective ${date(m.updatedAt)}` : ""}</p>)}</div>}
+  </details>;
+}
+function FactorCard({ factor, demo }: { factor: SnapshotFactor; demo: boolean }) {
+  const loading = factor.status === "loading";
+  return <article className={`sf-factor result-${factor.meaning}`} aria-busy={loading}><div className="sf-factor-top"><span className="icon-disc"><Icon name={icons[factor.id]} /></span><EvidenceQuality quality={factor.quality} /></div><h2>{factor.title}</h2>
+    {loading ? <div role="status"><span className="sf-skeleton sf-skeleton-heading" /><span className="sf-skeleton" /><span className="sf-skeleton" /><span className="sr-only">Loading {factor.title.toLowerCase()} evidence</span></div> : <><h3>{factor.finding ?? "Evidence is not yet available."}</h3><p className="sf-factor-reason">{factor.reason ?? "This factor has not been established by the available evidence."}</p></>}
+    {factor.score !== null && <p className="sf-dimension-score"><strong>{factor.score}</strong> / 100 · Dimension assessment</p>}
+    <div className="sf-metrics">{factor.metrics.length ? factor.metrics.map(m => <SnapshotMetricRow key={m.id} metric={m} />) : <p className="sf-empty-line">No verified metrics available.</p>}</div>{factor.question && <p className="sf-factor-question"><strong>Still to resolve</strong>{factor.question}</p>}{!loading && <Reasoning factor={factor} demo={demo} />}
+  </article>;
+}
+function OverallScore({ snapshot }: { snapshot: SnapshotView }) {
+  const score = snapshot.overallAssessment.score;
+  const available = scoreIsDisplayable(score);
+  return <div className="sf-overall-score"><div className={`sf-score-ring ${available ? "sf-score-ready" : ""}`} style={available ? { background: `conic-gradient(#236345 ${score.value! * 3.6}deg, #e4ebe6 0deg)` } : undefined}><div>{score.status === "loading" ? <span className="sf-skeleton" /> : <strong>{available ? score.value : "—"}</strong>}<span>{available ? "out of 100" : "Not scored"}</span></div></div><div><p className="eyebrow">{snapshot.mode === "demo" ? "ILLUSTRATIVE SCORE" : "LOCATION SCORE"}</p><p>{available ? "Evidence-weighted location assessment" : "Awaiting complete evidence"}</p><details className="sf-score-method"><summary>{available ? "How is this scored?" : "Why no number yet?"}</summary><p>{score.explanation}</p>{available && score.method && <><p>Method: {score.method.version} · {score.method.authoredBy === "ai" ? "AI-authored weighting method" : "Reviewed weighting method"}</p>{score.method.aiModel && <p>{score.method.aiModel}</p>}<ul>{score.method.components.map(c => <li key={c.factor}>{factorTitles[c.factor]}: {c.weight}% · Factor {c.value}/100</li>)}</ul></>}</details></div></div>;
+}
+export function FreeSnapshot({ report }: { report: FreeProjection }) { return <FreeSnapshotView snapshot={snapshotFromStored(report)} />; }
+export function FreeSnapshotView({ snapshot }: { snapshot: SnapshotView }) {
   const price = formatPrice(site.pricing.fullReport);
-  return <div className="page-wrap analysis-page">
-    <div className="analysis-property"><p className="eyebrow">YOUR FREE SNAPSHOT <span>STEP 3 OF 3</span></p>
-      <h1>{report.property.address}</h1><p>{businessTypes.find(type => type.id === report.businessType)?.label} · {report.property.resolution === "provider_verified" ? "Postal address confirmed" : "Manually entered address"}</p>
-      <p className="analysis-date">Generated {new Date(report.generatedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Europe/London" })} · Saved historical view</p></div>
-    <section className={`analysis-early result-${report.earlyView.meaning}`} aria-labelledby="early-view-title">
-      <p className="eyebrow">EARLY VIEW</p><h2 id="early-view-title">{report.earlyView.headline}</h2>
-      <p>{report.earlyView.reason} <span className="analysis-evidence">Evidence: {strengthLabels[report.earlyView.strength]}</span></p>
-      <div className="analysis-key-gaps"><h3>Key questions still open</h3><ul>{report.earlyView.keyQuestions.map(question => <li key={question}>{question}</li>)}</ul></div>
-      <p className="analysis-coverage">{report.earlyView.coverage}</p>
+  const demo = snapshot.mode === "demo";
+  const factors: SnapshotFactor[] = (Object.keys(factorTitles) as FactorId[]).map(id => snapshot.factors.find(f => f.id === id) ?? { id, title: factorTitles[id], status: "unavailable", meaning: "no_basis", quality: "insufficient", finding: null, reason: null, question: null, metrics: [], score: null, details: null, implication: null, scoreNote: null });
+  return <div className="page-wrap sf-snapshot">{demo && <aside className="sf-demo-notice" role="note"><strong>Development demo · illustrative data</strong><span>Example values, score and geometry do not measure this property. The real Snapshot never uses this fixture.</span></aside>}
+    <header className="sf-property-header"><div><p className="eyebrow">YOUR FREE SNAPSHOT</p><h1>{snapshot.property.address}</h1><p className="sf-property-meta">{businessTypes.find(t => t.id === snapshot.businessType)?.label ?? snapshot.businessType}<span>·</span>{snapshot.property.confirmation}{snapshot.generatedAt && <><span>·</span>Generated {date(snapshot.generatedAt)}</>}</p></div><div className={`sf-property-context ${snapshot.property.image ? "sf-has-photo" : ""}`}>{snapshot.property.image && <Image src={snapshot.property.image.src} alt={snapshot.property.image.alt} width={240} height={180} />}<dl>{snapshot.property.context.map(c => <div key={c.label}><dt>{c.label}</dt><dd>{c.value ?? "Unknown"}</dd></div>)}</dl></div></header>
+    <section className={`sf-assessment result-${snapshot.overallAssessment.meaning}`} aria-labelledby="assessment-title" aria-busy={snapshot.analysisStatus === "loading"}><div className="sf-assessment-result"><p className="eyebrow">INITIAL ASSESSMENT</p>{snapshot.analysisStatus === "loading" ? <div role="status"><span className="sf-skeleton sf-skeleton-heading" /><h2 id="assessment-title">Preparing the available evidence…</h2></div> : <><h2 id="assessment-title">{snapshot.overallAssessment.headline ?? "The location case remains open."}</h2><p>{snapshot.overallAssessment.reason ?? "More verified evidence is needed to assess this location."}</p><EvidenceQuality quality={snapshot.overallAssessment.quality} /></>}<OverallScore snapshot={snapshot} /></div>
+      <div className="sf-assessment-signals"><h3><Icon name="check" />Key supportive signals</h3>{snapshot.supportiveSignals.length ? <ul>{snapshot.supportiveSignals.map(s => <li key={s}>{s}</li>)}</ul> : <p>No supportive finding has been established.</p>}<a href="#decision-factors" className="text-link">See evidence details ↓</a></div><div className="sf-assessment-questions"><h3><Icon name="shield" />Key open questions</h3>{snapshot.openQuestions.length ? <ul>{snapshot.openQuestions.map(q => <li key={q}>{q}</li>)}</ul> : <p>No questions supplied; this does not establish the absence of risks.</p>}<a href="#decision-factors" className="text-link">See what remains unknown ↓</a></div>{snapshot.coverage && <p className="sf-coverage">{snapshot.coverage}</p>}
     </section>
-    <section className="analysis-factors" aria-label="Decision factors">{report.dimensions.map(dimension => <article className={`analysis-factor result-${dimension.meaning}`} key={dimension.id}>
-      <div className="analysis-factor-heading"><span className="icon-disc"><Icon name={icons[dimension.id]} /></span><h2>{dimension.title}</h2></div>
-      {dimension.score !== null && <div className="analysis-score" aria-label={`${dimension.title} dimension assessment ${dimension.score} out of 100`}><strong>{dimension.score}</strong><span>/ 100</span></div>}
-      <h3 className="analysis-conclusion">{dimension.conclusion}</h3><p>{dimension.reason} <span className="analysis-evidence">Evidence: {strengthLabels[dimension.strength]}</span></p>
-      <p className="analysis-open-question"><strong>Still to resolve</strong><br />{dimension.why.unknowns[0] ?? dimension.question}</p>
-      <a className="analysis-continuation" href="#full-case">{dimension.question} <Arrow /></a>
-      <details className="analysis-why"><summary>Why this result?</summary>
-        <p>{dimension.implication}</p><p>{dimension.scoreNote}</p>
-        <Lines label="What supports the result" lines={dimension.why.support} />
-        <Lines label="What pushes against it" lines={dimension.why.opposition} />
-        <Lines label="Another explanation" lines={dimension.why.alternatives} />
-        <Lines label="What remains unknown" lines={dimension.why.unknowns} />
-        {dimension.why.observations.length > 0 && <div><h4>Main evidence</h4>{dimension.why.observations.map((observation, i) => <p key={i}>
-          {observation.value === null ? "Not supplied" : typeof observation.value === "number" ? observation.value.toLocaleString("en-GB") : observation.value} {observation.units} · {observation.scope}
-          {observation.effectiveAt && <> · Effective {new Date(observation.effectiveAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" })}</>}
-        </p>)}</div>}
-        {dimension.why.comparison && <div><h4>Residential comparison</h4><p>{dimension.why.comparison.description}</p>
-          {dimension.why.comparison.density !== null && <p>{Math.round(dimension.why.comparison.density).toLocaleString("en-GB")} {dimension.why.comparison.units}</p>}
-          {dimension.why.comparison.percentile !== null && <p>Descriptive distribution position: {Math.round(dimension.why.comparison.percentile)}th percentile among {dimension.why.comparison.peers} other Census areas. This is not a customer-demand or commercial-performance score.</p>}
-          <Lines label="Comparison limits" lines={dimension.why.comparison.limitations} /></div>}
-        {dimension.why.sources.length > 0 && <div><h4>Sources</h4>{dimension.why.sources.map((source, i) => <div key={i}>
-          <p>{source.url ? <a href={source.url} rel="noreferrer" target="_blank">{source.provider} · {source.dataset}</a> : `${source.provider} · ${source.dataset}`}
-            {source.retrievedAt && <> · Retrieved {new Date(source.retrievedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" })}</>}</p>
-          {source.notices.map(notice => <small key={notice}>{notice}</small>)}
-        </div>)}</div>}
-      </details>
-    </article>)}</section>
-    <section className="analysis-finance" aria-labelledby="finance-title"><span className="icon-disc green"><Icon name="cost" /></span>
-      <div><p className="eyebrow">INCLUDED IN THE FULL REPORT</p><h2 id="finance-title">Can this location work financially?</h2><p>See the sales, customers and margins this location may need to work, using your assumptions.</p>
-        <ul className="analysis-benefits"><li>Break-even sales</li><li>Customers needed per day</li><li>Cost and rent sensitivity</li></ul>
-        <a className="button button-secondary" href="#full-case">Run Financial Analysis <Arrow /></a><p className="field-help">Opens the report outline; no payment or calculation.</p></div></section>
-    <section className="analysis-full-case" id="full-case" tabIndex={-1} aria-labelledby="full-case-title"><p className="eyebrow">CHECK BEFORE YOU COMMIT</p>
-      <h2 id="full-case-title">See the case for — and against.</h2><p>Strengths, trade-offs and questions that could change your decision.</p>
-      <ul className="analysis-benefits"><li>Strengths worth building on</li><li>Reasons to reconsider</li><li>Customer fit and complementary trade</li><li>Premises questions before a lease</li><li>Financial scenarios using your inputs</li></ul>
-      <p>Resolve the unknowns before a lease. Some questions may still require a viewing, your own inputs or specialist advice.</p>
-      <a className="button button-primary" href="#report-outline">Check the Full Case · {price} <Arrow /></a><p className="field-help">One-off payment · No subscription</p>
-      <div id="report-outline" tabIndex={-1}><h3>Your Full Report outline</h3><p>Report outline only. Purchasing is not enabled.</p><p>The planned report investigates the case for and against, practical next checks and decision-changing unknowns. Financial analysis follows the main report using your inputs.</p>
-        <Link className="text-link" href="/sample-report">View an illustrative sample report <Arrow /></Link></div>
-    </section>
-    <div className="analysis-session-note"><p>Your saved Snapshot reopens with the same evidence and interpretation. Guest access depends on this browser session; signing out or losing its cookies can remove access.</p><Link href="/check-location">Check another location</Link></div>
-    <div className="analysis-mobile-action"><a className="button button-primary" href="#full-case">Check the Full Case · {price} <Arrow /></a></div>
+    <section className="sf-location-context" aria-label="Map and nearby transport"><SnapshotMapPanel map={snapshot.map} demo={demo} /><aside className="sf-transport"><h2>Nearby transport</h2>{snapshot.transport.status === "loading" ? <div role="status"><span className="sf-skeleton" /><span className="sf-skeleton" /><p>Loading transport context…</p></div> : snapshot.transport.places.length ? <ul>{snapshot.transport.places.map(p => <li key={p.id}><span className="icon-disc blue"><Icon name={p.mode === "Walking" ? "pin" : "access"} /></span><div><h3>{p.name}</h3><p>{p.walkingMinutes !== null ? `${p.walkingMinutes} min walk` : "Walking time unknown"}{p.distanceMetres !== null && <span> · {(p.distanceMetres / 1000).toLocaleString("en-GB")} km</span>}</p>{p.mode && <span className="sf-transport-mode">{p.mode}</span>}{p.information && <small>{p.information}</small>}</div></li>)}</ul> : <div className="sf-transport-empty"><span className="icon-disc blue"><Icon name="access" /></span><h3>Journey details not available</h3><p>Verified station distances and walking times have not been supplied.</p><a href="#evidence-customer-access" className="text-link">Review available access evidence ↓</a></div>}{snapshot.transport.note && <p className="sf-context-note">{snapshot.transport.note}</p>}</aside></section>
+    <section className="sf-factors" id="decision-factors" aria-label="Four decision factors">{factors.map(f => <FactorCard key={f.id} factor={f} demo={demo} />)}</section>
+    <SnapshotFinancePreview financial={snapshot.financialPreview} demo={demo} />
+    <section className="sf-full-report" id="full-case" tabIndex={-1} aria-labelledby="full-case-title"><div className="sf-full-report-intro"><p className="eyebrow">GET THE FULL REPORT</p><h2 id="full-case-title">Full Location Due Diligence Report <span>· {price}</span></h2><p>The deeper case for and against: customer catchment, competition, economics, premises history and practical next checks before a lease.</p><SnapshotOutlineLink price={price} /><p className="field-help">One-off payment · No subscription</p></div><div className="sf-report-unlocks"><h3>What the Full Report is designed to investigate</h3><ul>{["Detailed customer catchment and demand", "Competition analysis, maps and profiles", "Financial scenarios and daily transactions", "Premises history, planning and suitability", "Evidence for and against the location", "Key unknowns and physical checks", "Questions for the landlord or agent", "Downloadable PDF report"].map(t => <li key={t}><Icon name="document" />{t}</li>)}</ul></div>
+      <div className="sf-report-art" aria-hidden="true"><div className="sf-report-sheet sf-report-sheet-back"><span /><span /><span /></div><div className="sf-report-sheet"><p className="sf-report-wordmark">SITE<span>FIT</span></p><strong>Location Due Diligence Report</strong><p>Your location. The full case.</p><div className="sf-report-cover"><Icon name="pin" /><span>Evidence · Analysis · Next steps</span></div><div className="sf-report-bars"><i /><i /><i /><i /></div><small>Illustrative report layout</small></div></div>
+      <details className="sf-report-outline" id="report-outline"><summary>Your Full Report outline</summary><p>Purchasing is not enabled. No payment is taken, and the Full Report, financial calculations and PDF are not generated by this action.</p><p>Some questions require your own inputs, a viewing or specialist advice. The outline describes planned investigation; it does not promise every unknown can be resolved.</p><Link className="text-link" href="/sample-report">View an illustrative sample report <Arrow /></Link></details><p className="sf-outline-disclosure">Report outline only. Purchasing is not enabled.</p>
+    </section><div className="sf-saved-note"><p>{demo ? "Development demo only. No report or financial inputs are saved." : "Saved historical view: reopening keeps the same evidence and interpretation. Guest access depends on this browser session; signing out or losing cookies can remove access."}</p><Link href="/check-location">Check another location <Arrow /></Link></div><div className="sf-mobile-action"><a className="button button-primary" href="#full-case">Check the Full Case · {price} <Arrow /></a></div>
   </div>;
 }

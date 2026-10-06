@@ -1,5 +1,7 @@
 # SiteFit development roadmap
 
+Current additional authority: D71 authorises the [Free Snapshot UI refinement](free-snapshot-ui-status.md) after Phase 6, including a future overall-score presentation contract and local-only input preview. This is not Phase 7/8 or a new analysis/data/payment engine. The original Phase 6 verification record remains historical.
+
 Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–5 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phase 5 is complete under the revised approved plan (see [phase-5-status.md](phase-5-status.md)); Phases 6–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
 
 The Product Contract in [product.md](product.md) controls scope. Definitions of Done below are planning acceptance criteria, not claims that checks passed. A phase requiring external access remains unverified until the relevant access and checks are available.
