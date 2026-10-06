@@ -78,4 +78,6 @@ V1 real-property tests must cover the three categories and inner/outer Greater L
 
 ## Current Phase 6 authority (D70)
 
+Phase 6 implementation is verified in phase-6-status.md through protected delivery. That record supersedes earlier proposal/no-implementation wording here. Evidence truth, result-first presentation, independent strength/colour and historical snapshots remain binding; completion authorises no later phase.
+
 The owner approved implementation on 2026-10-06. SiteFit performs deterministic metrics/comparison/business weighting and bounded evidence-linked section analysis, then shows a conclusion first. Dimension assessments may use 0–100 only when their minimum evidence passes; they are not business success probabilities. Current source gaps withhold all four composite scores. Evidence strength remains independent of numeric direction and colour. Historical outputs never refresh on reopening. Preserve the approved financial benefit preview and Full Case £29 outline; no financial execution, checkout, new provider or later phase is authorised. See `phase6_plan.md` and `phase-6-status.md`.

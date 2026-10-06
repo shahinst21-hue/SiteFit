@@ -1,6 +1,6 @@
-# Planned architecture
+# SiteFit architecture
 
-Updated 2026-10-04. The authoritative Phase 2.5 contract supersedes conflicting historical Phase 1/2 descriptions below. Architectural directions are accepted; later mechanics remain proposals. Phase 1 infrastructure is described in [infrastructure.md](infrastructure.md). Phase 2 now adds the public website, frontend-only wizard and authorised Blog/SEO foundation; see [phase-2-status.md](phase-2-status.md). GitHub protection and authenticated Preview remain in place. Analysis services are unimplemented; Production is not activated.
+Updated 2026-10-06. The current Product Contract and D70 supersede conflicting historical phase descriptions below. Phases 0–6 are implemented within their recorded scope; the owned immutable Free Snapshot engine is verified in [phase-6-status.md](phase-6-status.md). Earlier planning descriptions retain their historical context, and the Phase 6 implementation section is authoritative for the current analytical runtime. Payments, financial execution, purchased Full Report delivery/PDF and publishing remain later work. GitHub protection and authenticated Preview remain; Production is not activated.
 
 ## Frontend and backend
 
@@ -138,4 +138,4 @@ Steps 5.0–5.8 are now implemented/verified: three explicit server-only adapter
 
 ## Phase 6 implementation authority (D70, 2026-10-06)
 
-The owner authorises the AI-native, score-ready Free Snapshot in `phase6_plan.md`. Implementation is in progress; see `phase-6-status.md` for actual gates. Four dimensions use versioned deterministic components, comparison methods and business-specific hypothesis weights, followed by evidence-linked section interpretation and validated synthesis. Missing required components suppress composite scores; current ONS/TfL/FSA evidence does not justify complete dimension scores. No overall numeric score, new providers, payment or Phase 7/8 execution is authorised. Completed outputs retain original operands, cohort membership, weights, evidence and AI/model versions and are read without recalculation. Owner requires GPT 6.1 Sol only (`gpt-6.1-sol`); no model fallback.
+The owner authorises the AI-native, score-ready Free Snapshot in `phase6_plan.md`. Implementation is verified; see `phase-6-status.md` for actual gates. Four dimensions use versioned deterministic components, comparison methods and business-specific hypothesis weights, followed by evidence-linked section interpretation and validated synthesis. Missing required components suppress composite scores; current ONS/TfL/FSA evidence does not justify complete dimension scores. No overall numeric score, new providers, payment or Phase 7/8 execution is authorised. Completed outputs retain original operands, cohort membership, weights, evidence and AI/model versions and are read without recalculation. Owner requires GPT 6.1 Sol only (`gpt-6.1-sol`); no model fallback.

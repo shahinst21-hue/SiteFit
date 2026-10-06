@@ -70,11 +70,11 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 - Human action: approve provider usage/licensing and budget; provide account access where required.
 - Definition of Done: implemented adapters have verified capabilities, bounded failures and clear provenance; unavailable/stale data is explicit; storage respects provider terms; no invented observations or fragile property scraping.
 
-## Phase 6: AI-native Free Snapshot — revised proposal
+## Phase 6: AI-native Free Snapshot — implemented under D70
 
-- Objective: demonstrate genuine first-level analysis and clear £29 deeper-investigation value, under D66's analysis-first/evidence-on-demand and D68/D69's result-first rules, independent result colours and closed per-section reasoning. Internal Mixed/Unclear/Not assessed are not routine customer headlines; validated implications/reasons and honest verification actions lead. The rewritten [phase6_plan.md](phase6_plan.md) and replacement designs remain proposed; no implementation authorised.
-- Proposed after approval: minimum Evidence/Data Quality, deterministic comparison and bounded section-AI/validated synthesis slices moved forward from Phases 11/12; narrow category POI proof moved from Phase 8 if needed. Persist/freeze/replay real free interpretation; final responsive uncertainty/evidence/CTA states. No full report engine, payment or economics implementation.
-- Human action: approve revised scope, claim/cohort/quality policies, guest ownership, metered AI provider/data handling/budget and any source access/licence gates. Select public London QA fixtures independently; no owner-address prerequisite.
+- Objective: genuine first-level analysis and clear £29 deeper-investigation value, with conclusion-first factors, independent result colours and closed per-section reasoning. The approved [phase6_plan.md](phase6_plan.md) defines D70; actual evidence is in phase-6-status.md.
+- Implemented: runtime Evidence/Data Quality, scoped Census comparison, versioned deterministic score-ready dimensions/hypothesis weights, bounded GPT 6.1 Sol section analysis/validated synthesis, owned immutable persistence and stored replay. Current-source gaps withhold all four composite scores. No new POI provider, purchased Full Report engine, payment or financial execution.
+- Human action completed: ownership/model/data-handling/budget approval and secure local/Preview credentials; actual 200% zoom verified. Six independently selected actual inner/outer London commercial fixtures pass. No Phase 6 owner-dependent gate remains.
 - Definition of Done: real category/inner-outer analytical-readiness gate, valid claim-support Evidence IDs, defensible comparisons/business relevance, measured AI evaluations/cost/runtime, historical freeze/security/source-failure/CI proofs. No unsupported score/footfall/viability, generic data viewer, or silently weakened gate. Free shows the locked three-output financial benefit and Run Financial Analysis outline without optional marketing, forms or execution. Economics use remains voluntary after verified purchase/main report. The Full Case action stays honestly non-paying until authorised payment.
 
 ## Phase 7: Payment
@@ -87,7 +87,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 ## Phase 8: Full Location Data
 
 - Objective: gather approved full-report location context.
-- Proposed boundary adjustment: Phase 6 may admit one narrow category-capable POI subset for free comparison; broader catchment/mobility/customer/competitive-strength investigation remains here. No additional provider is enabled by this planning proposal.
+- D70 keeps category-capable POI and broader catchment/mobility/customer/competitive-strength investigation in Phase 8. The earlier proposal to bring a POI subset into Phase 6 was superseded; no additional provider was admitted.
 - Codex implements: selected adapters and evidence for catchment, demand, competitors, complementary businesses, accessibility, mobility and local business signals within approved source coverage.
 - Human action: any provider permissions/budget or dataset selection that materially affects report promises.
 - Definition of Done: real benchmark coverage is checked; units, date/geography and source limitations are visible; proxies are labelled; no proprietary footfall or fabricated exhaustive coverage.
@@ -176,4 +176,4 @@ Steps 5.0–5.9 are implemented and verified through protected PR #13 and requir
 
 ## Active gate: Phase 6 (authorised 2026-10-06)
 
-Execute the revised `phase6_plan.md` Steps 6.0–6.9, including real hosted/AI/Preview verification and protected CI delivery. Status: in progress, not complete. D70 supersedes earlier no-implementation/no-score and early-POI proposals. Foursquare/PropertyData/Valhalla remain deferred. Phase 7 and Phase 8 require new explicit authority even after Phase 6 completion.
+Steps 6.0–6.9 are complete and verified in `phase-6-status.md`, including actual hosted/AI/Preview checks and protected PRs #15/#16 with required post-merge CI. The completion record follows its own protected documentation workflow. D70 supersedes earlier no-implementation/no-score and early-POI proposals. Foursquare/PropertyData/Valhalla remain deferred. Phase 7 and Phase 8 require new explicit authority; neither has started.
