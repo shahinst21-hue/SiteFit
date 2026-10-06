@@ -57,7 +57,7 @@ select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000052'
 set local role authenticated;
 do $$ declare f record; begin
  select * into f from framework_fixture;
- perform pg_temp.framework_assert(not exists(select 1 from public.data_snapshots where id=f.s),'other owner snapshot invisible');
+ begin perform count(*) from public.data_snapshots where id=f.s; raise exception 'Client raw snapshot read accepted'; exception when insufficient_privilege then null; end;
  begin perform public.prepare_sitefit_input(f.b,'{}','{}'); raise exception 'Client prepare RPC accepted'; exception when insufficient_privilege then null; end;
  begin insert into public.analysis_inputs(analysis_id,version,user_supplied,resolved_context,context_schema_version) values(f.b,1,'{}','{}',1); raise exception 'Client context columns accepted'; exception when insufficient_privilege then null; end;
 end $$;

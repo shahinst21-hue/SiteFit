@@ -40,9 +40,13 @@ do $$
 declare table_name text; visible integer; changed integer; other_analysis uuid;
 begin
 select analysis_id into other_analysis from fixture where owner_id='00000000-0000-4000-8000-000000000032';
-foreach table_name in array array['profiles','properties','analyses','analysis_inputs','data_snapshots','evidence_items','competitors','premises_events','economic_models','reports','report_sections','payments','pdf_exports'] loop
+foreach table_name in array array['profiles','properties','analyses','analysis_inputs','payments'] loop
 execute format('select count(*) from public.%I',table_name) into visible;
 perform pg_temp.assert_true(visible=1,'User A reads only own rows: '||table_name);
+end loop;
+-- Phase 6 replaces raw derived/full reads with an owner-bound validated free projection.
+foreach table_name in array array['data_snapshots','evidence_items','competitors','premises_events','economic_models','reports','report_sections','pdf_exports'] loop
+ begin execute format('select count(*) from public.%I',table_name) into visible; raise exception 'Client read private analytical data: %',table_name; exception when insufficient_privilege then null; end;
 end loop;
 update public.profiles set display_name='forged' where id='00000000-0000-4000-8000-000000000032'; get diagnostics changed=row_count;
 perform pg_temp.assert_true(changed=0,'A cannot update B profile');
@@ -67,7 +71,7 @@ end $$;
 select set_config('request.jwt.claim.sub','00000000-0000-4000-8000-000000000032',true);
 select set_config('request.jwt.claims','{"sub":"00000000-0000-4000-8000-000000000032","role":"authenticated"}',true);
 select pg_temp.assert_true((select count(*) from public.analyses)=1 and(select bool_and(owner_id=auth.uid())from public.analyses),'B cannot see A analyses');
-select pg_temp.assert_true((select count(*) from public.reports)=1,'B cannot see A reports');
+select pg_temp.assert_true(public.read_sitefit_free((select report_id from fixture where owner_id=auth.uid())) is null,'No draft or full report projection is exposed to its owner');
 insert into public.analyses(owner_id,business_type,business_category) values(auth.uid(),'beauty-salon','hair-beauty-salon');
 select pg_temp.assert_true((select count(*) from public.analyses)=2,'Owner can start own draft without forged lifecycle/property');
 insert into public.analysis_inputs(analysis_id,version,user_supplied) select id,2,'{"rent":null}' from public.analyses where owner_id=auth.uid() and property_id is not null;

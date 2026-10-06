@@ -22,11 +22,24 @@ begin
  begin update source_data.dataset_releases set version='mutated' where id=gid; raise exception 'Release mutation accepted'; exception when check_violation then null; end;
  begin update source_data.geography_features set name='mutated' where release_id=gid; raise exception 'Geometry mutation accepted'; exception when check_violation then null; end;
  begin delete from source_data.geography_features where release_id=gid; raise exception 'Geometry deletion accepted'; exception when check_violation then null; end;
- pop:=public.stage_sitefit_release('{"provider":"synthetic","dataset":"TS001","version":"A","subset":"london","sha256":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","sourceUrl":"https://example.org/synthetic","retrievedAt":"2026-10-05T00:00:00Z","licence":{"normalised":{"allowed":true}}}'); pid:=(pop->>'id')::uuid;
+ pop:=public.stage_sitefit_release('{"provider":"synthetic","dataset":"TS001","effectiveAt":"2030-01-01T00:00:00Z","version":"A","subset":"london","sha256":"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","sourceUrl":"https://example.org/synthetic","retrievedAt":"2026-10-05T00:00:00Z","licence":{"normalised":{"allowed":true}}}'); pid:=(pop->>'id')::uuid;
  perform public.import_sitefit_statistics(pid,gid,'[{"code":"E00100001","count":42,"missingReason":null},{"code":"E00100002","count":null,"missingReason":"suppressed"}]');
  perform public.activate_sitefit_release(pid,2);
  found:=public.lookup_sitefit_population(pid,gid,'E00100001'); perform pg_temp.spatial_assert((found->>'count')::integer=42,'independent count expectation');
  found:=public.lookup_sitefit_population(pid,gid,'E00100002'); perform pg_temp.spatial_assert(found->'count'='null'::jsonb and found->>'missingReason'='suppressed','suppressed does not become zero');
+ found:=public.select_sitefit_analysis_releases();
+ perform pg_temp.spatial_assert(found->>'population'=pid::text and found->>'geography'=gid::text,'Phase 6 selects compatible ready releases, not latest loading rows');
+ found:=public.lookup_sitefit_residential_comparison(pid,gid,'E00100001');
+ perform pg_temp.spatial_assert((found->>'targetAreaSquareMetres')::numeric between 15000000000 and 17000000000,
+   'geodesic square metre area of one degree by two degrees near 51 north, not square degrees');
+ perform pg_temp.spatial_assert(found->>'targetCount'='42' and found->>'authorityCode'='E09000001' and found->>'eligibleCount'='1',
+   'comparison retains target, same authority and eligible count');
+ perform pg_temp.spatial_assert(found->'members'='[]'::jsonb,'suppressed peer excluded rather than converted to zero, target excluded');
+ found:=public.lookup_sitefit_residential_comparison(pid,gid,'E00100002');
+ perform pg_temp.spatial_assert(found->'targetCount'='null'::jsonb and jsonb_array_length(found->'members')=1,
+   'missing target remains missing while valid peer retained');
+ perform pg_temp.spatial_assert(found->'members'->0->>'id'='E00100001' and (found->'members'->0->>'count')::integer=42,
+   'exact comparison operands and membership retained');
  begin update source_data.area_statistics set value=99 where release_id=pid; raise exception 'Statistic mutation accepted'; exception when check_violation then null; end;
  same:=public.stage_sitefit_release('{"provider":"synthetic","dataset":"TS001","version":"B","subset":"london","sha256":"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd","sourceUrl":"https://example.org/synthetic","retrievedAt":"2026-10-06T00:00:00Z","licence":{"normalised":{"allowed":true}}}');
  perform pg_temp.spatial_assert(same->>'id'<>pop->>'id','new artefact version creates new release');
@@ -36,6 +49,8 @@ set local role authenticated;
 do $$ begin
  begin perform count(*) from source_data.dataset_releases; raise exception 'Client read private releases'; exception when insufficient_privilege then null; end;
  begin perform public.lookup_sitefit_geography(null,0,0,'building'); raise exception 'Client spatial RPC accepted'; exception when insufficient_privilege then null; end;
+ begin perform public.select_sitefit_analysis_releases(); raise exception 'Client release inventory accepted'; exception when insufficient_privilege then null; end;
+ begin perform public.lookup_sitefit_residential_comparison(null,null,'E00100001'); raise exception 'Client comparator accepted'; exception when insufficient_privilege then null; end;
 end $$;
 reset role;
 rollback;

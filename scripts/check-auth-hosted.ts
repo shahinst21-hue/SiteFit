@@ -227,6 +227,15 @@ async function verify() {
     );
     const signout = html.match(/name="(\$ACTION_ID_[^"]+)"/)?.[1];
     assert.ok(signout);
+    stage = "Snapshot submission preserves signed-in identity";
+    const unavailable = await page("/api/analyses/generate", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ propertyId: crypto.randomUUID(), businessType: "coffee-shop", nonce: crypto.randomUUID() }),
+    });
+    assert.equal(unavailable.status, 503, "Unknown property must not generate a report.");
+    const stillSignedIn = await page("/account");
+    assert.equal(stillSignedIn.status, 200);
+    assert.ok((await stillSignedIn.text()).includes(email), "Snapshot submission replaced the signed-in owner.");
     stage = "application sign-out";
     const out = await page("/account", {
       method: "POST",
