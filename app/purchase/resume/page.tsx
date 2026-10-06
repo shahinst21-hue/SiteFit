@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { verifiedUser } from "@/lib/supabase/server";
 import { CLAIM_COOKIE,RESUME_COOKIE,AUTH_RECEIPT_COOKIE,claimCookie,permanentIdentity,purchaseUuid,validAuthReceipt } from "@/lib/auth/purchase-flow";
 import { readClaim } from "@/lib/auth/claim-repository";
 import { purchaseOrigin } from "@/lib/payments/config";
+import { activeTestPurchaseId } from "@/lib/payments/purchase-projection";
 import { PurchaseClaim } from "@/components/purchase-claim";
 import { PurchaseButton } from "@/components/purchase-button";
 export const dynamic="force-dynamic";
@@ -16,6 +17,10 @@ export default async function Resume({searchParams}:{searchParams:Promise<{repor
  const {report}=await searchParams;
  if(report&&purchaseUuid(report)){
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:report});if(error||!data)notFound();
+  const purchase=await client.rpc("read_sitefit_purchase",{p_report:report});
+  if(purchase.error)notFound();
+  const active=activeTestPurchaseId(purchase.data);
+  if(active)redirect(`/purchase/return?purchase=${active}`);
   const automatic=(await cookies()).get(RESUME_COOKIE)?.value===report;
   return <div className="page-wrap narrow-page"><h1>Your Snapshot is saved.</h1><p>Test Mode only. No real payment is taken. Full Report generation is not enabled in this development phase.</p><PurchaseButton report={report} checkout automatic={automatic}/><Link href={`/snapshots/${report}`}>Return to your Snapshot</Link></div>;
  }

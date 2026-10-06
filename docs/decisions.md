@@ -1,5 +1,13 @@
 # Architecture Decision Log
 
+## D74 accepted Phase 7 verification boundary and direct Production webhook — 2026-10-06
+
+The owner removes external Stripe delivery through protected Preview from the Phase 7 completion requirement. Real Local Stripe Test signed delivery with hosted development payment/entitlement state remains required, including success, decline, cancel, expiry, refund, replay/order, signature/raw-body, RLS and security checks. Protected Preview still verifies browser/Auth/UI/ownership/security/deployment; it must remain protected. This is an explicit owner-approved verification-scope revision, not a silent waiver of payment integrity tests or a claim that outstanding Auth/accessibility/CI gates passed.
+
+The temporary relay approval is withdrawn. No Cloudflare account, relay or third-party webhook proxy is to be created or used. Uncommitted relay code/tests were removed; no relay was deployed and no Cloudflare account/service was created. Earlier dummy URL-redaction probe evidence is historical; real bypass was revoked and the dummy Stripe Test destination disabled.
+
+The intended final architecture is **Stripe Live → direct final SiteFit Production webhook → existing verified atomic payment/entitlement path**. Before enabling real payments, a separate mandatory pre-launch gate must verify actual signed direct Live delivery, idempotency, payment confirmation and permanent-account entitlement with the approved final Production configuration and separately authorised real-payment budget. No Production/live activation, later report functionality or Phase 8 is authorised now. See [revised plan §17](phase7_plan.md#17-mandatory-pre-launch-production-payment-gate--not-phase-7-activation).
+
 ## D72 accepted Phase 7 purchase policy — 2026-10-06
 
 Owner's final authentication/purchase addendum is accepted: Free Snapshot remains signup-free; a verified permanent Supabase account using Google or email is required **before** Stripe Checkout creation. Preserve anonymous historical data through supported same-UUID identity upgrade where possible, or an authorised transactional/idempotent/auditable existing-account claim. No report regeneration, provider/AI/scoring calls, duplicate analysis or Stripe-email ownership recovery. Permanent accounts must recover their history and entitlement after session loss/later sign-in.

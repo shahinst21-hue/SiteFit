@@ -1,4 +1,6 @@
-# Phase 7 Preview ingress — proposal, not authorised or implemented
+# Historical Phase 7 ingress proposal — withdrawn by D74
+
+**Superseded 2026-10-06:** the owner withdrew relay approval, prohibited creating/using a Cloudflare account/service for Preview bypass, and revised the verification boundary. The text below records the investigation only; it is not an active proposal or permission request. No relay was deployed, no Cloudflare account/service was created, and its uncommitted source/tests were removed. The real bypass is revoked and the no-access dummy Test destination disabled. Follow [D74](decisions.md) and the [revised Phase 7 plan](phase7_plan.md): Local real signed Stripe Test proof, protected Preview browser/Auth/UI/ownership/security/deployment, mandatory direct Production Live webhook proof before live activation. Do not implement anything proposed below.
 
 ## Observed blocker
 
