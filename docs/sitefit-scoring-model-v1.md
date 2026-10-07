@@ -1,10 +1,24 @@
 # SiteFit scoring model v1 — independent design review
 
-**7 October 2026. Proposed for owner review; not accepted, implemented or calibrated.** This specification selects an architecture, records the independent arithmetic audit and explicitly blocks unapproved domain transforms. It does not authorise Phase 8, 9 or 10 implementation, providers, paid AI or changes to historical reports. The current [Phase 8 plan](phase8_plan.md) is also a proposal awaiting approval, despite the request referring to an approved plan. Phases 6 and 7 remain frozen.
+**Owner-approved architecture revision, 7 October 2026 (D76). Scoring and grouped analytical prompts are now frozen candidate designs, not final production calibration.** The absolute rejection of provisional scoring is withdrawn. Phase 8 data implementation is approved; final scoring activation, further weight/transform/formula/prompt/interaction/publication-band/calibration work is not. Phases 6 and 7 remain frozen; no Phase 9/10 work is authorised.
+
+## Current authority: commercial location score, separate readiness
+
+The main numeric SiteFit score represents **commercial attractiveness of the location for the selected business concept**, using location evidence that can be consistently measured and compared. Premises feasibility, binding constraints and Decision Readiness are separate assessments, as is Economics. A strong location score is not permission to sign a lease or proof that the business case works. The prior requirement for four complete dimensions, including Premises, is withdrawn for this future score architecture.
+
+Preliminary/provisional scoring is **permitted in principle**, provided later approved policy controls explicit missingness, reproducible scope, ranges, stability and truthful labels. Do not invent a point estimate, a success probability or a neutral missing value. Neither a provisional score nor the final scoring model is activated in Phase 8. Required commercial dimension semantics and components, cohorts, transforms, weights, preliminary-score/range policies, labels, grouped prompts, synthesis and Economics interpretation will be reassessed during the separately authorised **Full Report generation phase**, using real London evidence and actual report packets.
+
+The approved boundaries are deterministic numerical scoring, AI interpretation only, no runtime AI-selected weights/transforms, separate Economics and Decision Readiness, explicit missingness, evidence-linked conclusions, versioned reproducible results and no fabricated success probabilities. Approval does not endorse the candidate coefficients as calibrated facts.
+
+Phase 8 now implements the approved provider/ingestion/normalisation/evidence/spatial/QA/storage architecture. Preserve permitted metric operands, comparator metadata, coverage/denominators/distributions, missing states, quality, release/source/rights versions and evidence lineage for later calibration. Do not spend Phase 8 refining or activating a speculative scorer simply because the UI has a score slot. Grouped prompt orchestration remains a reviewable architecture, not rewritten or enabled production prompts.
+
+### Frozen prior audit
+
+The independent audit below is retained as historical candidate research. Its formula/weights, four-dimension completeness requirement, rejection of provisional points, blocker-based overall suppression and publication/calibration recommendations are **not current architectural authority where they conflict with D76 above**. They must not become Phase 8 implementation requirements. No further numerical or prompt refinement was performed for this revision; the machine-readable config records the supersession and preserves prior operands under `frozen_previous_candidate`.
 
 Review configuration: [scoring-model-v1.candidate.json](scoring-model-v1.candidate.json). Exact synthetic inputs, operands, sensitivity results, source digests and inert reproduction text: [scoring-model-v1.audit-results.json](scoring-model-v1.audit-results.json). Nothing imports these files into the application. The offline arithmetic exercise is not a production scorer or provider/AI verification.
 
-## 1. Selected architecture and purpose
+## 1. Frozen prior candidate architecture and purpose
 
 Recommend **C: fixed-budget location dimensions, separate feasibility/readiness, separate Economics**. Four dimensions remain Customer Base, Market Position, Customer Access and Premises. Preserve the existing analysis boundary. A main Location Suitability score may be published only after all four dimensions meet their own evidence and method gates. A confirmed blocker or unresolved critical feasibility question suppresses the overall number and leads the decision statement; it does not manufacture a score of 29 or 59. Independently complete dimension results remain inspectable.
 
@@ -235,7 +249,7 @@ Competition/complementary **observations** behind P11–P14 can become counts an
 
 Therefore **no complete attached suitability parameter is automatically ready for scoring at Phase 8 completion**, and no four-dimension overview is promised. P03 has a potentially defensible **metric percentile**, P07 native-scope income statistics, P17 route time, inventory counts and activity observations can inform bounded interpretation. Full normative utilities require independently reviewed business rules/comparators; Phase 9 premises/concept gaps and Phase 10 financial dependencies stay explicit. No new provider is approved by this finding.
 
-## 10. Selected numerical specification
+## 10. Frozen prior numerical specification — not activated
 
 The config makes all active and blocked coefficients explicit. It is a review representation, not executable runtime configuration. Unapproved transforms are intentionally `numeric_output_allowed:false`, `knots:null`, `rule_ids:[]`; this is an explicit readiness block, not a hidden default or a licence to choose knots during implementation.
 
@@ -295,7 +309,7 @@ Internally `Q=100×Σ fixed_share×admitted_reliability×presence` can be retain
 
 Before calling something a contradiction, compare exact unit, universe, date, geography, business concept and denominator. Resident activity and missing evening demand can coexist; cluster support and competitive pressure are not automatically inconsistent. For genuine conflicts, retain original observations and a recorded selection rationale. Prefer a source only under a reviewed claim-specific superiority rule. If unresolved, withhold the dependent scoring input; do not average disagreeing unit areas or discount a quality index by an arbitrary h. Do not remove an input and separately punish the same conflict. Unaffected dimensions remain valid.
 
-## 13. Publication, missingness, bounds and score semantics
+## 13. Prior publication proposal — absolute provisional rejection withdrawn
 
 | Output | When it is defensible |
 | --- | --- |
@@ -399,7 +413,7 @@ Required tests in an **authorised later implementation**:
 
 Completed **in this review**: attachment/registry/trace inspection, independent formula reproduction, synthetic sensitivity matrices and strict finite JSON/review-configuration checks. No real scoring/calibration, paid AI, provider purchase, runtime validation/deployment/browser or database migration was performed. Application regression is not claimed by this mathematical documentation task.
 
-## 19. Open decisions and recommendation reversal conditions
+## 19. Prior open decisions — calibration deferred to Full Report phase
 
 Owner approval is required for the proposed architecture/overall semantics and later implementation scope; it does not automatically approve an undefined domain transform or paid source. Precise utility rules, empirical fit labels, adequate real comparators, external coverage and any hair/beauty numerical split remain unproven. Some existing component slots may prove too broad or correlated; their removal/merge requires an explicit new manifest, never a per-report workaround.
 

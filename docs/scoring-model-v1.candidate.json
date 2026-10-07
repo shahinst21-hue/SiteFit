@@ -1,37 +1,49 @@
 {
   "schema_version": 1,
   "model_id": "sitefit-location-v1-candidate",
-  "status": "proposed_review_only_not_approved_not_executable",
+  "status": "architectural_boundaries_owner_approved_candidate_calibration_frozen",
   "runtime_enabled": false,
   "implementation_authorised": false,
-  "selected_architecture": "C_fixed_dimensions_separate_readiness_separate_economics",
+  "selected_architecture": "commercial_location_attractiveness_separate_premises_readiness_and_economics",
   "scope": {
     "geography": "Greater London only",
-    "score": "conditional location suitability for explicit business concept, excluding detailed financial assumptions",
-    "dimensions_required": 4,
-    "economics_in_score": false,
+    "score": "commercial attractiveness of location for selected business concept from consistently measurable and comparable location evidence",
+    "candidate_location_dimensions": [
+      "customer-base",
+      "market-position",
+      "customer-access"
+    ],
+    "premises_in_location_score": false,
+    "economics_in_location_score": false,
+    "decision_readiness_in_location_score": false,
+    "required_dimension_semantics": "reassess during later Full Report calibration, not a four-complete-dimension gate",
     "report_sections_independent_weight": 0,
     "direct_parameter_weight_layer": false
   },
   "formula": {
-    "component_score": "100 * approved utility in [0,1]; null until valid rule exists",
-    "dimension_score": "sum(fixed_component_weight_percent * admitted_component_score) / 100, only when every required component passes",
-    "overall_score": "sum(fixed_dimension_weight_percent * unrounded_dimension_score) / 100, only when all four dimensions and readiness publication gates pass",
-    "normalisation": "no fitted rescaling, no softmax, no missing redistribution",
-    "downside_lambda": 0,
+    "status": "frozen_candidate_not_production_calibration",
+    "numerical_owner": "deterministic",
+    "runtime_ai_weights_or_transforms": false,
+    "location_aggregation": null,
+    "aggregation_reason": "freeze rather than refine the prior four-dimension formula; re-evaluate against actual London report packets in Full Report phase",
+    "premises_weight": 0,
+    "economics_weight": 0,
+    "readiness_numeric_adjustment": 0,
+    "downside_lambda": "historical candidate only; not activated",
     "interaction_effect": 0,
     "numeric_risk_caps": [],
-    "rounding": "round_half_up only displayed final score; preserve exact unrounded intermediates",
+    "rounding": "candidate final-only half-up; reassess with later calibration",
     "bounds": [
       0,
       100
-    ]
+    ],
+    "runtime_enabled": false
   },
   "dimensions": [
     {
       "id": "customer-base",
-      "overall_weight_percent": 25,
-      "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+      "overall_weight_percent": null,
+      "weight_basis": "frozen review candidate only; commercial-dimension budgets deferred to Full Report calibration",
       "components": [
         {
           "id": "residential",
@@ -120,12 +132,13 @@
           "additional_evidence_dependency": null,
           "legacy_id": "time-specific-transport"
         }
-      ]
+      ],
+      "runtime_enabled": false
     },
     {
       "id": "market-position",
-      "overall_weight_percent": 25,
-      "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+      "overall_weight_percent": null,
+      "weight_basis": "frozen review candidate only; commercial-dimension budgets deferred to Full Report calibration",
       "components": [
         {
           "id": "direct-competition",
@@ -194,12 +207,13 @@
           "additional_evidence_dependency": null,
           "legacy_id": "differentiation"
         }
-      ]
+      ],
+      "runtime_enabled": false
     },
     {
       "id": "customer-access",
-      "overall_weight_percent": 25,
-      "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+      "overall_weight_percent": null,
+      "weight_basis": "frozen review candidate only; commercial-dimension budgets deferred to Full Report calibration",
       "components": [
         {
           "id": "walking-reach",
@@ -265,88 +279,8 @@
           "additional_evidence_dependency": "Explicit customer/staff/delivery mode needs and compatible evidence",
           "legacy_id": "travel-fit"
         }
-      ]
-    },
-    {
-      "id": "premises",
-      "overall_weight_percent": 25,
-      "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
-      "components": [
-        {
-          "id": "permitted-use",
-          "required": true,
-          "weights_percent": {
-            "coffee_shop": 40,
-            "restaurant": 40,
-            "hair_salon": 40,
-            "beauty_salon": 40
-          },
-          "parameter_refs": [
-            "P27",
-            "P28"
-          ],
-          "transform_id": "component-rule-pending",
-          "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
-          "additional_evidence_dependency": null,
-          "legacy_id": "permitted-use"
-        },
-        {
-          "id": "physical-fit",
-          "required": true,
-          "weights_percent": {
-            "coffee_shop": 25,
-            "restaurant": 30,
-            "hair_salon": 20,
-            "beauty_salon": 20
-          },
-          "parameter_refs": [
-            "P01",
-            "P21",
-            "P31",
-            "P32"
-          ],
-          "transform_id": "component-rule-pending",
-          "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
-          "additional_evidence_dependency": null,
-          "legacy_id": "physical-fit"
-        },
-        {
-          "id": "planning-environment-licences",
-          "required": true,
-          "weights_percent": {
-            "coffee_shop": 20,
-            "restaurant": 20,
-            "hair_salon": 20,
-            "beauty_salon": 20
-          },
-          "parameter_refs": [
-            "P29",
-            "P30"
-          ],
-          "transform_id": "component-rule-pending",
-          "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
-          "additional_evidence_dependency": null,
-          "legacy_id": "planning-environment-licences"
-        },
-        {
-          "id": "lease-rates-history",
-          "required": true,
-          "weights_percent": {
-            "coffee_shop": 15,
-            "restaurant": 10,
-            "hair_salon": 20,
-            "beauty_salon": 20
-          },
-          "parameter_refs": [
-            "P02",
-            "P22"
-          ],
-          "transform_id": "component-rule-pending",
-          "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
-          "additional_evidence_dependency": null,
-          "legacy_id": "lease-rates-history"
-        }
-      ]
+      ],
+      "runtime_enabled": false
     }
   ],
   "parameters": [
@@ -1502,10 +1436,10 @@
   },
   "coverage": {
     "score_input_presence": "sum(fixed weights of admitted inputs)/sum(all applicable fixed weights)",
-    "all_required_components": true,
-    "minimum_input_presence_for_dimension": 1,
+    "all_required_components": "historical candidate only; final required inputs will be calibrated later",
+    "minimum_input_presence_for_dimension": null,
     "minimum_source_coverage_for_each_numeric_claim": 0.9,
-    "minimum_source_coverage_for_overall": 0.9,
+    "minimum_source_coverage_for_overall": null,
     "minimum_routing_population_sensitivity_tolerance": null,
     "maximum_material_allocation_uncertainty_fraction": 0.1,
     "allocation_threshold_basis": "Phase 8 conservative engineering hypothesis, calibration required; larger material uncertainty withholds quantitative score",
@@ -1513,15 +1447,16 @@
     "not_applicable": "freeze before retrieval using explicit concept and versioned rule; new scope manifest, never inferred from source failure"
   },
   "publication": {
-    "full_dimension": "all required component, rule, comparator, licence, scope, parent quality and contradiction gates pass",
-    "full_overall": "four full dimensions; no unresolved critical feasibility question or confirmed blocker; readiness separately visible",
-    "provisional_point_score": false,
-    "missing_bounds": "internal only: missing fixed-budget component utility spans [0,100]; logical bound, never confidence interval",
-    "metric_only": "descriptive values or independently admitted same-scope percentile; no suitability label",
-    "qualitative": "evidence-linked scoped direction if supported; retain important unknown",
-    "no_assessment": "no admissible evidence or rule for that claim",
-    "required_rule_calibration": "blocked until independently reviewed rule and held-out assessment exist",
-    "percentile_of_composite": "withhold unless peers have same complete method/profile/scope/gates; score/100 is not percentile"
+    "status": "candidate_policy_frozen_for_later_calibration",
+    "full_location_score": "publish only under a later approved reproducible location-evidence method; Premises completeness is not an arithmetic prerequisite",
+    "provisional_point_score": true,
+    "provisional_policy": "allowed in principle; required inputs, ranges, stability gates and labels deferred to Full Report phase",
+    "activate_during_phase8": false,
+    "missingness": "retain explicit missing states and fixed-scope operands; no speculative neutral values or favourable redistribution",
+    "metric_only": "existing admitted descriptive metrics/comparators may be used without claiming final location suitability",
+    "qualitative": "evidence-linked conclusions and material limitations remain available",
+    "no_assessment": "preserve unsupported claim state",
+    "percentile_of_composite": "not inferred from score/100; needs a separately valid comparator"
   },
   "readiness": {
     "states": [
@@ -1532,20 +1467,20 @@
       "unresolved",
       "not_applicable"
     ],
+    "separate_from_location_score": true,
     "numeric_modification": false,
-    "confirmed_blocker": "Do not proceed with present concept; overall numeric withheld, completed dimensions retained with scope",
-    "unresolved_critical": "Resolve before commitment; overall numeric withheld without adverse utility imputation",
-    "confirmed_material_risk": "Rework or verify mitigation before commitment; any numeric dimension unchanged by readiness layer",
-    "material_risk_numerical_gate": "no automatic ceiling; significant issues remain adjacent to result",
-    "clear": "only after actually completed bounded investigation; no findings in partial register insufficient",
-    "severity_authority": "versioned rule plus current matched documents; AI cannot assign severity",
+    "suppresses_location_arithmetic": false,
+    "binding_constraint": "prominent decision consequence independent of commercial attractiveness; do not present an attractive location as permission to commit",
+    "unresolved": "explicit unknown, not confirmed blocker",
+    "severity_authority": "versioned evidence-backed rules, never runtime AI invention",
+    "clear": "only an actually completed defined investigation",
     "risk_families": [
       "permission",
       "licensing",
       "physical_operation",
       "lease_obligation"
     ],
-    "suppression_on_risk": "publication state only, never fabricate 29/59"
+    "wording_and_final_publication_policy": "frozen candidate, reassess in Full Report calibration"
   },
   "interactions": [
     {
@@ -1645,7 +1580,8 @@
     "reserved_repair_calls": 3,
     "sections_19_to_23": "deterministic diagnostic projection; optional short validated explanation inside existing batches",
     "section_24": "validated synthesis",
-    "on_over_budget": "bounded deterministic scoped fallback or unavailable explanation, never extend implicitly"
+    "on_over_budget": "bounded deterministic scoped fallback or unavailable explanation, never extend implicitly",
+    "prompt_status": "current grouped architecture frozen review candidate; no further wording or live calibration in Phase 8"
   },
   "historical_replay": {
     "recompute_on_open": false,
@@ -1710,5 +1646,457 @@
     "London paired robustness cohort",
     "separate hair/beauty weights only if demonstrated",
     "required live/hosted/security/history/CI gates in an authorised implementation"
-  ]
+  ],
+  "frozen_previous_candidate": {
+    "scope": {
+      "geography": "Greater London only",
+      "score": "conditional location suitability for explicit business concept, excluding detailed financial assumptions",
+      "dimensions_required": 4,
+      "economics_in_score": false,
+      "report_sections_independent_weight": 0,
+      "direct_parameter_weight_layer": false
+    },
+    "formula": {
+      "component_score": "100 * approved utility in [0,1]; null until valid rule exists",
+      "dimension_score": "sum(fixed_component_weight_percent * admitted_component_score) / 100, only when every required component passes",
+      "overall_score": "sum(fixed_dimension_weight_percent * unrounded_dimension_score) / 100, only when all four dimensions and readiness publication gates pass",
+      "normalisation": "no fitted rescaling, no softmax, no missing redistribution",
+      "downside_lambda": 0,
+      "interaction_effect": 0,
+      "numeric_risk_caps": [],
+      "rounding": "round_half_up only displayed final score; preserve exact unrounded intermediates",
+      "bounds": [
+        0,
+        100
+      ]
+    },
+    "publication": {
+      "full_dimension": "all required component, rule, comparator, licence, scope, parent quality and contradiction gates pass",
+      "full_overall": "four full dimensions; no unresolved critical feasibility question or confirmed blocker; readiness separately visible",
+      "provisional_point_score": false,
+      "missing_bounds": "internal only: missing fixed-budget component utility spans [0,100]; logical bound, never confidence interval",
+      "metric_only": "descriptive values or independently admitted same-scope percentile; no suitability label",
+      "qualitative": "evidence-linked scoped direction if supported; retain important unknown",
+      "no_assessment": "no admissible evidence or rule for that claim",
+      "required_rule_calibration": "blocked until independently reviewed rule and held-out assessment exist",
+      "percentile_of_composite": "withhold unless peers have same complete method/profile/scope/gates; score/100 is not percentile"
+    },
+    "readiness": {
+      "states": [
+        "clear_in_defined_scope",
+        "manageable",
+        "confirmed_material_risk",
+        "confirmed_blocker",
+        "unresolved",
+        "not_applicable"
+      ],
+      "numeric_modification": false,
+      "confirmed_blocker": "Do not proceed with present concept; overall numeric withheld, completed dimensions retained with scope",
+      "unresolved_critical": "Resolve before commitment; overall numeric withheld without adverse utility imputation",
+      "confirmed_material_risk": "Rework or verify mitigation before commitment; any numeric dimension unchanged by readiness layer",
+      "material_risk_numerical_gate": "no automatic ceiling; significant issues remain adjacent to result",
+      "clear": "only after actually completed bounded investigation; no findings in partial register insufficient",
+      "severity_authority": "versioned rule plus current matched documents; AI cannot assign severity",
+      "risk_families": [
+        "permission",
+        "licensing",
+        "physical_operation",
+        "lease_obligation"
+      ],
+      "suppression_on_risk": "publication state only, never fabricate 29/59"
+    },
+    "dimensions": [
+      {
+        "id": "customer-base",
+        "overall_weight_percent": 25,
+        "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+        "components": [
+          {
+            "id": "residential",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 25,
+              "restaurant": 25,
+              "hair_salon": 40,
+              "beauty_salon": 40
+            },
+            "parameter_refs": [
+              "P03",
+              "P04"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "residential"
+          },
+          {
+            "id": "daytime-workplace",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 30,
+              "restaurant": 20,
+              "hair_salon": 10,
+              "beauty_salon": 10
+            },
+            "parameter_refs": [],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": "BRES employee-job context plus justified independent business relevance rule; jobs not people",
+            "legacy_id": "daytime-workplace"
+          },
+          {
+            "id": "purchasing-power",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 15,
+              "restaurant": 25,
+              "hair_salon": 20,
+              "beauty_salon": 20
+            },
+            "parameter_refs": [
+              "P07",
+              "P08"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "purchasing-power"
+          },
+          {
+            "id": "customer-fit",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 20,
+              "restaurant": 20,
+              "hair_salon": 25,
+              "beauty_salon": 25
+            },
+            "parameter_refs": [
+              "P05",
+              "P06"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "customer-fit"
+          },
+          {
+            "id": "trading-window-customer-fit",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 10,
+              "restaurant": 10,
+              "hair_salon": 5,
+              "beauty_salon": 5
+            },
+            "parameter_refs": [
+              "P09",
+              "P20"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "time-specific-transport"
+          }
+        ]
+      },
+      {
+        "id": "market-position",
+        "overall_weight_percent": 25,
+        "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+        "components": [
+          {
+            "id": "direct-competition",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 35,
+              "restaurant": 30,
+              "hair_salon": 40,
+              "beauty_salon": 40
+            },
+            "parameter_refs": [
+              "P11"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "direct-competition"
+          },
+          {
+            "id": "complementary-trade",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 20,
+              "restaurant": 25,
+              "hair_salon": 15,
+              "beauty_salon": 15
+            },
+            "parameter_refs": [
+              "P13",
+              "P14"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "complementary-trade"
+          },
+          {
+            "id": "cluster-context",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 25,
+              "restaurant": 25,
+              "hair_salon": 15,
+              "beauty_salon": 15
+            },
+            "parameter_refs": [],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": "Independent cluster form and concept assessment; not repeat POI count or momentum",
+            "legacy_id": "cluster-context"
+          },
+          {
+            "id": "differentiation",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 20,
+              "restaurant": 20,
+              "hair_salon": 30,
+              "beauty_salon": 30
+            },
+            "parameter_refs": [
+              "P12"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "differentiation"
+          }
+        ]
+      },
+      {
+        "id": "customer-access",
+        "overall_weight_percent": 25,
+        "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+        "components": [
+          {
+            "id": "walking-reach",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 30,
+              "restaurant": 25,
+              "hair_salon": 35,
+              "beauty_salon": 35
+            },
+            "parameter_refs": [],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": "Physical journey/permeability fit independent of population already scored",
+            "legacy_id": "walking-reach"
+          },
+          {
+            "id": "service-hours",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 30,
+              "restaurant": 25,
+              "hair_salon": 15,
+              "beauty_salon": 15
+            },
+            "parameter_refs": [
+              "P18"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "service-hours"
+          },
+          {
+            "id": "useful-journeys",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 25,
+              "restaurant": 25,
+              "hair_salon": 20,
+              "beauty_salon": 20
+            },
+            "parameter_refs": [
+              "P17"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "useful-journeys"
+          },
+          {
+            "id": "travel-fit",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 15,
+              "restaurant": 25,
+              "hair_salon": 30,
+              "beauty_salon": 30
+            },
+            "parameter_refs": [],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": "Explicit customer/staff/delivery mode needs and compatible evidence",
+            "legacy_id": "travel-fit"
+          }
+        ]
+      },
+      {
+        "id": "premises",
+        "overall_weight_percent": 25,
+        "weight_basis": "equal dimension budget, review hypothesis; all component weights inherit current business-hypothesis-v1 except explicitly proposed ownership rename",
+        "components": [
+          {
+            "id": "permitted-use",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 40,
+              "restaurant": 40,
+              "hair_salon": 40,
+              "beauty_salon": 40
+            },
+            "parameter_refs": [
+              "P27",
+              "P28"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "permitted-use"
+          },
+          {
+            "id": "physical-fit",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 25,
+              "restaurant": 30,
+              "hair_salon": 20,
+              "beauty_salon": 20
+            },
+            "parameter_refs": [
+              "P01",
+              "P21",
+              "P31",
+              "P32"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "physical-fit"
+          },
+          {
+            "id": "planning-environment-licences",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 20,
+              "restaurant": 20,
+              "hair_salon": 20,
+              "beauty_salon": 20
+            },
+            "parameter_refs": [
+              "P29",
+              "P30"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "planning-environment-licences"
+          },
+          {
+            "id": "lease-rates-history",
+            "required": true,
+            "weights_percent": {
+              "coffee_shop": 15,
+              "restaurant": 10,
+              "hair_salon": 20,
+              "beauty_salon": 20
+            },
+            "parameter_refs": [
+              "P02",
+              "P22"
+            ],
+            "transform_id": "component-rule-pending",
+            "status": "withheld_until_domain_rules_evidence_and_calibration_pass",
+            "additional_evidence_dependency": null,
+            "legacy_id": "lease-rates-history"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "score_input_presence": "sum(fixed weights of admitted inputs)/sum(all applicable fixed weights)",
+      "all_required_components": "historical candidate only; final required inputs will be calibrated later",
+      "minimum_input_presence_for_dimension": null,
+      "minimum_source_coverage_for_each_numeric_claim": 0.9,
+      "minimum_source_coverage_for_overall": null,
+      "minimum_routing_population_sensitivity_tolerance": null,
+      "maximum_material_allocation_uncertainty_fraction": 0.1,
+      "allocation_threshold_basis": "Phase 8 conservative engineering hypothesis, calibration required; larger material uncertainty withholds quantitative score",
+      "no_missing_denominator_renormalisation": true,
+      "not_applicable": "freeze before retrieval using explicit concept and versioned rule; new scope manifest, never inferred from source failure"
+    },
+    "quality": {
+      "source_class_is_numeric_authority": false,
+      "axes": [
+        "freshness_for_claim",
+        "geographic_fit",
+        "measurement_coverage",
+        "method_fit"
+      ],
+      "factor_values": [
+        0,
+        0.5,
+        0.75,
+        1
+      ],
+      "factor_meaning": {
+        "0": "invalid",
+        "0.5": "material limitation incompatible with numeric suitability publication",
+        "0.75": "adequate within documented qualified claim",
+        "1": "fully satisfies versioned claim policy"
+      },
+      "unknown_factor": null,
+      "reliability": "min(axes, required parent reliabilities); diagnostic index, not probability",
+      "score_weight_multiplier": 1,
+      "minimum_required_claim_reliability": 0.75,
+      "compound_parents": "minimum, never count number of sources as reliability boost",
+      "global_quality_threshold": null,
+      "global_quality_threshold_reason": "require adequacy for every essential claim; global average cannot rescue one weak essential input",
+      "internal_quality_index": "100 * weighted_mean(admitted reliability * presence), fixed component and dimension weights",
+      "quality_badges": "insufficient on absent/invalid essential; limited on material limitation; moderate on qualified adequate support; good only all axes 1 with no material gap"
+    },
+    "authority": "Historical candidate only; superseded scope/publication restrictions are not current policy. Coefficients preserved without further refinement."
+  },
+  "design_frozen": true,
+  "calibration_phase": "Full Report generation after Phase 8 real-data implementation",
+  "premises_assessment": {
+    "separate_from_location_score": true,
+    "location_weight": 0,
+    "purpose": "unit/concept feasibility, binding constraints and Decision Readiness",
+    "runtime_change_authorised_in_phase8": false
+  },
+  "phase8_boundary": {
+    "data_implementation_authorised": true,
+    "final_scoring_activation": false,
+    "prompt_rewrite_or_calibration": false,
+    "new_scoring_weights_transforms_interactions_bands": false,
+    "retain_for_later_calibration": [
+      "raw permitted metric operands",
+      "units and universes",
+      "native and comparison geography",
+      "source and release versions",
+      "coverage and excluded rows",
+      "comparator definition and membership",
+      "distributions",
+      "missing states and reasons",
+      "quality and freshness",
+      "evidence and derivation lineage",
+      "licence and retention metadata"
+    ],
+    "resume_calibration": "Full Report generation phase after Phase 8; separately authorised later phase"
+  }
 }
