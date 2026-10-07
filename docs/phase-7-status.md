@@ -1,8 +1,8 @@
 # Phase 7 status — Test Mode payment and permanent account continuity
 
-Started 2026-10-06. Owner approved [phase7_plan.md](phase7_plan.md) Steps 7.0–7.9, the narrow access-claim architecture and proposed test refund/reversal policy. **In progress; individual verified gates are recorded below, overall completion is not yet claimed.** Phase 8 remains unauthorised.
+Started 2026-10-06; completed 2026-10-07. Owner approved [phase7_plan.md](phase7_plan.md) Steps 7.0–7.9, the narrow access-claim architecture and test refund/reversal policy. **Phase 7 complete: all 23 gates evidenced, protected PR #20 merged and required post-merge CI passed.** This completion record follows the same protected documentation workflow. Phase 8 remains unauthorised.
 
-**Current checkpoint — 2026-10-07:** real new/existing Google and email continuity proofs have passed, including the corrected existing-email callback. Account visibly exposes both the original email Snapshot and the newly claimed historical Snapshot. Independent-browser recovery, real 200% material usability and actual browser Network/Console privacy passed by owner confirmation. Complete final regression passes lint/types/145 tests/build, all nine hosted SQL suites and hosted Auth. Only protected final delivery remains pending. Statements below describing earlier pending identity, callback, ingress or recovery checks are historical checkpoints superseded by the dated evidence at the end of this document.
+**Current checkpoint — 2026-10-07:** real new/existing Google and email continuity proofs have passed, including the corrected existing-email callback. Account visibly exposes both the original email Snapshot and the newly claimed historical Snapshot. Independent-browser recovery, real 200% material usability and actual browser Network/Console privacy passed by owner confirmation. Complete final regression passes lint/types/145 tests/build, all nine hosted SQL suites and hosted Auth. Protected implementation delivery and post-merge CI pass; this completion record follows the same gated workflow. Statements below describing earlier pending identity, callback, ingress or recovery checks are historical checkpoints superseded by the dated evidence at the end of this document.
 
 **Current authority D74:** owner removed protected Preview external Stripe delivery from Phase 7, retained all payment/security tests and protected browser/Auth/UI/ownership/deployment gates, and required direct Production Live signed delivery/idempotency/confirmation/entitlement before launch under separate approval. Relay approval was withdrawn; uncommitted relay code/tests were removed, no Cloudflare account/service was created and no relay was deployed. The old redaction finding below is historical and no longer blocks Phase 7. D75 adds the explicit email-sent and verified-account intermediary before Checkout without changing authority or historical data.
 
@@ -23,11 +23,11 @@ Checkout uses the verified permanent account email as server-side `customer_emai
 | 7.6 | Verified | Ready Local/Preview Snapshot CTA, guarded Auth/claim resume, explicit D75 intermediary, private return/status, bounded read-only polling and paginated minimal account test access. Owner-confirmed separate-browser recovery, real 200% material usability and Network/Console privacy passed; recorded keyboard/width checks passed. Production outline/finance preview retained. |
 | 7.7 | Verified under D74 | Protected Preview browser/Auth/UI/ownership/recovery/deployment checks and seven HTTP boundaries pass. Local actual signed Stripe deliveries and hosted state provide payment proof. Temporary token revoked; dummy destination disabled; no relay/service created. Preview protection remains enabled; Production unchanged. |
 | 7.8 | Verified | Complete lint/types/145 tests/build, nine hosted SQL suites, hosted Auth, public HTTP/SEO/404, six demo-denial states, 18 Local HTTP boundaries and source/client/HTML/runtime scans pass. Browser Network/Console proof is owner-reported, not an automated payload capture. |
-| 7.9 | Pending | Final evidence, exact-head CI/protected merge/post-merge CI/clean matching main. |
+| 7.9 | Verified | Exact head b653be5d262ecd7f1b68b7904ee916c38476e533 passed both required CI runs. PR #20 converted from draft and merged through enforced protection to b0702febe0a97d02992e374ab055628e1589876b. Required post-merge CI passed; Local main equalled origin/main and working tree was clean. This completion record also uses a protected PR. |
 
 ## Current validation
 
-Final Local regression on 2026-10-07 passes `npm run check`: lint, strict types, **145 tests**, fresh PostgreSQL/PostGIS and production build. All nine hosted rollback SQL suites and actual hosted Auth regression pass separately. Running app passes 13 public pages/articles, 13 internal paths, metadata/SEO/404/address boundaries, six production demo-denial states and 18 Local mutation/raw-webhook cases. Source/client scan: seven privileged values, 288 files, zero findings. Protected Preview: seven HTTP cases and six-value HTML/runtime scan pass; unauthenticated protection remains HTTP 302 to Vercel. Required CI for `a43fc620a5ded3af39400ed55574264db9eba5b6` passed; the final documentation/test revision requires its own exact-head CI before merge.
+Final Local regression on 2026-10-07 passes `npm run check`: lint, strict types, **145 tests**, fresh PostgreSQL/PostGIS and production build. All nine hosted rollback SQL suites and actual hosted Auth regression pass separately. Running app passes 13 public pages/articles, 13 internal paths, metadata/SEO/404/address boundaries, six production demo-denial states and 18 Local mutation/raw-webhook cases. Source/client scan: seven privileged values, 288 files, zero findings. Protected Preview: seven HTTP cases and six-value HTML/runtime scan pass; unauthenticated protection remains HTTP 302 to Vercel. Both required CI runs for final implementation `b653be5d262ecd7f1b68b7904ee916c38476e533` passed, followed by protected PR #20 merge and successful main CI.
 
 ### Conditional ingress approval and actual redaction outcome
 
@@ -43,7 +43,7 @@ Owner enabled development Google/manual linking and exact Local/Preview callback
 
 ## Definition of Done
 
-All 23 requirements in [the revised approved checklist](phase7_plan.md#15-definition-of-done--all-pending-none-waived) remain mandatory. Current evidence mapping follows; previous pending observations are preserved as history. D74 changes only the specified Preview ingress gate and requires direct Production Live verification separately before launch. Gate 23 must pass before overall completion.
+All 23 requirements in [the revised approved checklist](phase7_plan.md#15-definition-of-done) have passed. Current evidence mapping follows; previous pending observations are preserved as history. D74 changes only the specified Preview ingress gate and requires direct Production Live verification separately before launch.
 
 | Gate | State | Evidence |
 | --- | --- | --- |
@@ -69,7 +69,7 @@ All 23 requirements in [the revised approved checklist](phase7_plan.md#15-defini
 | 20 — Environment fail closed | Passed | Missing/live/Production/host admission tests; Production flags/purchasing/deployment unchanged. |
 | 21 — Scope/deferred hardening | Passed | No Phase 8, provider/AI work, Full Report, finance execution, PDF, subscriptions or generic/distributed infrastructure added. |
 | 22 — Evidence/limitations/deviations | Passed | Version/migration/count/digest/actual-versus-injected evidence and D73/D74/D75/config corrections recorded here. |
-| 23 — Protected final delivery | Pending | Final exact-head CI, protected merge, post-merge CI, matching main/origin and clean checkout required. |
+| 23 — Protected final delivery | Passed | PR #20 exact-head required CI, enforced protected merge and required post-merge CI pass. Main/origin b0702febe0a97d02992e374ab055628e1589876b matched, clean checkpoint; completion documentation uses the same protected workflow. |
 
 ## Deviations
 
@@ -184,3 +184,15 @@ Owner explicitly confirms: **“Phase 7 browser request and console privacy chec
 Three final injected Checkout tests explicitly cover provider idempotency conflicts/cached errors/lost responses retaining identical key/parameters, stored Session retrieval outage without replacement, and eight concurrent workers submitting identical parameters. Combined with the earlier binding-crash/late-ambiguity tests, actual hosted preparation concurrency and actual same-key Stripe creates, these close the bounded fault evidence. No indefinite exactly-once claim, lease/job/cache framework or new production hardening was introduced. Refund/dispute adversarial ordering is verified by service and fresh/hosted SQL tests; no actual Live dispute or forced 3DS challenge is claimed.
 
 Current protected Preview deployment dpl_31rAb8T993GerM7yhwcgSCJry1md is Ready. No external Phase 7 dependency remains. Known limitations: retained labelled synthetic ready proof history, bounded account-history offset 10,000 with direct owned replay retained, finite Stripe idempotency/reconciliation bounds, process-local safeguards, cosmetic polish deferred. Production purchasing and automatic main deployment remain disabled; direct final Production Live webhook and report-delivery readiness are mandatory separately authorised pre-launch work. Phase 8 remains unauthorised. Final exact-head CI/protected merge/post-merge checks are the remaining delivery gate.
+
+## Protected completion checkpoint — 2026-10-07
+
+Implementation PR [#20](https://github.com/shahinst21-hue/SiteFit/pull/20) is merged, after both required exact-head checks passed for b653be5d262ecd7f1b68b7904ee916c38476e533. Enforced main protection remained strict, admin-enforced, PR-only and conversation-resolving; no bypass, force push or direct main write. Squash merge b0702febe0a97d02992e374ab055628e1589876b passed the actual required post-merge GitHub Actions check. Main equalled origin/main with clean working tree before this documentation-only completion branch. All Steps 7.0–7.9 and all 23 gates are evidenced above. Completion documentation is itself submitted through protected CI/PR and its final main check is reported after merge.
+
+Applied migration inventory:
+- 20261006150000_guest_account_continuity.sql — private account continuity/claim lineage.
+- 20261006170000_test_payment_integrity.sql — immutable attempts, receipts and atomic access.
+- 20261006190000_phase7_narrow_writers.sql — guarded writers and proof-bound cancellation.
+- 20261006200000_payment_reversal_admission.sql — null-version and lost-dispute admission correction.
+
+No unresolved Phase 7 external dependency remains. Accepted deviations are D73 frozen contact email, D74 Local-versus-protected-Preview proof split/no relay, D75 explicit verification/Checkout presentation, the narrow forward permission/reversal fixes and the exact Local callback configuration correction. Production Live activation and report delivery remain unavailable and separately gated. Cosmetic polish and documented deferred distributed hardening remain outstanding by design. Phase 8 has not started and is not authorised.

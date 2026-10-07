@@ -259,7 +259,7 @@ This conservative partial-refund rule, no automatic entitlement expiry in Test M
 
 ## 12. Required verification matrix
 
-All below are **future gates**. Mocks, baseline Phase 6 checks or a successful deployment cannot replace hosted Auth/Stripe proofs.
+All below were required implementation gates; completed evidence is recorded in [phase-7-status.md](phase-7-status.md). Mocks, baseline Phase 6 checks or a successful deployment cannot replace hosted Auth/Stripe proofs.
 
 | Suite | Required cases/evidence |
 | --- | --- |
@@ -314,31 +314,31 @@ Execute one defined step at a time **only after explicit plan approval**. Create
 
 Proposed forward migrations are an account-continuity/access migration and a payment-integrity migration, with actual new unique timestamps chosen at implementation. **None is created or applied by this plan.** Separate concerns for review; do not edit eight applied files or create speculative full-report schema. Consolidate only if atomic dependencies make it simpler without losing test coverage.
 
-## 15. Definition of Done — all pending, none waived
+## 15. Definition of Done
 
-- [ ] Free Snapshot generation/read/replay still works without registration; analytical/UI/evidence contracts remain frozen.
-- [ ] Permanent verified Google and email accounts are supported; anonymous/direct Checkout is rejected on server and controlled SQL paths.
-- [ ] New-identity guest upgrade preserves UUID where supported; existing-account conflict uses an authorised idempotent auditable claim without ready-row mutation.
-- [ ] Original property/input/source/evidence/interpretation/metric/report hashes/dates are unchanged; zero regeneration/provider/AI/scoring during Auth, payment and reads.
-- [ ] Foreign accounts, unrelated callbacks, expired proof, duplicate/different-target/multi-tab races cannot claim or see another user's data; consumed guest access is denied.
-- [ ] Successful Auth returns directly to the intended purchase flow; cancellation/failure leaves unpaid Snapshot safe; no duplicate analysis.
-- [ ] Correct permanent owner can create/reuse a one-off £29 GBP **Test Mode** Checkout; server resolves report→analysis and validates eligibility/product/Price/quantity.
-- [ ] Retries/double clicks/multi-worker/tab/crash scenarios maintain one active intended attempt/session, with documented finite Stripe idempotency limitations and safe unresolved-state handling.
-- [ ] Raw webhook signature, mode and full purchase binding are verified; duplicate/out-of-order/early-binding events are transactionally safe.
-- [ ] Confirmation and durable account/analysis entitlement are atomic and unique; success redirect/query/client state/Stripe email grant nothing.
-- [ ] Failure/cancel/expiration grant nothing; late cancel/failure cannot overwrite confirmed payment; refund/dispute states revoke/suspend/restore only under approved explicit rules.
-- [ ] Original analyses remain `free_ready`; payment state/access remains separate; no dummy full report row or ready marker is created.
-- [ ] Permanent user sign-out/session loss/new browser sign-in restores paginated original history and correct paid test entitlement; third-account isolation passes.
-- [ ] Return polling is bounded/read-only; payment confirmed is distinct from report generated/PDF available; Account remains minimal.
-- [ ] Real official Stripe successful and declined/cancelled/expired Checkout proofs pass through the Local application and hosted development state; actual signed webhook delivery/replay and reversal prove one logical grant. Protected Preview separately passes browser/Auth/UI/ownership/security/deployment verification; external Stripe delivery through Preview protection is not required (D74).
-- [ ] Real hosted Google/email new/existing identity and claim/recovery proofs pass; actual email delivery/PKCE remains distinct from synthetic probes.
-- [ ] Fresh real PostgreSQL/PostGIS and hosted development SQL/RLS/Auth/security suites pass, including trusted-write freeze and direct RPC/grant tests.
-- [ ] Node 24/npm 11 locked install, complete lint/types/tests/build, actual public HTTP/SEO/404/demo-denial and responsive/keyboard/real 200% zoom gates pass.
-- [ ] Secrets/capabilities/payment instrument/PII/raw payloads are absent from SiteFit client JS/HTML/requests and unsafe logs/docs/source; the temporary bypass is revoked, the dummy destination disabled, no relay/proxy exists, and Preview protection remains enabled.
-- [ ] Config missing/live/Production fail closed; only Local/Preview test mode works; Production settings/purchasing and deployment activation remain unchanged.
-- [ ] No Phase 8 source, paid AI, financial engine, Full Report generation, PDF/report email, subscription, marketing integration or deferred generic/distributed hardening has started.
-- [ ] Actual migration/version/check/Stripe-object and count evidence, unresolved limitations and deviations are recorded in Phase 7 status without secrets.
-- [ ] Required exact-head CI/protected PR merge/post-merge CI pass; final main equals origin and working tree is clean; stop before Phase 8.
+- [x] Free Snapshot generation/read/replay still works without registration; analytical/UI/evidence contracts remain frozen.
+- [x] Permanent verified Google and email accounts are supported; anonymous/direct Checkout is rejected on server and controlled SQL paths.
+- [x] New-identity guest upgrade preserves UUID where supported; existing-account conflict uses an authorised idempotent auditable claim without ready-row mutation.
+- [x] Original property/input/source/evidence/interpretation/metric/report hashes/dates are unchanged; zero regeneration/provider/AI/scoring during Auth, payment and reads.
+- [x] Foreign accounts, unrelated callbacks, expired proof, duplicate/different-target/multi-tab races cannot claim or see another user's data; consumed guest access is denied.
+- [x] Successful Auth returns directly to the intended purchase flow; cancellation/failure leaves unpaid Snapshot safe; no duplicate analysis.
+- [x] Correct permanent owner can create/reuse a one-off £29 GBP **Test Mode** Checkout; server resolves report→analysis and validates eligibility/product/Price/quantity.
+- [x] Retries/double clicks/multi-worker/tab/crash scenarios maintain one active intended attempt/session, with documented finite Stripe idempotency limitations and safe unresolved-state handling.
+- [x] Raw webhook signature, mode and full purchase binding are verified; duplicate/out-of-order/early-binding events are transactionally safe.
+- [x] Confirmation and durable account/analysis entitlement are atomic and unique; success redirect/query/client state/Stripe email grant nothing.
+- [x] Failure/cancel/expiration grant nothing; late cancel/failure cannot overwrite confirmed payment; refund/dispute states revoke/suspend/restore only under approved explicit rules.
+- [x] Original analyses remain `free_ready`; payment state/access remains separate; no dummy full report row or ready marker is created.
+- [x] Permanent user sign-out/session loss/new browser sign-in restores paginated original history and correct paid test entitlement; third-account isolation passes.
+- [x] Return polling is bounded/read-only; payment confirmed is distinct from report generated/PDF available; Account remains minimal.
+- [x] Real official Stripe successful and declined/cancelled/expired Checkout proofs pass through the Local application and hosted development state; actual signed webhook delivery/replay and reversal prove one logical grant. Protected Preview separately passes browser/Auth/UI/ownership/security/deployment verification; external Stripe delivery through Preview protection is not required (D74).
+- [x] Real hosted Google/email new/existing identity and claim/recovery proofs pass; actual email delivery/PKCE remains distinct from synthetic probes.
+- [x] Fresh real PostgreSQL/PostGIS and hosted development SQL/RLS/Auth/security suites pass, including trusted-write freeze and direct RPC/grant tests.
+- [x] Node 24/npm 11 locked install, complete lint/types/tests/build, actual public HTTP/SEO/404/demo-denial and responsive/keyboard/real 200% zoom gates pass.
+- [x] Secrets/capabilities/payment instrument/PII/raw payloads are absent from SiteFit client JS/HTML/requests and unsafe logs/docs/source; the temporary bypass is revoked, the dummy destination disabled, no relay/proxy exists, and Preview protection remains enabled.
+- [x] Config missing/live/Production fail closed; only Local/Preview test mode works; Production settings/purchasing and deployment activation remain unchanged.
+- [x] No Phase 8 source, paid AI, financial engine, Full Report generation, PDF/report email, subscription, marketing integration or deferred generic/distributed hardening has started.
+- [x] Actual migration/version/check/Stripe-object and count evidence, unresolved limitations and deviations are recorded in Phase 7 status without secrets.
+- [x] Required exact-head CI/protected PR merge/post-merge CI pass; final main equals origin and working tree is clean; stop before Phase 8.
 
 ## 16. Risks, open decisions and readiness recommendation
 
