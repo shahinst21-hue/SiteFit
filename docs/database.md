@@ -1,8 +1,8 @@
 # Phase 3 database foundation
 
-## Phase 7 implementation in progress — 2026-10-06
+## Phase 7 implemented and verified — 2026-10-07
 
-Four forward migrations are applied to hosted development: `20261006150000_guest_account_continuity.sql` and `20261006170000_test_payment_integrity.sql`, `20261006190000_phase7_narrow_writers.sql` and `20261006200000_payment_reversal_admission.sql`. Their fresh PostgreSQL/PostGIS and hosted rollback suites pass; actual Google/email/Stripe/Preview proofs remain outstanding. See [phase-7-status.md](phase-7-status.md). No applied migration history is edited.
+Four forward migrations are applied to hosted development: `20261006150000_guest_account_continuity.sql` and `20261006170000_test_payment_integrity.sql`, `20261006190000_phase7_narrow_writers.sql` and `20261006200000_payment_reversal_admission.sql`. Their fresh PostgreSQL/PostGIS and hosted rollback suites pass; actual Google/email/Stripe/Preview proofs and protected PR #20/post-merge CI pass. See [phase-7-status.md](phase-7-status.md). No applied migration history is edited.
 
 `guest_account_claims` holds private expiring hashed continuation/browser proofs, announced Auth method, verified target receipt and immutable completed guest→permanent access lineage. Original ready analysis owners, contexts, evidence, projection and timestamps remain frozen. Current-access reads resolve the completed relation; consumed guests lose access. Same-UUID upgrades retain original ownership. Claim capabilities and raw rows are never client readable; history is exposed through bounded ownership-checked projection RPCs.
 
