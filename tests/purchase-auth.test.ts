@@ -1,10 +1,20 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { claimCookie,newProof,permanentIdentity,hashProof,signedAuthReceipt,validAuthReceipt } from "../lib/auth/purchase-flow.ts";
 import { purchaseOrigin,purchaseSameOrigin,stripeConfig } from "../lib/payments/config.ts";
 import { boundedJson } from "../lib/payments/http.ts";
 const id="70000000-0000-4000-8000-000000000001";
 const permanent={id,is_anonymous:false,email:"owner@example.invalid",email_confirmed_at:"2026-10-06T10:00:00Z",identities:[{provider:"email"}]};
+test("declared development redirects retain both generic and purchase PKCE callbacks",async()=>{
+ const config=await readFile(new URL("../supabase/config.toml",import.meta.url),"utf8");
+ const list=config.match(/additional_redirect_urls\s*=\s*\[([\s\S]*?)\]/)?.[1];
+ assert.ok(list,"Explicit development redirect allowlist required");
+ const urls=Array.from(list.matchAll(/"([^"\n]+)"/g),m=>m[1]);
+ for(const path of ["/auth/callback","/purchase/callback"])
+  assert.ok(urls.includes(`http://localhost:3000${path}`),`Missing exact Local ${path}`);
+ assert.equal(urls.some(url=>url.includes("*")),false,"Development callbacks must not require wildcard exposure");
+});
 test("purchase admission requires verified permanent platform identity, never email alone",()=>{
  assert.equal(permanentIdentity(permanent),true);
  assert.equal(permanentIdentity({...permanent,identities:[{provider:"google"}]}),true);

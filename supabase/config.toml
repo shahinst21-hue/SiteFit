@@ -40,6 +40,7 @@ site_url = "http://localhost:3000"
 additional_redirect_urls = [
   "http://localhost:3000/auth/confirm",
   "http://localhost:3000/auth/callback",
+  "http://localhost:3000/purchase/callback",
   "http://127.0.0.1:3000/auth/confirm",
   "http://127.0.0.1:3000/auth/callback",
   "https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/auth/confirm",
