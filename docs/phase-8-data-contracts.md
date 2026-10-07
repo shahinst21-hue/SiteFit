@@ -1,0 +1,25 @@
+# Phase 8 data boundary and admission map
+
+Implementation in progress, 7 October 2026. This maps approved sources to permitted representations; it is not a claim of dataset activation or completed live proof. See [plan](phase8_plan.md), [status](phase-8-status.md) and accepted D76. No scoring/prompt calibration occurs here.
+
+| Source / release | Representation and native scope | Rights / lineage retained | Admission state |
+| --- | --- | --- | --- |
+| Existing ONS TS001 / OA2021 | Original v1 usual-resident count and geography remain unchanged | Existing release/observation/licence/context | Historical runtime retained |
+| Census TS007A / 2021 | OA2021 five-year counts, original band labels and resident total | OGL/ONS attribution, archive hash, reference Census day, disclosure control | Real artifact/header verified; normalisation/loading pending |
+| TS003 / 2021 | OA2021 household composition, household total; hierarchical categories must not all be summed | Same ONS release/rights/perturbation metadata | Real artifact/header verified; admission pending |
+| TS045 / 2021 | OA2021 car availability household counts, not persons/traffic | Same ONS metadata, original categories/household denominator | Real artifact/header verified; admission pending |
+| TS066 / 2021 | OA2021 economic activity of residents 16+, not jobs or daytime population | Same ONS metadata, hierarchy and universe | Real artifact/header verified; admission pending |
+| ONS income / FYE2023 | Modelled MSOA2021 AHC equivalised household mean and intervals; non-additive | OGL, reference period, interval/quality/source record | Actual artifact/schema/joins pending |
+| BRES / 2024 | Employee jobs at published LSOA vintage, with rounding/suppression | OGL, published geography/period, disclosure metadata | Native geography/artifact proof pending; no vintage guessed |
+| OS Open UPRN / 202609 | Exact UPRN point join, no address text/lifecycle or surveyed entrance | OS OGL attribution, official MD5/local SHA-256, source CRS/release | Download/admission pending |
+| PropertyData match | Ephemeral up-to-ten candidates; selected historical match only | Retrieval date, documented/observed credits, classification/unknown source date; 60-day current cache vs historical rights | Live access and conservative match proof; unit/OS/persistence gate pending |
+| Overture / 2026-09-23.1 | London inventory, entity/category/source metadata; no completeness claim | Source-specific licence/notices, release/taxonomy/checksum and QA coverage | Prior research retained; production admission pending |
+| Geoapify Free | Validated 5/10/15-minute polygons and at-most-eight walking destinations | OSM/Geoapify attribution, request settings/retrieval/routing vintage/credits | Key configured; actual routing/storage admission pending |
+| TfL NUMBAT / 2025 | Station/time/day-type entries/exits; no pedestrian footfall | TfL rights, workbook/hash, day/time/unit/source dates | Actual workbook normalization/joins pending |
+| Planning Data / chosen layers | London constraint polygons and publisher-specific coverage | Per-dataset licence/dates/IDs; no result is not clearance | Chosen release/coverage admission pending |
+
+New `NativeStatistic` schema 2 is a bounded native statistical representation within `lib/data`, not a second collection/scoring pipeline. It retains release/geography identities, variable/unit/universe/period, aggregation type, observed zero vs missing/suppressed/unavailable/not-applicable, income intervals, disclosure control/rounding and lineage. It does not authorize a source merely because a payload validates. Its real loader must still admit exact dataset schema, rights, coverage and geography. Existing v1 SourceIds, source outcomes, input contexts and ready readers are unchanged; source-specific integration extends their boundary as required by each step.
+
+`PolygonGeometry` preserves GeoJSON rings and disconnected parts. TypeScript checks shape/finite coordinates/closure/bounds; service-only PostGIS checks topology/dimensions/SRID, without silent MakeValid. Native projected geometry operations remain EPSG:27700 for area; no degree-based allocation, centroid precision upgrade or default map fixture.
+
+Baseline `tests/fixtures/data/phase8-baseline.json` pins normalized-byte hashes of applied migrations and legacy fixture/security scenarios. It complements actual hosted ready-graph fingerprints and existing replay tests; it does not replace them. New migrations extend behaviour without rewriting prior files or historical rows. No production/provider purchase, durable job/lease/cache/billing/reservation or final numeric scorer is introduced.

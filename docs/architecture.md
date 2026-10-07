@@ -1,5 +1,7 @@
 # SiteFit architecture
 
+Phase 8 London data enrichment is authorised under D76 and in progress; see [data boundaries](phase-8-data-contracts.md) and [actual status](phase-8-status.md). The accepted location-score separation and candidate freeze supersede earlier future-score wording: Premises, binding constraints, Decision Readiness and Economics remain separate; no final score or grouped prompt calibration/activation in this data phase. New native statistical and hole-preserving geometry representations stay inside existing data/spatial boundaries. Existing frozen input/source/ready report readers are retained. No parallel scoring/collection engine or distributed lifecycle infrastructure is introduced.
+
 Updated 2026-10-06. The current Product Contract and D70 supersede conflicting historical phase descriptions below. Phases 0–6 are implemented within their recorded scope; the owned immutable Free Snapshot engine is verified in [phase-6-status.md](phase-6-status.md). Earlier planning descriptions retain their historical context, and the Phase 6 implementation section is authoritative for the current analytical runtime. Payments, financial execution, purchased Full Report delivery/PDF and publishing remain later work. GitHub protection and authenticated Preview remain; Production is not activated.
 
 ## Frontend and backend

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "baseline": "55b2435fc45bc128ab9d8647230f66137b36850c",
+  "normalisation": "UTF-8 with CRLF converted to LF",
+  "purpose": "Freeze applied migration history and Phase 6/7 legacy fixtures/security scenarios; not a hosted report digest proof.",
+  "files": {
+    "supabase/migrations/20261003210000_initial_sitefit_schema.sql": "fedda5b1e22c16d9d9eaea155d9e0d71aae56f1eb1c344a8e32951cf619e139d",
+    "supabase/migrations/20261004120000_property_address_identity.sql": "7f54438907a6849d804090c7827dafcf7a1fda8264d996ed23e9f1cb655f02cd",
+    "supabase/migrations/20261005110000_data_snapshot_integrity.sql": "3301b01692b48e0c342da1a1a3d716c26a3fba138143db3a146125ffc3cd3f01",
+    "supabase/migrations/20261005120000_london_spatial_releases.sql": "3523774364bfb0713ed89824ba27102bba3a4b53737101a1038fdfc3590275a9",
+    "supabase/migrations/20261005130000_bounded_boundary_normalisation.sql": "960fa9903a2fdfb035afa3693bc6780415c911c66bf3434442f1a8f8d869814b",
+    "supabase/migrations/20261006110000_analysis_comparison_context.sql": "be64bbb394e3b278fd1b11f6086b87c44be74138c73abfd2382334e805f28744",
+    "supabase/migrations/20261006120000_free_snapshot_persistence.sql": "4096ef3f3dd5da43e9319fcf9f7126464e1e01fc4df0d8ae95a79ac136f82b91",
+    "supabase/migrations/20261006130000_bounded_comparison_provenance.sql": "f24c7970d1c828bdb3dae250b166354e382ea8b6a00b0782756f0568e74efc4c",
+    "supabase/migrations/20261006150000_guest_account_continuity.sql": "3266c8e8d18e7698f0ea269f5a10a8b81c663330a613127297b9991c7b491b4a",
+    "supabase/migrations/20261006170000_test_payment_integrity.sql": "3ea4afa48205e91eaffbc693fb8521c1ee5855a687c81b0d2800d0520c05b350",
+    "supabase/migrations/20261006190000_phase7_narrow_writers.sql": "06cbc6de43d29b52596b2c6df0cb0f7fb5a5465526daaa0d3f77c79de039ad25",
+    "supabase/migrations/20261006200000_payment_reversal_admission.sql": "01984716a0a15f6c145712fb1c9af8ff058ba55aff3f4efb9ce5815bae412ae8",
+    "supabase/tests/account-claims.sql": "c065d660edc4003cbe906353715a475f78cc214de8232480c2ef2e5b3fbcfcd3",
+    "supabase/tests/free-snapshot.sql": "eb222ab0cbab525b087a3bffa7627e0534effa46a4ae95aec39d30a87568ce4b",
+    "supabase/tests/purchase-history.sql": "a04339cd6f0604552e13c02cf538c18a9973d82a2d57ecb016cd9c2fcbe44ec1",
+    "tests/fixtures/data/framework.ts": "0a1aa0a79c343dcf33f443ac1a0c4be61cd123e96785553eb1f589beeda39fe5"
+  }
+}

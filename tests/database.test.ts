@@ -42,6 +42,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL("../supabase/tests/account-claims.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/payments.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/purchase-history.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/enrichment-polygon.sql", import.meta.url), "utf8"));
     for (const table of ["public.analyses", "public.properties", "auth.users"])
       assert.equal(
         (

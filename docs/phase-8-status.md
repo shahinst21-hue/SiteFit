@@ -6,11 +6,11 @@ Started 7 October 2026 under owner-approved [phase8_plan.md](phase8_plan.md) and
 
 | Step | State | Evidence / remaining gate |
 | --- | --- | --- |
-| 8.0 Baseline/contracts | In progress | Node 24.12.0/npm 11.6.2 confirmed; clean starting scoring-review branch; prior planning PR #22 exact-head CI passed. Approved revision recorded; baseline regression and narrow versioned contracts pending. |
-| 8.1 Property resolution | Owner dependency; independent preparation permitted | No local PROPERTYDATA_API_KEY configured (names only checked). Trial/subscription has not been approved or enabled; resolver proof requires approved access. No paid calls or assumed UPRN/precise point. |
-| 8.2 Official Customer Base | Pending | Existing Census TS001 release retained; new Census/income/BRES releases need schema/geography/denominator/QA and hosted proof. |
+| 8.0 Baseline/contracts | Complete | npm ci/check/public/fresh and nine hosted legacy suites pass. Legacy fixture/migration digest manifest pinned; all six hosted ready-graph fingerprints unchanged after additive polygon migration. Geometry/native-statistics validators and source/release admission map recorded; combined regression passes 154 tests/lint/types/build. |
+| 8.1 Property resolution | In progress; live QA gap | Owner confirmed trial access; key found locally. Bounded server-only resolver/exact match gate tested. Live unit mismatch suppressed; whole-building match; residential alias unresolved; empty no-match. OS join/new precise context/persistence pending; no subscription purchase/renewal authorised. |
+| 8.2 Official Customer Base | In progress; artifact admission pending | Four real OA archives/header/checksums verified: TS007A, TS003, TS045, TS066. TS007 single-year bulk has no OA, so no fabricated OA 16–64 count. Income/BRES, native joins/QA/hosted admission pending. |
 | 8.3 Overture | Pending | Existing planning probe is research, not an admitted production inventory. London ingestion and expanded coverage/category/entity QA pending. |
-| 8.4 Walking geometry | Owner access dependency; independent geometry work permitted | No local GEOAPIFY_API_KEY configured (names only checked). Free access/live geometry/credit/routing proof pending. |
+| 8.4 Walking geometry | Access configured; live proof pending | Owner confirmed Free access; local key exists. Typed geometry preserves holes/parts; fresh/hosted PostGIS validity/privileges pass. Actual routing/credit/nesting QA and stored geometry replay pending. |
 | 8.5 Transport/activity | Pending | Existing TfL adapter remains; new NUMBAT release/time/day-type/station normalisation and QA pending. |
 | 8.6 Premises/benchmark | Pending dependent sources | Approved PD access and chosen official constraint coverage/precise-unit proofs pending. No legal clearance, history or financial engine. |
 | 8.7 Metric/cohort evidence | Pending | Retain reproducible operands/distributions/missingness; no final scoring calibration. |
@@ -25,7 +25,15 @@ Preserve metric values and units/universes, input/origin precision, source/provi
 
 ## Current validation
 
-Pending baseline npm ci/check and public/hosted historical regression. Prior scoring audit remains synthetic review evidence, not Phase 8 data verification. No migration or new provider has yet been applied. Every later check will be recorded with actual output and scope; outstanding source proofs remain outstanding.
+Node 24.12.0/npm 11.6.2; npm ci passed, zero reported dependency vulnerabilities. Baseline npm run check passed lint/types/145 tests/build; public HTTP checks, fresh database and nine existing hosted rollback suites passed. Combined foundation checkpoint passes 154 tests/lint/types/build, including old replay and new native statistics/geometry/resolution cases. The subsequent narrow network-error classification correction requires its step checkpoint, not a claim that future implementation is already covered.
+
+Migration `20261007130000_enrichment_polygon_contract.sql` is applied to hosted development after a dry-run showing only that migration. It adds a service-only pure polygon validator in existing source_data: no table/report/payment changes. Fresh and hosted tests pass for holes/disjoint parts, projected area and invalid/self-intersecting/empty/Z/CRS rejection and grants. Existing ready history has 21 analyses/inputs/reports, 42 source snapshots, 111 evidence rows and 70 sections; all six before/after fingerprints match. No raw history or account identifiers are published.
+
+Planning PR #22 merged through protected CI at `46007a0`; revised candidate/authority PR #23 merged after rebase/exact-head CI at `7cd6071`. Implementation is on `codex/phase-8-data`, not complete or merged.
+
+Live PropertyData schema probe plus four cases use header authentication, one bounded call per case and no retries; candidate lists remain memory only. Four proof calls report 10/10/10/1 credits. A prior single schema probe's receipt was not captured; its documented ceiling is 10 credits. Unit 1 Hutton House returns the whole-building `PP` record and is not an exact trading-unit match. Hutton House without Unit 1 matches one UPRN; point stays unknown precision pending OS. Residential candidate `RD06` is not permission to operate commercially. No-match returns empty. This proves access/adapter behaviour, not completed commercial-unit or canonical persistence gates.
+
+OS Open UPRN September 2026 CSV archive passes the official 619,271,161-byte size/MD5 check. Local SHA-256: `107503d45bedaab7f74511766eedbd617f9ca3592113363711e94f4b6458d55a`. Embedded metadata dates extraction to 14 August 2026; September filename is not the retrieval/reference day. Regional extraction/exact UPRN QA continues; no new release is active yet. Prior scoring audit remains synthetic candidate evidence, not new data verification. [Data contract/admission map](phase-8-data-contracts.md) distinguishes artifacts from admitted runtime releases.
 
 ## Deviations
 

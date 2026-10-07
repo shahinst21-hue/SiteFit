@@ -1,5 +1,9 @@
 # Phase 3 database foundation
 
+## Phase 8 in progress — bounded geometry boundary
+
+`20261007130000_enrichment_polygon_contract.sql` is applied to hosted development and fresh PostgreSQL/PostGIS. `source_data.checked_enrichment_polygon(jsonb)` accepts bounded valid 2D WGS84 Polygon/MultiPolygon and returns MultiPolygon without repairing topology, relabelling CRS or flattening holes/parts. Execution is service-role only; no source table, report lifecycle, payment policy or historical row changes. Fresh and hosted rollback tests pass; all six fingerprints of the 21 existing ready report graphs match. Dataset/precise-property/walking persistence extensions remain pending; see [Phase 8 status](phase-8-status.md).
+
 ## Phase 7 implemented and verified — 2026-10-07
 
 Four forward migrations are applied to hosted development: `20261006150000_guest_account_continuity.sql` and `20261006170000_test_payment_integrity.sql`, `20261006190000_phase7_narrow_writers.sql` and `20261006200000_payment_reversal_admission.sql`. Their fresh PostgreSQL/PostGIS and hosted rollback suites pass; actual Google/email/Stripe/Preview proofs and protected PR #20/post-merge CI pass. See [phase-7-status.md](phase-7-status.md). No applied migration history is edited.
