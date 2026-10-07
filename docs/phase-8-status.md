@@ -86,4 +86,12 @@ The four controlled strict-postcode QA calls each report six credits, including 
 
 ## Deviations
 
+### Compact OS capacity experiment — owner-directed continuation
+
+The owner's instruction requires a materially smaller immutable representation before any infrastructure-spend request. [The measured experiment](phase-8-os-compact-benchmark.md) preserves all 5,317,412 London UPRNs and original XY/WGS84 decimals in 127,617,888 packed bytes, with zero duplicate identifiers or rounding. A real 20,000-record rollback-only PostgreSQL chunk occupies 294,912 bytes including TOAST/index; full-size extrapolation is 78,408,431 bytes rather than the previous 625,525,034-byte row-layout projection. One thousand varied successful warm lookups take 9,981.099 ms total; boundaries and absence pass. These are sample storage and database execution measurements, not full admission, cold-cache/p95 or network latency claims.
+
+The strict bounded codec and tests are implemented; private immutable release storage, full-capacity/performance QA and context integration remain pending. No upgrade, subscription, external service, historical snapshot mutation or next-phase work occurred. Continue compact admission using existing infrastructure; no spend request is justified by this checkpoint.
+
+Validation at this checkpoint: `npm run check` passes lint, strict types, all 164 tests and production build; real HTTP `check:public` passes. All six hosted historical fingerprints still match the pre-enrichment baseline. Eight configured private values have zero matches across 296 tracked files and 22 browser artifacts. The transactional benchmark made no applied migration or ready dataset change; no new migration is created at this checkpoint. PR #24 remains draft pending the full Phase 8 gates.
+
 D76 explicitly defers final scoring/prompt calibration and withdraws the absolute no-provisional policy; this is an owner-approved boundary amendment, not a relaxed data/rights/security gate. No implementation deviation recorded yet.
