@@ -1,0 +1,1607 @@
+{
+  "schemaVersion": 1,
+  "release": "2026-09-23.1",
+  "representation": "london-compact1",
+  "reviewDate": "2026-10-07",
+  "sourceSha256": "a924bf853ad6c9e4b1d26f8e3297dbe7fc3e84a40fba0b409b9c12c69bc6aa21",
+  "selection": "First six food-register Restaurant/Cafe/Canteen records with coordinates per area, selected before Overture matching; ten official-address salon branches.",
+  "limitations": [
+    "40 deliberate QA cases are not a random sample or a London completeness estimate.",
+    "Register presence is not current opening proof.",
+    "Fuzzy name/proximity is candidate discovery only; no automatic merging or branch repair."
+  ],
+  "disposition": "Native inventory admission only; unique-business counts and inventory percentiles remain unavailable until entity/cohort admission. No exhaustive competitor claim.",
+  "benchmarks": [
+    {
+      "benchmark": {
+        "area": "Soho",
+        "id": 1361457,
+        "name": "El&N Wardour Street",
+        "postcode": "W1F 0TS",
+        "longitude": -0.1340591,
+        "latitude": 51.5139755,
+        "reference": "https://ratings.food.gov.uk/business/1361457",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Address/name corroboration: EL&N London; nearby name-only fuzzy results were unrelated.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "1f18ecdb-c860-4950-bb39-2be9d79f52cb",
+          "name": "BELONG Wardour Street",
+          "category": "books_music_and_video_store",
+          "distanceMetres": 153.7,
+          "similarity": 0.914
+        },
+        {
+          "id": "7c87e2e6-aa1f-4780-a387-b78e3b19693a",
+          "name": "GAME (Wardour Street)",
+          "category": "books_music_and_video_store",
+          "distanceMetres": 153.7,
+          "similarity": 0.848
+        },
+        {
+          "id": "a5a9a14e-499f-480c-935c-a109f0cc49da",
+          "name": "Byron Wardour Street",
+          "category": "restaurant",
+          "distanceMetres": 152.9,
+          "similarity": 0.824
+        },
+        {
+          "id": "3a06df5f-98dc-4b9b-82e8-281b4928f756",
+          "name": "Capgemini - Wardour Street",
+          "category": "restaurant",
+          "distanceMetres": 90.5,
+          "similarity": 0.789
+        },
+        {
+          "id": "514cb86e-69e8-4c8c-94f0-0d89eed76b1c",
+          "name": "Fora - Wardour Street",
+          "category": "rental_service",
+          "distanceMetres": 66.7,
+          "similarity": 0.788
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Soho",
+        "id": 427890,
+        "name": "The Ship Public House",
+        "postcode": "W1F 0TT",
+        "longitude": -0.1341695,
+        "latitude": 51.5140941,
+        "reference": "https://ratings.food.gov.uk/business/427890",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "The Ship shares postcode; Fullers is a parent/brand candidate, not a second pub.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "5dd17056-5ad7-4660-9939-7e470e8949ba",
+          "name": "artrepublic Soho",
+          "category": "art_gallery",
+          "distanceMetres": 477.9,
+          "similarity": 0.606
+        },
+        {
+          "id": "3f51f638-ef1e-4e56-a250-c6c9c397aad7",
+          "name": "TSQ Playhouse",
+          "category": "bar",
+          "distanceMetres": 464.3,
+          "similarity": 0.6
+        },
+        {
+          "id": "7b2ccf00-a063-4143-8a35-803ec154551d",
+          "name": "Thai House",
+          "category": "restaurant",
+          "distanceMetres": 495.9,
+          "similarity": 0.593
+        },
+        {
+          "id": "cf164750-25cc-4da6-9459-d58575093b0a",
+          "name": "The White Horse",
+          "category": "bar",
+          "distanceMetres": 254.5,
+          "similarity": 0.581
+        },
+        {
+          "id": "f3039a22-a8b7-40a1-b93b-ecb929c7173d",
+          "name": "The White Horse",
+          "category": "bar",
+          "distanceMetres": 315.9,
+          "similarity": 0.581
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Soho",
+        "id": 412191,
+        "name": "Snowflake Gelato",
+        "postcode": "W1F 0TN",
+        "longitude": -0.1339537,
+        "latitude": 51.513731,
+        "reference": "https://ratings.food.gov.uk/business/412191",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Near Snowflake Luxury Gelato at 9.7 m; native postcode differs. Separate Soho candidate at 318.1 m remains distinct.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "594eab55-03a9-43be-96e1-8d2bb56450ae",
+          "name": "Snowflake Luxury Gelato",
+          "category": "casual_eatery",
+          "distanceMetres": 9.7,
+          "similarity": 0.833
+        },
+        {
+          "id": "fa2e5d25-6409-4cb7-a874-d45376606639",
+          "name": "Snowflake, Soho",
+          "category": "restaurant",
+          "distanceMetres": 318.1,
+          "similarity": 0.714
+        },
+        {
+          "id": "67da78b5-f2b8-4b81-8b29-04f3fe4212bd",
+          "name": "Amorino Gelato",
+          "category": "casual_eatery",
+          "distanceMetres": 161.2,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Soho",
+        "id": 1829951,
+        "name": "Owners Club Cafe",
+        "postcode": "W1F 0UT",
+        "longitude": -0.1343776,
+        "latitude": 51.5138159,
+        "reference": "https://ratings.food.gov.uk/business/1829951",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No identified branch in reviewed local/address candidates; not evidence of closure.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "f80f6359-3481-4b53-a592-21fc12be63d5",
+          "name": "Onetrack Club",
+          "category": "sport_league",
+          "distanceMetres": 316.5,
+          "similarity": 0.615
+        },
+        {
+          "id": "899f7764-44b8-4c2f-9ab7-5cae71cb60a5",
+          "name": "Gerry's Club",
+          "category": "corporate_or_business_office",
+          "distanceMetres": 250.3,
+          "similarity": 0.583
+        },
+        {
+          "id": "baaf8795-6102-4020-81cf-083acd332703",
+          "name": "Members Club",
+          "category": "bar",
+          "distanceMetres": 449.7,
+          "similarity": 0.56
+        },
+        {
+          "id": "cc1bf87a-8fab-4c8f-8b06-43d58e7c7cb4",
+          "name": "Phoenix Arts Club",
+          "category": "theatre_venue",
+          "distanceMetres": 345.3,
+          "similarity": 0.552
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Soho",
+        "id": 732356,
+        "name": "Cote Brasserie",
+        "postcode": "W1F 0TY",
+        "longitude": -0.1343372,
+        "latitude": 51.5142227,
+        "reference": "https://ratings.food.gov.uk/business/732356",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Côte Soho shares postcode; shortened/accented native name defeated initial fuzzy comparison.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "cea3bd1a-49d6-48cc-b1db-86407a75463e",
+          "name": "C'est Ici Brasserie",
+          "category": "restaurant",
+          "distanceMetres": 355.7,
+          "similarity": 0.759
+        },
+        {
+          "id": "3b0df4c2-d996-4f79-b9b2-9631ce94ce64",
+          "name": "Old Compton Brasserie",
+          "category": "restaurant",
+          "distanceMetres": 227.6,
+          "similarity": 0.75
+        },
+        {
+          "id": "c3db81e0-99ea-407c-a0af-db5e6fa95cfb",
+          "name": "The Delhi Brasserie",
+          "category": "restaurant",
+          "distanceMetres": 226.5,
+          "similarity": 0.733
+        },
+        {
+          "id": "4c471541-9c02-4ceb-9b0c-ae64036e958f",
+          "name": "The Ivy Soho Brasserie",
+          "category": "restaurant",
+          "distanceMetres": 112.0,
+          "similarity": 0.688
+        },
+        {
+          "id": "6eacab64-78be-49fd-85ff-bdf238a95e8f",
+          "name": "Prix Fixe Brasserie",
+          "category": "restaurant",
+          "distanceMetres": 174.0,
+          "similarity": 0.667
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Soho",
+        "id": 414445,
+        "name": "Papaya",
+        "postcode": "W1F 0BD",
+        "longitude": -0.1342198,
+        "latitude": 51.5142748,
+        "reference": "https://ratings.food.gov.uk/business/414445",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Papaya at 12.4 m and same postcode.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "79275d3e-3fca-49d4-afa6-6c8b8d27cac5",
+          "name": "Papaya",
+          "category": "restaurant",
+          "distanceMetres": 12.4,
+          "similarity": 1.0
+        },
+        {
+          "id": "101bcbcd-3d99-4385-9dfd-c2440b470f4a",
+          "name": "Kapadokya",
+          "category": "restaurant",
+          "distanceMetres": 42.0,
+          "similarity": 0.667
+        },
+        {
+          "id": "1602e87b-2739-4da6-adf8-2dd22608cf86",
+          "name": "Kapara",
+          "category": "restaurant",
+          "distanceMetres": 230.3,
+          "similarity": 0.667
+        },
+        {
+          "id": "2313d8a8-1212-4e5e-95bb-a6529e00e8d7",
+          "name": "Patara",
+          "category": "restaurant",
+          "distanceMetres": 282.5,
+          "similarity": 0.667
+        },
+        {
+          "id": "1bd0d449-dcb0-4562-ace6-b33313ff0e4f",
+          "name": "Away",
+          "category": "fashion_and_apparel_store",
+          "distanceMetres": 452.4,
+          "similarity": 0.6
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Brixton",
+        "id": 483236,
+        "name": "Ritzy Cinema",
+        "postcode": "SW2 1JG",
+        "longitude": -0.114653,
+        "latitude": 51.461282,
+        "reference": "https://ratings.food.gov.uk/business/483236",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Cinema identity at 28.2 m; food-register presence does not turn the cinema into a primary cafe.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "c41ada7a-fdf4-45e3-897d-bab6eda7d669",
+          "name": "Ritzy Cinema",
+          "category": "movie_theater",
+          "distanceMetres": 28.2,
+          "similarity": 1.0
+        },
+        {
+          "id": "2f1b8729-75ac-4977-8a63-fe89386322c4",
+          "name": "Freight Line Bar",
+          "category": "bar",
+          "distanceMetres": 293.4,
+          "similarity": 0.56
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Brixton",
+        "id": 1986518,
+        "name": "Boba Haven",
+        "postcode": "SW9 8LH",
+        "longitude": -0.1134538,
+        "latitude": 51.461515,
+        "reference": "https://ratings.food.gov.uk/business/1986518",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No identified branch in reviewed local/address candidates; not evidence of closure.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Brixton",
+        "id": 1836316,
+        "name": "Clutch",
+        "postcode": "SW9 8FN",
+        "longitude": -0.1143054,
+        "latitude": 51.4616208,
+        "reference": "https://ratings.food.gov.uk/business/1836316",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Clutch Smoked Meats & Burgers shares postcode; shortened register name.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Brixton",
+        "id": 1628262,
+        "name": "F. Mondays Coffee",
+        "postcode": "SW9 8FN",
+        "longitude": -0.1146355,
+        "latitude": 51.4615814,
+        "reference": "https://ratings.food.gov.uk/business/1628262",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No identified branch in reviewed local/address candidates; not evidence of closure.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "d0c461cf-8a35-4331-8795-30a2eb475584",
+          "name": "Costa Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 168.0,
+          "similarity": 0.64
+        },
+        {
+          "id": "1f00cddf-31ea-4676-aafc-5c1d9858aa45",
+          "name": "Find Your Feet",
+          "category": "professional_service",
+          "distanceMetres": 246.0,
+          "similarity": 0.615
+        },
+        {
+          "id": "26002211-dce5-4ad1-b9da-7be571ba65c9",
+          "name": "Federation Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 222.4,
+          "similarity": 0.6
+        },
+        {
+          "id": "9e6fb56d-3959-4c92-a4ed-4762b7809b21",
+          "name": "Lounge Coffee Bar",
+          "category": "arts_and_entertainment",
+          "distanceMetres": 194.5,
+          "similarity": 0.552
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Brixton",
+        "id": 997013,
+        "name": "CJ",
+        "postcode": "SW9 8LD",
+        "longitude": -0.11328,
+        "latitude": 51.461763,
+        "reference": "https://ratings.food.gov.uk/business/997013",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Short CJ identity remains unresolved; no fuzzy substitute assigned.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Brixton",
+        "id": 484313,
+        "name": "May Foods",
+        "postcode": "SW9 8LD",
+        "longitude": -0.11328,
+        "latitude": 51.461764,
+        "reference": "https://ratings.food.gov.uk/business/484313",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "May Foods at 22.1 m and same postcode.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "4c873b4c-c778-4b09-bf20-9f4f7c2d4d06",
+          "name": "May Foods",
+          "category": "restaurant",
+          "distanceMetres": 22.1,
+          "similarity": 1.0
+        },
+        {
+          "id": "9027e10e-39be-4e59-895c-f33a8d23e7d7",
+          "name": "Health Foods",
+          "category": "food_and_beverage_store",
+          "distanceMetres": 153.5,
+          "similarity": 0.632
+        },
+        {
+          "id": "541e65bc-0c3b-42c4-a7d4-156b438bd4fa",
+          "name": "Meaza Food UK",
+          "category": "food_and_beverage_store",
+          "distanceMetres": 177.6,
+          "similarity": 0.632
+        },
+        {
+          "id": "e60d6769-2f70-48e0-8cc3-f7da45448bcd",
+          "name": "Halfords",
+          "category": "sporting_goods_store",
+          "distanceMetres": 387.5,
+          "similarity": 0.625
+        },
+        {
+          "id": "005960c9-1940-456b-b5e4-47bd65ccd4bd",
+          "name": "Back Home Foods",
+          "category": "food_and_beverage_store",
+          "distanceMetres": 125.7,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "id": 1561861,
+        "name": "Wendy's",
+        "postcode": "KT1 1DA",
+        "longitude": -0.3026043,
+        "latitude": 51.4102344,
+        "reference": "https://ratings.food.gov.uk/business/1561861",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Wendys at 14.6 m and same postcode.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "e78a2f8f-53ec-4446-8350-7aa1b7733b1a",
+          "name": "Wendy's",
+          "category": "fast_food_restaurant",
+          "distanceMetres": 14.6,
+          "similarity": 1.0
+        },
+        {
+          "id": "07f13329-3c8f-46e2-ad88-a1811d943b77",
+          "name": "Wenzel's",
+          "category": "casual_eatery",
+          "distanceMetres": 108.9,
+          "similarity": 0.615
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "id": 1646580,
+        "name": "McDonalds",
+        "postcode": "KT1 1DJ",
+        "longitude": -0.3021495,
+        "latitude": 51.4100475,
+        "reference": "https://ratings.food.gov.uk/business/1646580",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Native McDonalds candidate at 268.5 m has branch/address ambiguity; not repaired.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "e9af98bf-bdd7-4f8e-bc7a-ad8f2fa7c248",
+          "name": "McDonald's",
+          "category": "fast_food_restaurant",
+          "distanceMetres": 268.5,
+          "similarity": 1.0
+        },
+        {
+          "id": "b6c12e60-c0c9-447e-8e32-b22a4e704ce3",
+          "name": "Coral",
+          "category": "event_or_party_service",
+          "distanceMetres": 139.5,
+          "similarity": 0.571
+        },
+        {
+          "id": "ecd873c9-4351-4b4e-91e2-003cf23c46ec",
+          "name": "Amy's Nails",
+          "category": "personal_or_beauty_service",
+          "distanceMetres": 117.1,
+          "similarity": 0.556
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "id": 1386150,
+        "name": "Paul",
+        "postcode": "KT1 1BP",
+        "longitude": -0.3034638,
+        "latitude": 51.4095186,
+        "reference": "https://ratings.food.gov.uk/business/1386150",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Paul at 8.4 m; PAUL Kingston same-postcode duplicate candidate needs review.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "cda5054e-d482-448f-9e21-1a9d82ba7c01",
+          "name": "Paul",
+          "category": "casual_eatery",
+          "distanceMetres": 8.4,
+          "similarity": 1.0
+        },
+        {
+          "id": "053047fe-5377-45a2-be69-aab440a6c621",
+          "name": "Asu",
+          "category": "financial_service",
+          "distanceMetres": 493.4,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "id": 1897250,
+        "name": "Overlord Noodle",
+        "postcode": "KT1 1NR",
+        "longitude": -0.3024465,
+        "latitude": 51.410583,
+        "reference": "https://ratings.food.gov.uk/business/1897250",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No Overlord Noodle identity identified; Chopstix is not automatically treated as that business.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "id": 1386151,
+        "name": "Caffe Nero",
+        "postcode": "KT1 1BP",
+        "longitude": -0.3039076,
+        "latitude": 51.40957,
+        "reference": "https://ratings.food.gov.uk/business/1386151",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Caffe Nero at 9.8 m and same postcode; other nearby branches remain separate.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "8584af0f-a143-475c-951a-f15157f3ea01",
+          "name": "Caffè Nero",
+          "category": "coffee_shop",
+          "distanceMetres": 9.8,
+          "similarity": 0.941
+        },
+        {
+          "id": "36decaa1-eced-4e74-ba6f-1014dfc0a2e3",
+          "name": "Caffè Nero",
+          "category": "coffee_shop",
+          "distanceMetres": 228.8,
+          "similarity": 0.941
+        },
+        {
+          "id": "8814eee4-ec2f-4863-8920-73e476e6b07b",
+          "name": "Caffè Nero",
+          "category": "cafe",
+          "distanceMetres": 342.1,
+          "similarity": 0.941
+        },
+        {
+          "id": "7ba7b99c-56b8-46f7-8bf9-3668f0d20286",
+          "name": "Coffee Break",
+          "category": "cafe",
+          "distanceMetres": 63.4,
+          "similarity": 0.6
+        },
+        {
+          "id": "bb42189d-dc75-47aa-9d2a-d2420583f237",
+          "name": "Costa Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 152.4,
+          "similarity": 0.6
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "id": 1385847,
+        "name": "Spuds",
+        "postcode": "KT1 1EE",
+        "longitude": -0.3030293,
+        "latitude": 51.4092156,
+        "reference": "https://ratings.food.gov.uk/business/1385847",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No identified branch in reviewed local/address candidates; not evidence of closure.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "8b298ea6-1474-4c97-b416-374047ec13f6",
+          "name": "Studio SB",
+          "category": "wellness_service",
+          "distanceMetres": 202.4,
+          "similarity": 0.615
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Stratford",
+        "id": 1047539,
+        "name": "Pret A Manger",
+        "postcode": "E15 1AZ",
+        "longitude": -0.00331,
+        "latitude": 51.5412647,
+        "reference": "https://ratings.food.gov.uk/business/1047539",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Multiple nearby Pret branches; 53.2 m candidate and Petit Pret address identity require branch review.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "e2107eca-e432-483f-80aa-ca0be2f069e4",
+          "name": "Pret A Manger",
+          "category": "casual_eatery",
+          "distanceMetres": 53.2,
+          "similarity": 1.0
+        },
+        {
+          "id": "d492253c-9b69-46f8-b785-3f61bb058fec",
+          "name": "Pret A Manger",
+          "category": "casual_eatery",
+          "distanceMetres": 241.0,
+          "similarity": 1.0
+        },
+        {
+          "id": "b3eea048-c536-4d23-9e1e-2b859e566a0b",
+          "name": "Pret A Manger",
+          "category": "cafe",
+          "distanceMetres": 355.3,
+          "similarity": 1.0
+        },
+        {
+          "id": "a60ac70f-e629-4be5-8f4d-9cd1702f30ac",
+          "name": "Pret A Manger",
+          "category": "casual_eatery",
+          "distanceMetres": 416.5,
+          "similarity": 1.0
+        },
+        {
+          "id": "4cf47509-c015-4bc2-a678-4bb7866e85f4",
+          "name": "Freaks and Geeks",
+          "category": "bar",
+          "distanceMetres": 460.2,
+          "similarity": 0.56
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Stratford",
+        "id": 1865384,
+        "name": "Knot Coffee & Pretzel",
+        "postcode": "E15 1AZ",
+        "longitude": -0.00331,
+        "latitude": 51.5412647,
+        "reference": "https://ratings.food.gov.uk/business/1865384",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No Knot identity identified; Costa is not a substitute identity match.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "f2d8de14-e238-4bc7-9d3b-03c0e0ef5746",
+          "name": "Costa Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 257.4,
+          "similarity": 0.571
+        },
+        {
+          "id": "8872bb41-8307-49be-abc2-b105f83d79fe",
+          "name": "Costa Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 467.0,
+          "similarity": 0.571
+        },
+        {
+          "id": "89edcb6f-4fbc-40d8-a6b7-b01b997243c7",
+          "name": "Coffee Suppermarket",
+          "category": "food_and_beverage_store",
+          "distanceMetres": 490.3,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Stratford",
+        "id": 1973524,
+        "name": "Gopal's Corner",
+        "postcode": "E20 1GN",
+        "longitude": -0.0061998,
+        "latitude": 51.5430667,
+        "reference": "https://ratings.food.gov.uk/business/1973524",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No Gopals Corner identity identified; other food-court names remain distinct.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Stratford",
+        "id": 640772,
+        "name": "Pret A Manger",
+        "postcode": "E15 1DA",
+        "longitude": -0.0027505,
+        "latitude": 51.5417298,
+        "reference": "https://ratings.food.gov.uk/business/640772",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Pret same postcode at 15.6 m; other branches remain distinct.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "e2107eca-e432-483f-80aa-ca0be2f069e4",
+          "name": "Pret A Manger",
+          "category": "casual_eatery",
+          "distanceMetres": 15.6,
+          "similarity": 1.0
+        },
+        {
+          "id": "d492253c-9b69-46f8-b785-3f61bb058fec",
+          "name": "Pret A Manger",
+          "category": "casual_eatery",
+          "distanceMetres": 206.0,
+          "similarity": 1.0
+        },
+        {
+          "id": "b3eea048-c536-4d23-9e1e-2b859e566a0b",
+          "name": "Pret A Manger",
+          "category": "cafe",
+          "distanceMetres": 357.7,
+          "similarity": 1.0
+        },
+        {
+          "id": "a60ac70f-e629-4be5-8f4d-9cd1702f30ac",
+          "name": "Pret A Manger",
+          "category": "casual_eatery",
+          "distanceMetres": 455.7,
+          "similarity": 1.0
+        },
+        {
+          "id": "4cf47509-c015-4bc2-a678-4bb7866e85f4",
+          "name": "Freaks and Geeks",
+          "category": "bar",
+          "distanceMetres": 442.3,
+          "similarity": 0.56
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Stratford",
+        "id": 1245703,
+        "name": "Honi Poke",
+        "postcode": "E20 1GN",
+        "longitude": -0.0061517,
+        "latitude": 51.5432663,
+        "reference": "https://ratings.food.gov.uk/business/1245703",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Honi Poke same postcode, but point differs by 106.9 m; position/entrance precision unresolved.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "0c139b5b-162c-4ca0-978f-a10f14be6ae2",
+          "name": "Honi Poke",
+          "category": "restaurant",
+          "distanceMetres": 106.9,
+          "similarity": 1.0
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Stratford",
+        "id": 1493208,
+        "name": "BabaBoom",
+        "postcode": "E20 1GN",
+        "longitude": -0.0061517,
+        "latitude": 51.5432663,
+        "reference": "https://ratings.food.gov.uk/business/1493208",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "BABABOOM at 31.9 m; native postcode differs; dated branch candidate only.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "3d6708e4-f56f-4d27-b614-dd455aa4b4a5",
+          "name": "BABABOOM",
+          "category": "restaurant",
+          "distanceMetres": 31.9,
+          "similarity": 1.0
+        },
+        {
+          "id": "03d22312-2509-4947-9a7e-811a250a43ac",
+          "name": "Busaba",
+          "category": "restaurant",
+          "distanceMetres": 194.7,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Walthamstow",
+        "id": 1182316,
+        "name": "HAVEN Coffee",
+        "postcode": "E17 9RE",
+        "longitude": -0.0178389,
+        "latitude": 51.5835875,
+        "reference": "https://ratings.food.gov.uk/business/1182316",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "HAVEN Coffee at 7.9 m and same postcode.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "24cb481e-552d-4587-b12a-e040a7e637ba",
+          "name": "HAVEN Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 7.9,
+          "similarity": 1.0
+        },
+        {
+          "id": "65c7dab2-4162-4cdd-a7cb-8e17ab50fdd7",
+          "name": "Costa Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 160.6,
+          "similarity": 0.636
+        },
+        {
+          "id": "e625e007-db5f-4f62-be6e-476fd0965549",
+          "name": "Palace Coffee House",
+          "category": "cafe",
+          "distanceMetres": 336.4,
+          "similarity": 0.571
+        },
+        {
+          "id": "3aea4d1b-b0aa-4a4b-bb8d-301e672ef98d",
+          "name": "Incoming Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 119.6,
+          "similarity": 0.56
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Walthamstow",
+        "id": 1001919,
+        "name": "Chaiiwala",
+        "postcode": "E17 9PP",
+        "longitude": -0.01833,
+        "latitude": 51.58212,
+        "reference": "https://ratings.food.gov.uk/business/1001919",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Chaiiwala at 5.5 m and same postcode.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "ea286fe3-de74-4d8d-96af-9eae5df5381d",
+          "name": "Chaiiwala",
+          "category": "cafe",
+          "distanceMetres": 5.5,
+          "similarity": 1.0
+        },
+        {
+          "id": "9ddcbdcb-8589-47c0-ba84-3627542e154c",
+          "name": "Chicking Walthamstow",
+          "category": "fast_food_restaurant",
+          "distanceMetres": 72.8,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Walthamstow",
+        "id": 1878168,
+        "name": "Perky Blenders Coffee Bar",
+        "postcode": "E17 9QD",
+        "longitude": -0.01894,
+        "latitude": 51.582868,
+        "reference": "https://ratings.food.gov.uk/business/1878168",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No Perky Blenders identity identified; The Urban Grind is not a substitute identity match.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Walthamstow",
+        "id": 729746,
+        "name": "Costa Coffee",
+        "postcode": "E17 9QF",
+        "longitude": -0.0191702,
+        "latitude": 51.5828456,
+        "reference": "https://ratings.food.gov.uk/business/729746",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Costa at 37.3 m but native postcode differs; position/address qualification retained.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "65c7dab2-4162-4cdd-a7cb-8e17ab50fdd7",
+          "name": "Costa Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 37.3,
+          "similarity": 1.0
+        },
+        {
+          "id": "3aea4d1b-b0aa-4a4b-bb8d-301e672ef98d",
+          "name": "Incoming Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 19.1,
+          "similarity": 0.64
+        },
+        {
+          "id": "24cb481e-552d-4587-b12a-e040a7e637ba",
+          "name": "HAVEN Coffee",
+          "category": "coffee_shop",
+          "distanceMetres": 130.9,
+          "similarity": 0.636
+        },
+        {
+          "id": "0c64d1bc-9ad1-46ef-8446-ac0bbe83a35a",
+          "name": "Rio's Coffee Lounge",
+          "category": "cafe",
+          "distanceMetres": 97.4,
+          "similarity": 0.593
+        },
+        {
+          "id": "4b19487a-de75-4288-9678-ea2b2402ac38",
+          "name": "East of Eden",
+          "category": "fitness_studio",
+          "distanceMetres": 378.4,
+          "similarity": 0.571
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Walthamstow",
+        "id": 965071,
+        "name": "Etles Uyghur Restaurant",
+        "postcode": "E17 9PP",
+        "longitude": -0.0182327,
+        "latitude": 51.5818316,
+        "reference": "https://ratings.food.gov.uk/business/965071",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "Etles at 5.2 m and same postcode.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": [
+        {
+          "id": "97de90ee-a4fd-4fd1-99f1-045208df862d",
+          "name": "Etles Uyghur Restaurant",
+          "category": "restaurant",
+          "distanceMetres": 5.2,
+          "similarity": 1.0
+        },
+        {
+          "id": "c0365b07-beaf-4186-b631-0e800606dbc8",
+          "name": "Thainese Restaurant",
+          "category": "restaurant",
+          "distanceMetres": 379.3,
+          "similarity": 0.667
+        },
+        {
+          "id": "96e61279-93a0-4226-b8da-39d881f9ec9d",
+          "name": "Güneş Restaurant",
+          "category": "restaurant",
+          "distanceMetres": 109.5,
+          "similarity": 0.647
+        },
+        {
+          "id": "205a3793-4736-4fe8-a175-01ede5eb3e0d",
+          "name": "Taj Restaurant",
+          "category": "restaurant",
+          "distanceMetres": 474.0,
+          "similarity": 0.647
+        },
+        {
+          "id": "df89f218-3ed7-44b9-be1c-e1d297badd5d",
+          "name": "Sultanat Restaurant",
+          "category": "restaurant",
+          "distanceMetres": 371.2,
+          "similarity": 0.615
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Walthamstow",
+        "id": 1683362,
+        "name": "Ganache",
+        "postcode": "E17 3AX",
+        "longitude": -0.0191413,
+        "latitude": 51.5835105,
+        "reference": "https://ratings.food.gov.uk/business/1683362",
+        "basis": "Dated official food register; not current trading proof"
+      },
+      "review": "No Ganache identity identified; other names remain distinct.",
+      "sameAddressSalonCandidates": [],
+      "nearbyNameCandidates": []
+    },
+    {
+      "benchmark": {
+        "area": "Kensington",
+        "name": "Rush Kensington",
+        "postcode": "W8 4EP",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "f7d41fee-a645-4543-84d2-5fc4f4b0a968",
+          "name": "Rush Hairdressers Kensington",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.191181,
+            51.502773
+          ],
+          "addresses": [
+            {
+              "freeform": "26 Kensington Church Street, London, W8 4EP",
+              "locality": null,
+              "postcode": "W8 4EP",
+              "region": null,
+              "country": "GB"
+            }
+          ]
+        },
+        {
+          "id": "40dbcba6-ed81-469f-81f5-ab11532aa4e2",
+          "name": "Rush Hair & Beauty",
+          "taxonomy": {
+            "primary": "barber",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "barber"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.19124054886525207,
+            51.50278608951829
+          ],
+          "addresses": [
+            {
+              "freeform": "26 Kensington Church Street",
+              "locality": "London",
+              "postcode": "W8 4EP",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        },
+        {
+          "id": "8b528e19-255a-4e63-b3de-7dddc6a4b2af",
+          "name": "Rush Kensington",
+          "taxonomy": {
+            "primary": "hair_stylist",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon",
+              "hair_stylist"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.1913188,
+            51.5027123
+          ],
+          "addresses": [
+            {
+              "freeform": "26 Kensington Church Street",
+              "locality": "London",
+              "postcode": "W8 4EP",
+              "region": "London",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kentish Town",
+        "name": "Rush Kentish Town",
+        "postcode": "NW5 2AD",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "9125db32-0d50-442a-8675-61103982ff13",
+          "name": "Rush Kentish Town",
+          "taxonomy": {
+            "primary": "barber",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "barber"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.1411026,
+            51.5485828
+          ],
+          "addresses": [
+            {
+              "freeform": "222 Kentish Town Road",
+              "locality": "London",
+              "postcode": "NW5 2AD",
+              "region": "",
+              "country": "GB"
+            }
+          ]
+        },
+        {
+          "id": "b7127f7e-3874-463f-bbe2-c668fdc7d75e",
+          "name": "Rush Hairdressers Kentish Town",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.1408943,
+            51.5485728
+          ],
+          "addresses": [
+            {
+              "freeform": "222 Kentish Town Road, London, NW5 2AD",
+              "locality": null,
+              "postcode": "NW5 2AD",
+              "region": null,
+              "country": "GB"
+            }
+          ]
+        },
+        {
+          "id": "d98b2213-b6c9-42cd-9181-1825c18f1271",
+          "name": "Rush Hair & Beauty",
+          "taxonomy": {
+            "primary": "beauty_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "beauty_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.14083,
+            51.548572
+          ],
+          "addresses": [
+            {
+              "freeform": "222 Kentish Town Road",
+              "locality": "London",
+              "postcode": "NW5 2AD",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kings Cross",
+        "name": "Rush Kings Cross",
+        "postcode": "N1 9NR",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "ce16c7fc-2308-4991-a259-d8f8842b8b52",
+          "name": "Rush Kings Cross",
+          "taxonomy": {
+            "primary": "barber",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "barber"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.12125404,
+            51.53095878
+          ],
+          "addresses": [
+            {
+              "freeform": "282 Pentonville Rd",
+              "locality": "London",
+              "postcode": "N1 9NR",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        },
+        {
+          "id": "fda4c7a0-f004-42eb-9c57-86cf32f37e35",
+          "name": "Rush Hairdressers Kings Cross",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.12136,
+            51.53097
+          ],
+          "addresses": [
+            {
+              "freeform": "282 Pentonville Road, London, N1 9NR",
+              "locality": null,
+              "postcode": "N1 9NR",
+              "region": null,
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Moorgate",
+        "name": "Rush Moorgate",
+        "postcode": "EC2M 7LS",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "d3db03e3-5946-48e5-a76f-07fbae8c7797",
+          "name": "Rush Hair & Beauty",
+          "taxonomy": {
+            "primary": "beauty_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "beauty_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.085696,
+            51.518824
+          ],
+          "addresses": [
+            {
+              "freeform": "6 Eldon Street",
+              "locality": "London",
+              "postcode": "EC2M 7LS",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Strand",
+        "name": "Rush Strand",
+        "postcode": "WC2R 0NE",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "6dfc91ac-cb46-45b1-8aed-0e8cd4d1a66f",
+          "name": "Rush Hairdressers Strand",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.12243324212023,
+            51.510245128978
+          ],
+          "addresses": [
+            {
+              "freeform": "405 Strand, London, WC2R 0NE",
+              "locality": null,
+              "postcode": "WC2R 0NE",
+              "region": null,
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Hammersmith",
+        "name": "Rush Hammersmith",
+        "postcode": "W6 9JG",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "dfa3f0ae-0094-4400-a1d1-0d5e8f6a3cb8",
+          "name": "Rush Salons Rush Hammersmith",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.2293753,
+            51.492534
+          ],
+          "addresses": [
+            {
+              "freeform": "101 King Street",
+              "locality": "Hammersmith",
+              "postcode": "W6 9JG",
+              "region": "England",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Kingston",
+        "name": "Rush Kingston",
+        "postcode": "KT1 1JH",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "72d86b93-3002-4d56-bd83-579ae20e5d8f",
+          "name": "Rush Hairdressers Kingston",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.30542138188796,
+            51.409630076086
+          ],
+          "addresses": [
+            {
+              "freeform": "30 Market Place, Kingston Upon Thames, KT1 1JH",
+              "locality": null,
+              "postcode": "KT1 1JH",
+              "region": null,
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Putney",
+        "name": "Rush Putney",
+        "postcode": "SW15 1RR",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "419d9805-9422-4bc7-af81-a155a10ec652",
+          "name": "Rush Hairdressers Putney",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.2167482,
+            51.4620298
+          ],
+          "addresses": [
+            {
+              "freeform": "144 High Street, Putney, SW15 1RR",
+              "locality": null,
+              "postcode": "SW15 1RR",
+              "region": null,
+              "country": "GB"
+            }
+          ]
+        },
+        {
+          "id": "771946a9-ae86-4ce5-b573-3c78cf4b2c23",
+          "name": "Rush Hair & Beauty",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.21683551709139712,
+            51.46203542459343
+          ],
+          "addresses": [
+            {
+              "freeform": "144 Putney High Street",
+              "locality": "London",
+              "postcode": "SW15 1RR",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Wimbledon",
+        "name": "Rush Wimbledon",
+        "postcode": "SW19 1RQ",
+        "reference": "https://www.rush.co.uk/salon-finder",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "d7c0473e-fdca-4239-aadb-9ba2dfd7cd7c",
+          "name": "Rush Hair & Beauty",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.20269962,
+            51.41976013
+          ],
+          "addresses": [
+            {
+              "freeform": "64 The Broadway",
+              "locality": "London",
+              "postcode": "SW19 1RQ",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "benchmark": {
+        "area": "Covent Garden",
+        "name": "Trevor Sorbie",
+        "postcode": "WC2E 9DP",
+        "reference": "https://trevorsorbie.com/salon/covent-garden-hair-salon/",
+        "basis": "Official salon address; checked 2026-10-07"
+      },
+      "review": "Official branch postcode and native salon taxonomy corroborate identity; source existence/current trading/point precision remain qualified.",
+      "sameAddressSalonCandidates": [
+        {
+          "id": "b3bfacf3-7c07-48eb-a43e-7289ca270151",
+          "name": "Trevor Sorbie",
+          "taxonomy": {
+            "primary": "hair_salon",
+            "hierarchy": [
+              "lifestyle_services",
+              "personal_or_beauty_service",
+              "hair_salon"
+            ],
+            "alternates": null
+          },
+          "point": [
+            -0.12589211,
+            51.51175722
+          ],
+          "addresses": [
+            {
+              "freeform": "27 Floral St",
+              "locality": "London",
+              "postcode": "WC2E 9DP",
+              "region": "ENG",
+              "country": "GB"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
