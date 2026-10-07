@@ -1,5 +1,9 @@
 # Architecture Decision Log
 
+## D75 accepted explicit Auth-to-Checkout transition — 2026-10-07
+
+Owner's actual new-email proof reached Test Checkout but the sent-email state was obscured by the original form, and the immediate Stripe transition did not explain verification. Replace the form with a distinct sent-email view, keep code verification available as a disclosure, and recheck server state when the waiting tab regains focus. After verified Auth and the existing guarded claim, show the saved Snapshot/account confirmation and an explicit Continue to Test Checkout action. No Checkout POST runs merely from mounting the resume page. Already confirmed active purchases still recover their verified status without requesting another payment. This supersedes automatic Checkout navigation in Phase 7 plan §4/Step 7.6; it changes presentation and the final user action, not identity, claim, payment or historical authority. No new infrastructure, schema or Phase 8 functionality.
+
 ## D74 accepted Phase 7 verification boundary and direct Production webhook — 2026-10-06
 
 The owner removes external Stripe delivery through protected Preview from the Phase 7 completion requirement. Real Local Stripe Test signed delivery with hosted development payment/entitlement state remains required, including success, decline, cancel, expiry, refund, replay/order, signature/raw-body, RLS and security checks. Protected Preview still verifies browser/Auth/UI/ownership/security/deployment; it must remain protected. This is an explicit owner-approved verification-scope revision, not a silent waiver of payment integrity tests or a claim that outstanding Auth/accessibility/CI gates passed.

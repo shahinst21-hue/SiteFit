@@ -1,8 +1,7 @@
 "use client";
-import { useCallback,useEffect,useRef,useState } from "react";
-export function PurchaseButton({report,checkout=false,automatic=false}:{report:string;checkout?:boolean;automatic?:boolean}){
+import { useCallback,useState } from "react";
+export function PurchaseButton({report,checkout=false}:{report:string;checkout?:boolean}){
  const [busy,setBusy]=useState(false),[error,setError]=useState("");
- const started=useRef(false);
  const start=useCallback(async()=>{
   setBusy(true);setError("");
   try{
@@ -13,6 +12,5 @@ export function PurchaseButton({report,checkout=false,automatic=false}:{report:s
    window.location.assign(url.href);
   }catch{setError("We could not continue to Checkout. Your Snapshot is still saved; please retry shortly.");setBusy(false);}
  },[report,checkout]);
- useEffect(()=>{if(automatic&&!started.current){started.current=true;void start();}},[automatic,start]);
  return <><button type="button" className="button button-primary" disabled={busy} onClick={start}>{busy?"Please wait…":checkout?"Continue to Test Checkout · £29":"Check the Full Case · £29"}</button><p role="status">{error}</p></>;
 }

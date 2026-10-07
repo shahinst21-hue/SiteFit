@@ -23,6 +23,8 @@ Recorded 2026-10-03. The strategy below covers future phases. Phase 0 introduced
 
 ## Test data and benchmarks
 
+For Phase 7 D75, verify that a successful real email send replaces the original sign-in form with a clear sent-email state, optional code entry is labelled and keyboard-operable, and returning from the verification tab rechecks server state. Verified Auth/claim must stop at account/Snapshot confirmation until the user activates Checkout. Unverified refresh/focus cannot confer access; existing active Test purchases recover status without a second charge. Keep actual inbox/new/existing identity proofs distinct from generated admin tokens and provider mocks.
+
 Use isolated test accounts/resources and approved synthetic data for unit and failure-path tests; synthetic cases must never be displayed as observations about real properties. Test secrets belong in secure CI/service settings or ignored local files, not fixtures.
 
 The conceptual Benchmarks A/B/C in [product.md](product.md) cover the three business categories. Each real address remains HUMAN INPUT REQUIRED. Once supplied, capture retrieval dates, permitted evidence, user economics and reviewed expectations. Do not invent address-level outcomes. Exact live responses can change, so assert coverage, provenance and rules rather than brittle real-time counts. Stable snapshots must respect source retention/licensing restrictions.

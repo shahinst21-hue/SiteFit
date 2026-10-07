@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { verifiedUser } from "@/lib/supabase/server";
-import { CLAIM_COOKIE,RESUME_COOKIE,AUTH_RECEIPT_COOKIE,claimCookie,permanentIdentity,purchaseUuid,validAuthReceipt } from "@/lib/auth/purchase-flow";
+import { CLAIM_COOKIE,AUTH_RECEIPT_COOKIE,claimCookie,permanentIdentity,purchaseUuid,validAuthReceipt } from "@/lib/auth/purchase-flow";
 import { readClaim } from "@/lib/auth/claim-repository";
 import { purchaseOrigin } from "@/lib/payments/config";
 import { activeTestPurchaseId } from "@/lib/payments/purchase-projection";
@@ -21,8 +21,7 @@ export default async function Resume({searchParams}:{searchParams:Promise<{repor
   if(purchase.error)notFound();
   const active=activeTestPurchaseId(purchase.data);
   if(active)redirect(`/purchase/return?purchase=${active}`);
-  const automatic=(await cookies()).get(RESUME_COOKIE)?.value===report;
-  return <div className="page-wrap narrow-page"><h1>Your Snapshot is saved.</h1><p>Test Mode only. No real payment is taken. Full Report generation is not enabled in this development phase.</p><PurchaseButton report={report} checkout automatic={automatic}/><Link href={`/snapshots/${report}`}>Return to your Snapshot</Link></div>;
+  return <div className="page-wrap narrow-page"><p className="eyebrow">READY FOR CHECKOUT</p><h1>Your account is verified. Your Snapshot is saved.</h1><section className="simple-panel"><p>No payment has been confirmed for this Snapshot. Next, you will go to Stripe for the one-off £29 Test Checkout.</p><p className="field-help">No real payment is taken. Full Report generation is not enabled. Your original Snapshot stays unchanged.</p><PurchaseButton report={report} checkout/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
  }
  const proof=claimCookie((await cookies()).get(CLAIM_COOKIE)?.value);if(!proof)notFound();
  let claim;try{claim=await readClaim(proof);}catch{notFound();}

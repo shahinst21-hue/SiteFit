@@ -4,6 +4,8 @@ Updated 2026-10-06. The current Product Contract and D70 supersede conflicting h
 
 ## Frontend and backend
 
+Phase 7's owner-approved D75 transition presents a distinct email-sent state, then a server-verified account/saved-Snapshot confirmation before the explicit Stripe Test Checkout action. Waiting-tab focus only triggers a fresh server projection; it supplies no Auth, ownership or entitlement authority. Guarded account claims remain separate from Checkout creation, which does not run on callback GET or component mount. Historical report reads never regenerate content. See [decisions.md](decisions.md) and [phase-7-status.md](phase-7-status.md) for actual verification.
+
 Planned frontend: Next.js App Router, TypeScript in strict mode, Tailwind CSS and a lightweight component library, preferably shadcn/ui. A single web repository is sufficient. Vercel is the approved hosting direction. Phase 1 builds only a minimal deployment shell; public website and UX begin in Phase 2.
 
 Planned backend: server-side Next.js handlers and application services separating inputs, provider retrieval, deterministic analysis and report presentation. Credentials and privileged operations stay server side. Long-running analysis execution, retries and persistence will be designed when pipeline requirements are known; no queue or additional infrastructure is selected in Phase 0.
