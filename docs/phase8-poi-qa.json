@@ -1,0 +1,453 @@
+{
+  "status": "planning_research_not_application_dataset_or_live_provider_integration",
+  "release": "2026-09-23.1",
+  "retrievedAt": "2026-10-07T09:34:50Z",
+  "source": "s3://overturemaps-us-west-2/release/2026-09-23.1/theme=places/type=place/*",
+  "documentation": "https://docs.overturemaps.org/getting-data/duckdb/",
+  "attributionAndLicensing": "https://docs.overturemaps.org/attribution/",
+  "extractSha256": "e6adbf7850e3575fd070ea2e9222e2f17b72085bf2eb10c1b1c1393bbe19e17f",
+  "successfulQueryElapsedSeconds": 185.07,
+  "tool": "DuckDB 1.5.6 with httpfs; temporary Python research only",
+  "query": "SELECT id,names.primary AS name,basic_category,taxonomy,confidence,NULL AS addresses,NULL AS sources,bbox FROM read_parquet(source,hive_partitioning=true) WHERE bbox.xmin BETWEEN -0.312 AND 0.005 AND bbox.ymin BETWEEN 51.401 AND 51.590",
+  "postFilter": "Retain rows whose bbox.xmin/ymin lies within one of the five rectangles below; longitude then latitude. Bboxes are float approximations, not inspected WKB geometries.",
+  "boundsOrder": [
+    "name",
+    "west",
+    "east",
+    "south",
+    "north"
+  ],
+  "bounds": [
+    [
+      "Soho",
+      -0.143,
+      -0.125,
+      51.508,
+      51.52
+    ],
+    [
+      "Brixton",
+      -0.122,
+      -0.105,
+      51.452,
+      51.47
+    ],
+    [
+      "Kingston",
+      -0.312,
+      -0.294,
+      51.401,
+      51.419
+    ],
+    [
+      "Stratford",
+      -0.016,
+      0.005,
+      51.535,
+      51.55
+    ],
+    [
+      "Walthamstow",
+      -0.028,
+      -0.004,
+      51.577,
+      51.59
+    ]
+  ],
+  "records": 22475,
+  "nullBasicCategory": 1486,
+  "sameNameRoundedPointExtraRecords": 20,
+  "categoryFilters": {
+    "coffee_cafes": "basic_category in coffee_shop,cafe",
+    "restaurants": "basic_category restaurant",
+    "hair_beauty_nails_barbers": "taxonomy.primary contains hair_salon,beauty_salon,nail_salon,barber",
+    "office_coworking": "taxonomy.primary contains office,coworking",
+    "gyms": "basic_category gym",
+    "hotels": "basic_category hotel",
+    "food_stores": "basic_category food_and_beverage_store",
+    "department_shopping_anchors": "taxonomy.primary contains department_store,shopping_center",
+    "station_categories": "taxonomy.primary contains train_station,subway_station"
+  },
+  "areaCounts": {
+    "Soho": {
+      "all": 15151,
+      "coffee_cafes": 323,
+      "restaurants": 1461,
+      "hair_beauty_nails_barbers": 285,
+      "office_coworking": 318,
+      "gyms": 74,
+      "hotels": 122,
+      "food_stores": 135,
+      "department_shopping_anchors": 18,
+      "station_categories": 10
+    },
+    "Brixton": {
+      "all": 1778,
+      "coffee_cafes": 41,
+      "restaurants": 185,
+      "hair_beauty_nails_barbers": 71,
+      "office_coworking": 18,
+      "gyms": 10,
+      "hotels": 9,
+      "food_stores": 44,
+      "department_shopping_anchors": 4,
+      "station_categories": 4
+    },
+    "Kingston": {
+      "all": 2255,
+      "coffee_cafes": 67,
+      "restaurants": 144,
+      "hair_beauty_nails_barbers": 92,
+      "office_coworking": 29,
+      "gyms": 21,
+      "hotels": 9,
+      "food_stores": 41,
+      "department_shopping_anchors": 4,
+      "station_categories": 1
+    },
+    "Stratford": {
+      "all": 1861,
+      "coffee_cafes": 36,
+      "restaurants": 146,
+      "hair_beauty_nails_barbers": 46,
+      "office_coworking": 23,
+      "gyms": 16,
+      "hotels": 19,
+      "food_stores": 35,
+      "department_shopping_anchors": 8,
+      "station_categories": 15
+    },
+    "Walthamstow": {
+      "all": 1430,
+      "coffee_cafes": 48,
+      "restaurants": 106,
+      "hair_beauty_nails_barbers": 45,
+      "office_coworking": 19,
+      "gyms": 7,
+      "hotels": 6,
+      "food_stores": 46,
+      "department_shopping_anchors": 0,
+      "station_categories": 3
+    }
+  },
+  "selectedInspectedRecords": [
+    {
+      "area": "Soho",
+      "id": "927545cb-232f-4471-8ccc-6bd19b8456a6",
+      "name": "Monmouth Coffee Company",
+      "basic_category": "coffee_shop",
+      "taxonomy": {
+        "primary": "coffee_shop",
+        "hierarchy": [
+          "food_and_drink",
+          "non_alcoholic_beverage_venue",
+          "coffee_shop"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9993621396720409,
+      "bbox": {
+        "xmin": -0.12685233354568481,
+        "xmax": -0.12685231864452362,
+        "ymin": 51.514381408691406,
+        "ymax": 51.51438903808594
+      }
+    },
+    {
+      "area": "Soho",
+      "id": "988a0eb3-7a15-4985-9f08-52cb3124a729",
+      "name": "Flat White",
+      "basic_category": "cafe",
+      "taxonomy": {
+        "primary": "cafe",
+        "hierarchy": [
+          "food_and_drink",
+          "casual_eatery",
+          "cafe"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9996515394747257,
+      "bbox": {
+        "xmin": -0.13483530282974243,
+        "xmax": -0.13483527302742004,
+        "ymin": 51.51360321044922,
+        "ymax": 51.51361083984375
+      }
+    },
+    {
+      "area": "Brixton",
+      "id": "26002211-dce5-4ad1-b9da-7be571ba65c9",
+      "name": "Federation Coffee",
+      "basic_category": "coffee_shop",
+      "taxonomy": {
+        "primary": "coffee_shop",
+        "hierarchy": [
+          "food_and_drink",
+          "non_alcoholic_beverage_venue",
+          "coffee_shop"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.77,
+      "bbox": {
+        "xmin": -0.11172007024288177,
+        "xmax": -0.11172005534172058,
+        "ymin": 51.462406158447266,
+        "ymax": 51.4624137878418
+      }
+    },
+    {
+      "area": "Kingston",
+      "id": "5707905e-2d9b-41a5-b4a0-4fb485014ac4",
+      "name": "Headmasters",
+      "basic_category": "personal_or_beauty_service",
+      "taxonomy": {
+        "primary": "hair_salon",
+        "hierarchy": [
+          "lifestyle_services",
+          "personal_or_beauty_service",
+          "hair_salon"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9929689764976501,
+      "bbox": {
+        "xmin": -0.30357202887535095,
+        "xmax": -0.30357199907302856,
+        "ymin": 51.41144943237305,
+        "ymax": 51.41145706176758
+      }
+    },
+    {
+      "area": "Kingston",
+      "id": "24a3d0e8-cd93-4547-a89e-20bea5e8b764",
+      "name": "Headmasters",
+      "basic_category": "personal_or_beauty_service",
+      "taxonomy": {
+        "primary": "hair_salon",
+        "hierarchy": [
+          "lifestyle_services",
+          "personal_or_beauty_service",
+          "hair_salon"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.77,
+      "bbox": {
+        "xmin": -0.3008594512939453,
+        "xmax": -0.3008594214916229,
+        "ymin": 51.41075897216797,
+        "ymax": 51.4107666015625
+      }
+    },
+    {
+      "area": "Kingston",
+      "id": "f606ae20-5acb-44fc-9e81-97ad6305361a",
+      "name": "The Gym Group",
+      "basic_category": "gym",
+      "taxonomy": {
+        "primary": "gym",
+        "hierarchy": [
+          "sports_and_recreation",
+          "sport_or_fitness_facility",
+          "gym"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.999918829292059,
+      "bbox": {
+        "xmin": -0.30201053619384766,
+        "xmax": -0.30201050639152527,
+        "ymin": 51.41028594970703,
+        "ymax": 51.41029357910156
+      }
+    },
+    {
+      "area": "Soho",
+      "id": "d0801942-77a9-46a7-9ada-c0b2c957d6a8",
+      "name": "WeWork Medius House",
+      "basic_category": "b2b_office_and_professional_service",
+      "taxonomy": {
+        "primary": "b2b_business_management_service",
+        "hierarchy": [
+          "services_and_business",
+          "b2b_service",
+          "b2b_office_and_professional_service",
+          "b2b_business_management_service"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9988967063844204,
+      "bbox": {
+        "xmin": -0.13436530530452728,
+        "xmax": -0.1343652904033661,
+        "ymin": 51.51506042480469,
+        "ymax": 51.51506805419922
+      }
+    },
+    {
+      "area": "Soho",
+      "id": "f1393d27-dd6b-4bda-aa62-06bc8f3c909a",
+      "name": "WeWork",
+      "basic_category": "professional_service",
+      "taxonomy": {
+        "primary": "coworking_space",
+        "hierarchy": [
+          "services_and_business",
+          "professional_service",
+          "coworking_space"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.8,
+      "bbox": {
+        "xmin": -0.13429351150989532,
+        "xmax": -0.13429349660873413,
+        "ymin": 51.5152702331543,
+        "ymax": 51.51527786254883
+      }
+    },
+    {
+      "area": "Walthamstow",
+      "id": "69d5e6e8-274d-403f-9732-177574e00c18",
+      "name": "Eat 17",
+      "basic_category": "restaurant",
+      "taxonomy": {
+        "primary": "breakfast_and_brunch_restaurant",
+        "hierarchy": [
+          "food_and_drink",
+          "restaurant",
+          "breakfast_and_brunch_restaurant"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9937678986787796,
+      "bbox": {
+        "xmin": -0.013035091571509838,
+        "xmax": -0.013035089708864689,
+        "ymin": 51.58252716064453,
+        "ymax": 51.58253479003906
+      }
+    },
+    {
+      "area": "Walthamstow",
+      "id": "2ea6bb1e-6e23-446d-b9e7-e78b1e2db8df",
+      "name": "SPAR",
+      "basic_category": "food_and_beverage_store",
+      "taxonomy": {
+        "primary": "grocery_store",
+        "hierarchy": [
+          "shopping",
+          "food_and_beverage_store",
+          "grocery_store"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9998166022777557,
+      "bbox": {
+        "xmin": -0.012859400361776352,
+        "xmax": -0.012859398499131203,
+        "ymin": 51.582542419433594,
+        "ymax": 51.582550048828125
+      }
+    },
+    {
+      "area": "Stratford",
+      "id": "8cee6b1b-df81-4b33-a5d8-8dd9833793ce",
+      "name": "Waitrose & Partners",
+      "basic_category": "food_and_beverage_store",
+      "taxonomy": {
+        "primary": "grocery_store",
+        "hierarchy": [
+          "shopping",
+          "food_and_beverage_store",
+          "grocery_store"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9999453320741654,
+      "bbox": {
+        "xmin": -0.00928191002458334,
+        "xmax": -0.009281909093260765,
+        "ymin": 51.5436897277832,
+        "ymax": 51.543697357177734
+      }
+    },
+    {
+      "area": "Stratford",
+      "id": "e93e09fa-0280-4bbc-8508-c895d1c1be14",
+      "name": "Hyatt House London Stratford",
+      "basic_category": "hotel",
+      "taxonomy": {
+        "primary": "hotel",
+        "hierarchy": [
+          "lodging",
+          "hotel"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.9998782593607902,
+      "bbox": {
+        "xmin": -0.007688440848141909,
+        "xmax": -0.007688439916819334,
+        "ymin": 51.54261016845703,
+        "ymax": 51.54261779785156
+      }
+    },
+    {
+      "area": "Stratford",
+      "id": "6746268d-6029-41af-a3b6-b2c0c9121f1a",
+      "name": "Holiday Inn London - Stratford City",
+      "basic_category": "hotel",
+      "taxonomy": {
+        "primary": "hotel",
+        "hierarchy": [
+          "lodging",
+          "hotel"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.77,
+      "bbox": {
+        "xmin": -0.007889000698924065,
+        "xmax": -0.00788899976760149,
+        "ymin": 51.54229736328125,
+        "ymax": 51.54230499267578
+      }
+    },
+    {
+      "area": "Kingston",
+      "id": "d99e81e5-2bc4-4b8e-b029-bb6bbc08e007",
+      "name": "Kingston Station Bus Stop",
+      "basic_category": "travel_and_transportation",
+      "taxonomy": {
+        "primary": "travel_and_transportation",
+        "hierarchy": [
+          "travel_and_transportation"
+        ],
+        "alternates": null
+      },
+      "confidence": 0.8524356484413147,
+      "bbox": {
+        "xmin": -0.2993655204772949,
+        "xmax": -0.29936549067497253,
+        "ymin": 51.41240310668945,
+        "ymax": 51.412410736083984
+      }
+    }
+  ],
+  "knownUnresolvedExamples": [
+    "No exact current-name Hyatt Regency record in Stratford rectangle; old Holiday Inn name and Hyatt House require alias/location investigation.",
+    "No department-store John Lewis record in Kingston rectangle; concessions/opticians/car park/canteen were present.",
+    "No exact Kingston station-name rail record found; bus stop record is not station identity."
+  ],
+  "limitations": [
+    "No address arrays, source lists, operating_status or actual WKB geometry were inspected in this extract.",
+    "Counts are unreviewed inventory presence, not deduplicated competitors, current trading businesses, recall or category coverage.",
+    "Known-business sample is nonrandom and incomplete; site links/status and positional matches need fuller implementation QA.",
+    "First multi-rectangle query was stopped for excessive runtime; no successful result from it is claimed.",
+    "Public business-site comparison findings and independent verification limits are in phase8_plan.md.",
+    "No provider account, subscription, application integration, database import or Production change was made."
+  ]
+}
