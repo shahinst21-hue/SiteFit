@@ -1098,6 +1098,10 @@ export type Database = {
         Args: { p_expected_rows: number; p_release_id: string }
         Returns: Json
       }
+      activate_sitefit_constraint_release: {
+        Args: { p_release_id: string }
+        Returns: Json
+      }
       activate_sitefit_native_release: {
         Args: { p_release_id: string }
         Returns: Json
@@ -1217,6 +1221,10 @@ export type Database = {
         }
         Returns: number
       }
+      import_sitefit_constraints: {
+        Args: { p_release_id: string; p_rows: Json }
+        Returns: number
+      }
       import_sitefit_geographies: {
         Args: { p_release_id: string; p_rows: Json }
         Returns: number
@@ -1255,6 +1263,15 @@ export type Database = {
         Args: {
           p_code: string
           p_geography_release_id: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      lookup_sitefit_constraints: {
+        Args: {
+          p_geography_release_id: string
+          p_latitude: number
+          p_longitude: number
           p_release_id: string
         }
         Returns: Json
