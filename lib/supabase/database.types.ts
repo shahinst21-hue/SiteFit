@@ -1098,6 +1098,14 @@ export type Database = {
         Args: { p_expected_rows: number; p_release_id: string }
         Returns: Json
       }
+      activate_sitefit_native_release: {
+        Args: { p_release_id: string }
+        Returns: Json
+      }
+      activate_sitefit_os_release: {
+        Args: { p_release_id: string }
+        Returns: Json
+      }
       activate_sitefit_release: {
         Args: { p_expected_rows: number; p_release_id: string }
         Returns: Json
@@ -1205,6 +1213,18 @@ export type Database = {
         Args: { p_release_id: string; p_rows: Json }
         Returns: number
       }
+      import_sitefit_native_memberships: {
+        Args: { p_release_id: string; p_rows: Json }
+        Returns: number
+      }
+      import_sitefit_native_statistics: {
+        Args: { p_release_id: string; p_rows: Json }
+        Returns: number
+      }
+      import_sitefit_os_chunk: {
+        Args: { p_hex: string; p_ordinal: number; p_release_id: string }
+        Returns: number
+      }
       import_sitefit_statistics: {
         Args: {
           p_geography_release_id: string
@@ -1232,6 +1252,22 @@ export type Database = {
         }
         Returns: Json
       }
+      lookup_sitefit_native_statistic: {
+        Args: {
+          p_code: string
+          p_geography_release_id: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
+      lookup_sitefit_os_uprn: {
+        Args: {
+          p_geography_release_id: string
+          p_release_id: string
+          p_uprn: string
+        }
+        Returns: Json
+      }
       lookup_sitefit_population: {
         Args: {
           p_code: string
@@ -1245,6 +1281,17 @@ export type Database = {
           p_code: string
           p_geography_release: string
           p_population_release: string
+        }
+        Returns: Json
+      }
+      measure_sitefit_catchment: {
+        Args: {
+          p_bres_release_id: string
+          p_census_release_id: string
+          p_geography_release_id: string
+          p_geometry: Json
+          p_income_release_id: string
+          p_native_release_id: string
         }
         Returns: Json
       }

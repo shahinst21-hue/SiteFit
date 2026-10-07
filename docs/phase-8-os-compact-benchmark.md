@@ -1,6 +1,6 @@
 # OS Open UPRN compact representation checkpoint
 
-Measured 7 October 2026 in the existing development project. No Supabase upgrade, PropertyData subscription, new external service or Production change was made. This is an implementation experiment, **not an activated dataset release**.
+Measured 7 October 2026 in the existing development project. No Supabase upgrade, PropertyData subscription, new external service or Production change was made. The complete London release is now **loaded, verified and activated**; the sample experiment below remains separately labelled.
 
 ## Lossless representation
 
@@ -30,8 +30,36 @@ The benchmark materialises the bytea before repeated byte reads to avoid repeate
 
 Private ignored receipts: `supabase/.temp/phase8-implementation/os-compact-measurement.json`, `os-compact-performance.sql` and `os-compact-performance.json`. These contain public-source identifiers/coordinates and measurements, not credentials. No candidate postcode search result was persisted by this experiment.
 
-## Next admission gates
+## Complete hosted admission and activation
 
-Measure full stored relation size and lookup distribution across head/middle/tail chunks, misses and cold/warm access before relying on the capacity projection. Implement private immutable release-bound chunks, strict decoder and checksum validation, non-overlap/full-count activation, exact replay/conflict rejection, client denial and ready update/delete denial. Preserve original native coordinates, source extraction/retrieval dates, attribution, London geography release and address/building precision. Validate selected commercial UPRNs against the stored release and freeze only new analysis contexts. Historical report inputs and snapshots remain unchanged.
+Release `f9cfff94-6f19-4e97-9a4f-3841decb2e0f` is ready. All **5,317,412** London records were loaded in **532 chunks of at most 10,000**, retaining the same format and whole packed checksum above. The earlier 266 × 20,000 packing was rechunked after a real statement-timeout blocker; no record, precision or integrity requirement was removed. Actual serial admission took 1,401 seconds.
+
+At 18:41 BST, **before activation**, PostgreSQL measured:
+
+| Actual complete storage measurement | Bytes |
+| --- | ---: |
+| Main heap | 90,112 |
+| Main indexes | 81,920 |
+| TOAST heap | 73,547,776 |
+| TOAST indexes | 819,200 |
+| Total relation, including auxiliary allocation | **74,612,736** |
+| Complete database | **246,118,067** |
+| Remaining against conservative 500,000,000-byte allowance | **253,881,933** |
+
+The relation total includes PostgreSQL auxiliary allocation; it need not equal the sum of the four main-fork figures. Logical uncompressed packed bytes remain 127,617,888. These are **complete actual storage measurements**, superseding the sample's capacity extrapolation.
+
+Full stored SHA-256 matches the original packed input, with 532 expected chunks, exact count, no overlapping identifier ranges and all-record London admission. Independently decoded first/middle/last records from **every chunk**, plus both selected property identifiers, pass **1,598/1,598** lookups: database mean **5.284 ms**, p95 **13.355 ms**, maximum **84.447 ms**. Thirty-four separate request batches average 860.97 ms (p95 1,766 ms); batches generally contain 48 lookups and are not individual HTTP latency. This is normal development cache after ingestion, **not controlled cold-cache performance**. Absent identifiers return null; the public service RPC returns no loading-release data and requires the exact geography release. Ready RPCs reproduce both selected properties' original scaled XY/WGS84 and address/building precision.
+
+Fresh PostGIS and hosted rollback suites verify checksum rejection, partial activation rejection, outside-London rejection, exact/conflicting replay, immutable ready rows and denial to browser roles. Six historical analysis/report graph fingerprints remain unchanged after activation.
+
+Activation independently rechecks full count/checksum and refuses admission above a **375,000,000-byte development database ceiling**, preserving at least 125 MB against the conservative Free allowance. Current remaining capacity is about 50.8%; it is **not a prediction that all remaining Phase 8 data fits**. Measure each remaining full load and the final Phase 8 footprint, reserving room for reports and normal operation rather than targeting 499 MB. No upgrade is requested.
+
+Forward migrations `20261007160000` through `20261007165000` implement private immutable chunks and progressively optimise an actual admission timeout: set-based decoding, bounded MultiPoint containment and direct byte arithmetic. All records remain validated; there is no nearest-point match, spatial index per UPRN, durable workflow table or distributed execution infrastructure. Existing CLI login-role timeouts were bypassed using the already authenticated Supabase Management SQL API; new migration SQL and its new history record were committed atomically, without editing applied migration history. No new service was introduced.
+
+Ignored full receipts: `os-full-storage-receipt.json`, `os-full-lookup-receipt.json`, `os-activation-receipt.json`, `historical-after-full-os.json`. `scripts/data/import-os-uprn.ts` provides the pinned bounded load path; activation is deliberately separate.
+
+## Remaining integration gates
+
+Freeze this release only into new approved analysis contexts, preserve original native coordinates, extraction/retrieval dates, attribution and address/building precision, and complete runtime projection/security gates. Historical report inputs and snapshots remain unchanged. No cold-cache guarantee or entrance/unit suitability claim is made.
 
 The current measurements support continuing the compact approach in existing infrastructure. They do **not** justify infrastructure spend or prove that all remaining Phase 8 datasets fit within the development quota. No spend is requested at this checkpoint.
