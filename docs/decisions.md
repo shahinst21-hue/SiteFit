@@ -1,12 +1,28 @@
 # Architecture Decision Log
 
+## D75 accepted explicit Auth-to-Checkout transition — 2026-10-07
+
+Owner's actual new-email proof reached Test Checkout but the sent-email state was obscured by the original form, and the immediate Stripe transition did not explain verification. Replace the form with a distinct sent-email view, keep code verification available as a disclosure, and recheck server state when the waiting tab regains focus. After verified Auth and the existing guarded claim, show the saved Snapshot/account confirmation and an explicit Continue to Test Checkout action. No Checkout POST runs merely from mounting the resume page. Already confirmed active purchases still recover their verified status without requesting another payment. This supersedes automatic Checkout navigation in Phase 7 plan §4/Step 7.6; it changes presentation and the final user action, not identity, claim, payment or historical authority. No new infrastructure, schema or Phase 8 functionality.
+
+## D74 accepted Phase 7 verification boundary and direct Production webhook — 2026-10-06
+
+The owner removes external Stripe delivery through protected Preview from the Phase 7 completion requirement. Real Local Stripe Test signed delivery with hosted development payment/entitlement state remains required, including success, decline, cancel, expiry, refund, replay/order, signature/raw-body, RLS and security checks. Protected Preview still verifies browser/Auth/UI/ownership/security/deployment; it must remain protected. This is an explicit owner-approved verification-scope revision, not a silent waiver of payment integrity tests or a claim that outstanding Auth/accessibility/CI gates passed.
+
+The temporary relay approval is withdrawn. No Cloudflare account, relay or third-party webhook proxy is to be created or used. Uncommitted relay code/tests were removed; no relay was deployed and no Cloudflare account/service was created. Earlier dummy URL-redaction probe evidence is historical; real bypass was revoked and the dummy Stripe Test destination disabled.
+
+The intended final architecture is **Stripe Live → direct final SiteFit Production webhook → existing verified atomic payment/entitlement path**. Before enabling real payments, a separate mandatory pre-launch gate must verify actual signed direct Live delivery, idempotency, payment confirmation and permanent-account entitlement with the approved final Production configuration and separately authorised real-payment budget. No Production/live activation, later report functionality or Phase 8 is authorised now. See [revised plan §17](phase7_plan.md#17-mandatory-pre-launch-production-payment-gate--not-phase-7-activation).
+
 ## D72 accepted Phase 7 purchase policy — 2026-10-06
 
 Owner's final authentication/purchase addendum is accepted: Free Snapshot remains signup-free; a verified permanent Supabase account using Google or email is required **before** Stripe Checkout creation. Preserve anonymous historical data through supported same-UUID identity upgrade where possible, or an authorised transactional/idempotent/auditable existing-account claim. No report regeneration, provider/AI/scoring calls, duplicate analysis or Stripe-email ownership recovery. Permanent accounts must recover their history and entitlement after session loss/later sign-in.
 
-Phase 7 is currently **planning only**, in [phase7_plan.md](phase7_plan.md). Intended scope is one-off £29 `mode=payment`, Stripe Test Mode in Local/Preview, durable server-confirmed entitlement and minimal account history. Production/live purchasing, Full Report generation, Phase 8 sources, financial calculations, PDF and report-ready email remain prohibited. This policy supersedes the historical open sign-in-placement decision and any anonymous/post-payment-registration purchase proposal.
+Phase 7 implementation Steps 7.0–7.9 are now explicitly approved under [phase7_plan.md](phase7_plan.md). Scope is one-off £29 `mode=payment`, Stripe Test Mode in Local/Preview, durable server-confirmed entitlement and minimal account history. Production/live purchasing, Full Report generation, Phase 8 sources, financial calculations, PDF and report-ready email remain prohibited. This policy supersedes the historical open sign-in-placement decision and any anonymous/post-payment-registration purchase proposal. Actual progress and unverified gates are recorded in [phase-7-status.md](phase-7-status.md).
 
-The plan's immutable guest-account access relation, separate payment/access lifecycle, schema/events, technical limits and conservative **test** refund/dispute rules are recommended mechanisms awaiting explicit plan approval. They are not implemented or automatically accepted live commercial policies. Phase 6/PR #18 remain frozen; no later phase is authorised by recording D72.
+The narrow guest-account access relation, separate payment/access lifecycle, minimal event receipts, finite idempotency limits and conservative **test** refund/dispute rules are approved. Approval does not settle live commercial policies. Phase 6/PR #18 analytical contracts remain frozen; Phase 8 remains unauthorised.
+
+## D73 accepted frozen Checkout contact — 2026-10-06
+
+Use the verified permanent Supabase account email as server-side Stripe `customer_email` when available. Freeze it within the private durable attempt parameters so every retry submits the same contact value even if the account email later changes. It is contact convenience only: never authentication, ownership, account claim, entitlement or report recovery authority. Internal account/analysis/purchase bindings and verified platform identity remain authoritative. Keep contact/attempt values out of client projections, logs and documentation. This is the owner's sole amendment to the approved Phase 7 architecture.
 
 Recorded 2026-10-03 from the user's approved Phase 0 contract. “Accepted” means the direction is approved; actual implementation and external verification are recorded in phase-1-status.md. Phase 1 foundations are complete; later product services remain planned. Each entry's date is the record date, not a claim about an earlier decision.
 

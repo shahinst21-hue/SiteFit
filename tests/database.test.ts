@@ -8,7 +8,8 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
   try {
     // Minimal platform objects only; all application SQL is the actual migration history.
     await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
-      create schema auth; create table auth.users(id uuid primary key,email text,aud text,role text);
+      create schema auth; create table auth.users(id uuid primary key,email text,aud text,role text,
+        is_anonymous boolean not null default false,email_confirmed_at timestamptz,last_sign_in_at timestamptz);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
     const dir = new URL("../supabase/migrations/", import.meta.url);
@@ -38,6 +39,9 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL("../supabase/tests/spatial.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/boundary-normalisation.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/free-snapshot.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/account-claims.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/payments.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/purchase-history.sql", import.meta.url), "utf8"));
     for (const table of ["public.analyses", "public.properties", "auth.users"])
       assert.equal(
         (

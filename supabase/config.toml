@@ -40,6 +40,7 @@ site_url = "http://localhost:3000"
 additional_redirect_urls = [
   "http://localhost:3000/auth/confirm",
   "http://localhost:3000/auth/callback",
+  "http://localhost:3000/purchase/callback",
   "http://127.0.0.1:3000/auth/confirm",
   "http://127.0.0.1:3000/auth/callback",
   "https://sitefit-git-phase-3-database-auth-shahinst21-hues-projects.vercel.app/auth/confirm",
@@ -50,6 +51,8 @@ additional_redirect_urls = [
   "https://sitefit-git-codex-phase-3-5-bra-62a5c3-shahinst21-hues-projects.vercel.app/auth/callback",
   "https://sitefit-git-codex-phase-4-addre-2a7d1a-shahinst21-hues-projects.vercel.app/auth/confirm",
   "https://sitefit-git-codex-phase-4-addre-2a7d1a-shahinst21-hues-projects.vercel.app/auth/callback",
+  "https://sitefit-git-codex-phase-7-payments-shahinst21-hues-projects.vercel.app/purchase/callback",
+  "https://sitefit-git-codex-phase-7-payments-shahinst21-hues-projects.vercel.app/auth/callback",
 ]
 enable_signup = true
 enable_anonymous_sign_ins = true

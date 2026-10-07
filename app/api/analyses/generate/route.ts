@@ -20,6 +20,8 @@ export async function POST(request: Request) {
       const reverified = await client.auth.getUser(); user = reverified.error ? null : reverified.data.user;
       if (!user) return reply({ error: "Your session could not be verified." }, 503);
     }
+    const active = await client.rpc("sitefit_session_available");
+    if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const result = await ownedGeneration(user.id, input, () => generateSnapshot(user.id, input.propertyId, input.businessType, input.nonce, request.signal));
     return reply({ reportId: result.reportId });
   } catch (error) {

@@ -3,11 +3,19 @@ import { useRef, useState, type FormEvent } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import type { PublicSupabaseConfig } from "@/lib/supabase/config";
 import { emailInput } from "@/lib/auth/flow";
-export function LoginForm({ config }: { config: PublicSupabaseConfig | null }) {
+export function LoginForm({ config,google=false }: { config: PublicSupabaseConfig | null;google?:boolean }) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
+  async function googleSignIn(){
+    if(!config||state==='sending')return;setState('sending');setError(null);
+    try{
+      const client=createBrowserSupabase(config);
+      const {error:failure}=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${window.location.origin}/auth/callback`,queryParams:{prompt:'select_account'}}});
+      if(failure)throw Error('unavailable');
+    }catch{setError('Google sign-in is unavailable. Please try again.');setState('idle');}
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const checked = emailInput(email);
@@ -45,6 +53,7 @@ export function LoginForm({ config }: { config: PublicSupabaseConfig | null }) {
   }
   return (
     <section className="simple-panel" aria-label="Email sign-in">
+      {google&&<button type="button" className="button button-secondary" disabled={!config||state==='sending'} onClick={googleSignIn}>Continue with Google</button>}
       {!config && (
         <p role="status">
           We could not connect to sign-in. Please try again later, or start a

@@ -488,58 +488,233 @@ export type Database = {
           },
         ]
       }
+      guest_account_claims: {
+        Row: {
+          analysis_id: string
+          auth_target_id: string | null
+          auth_verified_at: string | null
+          browser_sha256: string
+          capability_sha256: string
+          completed_at: string | null
+          created_at: string
+          email_sha256: string | null
+          expires_at: string
+          guest_id: string
+          id: string
+          method: string | null
+          report_id: string
+          state: string
+          target_id: string | null
+        }
+        Insert: {
+          analysis_id: string
+          auth_target_id?: string | null
+          auth_verified_at?: string | null
+          browser_sha256: string
+          capability_sha256: string
+          completed_at?: string | null
+          created_at?: string
+          email_sha256?: string | null
+          expires_at?: string
+          guest_id: string
+          id: string
+          method?: string | null
+          report_id: string
+          state?: string
+          target_id?: string | null
+        }
+        Update: {
+          analysis_id?: string
+          auth_target_id?: string | null
+          auth_verified_at?: string | null
+          browser_sha256?: string
+          capability_sha256?: string
+          completed_at?: string | null
+          created_at?: string
+          email_sha256?: string | null
+          expires_at?: string
+          guest_id?: string
+          id?: string
+          method?: string | null
+          report_id?: string
+          state?: string
+          target_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_account_claims_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_account_claims_analysis_id_report_id_fkey"
+            columns: ["analysis_id", "report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["analysis_id", "id"]
+          },
+          {
+            foreignKeyName: "guest_account_claims_auth_target_id_fkey"
+            columns: ["auth_target_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_account_claims_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_account_claims_target_id_fkey"
+            columns: ["target_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_events: {
+        Row: {
+          event_type: string
+          id: string
+          observed_at: string
+          outcome: string
+          payment_id: string
+          reversal_state: string
+          test_mode: boolean
+        }
+        Insert: {
+          event_type: string
+          id: string
+          observed_at?: string
+          outcome: string
+          payment_id: string
+          reversal_state: string
+          test_mode: boolean
+        }
+        Update: {
+          event_type?: string
+          id?: string
+          observed_at?: string
+          outcome?: string
+          payment_id?: string
+          reversal_state?: string
+          test_mode?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_events_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
+          access_state: string
           amount_minor: number
           analysis_id: string
+          attempt_parameters: Json | null
           checkout_reference: string | null
           created_at: string
           currency: string
+          expired_at: string | null
+          expires_at: string | null
           id: string
           idempotency_key: string
+          owner_id: string | null
           payment_reference: string | null
+          payment_version: number | null
           price_reference: string
+          product_type: string | null
           provider: string
+          report_id: string | null
+          reversal_state: string
+          revision: number
           status: string
+          test_mode: boolean | null
           updated_at: string
           verified_at: string | null
         }
         Insert: {
+          access_state?: string
           amount_minor: number
           analysis_id: string
+          attempt_parameters?: Json | null
           checkout_reference?: string | null
           created_at?: string
           currency: string
+          expired_at?: string | null
+          expires_at?: string | null
           id?: string
           idempotency_key: string
+          owner_id?: string | null
           payment_reference?: string | null
+          payment_version?: number | null
           price_reference: string
+          product_type?: string | null
           provider: string
+          report_id?: string | null
+          reversal_state?: string
+          revision?: number
           status?: string
+          test_mode?: boolean | null
           updated_at?: string
           verified_at?: string | null
         }
         Update: {
+          access_state?: string
           amount_minor?: number
           analysis_id?: string
+          attempt_parameters?: Json | null
           checkout_reference?: string | null
           created_at?: string
           currency?: string
+          expired_at?: string | null
+          expires_at?: string | null
           id?: string
           idempotency_key?: string
+          owner_id?: string | null
           payment_reference?: string | null
+          payment_version?: number | null
           price_reference?: string
+          product_type?: string | null
           provider?: string
+          report_id?: string | null
+          reversal_state?: string
+          revision?: number
           status?: string
+          test_mode?: boolean | null
           updated_at?: string
           verified_at?: string | null
         }
         Relationships: [
           {
+            foreignKeyName: "payment_report_binding"
+            columns: ["analysis_id", "report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["analysis_id", "id"]
+          },
+          {
             foreignKeyName: "payments_analysis_id_fkey"
             columns: ["analysis_id"]
             isOneToOne: false
             referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -967,6 +1142,41 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      bind_sitefit_checkout: {
+        Args: { p_id: string; p_session: string }
+        Returns: undefined
+      }
+      cancel_sitefit_claim: {
+        Args: {
+          p_browser: string
+          p_capability: string
+          p_guest: string
+          p_id: string
+        }
+        Returns: undefined
+      }
+      complete_sitefit_claim: {
+        Args: {
+          p_browser: string
+          p_capability: string
+          p_id: string
+          p_target: string
+        }
+        Returns: string
+      }
+      confirm_sitefit_payment: {
+        Args: {
+          p_event: string
+          p_id: string
+          p_intent: string
+          p_outcome: string
+          p_reversal: string
+          p_revision: number
+          p_session: string
+          p_type: string
+        }
+        Returns: boolean
+      }
       finalise_sitefit_free: {
         Args: {
           p_analysis: string
@@ -992,6 +1202,7 @@ export type Database = {
         Returns: number
       }
       list_sitefit_free: { Args: never; Returns: Json }
+      list_sitefit_history: { Args: { p_offset?: number }; Returns: Json }
       lookup_sitefit_geography: {
         Args: {
           p_latitude: number
@@ -1026,6 +1237,38 @@ export type Database = {
         }
         Returns: Json
       }
+      prepare_sitefit_claim: {
+        Args: {
+          p_browser: string
+          p_capability: string
+          p_guest: string
+          p_id: string
+          p_report: string
+        }
+        Returns: {
+          analysis_id: string
+          auth_target_id: string | null
+          auth_verified_at: string | null
+          browser_sha256: string
+          capability_sha256: string
+          completed_at: string | null
+          created_at: string
+          email_sha256: string | null
+          expires_at: string
+          guest_id: string
+          id: string
+          method: string | null
+          report_id: string
+          state: string
+          target_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "guest_account_claims"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       prepare_sitefit_input: {
         Args: { p_analysis_id: string; p_context: Json; p_user_supplied: Json }
         Returns: {
@@ -1045,7 +1288,50 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      prepare_sitefit_payment: {
+        Args: {
+          p_expiry: string
+          p_id: string
+          p_owner: string
+          p_parameters: Json
+          p_price: string
+          p_report: string
+        }
+        Returns: {
+          access_state: string
+          amount_minor: number
+          analysis_id: string
+          attempt_parameters: Json | null
+          checkout_reference: string | null
+          created_at: string
+          currency: string
+          expired_at: string | null
+          expires_at: string | null
+          id: string
+          idempotency_key: string
+          owner_id: string | null
+          payment_reference: string | null
+          payment_version: number | null
+          price_reference: string
+          product_type: string | null
+          provider: string
+          report_id: string | null
+          reversal_state: string
+          revision: number
+          status: string
+          test_mode: boolean | null
+          updated_at: string
+          verified_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "payments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       read_sitefit_free: { Args: { p_report: string }; Returns: Json }
+      read_sitefit_purchase: { Args: { p_report: string }; Returns: Json }
       resolve_sitefit_property: {
         Args: { address: Json }
         Returns: {
@@ -1078,6 +1364,7 @@ export type Database = {
         }
       }
       select_sitefit_analysis_releases: { Args: never; Returns: Json }
+      sitefit_access_owner: { Args: { p_original: string }; Returns: string }
       sitefit_assert_collectable: {
         Args: { p_analysis_id: string }
         Returns: {
@@ -1102,7 +1389,43 @@ export type Database = {
         }
       }
       sitefit_free_frozen: { Args: { p_analysis_id: string }; Returns: boolean }
+      sitefit_owner_is: { Args: { p_original: string }; Returns: boolean }
+      sitefit_permanent_account: { Args: { p_owner: string }; Returns: boolean }
+      sitefit_session_available: { Args: never; Returns: boolean }
       stage_sitefit_release: { Args: { p_manifest: Json }; Returns: Json }
+      start_sitefit_claim_auth: {
+        Args: {
+          p_browser: string
+          p_capability: string
+          p_email_hash: string
+          p_guest: string
+          p_id: string
+          p_method: string
+        }
+        Returns: {
+          analysis_id: string
+          auth_target_id: string | null
+          auth_verified_at: string | null
+          browser_sha256: string
+          capability_sha256: string
+          completed_at: string | null
+          created_at: string
+          email_sha256: string | null
+          expires_at: string
+          guest_id: string
+          id: string
+          method: string | null
+          report_id: string
+          state: string
+          target_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "guest_account_claims"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       submit_sitefit_analysis: {
         Args: {
           p_business: string
@@ -1131,6 +1454,16 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      verify_sitefit_claim_auth: {
+        Args: {
+          p_browser: string
+          p_capability: string
+          p_id: string
+          p_method: string
+          p_target: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
