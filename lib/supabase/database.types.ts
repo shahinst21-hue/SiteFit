@@ -1094,6 +1094,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_sitefit_census_release: {
+        Args: { p_expected_rows: number; p_release_id: string }
+        Returns: Json
+      }
       activate_sitefit_release: {
         Args: { p_expected_rows: number; p_release_id: string }
         Returns: Json
@@ -1189,6 +1193,14 @@ export type Database = {
         }
         Returns: string
       }
+      import_sitefit_census_profiles: {
+        Args: {
+          p_geography_release_id: string
+          p_release_id: string
+          p_rows: Json
+        }
+        Returns: number
+      }
       import_sitefit_geographies: {
         Args: { p_release_id: string; p_rows: Json }
         Returns: number
@@ -1203,6 +1215,14 @@ export type Database = {
       }
       list_sitefit_free: { Args: never; Returns: Json }
       list_sitefit_history: { Args: { p_offset?: number }; Returns: Json }
+      lookup_sitefit_census_profile: {
+        Args: {
+          p_code: string
+          p_geography_release_id: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
       lookup_sitefit_geography: {
         Args: {
           p_latitude: number

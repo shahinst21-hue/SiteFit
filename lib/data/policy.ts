@@ -20,3 +20,13 @@ export function permitted(value: LicenceMetadata | null): value is LicenceMetada
   return Boolean(value && ["ons-population", "ons-london", "tfl-stop-points", "fsa-establishments"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
 }
 export function assertPolicy(value: LicenceMetadata | null) { if (!permitted(value)) throw new SourceError("licence_blocked"); }
+
+/** Versioned Census bulk admission; does not alter historical v1 source-policy acceptance. */
+export function censusPolicy(): LicenceMetadata {
+  return structuredClone({ policyId: "ons-census", version: 1, reviewedAt: "2026-10-07T00:00:00Z",
+    termsUrl: "https://www.ons.gov.uk/methodology/geography/licences",
+    raw: { allowed: false, maxDays: 0, condition: "Discard temporary national archives after validated London ingestion." },
+    normalised: permit, derived: permit, references: permit, timestamps: permit,
+    attribution: ["Source: Office for National Statistics licensed under the Open Government Licence v.3.0", "Contains OS data © Crown copyright and database right 2021"],
+    cacheSeconds: 0, rawDisposition: "discarded" });
+}

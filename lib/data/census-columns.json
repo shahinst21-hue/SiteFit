@@ -1,0 +1,103 @@
+{
+  "TS007A": {
+    "columns": [
+      "Age: Total",
+      "Age: Aged 4 years and under",
+      "Age: Aged 5 to 9 years",
+      "Age: Aged 10 to 14 years",
+      "Age: Aged 15 to 19 years",
+      "Age: Aged 20 to 24 years",
+      "Age: Aged 25 to 29 years",
+      "Age: Aged 30 to 34 years",
+      "Age: Aged 35 to 39 years",
+      "Age: Aged 40 to 44 years",
+      "Age: Aged 45 to 49 years",
+      "Age: Aged 50 to 54 years",
+      "Age: Aged 55 to 59 years",
+      "Age: Aged 60 to 64 years",
+      "Age: Aged 65 to 69 years",
+      "Age: Aged 70 to 74 years",
+      "Age: Aged 75 to 79 years",
+      "Age: Aged 80 to 84 years",
+      "Age: Aged 85 years and over"
+    ],
+    "sourceUrl": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts007a.zip",
+    "archiveSha256": "041e57fa6d3243fd622772767bba08ea64dece3d57de909f1fbcf675f888cad7"
+  },
+  "TS003": {
+    "columns": [
+      "Household composition: Total; measures: Value",
+      "Household composition: One person household; measures: Value",
+      "Household composition: One person household: Aged 66 years and over; measures: Value",
+      "Household composition: One person household: Other; measures: Value",
+      "Household composition: Single family household; measures: Value",
+      "Household composition: Single family household: All aged 66 years and over; measures: Value",
+      "Household composition: Single family household: Married or civil partnership couple; measures: Value",
+      "Household composition: Single family household: Married or civil partnership couple: No children; measures: Value",
+      "Household composition: Single family household: Married or civil partnership couple: Dependent children; measures: Value",
+      "Household composition: Single family household: Married or civil partnership couple: All children non-dependent; measures: Value",
+      "Household composition: Single family household: Cohabiting couple family; measures: Value",
+      "Household composition: Single family household: Cohabiting couple family: No children; measures: Value",
+      "Household composition: Single family household: Cohabiting couple family: With dependent children; measures: Value",
+      "Household composition: Single family household: Cohabiting couple family: All children non-dependent; measures: Value",
+      "Household composition: Single family household: Lone parent family; measures: Value",
+      "Household composition: Single family household: Lone parent family: With dependent children; measures: Value",
+      "Household composition: Single family household: Lone parent family: All children non-dependent; measures: Value",
+      "Household composition: Single family household: Other single family household; measures: Value",
+      "Household composition: Single family household: Other single family household: Other family composition; measures: Value",
+      "Household composition: Other household types; measures: Value",
+      "Household composition: Other household types: With dependent children; measures: Value",
+      "Household composition: Other household types: Other, including all full-time students and all aged 66 years and over; measures: Value"
+    ],
+    "sourceUrl": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts003.zip",
+    "archiveSha256": "86f1a4097a2e1cd69e162cd5d36f75ce2f23c05e5da70a81075e36fbde9c92f1"
+  },
+  "TS045": {
+    "columns": [
+      "Number of cars or vans: Total: All households",
+      "Number of cars or vans: No cars or vans in household",
+      "Number of cars or vans: 1 car or van in household",
+      "Number of cars or vans: 2 cars or vans in household",
+      "Number of cars or vans: 3 or more cars or vans in household"
+    ],
+    "sourceUrl": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts045.zip",
+    "archiveSha256": "95593dcd53247d4458e97edd7454577a63e47fd43be957f0a2460e872efdc070"
+  },
+  "TS066": {
+    "columns": [
+      "Economic activity status: Total: All usual residents aged 16 years and over",
+      "Economic activity status: Economically active (excluding full-time students)",
+      "Economic activity status: Economically active (excluding full-time students):In employment",
+      "Economic activity status: Economically active (excluding full-time students):In employment:Employee",
+      "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Part-time",
+      "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Full-time",
+      "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed with employees",
+      "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Part-time",
+      "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Full-time",
+      "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed without employees",
+      "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Part-time",
+      "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Full-time",
+      "Economic activity status: Economically active (excluding full-time students): Unemployed",
+      "Economic activity status: Economically active and a full-time student",
+      "Economic activity status: Economically active and a full-time student:In employment",
+      "Economic activity status: Economically active and a full-time student:In employment:Employee",
+      "Economic activity status: Economically active and a full-time student: In employment: Employee: Part-time",
+      "Economic activity status: Economically active and a full-time student: In employment: Employee: Full-time",
+      "Economic activity status: Economically active and a full-time student:In employment:Self-employed with employees",
+      "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Part-time",
+      "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Full-time",
+      "Economic activity status: Economically active and a full-time student:In employment:Self-employed without employees",
+      "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Part-time",
+      "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Full-time",
+      "Economic activity status: Economically active and a full-time student: Unemployed",
+      "Economic activity status: Economically inactive",
+      "Economic activity status: Economically inactive: Retired",
+      "Economic activity status: Economically inactive: Student",
+      "Economic activity status: Economically inactive: Looking after home or family",
+      "Economic activity status: Economically inactive: Long-term sick or disabled",
+      "Economic activity status: Economically inactive: Other"
+    ],
+    "sourceUrl": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts066.zip",
+    "archiveSha256": "eb9d792d4b9d196b2e36ab558af2ad85f52f5f2f2643b3895b42cd4fad068d1a"
+  }
+}
