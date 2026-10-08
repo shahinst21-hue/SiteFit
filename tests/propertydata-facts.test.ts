@@ -34,6 +34,16 @@ test("point flood and rent preserve unresolved scope, vintage, units and cost", 
   assert.throws(() => normaliseRentBenchmark(rent(), "51.5,-0.1", "retail"), code("invalid_response"));
   assert.throws(() => normalisePointFlood({ ...flood(), api_calls_cost: 2 }, "51.5,-0.1"), code("invalid_response"));
 });
+test("frozen selected components bind premises independently of a business display label without dropping unit distinctions", () => {
+  const selectedParts = {primary: "10", secondary: "Unit 1", street: "Synthetic Road", town: "London", postcode: "E8 4PH"};
+  const selection = {...selected, selectedParts};
+  const candidate = {...premises(), data: {...premises().data, address: "Synthetic business label",
+    addressParts: {...selectedParts, primary: "10", secondary: "UNIT 1", street: "SYNTHETIC ROAD", town: "LONDON", district: "Different postal district"}}};
+  assert.equal(normalisePremises(candidate, selection).uprn, selected.uprn);
+  for (const changed of [{secondary: "Unit 2"}, {secondary: null}, {primary: "10-12"}, {postcode: "E8 4PX"}, {street: "Other Road"}])
+    assert.throws(() => normalisePremises({...candidate, data: {...candidate.data, addressParts: {...candidate.data.addressParts, ...changed}}}, selection));
+  assert.throws(() => normalisePremises(premises(), selection));
+});
 
 test("facts transport uses private header and rejects unsafe responses without retry or reflection", async () => {
   let calls = 0;

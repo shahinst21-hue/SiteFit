@@ -3,8 +3,11 @@ import { SourceError } from "../errors.ts";
 import { object, text, uuid } from "../validation.ts";
 import { validPoint } from "../../spatial/model.ts";
 import type { PropertyMatch } from "./propertydata.ts";
+import type { EnrichmentInput } from "../enrichment-input.ts";
+import { normalisePostcode } from "../../addresses/model.ts";
 
-export type PropertyFactsSelection = PropertyMatch & { osReleaseId: string; coordinateBasis: "address_building_not_entrance" };
+export type PropertyFactsSelection = PropertyMatch & { osReleaseId: string; coordinateBasis: "address_building_not_entrance";
+  selectedParts?: NonNullable<EnrichmentInput["identity"]["selectedParts"]> };
 type Operation = "uprn" | "flood-risk" | "rents-commercial";
 type Cost = { observedCredits: number | null; estimatedCreditCeiling: number };
 const cost = (v: Record<string, unknown>, ceiling: number): Cost => {
@@ -19,7 +22,16 @@ const nonnegative = (v: unknown) => typeof v === "number" && Number.isFinite(v) 
  * EPC substitute. Field publication dates absent from this source stay unknown. */
 export function normalisePremises(value: unknown, selected: PropertyFactsSelection) {
   const root = object(value), d = object(root.data);
-  if (root.status !== "success" || !text(d.address, 600) || d.address !== selected.address || !text(d.description, 200) ||
+  let addressMatches = d.address === selected.address;
+  if (selected.selectedParts) {
+    const expected = selected.selectedParts, returned = object(d.addressParts);
+    const normalise = (v: unknown) => v === null || v === undefined || v === "" ? null :
+      text(v, 200) ? v.normalize("NFKC").toUpperCase().replace(/[,.]/g, " ").replace(/\s+/g, " ").trim() : undefined;
+    addressMatches = expected.primary !== null && expected.street !== null && expected.town !== null &&
+      ["primary", "secondary", "street", "town"].every(k => normalise(returned[k]) === normalise(expected[k as keyof typeof expected])) &&
+      normalisePostcode(returned.postcode) === expected.postcode;
+  }
+  if (root.status !== "success" || !text(d.address, 600) || !addressMatches || !text(d.description, 200) ||
     !/^[1-9]\d{0,11}$/.test(selected.uprn) || !validPoint(selected.point) || selected.point.source !== "os-open-uprn" || selected.point.precision !== "building" || selected.coordinateBasis !== "address_building_not_entrance" || !uuid(selected.osReleaseId) ||
     ![d.lat, d.lng].every(v => typeof v === "number" && Number.isFinite(v) || typeof v === "string" && /^-?\d+(\.\d+)?$/.test(v)) || Math.abs(Number(d.lat) - selected.point.latitude) > .000001 ||
     Math.abs(Number(d.lng) - selected.point.longitude) > .000001) throw new SourceError("invalid_response");

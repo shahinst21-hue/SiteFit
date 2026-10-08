@@ -2,6 +2,9 @@ import "server-only";
 import type { DataAdapter, SourceDefinition, SourceId } from "./contracts.ts";
 import { SourceError } from "./errors.ts";
 export const definitions: Readonly<Record<SourceId, SourceDefinition>> = {
+  "propertydata-premises": {id: "propertydata-premises", provider: "propertydata", dataset: "selected-property-facts", operation: "uprn", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 1, maxBytes: 1_000_000, timeoutMs: 10_000, maxAttempts: 1},
+  "propertydata-flood": {id: "propertydata-flood", provider: "propertydata", dataset: "point-rivers-sea", operation: "flood-risk", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 1, maxBytes: 1_000_000, timeoutMs: 10_000, maxAttempts: 1},
+  "propertydata-rent": {id: "propertydata-rent", provider: "propertydata", dataset: "commercial-quoting-rent", operation: "rents-commercial", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 1, maxBytes: 1_000_000, timeoutMs: 10_000, maxAttempts: 1},
   "ons-population": { id: "ons-population", provider: "ons", dataset: "TS001", operation: "area-total", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 1, maxBytes: 0, timeoutMs: 2000, maxAttempts: 1 },
   "tfl-stop-points": { id: "tfl-stop-points", provider: "tfl", dataset: "StopPoint", operation: "nearby", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 300, maxBytes: 2_000_000, timeoutMs: 8000, maxAttempts: 2 },
   "tfl-stations": { id: "tfl-stations", provider: "tfl", dataset: "StopPoint", operation: "station-register-1000m", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 300, maxBytes: 2_000_000, timeoutMs: 8000, maxAttempts: 2 },

@@ -3,6 +3,9 @@ import { SourceError } from "./errors.ts";
 
 const permit = { allowed: true, maxDays: null, condition: "Retain with source attribution and continuing licence compliance." };
 const terms = {
+  "propertydata-premises": "https://propertydata.co.uk/api/documentation/licensing",
+  "propertydata-flood": "https://propertydata.co.uk/api/documentation/licensing",
+  "propertydata-rent": "https://propertydata.co.uk/api/documentation/licensing",
   "ons-population": "https://www.ons.gov.uk/methodology/geography/licences",
   "tfl-stop-points": "https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service",
   "tfl-stations": "https://tfl.gov.uk/corporate/terms-and-conditions/transport-data-service",
@@ -16,6 +19,11 @@ const terms = {
   "overture-catchments": "https://docs.overturemaps.org/attribution/",
 };
 export function policy(source: SourceId): LicenceMetadata {
+  if (source.startsWith("propertydata-")) return structuredClone({policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
+    raw: {allowed: false, maxDays: 0, condition: "Discard provider bodies, personal owners, photos, transactions and candidate lists after bounded normalisation."},
+    normalised: {...permit, condition: "Dated per-analysis historical facts only; not a standing searchable/current bulk copy. Current caching is at most 60 days; reopening never refreshes historical reports. Applicable termination/archival rights require focused pre-launch review."},
+    derived: {...permit, condition: "Historical dated per-analysis derivatives under applicable PropertyData terms."}, references: permit, timestamps: permit,
+    attribution: ["Source: PropertyData; dated per-analysis historical observation, not current property verification."], cacheSeconds: 0, rawDisposition: "discarded"});
   if (source === "geoapify-access") return structuredClone({policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
     raw: {allowed: false, maxDays: 0, condition: "Discard raw provider body, credential URL and diagnostics after bounded normalisation."},
     normalised: {...permit, condition: "Retain calculated time/distance/snapping results with Geoapify and OSM attribution and continuing terms compliance; launch-scale rights remain a pre-launch gate."},
@@ -52,7 +60,7 @@ export function policy(source: SourceId): LicenceMetadata {
     attribution, cacheSeconds: ["ons-population", "tfl-stations", "tfl-station-activity"].includes(source) ? 0 : 86400, rawDisposition: "discarded" });
 }
 export function permitted(value: LicenceMetadata | null): value is LicenceMetadata {
-  return Boolean(value && ["ons-population", "ons-london", "tfl-stop-points", "tfl-stations", "tfl-station-activity", "geoapify-access", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
+  return Boolean(value && ["ons-population", "ons-london", "tfl-stop-points", "tfl-stations", "tfl-station-activity", "geoapify-access", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "propertydata-premises", "propertydata-flood", "propertydata-rent"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
 }
 export function assertPolicy(value: LicenceMetadata | null) { if (!permitted(value)) throw new SourceError("licence_blocked"); }
 
