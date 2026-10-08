@@ -8,8 +8,16 @@ const terms = {
   "fsa-establishments": "https://ratings.food.gov.uk/terms-and-conditions",
   "planning-conservation": "https://www.planning.data.gov.uk/dataset/conservation-area",
   "planning-article4": "https://www.planning.data.gov.uk/dataset/article-4-direction-area",
+  "geoapify-walking": "https://apidocs.geoapify.com/docs/isolines",
 };
 export function policy(source: SourceId): LicenceMetadata {
+  if (source === "geoapify-walking") return structuredClone({ policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
+    raw: { allowed: false, maxDays: 0, condition: "Discard external raw response and credential URL after bounded normalisation." },
+    normalised: { ...permit, condition: "Calculated isolines may be stored under Geoapify Isoline terms with required Geoapify/OSM attribution." },
+    derived: permit, references: permit, timestamps: permit,
+    attribution: ["Powered by Geoapify: https://www.geoapify.com/", "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"],
+    cacheSeconds: 0, rawDisposition: "discarded",
+  });
   if (source === "planning-conservation" || source === "planning-article4") return structuredClone({
     policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
     raw: { allowed: false, maxDays: 0, condition: "Persist only admitted native profiles; no external raw response." },
@@ -27,7 +35,7 @@ export function policy(source: SourceId): LicenceMetadata {
     attribution, cacheSeconds: source === "ons-population" ? 0 : 86400, rawDisposition: "discarded" });
 }
 export function permitted(value: LicenceMetadata | null): value is LicenceMetadata {
-  return Boolean(value && ["ons-population", "ons-london", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
+  return Boolean(value && ["ons-population", "ons-london", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
 }
 export function assertPolicy(value: LicenceMetadata | null) { if (!permitted(value)) throw new SourceError("licence_blocked"); }
 

@@ -1603,6 +1603,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      validate_sitefit_walking_geometry: {
+        Args: { p_geography_release_id: string; p_walking: Json }
+        Returns: Json
+      }
       verify_sitefit_claim_auth: {
         Args: {
           p_browser: string

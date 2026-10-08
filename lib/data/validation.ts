@@ -4,6 +4,7 @@ import type { CollectionContext, ProviderResult } from "./contracts.ts";
 import { validPoint } from "../spatial/model.ts";
 import { validateEnrichmentInput } from "./enrichment-input.ts";
 import { validateStoredConstraintLookup } from "./planning-constraints.ts";
+import { validateWalkingCatchments, validateWalkingTopology } from "./walking-result.ts";
 
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SourceError("invalid_response");
@@ -74,7 +75,7 @@ export function validateResult(value: unknown): ProviderResult {
   demand((cost.money === null) === (cost.currency === null) && ["observed", "estimated", "unknown"].includes(String(cost.category)) && (cost.priceReference === null || reference(cost.priceReference)));
   demand(integer(execution.durationMs) && integer(execution.attempts, 20) && integer(execution.pages, 10) && (execution.httpStatus === null || integer(execution.httpStatus, 599)) && (execution.providerRequestId === null || /^[A-Za-z0-9-]{1,100}$/.test(String(execution.providerRequestId))));
   demand(strings(r.limitations) && Array.isArray(r.observations) && r.observations.length <= 500);
-  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === "official_public_data" && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
+  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === (m.source === "geoapify-walking" ? "commercial_data" : "official_public_data") && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
   if (["success", "partial"].includes(String(r.outcome))) {
     const p = object(r.payload); demand(p.schemaVersion === 1 && r.observations.length > 0);
     if (m.source === "ons-population") {
@@ -82,6 +83,15 @@ export function validateResult(value: unknown): ProviderResult {
       demand(p.kind === "area_population" && /^E00\d{6}$/.test(String(p.geographyCode)) && uuid(p.geographyReleaseId) && uuid(p.releaseId) && p.measure === "TS001-total" && p.units === "persons" && p.universe === "usual_residents" && timestamp(p.effectiveAt));
       demand((p.count === null && text(p.missingReason)) || (integer(p.count) && p.missingReason === null));
       demand(r.observations.length === 1 && object(r.observations[0]).path === "count" && object(r.observations[0]).recordId === p.geographyCode && object(r.observations[0]).units === "persons");
+    } else if (m.source === "geoapify-walking") {
+      keys(p, "schemaVersion kind walking topology"); demand(p.kind === "walking_geometry" && q.precision === "building");
+      validateWalkingCatchments(p.walking);
+      const topology = object(p.topology); demand(uuid(topology.geographyReleaseId));
+      const checkedTopology = validateWalkingTopology(topology, topology.geographyReleaseId);
+      demand(m.provider === "geoapify" && m.dataset === "walking-isolines" && m.datasetReleaseId === null &&
+        r.observations.length === 1 && object(r.observations[0]).path === "walking" &&
+        object(r.observations[0]).sourceClass === "commercial_data" && object(r.observations[0]).kind === "modelled" &&
+        object(r.observations[0]).units === "seconds_metres_geometry" && r.outcome === (checkedTopology.parts[2].londonCoverageFraction === 1 ? "success" : "partial"));
     } else if (m.source === "planning-conservation" || m.source === "planning-article4") {
       keys(p, "schemaVersion kind lookup");
       demand(p.kind === "planning_constraints" && uuid(m.datasetReleaseId) && r.outcome === "partial" && q.precision === "building");
@@ -110,3 +120,5 @@ export function validateResult(value: unknown): ProviderResult {
   const encoded = JSON.stringify(value); demand(encoded.length <= 2_000_000 && !/(?:sb_secret_|sk_live_|app_key=|"(?:authorization|headers|rawResponse|stack)"\s*:)/i.test(encoded));
   return structuredClone(value) as ProviderResult;
 }
+
+
