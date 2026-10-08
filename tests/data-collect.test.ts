@@ -8,7 +8,9 @@ import { definitions } from "../lib/data/registry.ts";
 import { coverage } from "../lib/data/coverage.ts";
 import { policy } from "../lib/data/policy.ts";
 import { initialResult } from "../lib/data/result.ts";
-import type { DataAdapter, SnapshotRepository, SourceId, StoredSnapshot } from "../lib/data/contracts.ts";
+import type { CollectionContext, DataAdapter, SnapshotRepository, SourceId, StoredSnapshot } from "../lib/data/contracts.ts";
+import { enrichmentReleaseKeys } from "../lib/data/enrichment-input.ts";
+import type { EnrichmentInput } from "../lib/data/enrichment-input.ts";
 import { context, result } from "./fixtures/data/framework.ts";
 
 function store() {
@@ -43,6 +45,27 @@ function adapter(source: SourceId = "tfl-stop-points", fail = false) {
   return { value, calls: () => calls };
 }
 const opts = () => ({ coordination: processCoordination(), cache: normalisedCache(), record: async () => false });
+
+test("enriched input cache cannot reuse legacy or different release vectors", async () => {
+  const s = store(), a = adapter(); let current: CollectionContext = context();
+  s.repository.context = async () => structuredClone(current);
+  const run = collector(s.repository, [a.value], opts());
+  await run.collectSources(current, ["tfl-stop-points"], "vector");
+  const releases = Object.fromEntries(enrichmentReleaseKeys.map(key => [key, current.region.boundaryReleaseId])) as EnrichmentInput["releases"];
+  current = { ...current, analysisId: randomUUID(), inputId: randomUUID(), schemaVersion: 2, enrichment: {
+    schemaVersion: 1, releases, identity: { state: "unresolved", uprn: null, point: null, coordinateBasis: null,
+      method: null, retrievedAt: new Date().toISOString(), selectedParts: null, observedCredits: null, missingReason: "No exact unit match" },
+  } };
+  await run.collectSources(current, ["tfl-stop-points"], "vector");
+  assert.equal(a.calls(), 2);
+  current = { ...current, analysisId: randomUUID(), inputId: randomUUID() };
+  const replay = await run.collectSources(current, ["tfl-stop-points"], "vector");
+  assert.equal(a.calls(), 2); assert.equal(replay.outcomes[0].snapshot?.result.meta.cache.state, "hit");
+  current = structuredClone(current); current.analysisId = randomUUID(); current.inputId = randomUUID();
+  current.enrichment!.releases.placesReleaseId = randomUUID();
+  await run.collectSources(current, ["tfl-stop-points"], "vector");
+  assert.equal(a.calls(), 3);
+});
 
 test("same-process coalescing and stored partial replay keep original metadata and clean flights", async () => {
   const s = store(), a = adapter(), options = opts(), run = collector(s.repository, [a.value], options);

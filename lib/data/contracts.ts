@@ -1,4 +1,5 @@
 import type { Geography, Point, Precision } from "../spatial/model.ts";
+import type { EnrichmentInput } from "./enrichment-input.ts";
 
 export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments"] as const;
 export type SourceId = (typeof sourceIds)[number];
@@ -10,7 +11,8 @@ export const errorCodes = ["invalid_request", "unsupported_geography", "insuffic
 export type ErrorCode = (typeof errorCodes)[number];
 export type SafeSourceError = { code: ErrorCode; retryable: boolean; status: number | null };
 export type CollectionContext = {
-  schemaVersion: 1; analysisId: string; inputId: string; inputVersion: number; analysisTimestamp: string;
+  schemaVersion: 1 | 2; analysisId: string; inputId: string; inputVersion: number; analysisTimestamp: string;
+  enrichment?: EnrichmentInput;
   selectedProperty: { id: string; formattedAddress: string; postcode: string | null; provider: string | null;
     providerAddressId: string | null; uprn: string | null; point: Point | null; resolution: "provider_verified" | "manual_unverified" };
   businessType: "coffee-shop" | "restaurant" | "hair-salon" | "beauty-salon"; category: Category;

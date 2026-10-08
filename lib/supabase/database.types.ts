@@ -1393,6 +1393,30 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      prepare_sitefit_enriched_input: {
+        Args: {
+          p_analysis_id: string
+          p_context: Json
+          p_enrichment: Json
+          p_user_supplied: Json
+        }
+        Returns: {
+          analysis_id: string
+          context_schema_version: number | null
+          created_at: string
+          id: string
+          resolved_context: Json | null
+          schema_version: number
+          user_supplied: Json
+          version: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "analysis_inputs"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       prepare_sitefit_input: {
         Args: { p_analysis_id: string; p_context: Json; p_user_supplied: Json }
         Returns: {
@@ -1617,6 +1641,520 @@ export type Database = {
       [_ in never]: never
     }
   }
+  source_data: {
+    Tables: {
+      area_statistics: {
+        Row: {
+          effective_at: string
+          geography_code: string
+          geography_release_id: string
+          geography_type: string
+          measure_code: string
+          population_universe: string
+          quality_metadata: Json
+          release_id: string
+          unit: string
+          value: number | null
+        }
+        Insert: {
+          effective_at: string
+          geography_code: string
+          geography_release_id: string
+          geography_type?: string
+          measure_code: string
+          population_universe: string
+          quality_metadata: Json
+          release_id: string
+          unit: string
+          value?: number | null
+        }
+        Update: {
+          effective_at?: string
+          geography_code?: string
+          geography_release_id?: string
+          geography_type?: string
+          measure_code?: string
+          population_universe?: string
+          quality_metadata?: Json
+          release_id?: string
+          unit?: string
+          value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "area_statistics_geography_release_id_fkey"
+            columns: ["geography_release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "area_statistics_geography_release_id_geography_type_geogra_fkey"
+            columns: [
+              "geography_release_id",
+              "geography_type",
+              "geography_code",
+            ]
+            isOneToOne: false
+            referencedRelation: "geography_features"
+            referencedColumns: [
+              "release_id",
+              "geography_type",
+              "geography_code",
+            ]
+          },
+          {
+            foreignKeyName: "area_statistics_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      census_profiles: {
+        Row: {
+          geography_code: string
+          geography_release_id: string
+          geography_type: string
+          missing_reasons: string[]
+          profile_schema_version: number
+          release_id: string
+          values_data: number[]
+        }
+        Insert: {
+          geography_code: string
+          geography_release_id: string
+          geography_type?: string
+          missing_reasons: string[]
+          profile_schema_version?: number
+          release_id: string
+          values_data: number[]
+        }
+        Update: {
+          geography_code?: string
+          geography_release_id?: string
+          geography_type?: string
+          missing_reasons?: string[]
+          profile_schema_version?: number
+          release_id?: string
+          values_data?: number[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "census_profiles_geography_release_id_fkey"
+            columns: ["geography_release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "census_profiles_geography_release_id_geography_type_geogra_fkey"
+            columns: [
+              "geography_release_id",
+              "geography_type",
+              "geography_code",
+            ]
+            isOneToOne: false
+            referencedRelation: "geography_features"
+            referencedColumns: [
+              "release_id",
+              "geography_type",
+              "geography_code",
+            ]
+          },
+          {
+            foreignKeyName: "census_profiles_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      constraint_features: {
+        Row: {
+          entity: number
+          geometry: unknown
+          profile: Json
+          release_id: string
+        }
+        Insert: {
+          entity: number
+          geometry: unknown
+          profile: Json
+          release_id: string
+        }
+        Update: {
+          entity?: number
+          geometry?: unknown
+          profile?: Json
+          release_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "constraint_features_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dataset_releases: {
+        Row: {
+          dataset_id: string
+          effective_from: string | null
+          effective_to: string | null
+          id: string
+          imported_at: string
+          licence_metadata: Json
+          manifest: Json
+          provider_id: string
+          retrieved_at: string
+          row_count: number
+          schema_version: number
+          sha256: string
+          source_published_at: string | null
+          source_url: string
+          state: string
+          subset_id: string
+          supersedes_release_id: string | null
+          version: string
+        }
+        Insert: {
+          dataset_id: string
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          imported_at?: string
+          licence_metadata: Json
+          manifest: Json
+          provider_id: string
+          retrieved_at: string
+          row_count?: number
+          schema_version: number
+          sha256: string
+          source_published_at?: string | null
+          source_url: string
+          state?: string
+          subset_id: string
+          supersedes_release_id?: string | null
+          version: string
+        }
+        Update: {
+          dataset_id?: string
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          imported_at?: string
+          licence_metadata?: Json
+          manifest?: Json
+          provider_id?: string
+          retrieved_at?: string
+          row_count?: number
+          schema_version?: number
+          sha256?: string
+          source_published_at?: string | null
+          source_url?: string
+          state?: string
+          subset_id?: string
+          supersedes_release_id?: string | null
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dataset_releases_supersedes_release_id_fkey"
+            columns: ["supersedes_release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      geography_features: {
+        Row: {
+          geography_code: string
+          geography_type: string
+          geometry: unknown
+          name: string
+          parent_code: string | null
+          properties: Json
+          release_id: string
+          source_reference: string
+        }
+        Insert: {
+          geography_code: string
+          geography_type: string
+          geometry: unknown
+          name: string
+          parent_code?: string | null
+          properties?: Json
+          release_id: string
+          source_reference: string
+        }
+        Update: {
+          geography_code?: string
+          geography_type?: string
+          geometry?: unknown
+          name?: string
+          parent_code?: string | null
+          properties?: Json
+          release_id?: string
+          source_reference?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geography_features_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      native_memberships: {
+        Row: {
+          lad22_code: string
+          lsoa_code: string
+          msoa_code: string
+          oa_code: string
+          oa_release_id: string
+          oa_type: string
+          release_id: string
+        }
+        Insert: {
+          lad22_code: string
+          lsoa_code: string
+          msoa_code: string
+          oa_code: string
+          oa_release_id: string
+          oa_type?: string
+          release_id: string
+        }
+        Update: {
+          lad22_code?: string
+          lsoa_code?: string
+          msoa_code?: string
+          oa_code?: string
+          oa_release_id?: string
+          oa_type?: string
+          release_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "native_memberships_oa_release_id_fkey"
+            columns: ["oa_release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "native_memberships_oa_release_id_oa_type_oa_code_fkey"
+            columns: ["oa_release_id", "oa_type", "oa_code"]
+            isOneToOne: false
+            referencedRelation: "geography_features"
+            referencedColumns: [
+              "release_id",
+              "geography_type",
+              "geography_code",
+            ]
+          },
+          {
+            foreignKeyName: "native_memberships_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      native_statistics: {
+        Row: {
+          geography_code: string
+          geography_release_id: string
+          geography_type: string
+          profile: Json
+          release_id: string
+        }
+        Insert: {
+          geography_code: string
+          geography_release_id: string
+          geography_type: string
+          profile: Json
+          release_id: string
+        }
+        Update: {
+          geography_code?: string
+          geography_release_id?: string
+          geography_type?: string
+          profile?: Json
+          release_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "native_statistics_geography_release_id_fkey"
+            columns: ["geography_release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "native_statistics_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      os_uprn_chunks: {
+        Row: {
+          first_uprn: number
+          last_uprn: number
+          ordinal: number
+          records: string
+          release_id: string
+          rows_count: number
+          sha256: string
+        }
+        Insert: {
+          first_uprn: number
+          last_uprn: number
+          ordinal: number
+          records: string
+          release_id: string
+          rows_count: number
+          sha256: string
+        }
+        Update: {
+          first_uprn?: number
+          last_uprn?: number
+          ordinal?: number
+          records?: string
+          release_id?: string
+          rows_count?: number
+          sha256?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_uprn_chunks_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      place_tiles: {
+        Row: {
+          boundary: unknown
+          ordinal: number
+          records: string
+          release_id: string
+          row_count: number
+          sha256: string
+          tile_x: number
+          tile_y: number
+        }
+        Insert: {
+          boundary: unknown
+          ordinal: number
+          records: string
+          release_id: string
+          row_count: number
+          sha256: string
+          tile_x: number
+          tile_y: number
+        }
+        Update: {
+          boundary?: unknown
+          ordinal?: number
+          records?: string
+          release_id?: string
+          row_count?: number
+          sha256?: string
+          tile_x?: number
+          tile_y?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "place_tiles_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      station_activity: {
+        Row: {
+          day_type: string
+          measure: string
+          profile: Json
+          release_id: string
+          station_asc: string
+        }
+        Insert: {
+          day_type: string
+          measure: string
+          profile: Json
+          release_id: string
+          station_asc: string
+        }
+        Update: {
+          day_type?: string
+          measure?: string
+          profile?: Json
+          release_id?: string
+          station_asc?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "station_activity_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      address_component_identity: { Args: { v: string }; Returns: string }
+      check_constraint_release: {
+        Args: { p_release_id: string }
+        Returns: number
+      }
+      check_enrichment_input: {
+        Args: { c: Json; p_property: string }
+        Returns: undefined
+      }
+      check_native_release: { Args: { p_id: string }; Returns: number }
+      check_place_release: { Args: { p_id: string }; Returns: number }
+      check_station_release: { Args: { p_id: string }; Returns: number }
+      checked_enrichment_polygon: {
+        Args: { p_geometry: Json }
+        Returns: unknown
+      }
+      lookup_os_record: {
+        Args: { p_release_id: string; p_uprn: string }
+        Returns: Json
+      }
+      os_i32: { Args: { b: string; o: number }; Returns: number }
+      os_u64: { Args: { b: string; o: number }; Returns: number }
+      valid_constraint_native_date: { Args: { v: Json }; Returns: boolean }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
 }
 
 type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
@@ -1763,5 +2301,8 @@ export const Constants = {
       ],
       knowledge_status: ["known", "estimated", "unknown"],
     },
+  },
+  source_data: {
+    Enums: {},
   },
 } as const

@@ -2,6 +2,7 @@ import { SourceError } from "./errors.ts";
 import { sourceIds, errorCodes } from "./contracts.ts";
 import type { CollectionContext, ProviderResult } from "./contracts.ts";
 import { validPoint } from "../spatial/model.ts";
+import { validateEnrichmentInput } from "./enrichment-input.ts";
 
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SourceError("invalid_response");
@@ -29,9 +30,9 @@ function keys(value: Record<string, unknown>, allowed: string) { const fields = 
 
 export function validateContext(value: unknown): CollectionContext {
   const c = object(value), p = object(c.selectedProperty), r = object(c.region), releases = object(c.releases);
-  keys(c, "schemaVersion analysisId inputId inputVersion analysisTimestamp selectedProperty businessType category region geography releases");
+  keys(c, "schemaVersion analysisId inputId inputVersion analysisTimestamp selectedProperty businessType category region geography releases enrichment");
   keys(p, "id formattedAddress postcode provider providerAddressId uprn point resolution"); keys(r, "id boundaryReleaseId eligible method"); keys(releases, "population geography");
-  demand(c.schemaVersion === 1 && uuid(c.analysisId) && uuid(c.inputId) && integer(c.inputVersion) && Number(c.inputVersion) > 0 && timestamp(c.analysisTimestamp));
+  demand([1, 2].includes(Number(c.schemaVersion)) && typeof c.schemaVersion === "number" && uuid(c.analysisId) && uuid(c.inputId) && integer(c.inputVersion) && Number(c.inputVersion) > 0 && timestamp(c.analysisTimestamp));
   demand(uuid(p.id) && text(p.formattedAddress) && (p.postcode === null || text(p.postcode, 20)) && (p.point === null || validPoint(p.point)));
   for (const key of ["provider", "providerAddressId", "uprn"]) demand(p[key] === null || text(p[key], 120));
   demand(["provider_verified", "manual_unverified"].includes(String(p.resolution)));
@@ -41,6 +42,10 @@ export function validateContext(value: unknown): CollectionContext {
   for (const v of Object.values(releases)) demand(v === null || uuid(v));
   demand("population" in releases && "geography" in releases);
   if (c.geography !== null) { const g = object(c.geography); demand(/^E00\d{6}$/.test(String(g.code)) && g.type === "OA2021" && uuid(g.releaseId) && typeof g.ambiguous === "boolean" && ["point_in_polygon", "centroid_proxy"].includes(String(g.method))); }
+  if (c.schemaVersion === 2) {
+    const enriched = validateEnrichmentInput(c.enrichment);
+    demand(enriched.releases.geographyReleaseId === releases.geography && enriched.releases.geographyReleaseId === r.boundaryReleaseId);
+  } else demand(!("enrichment" in c));
   return structuredClone(value) as CollectionContext;
 }
 

@@ -80,7 +80,9 @@ export function collector(repository: SnapshotRepository, adapters: DataAdapter[
           if (stored) return { source: id, snapshot: stored, outcome: stored.result.outcome, error: stored.result.error };
           const execution = { signal: batchSignal, correlationId: randomUUID(), now };
           const cacheKey = digest({ source: adapter.source, licence, point: context.selectedProperty.point, region: context.region,
-            geography: context.geography, releases: context.releases, radiusMetres: request.radiusMetres, category: id === "fsa-establishments" ? context.category : null });
+            geography: context.geography, releases: context.releases,
+            ...(context.schemaVersion === 2 ? { enrichment: context.enrichment } : {}),
+            radiusMetres: request.radiusMetres, category: id === "fsa-establishments" ? context.category : null });
           let value = initialResult(adapter.source, request, execution);
           const eligible = adapter.supports(context);
           if (!eligible.eligible) { value.outcome = eligible.outcome; value.error = { code: eligible.code, status: null, retryable: false }; }
