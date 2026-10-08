@@ -1,5 +1,5 @@
 import "server-only";
-import { object, timestamp } from "./validation.ts";
+import { object, timestamp, uuid } from "./validation.ts";
 import { SourceError } from "./errors.ts";
 import type { PolygonGeometry } from "../spatial/polygon.ts";
 
@@ -10,11 +10,25 @@ export type ConstraintFeature = {
   name: string | null; sourceEntryDate: string; startDate: string; endDate: string;
   description: string | null; notes: string | null; geometry: PolygonGeometry;
 };
+export type ConstraintProfile = Omit<ConstraintFeature, "geometry">;
 const nativeText = (v: unknown, limit: number) => v === null || typeof v === "string" && v.length <= limit && Array.from(v).every(c => {
   const code = c.charCodeAt(0); return code >= 32 && code !== 127 || [9, 10, 13].includes(code);
 });
 const nativeDate = (v: unknown) => typeof v === "string" && (v === "" || Number(v.slice(0, 4)) > 0 && (/^\d{4}$/.test(v) || /^\d{4}-(0[1-9]|1[0-2])$/.test(v) || /^\d{4}-\d{2}-\d{2}$/.test(v) && timestamp(`${v}T00:00:00Z`)));
 const demand = (v: unknown) => { if (!v) throw new SourceError("invalid_response"); };
+
+/** Point lookup returns the permitted native profile, not a designation polygon.
+ * Validate it directly rather than fabricating geometry to satisfy an importer. */
+export function validateConstraintProfile(value: unknown): ConstraintProfile {
+  const r = object(value);
+  const fields = "entity reference organisation quality name sourceEntryDate startDate endDate description notes".split(" ");
+  demand(Object.keys(r).length === fields.length && fields.every(k => k in r));
+  demand(typeof r.entity === "string" && /^[1-9]\d{0,13}$/.test(r.entity) && typeof r.organisation === "string" && /^[1-9]\d{0,9}$/.test(r.organisation));
+  demand(["authoritative", "some"].includes(String(r.quality)) && nativeText(r.reference, 1000) && nativeText(r.name, 2000) &&
+    nativeText(r.description, 10000) && nativeText(r.notes, 10000));
+  demand(nativeDate(r.sourceEntryDate) && nativeDate(r.startDate) && nativeDate(r.endDate));
+  return structuredClone(value) as ConstraintProfile;
+}
 
 /** Native publisher features have larger bounded multipart geometry than user
  * walking polygons (actual Article 4 has 609 parts). Preserve source topology;
@@ -24,10 +38,8 @@ export function validateConstraintFeature(value: unknown): ConstraintFeature {
   const r = object(value);
   const fields = "entity reference organisation quality name sourceEntryDate startDate endDate description notes geometry".split(" ");
   demand(Object.keys(r).length === fields.length && fields.every(k => k in r));
-  demand(typeof r.entity === "string" && /^[1-9]\d{0,13}$/.test(r.entity) && typeof r.organisation === "string" && /^[1-9]\d{0,9}$/.test(r.organisation));
-  demand(["authoritative", "some"].includes(String(r.quality)) && nativeText(r.reference, 1000) && nativeText(r.name, 2000) &&
-    nativeText(r.description, 10000) && nativeText(r.notes, 10000));
-  demand(nativeDate(r.sourceEntryDate) && nativeDate(r.startDate) && nativeDate(r.endDate));
+  const profile = Object.fromEntries(fields.filter(k => k !== "geometry").map(k => [k, r[k]]));
+  validateConstraintProfile(profile);
   const g = object(r.geometry);
   demand(Object.keys(g).length === 2 && "coordinates" in g && ["Polygon", "MultiPolygon"].includes(String(g.type)));
   const polygons = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
@@ -54,6 +66,23 @@ export function constraintOutcome(dataset: ConstraintDataset, features: Constrai
   const known = features.map(validateConstraintFeature);
   return { dataset, observedOn, state: known.length ? "potential_constraint_found" as const : "no_record_found_coverage_unconfirmed" as const,
     features: known.map(f => ({ ...f, sourceReference: `https://www.planning.data.gov.uk/entity/${f.entity}`,
+      applicability: f.endDate ? "end_date_requires_review" as const : "legal_scope_requires_review" as const })),
+    absenceIsClearance: false as const, permittedUseConfirmed: false as const };
+}
+
+export function validateConstraintLookup(value: unknown, releaseId: string, dataset: ConstraintDataset, observedOn: string) {
+  const r = object(value);
+  const fields = "releaseId dataset features coverage absenceIsClearance spatialBasis".split(" ");
+  demand(uuid(releaseId) && constraintDatasets.includes(dataset) && timestamp(observedOn) &&
+    Object.keys(r).length === fields.length && fields.every(k => k in r) && r.releaseId === releaseId && r.dataset === dataset &&
+    r.coverage === "published_features_coverage_unconfirmed" && r.absenceIsClearance === false &&
+    r.spatialBasis === "address_building_point_not_premises_extent" && Array.isArray(r.features) && r.features.length <= 500);
+  const profiles = (r.features as unknown[]).map(validateConstraintProfile);
+  demand(new Set(profiles.map(f => f.entity)).size === profiles.length);
+  return { releaseId, dataset, observedOn, coverage: "published_features_coverage_unconfirmed" as const,
+    spatialBasis: "address_building_point_not_premises_extent" as const,
+    state: profiles.length ? "potential_constraint_found" as const : "no_record_found_coverage_unconfirmed" as const,
+    features: profiles.map(f => ({ ...f, sourceReference: `https://www.planning.data.gov.uk/entity/${f.entity}`,
       applicability: f.endDate ? "end_date_requires_review" as const : "legal_scope_requires_review" as const })),
     absenceIsClearance: false as const, permittedUseConfirmed: false as const };
 }
