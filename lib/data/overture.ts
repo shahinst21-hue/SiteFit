@@ -29,12 +29,7 @@ export function validatePlace(value: unknown): CompactPlace {
   const r = value as unknown[];
   demand(uuid(r[0]) && Number.isSafeInteger(r[1]) && Number(r[1]) >= 0 && text(r[2], 200));
   demand(r[3] === null || slug(r[3]));
-  if (r[4] !== null) {
-    const t = object(r[4]);
-    demand(Object.keys(t).length === 3 && ["primary", "hierarchy", "alternates"].every(k => k in t) && slug(t.primary) &&
-      Array.isArray(t.hierarchy) && t.hierarchy.length <= 20 && t.hierarchy.every(slug) &&
-      (t.alternates === null || Array.isArray(t.alternates) && t.alternates.length <= 30 && t.alternates.every(slug)));
-  }
+  validatePlaceTaxonomy(r[4]);
   demand(typeof r[5] === "number" && Number.isFinite(r[5]) && r[5] >= -180 && r[5] <= 180 &&
     typeof r[6] === "number" && Number.isFinite(r[6]) && r[6] >= -90 && r[6] <= 90 && confidence(r[7]));
   demand(r[8] === null || ["open", "temporarily_closed", "permanently_closed"].includes(String(r[8])));
@@ -43,6 +38,15 @@ export function validatePlace(value: unknown): CompactPlace {
     nullableText(s[0], 300) && typeof s[1] === "string" && Object.hasOwn(overtureLicences, s[1]) && s[2] === overtureLicences[s[1]] &&
     nullableText(s[3], 300) && sourceTime(s[4]) && confidence(s[5]) && nullableText(s[6], 100)));
   return structuredClone(value) as CompactPlace;
+}
+export function validatePlaceTaxonomy(value: unknown): CompactPlace[4] {
+  if (value !== null) {
+    const t = object(value);
+    demand(Object.keys(t).length === 3 && ["primary", "hierarchy", "alternates"].every(k => k in t) && slug(t.primary) &&
+      Array.isArray(t.hierarchy) && t.hierarchy.length <= 20 && t.hierarchy.every(slug) &&
+      (t.alternates === null || Array.isArray(t.alternates) && t.alternates.length <= 30 && t.alternates.every(slug)));
+  }
+  return structuredClone(value) as CompactPlace[4];
 }
 export function validatePlaceChunk(value: unknown): CompactPlace[] {
   demand(Array.isArray(value) && value.length >= 1 && value.length <= 500);

@@ -19,7 +19,8 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
   for (const key of ["geographyReleaseId", "nativeReleaseId", "censusReleaseId", "incomeReleaseId", "bresReleaseId"] as const) {
     const id = releases[key]; requireOperand(uuid(id) && r[key] === id);
   }
-  requireOperand(r.schemaVersion === 1 && r.methodVersion === "area-uniform-bng1" &&
+  const version2 = r.schemaVersion === 2 && r.methodVersion === "area-uniform-bng2";
+  requireOperand((r.schemaVersion === 1 && r.methodVersion === "area-uniform-bng1" || version2) &&
     r.allocation === "uniform_within_native_area_estimate" && nonnegative(r.catchmentAreaM2) && r.catchmentAreaM2 > 0 &&
     nonnegative(r.londonCoveredAreaM2) && r.londonCoveredAreaM2 <= r.catchmentAreaM2 * (1 + 1e-8) &&
     nonnegative(r.londonCoverageFraction) && r.londonCoverageFraction <= 1 &&
@@ -56,19 +57,26 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
       }
     }
   }
-  requireOperand(close(area, r.londonCoveredAreaM2));
+  if (version2) requireOperand(nonnegative(r.allocationCoveredAreaM2) && close(area, r.allocationCoveredAreaM2) &&
+    typeof r.boundaryResidualAreaM2 === "number" && Number.isFinite(r.boundaryResidualAreaM2) &&
+    close(r.boundaryResidualAreaM2, area - r.londonCoveredAreaM2));
+  else requireOperand(close(area, r.londonCoveredAreaM2));
+  const boundaryMismatch = version2 && !close(area, r.londonCoveredAreaM2);
   const metrics = diagnostics.map((d, i) => {
     const published = object((r.censusEstimates as unknown[])[i]);
     requireOperand(published.columnOrdinal === d.columnOrdinal && nonnegative(published.knownContribution) &&
       nonnegative(published.missingAreaM2) && close(published.knownContribution, d.knownContribution) &&
       close(published.missingAreaM2, d.missingAreaM2) && published.state === (d.missingAreaM2 > 0 ? "partial" : "available"));
-    return { ...d, state: d.missingAreaM2 > 0 || (r.londonCoverageFraction as number) < 1 - 1e-8 ? "partial" as const : "available" as const,
+    return { ...d, state: boundaryMismatch || d.missingAreaM2 > 0 || (r.londonCoverageFraction as number) < 1 - 1e-8 ? "partial" as const : "available" as const,
       partialAllocationShare: d.knownContribution === 0 ? null : d.partiallyAllocatedCount / d.knownContribution,
       upperEnvelopeScope: "known_intersecting_native_areas_only" as const };
   });
-  return { methodVersion: "area-uniform-bng1", releases: structuredClone(releases), metrics,
+  return { methodVersion: version2 ? "area-uniform-bng2" : "area-uniform-bng1", releases: structuredClone(releases), metrics,
+    boundaryResidualAreaM2: version2 ? r.boundaryResidualAreaM2 as number : null,
+    allocationCoveredAreaM2: version2 ? r.allocationCoveredAreaM2 as number : null,
     londonCoverageFraction: r.londonCoverageFraction as number, comparator: null, score: null,
     limitations: ["Uniform area allocation is an estimate, not a measured walking population.",
       "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+      ...(boundaryMismatch ? ["OA allocation footprint differs from the London region boundary; signed area residual is retained and this estimate is partial."] : []),
       "The upper envelope excludes missing and outside-London data; absence is not zero."] };
 }

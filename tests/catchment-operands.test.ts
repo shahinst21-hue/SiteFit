@@ -40,3 +40,17 @@ test("wrong releases, duplicate areas, fabricated totals, fractions and missing-
   for (const mutate of cases) { const value = fixture(); mutate(value); assert.throws(() => catchmentAllocationOperands(value, releases, 2)); }
   assert.throws(() => catchmentAllocationOperands(fixture(), releases, 1));
 });
+
+test("versioned boundary residual remains explicit and partial without redistributing native operands", () => {
+  const legacy = fixture();
+  const value = {...legacy, schemaVersion: 2, methodVersion: "area-uniform-bng2",
+    londonCoveredAreaM2: 19, londonCoverageFraction: 0.95,
+    allocationCoveredAreaM2: 20, boundaryResidualAreaM2: 1};
+  const result = catchmentAllocationOperands(value, releases, 2);
+  assert.equal(result.boundaryResidualAreaM2, 1);
+  assert.equal(result.metrics[0].state, "partial");
+  assert.equal(result.metrics[0].knownContribution, catchmentAllocationOperands(legacy, releases, 2).metrics[0].knownContribution);
+  assert.throws(() => catchmentAllocationOperands({...value, boundaryResidualAreaM2: 0}, releases, 2));
+  assert.throws(() => catchmentAllocationOperands({...value, allocationCoveredAreaM2: 19}, releases, 2));
+  assert.throws(() => catchmentAllocationOperands({...value, schemaVersion: 1, methodVersion: "area-uniform-bng1"}, releases, 2));
+});

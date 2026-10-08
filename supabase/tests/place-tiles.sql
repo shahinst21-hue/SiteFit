@@ -1,6 +1,6 @@
 begin;
 do $$
-declare geo uuid; v_id uuid; bad uuid; m jsonb; p jsonb; bytes bytea; sha text; permit jsonb;
+declare geo uuid; v_id uuid; bad uuid; m jsonb; p jsonb; bytes bytea; sha text; permit jsonb; full_inventory jsonb; compact_inventory jsonb;
 begin
  permit:='{"normalised":{"allowed":true},"attribution":["Synthetic"]}'::jsonb;
  geo:=(public.stage_sitefit_release(jsonb_build_object('provider','ons','dataset','london-geography','version','synthetic-place-parent','subset','london',
@@ -20,6 +20,16 @@ begin
  begin perform public.activate_sitefit_places_release(v_id); raise exception 'Unreviewed QA activated'; exception when check_violation then null; end;
  update source_data.dataset_releases set manifest=jsonb_set(manifest,'{quality,entityDuplicateQa}','"reviewed"') where dataset_releases.id=v_id;
  perform public.activate_sitefit_places_release(v_id);
+ full_inventory:=public.lookup_sitefit_places(v_id,geo,'{"type":"Polygon","coordinates":[[[-0.11,51.49],[-0.09,51.49],[-0.09,51.51],[-0.11,51.51],[-0.11,51.49]]]}');
+ compact_inventory:=public.lookup_sitefit_place_operands(v_id,geo,'{"type":"Polygon","coordinates":[[[-0.11,51.49],[-0.09,51.49],[-0.09,51.51],[-0.11,51.51],[-0.11,51.49]]]}');
+ if compact_inventory->>'schemaVersion'<>'2' or compact_inventory->>'nativeRecords'<>'1' or
+    compact_inventory->>'recordSetSha256'<>encode(pg_catalog.sha256(convert_to((full_inventory->'items')::text,'UTF8')),'hex') or
+    (select sum((g->>'count')::int) from jsonb_array_elements(compact_inventory->'groups') g)<>1 then
+  raise exception 'Compact inventory lost exact native operands or checksum'; end if;
+ if has_function_privilege('anon','public.lookup_sitefit_place_operands(uuid,uuid,jsonb)','execute') or
+    has_function_privilege('authenticated','public.lookup_sitefit_place_operands(uuid,uuid,jsonb)','execute') or
+    not has_function_privilege('service_role','public.lookup_sitefit_place_operands(uuid,uuid,jsonb)','execute') then
+  raise exception 'Compact inventory grants invalid'; end if;
  if jsonb_array_length(public.lookup_sitefit_places(v_id,geo,'{"type":"Polygon","coordinates":[[[-0.11,51.49],[-0.09,51.49],[-0.09,51.51],[-0.11,51.51],[-0.11,51.49]]]}')->'items')<>1 then raise exception 'Exact point membership lost'; end if;
  if jsonb_array_length(public.lookup_sitefit_places(v_id,geo,'{"type":"Polygon","coordinates":[[[-0.11,51.49],[-0.09,51.49],[-0.09,51.51],[-0.11,51.51],[-0.11,51.49]],[[-0.101,51.499],[-0.101,51.501],[-0.099,51.501],[-0.099,51.499],[-0.101,51.499]]]}')->'items')<>0 then raise exception 'Point inside hole counted'; end if;
  if public.lookup_sitefit_places(v_id,v_id,'{"type":"Polygon","coordinates":[[[-0.11,51.49],[-0.09,51.49],[-0.09,51.51],[-0.11,51.51],[-0.11,51.49]]]}') is not null then raise exception 'Wrong geography release accepted'; end if;

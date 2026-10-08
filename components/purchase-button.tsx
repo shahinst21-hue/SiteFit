@@ -1,16 +1,14 @@
 "use client";
 import { useCallback,useState } from "react";
-export function PurchaseButton({report,checkout=false}:{report:string;checkout?:boolean}){
+import { purchaseNavigation } from "../lib/payments/purchase-navigation";
+export function PurchaseButton({report,checkout=false,controlId}:{report?:string;checkout?:boolean;controlId?:string}){
  const [busy,setBusy]=useState(false),[error,setError]=useState("");
  const start=useCallback(async()=>{
+  if(!report)return;
   setBusy(true);setError("");
   try{
-   const response=await fetch(checkout?"/purchase/checkout":"/purchase/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({reportId:report})});
-   const data=await response.json();if(!response.ok||typeof data.url!=="string")throw Error("unavailable");
-   const url=new URL(data.url,window.location.origin);
-   if(checkout?url.origin!=="https://checkout.stripe.com"||!url.pathname.startsWith("/c/pay/"):url.origin!==window.location.origin||!['/purchase/auth','/purchase/resume'].includes(url.pathname))throw Error("invalid_redirect");
-   window.location.assign(url.href);
+   window.location.assign(await purchaseNavigation(report,checkout,window.location.origin));
   }catch{setError("We could not continue to Checkout. Your Snapshot is still saved; please retry shortly.");setBusy(false);}
  },[report,checkout]);
- return <><button type="button" className="button button-primary" disabled={busy} onClick={start}>{busy?"Please wait…":checkout?"Continue to Test Checkout · £29":"Check the Full Case · £29"}</button><p role="status">{error}</p></>;
+ return <><button type="button" className="button button-primary" data-testid={controlId} disabled={busy||!report} onClick={start}>{busy?"Please wait…":checkout?"Continue to Test Checkout · £29":"Check the Full Case · £29"}</button><p role="status">{!report?"Purchasing is unavailable in this environment.":error}</p></>;
 }

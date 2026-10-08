@@ -10,6 +10,9 @@ import { packetDigest } from "../lib/analysis/canonical.ts";
 import type { CollectionContext, StoredSnapshot } from "../lib/data/contracts.ts";
 import { enrichmentReleaseKeys, type EnrichmentInput } from "../lib/data/enrichment-input.ts";
 import { context, ids, date } from "./fixtures/data/framework.ts";
+import { walkingAdapter } from "../lib/data/adapters/walking.ts";
+import { catchmentAdapter } from "../lib/data/adapters/catchments.ts";
+import { enrichmentRepository } from "../lib/data/enrichment-repository.ts";
 function fixture(): CollectionContext {
   return {...context(), schemaVersion: 2, enrichment: {schemaVersion: 1,
     releases: Object.fromEntries(enrichmentReleaseKeys.map(key => [key, ids.release])) as EnrichmentInput["releases"],
@@ -17,6 +20,32 @@ function fixture(): CollectionContext {
       coordinateBasis: "address_building_not_entrance", method: "exact_selected_address_components", retrievedAt: date,
       selectedParts: {primary: "10", secondary: null, street: "Synthetic Road", town: "London", postcode: "E8 4PH"}, observedCredits: 10, missingReason: null}}};
 }
+test("compact native inventory evidence resolves to stored groups without inventing unique competitors", async () => {
+  const c=fixture(), point=c.enrichment!.identity.point!, release=c.enrichment!.releases.geographyReleaseId;
+  const request={context:c,collectionKey:"compact-proof",radiusMetres:500};
+  const execution={signal:new AbortController().signal,correlationId:ids.correlation,now:()=>new Date(date)};
+  const walked=await walkingAdapter({retrieve:async()=>({schemaVersion:1,provider:"geoapify",mode:"walk",type:"time",origin:point,
+    retrievedAt:date,routingVersion:null,snappedOrigin:null,credits:{expected:6,observed:null},
+    polygons:([300,600,900] as const).map(seconds=>({seconds,geometry:{type:"Polygon",coordinates:[[[-.11,51.49],[-.09,51.49],[-.09,51.51],[-.11,51.49]]]}}))}),
+    topology:async()=>({schemaVersion:1,geographyReleaseId:release,method:"postgis-bng-topology-1",parts:[300,600,900].map((seconds,i)=>({seconds,
+      areaM2:100,londonAreaM2:100,londonCoverageFraction:1,originCovered:true,outsideNextFraction:i===2?null:0,vertices:4,polygons:1}))})}).retrieve(request,execution);
+  function stored(result: StoredSnapshot["result"]): StoredSnapshot {
+    result.meta.checksum=packetDigest({payload:result.payload,observations:result.observations});
+    return {id:crypto.randomUUID(),analysisId:c.analysisId,inputId:c.inputId,collectionKey:request.collectionKey,requestHash:"a".repeat(64),result};
+  }
+  const parent=stored(walked);
+  const repository=(()=>({places:async()=>({schemaVersion:2,releaseId:c.enrichment!.releases.placesReleaseId,geographyReleaseId:release,
+    membership:"native-point-closed-polygon",inventoryCompleteness:"unknown",nativeRecords:2,recordSetSha256:"b".repeat(64),sourceCoverage:{Foursquare:2},
+    groups:[{taxonomy:{primary:"coffee_shop",hierarchy:["coffee_shop"],alternates:null},operatingStatus:null,count:2}]})})) as unknown as typeof enrichmentRepository;
+  const places=stored(await catchmentAdapter("overture-catchments",parent,repository).retrieve(request,execution));
+  const derived=enrichedEvidence(c,[parent,places],new Date(date)).evidence.filter(e=>e.kind==="derived");
+  assert.equal(derived.length,3);
+  for(const [i,e] of derived.entries()) {
+    assert.deepEqual(e.lineage.operandPaths,[`ranges/${i}/inventory/groups`]);
+    assert.equal(e.value,2); assert.equal(e.quality.partial,true);
+    assert.match(e.units!,/not unique businesses/);
+  }
+});
 test("enriched property evidence is owned, frozen, commercial and distinct from deferred Economics", async () => {
   const c = fixture(), factory = () => ({premises: async (selected: Parameters<ReturnType<typeof import("../lib/data/adapters/propertydata-facts.ts").propertyDataFacts>["premises"]>[0]) =>
     ({...normalisePremises({status: "success", data: {address: selected.address, addressParts: selected.selectedParts,

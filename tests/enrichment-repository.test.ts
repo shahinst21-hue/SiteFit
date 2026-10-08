@@ -12,7 +12,7 @@ test("source read boundary freezes releases and preserves independent outcomes w
   const repository = enrichmentRepository(vector, { read: async (name, args, signal) => {
     calls.push(name); assert.equal(signal.aborted, false);
     assert.equal("p_release_id" in args && args.p_release_id, id);
-    if (name === "lookup_sitefit_places") throw new Error("private diagnostic must not escape");
+    if (name === "lookup_sitefit_place_operands") throw new Error("private diagnostic must not escape");
     return { releaseId: id, dataset: "conservation-area", features: [], coverage: "published_features_coverage_unconfirmed",
       absenceIsClearance: false, spatialBasis: "address_building_point_not_premises_extent" };
   } });

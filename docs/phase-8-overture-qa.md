@@ -17,3 +17,7 @@ Ten official salon branches correspond to 16 native same-postcode Rush/Sorbie re
 Source-specific rights and the complete applicable Foursquare notice/licence copy are retained in [data-licences](data-licences/README.md). Normalisation discards temporary extraction after admission; it retains permitted native attributes, provenance, source timestamps, licences and immutable release bindings. Offset-free Foursquare timestamps remain offset-free with timezone unknown. Old native evidence is not made fresh merely by appearing in the September release.
 
 Admission may make the qualified private inventory available for evidence and later reviewed operands. It does not clear entity/cohort completeness gates or grant customer-facing complete competition claims. Full stored checksum, actual PostgreSQL capacity, exact spatial membership and measured lookup gates are recorded separately in [Phase 8 status](phase-8-status.md).
+
+### Owner-approved admission resolution — 8 October 2026
+
+D77 accepts the qualified native inventory and explicitly keeps unique competitor counts and competition percentiles blocked until entity/coverage/cohort admission. This resolves the affected-metric branch of the Phase 8 DoD; it does not assert exhaustive coverage, pass an unperformed comparator QA or admit a numeric competition score. All reviewed gaps and source-record provenance remain retained.

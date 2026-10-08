@@ -15,6 +15,19 @@ test("native family mapping separates substitutes, unknown coarse categories and
   const closed = place("coffee_shop"); closed[8] = "permanently_closed";
   assert.equal(placeRole(closed, "coffee-shop"), "excluded_closed");
 });
+
+test("compact native taxonomy operands preserve role counts and reject altered membership totals", () => {
+  const items = [place("coffee_shop"),place("coffee_shop"),place("barber")];
+  items[1][0] = "00000000-0000-4000-8000-000000000002";
+  items[2][0] = "00000000-0000-4000-8000-000000000003";
+  const full = {schemaVersion:1,releaseId:release,geographyReleaseId:geo,membership:"native-point-closed-polygon",inventoryCompleteness:"unknown",items};
+  const compact = {schemaVersion:2,releaseId:release,geographyReleaseId:geo,membership:"native-point-closed-polygon",inventoryCompleteness:"unknown",
+    nativeRecords:3,recordSetSha256:"a".repeat(64),sourceCoverage:{Foursquare:3},groups:[{taxonomy:place("coffee_shop")[4],operatingStatus:null,count:2},{taxonomy:place("barber")[4],operatingStatus:null,count:1}]};
+  for (const category of ["coffee-shop","restaurant","hair-beauty-salon"] as const)
+    assert.deepEqual(inventoryOperands(validatePlaceInventory(compact,release,geo),category),inventoryOperands(validatePlaceInventory(full,release,geo),category));
+  for (const changed of [{...compact,nativeRecords:4},{...compact,recordSetSha256:"bad"},{...compact,groups:[...compact.groups,compact.groups[0]]},{...compact,sourceCoverage:{Foursquare:0}},{...compact,sourceCoverage:{unlicensed:3}}])
+    assert.throws(()=>validatePlaceInventory(changed,release,geo));
+});
 test("exact inventory binds releases and retains record counts without inventing entity counts or percentiles", () => {
   const one = place("coffee_shop"), two = place("coffee_shop"); two[0] = geo;
   const response = { schemaVersion: 1, releaseId: release, geographyReleaseId: geo, membership: "native-point-closed-polygon",

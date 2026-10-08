@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { verifiedUser } from "@/lib/supabase/server";
 import { validateFreeProjection } from "@/lib/analysis/projection";
 import { FreeSnapshot } from "@/components/free-snapshot";
-import { purchaseOrigin } from "@/lib/payments/config";
+import { purchaseAvailableOnHost } from "@/lib/payments/config";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your Free Snapshot", robots: { index: false, follow: false }, referrer: "no-referrer" };
 export default async function Snapshot({ params }: { params: Promise<{ id: string }> }) {
@@ -14,5 +15,6 @@ export default async function Snapshot({ params }: { params: Promise<{ id: strin
   let report;
   try { report = validateFreeProjection(data); } catch { notFound(); }
   // Stored projection only: no source, metric, comparison or AI engine import on the read path.
-  return <FreeSnapshot report={report} purchaseReport={purchaseOrigin(process.env)?id:undefined} />;
+  const requestHeaders=await headers();
+  return <FreeSnapshot report={report} purchaseReport={purchaseAvailableOnHost(process.env,requestHeaders.get("host"))?id:undefined} />;
 }

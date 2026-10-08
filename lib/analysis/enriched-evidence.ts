@@ -70,7 +70,7 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
       {unit: "OA2021", code: p.geographyCode, releaseId: p.geographyReleaseId, method: context.geography?.method ?? "unknown", estimated: false} :
       p?.kind === "catchment_statistics" || p?.kind === "catchment_places" || p?.kind === "walking_geometry" ?
       {unit: "network_catchment", code: null, releaseId: context.enrichment.releases.geographyReleaseId,
-        method: p.kind === "catchment_places" ? "native-point-closed-polygon" : p.kind === "catchment_statistics" ? "area-uniform-bng1" : "provider_walk_network", estimated: p.kind !== "catchment_places"} :
+        method: p.kind === "catchment_places" ? "native-point-closed-polygon" : p.kind === "catchment_statistics" ? String((p.ranges.find(r => r.statistics.some(s => s.operands))?.statistics.find(s => s.operands)?.operands as {methodVersion?: string} | null)?.methodVersion ?? "area-uniform-bng1") : "provider_walk_network", estimated: p.kind !== "catchment_places"} :
       {unit: p?.kind === "property_fact" || p?.kind === "planning_constraints" ? "property" : available ? "provider_point" : null,
         code: null, releaseId: p?.kind === "property_fact" ? p.binding.osReleaseId : null,
         method: p?.kind === "property_fact" ? "os_address_building_point_not_premises_extent" : "provider_register_point", estimated: r.observations.some(o => o.kind === "modelled")};
@@ -129,12 +129,13 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
           `ranges/${i}/statistics/${j}/operands/censusEstimates/0`, value !== null, [geometryRoot.id]);
       }));
     } else {
+      const source = byId.get(metric.sourceSnapshotId)?.result.payload;
       metric.ranges.forEach((range, i) => add(root, {sections: ["market-position"],
         source: {...root.source, dataset: `Native primary-family records, ${range.seconds / 60} minute walk`}, value: range.operands?.roles.primary ?? null,
         units: "native mapped records, not unique businesses", scope: `${range.seconds / 60} minute cumulative routing polygon; incomplete community inventory`,
         quality: {...root.quality, partial: true, limitations: [...new Set([...root.quality.limitations,
           "Native taxonomy records are not a complete deduplicated competitor inventory or evidence of saturation."])].slice(0, 32)}},
-        `ranges/${i}/inventory/items`, range.operands !== null, [geometryRoot.id]));
+        `ranges/${i}/inventory/${source?.kind === "catchment_places" && source.ranges[i].inventory?.schemaVersion === 2 ? "groups" : "items"}`, range.operands !== null, [geometryRoot.id]));
     }
   }
   for (const snapshot of snapshots) {

@@ -10,7 +10,7 @@ import { validatePlaceInventory } from "./place-inventory.ts";
 import { validateConstraintLookup, type ConstraintDataset } from "./planning-constraints.ts";
 import type { Database, Json } from "../supabase/database.types.ts";
 
-type ReadName = "measure_sitefit_catchment" | "lookup_sitefit_places" | "lookup_sitefit_constraints";
+type ReadName = "measure_sitefit_catchment" | "lookup_sitefit_places" | "lookup_sitefit_place_operands" | "lookup_sitefit_constraints";
 type ReadArgs = Database["public"]["Functions"][ReadName]["Args"];
 type Reader = (name: ReadName, args: ReadArgs, signal: AbortSignal) => Promise<unknown>;
 export type EnrichmentReleaseBindings = CatchmentReleaseBindings & {
@@ -58,7 +58,7 @@ export function enrichmentRepository(bindings: EnrichmentReleaseBindings, option
       return validateCatchmentOperands(value, releases, columns);
     },
     async places(shape: PolygonGeometry, signal?: AbortSignal) {
-      const value = await lookup("lookup_sitefit_places", { p_release_id: releases.placesReleaseId,
+      const value = await lookup("lookup_sitefit_place_operands", { p_release_id: releases.placesReleaseId,
         p_geography_release_id: releases.geographyReleaseId, p_geometry: geometry(shape) }, signal);
       return validatePlaceInventory(value, releases.placesReleaseId, releases.geographyReleaseId);
     },

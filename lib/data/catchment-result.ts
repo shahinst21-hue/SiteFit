@@ -10,7 +10,7 @@ function keys(r:Record<string,unknown>,names:string){const fields=names.split(" 
  * stay employee counts. This adds no score, spending or footfall inference. */
 export function validateCatchmentOperands(value: unknown, releases: CatchmentReleaseBindings, columns: number) {
   try {
-    const r=object(value);keys(r,"schemaVersion methodVersion allocation geographyReleaseId nativeReleaseId censusReleaseId incomeReleaseId bresReleaseId catchmentAreaM2 londonCoveredAreaM2 londonCoverageFraction oaOperands censusEstimates employeeJobsOperands incomeNativeContext incomeMissingGeographies limitations");
+    const r=object(value);keys(r,"schemaVersion methodVersion allocation geographyReleaseId nativeReleaseId censusReleaseId incomeReleaseId bresReleaseId catchmentAreaM2 londonCoveredAreaM2 londonCoverageFraction oaOperands censusEstimates employeeJobsOperands incomeNativeContext incomeMissingGeographies limitations" + (r.schemaVersion === 2 ? " allocationCoveredAreaM2 boundaryResidualAreaM2" : ""));
     const allocation=catchmentAllocationOperands(value,releases,columns);
     const lsoaAreas=new Map<string,number>(),msoaCodes=new Set<string>();
     for(const value of r.oaOperands as unknown[]) {

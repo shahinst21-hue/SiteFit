@@ -1318,6 +1318,14 @@ export type Database = {
         }
         Returns: Json
       }
+      lookup_sitefit_place_operands: {
+        Args: {
+          p_geography_release_id: string
+          p_geometry: Json
+          p_release_id: string
+        }
+        Returns: Json
+      }
       lookup_sitefit_place_tiles: {
         Args: {
           p_geography_release_id: string
