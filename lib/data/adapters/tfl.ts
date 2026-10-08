@@ -8,6 +8,7 @@ import { object, text, validateContext, validateResult } from "../validation.ts"
 import { validPoint } from "../../spatial/model.ts";
 import { createTransport, processQuota } from "../transport.ts";
 import type { JsonTransport } from "../transport.ts";
+import { queryPoint } from "../query-point.ts";
 const quota = processQuota(30);
 const modes: Record<string, TransportAccessPoints["items"][number]["mode"]> = { bus:"bus", tube:"tube", dlr:"rail", "national-rail":"rail", overground:"rail", "elizabeth-line":"rail", tram:"tram", "river-bus":"water", "river-tour":"water" };
 function invalid(): never { throw new SourceError("invalid_response"); }
@@ -34,7 +35,7 @@ export function tflAdapter(factory: (execution: ExecutionContext) => JsonTranspo
     if(!eligible.eligible){result.outcome=eligible.outcome;result.error={code:eligible.code,retryable:false,status:null};return validateResult(result);}
     try {
       if(!Number.isSafeInteger(request.radiusMetres)||request.radiusMetres<1||request.radiusMetres>1000)throw new SourceError("invalid_request");
-      const point=request.context.selectedProperty.point!;transport=factory(execution);
+      const point=queryPoint(request.context)!;transport=factory(execution);
       const data=await transport.request({lat:String(point.latitude),lon:String(point.longitude),radius:String(request.radiusMetres),stopTypes:"NaptanPublicBusCoachTram,NaptanMetroStation,NaptanRailStation,NaptanFerryPort",useStopPointHierarchy:"false",returnLines:"false",categories:"none"});
       const payload=normaliseTfl(data,source.maxRecords);
       result.outcome=payload.items.length?payload.complete?"success":"partial":"empty";

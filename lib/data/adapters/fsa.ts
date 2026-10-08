@@ -8,6 +8,7 @@ import { object, text, timestamp, validateContext, validateResult } from "../val
 import { validPoint } from "../../spatial/model.ts";
 import { createTransport, processQuota } from "../transport.ts";
 import type { JsonTransport } from "../transport.ts";
+import { queryPoint } from "../query-point.ts";
 const quota=processQuota(10);
 function invalid():never{throw new SourceError("invalid_response");}
 function coordinate(value:unknown):number|null{
@@ -36,7 +37,7 @@ export function fsaAdapter(factory:(execution:ExecutionContext)=>JsonTransport=e
     const items:FoodEstablishments["items"]=[];const ids=new Set<string>();let complete=false,total:number|null=null,extractDate:string|null=null;
     try{
       if(!Number.isSafeInteger(request.radiusMetres)||request.radiusMetres<1||request.radiusMetres>1000)throw new SourceError("invalid_request");
-      transport=factory(execution);const point=request.context.selectedProperty.point!;
+      transport=factory(execution);const point=queryPoint(request.context)!;
       for(let page=1;page<=source.maxPages;page++){
         if(transport.summary().attempts>=source.maxAttempts)break;
         const parsed=normaliseFsa(await transport.request({longitude:String(point.longitude),latitude:String(point.latitude),maxDistanceLimit:String(request.radiusMetres/1609.344),pageNumber:String(page),pageSize:"100",sortOptionKey:"distance",schemeTypeKey:"FHRS"}),page);
