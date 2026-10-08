@@ -1,7 +1,7 @@
 import type { Geography, Point, Precision } from "../spatial/model.ts";
 import type { EnrichmentInput } from "./enrichment-input.ts";
 
-export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "tfl-stations", "geoapify-access", "tfl-station-activity", "propertydata-premises", "propertydata-flood", "propertydata-rent"] as const;
+export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "tfl-stations", "geoapify-access", "tfl-station-activity", "propertydata-premises", "propertydata-flood", "propertydata-rent", "ons-income-context", "ons-jobs-context"] as const;
 export type SourceId = (typeof sourceIds)[number];
 export type Category = "coffee-shop" | "restaurant" | "hair-beauty-salon";
 export type Outcome = "success" | "partial" | "empty" | "unavailable" | "unsupported" | "not_applicable" | "policy_blocked";
@@ -47,7 +47,7 @@ export type PlanningConstraints = { schemaVersion: 1; kind: "planning_constraint
   lookup: ReturnType<typeof import("./planning-constraints.ts").validateConstraintLookup> };
 export type WalkingGeometry = { schemaVersion: 1; kind: "walking_geometry";
   walking: import("./adapters/geoapify.ts").WalkingCatchments; topology: import("./walking-result.ts").WalkingTopology };
-export type Payload = AreaPopulation | TransportAccessPoints | FoodEstablishments | PlanningConstraints | WalkingGeometry |
+export type Payload = import("./native-context-result.ts").NativeContextResult | AreaPopulation | TransportAccessPoints | FoodEstablishments | PlanningConstraints | WalkingGeometry |
   import("./property-fact-result.ts").PropertyFactResult |
   import("./station-walking-result.ts").StationWalkingResult | import("./station-activity-result.ts").StationActivityResult |
   import("./catchment-sources.ts").CatchmentSources | import("./catchment-sources.ts").CatchmentPlaces;

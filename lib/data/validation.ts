@@ -8,6 +8,7 @@ import { validateWalkingCatchments, validateWalkingTopology } from "./walking-re
 import { validateCatchmentSources, validateCatchmentPlaces } from "./catchment-sources.ts";
 import { validateStationWalkingResult } from "./station-walking-result.ts";
 import { validateStationActivityResult } from "./station-activity-result.ts";
+import { validateNativeContextResult } from "./native-context-result.ts";
 import { validatePropertyFactResult } from "./property-fact-result.ts";
 
 export function object(value: unknown): Record<string, unknown> {
@@ -82,7 +83,16 @@ export function validateResult(value: unknown): ProviderResult {
   for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === (["geoapify-walking", "geoapify-access"].includes(String(m.source)) || String(m.source).startsWith("propertydata-") ? "commercial_data" : m.source === "overture-catchments" ? "community_open_data" : "official_public_data") && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
   if (["success", "partial"].includes(String(r.outcome))) {
     const p = object(r.payload); demand(p.schemaVersion === 1 && r.observations.length > 0);
-    if (String(m.source).startsWith("propertydata-")) {
+    if (m.source === "ons-income-context" || m.source === "ons-jobs-context") {
+      const checked = validateNativeContextResult(p), d = checked.distribution, target = object(d.target);
+      demand(m.provider === "ons" && m.operation === "native-target-excluded-distribution" &&
+        m.dataset === (m.source === "ons-income-context" ? "income-AHC-FYE2023" : "BRES2024") &&
+        object(target.measure).dataset === m.dataset && m.datasetReleaseId === d.releaseId && m.sourceVersion === d.releaseVersion &&
+        m.sourceRetrievedAt === d.sourceRetrievedAt && m.publishedAt === d.publishedAt && q.precision === "building" &&
+        r.outcome === "success" && r.observations.length === 1 && object(r.observations[0]).path === "distribution" &&
+        object(r.observations[0]).recordId === object(target.geography).code && object(r.observations[0]).units === object(target.measure).unit &&
+        object(r.observations[0]).kind === (m.source === "ons-income-context" ? "modelled" : "measured"));
+    } else if (String(m.source).startsWith("propertydata-")) {
       const checked = validatePropertyFactResult(p);
       const operation = m.source === "propertydata-premises" ? "uprn" : m.source === "propertydata-flood" ? "flood-risk" : "rents-commercial";
       demand(checked.operation === operation && m.operation === operation && m.provider === "propertydata" &&

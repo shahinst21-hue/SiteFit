@@ -3,6 +3,8 @@ import { SourceError } from "./errors.ts";
 
 const permit = { allowed: true, maxDays: null, condition: "Retain with source attribution and continuing licence compliance." };
 const terms = {
+  "ons-income-context": "https://www.ons.gov.uk/methodology/geography/licences",
+  "ons-jobs-context": "https://www.ons.gov.uk/methodology/geography/licences",
   "propertydata-premises": "https://propertydata.co.uk/api/documentation/licensing",
   "propertydata-flood": "https://propertydata.co.uk/api/documentation/licensing",
   "propertydata-rent": "https://propertydata.co.uk/api/documentation/licensing",
@@ -29,10 +31,10 @@ export function policy(source: SourceId): LicenceMetadata {
     normalised: {...permit, condition: "Retain calculated time/distance/snapping results with Geoapify and OSM attribution and continuing terms compliance; launch-scale rights remain a pre-launch gate."},
     derived: permit, references: permit, timestamps: permit, attribution: ["Powered by Geoapify: https://www.geoapify.com/", "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"],
     cacheSeconds: 0, rawDisposition: "discarded"});
-  if (source === "ons-catchments" || source === "overture-catchments") return structuredClone({ policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
+  if (["ons-catchments", "ons-income-context", "ons-jobs-context", "overture-catchments"].includes(source)) return structuredClone({ policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
     raw: { allowed: false, maxDays: 0, condition: "Store only admitted normalised release operands, not temporary national raw archives." },
     normalised: permit, derived: permit, references: permit, timestamps: permit,
-    attribution: source === "ons-catchments" ? ["Source: Office for National Statistics licensed under the Open Government Licence v3.0.", "Contains OS data © Crown copyright and database rights."] :
+    attribution: source !== "overture-catchments" ? ["Source: Office for National Statistics licensed under the Open Government Licence v3.0.", "Contains OS data © Crown copyright and database rights."] :
       ["Overture Maps Foundation — CDLA-Permissive-2.0; required release notices retained.", "Foursquare Open Source Places — Apache-2.0.", "All The Places — CC0-1.0; native per-record sources/licences retained."],
     cacheSeconds: 0, rawDisposition: "not_returned",
   });
@@ -60,7 +62,7 @@ export function policy(source: SourceId): LicenceMetadata {
     attribution, cacheSeconds: ["ons-population", "tfl-stations", "tfl-station-activity"].includes(source) ? 0 : 86400, rawDisposition: "discarded" });
 }
 export function permitted(value: LicenceMetadata | null): value is LicenceMetadata {
-  return Boolean(value && ["ons-population", "ons-london", "tfl-stop-points", "tfl-stations", "tfl-station-activity", "geoapify-access", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "propertydata-premises", "propertydata-flood", "propertydata-rent"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
+  return Boolean(value && ["ons-income-context", "ons-jobs-context", "ons-population", "ons-london", "tfl-stop-points", "tfl-stations", "tfl-station-activity", "geoapify-access", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "propertydata-premises", "propertydata-flood", "propertydata-rent"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
 }
 export function assertPolicy(value: LicenceMetadata | null) { if (!permitted(value)) throw new SourceError("licence_blocked"); }
 

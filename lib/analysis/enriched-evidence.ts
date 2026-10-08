@@ -12,14 +12,14 @@ import { reviewedStationTargets } from "../data/station-targets.ts";
 import { validateWalkingMatrix } from "../data/walking-matrix-result.ts";
 
 const sectionsFor = (source: string): Dimension[] => source === "geoapify-walking" ? ["customer-base", "market-position", "customer-access"] :
-  ["ons-population", "ons-catchments"].includes(source) ? ["customer-base"] :
+  ["ons-population", "ons-catchments", "ons-income-context", "ons-jobs-context"].includes(source) ? ["customer-base"] :
   ["overture-catchments", "fsa-establishments"].includes(source) ? ["market-position"] :
   ["tfl-stop-points", "tfl-stations", "geoapify-access", "tfl-station-activity"].includes(source) ? ["customer-access"] : ["premises"];
 /** Private, source-bound observations only. All full operands remain in immutable
  * snapshots; this does not calibrate scores or expand the model's authority. */
 export function enrichedEvidence(input: CollectionContext, snapshots: readonly StoredSnapshot[], now: Date) {
   const context = validateContext(input);
-  if (context.schemaVersion !== 2 || !context.enrichment || snapshots.length > 14) throw new Error("enriched_evidence_context_required");
+  if (context.schemaVersion !== 2 || !context.enrichment || snapshots.length > 16) throw new Error("enriched_evidence_context_required");
   const byId = new Map<string, StoredSnapshot>(), bySource = new Map<string, StoredSnapshot>();
   for (const snapshot of snapshots) {
     if (!uuid(snapshot.id) || snapshot.analysisId !== context.analysisId || snapshot.inputId !== context.inputId ||
@@ -51,12 +51,16 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
       packetDigest(p.binding.point) !== packetDigest(context.enrichment.identity.point))) throw new Error("enriched_evidence_property_binding");
     if (p?.kind === "planning_constraints" && p.lookup.releaseId !== context.enrichment.releases[r.meta.source === "planning-conservation" ? "conservationReleaseId" : "article4ReleaseId"])
       throw new Error("enriched_evidence_planning_release");
+    if (p?.kind === "native_context" && (p.oaCode !== context.geography?.code || p.oaReleaseId !== context.enrichment.releases.geographyReleaseId ||
+      p.nativeReleaseId !== context.enrichment.releases.nativeReleaseId || p.distribution.releaseId !== context.enrichment.releases[r.meta.source === "ons-income-context" ? "incomeReleaseId" : "bresReleaseId"])) throw new Error("enriched_evidence_native_binding");
     // Benchmark operands are retained privately for later Economics, never a location factor.
     if (r.meta.source === "propertydata-rent") continue;
     const available = p !== null && ["success", "partial"].includes(r.outcome);
     const missingState = available ? r.outcome === "partial" ? "partial" : null :
       r.outcome === "unsupported" || r.outcome === "not_applicable" ? r.outcome : "unavailable";
-    const statistical: EnrichedEvidence["geography"]["statistical"] = p?.kind === "area_population" ?
+    const statistical: EnrichedEvidence["geography"]["statistical"] = p?.kind === "native_context" ?
+      {unit: r.meta.source === "ons-income-context" ? "MSOA2021" : "LSOA2021", code: String((p.distribution.target as {geography: {code: string}}).geography.code),
+        releaseId: p.nativeReleaseId, method: "native-london-distribution-1", estimated: r.meta.source === "ons-income-context"} : p?.kind === "area_population" ?
       {unit: "OA2021", code: p.geographyCode, releaseId: p.geographyReleaseId, method: context.geography?.method ?? "unknown", estimated: false} :
       p?.kind === "catchment_statistics" || p?.kind === "catchment_places" || p?.kind === "walking_geometry" ?
       {unit: "network_catchment", code: null, releaseId: context.enrichment.releases.geographyReleaseId,
@@ -64,7 +68,8 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
       {unit: p?.kind === "property_fact" || p?.kind === "planning_constraints" ? "property" : available ? "provider_point" : null,
         code: null, releaseId: p?.kind === "property_fact" ? p.binding.osReleaseId : null,
         method: p?.kind === "property_fact" ? "os_address_building_point_not_premises_extent" : "provider_register_point", estimated: r.observations.some(o => o.kind === "modelled")};
-    const value = !available ? null : p?.kind === "area_population" ? p.count :
+    const nativeTarget = p?.kind === "native_context" ? p.distribution.target as {value: number | null; measure: {unit: string; referencePeriod: string}} : null;
+    const value = !available ? null : nativeTarget ? nativeTarget.value : p?.kind === "area_population" ? p.count :
       p?.kind === "transport_access_points" || p?.kind === "food_establishments" ? p.items.length :
       p?.kind === "planning_constraints" ? p.lookup.features.length :
       p?.kind === "property_fact" && p.operation === "flood-risk" ? p.facts.riversAndSea :
@@ -76,8 +81,8 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
       sourceClass: ["geoapify", "propertydata"].includes(r.meta.provider) ? "commercial" : r.meta.provider === "overture" ? "community_open" : "official_public",
       kind: available ? r.observations.some(o => o.kind === "modelled") ? "modelled" : "direct_register" : "capability",
       scope: `Retained ${r.meta.dataset} source outcome; origin precision is not statistical accuracy or premises extent`, value,
-      units: p?.kind === "area_population" ? "usual residents" : p?.kind === "transport_access_points" || p?.kind === "food_establishments" || p?.kind === "planning_constraints" ? "returned records, not complete entities or clearance" : null,
-      retrievedAt: r.meta.sourceRetrievedAt, effectiveAt: p?.kind === "area_population" ? p.effectiveAt : r.meta.observedAt,
+      units: nativeTarget?.measure.unit ?? (p?.kind === "area_population" ? "usual residents" : p?.kind === "transport_access_points" || p?.kind === "food_establishments" || p?.kind === "planning_constraints" ? "returned records, not complete entities or clearance" : null),
+      retrievedAt: r.meta.sourceRetrievedAt, effectiveAt: p?.kind === "native_context" ? p.distribution.effectiveAt as string | null : p?.kind === "area_population" ? p.effectiveAt : r.meta.observedAt,
       geography: {precision: queryPoint(context)?.precision ?? "unknown", crs: "EPSG:4326", scope: "frozen analysis origin",
         method: context.enrichment.identity.coordinateBasis ?? "unresolved_input", positionMeaning: "input_origin_only", statistical},
       quality: {available: available && value !== null, partial: r.outcome === "partial" || r.meta.quality.truncated,
@@ -86,7 +91,7 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
       licence: {policyId: r.meta.licence.policyId, version: r.meta.licence.version,
         representationAllowed: r.meta.licence.normalised.allowed && r.meta.licence.references.allowed && r.meta.licence.timestamps.allowed,
         expiresAt: r.meta.licence.normalised.maxDays === null ? null : new Date(Date.parse(r.meta.sourceRetrievedAt) + r.meta.licence.normalised.maxDays * 86400000).toISOString(), notices: [...r.meta.licence.attribution]},
-      lineage: {sourceChecksum: r.meta.checksum, operandPaths: available ? r.observations.map(o => o.path).slice(0, 32) : [], parentSnapshots: parents,
+      lineage: {sourceChecksum: r.meta.checksum, operandPaths: available ? p?.kind === "native_context" ? ["distribution/target", "distribution/rows", "distribution/eligibleCount"] : r.observations.map(o => o.path).slice(0, 32) : [], parentSnapshots: parents,
         releaseBindings: enrichmentReleaseKeys.map(key => ({key, id: context.enrichment!.releases[key]})),
         methodVersion: r.meta.normalisationVersion, missingState: !available || value === null ? missingState ?? "missing" : missingState}};
     validateEvidence(item); roots.set(snapshot.id, item); evidence.push(item);

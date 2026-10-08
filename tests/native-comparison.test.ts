@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { nativeComparison } from "../lib/analysis/native-comparison.ts";
 import { ids, date } from "./fixtures/data/framework.ts";
+import { validateNativeContextResult } from "../lib/data/native-context-result.ts";
 function fixture() {
   return {schemaVersion: 1, methodVersion: "native-london-distribution-1", definition: "Synthetic London native areas; target excluded",
     releaseId: ids.release, geographyReleaseId: ids.input, releaseVersion: "synthetic-1", releaseChecksum: "a".repeat(64),
@@ -35,4 +36,21 @@ test("native distributions reject wrong scope/release, target inclusion, duplica
     const r = fixture(); mutate(r); assert.throws(() => nativeComparison(r, ids.release, ids.input, "E02000001"));
   }
   assert.throws(() => nativeComparison(fixture(), ids.analysis, ids.input, "E02000001"));
+});
+
+test("owned native context retains compact raw operands and rejects mismatched geography and private fields", () => {
+  const p = {schemaVersion: 1, kind: "native_context", oaCode: "E00000001", oaReleaseId: ids.release,
+    nativeReleaseId: ids.input, distribution: fixture()};
+  const result = validateNativeContextResult(p);
+  assert.deepEqual(result, p);
+  (result.distribution.rows as unknown[][])[0][1] = 999;
+  assert.equal(p.distribution.rows[0][1], 0);
+  for (const change of ["release", "scope", "extra", "missing-zero"]) {
+    const r = structuredClone(p);
+    if (change === "release") r.nativeReleaseId = ids.property;
+    else if (change === "scope") r.oaCode = "E02000001";
+    else if (change === "extra") Object.assign(r, {headers: "forbidden"});
+    else {r.distribution.rows[0][1] = 0; r.distribution.rows[0][2] = "missing"; r.distribution.rows[0][3] = "blank";}
+    assert.throws(() => validateNativeContextResult(r));
+  }
 });

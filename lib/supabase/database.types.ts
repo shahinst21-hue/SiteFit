@@ -1309,6 +1309,15 @@ export type Database = {
         }
         Returns: Json
       }
+      lookup_sitefit_owned_native_context: {
+        Args: {
+          p_native_release_id: string
+          p_oa_code: string
+          p_oa_release_id: string
+          p_statistic_release_id: string
+        }
+        Returns: Json
+      }
       lookup_sitefit_place_tiles: {
         Args: {
           p_geography_release_id: string

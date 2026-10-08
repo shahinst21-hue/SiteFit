@@ -2,6 +2,8 @@ import "server-only";
 import type { DataAdapter, SourceDefinition, SourceId } from "./contracts.ts";
 import { SourceError } from "./errors.ts";
 export const definitions: Readonly<Record<SourceId, SourceDefinition>> = {
+  "ons-income-context": {id: "ons-income-context", provider: "ons", dataset: "income-AHC-FYE2023", operation: "native-target-excluded-distribution", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 1002, maxBytes: 1_000_000, timeoutMs: 8000, maxAttempts: 1},
+  "ons-jobs-context": {id: "ons-jobs-context", provider: "ons", dataset: "BRES2024", operation: "native-target-excluded-distribution", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 4994, maxBytes: 1_000_000, timeoutMs: 8000, maxAttempts: 1},
   "propertydata-premises": {id: "propertydata-premises", provider: "propertydata", dataset: "selected-property-facts", operation: "uprn", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 1, maxBytes: 1_000_000, timeoutMs: 10_000, maxAttempts: 1},
   "propertydata-flood": {id: "propertydata-flood", provider: "propertydata", dataset: "point-rivers-sea", operation: "flood-risk", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 1, maxBytes: 1_000_000, timeoutMs: 10_000, maxAttempts: 1},
   "propertydata-rent": {id: "propertydata-rent", provider: "propertydata", dataset: "commercial-quoting-rent", operation: "rents-commercial", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 1, maxBytes: 1_000_000, timeoutMs: 10_000, maxAttempts: 1},
