@@ -1,2 +1,0 @@
-
-Phase 8 private collection uses two bounded batches over existing owned source rows. Matched version-2 TfL/FSA spatial queries use the frozen OS building point while preserving canonical postal coordinates. Native NUMBAT reads require an explicit release-pinned reviewed station crosswalk and exact requested day; unreviewed station coverage remains unavailable. These boundaries do not themselves activate new customer report generation or final scoring.
