@@ -2,6 +2,12 @@ begin;
 do $$
 declare id uuid; m jsonb; p jsonb; periods jsonb; ids jsonb; day text; measure text;
 begin
+ if not source_data.same_numbat_binary64('{"values":[0.30000000000000004,null],"publishedTotals":[1],"unit":"native"}',
+   '{"unit":"native","values":[0.3000000000000000400,null],"publishedTotals":[1.0]}') or
+    source_data.same_numbat_binary64('{"values":[0.3],"publishedTotals":[1]}','{"values":[0.4],"publishedTotals":[1]}') or
+    source_data.same_numbat_binary64('{"values":[0],"publishedTotals":[1]}','{"values":[null],"publishedTotals":[1]}') or
+    source_data.same_numbat_binary64('{"values":[0],"publishedTotals":[1],"unit":"customers"}','{"values":[0],"publishedTotals":[1],"unit":"native"}') then
+  raise exception 'Native binary64 comparison changed numeric, missing or metadata content'; end if;
  select jsonb_agg(i+21 order by i),jsonb_agg(to_char(timestamp '2000-01-01 05:00'+i*interval '15 minutes','HH24MI')||'-'||to_char(timestamp '2000-01-01 05:00'+(i+1)*interval '15 minutes','HH24MI') order by i) into ids,periods from generate_series(0,95) i;
  m:=jsonb_build_object('provider','tfl','dataset','NUMBAT2025','version','synthetic-numbat','subset','london','sha256',repeat('f',64),'rows',10,'stationCount',1,
   'sourceUrl','https://example.org/synthetic','retrievedAt','2026-10-07T00:00:00Z','licence','{"normalised":{"allowed":true},"attribution":["Synthetic"]}'::jsonb);

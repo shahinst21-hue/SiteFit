@@ -2159,6 +2159,10 @@ export type Database = {
       }
       os_i32: { Args: { b: string; o: number }; Returns: number }
       os_u64: { Args: { b: string; o: number }; Returns: number }
+      same_numbat_binary64: {
+        Args: { p_actual: Json; p_expected: Json }
+        Returns: boolean
+      }
       valid_constraint_native_date: { Args: { v: Json }; Returns: boolean }
     }
     Enums: {

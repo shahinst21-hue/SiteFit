@@ -9,6 +9,8 @@ import { definitions } from "./registry.ts";
 import { initialResult } from "./result.ts";
 import { validateContext, validateResult } from "./validation.ts";
 import { SourceError } from "./errors.ts";
+import { tflStationsAdapter } from "./adapters/tfl.ts";
+import { stationEnrichmentAdapter } from "./adapters/station-enrichment.ts";
 
 type DependentId="ons-catchments"|"overture-catchments";
 type Options={roots?:DataAdapter[];dependent?:(id:DependentId,parent:StoredSnapshot)=>DataAdapter};
@@ -32,4 +34,26 @@ export async function collectEnrichment(repository:SnapshotRepository,input:Coll
  });
  const second=await collector(repository,dependents).collectSources(context,["ons-catchments","overture-catchments"],key,signal);
  return {outcomes:[...first.outcomes,...second.outcomes],summary:[...first.summary,...second.summary]};
+}
+
+/** Station discovery is stored before the two dependent bounded adapters run.
+ * This is another explicit collector batch, not a durable workflow lifecycle. */
+export async function collectTransportEnrichment(repository: SnapshotRepository, input: CollectionContext, key: string,
+ signal?: AbortSignal, options: {root?: DataAdapter; dependent?: typeof stationEnrichmentAdapter} = {}) {
+ const context = validateContext(input);
+ if (context.schemaVersion !== 2) throw new SourceError("invalid_request");
+ const first = await collector(repository, [options.root ?? tflStationsAdapter()]).collectSources(context, ["tfl-stations"], key, signal);
+ const parent = first.outcomes[0]?.snapshot;
+ const usable = parent && parent.result.payload?.kind === "transport_access_points" && ["success", "partial"].includes(parent.result.outcome);
+ const adapters = (["geoapify-access", "tfl-station-activity"] as const).map(id => {
+  if (usable) return (options.dependent ?? stationEnrichmentAdapter)(id, parent);
+  return {source: definitions[id], supports: (c: CollectionContext) => coverage(id, c), async retrieve(request, execution) {
+   const result = initialResult(definitions[id], request, execution);
+   result.error = {code: "dataset_missing", retryable: false, status: null};
+   result.limitations = ["No usable stored station register exists for this input and collection; dependent station outcomes are unavailable."];
+   result.meta.quality.limitations = [...result.limitations]; return validateResult(result);
+  }} satisfies DataAdapter;
+ });
+ const second = await collector(repository, adapters).collectSources(context, ["geoapify-access", "tfl-station-activity"], key, signal);
+ return {outcomes: [...first.outcomes, ...second.outcomes], summary: [...first.summary, ...second.summary]};
 }

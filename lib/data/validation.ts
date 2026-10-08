@@ -6,6 +6,8 @@ import { validateEnrichmentInput } from "./enrichment-input.ts";
 import { validateStoredConstraintLookup } from "./planning-constraints.ts";
 import { validateWalkingCatchments, validateWalkingTopology } from "./walking-result.ts";
 import { validateCatchmentSources, validateCatchmentPlaces } from "./catchment-sources.ts";
+import { validateStationWalkingResult } from "./station-walking-result.ts";
+import { validateStationActivityResult } from "./station-activity-result.ts";
 
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SourceError("invalid_response");
@@ -76,7 +78,7 @@ export function validateResult(value: unknown): ProviderResult {
   demand((cost.money === null) === (cost.currency === null) && ["observed", "estimated", "unknown"].includes(String(cost.category)) && (cost.priceReference === null || reference(cost.priceReference)));
   demand(integer(execution.durationMs) && integer(execution.attempts, 20) && integer(execution.pages, 10) && (execution.httpStatus === null || integer(execution.httpStatus, 599)) && (execution.providerRequestId === null || /^[A-Za-z0-9-]{1,100}$/.test(String(execution.providerRequestId))));
   demand(strings(r.limitations) && Array.isArray(r.observations) && r.observations.length <= 500);
-  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === (m.source === "geoapify-walking" ? "commercial_data" : m.source === "overture-catchments" ? "community_open_data" : "official_public_data") && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
+  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === (["geoapify-walking", "geoapify-access"].includes(String(m.source)) ? "commercial_data" : m.source === "overture-catchments" ? "community_open_data" : "official_public_data") && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
   if (["success", "partial"].includes(String(r.outcome))) {
     const p = object(r.payload); demand(p.schemaVersion === 1 && r.observations.length > 0);
     if (m.source === "ons-population") {
@@ -84,6 +86,17 @@ export function validateResult(value: unknown): ProviderResult {
       demand(p.kind === "area_population" && /^E00\d{6}$/.test(String(p.geographyCode)) && uuid(p.geographyReleaseId) && uuid(p.releaseId) && p.measure === "TS001-total" && p.units === "persons" && p.universe === "usual_residents" && timestamp(p.effectiveAt));
       demand((p.count === null && text(p.missingReason)) || (integer(p.count) && p.missingReason === null));
       demand(r.observations.length === 1 && object(r.observations[0]).path === "count" && object(r.observations[0]).recordId === p.geographyCode && object(r.observations[0]).units === "persons");
+    } else if (m.source === "geoapify-access" || m.source === "tfl-station-activity") {
+      const walking = m.source === "geoapify-access";
+      const checked = walking ? validateStationWalkingResult(p) : validateStationActivityResult(p);
+      demand(q.precision === "building" && r.observations.length === 1 && object(r.observations[0]).recordId === checked.parent.snapshotId &&
+        object(r.observations[0]).kind === "modelled" && object(r.observations[0]).path === (walking ? "matrix" : "stations") &&
+        m.provider === (walking ? "geoapify" : "tfl") && m.dataset === (walking ? "walking-matrix" : "NUMBAT2025"));
+      demand(walking ? m.datasetReleaseId === null : uuid(m.datasetReleaseId) && checked.kind === "station_activity" && checked.releaseId === m.datasetReleaseId);
+      const incomplete = !checked.registerComplete || checked.omittedIds.length > 0 || checked.truncatedReviewedIds.length > 0;
+      const failed = checked.kind === "station_walking" ? checked.matrix.targets.some(t => t.outcome !== "success") : checked.failures.length > 0;
+      demand(r.outcome === (incomplete || failed ? "partial" : "success") && q.truncated === incomplete &&
+        object(r.observations[0]).units === (walking ? "metres_seconds" : "typical_day_gateline_passenger_movements"));
     } else if (m.source === "ons-catchments" || m.source === "overture-catchments") {
       const statistics = m.source === "ons-catchments";
       const checked = statistics ? validateCatchmentSources(p) : validateCatchmentPlaces(p);

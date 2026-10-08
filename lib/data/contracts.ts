@@ -1,7 +1,7 @@
 import type { Geography, Point, Precision } from "../spatial/model.ts";
 import type { EnrichmentInput } from "./enrichment-input.ts";
 
-export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "tfl-stations"] as const;
+export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "tfl-stations", "geoapify-access", "tfl-station-activity"] as const;
 export type SourceId = (typeof sourceIds)[number];
 export type Category = "coffee-shop" | "restaurant" | "hair-beauty-salon";
 export type Outcome = "success" | "partial" | "empty" | "unavailable" | "unsupported" | "not_applicable" | "policy_blocked";
@@ -48,6 +48,7 @@ export type PlanningConstraints = { schemaVersion: 1; kind: "planning_constraint
 export type WalkingGeometry = { schemaVersion: 1; kind: "walking_geometry";
   walking: import("./adapters/geoapify.ts").WalkingCatchments; topology: import("./walking-result.ts").WalkingTopology };
 export type Payload = AreaPopulation | TransportAccessPoints | FoodEstablishments | PlanningConstraints | WalkingGeometry |
+  import("./station-walking-result.ts").StationWalkingResult | import("./station-activity-result.ts").StationActivityResult |
   import("./catchment-sources.ts").CatchmentSources | import("./catchment-sources.ts").CatchmentPlaces;
 export type ProviderResult = { schemaVersion: 1; outcome: Outcome; payload: Payload | null; observations: ObservationRef[];
   meta: RetrievalMetadata; limitations: string[]; error: SafeSourceError | null };
