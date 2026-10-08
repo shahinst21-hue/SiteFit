@@ -86,3 +86,23 @@ export function validateConstraintLookup(value: unknown, releaseId: string, data
       applicability: f.endDate ? "end_date_requires_review" as const : "legal_scope_requires_review" as const })),
     absenceIsClearance: false as const, permittedUseConfirmed: false as const };
 }
+
+/** Revalidate stored derived states against the frozen native profiles. */
+export function validateStoredConstraintLookup(value: unknown, releaseId: string, dataset: ConstraintDataset) {
+  const r = object(value);
+  const fields = "releaseId dataset observedOn coverage spatialBasis state features absenceIsClearance permittedUseConfirmed".split(" ");
+  demand(Object.keys(r).length === fields.length && fields.every(k => k in r) && timestamp(r.observedOn) && Array.isArray(r.features));
+  const profiles = (r.features as unknown[]).map(value => {
+    const f = object(value);
+    demand(Object.keys(f).length === 12 && "sourceReference" in f && "applicability" in f);
+    const { sourceReference, applicability, ...profile } = f;
+    validateConstraintProfile(profile);
+    demand(sourceReference === `https://www.planning.data.gov.uk/entity/${profile.entity}` &&
+      applicability === (profile.endDate ? "end_date_requires_review" : "legal_scope_requires_review"));
+    return profile;
+  });
+  const validated = validateConstraintLookup({ releaseId: r.releaseId, dataset: r.dataset, features: profiles,
+    coverage: r.coverage, absenceIsClearance: r.absenceIsClearance, spatialBasis: r.spatialBasis }, releaseId, dataset, r.observedOn as string);
+  demand(r.state === validated.state && r.permittedUseConfirmed === false);
+  return validated;
+}

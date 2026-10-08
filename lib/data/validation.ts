@@ -3,6 +3,7 @@ import { sourceIds, errorCodes } from "./contracts.ts";
 import type { CollectionContext, ProviderResult } from "./contracts.ts";
 import { validPoint } from "../spatial/model.ts";
 import { validateEnrichmentInput } from "./enrichment-input.ts";
+import { validateStoredConstraintLookup } from "./planning-constraints.ts";
 
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SourceError("invalid_response");
@@ -81,6 +82,14 @@ export function validateResult(value: unknown): ProviderResult {
       demand(p.kind === "area_population" && /^E00\d{6}$/.test(String(p.geographyCode)) && uuid(p.geographyReleaseId) && uuid(p.releaseId) && p.measure === "TS001-total" && p.units === "persons" && p.universe === "usual_residents" && timestamp(p.effectiveAt));
       demand((p.count === null && text(p.missingReason)) || (integer(p.count) && p.missingReason === null));
       demand(r.observations.length === 1 && object(r.observations[0]).path === "count" && object(r.observations[0]).recordId === p.geographyCode && object(r.observations[0]).units === "persons");
+    } else if (m.source === "planning-conservation" || m.source === "planning-article4") {
+      keys(p, "schemaVersion kind lookup");
+      demand(p.kind === "planning_constraints" && uuid(m.datasetReleaseId) && r.outcome === "partial" && q.precision === "building");
+      const dataset = m.source === "planning-conservation" ? "conservation-area" : "article-4-direction-area";
+      validateStoredConstraintLookup(p.lookup, m.datasetReleaseId, dataset);
+      demand(m.provider === "planning-data" && m.dataset === dataset && r.observations.length === 1 &&
+        object(r.observations[0]).path === "lookup" && object(r.observations[0]).recordId === m.datasetReleaseId &&
+        object(r.observations[0]).units === "published_designation_profiles");
     } else {
       keys(p, "schemaVersion kind complete items");
       demand(p.kind === (m.source === "tfl-stop-points" ? "transport_access_points" : "food_establishments") && typeof p.complete === "boolean" && Array.isArray(p.items) && p.items.length > 0 && p.items.length <= 500);

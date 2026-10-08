@@ -27,7 +27,8 @@ export function sectionPackets(context: CollectionContext, snapshots: readonly S
       const result = snapshot.result;
       const payload = result.payload;
       available = ["success", "partial", "empty"].includes(result.outcome) && payload !== null;
-      const value = payload?.kind === "area_population" ? payload.count : payload?.items.length ?? null;
+      const value = payload?.kind === "area_population" ? payload.count :
+        payload?.kind === "transport_access_points" || payload?.kind === "food_establishments" ? payload.items.length : null;
       observation = { ...structuredClone(policy), id: randomUUID(), snapshotId: snapshot.id,
         source: { provider: result.meta.provider, dataset: result.meta.dataset, releaseId: result.meta.datasetReleaseId,
           reference: result.observations[0]?.reference ?? result.meta.licence.termsUrl, adapterVersion: result.meta.adapterVersion },

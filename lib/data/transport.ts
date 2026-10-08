@@ -10,7 +10,7 @@ const endpoints = { "tfl-stop-points": "https://api.tfl.gov.uk/StopPoint", "fsa-
 const allowed = { "tfl-stop-points": ["lat", "lon", "radius", "stopTypes", "useStopPointHierarchy", "returnLines", "categories"], "fsa-establishments": ["longitude", "latitude", "maxDistanceLimit", "pageNumber", "pageSize", "sortOptionKey", "schemeTypeKey"] };
 export function createTransport(source: SourceDefinition, execution: ExecutionContext, options: { key?: string; fetcher?: typeof fetch; quota?: () => boolean } = {}): JsonTransport {
   let attempts = 0, pages = 0, bytes = 0, status: number | null = null; const started = performance.now();
-  if (source.id === "ons-population" || !Object.hasOwn(endpoints, source.id)) throw new SourceError("invalid_request");
+  if (source.id !== "tfl-stop-points" && source.id !== "fsa-establishments") throw new SourceError("invalid_request");
   const id = source.id;
   return {
     summary: () => ({ durationMs: Math.round(performance.now() - started), attempts, pages, httpStatus: status, providerRequestId: null }),

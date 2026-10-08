@@ -1,7 +1,7 @@
 import type { Geography, Point, Precision } from "../spatial/model.ts";
 import type { EnrichmentInput } from "./enrichment-input.ts";
 
-export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments"] as const;
+export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4"] as const;
 export type SourceId = (typeof sourceIds)[number];
 export type Category = "coffee-shop" | "restaurant" | "hair-beauty-salon";
 export type Outcome = "success" | "partial" | "empty" | "unavailable" | "unsupported" | "not_applicable" | "policy_blocked";
@@ -43,7 +43,9 @@ export type TransportAccessPoints = { schemaVersion: 1; kind: "transport_access_
   items: { id: string; name: string; mode: "bus" | "rail" | "tube" | "tram" | "water" | "other"; originalMode: string; point: Point | null }[] };
 export type FoodEstablishments = { schemaVersion: 1; kind: "food_establishments"; complete: boolean;
   items: { id: string; authorityId: string; name: string; businessType: string; point: Point | null; observedAt: string | null }[] };
-export type Payload = AreaPopulation | TransportAccessPoints | FoodEstablishments;
+export type PlanningConstraints = { schemaVersion: 1; kind: "planning_constraints";
+  lookup: ReturnType<typeof import("./planning-constraints.ts").validateConstraintLookup> };
+export type Payload = AreaPopulation | TransportAccessPoints | FoodEstablishments | PlanningConstraints;
 export type ProviderResult = { schemaVersion: 1; outcome: Outcome; payload: Payload | null; observations: ObservationRef[];
   meta: RetrievalMetadata; limitations: string[]; error: SafeSourceError | null };
 export type SourceRequest = { context: CollectionContext; collectionKey: string; radiusMetres: number };

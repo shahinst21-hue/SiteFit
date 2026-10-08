@@ -50,6 +50,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL("../supabase/tests/place-tiles.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/planning-constraints.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/enriched-input.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/planning-snapshots.sql", import.meta.url), "utf8"));
     for (const table of ["public.analyses", "public.properties", "auth.users"])
       assert.equal(
         (
