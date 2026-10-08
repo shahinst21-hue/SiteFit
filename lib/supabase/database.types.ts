@@ -1657,6 +1657,7 @@ export type Database = {
         | "modelled_estimate"
         | "ai_inference"
         | "user_supplied_information"
+        | "community_open_data"
       knowledge_status: "known" | "estimated" | "unknown"
     }
     CompositeTypes: {
@@ -2324,6 +2325,7 @@ export const Constants = {
         "modelled_estimate",
         "ai_inference",
         "user_supplied_information",
+        "community_open_data",
       ],
       knowledge_status: ["known", "estimated", "unknown"],
     },

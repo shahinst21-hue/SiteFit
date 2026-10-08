@@ -109,7 +109,12 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
     if (!geometryRoot) throw new Error("enriched_evidence_geometry_parent_missing");
     if (metric.id === "census.walking-native-operands") {
       metric.ranges.forEach((range, i) => range.tables.forEach((table, j) => {
-        const value = table.series?.[0]?.value ?? null;
+        const source = byId.get(metric.sourceSnapshotId)?.result.payload;
+        const stored = source?.kind === "catchment_statistics" ? source.ranges[i].statistics[j].operands as
+          {censusEstimates: {state: string; knownContribution: number}[]} | null : null;
+        // Use the admitted operand verbatim; re-summing binary64 values can differ
+        // in the last bit. Reproduction QA remains in enrichmentMetrics.
+        const value = table.series?.[0]?.value !== null && stored?.censusEstimates[0]?.state === "available" ? stored.censusEstimates[0].knownContribution : null;
         add(root, {sections: ["customer-base"], source: {...root.source, dataset: `${table.dataset} total, ${range.seconds / 60} minute walking estimate`, releaseId: table.releaseId},
           value, units: table.dataset === "TS007A" || table.dataset === "TS066" ? "persons, area-allocated estimate" : "households, area-allocated estimate",
           effectiveAt: "2021-03-21", scope: `${range.seconds / 60} minute cumulative walking scope; not current customers or a measured catchment`,
