@@ -10,7 +10,8 @@ const certificate = () => ({ data: { uprn: 123456789, schema_type: "CEPC-8.0.0",
 test("CEPC representation strips restricted and personal fields, preserving historical identity and uncertainty", () => {
   const result = normaliseNonDomesticCertificate(certificate(), context);
   assert.equal(result.uprn, context.expectedUprn); assert.equal(result.nativeFloorArea.value, 193);
-  assert.equal(result.nativeFloorArea.unit, null); assert.equal(result.currentCertificateConfirmed, false);
+  assert.equal(result.nativeFloorArea.unit, "square_metres"); assert.equal(result.currentCertificateConfirmed, false);
+  assert.equal(result.sourceReference, `https://find-energy-certificate.service.gov.uk/energy-certificate/${context.certificateNumber}`);
   assert.equal(result.tradingUnitMatchConfirmed, false); assert.equal(result.validity, "within_certificate_dates");
   for (const excluded of ["Restricted", "Private assessor", "postcode", "address_line_1"]) assert.equal(JSON.stringify(result).includes(excluded), false);
   assert.equal(result.licence.rawRetained, false);

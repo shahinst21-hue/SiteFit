@@ -39,8 +39,10 @@ export function normaliseNonDomesticCertificate(value: unknown, context: {
     // A retrieved certificate is historical evidence, not proof of latest/current
     // certification or unit-level fit. Supersession requires complete discovery.
     currentCertificateConfirmed: false as const, tradingUnitMatchConfirmed: false as const,
-    nativeFloorArea: { value: technical.floor_area ?? null, unit: null, areaBasis: "certificate_area_not_verified_lease_NIA" as const },
-    sourceReference: `https://api.get-energy-performance-data.communities.gov.uk/api/certificate?certificate_number=${context.certificateNumber}`,
+    // CEPC 8 floor_area units corroborated against three exact official public
+    // certificate renderings; this does not establish lease NIA or unit fit.
+    nativeFloorArea: { value: technical.floor_area ?? null, unit: "square_metres" as const, areaBasis: "certificate_area_not_verified_lease_NIA" as const },
+    sourceReference: `https://find-energy-certificate.service.gov.uk/energy-certificate/${context.certificateNumber}`,
     licence: { id: "OGL-3.0", representation: "non_address_fields_only", attribution: "Contains public sector information licensed under the Open Government Licence v3.0.", rawRetained: false },
   };
 }

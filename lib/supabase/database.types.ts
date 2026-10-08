@@ -1512,6 +1512,7 @@ export type Database = {
         }
       }
       select_sitefit_analysis_releases: { Args: never; Returns: Json }
+      select_sitefit_enrichment_releases: { Args: never; Returns: Json }
       sitefit_access_owner: { Args: { p_original: string }; Returns: string }
       sitefit_assert_collectable: {
         Args: { p_analysis_id: string }
