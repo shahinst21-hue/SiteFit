@@ -8,6 +8,8 @@ export const definitions: Readonly<Record<SourceId, SourceDefinition>> = {
   "planning-conservation": { id: "planning-conservation", provider: "planning-data", dataset: "conservation-area", operation: "point-profile", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 500, maxBytes: 2_000_000, timeoutMs: 8000, maxAttempts: 1 },
   "planning-article4": { id: "planning-article4", provider: "planning-data", dataset: "article-4-direction-area", operation: "point-profile", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 500, maxBytes: 2_000_000, timeoutMs: 8000, maxAttempts: 1 },
   "geoapify-walking": { id: "geoapify-walking", provider: "geoapify", dataset: "walking-isolines", operation: "walk-300-600-900", adapterVersion: "1", normalisationVersion: "1", maxPages: 1, maxRecords: 3, maxBytes: 1_000_000, timeoutMs: 8000, maxAttempts: 1 },
+  "ons-catchments": { id: "ons-catchments", provider: "ons", dataset: "census-income-bres", operation: "frozen-walking-operands", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 12, maxBytes: 2_000_000, timeoutMs: 8000, maxAttempts: 1 },
+  "overture-catchments": { id: "overture-catchments", provider: "overture", dataset: "places", operation: "frozen-walking-inventory", adapterVersion: "1", normalisationVersion: "1", maxPages: 0, maxRecords: 25000, maxBytes: 2_000_000, timeoutMs: 8000, maxAttempts: 1 },
 };
 for (const definition of Object.values(definitions)) Object.freeze(definition);
 Object.freeze(definitions);

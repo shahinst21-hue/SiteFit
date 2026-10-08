@@ -1,6 +1,6 @@
 import type { CollectionContext, Eligibility, SourceId } from "./contracts.ts";
 export function coverage(source: SourceId, context: CollectionContext): Eligibility {
-  if (source === "planning-conservation" || source === "planning-article4" || source === "geoapify-walking") {
+  if (["planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments"].includes(source)) {
     if (context.schemaVersion !== 2 || context.enrichment?.identity.state !== "matched") return { eligible: false, outcome: "unsupported", code: "insufficient_precision" };
     return context.region.eligible ? { eligible: true } : { eligible: false, outcome: "unsupported", code: "unsupported_geography" };
   }
