@@ -114,12 +114,13 @@ export function validateResult(value: unknown): ProviderResult {
         object(r.observations[0]).units === "published_designation_profiles");
     } else {
       keys(p, "schemaVersion kind complete items");
-      demand(p.kind === (m.source === "tfl-stop-points" ? "transport_access_points" : "food_establishments") && typeof p.complete === "boolean" && Array.isArray(p.items) && p.items.length > 0 && p.items.length <= 500);
+      const transport = m.source === "tfl-stop-points" || m.source === "tfl-stations";
+      demand(p.kind === (transport ? "transport_access_points" : "food_establishments") && typeof p.complete === "boolean" && Array.isArray(p.items) && p.items.length > 0 && p.items.length <= 500);
       demand(r.outcome !== "success" || p.complete === true); demand(!q.truncated || r.outcome === "partial");
       const ids = new Set<string>();
       for (const item of p.items) { const i = object(item); demand(text(i.id, 120) && !ids.has(i.id) && text(i.name, 300) && (i.point === null || validPoint(i.point))); ids.add(i.id);
-        keys(i, m.source === "tfl-stop-points" ? "id name mode originalMode point" : "id authorityId name businessType point observedAt");
-        if (m.source === "tfl-stop-points") demand(["bus", "rail", "tube", "tram", "water", "other"].includes(String(i.mode)) && text(i.originalMode, 100));
+        keys(i, transport ? "id name mode originalMode point" : "id authorityId name businessType point observedAt");
+        if (transport) demand(["bus", "rail", "tube", "tram", "water", "other"].includes(String(i.mode)) && text(i.originalMode, 100));
         else { demand(text(i.authorityId, 120) && text(i.businessType, 120)); nullableDate(i.observedAt); }
       }
       demand(r.observations.length === p.items.length);
