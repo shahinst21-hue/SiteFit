@@ -19,7 +19,7 @@ const sectionsFor = (source: string): Dimension[] => source === "geoapify-walkin
  * snapshots; this does not calibrate scores or expand the model's authority. */
 export function enrichedEvidence(input: CollectionContext, snapshots: readonly StoredSnapshot[], now: Date) {
   const context = validateContext(input);
-  if (context.schemaVersion !== 2 || !context.enrichment || snapshots.length > 16) throw new Error("enriched_evidence_context_required");
+  if (context.schemaVersion !== 2 || !context.enrichment || snapshots.length > 17) throw new Error("enriched_evidence_context_required");
   const byId = new Map<string, StoredSnapshot>(), bySource = new Map<string, StoredSnapshot>();
   for (const snapshot of snapshots) {
     if (!uuid(snapshot.id) || snapshot.analysisId !== context.analysisId || snapshot.inputId !== context.inputId ||
@@ -38,6 +38,8 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
         throw new Error("enriched_evidence_parent_binding");
       if ((p.kind === "catchment_statistics" || p.kind === "catchment_places") && parent.result.payload?.kind !== "walking_geometry")
         throw new Error("enriched_evidence_parent_kind");
+      if (p.kind === "non_domestic_certificate" && (parent.result.meta.source !== "propertydata-premises" || parent.result.payload?.kind !== "property_fact" || parent.result.payload.operation !== "uprn"))
+        throw new Error("enriched_evidence_parent_kind");
       if (p.kind === "station_walking" || p.kind === "station_activity") {
         const selected = reviewedStationTargets(context, parent, snapshot.collectionKey);
         if (p.kind === "station_walking") validateWalkingMatrix(p.matrix, context.enrichment.identity.point!, selected.targets);
@@ -47,7 +49,7 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
     }
     if (p?.kind === "walking_geometry" && (p.topology.geographyReleaseId !== context.enrichment.releases.geographyReleaseId ||
       packetDigest(p.walking.origin) !== packetDigest(context.enrichment.identity.point))) throw new Error("enriched_evidence_walking_origin");
-    if (p?.kind === "property_fact" && (p.binding.uprn !== context.enrichment.identity.uprn || p.binding.osReleaseId !== context.enrichment.releases.osReleaseId ||
+    if ((p?.kind === "property_fact" || p?.kind === "non_domestic_certificate") && (p.binding.uprn !== context.enrichment.identity.uprn || p.binding.osReleaseId !== context.enrichment.releases.osReleaseId ||
       packetDigest(p.binding.point) !== packetDigest(context.enrichment.identity.point))) throw new Error("enriched_evidence_property_binding");
     if (p?.kind === "planning_constraints" && p.lookup.releaseId !== context.enrichment.releases[r.meta.source === "planning-conservation" ? "conservationReleaseId" : "article4ReleaseId"])
       throw new Error("enriched_evidence_planning_release");

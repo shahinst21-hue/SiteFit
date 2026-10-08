@@ -10,6 +10,7 @@ import { validateStationWalkingResult } from "./station-walking-result.ts";
 import { validateStationActivityResult } from "./station-activity-result.ts";
 import { validateNativeContextResult } from "./native-context-result.ts";
 import { validatePropertyFactResult } from "./property-fact-result.ts";
+import { validateEpcResult } from "./epc-result.ts";
 
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SourceError("invalid_response");
@@ -83,7 +84,13 @@ export function validateResult(value: unknown): ProviderResult {
   for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === (["geoapify-walking", "geoapify-access"].includes(String(m.source)) || String(m.source).startsWith("propertydata-") ? "commercial_data" : m.source === "overture-catchments" ? "community_open_data" : "official_public_data") && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
   if (["success", "partial"].includes(String(r.outcome))) {
     const p = object(r.payload); demand(p.schemaVersion === 1 && r.observations.length > 0);
-    if (m.source === "ons-income-context" || m.source === "ons-jobs-context") {
+    if (m.source === "govuk-non-domestic-epc") {
+      const checked=validateEpcResult(p);
+      demand(m.provider==="govuk-energy-data" && m.dataset==="non-domestic-CEPC8" && m.operation==="conditional-uprn-certificate" &&
+        m.sourceRetrievedAt===checked.discovery.retrievedAt && m.datasetReleaseId===null && q.precision==="building" &&
+        q.truncated===!checked.discovery.complete && r.outcome==="partial" && r.observations.length===1 &&
+        object(r.observations[0]).path==="discovery" && object(r.observations[0]).recordId===checked.binding.uprn);
+    } else if (m.source === "ons-income-context" || m.source === "ons-jobs-context") {
       const checked = validateNativeContextResult(p), d = checked.distribution, target = object(d.target);
       demand(m.provider === "ons" && m.operation === "native-target-excluded-distribution" &&
         m.dataset === (m.source === "ons-income-context" ? "income-AHC-FYE2023" : "BRES2024") &&

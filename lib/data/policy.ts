@@ -3,6 +3,7 @@ import { SourceError } from "./errors.ts";
 
 const permit = { allowed: true, maxDays: null, condition: "Retain with source attribution and continuing licence compliance." };
 const terms = {
+  "govuk-non-domestic-epc": "https://get-energy-performance-data.communities.gov.uk/",
   "ons-income-context": "https://www.ons.gov.uk/methodology/geography/licences",
   "ons-jobs-context": "https://www.ons.gov.uk/methodology/geography/licences",
   "propertydata-premises": "https://propertydata.co.uk/api/documentation/licensing",
@@ -21,6 +22,10 @@ const terms = {
   "overture-catchments": "https://docs.overturemaps.org/attribution/",
 };
 export function policy(source: SourceId): LicenceMetadata {
+  if (source === "govuk-non-domestic-epc") return structuredClone({policyId:source,version:1,reviewedAt:"2026-10-08T00:00:00Z",termsUrl:terms[source],
+    raw:{allowed:false,maxDays:0,condition:"Discard raw search/certificate bodies and all restricted address, postcode, assessor and personal fields."},
+    normalised:{...permit,condition:"Only permitted non-address CEPC facts and provenance under OGL; never a copy of restricted address records."},
+    derived:permit,references:permit,timestamps:permit,attribution:["Contains public sector information licensed under the Open Government Licence v3.0. Source: GOV.UK non-domestic energy performance data."],cacheSeconds:0,rawDisposition:"discarded"});
   if (source.startsWith("propertydata-")) return structuredClone({policyId: source, version: 1, reviewedAt: "2026-10-08T00:00:00Z", termsUrl: terms[source],
     raw: {allowed: false, maxDays: 0, condition: "Discard provider bodies, personal owners, photos, transactions and candidate lists after bounded normalisation."},
     normalised: {...permit, condition: "Dated per-analysis historical facts only; not a standing searchable/current bulk copy. Current caching is at most 60 days; reopening never refreshes historical reports. Applicable termination/archival rights require focused pre-launch review."},
@@ -62,7 +67,7 @@ export function policy(source: SourceId): LicenceMetadata {
     attribution, cacheSeconds: ["ons-population", "tfl-stations", "tfl-station-activity"].includes(source) ? 0 : 86400, rawDisposition: "discarded" });
 }
 export function permitted(value: LicenceMetadata | null): value is LicenceMetadata {
-  return Boolean(value && ["ons-income-context", "ons-jobs-context", "ons-population", "ons-london", "tfl-stop-points", "tfl-stations", "tfl-station-activity", "geoapify-access", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "propertydata-premises", "propertydata-flood", "propertydata-rent"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
+  return Boolean(value && ["govuk-non-domestic-epc", "ons-income-context", "ons-jobs-context", "ons-population", "ons-london", "tfl-stop-points", "tfl-stations", "tfl-station-activity", "geoapify-access", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "propertydata-premises", "propertydata-flood", "propertydata-rent"].includes(value.policyId) && value.version === 1 && !value.raw.allowed && value.normalised.allowed && value.references.allowed && value.timestamps.allowed && value.attribution.length);
 }
 export function assertPolicy(value: LicenceMetadata | null) { if (!permitted(value)) throw new SourceError("licence_blocked"); }
 
