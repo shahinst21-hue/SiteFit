@@ -4,7 +4,8 @@ import { SourceError } from "./errors.ts";
 import { uuid } from "./validation.ts";
 import { validatePolygonGeometry, type PolygonGeometry } from "../spatial/polygon.ts";
 import { validPoint, type Point } from "../spatial/model.ts";
-import { catchmentAllocationOperands, type CatchmentReleaseBindings } from "../analysis/catchment-operands.ts";
+import type { CatchmentReleaseBindings } from "../analysis/catchment-operands.ts";
+import { validateCatchmentOperands } from "./catchment-result.ts";
 import { validatePlaceInventory } from "./place-inventory.ts";
 import { validateConstraintLookup, type ConstraintDataset } from "./planning-constraints.ts";
 import type { Database, Json } from "../supabase/database.types.ts";
@@ -54,8 +55,7 @@ export function enrichmentRepository(bindings: EnrichmentReleaseBindings, option
         p_census_release_id: releases.censusReleaseId, p_income_release_id: releases.incomeReleaseId,
         p_bres_release_id: releases.bresReleaseId, p_geometry: geometry(shape),
       }, signal);
-      const allocation = catchmentAllocationOperands(value, releases, columns);
-      return { operands: structuredClone(value), allocation };
+      return validateCatchmentOperands(value, releases, columns);
     },
     async places(shape: PolygonGeometry, signal?: AbortSignal) {
       const value = await lookup("lookup_sitefit_places", { p_release_id: releases.placesReleaseId,

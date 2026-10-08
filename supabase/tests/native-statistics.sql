@@ -63,6 +63,9 @@ begin
   or abs((x->'censusEstimates'->0->>'knownContribution')::numeric-100)>0.001
   or (x->'censusEstimates'->0->>'missingAreaM2')::numeric<=0
   or jsonb_array_length(x->'incomeNativeContext')<>2 then raise exception 'Catchment native/missing operands lost'; end if;
+ if x->'oaOperands'->0->>'lsoaCode'<>'E01000001' or x->'oaOperands'->0->>'msoaCode'<>'E02000001'
+  or jsonb_typeof(x->'incomeMissingGeographies')<>'array' or jsonb_array_length(x->'incomeMissingGeographies')<>0
+  or x->'incomeNativeContext'->1->>'state'<>'missing' then raise exception 'Membership or explicit income missingness lost'; end if;
  -- A hole excludes OA1 rather than filling it; income means remain separate, never summed.
  shape:='{"type":"Polygon","coordinates":[[[-0.21,51.39],[0.01,51.39],[0.01,51.46],[-0.21,51.46],[-0.21,51.39]],[[-0.2,51.4],[-0.2,51.45],[-0.1,51.45],[-0.1,51.4],[-0.2,51.4]]]}'::jsonb;
  x:=public.measure_sitefit_catchment(oa,geo,c,income,jobs,shape);
