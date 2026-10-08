@@ -74,6 +74,13 @@ begin
  if has_function_privilege('anon','public.measure_sitefit_catchment(uuid,uuid,uuid,uuid,uuid,jsonb)','execute') then raise exception 'Client catchment access'; end if;
  if has_table_privilege('anon','source_data.native_statistics','select') or has_table_privilege('authenticated','source_data.native_memberships','select')
   or has_function_privilege('authenticated','public.lookup_sitefit_native_statistic(uuid,uuid,text)','execute') then raise exception 'Client native access'; end if;
+ x:=public.lookup_sitefit_native_comparison(income,geo,'E02000001');
+ if x->>'eligibleCount'<>'1' or jsonb_array_length(x->'rows')<>1 or x->'rows'->0->>0<>'E02000002'
+  or x->'rows'->0->2<>'"missing"'::jsonb or x->'rows'->0->1<>'null'::jsonb
+  or x->'target'->>'value'<>'40000' then raise exception 'Native comparison target exclusion or missingness lost'; end if;
+ if public.lookup_sitefit_native_comparison(income,oa,'E02000001') is not null
+  or has_function_privilege('anon','public.lookup_sitefit_native_comparison(uuid,uuid,text)','execute')
+  or has_function_privilege('authenticated','public.lookup_sitefit_native_comparison(uuid,uuid,text)','execute') then raise exception 'Native comparison parent/private boundary'; end if;
 end $$;
 rollback;
 

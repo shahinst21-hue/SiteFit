@@ -1285,6 +1285,14 @@ export type Database = {
         }
         Returns: Json
       }
+      lookup_sitefit_native_comparison: {
+        Args: {
+          p_code: string
+          p_geography_release_id: string
+          p_release_id: string
+        }
+        Returns: Json
+      }
       lookup_sitefit_native_statistic: {
         Args: {
           p_code: string
