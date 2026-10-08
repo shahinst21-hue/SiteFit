@@ -25,7 +25,11 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
     if (!uuid(snapshot.id) || snapshot.analysisId !== context.analysisId || snapshot.inputId !== context.inputId ||
       byId.has(snapshot.id) || bySource.has(snapshot.result.meta.source)) throw new Error("enriched_evidence_snapshot_binding");
     const result = validateResult(snapshot.result);
-    if (result.payload && result.meta.checksum !== packetDigest({payload: result.payload, observations: result.observations})) throw new Error("enriched_evidence_checksum");
+    // The historical local TS001 adapter uses the immutable dataset's SHA,
+    // not an outcome hash. Database admission reproduces its native operand.
+    const nativePopulation=result.meta.source==="ons-population" && result.meta.provider==="ons" && result.meta.cache.state==="local_release" &&
+      result.payload?.kind==="area_population" && result.payload.releaseId===context.releases.population && result.meta.datasetReleaseId===context.releases.population;
+    if (result.payload && !nativePopulation && result.meta.checksum !== packetDigest({payload: result.payload, observations: result.observations})) throw new Error("enriched_evidence_checksum");
     byId.set(snapshot.id, snapshot); bySource.set(result.meta.source, snapshot);
   }
   const evidence: EnrichedEvidence[] = [], roots = new Map<string, EnrichedEvidence>();

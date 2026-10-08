@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { enrichedEvidence } from "../lib/analysis/enriched-evidence.ts";
+import { onsLocal } from "../lib/data/adapters/ons-local.ts";
+import { policy } from "../lib/data/policy.ts";
 import { premisesAdapter } from "../lib/data/adapters/premises.ts";
 import { normalisePremises, normaliseRentBenchmark } from "../lib/data/adapters/propertydata-facts.ts";
 import { SourceError } from "../lib/data/errors.ts";
@@ -42,4 +44,16 @@ test("enriched property evidence is owned, frozen, commercial and distinct from 
     else wrong.push(wrong[0]);
     assert.throws(() => enrichedEvidence(c, wrong, new Date(date)));
   }
+});
+
+test("historical native TS001 release checksum survives enriched evidence without an outcome-hash rewrite", async () => {
+  const c=fixture(), releaseChecksum="a".repeat(64);
+  const adapter=onsLocal({population:async()=>({count:123,missingReason:null,effectiveAt:"2021-03-21T00:00:00Z",sourceRetrievedAt:date,publishedAt:null,version:"synthetic-release",checksum:releaseChecksum,licence:policy("ons-population")})});
+  const result=await adapter.retrieve({context:c,collectionKey:"proof",radiusMetres:500},{signal:new AbortController().signal,correlationId:ids.correlation,now:()=>new Date(date)});
+  const before=structuredClone(result);
+  const snapshot:StoredSnapshot={id:crypto.randomUUID(),analysisId:c.analysisId,inputId:c.inputId,collectionKey:"proof",requestHash:"b".repeat(64),result};
+  const output=enrichedEvidence(c,[snapshot],new Date(date));
+  assert.equal(output.evidence[0].value,123);
+  assert.equal(output.evidence[0].lineage.sourceChecksum,releaseChecksum);
+  assert.deepEqual(snapshot.result,before);
 });

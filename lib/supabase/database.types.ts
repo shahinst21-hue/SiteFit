@@ -2148,6 +2148,10 @@ export type Database = {
     }
     Functions: {
       address_component_identity: { Args: { v: string }; Returns: string }
+      assert_required_evidence_parent: {
+        Args: { lineage: Json; payload: Json }
+        Returns: undefined
+      }
       check_constraint_release: {
         Args: { p_release_id: string }
         Returns: number

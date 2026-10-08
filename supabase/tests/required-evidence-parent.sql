@@ -1,4 +1,7 @@
 begin;
+do $$ begin
+ if not has_function_privilege('service_role','source_data.assert_required_evidence_parent(jsonb,jsonb)','EXECUTE') then raise exception 'Server parent validation permission missing';end if;
+end $$;
 do $$
 declare payload jsonb:='{"parent":{"snapshotId":"00000000-0000-4000-8000-000000000001","checksum":"abc"}}';
  valid jsonb:='{"parentSnapshots":[{"id":"00000000-0000-4000-8000-000000000001","checksum":"abc"}]}'; changed jsonb;
