@@ -42,13 +42,14 @@ Measure actual PostgreSQL database/relation/index footprint and owned stored rea
 ## Definition of Done
 
 - [x] Owner authorised revised existing-provider-only scope.
-- [ ] Steps 9.0–9.9 and required evidence completed.
-- [ ] Real planning/EPC evidence admitted; two dated events; conservative identity and date semantics.
-- [ ] Unknown, unavailable, capped, sparse and not-applicable states explicit; no fabricated occupancy/closure/vacancy.
-- [ ] Historical graphs unchanged; immutable replay makes zero external/AI/scoring calls; failures preserve successes.
-- [ ] Runtime, ownership/claim/RLS and cross-input security checks pass locally and hosted; no private/raw/restricted leakage.
-- [ ] Credits, licence limits, actual storage/latency and useful evidence yield recorded.
-- [ ] Regression, protected Preview, exact-head/post-merge CI pass; protected merge; clean main matches origin.
-- [ ] No new provider/service/purchase/subscription, Full Report generation, economics/PDF, scoring calibration or Phase 10.
+- [x] Steps 9.0–9.9 and required evidence completed.
+- [x] Real planning/EPC evidence admitted; two dated events; conservative identity and date semantics.
+- [x] Unknown, unavailable, capped, sparse and not-applicable states explicit; no fabricated occupancy/closure/vacancy.
+- [x] Historical graphs unchanged; immutable replay makes zero external/AI/scoring calls; failures preserve successes.
+- [x] Runtime, ownership/claim/RLS and cross-input security checks pass locally and hosted; no private/raw/restricted leakage.
+- [x] Credits, licence limits, actual storage/latency and useful evidence yield recorded.
+- [x] Regression, protected Preview, exact-head/post-merge CI pass; protected merge; clean main matches origin.
+- [x] No new provider/service/purchase/subscription, Full Report generation, economics/PDF, scoring calibration or Phase 10.
 
 No new durable lifecycle, lease tokens, queues, distributed ownership, billing ledgers, monetary reservations, distributed caches or exactly-once execution claims. No UI redesign. Customer report delivery and pre-launch rights remain later gates.
+
