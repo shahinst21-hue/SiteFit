@@ -52,4 +52,3 @@ Measure actual PostgreSQL database/relation/index footprint and owned stored rea
 - [x] No new provider/service/purchase/subscription, Full Report generation, economics/PDF, scoring calibration or Phase 10.
 
 No new durable lifecycle, lease tokens, queues, distributed ownership, billing ledgers, monetary reservations, distributed caches or exactly-once execution claims. No UI redesign. Customer report delivery and pre-launch rights remain later gates.
-
