@@ -4,9 +4,10 @@ import { frameworkClient } from "../data/server-client.ts";
 import { SourceError } from "../data/errors.ts";
 import { uuid, validateContext } from "../data/validation.ts";
 import { canonicalJSON } from "../analysis/canonical.ts";
-import { validateDiscovery } from "./model.ts";
+import { validateDiscovery, projectDiscovery } from "./model.ts";
 import { collectDiscovery } from "./collect.ts";
 import { validatePropertyFactResult } from "../data/property-fact-result.ts";
+import { premisesHistoryRepository } from "../premises-history/repository.ts";
 
 export function webDiscoveryRepository(ownerId: string) {
   if (!uuid(ownerId)) throw new SourceError("permission_denied");
@@ -17,7 +18,11 @@ export function webDiscoveryRepository(ownerId: string) {
     if (error) throw new SourceError("permission_denied");
     return data === null ? null : validateDiscovery(data);
   };
-  return { read, async prepare(analysisId: string, inputId: string, options: Parameters<typeof collectDiscovery>[2]) {
+  return { read, async project(analysisId: string, inputId: string) {
+    const stored = await read(analysisId,inputId);
+    return stored ? projectDiscovery(stored,await premisesHistoryRepository(ownerId).read(analysisId,inputId)) : null;
+  }, async prepare(analysisId: string, inputId: string, options: Parameters<typeof collectDiscovery>[2]) {
+    if (![analysisId,inputId].every(uuid)) throw new SourceError("invalid_request");
     // No client route invokes this. Paid Full Report preparation integration is a later caller.
     const { error: denied } = await client.rpc("authorise_sitefit_web_discovery", { p_owner: ownerId, p_analysis: analysisId, p_input: inputId });
     if (denied) throw new SourceError("permission_denied");

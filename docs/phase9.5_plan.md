@@ -26,19 +26,25 @@ Only the selected public commercial address/concept enters the new search adapte
 
 [OpenAI web search](https://developers.openai.com/api/docs/guides/tools-web-search), [pricing](https://developers.openai.com/api/docs/pricing), [GPT 6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol), and [tool-call/output limits](https://developers.openai.com/api/reference/resources/responses/methods/create) reviewed 9 October 2026. Standard search $0.01/call, model input $2/M and output $10/M at normal context; above 272K input the higher long-context rates apply. No Fast tier. Low/default returned search context has no documented numeric hard input limit. For the one authorised proof, 128K input + 512 output + one search is approximately $0.27112 (a conservative plausible scenario, not an enforced cap). No second request even on failure. Record actual usage-derived estimate separately from invoice-confirmed spend; uncached input is a conservative estimate when cache discounts apply. No new PropertyData credits required for this pilot; compare retained evidence only.
 
-Recurring paid-report search enablement and any source-rights approval beyond reviewed permission remain genuine owner dependencies. No commercial source is purchased. If live proof cannot reasonably fit $0.50, do not dispatch. If permission/unit evidence is missing, retain only an honest unavailable outcome; never loosen admission to improve yield.
+Recurring paid-report search enablement and any source-rights approval beyond reviewed permission remain genuine future runtime dependencies. No commercial source is purchased. If live proof cannot reasonably fit $0.50, do not dispatch. If permission/unit evidence is missing, retain only an honest unavailable outcome; never loosen admission to improve yield.
+
+### Admission gate interpretation and delivery limits
+
+The owner's follow-up directs public data now, with data investment reconsidered after launch/sales, and completion of the remaining gates with documented limits. Admission passes when independently verifiable permitted facts can be retained and unsupported sources are demonstrably excluded; it does **not** require a licensed positive rent/history finding for every address. This is the existing explicit-missingness rule, not a waiver of source rights or a guarantee of coverage. Initial automatic fact admission is limited to the existing FSA official register; commercial listings and historical narrative discoveries are compact references with unknown rights/unit/date states. They cannot become financial assumptions or customer-facing historical facts. This phase delivers the bounded discovery and stored preparation boundary, not automatic comprehensive tenancy reconstruction. Future reviewed policies can extend admission; no permission or licence is invented in order to close this phase.
+
+Hosted positive verification uses live permitted FSA facts within synthetic owner/account/confirmed Test-state rollback fixtures; it is not a real customer payment or a new Stripe delivery proof. No suitable actively entitled frozen customer input exists in development at this checkpoint. The service preparation path and stored-only history join are separately tested end to end with controlled transport. Production/recurring search stays off; actual paid Full Report invocation belongs to its later approved generation phase.
 
 ## Definition of Done
 
-- [ ] Representative London pilot and measured incremental/admitted yield recorded.
-- [ ] Strict discovery/matching/date/rent/rights/provenance contracts implemented.
-- [ ] Actual single-call search proof and tokens/cost/latency recorded within approval.
-- [ ] Reviewed legally reusable compact facts admitted; unsupported rights/unit cases excluded explicitly.
-- [ ] Existing PropertyData/history reconciled without overwrites or automatic finance assumptions.
-- [ ] Paid-only private orchestration, failure preservation and immutable replay verified.
-- [ ] Hosted storage/ownership/security and historical checks pass.
+- [x] Small purposive London pilot and measured incremental/admitted yield recorded; no statistical coverage claim.
+- [x] Strict discovery/matching/date/rent/rights/provenance contracts implemented.
+- [x] Actual single-call search proof and tokens/cost/latency recorded within approval.
+- [x] Reviewed legally reusable compact facts admitted in hosted rollback verification; unsupported rights/unit cases excluded explicitly.
+- [x] Existing PropertyData/history reconciled without overwrites or automatic finance assumptions.
+- [x] Paid-only private orchestration, failure preservation and immutable replay verified.
+- [x] Hosted storage/ownership/security and historical checks pass.
 - [ ] Required regression, exact-head CI, protected merge and post-merge checks pass.
-- [ ] Limits, actual costs and remaining runtime enablement dependencies documented.
-- [ ] No Phase 10 implementation, later UI, new subscriptions or Production activation.
+- [x] Limits, actual costs and remaining runtime enablement dependencies documented.
+- [x] No Phase 10 implementation, later UI, new subscriptions or Production activation.
 
 This document is an implementation plan, not a completion claim. See phase-9.5-status.md.

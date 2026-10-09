@@ -1,6 +1,6 @@
 # Phase 9.5 status
 
-Implementation in progress; not complete. Isolated `codex/phase-9-5-web-evidence` worktree from main 4f8ce4d; Phase 10 draft branch unchanged. No subscription, infrastructure purchase or Production activation.
+Implementation/admission/integration verified; protected delivery pending [PR #29](https://github.com/shahinst21-hue/SiteFit/pull/29). Isolated `codex/phase-9-5-web-evidence` worktree from main 4f8ce4d; Phase 10 draft branch unchanged. No subscription, infrastructure purchase or Production activation.
 
 ## Pilot observations — 9 October 2026
 
@@ -28,14 +28,21 @@ The proof discovered Allsop particulars, a Rightmove-hosted agent brochure and [
 - Frozen existing PropertyData rent references/checksums remain qualified market estimates. No new PropertyData request, provider credit or financial assumption.
 - Append-only discovery sidecar in private `premises_events`, using migrations `20261009150000_web_discovery.sql` and `20261009151000_web_discovery_account_policy.sql`. The corrective migration reuses the established permanent-account predicate. Both applied to hosted development; no applied history edited.
 - Hosted rollback proofs: unpaid/pending/refunded preparation denied, another owner denied, browser grants denied, authorised append and identical replay accepted, changed replay/forged parent rejected, direct mutation rejected. Synthetic paid bindings test existing payment state, not a new Stripe delivery claim.
-- All **28 existing ready-report fingerprints unchanged**. PostgreSQL storage **374,232,755 bytes**, versus 374,199,987 before migrations (32,768-byte increase); `premises_events` total relation 155,648 bytes. No infrastructure purchase.
+- All **28 existing ready-report fingerprints unchanged**, including after positive live-source rollback verification. Final measured PostgreSQL storage **374,265,523 bytes**, versus 374,199,987 before migrations (65,536-byte increase, including allocated rollback-test pages); `premises_events` total relation 188,416 bytes. No infrastructure purchase.
 - `npm ci`: 165 packages, zero reported vulnerabilities. `npm run check`: lint, strict typecheck, **246 tests** including fresh PostgreSQL/PostGIS/security rebuild, production build passed. Public HTTP regression passed for 13 pages/articles and 13 internal paths. Stored replay test makes zero source/search/context-write calls.
 - Local scan of 20 changed/new source files and 20 built browser JS/HTML files against eight privately loaded credential values found zero matches. This is an artifact scan, not a claim of new DevTools, Network or Preview acceptance verification.
+- Final implementation `npm run check` passes lint, strict types, **249 tests** (including 11 focused discovery tests and the fresh database suite) and production build. No new customer route or interaction changed.
 
-## Remaining gates and honest limits
+## Final admission/integration evidence
+
+The final positive hosted test independently retrieves the existing FSA API record, validates the explicit selected unit and permitted compact name/address representation, then exercises the actual freeze/read/replay/tamper/refund gates with that live fact in a synthetic verified-account/confirmed Test-state rollback transaction. It passes and leaves no fixture/purchase behind. This is not a new Stripe delivery or actual customer purchase proof. An aggregate hosted query found zero actively entitled frozen inputs suitable for this proof; no customer account/report was rewritten to manufacture one.
+
+Controlled full preparation verification passes owner authorisation → frozen context/source reads → independent source admission → immutable write → identical stored replay, with one discovery and one write. A second test confirms a later verification failure preserves the earlier admitted finding; duplicate URLs do not spend repeated verification calls. Stored History/Discovery projection rejects context mismatch, retains the original history digest and makes no provider/AI calls. Rent remains explicitly unknown, with no automatic financial assumption.
+
+## Documented limits and delivery gate
 
 The owner directs public-data use before revenue validation. No new subscription or purchase is proposed. Public visibility is not blanket permission to retain copyrighted particulars, database contents or personal information. Agency rent and first-party past-name sources currently remain references-only, with rights and unit/date limitations. **Automatic admission of property-specific rent and prior business-name evidence is not implemented or verified**; the narrow initial FSA verifier admits current register observations only. The framework therefore must not be presented as complete automated premises history or a validated current-rent feed.
 
-Required independent integration/security checks, exact-head CI and protected delivery remain open. No automatic paid-report invocation exists until later Full Report preparation and a separately approved recurring search budget. Existing Free Snapshot, Auth and Test payment UI remain unchanged; no new visual/user acceptance or real 200% zoom claim is made.
+Source admission is closed by positive permitted-fact verification and validated exclusion/unknown outcomes for unsupported sources, as clarified in the plan. It is **not** closed by treating agency rights or proposed facts as verified. Comprehensive rent/past-name coverage remains a documented limitation rather than a promised capability. No automatic paid-report invocation exists until later Full Report preparation and a separately approved recurring search budget. Existing Free Snapshot, Auth and Test payment UI remain unchanged; no new visual/user acceptance or real 200% zoom claim is made.
 
-Pilot agency discoveries are not customer report facts. Current UI remains not approved for launch; no UI change is planned. Phase 9.5 is **not complete**; incomplete admission/integration gates are not replaced by passing unit tests.
+Pilot agency discoveries are not customer report facts. Current UI remains not approved for launch; no UI change is planned. Exact-head required CI, protected merge and post-merge verification must pass before the final Phase 9.5 completion declaration; the immutable [PR delivery record](https://github.com/shahinst21-hue/SiteFit/pull/29) records that gate. Prior head `3633c854` passed both push/PR CI and Vercel deployment; this does not substitute for checks on the final head.

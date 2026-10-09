@@ -4,6 +4,7 @@ import { object, text, timestamp, uuid } from "../data/validation.ts";
 import { historyDate } from "../premises-history/model.ts";
 import { publicReference } from "./search.ts";
 import type { SearchReceipt } from "./search.ts";
+import { validateHistory, type HistoryBundle } from "../premises-history/model.ts";
 
 export type AddressParts = { primary: string; street: string; postcode: string; unit: string | null };
 export type FindingKind = "asking_rent" | "reported_contract_rent" | "market_estimate" | "floor_area" | "lease_term" | "additional_charge" | "business_name" | "business_change";
@@ -57,7 +58,7 @@ export function validateDiscovery(value: unknown): DiscoveryBundle {
     !Array.isArray(b.references) || b.references.length > 6 || !Array.isArray(b.sourceBindings) || b.sourceBindings.length > 30 ||
     !Array.isArray(b.limitations) || b.limitations.length > 12 || b.limitations.some(x => !text(x,500))) throw new Error("discovery_invalid");
   for (const f of b.findings) validateFinding(f);
-  if (new Set(b.findings.map(f => object(f).id)).size !== b.findings.length || (b.outcome !== "success" && b.findings.length)) throw new Error("discovery_invalid");
+  if (new Set(b.findings.map(f => object(f).id)).size !== b.findings.length || (b.outcome !== "success" && b.findings.length) || (b.outcome === "success" && !b.findings.length)) throw new Error("discovery_invalid");
   for (const ref of b.references) { const r = object(ref); keys(r,"url state"); if (!publicReference(r.url) || !["rights_unknown","unit_unknown","verified","fetch_failed"].includes(String(r.state))) throw new Error("discovery_invalid"); }
   for (const ref of b.sourceBindings) { const r = object(ref); keys(r,"snapshotId source checksum"); if (!uuid(r.snapshotId) || !text(r.source,100) || !/^[a-f0-9]{64}$/.test(String(r.checksum))) throw new Error("discovery_invalid"); }
   if (b.searchReceipt !== null) { const r = object(b.searchReceipt); keys(r,"model promptVersion generatedAt packetDigest inputTokens outputTokens toolCalls durationMs estimatedUsd priceVersion store");
@@ -73,4 +74,21 @@ export function reconcileRent(records: { id: string; kind: FindingKind; match: "
     relevance: r.match !== "exact_unit" ? "Building evidence cannot establish rent for the selected unit." : !r.sourceVerified ? "Source verification is incomplete." :
       r.kind === "market_estimate" ? "Comparable-market estimate; not a property asking or contracted rent." : r.kind === "reported_contract_rent" ? "Source-reported contract rent; not independently verified lease terms or current asking rent." :
         r.effectiveDate === null ? "Effective date unknown; current applicability requires confirmation." : "Exact-unit dated source evidence; compare terms and stale status before use." }));
+}
+
+/** Stored-only preparation view. Different evidence roles remain separate, not
+ * a reconstructed tenancy timeline or a current-rent/financial assumption. */
+export function projectDiscovery(value: DiscoveryBundle, previous: HistoryBundle | null) {
+  const bundle = validateDiscovery(value), history = previous === null ? null : validateHistory(previous);
+  if (history && ["analysisId","inputId","propertyId","contextDigest"].some(k => history[k as keyof HistoryBundle] !== bundle[k as keyof DiscoveryBundle])) throw new Error("discovery_history_context_invalid");
+  return { schemaVersion: 1, analysisId: bundle.analysisId, inputId: bundle.inputId,
+    businessObservations: structuredClone(bundle.findings),
+    premisesEvents: structuredClone(history?.events ?? []),
+    historyDigest: history ? packetDigest(history) : null,
+    sourceBindings: structuredClone(bundle.sourceBindings),
+    discoveryReferences: structuredClone(bundle.references),
+    rent: { state: "unknown", automaticFinancialAssumption: false },
+    unknowns: [...(history?.unknowns ?? ["No stored premises-history outcome."]), "Current property-specific rent is not established by these references.",
+      "A register observation and a planning/EPC event do not establish occupation dates or closure reasons."],
+    limitations: [...bundle.limitations, ...(history?.limitations ?? [])] };
 }
