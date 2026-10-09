@@ -43,8 +43,8 @@ Hosted positive verification uses live permitted FSA facts within synthetic owne
 - [x] Existing PropertyData/history reconciled without overwrites or automatic finance assumptions.
 - [x] Paid-only private orchestration, failure preservation and immutable replay verified.
 - [x] Hosted storage/ownership/security and historical checks pass.
-- [ ] Required regression, exact-head CI, protected merge and post-merge checks pass.
+- [x] Required regression, exact-head CI, protected merge and post-merge checks pass (PR #29, final head 606946d; post-merge run 37978182341).
 - [x] Limits, actual costs and remaining runtime enablement dependencies documented.
 - [x] No Phase 10 implementation, later UI, new subscriptions or Production activation.
 
-This document is an implementation plan, not a completion claim. See phase-9.5-status.md.
+See phase-9.5-status.md for the actual completion record, measured proof and qualified coverage limits.
