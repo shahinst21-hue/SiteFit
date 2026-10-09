@@ -15,7 +15,7 @@ export default function Contact() {
         {[
           [
             "Your location check",
-            "Start with an address and business type. Add economics only after your Snapshot, if it helps your investigation.",
+            "Start with an address and business type. Financial inputs are not required to purchase or receive a report.",
             "/how-it-works",
             "How it works",
           ],

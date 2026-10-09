@@ -81,7 +81,7 @@ export function LocationEntry() {
         </p>
       )}
       <p className="hero-footnote" id="hero-entry-note">
-        Two details. No account. Economics is optional.
+        Two details. No account or financial inputs needed.
       </p>
     </form>
   );

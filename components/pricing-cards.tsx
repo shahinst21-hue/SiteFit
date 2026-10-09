@@ -21,7 +21,7 @@ export function PricingCards() {
           <li>Evidence gaps and practical next checks</li>
         </ul>
         <p className="fine-print">
-          Two details to start. No account or economics required.
+          Two details to start. No account or financial inputs required.
         </p>
         <ButtonLink href="/check-location" secondary>
           Get your Free Snapshot
@@ -47,7 +47,7 @@ export function PricingCards() {
         <ul className="check-list">
           <li>Business-specific interpretation of demand and competition</li>
           <li>Supporting evidence weighed against commercial risks</li>
-          <li>Optional economics and transparent scenario assumptions</li>
+          <li>Qualified commercial rental context</li>
           <li>Prioritised landlord questions and physical checks</li>
         </ul>
         <p className="fine-print">

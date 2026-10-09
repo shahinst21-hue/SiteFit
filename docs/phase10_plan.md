@@ -142,7 +142,7 @@ QA validates formulas against independent arithmetic, not a second production ca
 
 ## Definition of Done — implementation gates, implementation progress recorded in phase-10-status.md
 
-- [ ] Owner approves formulas, labelled stress assumptions, cost/VAT/owner treatment and bounded existing-trial proof permission.
+- [x] Owner approves formulas, labelled stress assumptions, cost/VAT/owner treatment and bounded existing-trial proof permission.
 - [ ] Steps 10.0–10.9 complete within approved scope; `docs/phase-10-status.md` records actual evidence and deviations throughout.
 - [ ] Coffee, restaurant and salon deterministic contribution, break-even, daily trade/customer qualification, surplus and scenario outputs match independent expectations.
 - [ ] Verified source facts, market estimates and user assumptions remain distinct; missing costs, VAT, type/area and nonpositive contribution do not produce misleading complete outputs.
@@ -173,3 +173,5 @@ These supersede conflicting older references to forms, optional report sections 
 - Reuse validated historical rental/Phase 9.5 evidence first. Rights/retention policy and exact selected-property/input provenance remain required. No automatic refresh on reopening and no rewrites of historical unadmitted snapshots.
 - Step 10.4 includes both endpoint adapters, compatible/incompatible area paths, provider-reported error semantics and six-credit cumulative live verification accounting. Step 10.7 supplies independent rental-report and engine projections, no final UI.
 - Acceptance requires source/prepopulation precedence, labelled illustrative scenarios, minimal validated overrides, independent rental context, both endpoints evaluated, explicit fallback, unchanged historical reports and all remaining original security/CI/measurement gates.
+
+Implementation verification and final protected delivery are recorded in phase-10-status.md. The completed backend scope deliberately excludes the final separate Financial Engine interactive UI. Removal of the old Snapshot preview and misleading report promises is the necessary D82 boundary correction, not a new product UI phase.

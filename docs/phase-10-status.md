@@ -1,11 +1,11 @@
 # Phase 10 status
 
-Implementation in progress under D82. Not complete.
+Economic capabilities and mandatory backend verification completed under D82. Protected final delivery record below remains the completion authority.
 
 - 10.0: owner amendments recorded; completed Phase 9.5 merged into branch without altering completed report data. Baseline storage, fingerprints and available credits pending actual verification.
-- 10.1–10.9: pending.
+- 10.1–10.8 completed; final protected delivery is tracked below.
 - Provider review: both existing endpoint contracts inspected; valuation requires GIA for retail/restaurants while benchmark methodology can use NIA. No basis conversion or invented selected-unit area.
-- Live Phase 10 provider requests executed: zero; approved cumulative ceiling six credits. No purchases/subscriptions.
+- Initial checkpoint: zero live requests; final total is one of six credits as recorded below. No purchases/subscriptions.
 - UI unchanged and not approved for launch. No Financial Engine form/calculations in report interfaces. No Phase 11+ work.
 
 ## Verified checkpoint
@@ -37,9 +37,17 @@ Node 24/npm 11 npm ci passed (zero audit vulnerabilities). Final npm run check p
 - [x] Private immutable context/run/parent/source lineage, replay, ownership/entitlement/refund gates pass fresh and hosted.
 - [x] Actual storage/lookup/kernel measurements and unchanged 28 historical reports verified.
 - [x] Required regression/build/public/secret gates pass; no new UI/user acceptance is claimed.
-- [ ] Step 10.9 exact-head required CI, protected Preview boundary, merge and post-main CI verified.
+- [x] Implementation delivery: PR #28 exact-head push CI 37984406250 and PR CI 37984412358 passed; protected Preview ready with authenticated boundary; squash 39af4836281dda1f9759d07b256c7586e0e878ce and post-main CI 37984861941 pass. Final separation/completion follow-up goes through the same protected workflow before final declaration.
 - [x] No purchase/subscription/new provider, final Financial Engine UI, Full Report/PDF generation, scoring/prompt calibration, Production activation or Phase 11+ work.
 
 ### Limitations and proportional implementation choices
 
 Operating costs, margin, spend and trade are explicit product illustrations unless replaced by sourced/qualified/user assumptions. They are not London business measurements or predictions. Fixed-cost capture is aggregated into rent, fully loaded staff and explicitly inclusive other costs; final separate interactive UI is deferred as instructed. Natural-language/AI adjustments enter a validated edit contract; no new paid AI execution or Phase 12 interpretation is enabled. The live valuation proof is an office-area protocol example; it is not selected-premises evidence. No compatible GIA is manufactured from EPC or NIA benchmarks. Selected properties can receive qualified local rental context while property valuation remains unavailable. Report generation/PDF consumption occurs in later separately approved phases. PropertyData trial is temporary; renewal and continuing launch licensing remain separate owner decisions. No browser redesign/launch acceptance or new real Stripe ceremony is claimed. These choices implement the owner amendments, not silent DoD weakening.
+
+## Final report-separation correction
+
+Final review found the pre-existing Phase 6 Snapshot financial input preview and older financial/scenario report promises contradicted D82. The correction removes that unused form/component and replaces report/pricing/sample acquisition wording with qualified rental context; no new Financial Engine UI, calculations or visual redesign is introduced. Internal legacy stored schemas remain compatible; reports are not rewritten. The earlier UI-unchanged records describe the initial backend checkpoint, not this correction. Existing purchase controls and their genuine routes remain unchanged.
+
+Actual browser verification on the shared Snapshot component using the explicitly fictional Local development fixture: 390px and 1440px, zero financial forms, no horizontal overflow, reasoning opened with Enter. Disabled demo purchase controls remain honestly disabled. This is not a real property analysis, new Stripe verification, real 200% zoom or owner launch acceptance. No controls/styles/zoom mechanisms were added; the form is removed rather than redesigned. Overall UX/UI remains not approved for launch. The final separate-engine UI remains deferred.
+
+Phase 10 final completion requires this follow-up protected PR and its post-main CI to pass. See the attached PR and main GitHub Actions for its live delivery state; no later-phase authorisation follows.

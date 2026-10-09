@@ -19,8 +19,9 @@ export default function Terms() {
         <p>
           The location check organises the address and business type you enter,
           with relevant verification questions. Local evidence has not been
-          verified for that address. Optional economics stays on the page and
-          produces no calculated financial result.
+          verified for that address. Financial inputs are not required to
+          purchase or receive a report; financial planning is a separate
+          experience and is not calculated within this report.
         </p>
         <h2>Samples and editorial guidance</h2>
         <p>

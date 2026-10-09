@@ -73,9 +73,9 @@ export default function Pricing() {
         <details>
           <summary>Do I need to provide financial details?</summary>
           <p>
-            No. Address and business type are enough to start. Economics is
-            optional afterwards; calculations must depend on the figures
-            actually supplied.
+            No. Address and business type are enough to start. Financial inputs
+            are never required to purchase or receive the Full Report.
+            Financial planning is a separate experience.
           </p>
         </details>
         <details>
