@@ -42,6 +42,7 @@ export function walkingAdapter(options: WalkingOptions = {}): DataAdapter {
       "Provider routing version and snapped isoline origin are unavailable; echoed origin is the request coordinate.",
       "PostGIS checks topology, origin and nesting; this does not independently prove every mapped bridge, barrier or path.",
       "Outside-London coverage is retained in geometry and coverage operands; it is not missing-as-zero.",
+      "Coverage uses the frozen source geography footprint; uncovered water or other footprint gaps do not by themselves establish that a location is outside London.",
       "Six expected API credits are an estimate; provider-observed account billing is unavailable."];
     result.meta.quality.limitations = [...result.limitations];
     result.observations = [{ id: "walking-300-600-900", path: "walking", recordId: "walking-300-600-900", reference: result.meta.licence.termsUrl,

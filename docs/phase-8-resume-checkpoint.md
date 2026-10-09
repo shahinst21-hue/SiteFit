@@ -48,3 +48,9 @@ Important artifacts:
 Development management helper: `supabase/.temp/phase8-implementation/supabase-management.ps1`. It uses existing CLI credentials in process memory and redacts SQL errors. Do not print environment values, credentials, private submission parameters or raw provider bodies. Use PowerShell JSON parsing with `-DateKind String` where exact timestamp strings are required.
 
 At resumption, first inspect Git status, current branch/head, remote and existing server processes. A production server was started on port 3001; an older localhost 3000 process may also exist. Do not assume servers survive laptop sleep/restart. No new live proof, paid operation, deployment or migration was required solely to save this checkpoint.
+
+## Resumed checkpoint — 9 October 2026
+
+The battery pause above is historical. Subsequent implementation is on codex/phase-8-data, draft PR #24, with applied forward migrations through 20261008280000. See the latest dated sections in phase-8-status.md for authoritative progress. Real bridge, prohibited road-tunnel detour, railway underpass and nine additional catchment geometry checks now pass. Source-footprint gaps over Thames water are explicitly qualified. Lint/types/233 tests/build pass. Original repaired CTA/auth/Test Checkout and real 200% functional acceptance are owner-confirmed; final visual UX/UI is not approved for launch.
+
+Browser Network privacy remains open; controlled Local HTTP response checks add evidence but do not replace it. Do not mark that gate passed or merge/declare completion. No new AI calls, persisted proof graphs, paid subscription, infrastructure upgrade, Production change, Phase 9 or calibration work is authorised by this checkpoint. Latest pushed checkpoint before these additions is a98bc2aa9f073ab2c40ebc57f2a4f55df86bfeac; final new-head CI and deployment still require actual verification.

@@ -78,5 +78,6 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
     limitations: ["Uniform area allocation is an estimate, not a measured walking population.",
       "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
       ...(boundaryMismatch ? ["OA allocation footprint differs from the London region boundary; signed area residual is retained and this estimate is partial."] : []),
-      "The upper envelope excludes missing and outside-London data; absence is not zero."] };
+      "The upper envelope excludes missing and outside-London data; absence is not zero.",
+      "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."] };
 }
