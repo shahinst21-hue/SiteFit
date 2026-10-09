@@ -107,6 +107,8 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 10: Economic Engine
 
+Current planning proposal (9 October 2026): [complete implementation plan](phase10_plan.md), [economic sources and bounded free historical-name research](phase-10-research.md). Awaiting owner approval; no implementation/spend/provider activation. Proposed scope is an immutable private supplementary operating model for coffee/restaurant/salons, existing qualified PropertyData rent context, deterministic break-even/daily trade/profitability/scenarios, and claim-aware Test entitlement. Phase 13 connects the post-main-report customer form/dashboard/PDF. D78/D79/D80 exclude new provider purchases, overengineering and later-phase activation. The proposal's Steps 10.0–10.9 and pending Definition of Done refine the historical outline below, subject to approval.
+
 - Objective: calculate reproducible supplementary financial scenarios from optional explicit inputs in a separate post-main-report Economics area (D65/D69). The free locked benefit previews break-even sales, daily customers and cost/rent sensitivity; no formulas or financial execution move into Phase 6. Entitlement verification precedes inputs/run when the paid path is enabled. Main report purchase/readiness/access does not depend on it; new supplement versions preserve all ready historical reports.
 - Codex implements: deterministic calculations, validated units/periods, versioned methods, rounding and scenario outputs with missing-input behaviour.
 - Human action: approve formulas, scenario assumptions, inclusion of costs and presentation; provide benchmark economics or approve labelled synthetic calculation-only cases.

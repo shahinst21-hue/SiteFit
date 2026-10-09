@@ -1,5 +1,9 @@
 # SiteFit architecture
 
+## Phase 10 planning boundary — 9 October 2026
+
+Phase 9 is complete in [status](phase-9-status.md). The owner's new request authorises planning only. [Economic Engine proposal](phase10_plan.md) uses a pure deterministic kernel and private claim/entitlement-aware immutable supplements in existing economic_models; their assumption versions reference the original frozen analysis input without inserting into or weakening the ready source graph. Rent is qualified existing-provider market context, not an agreed selected-unit lease. Economics remains separate from scores/readiness, with no provider/AI/calculator execution on stored read. Phase 13 later connects the voluntary post-main-report form/dashboard/PDF. No proposed migration, code or new source has been implemented or approved here.
+
 ## Current checkpoint and Phase 9 implementation — 9 October 2026
 
 Phase 8 is complete within its qualified [verified scope](phase-8-status.md); older progress notes below are historical. D80 authorises [Phase 9](phase9_plan.md), existing providers only. A focused private section collector reuses PropertyData transport/EPC normalisation and frozen Phase 8 references. One bounded immutable bundle per analysis/input is stored in the existing `premises_events` table; ready Free source graphs/guards are untouched. Stored replay invokes no provider, AI or scoring. GLA/new providers/importer are excluded. [Status](phase-9-status.md) distinguishes implementation from verified gates. No Full Report, UI redesign, workflow infrastructure or Production activation.

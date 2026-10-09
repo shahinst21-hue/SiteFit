@@ -1,5 +1,9 @@
 # Potential data sources
 
+## Phase 10 source proposal — 9 October 2026
+
+[Economic plan](phase10_plan.md) reuses existing PropertyData quoting-rent candidates as labelled market context, with conditional same-basis lease-area estimates and explicit user acknowledgement; it never promotes historical unadmitted payloads into verified lease quotes. User assumptions supply costs/spend/margins/calendar; official HMRC references govern VAT/cost explanations, not a new ingestion or payroll system. [Focused research](phase-10-research.md) records actual free London OSM mapped names and Camden corporate ratepayer rows with dates/reuse limitations. No new source is admitted or implemented, and historical-name integration is outside Phase 10 baseline. Trial renewal/purchases remain separate owner decisions.
+
 ## Phase 9 source research — 9 October 2026
 
 The earlier [research comparison](phase-9-research.md) is background, superseded for implementation by D80 and the [approved plan](phase9_plan.md). Phase 9 uses only existing PropertyData Planning, official EPC non-address fields and frozen Phase 8 references. No GLA/new provider/importer, title purchase, search API or imagery. Planning receipt records radius/default type exclusions and no age filter; incomplete search is never complete history. Existing historical PropertyData policy and OGL EPC subset apply; raw candidates/documents/personal/restricted postal data are discarded. Current source names/removals do not establish occupancy or closure. Launch/termination display-rights review remains open.
