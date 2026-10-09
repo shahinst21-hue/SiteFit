@@ -78,6 +78,10 @@ test("source verification ignores AI text and admits only independently read reu
   assert.equal(result.findings[0].dateMeaning,"observation_only");
   assert.throws(() => validateFinding({ ...result.findings[0],value:"Invented prior occupant" }), /discovery_invalid/);
   assert.throws(() => finding({ ...result.findings[0], kind:"asking_rent",value:45000 }), /discovery_invalid/);
+  assert.throws(() => finding({ ...result.findings[0],kind:"business_change" }),/discovery_invalid/);
+  assert.throws(() => finding({ ...result.findings[0],sourceRecord:"469850" }),/discovery_invalid/);
+  assert.throws(() => finding({ ...result.findings[0],eventDate:"2025-03-05",dateMeaning:"inspection_date" }),/discovery_invalid/);
+  assert.throws(() => finding({ ...result.findings[0],sourceAddress:{...target,unit:null} }),/discovery_invalid/);
 });
 test("conflicting rent classes survive; the newest estimate is never preferred as actual unit rent", () => {
   const records = [

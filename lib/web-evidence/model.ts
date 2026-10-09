@@ -41,7 +41,9 @@ export function validateFinding(value: unknown): WebFinding {
   const address = object(f.sourceAddress); keys(address,"primary street postcode unit");
   if (![address.primary,address.street,address.postcode].every(v => text(v,200)) || !(address.unit===null || text(address.unit,200))) throw new Error("discovery_invalid");
   if (!publicReference(f.source) || !/^https:\/\/ratings\.food\.gov\.uk\/business\/\d+$/.test(f.source) || f.policyId !== "fsa-ogl-v3" ||
-    !["business_name", "business_change"].includes(String(f.kind)) || !text(f.value, 200) || !text(f.basis, 300) || !/^\d+$/.test(String(f.sourceRecord)) ||
+    f.kind !== "business_name" || !text(f.value, 200) || !text(f.basis, 300) || !/^\d+$/.test(String(f.sourceRecord)) ||
+    f.sourceRecord !== f.source.split("/").at(-1) || (f.match === "exact_unit" && address.unit === null) ||
+    f.publishedDate !== null || f.eventDate !== null || f.dateMeaning !== "observation_only" ||
     !timestamp(f.observedAt) || !(f.publishedDate === null || historyDate(f.publishedDate)) || !(f.eventDate === null || historyDate(f.eventDate)) ||
     !["inspection_date", "observation_only"].includes(String(f.dateMeaning)) || !["exact_unit", "building_only"].includes(String(f.match)) ||
     f.attribution !== "Food Standards Agency, Crown copyright, Open Government Licence v3.0" || f.verificationVersion !== "public-facts-review-v1" ||
