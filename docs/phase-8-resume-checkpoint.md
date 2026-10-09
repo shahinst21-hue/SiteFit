@@ -58,3 +58,7 @@ Browser Network privacy remains open; controlled Local HTTP response checks add 
 ## Final delivery candidate — 9 October 2026
 
 The mandatory privacy gate is now verified via actual Local browser wire inspection plus enriched guest HTTP, refreshed protected Preview artifacts/logs and hosted/history checks, with exact scope in phase-8-status.md. DevTools/Preview wire inspection is not falsely claimed. D79 preserves completion of approved phases and prioritises the paid deliverable. All implementation prerequisites are verified with explicit source qualifications; final exact-head CI, protected merge, post-merge CI/main synchronisation are still pending. The earlier open-gate notes describe earlier checkpoints, not the final verified method. No Phase 9 starts here.
+
+## Phase 8 implementation complete — 9 October 2026
+
+Protected PR #24 merged as d3a664badf0ad104ce4e86d1dc08a7606bab4aee after exact-head CI; post-merge CI 37921803941 passes. Main equals origin and is clean at that checkpoint. See phase-8-status.md for the final checked Definition of Done, alternative controlled network proof, qualified source limitations and D78/D79 priorities. All earlier resume/pause/pending notes are historical. A documentation-only completion PR follows the same protected workflow; verify its final CI/merge/main state before the final response. Do not start Phase 9 or resume candidate calibration in this completion task.
