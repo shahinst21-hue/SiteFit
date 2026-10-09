@@ -30,3 +30,9 @@ Current sources leave exact-unit permitted use, physical suitability and lease c
 Final changed-source regression, protected Preview deployment/protection and unchanged public behaviour, exact-head required CI, protected PR #32 merge, post-main CI, main=origin and clean working tree. Record their actual results before declaring completion.
 
 Phase 12/13 have not started. UX/UI remains not approved for launch; no new customer numerical projection, Full Report, financial form, AI generation or PDF is introduced.
+
+## Protected delivery evidence
+
+Implementation commit `d486260c068165d3bc1aa2d29bb7358a9b74cde1`: push CI 38003533846 and PR CI 38003535816 passed (all required checks). PR #32 is ready for review. Protected Preview `https://sitefit-7huqyhpts-shahinst21-hues-projects.vercel.app` is READY; deployment `dpl_5icZhxcHHuJLT77zL2xw6EFChXFG` retains Vercel authentication. This deployment's payment-origin configuration intentionally disables purchase/webhook access (403); it is not a new Stripe E2E proof. Existing Auth/Test regression and historical payment verification remain intact; no live payments or protection changes.
+
+Final capacity recheck: 374,855,347 bytes; zero retained QA assessments (all synthetic write proofs rolled back). Existing ready graphs: 28 unchanged. Actual merge/post-main verification remains pending; completion is conditional on those protected gates.
