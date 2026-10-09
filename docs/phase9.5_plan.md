@@ -1,0 +1,50 @@
+# Phase 9.5 — AI Web Evidence Discovery
+
+Owner-authorised implementation, 9 October 2026. Insert after completed Phase 9; do not reopen or renumber completed phases. D78/D79/D80 apply. Phase 10 remains a separate draft planning branch (PR #28); this work starts from main in an isolated worktree.
+
+## Scope and commercial decision
+
+Discover selected commercial-unit rent evidence and past business activity missed by structured sources. Use the existing OpenAI account and owner-mandated GPT 6.1 Sol, real web search, existing frozen Phase 8 input contexts and Phase 9 premises evidence. No new subscription/provider account, recurring charge, infrastructure, scoring, financial execution, public route or Full Report UI. Discovery is internal paid-report preparation; it never runs during Free Snapshot generation or ordinary report reads.
+
+The representative London pilot precedes implementation selection. Its research results are candidates, not admitted report facts. A small search-plus-review workflow is preferable to an autonomous crawler: AI discovers URLs and proposes facts; deterministic checks and explicit source/unit/rights review admit evidence. Unsupported findings stay unknown. Source pages can contain adversarial instructions; their content is data and cannot authorise tools or change policy.
+
+## Steps and acceptance criteria
+
+1. **9.5.0 — baseline/pilot:** record existing architecture, isolated branch, real London cases including known positive listings, sparse results, same-building/wrong-unit and historical-name conflicts. Record searches and elapsed time separately from API usage. Measure discovery yield separately from exact-unit, rights-admitted yield; no fabricated denominator or accuracy claim.
+2. **9.5.1 — contract/policy:** strict versioned compact bundles bind analysis, immutable input/context digest, source references, observation/publication/event dates and meanings, matching scope, reviewed permission and retention. Null dates remain null. No crawl date presented as publication or occupancy date. Records distinguish asking rent, source-reported contracted rent, market estimate, floor-area basis, lease terms/charges, previous names and dated activity. No closure reasons or fabricated complete history.
+3. **9.5.2 — bounded search:** one provider request / tool call, low context, bounded output, no retries/model fallback. Return sourced candidates only. Receipt records model/prompt, input/output tokens, tool count, latency and estimated USD using reviewed price version. Failed/incomplete search does not erase structured source results. Runtime disabled absent explicit budget/enablement. The owner approves exactly one live proof up to US$0.50; this does not authorise recurring report execution.
+4. **9.5.3 — admission/reconciliation:** exact postcode, primary address, street and selected unit independently checked. A source saying ground floor cannot prove a selected building-only identity. Wrong units/residential estimates rejected. AI agreement is not independent confirmation. Unknown rights prevent content retention; source references and rejection reason can remain only where permitted. Reviewed source policies specify allowed factual fields, attribution, raw/normalised/reference retention. Never retain HTML/PDF/search response bodies. Keep conflicting facts; relevance uses match, rent class, source authority, measurement basis, explicit effective date and corroboration, not recency alone. An expired lease/listing never becomes current achieved rent. PropertyData market estimates remain estimates with their original checksums; discovery cannot rewrite them or automatically supply a finance assumption.
+5. **9.5.4 — immutable integration:** append a distinct discovery sidecar in existing private premises infrastructure, bound to original input and structured snapshot references. Do not write into ready Free Snapshot evidence/sections or modify old history bundles. Read stored outcome first, with zero provider/AI calls. Reject changed replay; later fresh work requires a new Analysis/input. Authorise verified permanent account and server-confirmed entitlement for runtime collection. Development verification stays private and explicit. No lifecycle/job/cache/ledger tables.
+6. **9.5.5 — verification:** focused tests cover wrong-unit/address, date confusion, source rights, prompt injection, rent class/conflicts, bounds/failure, access/entitlement, immutable writes and zero-call replay. Real pilot validates facts from opened original sources, not search snippets alone. Hosted integration must measure bundle storage and verify old snapshot digests unchanged. No exhaustive tenancy research, extra spatial QA or visual redesign.
+7. **9.5.6 — delivery:** run npm ci/check, fresh database security suite, required public HTTP regression, exact-head required CI and protected merge; verify post-merge CI/main/origin/clean tree. Record each actual result; an unresolved required dependency prevents completion.
+
+## Security, rights and retention
+
+Only the selected public commercial address/concept enters the new search adapter. No account identity, UPRN, guest proof, auth token, private Stripe parameters or credentials enter packets. Existing analysis adapter address-exclusion rules remain unchanged. OpenAI store:false is not zero abuse-monitoring retention. No arbitrary customer URL fetching, browser scraping, paywall bypass or login automation. Provider responses remain transient and bounded. Search-provided URLs are untrusted; validated HTTPS references exclude credentials, private hosts and secret query parameters. Raw content is never stored. Reviewed source permission must cover commercial reuse and intended normalised-fact retention; public visibility, robots permission and a search citation do not establish this. Limited-duration permissions cannot silently expire or rewrite ready reports: do not admit them into an indefinitely retained bundle until compatible deletion/retention behaviour is approved.
+
+## Costs and dependencies
+
+[OpenAI web search](https://developers.openai.com/api/docs/guides/tools-web-search), [pricing](https://developers.openai.com/api/docs/pricing), [GPT 6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol), and [tool-call/output limits](https://developers.openai.com/api/reference/resources/responses/methods/create) reviewed 9 October 2026. Standard search $0.01/call, model input $2/M and output $10/M at normal context; above 272K input the higher long-context rates apply. No Fast tier. Low/default returned search context has no documented numeric hard input limit. For the one authorised proof, 128K input + 512 output + one search is approximately $0.27112 (a conservative plausible scenario, not an enforced cap). No second request even on failure. Record actual usage-derived estimate separately from invoice-confirmed spend; uncached input is a conservative estimate when cache discounts apply. No new PropertyData credits required for this pilot; compare retained evidence only.
+
+Recurring paid-report search enablement and any source-rights approval beyond reviewed permission remain genuine future runtime dependencies. No commercial source is purchased. If live proof cannot reasonably fit $0.50, do not dispatch. If permission/unit evidence is missing, retain only an honest unavailable outcome; never loosen admission to improve yield.
+
+### Admission gate interpretation and delivery limits
+
+The owner's follow-up directs public data now, with data investment reconsidered after launch/sales, and completion of the remaining gates with documented limits. Admission passes when independently verifiable permitted facts can be retained and unsupported sources are demonstrably excluded; it does **not** require a licensed positive rent/history finding for every address. This is the existing explicit-missingness rule, not a waiver of source rights or a guarantee of coverage. Initial automatic fact admission is limited to the existing FSA official register; commercial listings and historical narrative discoveries are compact references with unknown rights/unit/date states. They cannot become financial assumptions or customer-facing historical facts. This phase delivers the bounded discovery and stored preparation boundary, not automatic comprehensive tenancy reconstruction. Future reviewed policies can extend admission; no permission or licence is invented in order to close this phase.
+
+Hosted positive verification uses live permitted FSA facts within synthetic owner/account/confirmed Test-state rollback fixtures; it is not a real customer payment or a new Stripe delivery proof. No suitable actively entitled frozen customer input exists in development at this checkpoint. The service preparation path and stored-only history join are separately tested end to end with controlled transport. Production/recurring search stays off; actual paid Full Report invocation belongs to its later approved generation phase.
+
+## Definition of Done
+
+- [x] Small purposive London pilot and measured incremental/admitted yield recorded; no statistical coverage claim.
+- [x] Strict discovery/matching/date/rent/rights/provenance contracts implemented.
+- [x] Actual single-call search proof and tokens/cost/latency recorded within approval.
+- [x] Reviewed legally reusable compact facts admitted in hosted rollback verification; unsupported rights/unit cases excluded explicitly.
+- [x] Existing PropertyData/history reconciled without overwrites or automatic finance assumptions.
+- [x] Paid-only private orchestration, failure preservation and immutable replay verified.
+- [x] Hosted storage/ownership/security and historical checks pass.
+- [x] Required regression, exact-head CI, protected merge and post-merge checks pass (PR #29, final head 606946d; post-merge run 37978182341).
+- [x] Limits, actual costs and remaining runtime enablement dependencies documented.
+- [x] No Phase 10 implementation, later UI, new subscriptions or Production activation.
+
+See phase-9.5-status.md for the actual completion record, measured proof and qualified coverage limits.

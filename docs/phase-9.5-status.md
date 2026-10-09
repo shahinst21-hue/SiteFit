@@ -1,0 +1,61 @@
+# Phase 9.5 status
+
+**Phase 9.5 complete within the qualified public-evidence scope, 9 October 2026.** Implementation/admission/integration delivered through protected [PR #29](https://github.com/shahinst21-hue/SiteFit/pull/29), merged as `dc0b9bc00b24ece818430d1eb18d29a237d0bc2c`. [Post-merge main CI 37978182341](https://github.com/shahinst21-hue/SiteFit/actions/runs/37978182341) passed. This completion documentation follows the same protected workflow. Phase 10 draft branch is unchanged; no subscription, infrastructure purchase or Production activation.
+
+## Pilot observations — 9 October 2026
+
+Opened original primary sources, not only search summaries:
+
+- Ground floor/basement **33 Broadway Market E8 4PH**: [Allsop particulars](https://www.allsop.co.uk/api/file/a3565abe-43ff-11e9-99ac-0242ac110002) identify Tiosk Ltd and source-reported reserved rent £45,000/year, lease expiry June 2026 and service charge. This is historical agent-reported contracted rent, not current asking/achieved rent. Publication date is not established from the PDF/URL. Selected building identity alone cannot establish this trading unit. Rights to retain particulars-derived facts require review; no document body retained.
+- Whole building **2 Greek Street W1D 4NB**: [AG&G original particulars](https://agg.uk.com/sites/default/files/2018-09/Gay%20Hussar.pdf) identify former Gay Hussar, asking offers above £125,000/year and approximate GIA 231m². The URL contains 2018-09 but that is not a verified publication date. Whole-building evidence cannot be used as ground-floor unit rent. Agent disclaimer says particulars are not a contract; commercial retention permission not established.
+- **67 Broadway Market E8 4PH**: [business's own account](https://climpsonandsons.com/blogs/journal/20-things-that-have-helped-us-survive-and-thrive-in-20-years-of-running-a-cafe) distinguishes 2002 market stall from 2005 permanent shop and reports a former butcher with the same name. Secondary directory conflicts by describing the permanent café as starting in 2002. No inferred closure date/reason or exact floor is admitted. First-party account provides useful leads beyond Phase 9's dated planning/EPC bundle; reuse permission is unresolved.
+- **13 Ingestre Place**: search returned nearby-area brochures and a council report mentioning **13D**, not proof of the selected unit. Reject unit substitution.
+- **Unit 1 Hutton House, Manorgate Road KT2 7AW**: returned residential-style modelled rental estimate with poor data quality, not an actual commercial listing; reject commercial-rent substitution.
+- **Haven Hair Walthamstow**: ambiguous name-only query returned a Massachusetts salon; reject geographic/name-only match. This is a sparse-search control, not a canonical exact-address accuracy case.
+
+One explicitly timed four-query batch took 1,989ms for the tool response (not model/API latency). Earlier exploratory searches were not individually timed; do not invent per-property latency. These six cases are a small purposive pilot, not a statistically representative London coverage/accuracy claim. Three have useful original-source leads. The sparse name-only control is excluded from exact-unit accuracy calculations. Search-tool execution here has no separately verified API invoice; no claim of a measured zero model/search cost.
+
+## Approval and open gates
+
+Owner approved **one** existing-account OpenAI search proof, **US$0.50** maximum, replacing proposed $5. That permission is now consumed: GPT 6.1 Sol, one tool call, 12,425 input tokens, 270 output tokens, 9,321ms; usage-derived conservative cost **US$0.03755**, not an invoice-confirmed charge. Before dispatch, the conservative plausible 128K-input/512-output scenario was estimated at US$0.27112; this was not represented as a provider-enforced input cap. No retries, second paid request, recurring execution budget or Production enablement.
+
+The proof discovered Allsop particulars, a Rightmove-hosted agent brochure and [FSA record 1225476](https://ratings.food.gov.uk/business/1225476). Independent fixed-origin FSA API verification confirms `%Arabica` at **Basement To Ground Floor, 33 Broadway Market, E8 4PH**, matching the pilot's explicit ground-floor/basement unit. This is an observed register name, not an opening/closure date or proof of when Tiosk ceased operating. A legal tenant and a trading name are different roles. The brochure fetch timed out: its proposed £48,000 rent and date are **unverified**, and it cannot be called newer evidence. The FSA record gives one independently verified, reusable unit-linked observation; it does not prove that the name was entirely absent from existing Phase 8 radius inventory. No positive pilot finding has yet been durably attached to a real purchased analysis.
+
+## Implemented and locally/hosted verified
+
+- Private server-only bounded search, strict candidate/source URL and receipt validation; no arbitrary URL crawler, retries or model fallback.
+- Exact address/unit and explicit date semantics; transient rent/area/lease/charge review distinguishes rent classes and preserves conflicts. Unknown commercial reuse excludes content retention. FSA normalised name/address facts use [the reviewed OGL policy](https://www.gov.uk/government/organisations/food-standards-agency/about/about-our-services); no logos, ratings or raw documents retained.
+- Frozen existing PropertyData rent references/checksums remain qualified market estimates. No new PropertyData request, provider credit or financial assumption.
+- Append-only discovery sidecar in private `premises_events`, using migrations `20261009150000_web_discovery.sql` and `20261009151000_web_discovery_account_policy.sql`. The corrective migration reuses the established permanent-account predicate. Both applied to hosted development; no applied history edited.
+- Hosted rollback proofs: unpaid/pending/refunded preparation denied, another owner denied, browser grants denied, authorised append and identical replay accepted, changed replay/forged parent rejected, direct mutation rejected. Synthetic paid bindings test existing payment state, not a new Stripe delivery claim.
+- All **28 existing ready-report fingerprints unchanged**, including after positive live-source rollback verification. Final measured PostgreSQL storage **374,265,523 bytes**, versus 374,199,987 before migrations (65,536-byte increase, including allocated rollback-test pages); `premises_events` total relation 188,416 bytes. No infrastructure purchase.
+- `npm ci`: 165 packages, zero reported vulnerabilities. `npm run check`: lint, strict typecheck, **246 tests** including fresh PostgreSQL/PostGIS/security rebuild, production build passed. Public HTTP regression passed for 13 pages/articles and 13 internal paths. Stored replay test makes zero source/search/context-write calls.
+- Local scan of 20 changed/new source files and 20 built browser JS/HTML files against eight privately loaded credential values found zero matches. This is an artifact scan, not a claim of new DevTools, Network or Preview acceptance verification.
+- Final implementation `npm run check` passes lint, strict types, **249 tests** (including 11 focused discovery tests and the fresh database suite) and production build. No new customer route or interaction changed.
+
+## Final admission/integration evidence
+
+The final positive hosted test independently retrieves the existing FSA API record, validates the explicit selected unit and permitted compact name/address representation, then exercises the actual freeze/read/replay/tamper/refund gates with that live fact in a synthetic verified-account/confirmed Test-state rollback transaction. It passes and leaves no fixture/purchase behind. This is not a new Stripe delivery or actual customer purchase proof. An aggregate hosted query found zero actively entitled frozen inputs suitable for this proof; no customer account/report was rewritten to manufacture one.
+
+Controlled full preparation verification passes owner authorisation → frozen context/source reads → independent source admission → immutable write → identical stored replay, with one discovery and one write. A second test confirms a later verification failure preserves the earlier admitted finding; duplicate URLs do not spend repeated verification calls. Stored History/Discovery projection rejects context mismatch, retains the original history digest and makes no provider/AI calls. Rent remains explicitly unknown, with no automatic financial assumption.
+
+## Documented limits
+
+The owner directs public-data use before revenue validation. No new subscription or purchase is proposed. Public visibility is not blanket permission to retain copyrighted particulars, database contents or personal information. Agency rent and first-party past-name sources currently remain references-only, with rights and unit/date limitations. **Automatic admission of property-specific rent and prior business-name evidence is not implemented or verified**; the narrow initial FSA verifier admits current register observations only. The framework therefore must not be presented as complete automated premises history or a validated current-rent feed.
+
+Source admission is closed by positive permitted-fact verification and validated exclusion/unknown outcomes for unsupported sources, as clarified in the plan. It is **not** closed by treating agency rights or proposed facts as verified. Comprehensive rent/past-name coverage remains a documented limitation rather than a promised capability. No automatic paid-report invocation exists until later Full Report preparation and a separately approved recurring search budget. Existing Free Snapshot, Auth and Test payment UI remain unchanged; no new visual/user acceptance or real 200% zoom claim is made.
+
+Pilot agency discoveries are not customer report facts. Current UI remains not approved for launch; no UI change was made. Final head `606946dbfcfd40d7d5bc67afb5c060c614a731ef` passed required [PR CI 37977805816](https://github.com/shahinst21-hue/SiteFit/actions/runs/37977805816) and [push CI 37977799249](https://github.com/shahinst21-hue/SiteFit/actions/runs/37977799249); Vercel Preview deployment succeeded. Main remained strictly protected with required checks and enforcement for administrators. Protected squash merge and its post-merge CI passed; no bypass or direct main push occurred.
+
+## Definition of Done
+
+- [x] Steps 9.5.0–9.5.6 delivered: pilot, contracts/policies, single bounded proof, source admission/exclusions, reconciliation, immutable integration, verification and protected delivery.
+- [x] Actual usage, latency and conservative cost recorded; the one-request permission is consumed, with no further paid request.
+- [x] Exact-unit permitted positive fact and unsupported/unknown source dispositions verified; no fabricated rent, prior tenant, occupation dates or closure causes.
+- [x] Existing PropertyData/history and original ready reports preserved; source-local failure and stored-only replay verified.
+- [x] Hosted ownership, Test entitlement, grants, positive freeze, replay, mutation/refund and storage gates pass with disclosed fixture boundaries.
+- [x] Lint, strict types, 249 tests, production build, public HTTP regression and secret artifact checks pass.
+- [x] Exact-head required CI, protected merge and post-merge main CI pass.
+- [x] Limits and future runtime dependencies documented; no new provider account/subscription, Production enablement, Full Report UI or Phase 10 implementation.
+
+No external credential/account/purchase decision blocks this completed phase. Recurring paid-report search, additional source-rights admission and actual customer Full Report execution remain later separately authorised work, not implied by this completion.
