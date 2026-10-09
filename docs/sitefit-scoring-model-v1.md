@@ -1,5 +1,7 @@
 # SiteFit scoring model v1 — independent design review
 
+**Phase 11 review pointer, 9 October 2026:** the [repository/decision/prompt audit](phase-11-design-audit.md) and [proposed Phase 11 plan](phase11_plan.md) reassess these frozen candidates using completed Phases 8–10. They are awaiting owner approval; no candidate coefficient, formula or prompt is changed or activated by this planning update. The older four-complete/provisional-rejection passages below remain historical, superseded where D76 says so. Later completed-phase status records supersede old “no Phase 9/10 authority” chronology.
+
 **Owner-approved architecture revision, 7 October 2026 (D76). Scoring and grouped analytical prompts are now frozen candidate designs, not final production calibration.** The absolute rejection of provisional scoring is withdrawn. Phase 8 data implementation is approved; final scoring activation, further weight/transform/formula/prompt/interaction/publication-band/calibration work is not. Phases 6 and 7 remain frozen; no Phase 9/10 work is authorised.
 
 ## Current authority: commercial location score, separate readiness
