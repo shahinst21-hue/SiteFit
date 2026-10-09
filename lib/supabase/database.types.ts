@@ -767,6 +767,8 @@ export type Database = {
           business_name: string | null
           confidence: number | null
           created_at: string
+          discovery_bundle: Json | null
+          discovery_input_id: string | null
           estimated_end: string | null
           estimated_start: string | null
           evidence_id: string | null
@@ -785,6 +787,8 @@ export type Database = {
           business_name?: string | null
           confidence?: number | null
           created_at?: string
+          discovery_bundle?: Json | null
+          discovery_input_id?: string | null
           estimated_end?: string | null
           estimated_start?: string | null
           evidence_id?: string | null
@@ -803,6 +807,8 @@ export type Database = {
           business_name?: string | null
           confidence?: number | null
           created_at?: string
+          discovery_bundle?: Json | null
+          discovery_input_id?: string | null
           estimated_end?: string | null
           estimated_start?: string | null
           evidence_id?: string | null
@@ -828,6 +834,13 @@ export type Database = {
             columns: ["analysis_id"]
             isOneToOne: false
             referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "premises_events_discovery_input_id_fkey"
+            columns: ["discovery_input_id"]
+            isOneToOne: false
+            referencedRelation: "analysis_inputs"
             referencedColumns: ["id"]
           },
           {
@@ -1179,6 +1192,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      authorise_sitefit_web_discovery: {
+        Args: { p_analysis: string; p_input: string; p_owner: string }
+        Returns: undefined
+      }
       bind_sitefit_checkout: {
         Args: { p_id: string; p_session: string }
         Returns: undefined
@@ -1227,6 +1244,16 @@ export type Database = {
         Returns: string
       }
       freeze_sitefit_premises_history: {
+        Args: {
+          p_analysis: string
+          p_bundle: Json
+          p_context_canonical: string
+          p_input: string
+          p_owner: string
+        }
+        Returns: Json
+      }
+      freeze_sitefit_web_discovery: {
         Args: {
           p_analysis: string
           p_bundle: Json
@@ -1532,6 +1559,10 @@ export type Database = {
         Returns: Json
       }
       read_sitefit_purchase: { Args: { p_report: string }; Returns: Json }
+      read_sitefit_web_discovery: {
+        Args: { p_analysis: string; p_input: string; p_owner: string }
+        Returns: Json
+      }
       resolve_sitefit_property: {
         Args: { address: Json }
         Returns: {

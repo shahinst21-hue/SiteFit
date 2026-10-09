@@ -248,3 +248,9 @@ Following Phase 8 completion, the owner explicitly requests independent provider
 ## D80 — Phase 9 existing-source implementation — accepted 9 October 2026
 
 Owner authorises immediate implementation of revised docs/phase9_plan.md under D78/D79. Reuse approved PropertyData, EPC, FSA and Overture, including bounded additional endpoints within existing trial permission. Remove GLA/new provider/importer baseline; no purchase/subscription. Deliver useful verified dated premises facts, qualified observations and explicit unknowns with immutable provenance, security and proportionate QA. Replace the mandatory exact prior-tenant proof with honest existing-source coverage, never fabricated tenancy dates. Full Report generation and Phase 10 remain later separately authorised work.
+
+## D81 — Phase 9.5 bounded AI web discovery — accepted 9 October 2026
+
+Owner authorises immediate plan/implementation/protected delivery for selected commercial rent and premises-history discovery alongside existing frozen sources. Real web search only; AI proposals require source/unit/date/rights validation. Preserve rent classes/conflicts, historical reports and explicit unknowns. Discovery is paid-report preparation, never automatic Free Snapshot collection. No Full Report UI or later phase is authorised. Phase 10 draft planning remains isolated. One live GPT 6.1 Sol search proof is approved up to US$0.50, one tool call, no retry; this replaces the proposed $5 ceiling and does not authorise recurring calls. No subscription, purchase or Production activation. See phase9.5_plan.md; missing rights/access/spend dependencies remain explicit, not weakened completion gates.
+
+Owner follow-up: use public data at this pre-revenue stage; reassess data investment after launch and demonstrated sales. No provider purchase or subscription is requested. This does not authorise fabricated evidence, indiscriminate document retention or ignoring source reuse restrictions.
