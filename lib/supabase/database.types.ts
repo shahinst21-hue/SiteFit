@@ -361,6 +361,9 @@ export type Database = {
       economic_models: {
         Row: {
           analysis_id: string
+          completed_at: string | null
+          content_digest: string | null
+          context_digest: string | null
           created_at: string
           id: string
           input_id: string
@@ -368,10 +371,15 @@ export type Database = {
           missing_inputs: string[]
           model_version: string
           outputs: Json | null
+          parent_id: string | null
+          run_id: string | null
           scenario_assumptions: Json
         }
         Insert: {
           analysis_id: string
+          completed_at?: string | null
+          content_digest?: string | null
+          context_digest?: string | null
           created_at?: string
           id?: string
           input_id: string
@@ -379,10 +387,15 @@ export type Database = {
           missing_inputs?: string[]
           model_version: string
           outputs?: Json | null
+          parent_id?: string | null
+          run_id?: string | null
           scenario_assumptions?: Json
         }
         Update: {
           analysis_id?: string
+          completed_at?: string | null
+          content_digest?: string | null
+          context_digest?: string | null
           created_at?: string
           id?: string
           input_id?: string
@@ -390,6 +403,8 @@ export type Database = {
           missing_inputs?: string[]
           model_version?: string
           outputs?: Json | null
+          parent_id?: string | null
+          run_id?: string | null
           scenario_assumptions?: Json
         }
         Relationships: [
@@ -406,6 +421,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "analysis_inputs"
             referencedColumns: ["analysis_id", "id"]
+          },
+          {
+            foreignKeyName: "economic_models_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "economic_models"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1192,6 +1214,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      authorise_sitefit_economics: {
+        Args: { p_analysis: string; p_input: string; p_owner: string }
+        Returns: undefined
+      }
       authorise_sitefit_web_discovery: {
         Args: { p_analysis: string; p_input: string; p_owner: string }
         Returns: undefined
@@ -1242,6 +1268,18 @@ export type Database = {
           p_sections: Json
         }
         Returns: string
+      }
+      freeze_sitefit_economics: {
+        Args: {
+          p_analysis: string
+          p_bundle_canonical: string
+          p_context_canonical: string
+          p_input: string
+          p_owner: string
+          p_parent: string
+          p_run: string
+        }
+        Returns: Json
       }
       freeze_sitefit_premises_history: {
         Args: {
@@ -1552,6 +1590,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      read_sitefit_economics: {
+        Args: { p_analysis: string; p_owner: string; p_run: string }
+        Returns: Json
       }
       read_sitefit_free: { Args: { p_report: string }; Returns: Json }
       read_sitefit_premises_history: {
