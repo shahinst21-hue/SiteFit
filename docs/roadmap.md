@@ -191,3 +191,7 @@ D78 changes prioritisation to revenue validation first: stop unnecessary supplem
 ## Accepted delivery priorities — 9 October 2026
 
 D79 preserves completion of each approved phase while applying D78. Close Phase 8's essential security/CI/protected-delivery gates first. Keep property history, economic calculations, scoring and AI work in Phases 9–12 focused on the paid report; Phase 13 delivers the real Full Report, AI Native Dashboard and PDF. Phases 14–15 provide dependable delivery/recovery, cost control and security. Phases 16–17 prioritise the pre-payment journey, conversion and real willingness to pay. Supplementary engineering polish must not replace that sequence. This update does not start another phase within Phase 8 or enable Production/live payments.
+
+## Phase 8 completed implementation gate — 9 October 2026
+
+Steps 8.0–8.9 and mandatory data/security/Preview/regression gates are verified with qualified source outcomes. Protected PR #24 merged after exact-head CI; post-merge CI 37921803941 passes. See phase-8-status.md for the complete evidence/Definition of Done and the separate protected completion-document record. D77 leaves unique competitor counts/percentiles unavailable. D78/D79 guide the paid-deliverable sequence without starting Phase 9 here; final visual UX/UI remains not approved for launch. Production purchase/deployment, Full Report, Economics execution, PDF and scoring/prompt calibration remain outside this completed phase.
