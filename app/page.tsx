@@ -39,7 +39,7 @@ const checks: [IconName, string, string, string][] = [
   ],
   [
     "cost",
-    "Business economics",
+    "Commercial rental context",
     "Frame costs and scenarios around the figures you choose to supply.",
     "green",
   ],

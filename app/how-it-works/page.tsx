@@ -23,7 +23,7 @@ export default function HowItWorks() {
           ],
           [
             "Review your Free Snapshot",
-            "Start with your location brief, key questions and evidence limitations. No account or economics required.",
+            "Start with your location brief, key questions and evidence limitations. No account or financial inputs required.",
           ],
           [
             "Go deeper when it helps",

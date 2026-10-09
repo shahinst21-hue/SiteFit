@@ -44,12 +44,12 @@ const sections = [
     "Business listings or company records cannot establish why a site changed occupier. Verified dates and identity matching are necessary before drawing a conclusion.",
   ],
   [
-    "Make the cost assumptions explicit",
-    "Annual rent, business rates and transaction value frame the first financial questions. Margin, staffing and opening hours refine them. This sample contains no calculated financial result.",
+    "Distinguish a benchmark from the premises rent",
+    "A local asking-rent benchmark is market context, not the selected unit’s agreed rent. A property estimate needs compatible area and its stated uncertainty. This fictional sample contains no measured rental evidence.",
   ],
   [
-    "Test a downside as well as a target",
-    "Compare the effect of lower sales, higher costs and reduced trading hours using explicit assumptions. A scenario describes dependencies; it is not a forecast.",
+    "Check the commercial terms",
+    "Headline rent can exclude rates, service charges, VAT and lease incentives. Confirm which terms apply to the selected unit; unknown terms remain unknown. Financial calculations belong to a separate experience, not this report.",
   ],
   [
     "What would support the proposition?",
