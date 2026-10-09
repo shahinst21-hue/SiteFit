@@ -1,6 +1,6 @@
 # Phase 9.5 status
 
-Implementation/admission/integration verified; protected delivery pending [PR #29](https://github.com/shahinst21-hue/SiteFit/pull/29). Isolated `codex/phase-9-5-web-evidence` worktree from main 4f8ce4d; Phase 10 draft branch unchanged. No subscription, infrastructure purchase or Production activation.
+**Phase 9.5 complete within the qualified public-evidence scope, 9 October 2026.** Implementation/admission/integration delivered through protected [PR #29](https://github.com/shahinst21-hue/SiteFit/pull/29), merged as `dc0b9bc00b24ece818430d1eb18d29a237d0bc2c`. [Post-merge main CI 37978182341](https://github.com/shahinst21-hue/SiteFit/actions/runs/37978182341) passed. This completion documentation follows the same protected workflow. Phase 10 draft branch is unchanged; no subscription, infrastructure purchase or Production activation.
 
 ## Pilot observations — 9 October 2026
 
@@ -39,10 +39,23 @@ The final positive hosted test independently retrieves the existing FSA API reco
 
 Controlled full preparation verification passes owner authorisation → frozen context/source reads → independent source admission → immutable write → identical stored replay, with one discovery and one write. A second test confirms a later verification failure preserves the earlier admitted finding; duplicate URLs do not spend repeated verification calls. Stored History/Discovery projection rejects context mismatch, retains the original history digest and makes no provider/AI calls. Rent remains explicitly unknown, with no automatic financial assumption.
 
-## Documented limits and delivery gate
+## Documented limits
 
 The owner directs public-data use before revenue validation. No new subscription or purchase is proposed. Public visibility is not blanket permission to retain copyrighted particulars, database contents or personal information. Agency rent and first-party past-name sources currently remain references-only, with rights and unit/date limitations. **Automatic admission of property-specific rent and prior business-name evidence is not implemented or verified**; the narrow initial FSA verifier admits current register observations only. The framework therefore must not be presented as complete automated premises history or a validated current-rent feed.
 
 Source admission is closed by positive permitted-fact verification and validated exclusion/unknown outcomes for unsupported sources, as clarified in the plan. It is **not** closed by treating agency rights or proposed facts as verified. Comprehensive rent/past-name coverage remains a documented limitation rather than a promised capability. No automatic paid-report invocation exists until later Full Report preparation and a separately approved recurring search budget. Existing Free Snapshot, Auth and Test payment UI remain unchanged; no new visual/user acceptance or real 200% zoom claim is made.
 
-Pilot agency discoveries are not customer report facts. Current UI remains not approved for launch; no UI change is planned. Exact-head required CI, protected merge and post-merge verification must pass before the final Phase 9.5 completion declaration; the immutable [PR delivery record](https://github.com/shahinst21-hue/SiteFit/pull/29) records that gate. Prior head `3633c854` passed both push/PR CI and Vercel deployment; this does not substitute for checks on the final head.
+Pilot agency discoveries are not customer report facts. Current UI remains not approved for launch; no UI change was made. Final head `606946dbfcfd40d7d5bc67afb5c060c614a731ef` passed required [PR CI 37977805816](https://github.com/shahinst21-hue/SiteFit/actions/runs/37977805816) and [push CI 37977799249](https://github.com/shahinst21-hue/SiteFit/actions/runs/37977799249); Vercel Preview deployment succeeded. Main remained strictly protected with required checks and enforcement for administrators. Protected squash merge and its post-merge CI passed; no bypass or direct main push occurred.
+
+## Definition of Done
+
+- [x] Steps 9.5.0–9.5.6 delivered: pilot, contracts/policies, single bounded proof, source admission/exclusions, reconciliation, immutable integration, verification and protected delivery.
+- [x] Actual usage, latency and conservative cost recorded; the one-request permission is consumed, with no further paid request.
+- [x] Exact-unit permitted positive fact and unsupported/unknown source dispositions verified; no fabricated rent, prior tenant, occupation dates or closure causes.
+- [x] Existing PropertyData/history and original ready reports preserved; source-local failure and stored-only replay verified.
+- [x] Hosted ownership, Test entitlement, grants, positive freeze, replay, mutation/refund and storage gates pass with disclosed fixture boundaries.
+- [x] Lint, strict types, 249 tests, production build, public HTTP regression and secret artifact checks pass.
+- [x] Exact-head required CI, protected merge and post-merge main CI pass.
+- [x] Limits and future runtime dependencies documented; no new provider account/subscription, Production enablement, Full Report UI or Phase 10 implementation.
+
+No external credential/account/purchase decision blocks this completed phase. Recurring paid-report search, additional source-rights admission and actual customer Full Report execution remain later separately authorised work, not implied by this completion.
