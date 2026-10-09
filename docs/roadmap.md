@@ -199,3 +199,7 @@ Steps 8.0–8.9 and mandatory data/security/Preview/regression gates are verifie
 ## Phase 9 completed — 9 October 2026
 
 Existing-provider premises history is implemented and verified through protected PR #26 and passing post-merge CI 37934156053; [status](phase-9-status.md) records all Steps 9.0–9.9, qualified evidence, immutable storage, security, costs and limits. The completion record follows protected CI separately. No Phase 10 authority, new provider, purchase, Production activation or Full Report generation follows automatically.
+
+## Phase 9.5: AI Web Evidence Discovery — authorised 9 October 2026
+
+D81 inserts a bounded paid-preparation discovery stage after Phase 9, without renumbering/reopening completed phases. Scope: property-specific commercial rent and verifiable past business activity, exact-unit/date/source/rights admission, reconciliation with existing evidence and compact immutable persistence. [Plan](phase9.5_plan.md), [status](phase-9.5-status.md). No Full Report UI, financial execution or Phase 10 implementation. Recurring paid search is not enabled by the one US$0.50 development proof. Required verified/security/CI/protected-delivery gates remain explicit.

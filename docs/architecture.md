@@ -1,3 +1,7 @@
+# Phase 9.5 private web-discovery sidecar — implementation in progress
+
+Bounded AI search proposes references; source adapters independently validate facts and exact unit/date/reuse conditions. The initial verifier admits OGL FSA register observations only; agent rent and historical narratives remain references, not admitted report facts. Frozen source outcomes and ready report sections are never rewritten. A server-confirmed entitled permanent owner may append a separate discovery bundle against the original input in private premises infrastructure; reopening reads stored outcomes without collection or AI. No Free Snapshot route, crawler, job system or final Full Report UI is introduced. See [plan](phase9.5_plan.md) and [actual limits/status](phase-9.5-status.md).
+
 # SiteFit architecture
 
 ## Current checkpoint and Phase 9 implementation — 9 October 2026

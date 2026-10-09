@@ -1,3 +1,7 @@
+# Phase 9.5 additive discovery persistence — implementation in progress
+
+Migrations `20261009150000_web_discovery.sql` and `20261009151000_web_discovery_account_policy.sql` add paired input/bundle columns and an analysis/input unique partial index to existing private `premises_events`. Existing history bundles remain unchanged. Service-only owner-bound read/authorise/freeze RPCs check immutable input/context, parent snapshot checksums and permanent-account confirmed entitlement; browser roles have no grants. Identical replay returns stored content, changed replay and update/delete are rejected. No new lifecycle/payment/queue table. Hosted rollback and prior-report fingerprint evidence are recorded in [Phase 9.5 status](phase-9.5-status.md); real positive paid-analysis integration and protected delivery remain open.
+
 # Phase 3 database foundation
 
 ## Phase 9 implemented boundary — 9 October 2026

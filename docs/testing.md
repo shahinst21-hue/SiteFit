@@ -1,3 +1,7 @@
+# Phase 9.5 verification
+
+`tests/web-evidence.test.ts` covers single-call bounds, unsafe input/references, independently fetched source facts, exact unit/date semantics, rent-class conflicts, unconfirmed reuse and zero-provider stored replay. `supabase/tests/web-discovery.sql` is included in the fresh database suite and also runs as hosted development rollback verification of owner/entitlement/immutability/grants. The one approved live search proof is consumed; do not rerun `scripts/data/verify-web-discovery.ts` or delete its ignored dispatch marker to obtain another paid request. Passing mocks/rollback fixtures does not prove real purchased-analysis enrichment or customer acceptance. See [actual evidence and open gates](phase-9.5-status.md).
+
 # Future testing strategy
 
 Recorded 2026-10-03. The strategy below covers future phases. Phase 0 introduced no executable tests. Phase 1 now introduces lint, strict types, Node unit tests and production build scripts with a GitHub Actions workflow. Later phases add tests alongside implemented behaviour, not speculative suites or tests that merely mirror code.
