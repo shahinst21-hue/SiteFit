@@ -187,3 +187,7 @@ Steps 6.0–6.9 are complete and verified in `phase-6-status.md`, including actu
 ## Owner priority update — 9 October 2026
 
 D78 changes prioritisation to revenue validation first: stop unnecessary supplementary spatial QA and avoid speculative engineering work. Preserve minimum honest-sale, customer-security and reliable-delivery requirements; mandatory unresolved gates remain explicit. This does not authorise live payments, launch, a new phase or selling an unavailable Full Report. Final paid-deliverable work and willingness-to-pay validation require their appropriate explicit authorisation; do not extend Phase 8 to implement them.
+
+## Accepted delivery priorities — 9 October 2026
+
+D79 preserves completion of each approved phase while applying D78. Close Phase 8's essential security/CI/protected-delivery gates first. Keep property history, economic calculations, scoring and AI work in Phases 9–12 focused on the paid report; Phase 13 delivers the real Full Report, AI Native Dashboard and PDF. Phases 14–15 provide dependable delivery/recovery, cost control and security. Phases 16–17 prioritise the pre-payment journey, conversion and real willingness to pay. Supplementary engineering polish must not replace that sequence. This update does not start another phase within Phase 8 or enable Production/live payments.

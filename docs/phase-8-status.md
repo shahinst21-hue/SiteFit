@@ -479,3 +479,40 @@ After the two source-footprint limitation changes, lint, strict types, all **233
 ### Revenue-validation-first checkpoint — 9 October 2026
 
 Under D78, supplementary walking/barrier/boundary testing stops. The localhost diagnostic gateway proposed in commentary was not created or run and will not be pursued as supplementary work. The existing controlled HTTP proof remains limited evidence, not browser Network inspection. The mandatory Network privacy gate stays open; no defect or pass is inferred from tool unavailability. Both exact-head CI runs for f79e54a now pass (37908106255 and 37908097753). No additional application code, provider calls, paid service or new infrastructure is introduced by this priority update. Phase 8 is not falsely declared complete and PR #24 remains unmerged while mandatory delivery gates are unresolved. Work priorities now favour minimum trustworthy paid delivery and real £29 willingness-to-pay validation; Production/Full Report/later-phase authorisation remains separate.
+
+### Final mandatory security gate and delivery candidate — 9 October 2026
+
+D79 preserves mandatory completion requirements. To finish the outstanding actual network proof without a new service, a temporary ignored loopback-only inspector forwards Local requests to the unchanged production build. **81 actual browser requests** cover authenticated Account, the preserved owned historical Snapshot, its genuine POST purchase/start and verified purchase/resume page plus observed assets/prefetch responses. Request URL/body, response body and non-cookie response headers are checked against nine private configured values; ten privately held session/cookie/token markers are also checked in responses after the additional enriched guest probe. Zero prohibited private-value/payload/token matches are found. The sole matched cookie class, sitefit_purchase_resume, is the expected report identifier, not an authentication/claim/entitlement proof. Sensitive Cookie/Set-Cookie transport is not mislabelled as a body leak; values and raw request/response payloads are neither printed nor copied into the proof artifact.
+
+The enriched guest control independently retrieves projection 3 and replays the same ready report; its unauthenticated resume returns the correct 404. It is clearly tagged as controlled HTTP, not a browser request. Third-party Supabase authentication and Stripe-owned traffic are expected exceptions and are not claimed inspected by the loopback tool. The original required repaired-Preview Google/email/Stripe Test £29 and 200% interaction acceptance remains owner-verified. No new payment or authentication ceremony, graph creation or AI request is needed for this inspection.
+
+The refreshed protected deployment is READY at sitefit-ih4xvro1y-shahinst21-hues-projects.vercel.app; the configured stable branch alias points there. The explicit deploy command succeeds after an initial implicit CLI invocation returned Not authorized; existing CLI identity is still valid. Protected Preview Account retains the original claimed Phase 8 Snapshot and active prior Test entitlement. Two fully rendered deployed HTML pages, **11 observed current JS assets** and **13 current log rows** contain zero matches for nine private values; current browser Console has zero warnings/errors. This verifies the required client/HTML/network/log privacy layers using controlled alternatives, **not a claimed DevTools or protected-Preview wire-body inspection**. The formerly open privacy gate is now verified on that stated basis; no security requirement is waived and no external telemetry completeness claim is made. The temporary Local inspector is not product infrastructure and is removed from the active test path after the probe.
+
+The final outside-London real postal selection is Blackwell Oxford OX1 3BQ, independently referenced on the official store page. Actual Postio lookup/selection/resolution followed by component resolution (six observed trial credits) leaves identity unresolved because the selected UPRN is absent from the frozen London OS release. No precise point or centroid is substituted; no new analysis/report is created. This completes the actual selected-property coverage rejection case, separately from a synthetic outside-polygon test or the London-edge street anchor.
+
+Fresh database rebuild, hosted ownership/payments/claims/purchase-history/required-parent/boundary rollback suites and public HTTP checks pass again. All six exact original historical fingerprints match. Final whole database is **374,060,723 bytes**, with **125,939,277 bytes** conservative Free reserve; no upgrade/purchase. The initial comparison read the baseline wrapper instead of its rows; corrected row comparison passes. Browser artifacts (22) and all tracked files (429) have zero matches for nine configured private values. Last full application check remains lint/types/233 tests/build passing; current code has no later application change. Thirty-six forward migrations are development-applied. All recorded qualifications, D77 blocked competition metrics and unknown actual billing remain explicit.
+
+### Definition of Done — delivery candidate
+
+- [x] Explicit Phase 8 approval; no unapproved paid service, subscription or infrastructure spend.
+- [x] Phase 6/7 behaviour, baseline and exact immutable history retained.
+- [x] Versioned runtime/database contracts, migration history and legacy readers preserved.
+- [x] Real selected-property matching/conflict/unresolved/whole-unit and outside-London rejection proven without centroid substitution.
+- [x] Census/Income/BRES/geography and compact OS releases validated and pinned, with universes/vintages/missingness preserved.
+- [x] Qualified Overture inventory and approved D77 blocked count/percentile admission resolution documented.
+- [x] Real walking polygons/matrices, bridge/rail/prohibited-road-tunnel cases and hosted PostGIS coverage/rights/cost limitations verified.
+- [x] TfL/NUMBAT reviewed joins/day/time/version proved; unreviewed joins, National Rail and current PTAL remain explicit gaps.
+- [x] Premises/constraint/rent semantics and official conditional EPC fallback verified with qualified omissions; no permission/currentness/unit-area claim invented.
+- [x] Immutable metric/comparator operands, provenance, precision, rights, quality and missing states retained.
+- [x] Existing descriptive boundary preserved; candidate scoring/prompt calibration and activation remain deferred.
+- [x] Validated projection/interpretation and frozen historical model/schema/method output retained; truthful labels and attribution.
+- [x] Independent source failures preserve successes; bounded requests and measured/unknown latency/credit findings recorded.
+- [x] Stored replay/account claim/recovery preserves history with no provider/AI/scoring rerun.
+- [x] Hosted RLS/grants/immutability and actual client/HTML/controlled-network/log privacy proofs pass with exact method/scope disclosed.
+- [x] Required regression/build/public/fresh/hosted/protected Preview/keyboard/mobile/material-zoom gates evidenced; owner functional acceptance remains distinct from visual approval.
+- [x] Rights/launch-scale/retention and direct Production Live Stripe gates remain explicitly pre-launch.
+- [x] No Full Report/financial execution/PDF/subscription/live payment/Production/Phase 9/10 or deferred distributed hardening.
+- [x] Architecture/database/source/decision/roadmap/status documents reflect actual qualified implementation and D78/D79.
+- [ ] Final required exact-head CI, protected PR review/merge, post-merge CI, main=origin and clean tree: pending final delivery, not a passed gate.
+
+UX/UI remains **not approved for launch**. Phase 8 is not formally complete until the last delivery item passes. No Phase 9 starts in this checkpoint.
