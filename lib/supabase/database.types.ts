@@ -771,6 +771,8 @@ export type Database = {
           estimated_start: string | null
           evidence_id: string | null
           evidence_quality: Json | null
+          history_bundle: Json | null
+          history_input_id: string | null
           id: string
           knowledge: Database["public"]["Enums"]["knowledge_status"]
           property_id: string | null
@@ -787,6 +789,8 @@ export type Database = {
           estimated_start?: string | null
           evidence_id?: string | null
           evidence_quality?: Json | null
+          history_bundle?: Json | null
+          history_input_id?: string | null
           id?: string
           knowledge?: Database["public"]["Enums"]["knowledge_status"]
           property_id?: string | null
@@ -803,6 +807,8 @@ export type Database = {
           estimated_start?: string | null
           evidence_id?: string | null
           evidence_quality?: Json | null
+          history_bundle?: Json | null
+          history_input_id?: string | null
           id?: string
           knowledge?: Database["public"]["Enums"]["knowledge_status"]
           property_id?: string | null
@@ -822,6 +828,13 @@ export type Database = {
             columns: ["analysis_id"]
             isOneToOne: false
             referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "premises_events_history_input_id_fkey"
+            columns: ["history_input_id"]
+            isOneToOne: false
+            referencedRelation: "analysis_inputs"
             referencedColumns: ["id"]
           },
           {
@@ -1213,6 +1226,16 @@ export type Database = {
         }
         Returns: string
       }
+      freeze_sitefit_premises_history: {
+        Args: {
+          p_analysis: string
+          p_bundle: Json
+          p_context_canonical: string
+          p_input: string
+          p_owner: string
+        }
+        Returns: Json
+      }
       import_sitefit_census_profiles: {
         Args: {
           p_geography_release_id: string
@@ -1504,6 +1527,10 @@ export type Database = {
         }
       }
       read_sitefit_free: { Args: { p_report: string }; Returns: Json }
+      read_sitefit_premises_history: {
+        Args: { p_analysis: string; p_input: string; p_owner: string }
+        Returns: Json
+      }
       read_sitefit_purchase: { Args: { p_report: string }; Returns: Json }
       resolve_sitefit_property: {
         Args: { address: Json }

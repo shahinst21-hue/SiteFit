@@ -8,7 +8,7 @@ import { normalisePostcode } from "../../addresses/model.ts";
 
 export type PropertyFactsSelection = PropertyMatch & { osReleaseId: string; coordinateBasis: "address_building_not_entrance";
   selectedParts?: NonNullable<EnrichmentInput["identity"]["selectedParts"]> };
-type Operation = "uprn" | "flood-risk" | "rents-commercial";
+type Operation = "uprn" | "flood-risk" | "rents-commercial" | "planning-applications";
 type Cost = { observedCredits: number | null; estimatedCreditCeiling: number };
 const cost = (v: Record<string, unknown>, ceiling: number): Cost => {
   if (v.api_calls_cost === undefined) return { observedCredits: null, estimatedCreditCeiling: ceiling };
@@ -104,6 +104,10 @@ export function propertyDataFacts(options: { key: string | undefined; fetcher?: 
     return `${selected.point.latitude},${selected.point.longitude}`;
   };
   return {
+    async planning(selected: PropertyFactsSelection, signal?: AbortSignal) {
+      const location = validateSelected(selected);
+      return request("planning-applications", { location, results: "10", max_radius: "0.1" }, signal);
+    },
     async premises(selected: PropertyFactsSelection, signal?: AbortSignal) { validateSelected(selected); const r = await request("uprn", { uprn: selected.uprn }, signal); return { ...normalisePremises(r.value, selected), retrievedAt: r.retrievedAt }; },
     async flood(selected: PropertyFactsSelection, signal?: AbortSignal) { const location = validateSelected(selected), r = await request("flood-risk", { location }, signal); return { ...normalisePointFlood(r.value, location), retrievedAt: r.retrievedAt }; },
     async rent(selected: PropertyFactsSelection, type: "restaurants" | "retail", signal?: AbortSignal) { const location = validateSelected(selected); if (!["restaurants", "retail"].includes(type)) throw new SourceError("invalid_request"); const r = await request("rents-commercial", { location, type }, signal); return { ...normaliseRentBenchmark(r.value, location, type), retrievedAt: r.retrievedAt }; },

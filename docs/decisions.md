@@ -244,3 +244,7 @@ The remaining Phase 8 network check uses the already authorised alternative cont
 ## Phase 9 research authorisation and pending proposal — 2026-10-09
 
 Following Phase 8 completion, the owner explicitly requests independent provider research and an implementation-ready Premises History plan, permits challenging the earlier approach and prohibits implementation, purchases and subscriptions during planning. [Research](phase-9-research.md) and [proposed plan](phase9_plan.md) apply D78/D79: a scoped evidence timeline using existing sources, one admitted official planning adapter and bounded reviewed factual imports. This is **not an accepted implementation decision**, provider admission, spending approval or change to historical-report/security requirements. Owner approval is pending; no Phase 9 code, migration, account or subscription is introduced.
+
+## D80 — Phase 9 existing-source implementation — accepted 9 October 2026
+
+Owner authorises immediate implementation of revised docs/phase9_plan.md under D78/D79. Reuse approved PropertyData, EPC, FSA and Overture, including bounded additional endpoints within existing trial permission. Remove GLA/new provider/importer baseline; no purchase/subscription. Deliver useful verified dated premises facts, qualified observations and explicit unknowns with immutable provenance, security and proportionate QA. Replace the mandatory exact prior-tenant proof with honest existing-source coverage, never fabricated tenancy dates. Full Report generation and Phase 10 remain later separately authorised work.

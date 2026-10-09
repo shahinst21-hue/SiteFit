@@ -2,7 +2,7 @@
 
 ## Phase 9 source research — 9 October 2026
 
-The [research comparison](phase-9-research.md) verifies public provider capabilities/prices and identifies unresolved licences/coverage. The [implementation proposal](phase9_plan.md) prefers existing Phase 8 observations plus bounded official London planning metadata and reviewed exact-premises facts. Neither document admits or activates a provider. Specialist retail surveys, title purchases, company-level history, search APIs and imagery are not default dependencies. Public records, nearby applications and provider disappearance cannot establish complete occupancy, closure reasons or continuous vacancy. Source-specific commercial historical-display/retention rights remain admission gates.
+The earlier [research comparison](phase-9-research.md) is background, superseded for implementation by D80 and the [approved plan](phase9_plan.md). Phase 9 uses only existing PropertyData Planning, official EPC non-address fields and frozen Phase 8 references. No GLA/new provider/importer, title purchase, search API or imagery. Planning receipt records radius/default type exclusions and no age filter; incomplete search is never complete history. Existing historical PropertyData policy and OGL EPC subset apply; raw candidates/documents/personal/restricted postal data are discarded. Current source names/removals do not establish occupancy or closure. Launch/termination display-rights review remains open.
 
 Recorded 2026-10-03. This is a candidate register, not a promise of integration, comprehensive UK coverage or permission for SiteFit's use. No adapter, API account or source dataset has been implemented or queried for a property.
 

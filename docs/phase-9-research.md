@@ -1,5 +1,7 @@
 # Phase 9 premises-history research
 
+**Historical research, superseded by D80:** the owner now authorises existing-provider implementation only. GLA and all new providers/importer are excluded from the [approved plan](phase9_plan.md). No additional provider research or purchase is part of Phase 9.
+
 Researched 9 October 2026. **Planning only; no provider activated, purchased or contacted.** Public documentation/prices were inspected; no new authenticated API proof was performed. Publisher coverage claims are not measured SiteFit coverage. Read alongside [implementation proposal](phase9_plan.md), [D78/D79](decisions.md) and [completed Phase 8](phase-8-status.md).
 
 ## Commercial conclusion
