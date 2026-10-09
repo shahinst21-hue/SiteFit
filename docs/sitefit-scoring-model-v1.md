@@ -1,5 +1,7 @@
 # SiteFit scoring model v1 — independent design review
 
+**Phase 11 review pointer, 9 October 2026:** the [repository/decision/prompt audit](phase-11-design-audit.md) and [proposed Phase 11 plan](phase11_plan.md) reassess these frozen candidates using completed Phases 8–10. They are awaiting owner approval; no candidate coefficient, formula or prompt is changed or activated by this planning update. The older four-complete/provisional-rejection passages below remain historical, superseded where D76 says so. Later completed-phase status records supersede old “no Phase 9/10 authority” chronology.
+
 **Owner-approved architecture revision, 7 October 2026 (D76). Scoring and grouped analytical prompts are now frozen candidate designs, not final production calibration.** The absolute rejection of provisional scoring is withdrawn. Phase 8 data implementation is approved; final scoring activation, further weight/transform/formula/prompt/interaction/publication-band/calibration work is not. Phases 6 and 7 remain frozen; no Phase 9/10 work is authorised.
 
 ## Current authority: commercial location score, separate readiness
@@ -428,3 +430,7 @@ Primary candidate: supplied `sitefit-analysis-design-fa.md`, `parameter-registry
 Methodological reference: [OECD/European Union/EC-JRC, Handbook on Constructing Composite Indicators (2008)](https://www.oecd.org/en/publications/handbook-on-constructing-composite-indicators-methodology-and-user-guide_9789264043466-en.html), especially weighting/aggregation and uncertainty/sensitivity chapters. It supports explicitly examining those methodological choices; it does not validate SiteFit's weights, thresholds or predictive claims. This recommendation follows the independent algebra and experiments above.
 
 Internal authorities: [product](product.md), [architecture](architecture.md), [database](database.md), [data sources](data-sources.md), [decisions](decisions.md), [Phase 6 completion](phase-6-status.md), [Phase 7 completion](phase-7-status.md), [Phase 8 proposal](phase8_plan.md) and current analysis/Snapshot code. Historical prose is not used to override later accepted decisions or actual completion records. No accepted decision or phase gate is weakened by this proposal.
+
+## D83 superseding implementation boundary — 2026-10-09
+
+The frozen commercial scoring candidate remains inactive. Phase 11 implements a separately named Resident & Workplace Context Index, not overall/preliminary commercial suitability. Its limited hypothetical policy and independent decision architecture are recorded in [approved plan](phase11_plan.md). No runtime candidate JSON activation is authorised.

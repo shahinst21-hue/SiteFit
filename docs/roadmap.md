@@ -1,5 +1,7 @@
 # SiteFit development roadmap
 
+**Authoritative checkpoint, 9 October 2026:** Phases 8, 9, 9.5 and 10 are complete within their recorded qualified scope. Phase 10 implementation/completion PRs #28/#31 and post-main CI 37986830919 passed; main baseline is `02a0d4c011548dde0aa13dba7b46948c1b1811e5`. The owner requests **Phase 11 planning/review only**: [complete proposal](phase11_plan.md), [earlier-model/prompt/decision audit](phase-11-design-audit.md). No scoring policy in that proposal is approved or activated yet. Implementation awaits explicit approval; Phases 12/13 remain separately authorised later work. Earlier dated checkpoints below are history, not current phase authority.
+
 Current checkpoint, 9 October 2026: Phase 8 is complete through protected PRs #24/#25 and passing post-merge CI. D80 authorises immediate [Phase 9 existing-provider implementation](phase9_plan.md) under D78/D79; GLA/new providers/importer are excluded. [Phase 9 status](phase-9-status.md) records actual gates. No purchase, subscription, Full Report generation or Phase 10 is authorised. Scoring/grouped prompts remain frozen candidates; calibration resumes only in separately authorised later work. Earlier dated paragraphs below are historical.
 
 Current authority: Phase 6 and the [Free Snapshot UI refinement](free-snapshot-ui-status.md) are complete and frozen. The owner now approves Phase 7 Steps 7.0–7.9 under [phase7_plan.md](phase7_plan.md), with D73's private frozen Checkout contact amendment. Phase 7 is complete through protected PR #20 and successful post-merge CI; [phase-7-status.md](phase-7-status.md) records all 23 gates and remaining separately authorised pre-launch work. Phase 8 remains unauthorised.
@@ -114,15 +116,19 @@ Owner-authorised Phase 10 implementation: [approved plan](phase10_plan.md) and [
 - Owner scope/formula and six-credit existing-trial authority recorded; genuine expired access or new expenditure requires separate approval.
 - Definition of Done: independent expected-value tests pass for approved formulas and boundary conditions; missing inputs remain unknown; AI performs no core financial calculation; scenarios are not forecasts of success.
 
-## Phase 11: Evidence Engine
+## Phase 11: Evidence, Scoring and Decision Logic — planning only
 
-- Objective: extend report-wide traceability and uncertainty handling beyond the proposed minimum Phase 6 core.
-- Proposed sequencing: valid Evidence IDs, claim support, quality/capability and contradiction preservation must exist before Free analysis; they cannot wait until Phase 11. This phase expands coverage/methods across the later full report rather than adding provenance for the first time.
-- Codex implements after its own approval: broader claim links/derivation/quality policies and report-wide reconciliation, reusing the minimum core.
-- Human action: approve material sufficiency/freshness policies and evidence presentation.
-- Definition of Done: important claims resolve to valid permitted evidence; official/commercial provenance and estimate/inference labels remain distinct; unsupported claims fail validation or become Unknown/Insufficient Evidence.
+- Objective: answer the selected business's location strengths/risks, with an explainable supported number and separate premises feasibility, evidence adequacy and Decision Readiness. No customer must analyse raw datasets to get a useful conclusion.
+- Audit first: [inventory and assessment](phase-11-design-audit.md) distinguishes the implemented Phase 6 scorer, fictional UI score, advanced 34-parameter prototype, frozen independent audit and D76's accepted boundaries. Candidate coefficients and historical provisional-score rejection are not approved runtime policy.
+- Proposed baseline: [Steps 11.0–11.9](phase11_plan.md#8-numbered-execution-steps--only-after-approval), one deterministic fixed-scope **preliminary resident/workplace context index**, existing-source market/access/premises/rental reasoning, claim-specific admission/conflicts, separate binding readiness and private immutable assessment. The narrow score scope and profile priorities require approval; no complete commercial-suitability promise or D77 competition score.
+- Reuse Phase 8 metric/source/release/spatial framework, Phase 9/9.5 qualified events/references and Phase 10 independent rental context. Financial Engine calculations/inputs remain separate from Free Snapshot, Full Report and PDF under D82.
+- Owner action: approve the four actual policy/architecture choices in [plan Section 11](phase11_plan.md#11-risks-dependencies-and-owner-decisions). No baseline purchase, new provider or paid AI request required.
+- Definition of Done: [all proposed gates](phase11_plan.md#12-definition-of-done--proposed-all-unchecked), including numerical admission and bounded real-packet usefulness, truthful gaps/risks, source rights, immutable ownership/replay/security, required regression and protected delivery. No unverified scoring or customer acceptance claimed.
+- Boundary: no Phase 11 implementation in this planning task. Phase 12 owns authorised AI narrative/semantic evaluation; Phase 13 owns genuine paid report/dashboard/PDF and final display. Existing historical Free reports and customer UI remain frozen; UX/UI remains not approved for launch.
 
 ## Phase 12: AI Report Engine
+
+- Phase 11 handoff proposal: consume its admitted evidence/rules, exact preliminary-score scope/trace, separate readiness and mandatory opposition/gaps. No model-authored numbers/weights or score upgrades; finance prompts are outside the main report under D82. See [responsibilities](phase11_plan.md#10-phase-12--13-contracts-and-exclusions); no Phase 12 implementation authority follows from planning.
 
 - Objective: expand bounded validated section analysis into the full report.
 - Proposed sequencing: the minimal AI adapter, prompt/schema versions, relevant section packets, validation/repair and validated-only synthesis move into Phase 6 to demonstrate free analytical value. This phase adds deeper subanalyses/full synthesis, not the first AI interpretation.
@@ -131,6 +137,8 @@ Owner-authorised Phase 10 implementation: [approved plan](phase10_plan.md) and [
 - Definition of Done: schema and evidence validation pass; fabricated references, missing-data invention and success probabilities are rejected; deterministic financial values remain unchanged; provider-specific objects stay behind the boundary.
 
 ## Phase 13: Full Report UI, PDF and Delivery
+
+- Phase 11 handoff proposal: a new safe paid view supports explicitly limited preliminary/withheld scores and separate binding premises/readiness, rather than forcing the old four-factor Snapshot DTO. Rental context independently appears; Financial Engine remains a separate experience, with no financial form/calculations in report or PDF. Historical views remain unchanged. Final UX/UI requires approval and is not approved for launch by automated checks.
 
 - Objective: deliver the paid report consistently across web and PDF.
 - Codex implements: approved result-first report dimensions/subsections with short reason/small strength and closed per-section Why this result (D69), permitted PDF generation/storage and secure delivery from persisted ready content. Sixteen legacy storage keys are not a mandatory UI hierarchy; new keys require explicit migration. PDF rendering/retries use the frozen snapshot without provider retrieval, recalculation or AI regeneration.
@@ -213,3 +221,7 @@ Phase 10 separation: later Full Report UI/PDF consumes qualified rental evidence
 ## Phase 10 verified implementation — 9 October 2026
 
 Steps 10.0–10.8 and required arithmetic/source/security/immutability/storage/regression proofs pass; protected PR #28 and post-main CI 37984861941 pass. Final separation/completion correction follows protected CI. See phase-10-status.md. Financial Engine remains a separate backend capability, without final interactive UI; future Full Report consumes qualified rental evidence independently. No Phase 11 is authorised.
+
+## Phase 11 authorised under D83 — 2026-10-09
+
+Steps 11.0–11.9 are under implementation. Initial numeric output is Resident & Workplace Context Index, subject to scoped evidence/method admission; broader decision and premises/readiness remain separate. Phases 12/13 are not authorised. [Status](phase-11-status.md) records actual remaining gates.

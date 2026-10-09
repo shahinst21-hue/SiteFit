@@ -74,6 +74,67 @@ export type Database = {
           },
         ]
       }
+      analysis_assessments: {
+        Row: {
+          analysis_id: string
+          bundle: Json
+          config_digest: string
+          content_digest: string
+          context_digest: string
+          generated_at: string
+          id: string
+          input_id: string
+          method_version: string
+          property_id: string
+        }
+        Insert: {
+          analysis_id: string
+          bundle: Json
+          config_digest: string
+          content_digest: string
+          context_digest: string
+          generated_at: string
+          id?: string
+          input_id: string
+          method_version: string
+          property_id: string
+        }
+        Update: {
+          analysis_id?: string
+          bundle?: Json
+          config_digest?: string
+          content_digest?: string
+          context_digest?: string
+          generated_at?: string
+          id?: string
+          input_id?: string
+          method_version?: string
+          property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analysis_assessments_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "analyses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analysis_assessments_input_id_fkey"
+            columns: ["input_id"]
+            isOneToOne: false
+            referencedRelation: "analysis_inputs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analysis_assessments_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       analysis_inputs: {
         Row: {
           analysis_id: string
@@ -1214,6 +1275,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      authorise_sitefit_assessment: {
+        Args: { p_analysis: string; p_input: string; p_owner: string }
+        Returns: undefined
+      }
       authorise_sitefit_economics: {
         Args: { p_analysis: string; p_input: string; p_owner: string }
         Returns: undefined
@@ -1268,6 +1333,16 @@ export type Database = {
           p_sections: Json
         }
         Returns: string
+      }
+      freeze_sitefit_assessment: {
+        Args: {
+          p_analysis: string
+          p_bundle: string
+          p_context: string
+          p_input: string
+          p_owner: string
+        }
+        Returns: Json
       }
       freeze_sitefit_economics: {
         Args: {
@@ -1361,6 +1436,17 @@ export type Database = {
           p_latitude: number
           p_longitude: number
           p_release_id: string
+        }
+        Returns: Json
+      }
+      lookup_sitefit_context_density: {
+        Args: {
+          p_code: string
+          p_component: string
+          p_jobs: string
+          p_membership: string
+          p_oa: string
+          p_population: string
         }
         Returns: Json
       }
@@ -1590,6 +1676,20 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      read_sitefit_assessment: {
+        Args: {
+          p_analysis: string
+          p_config: string
+          p_input: string
+          p_method: string
+          p_owner: string
+        }
+        Returns: Json
+      }
+      read_sitefit_assessment_material: {
+        Args: { p_analysis: string; p_input: string; p_owner: string }
+        Returns: Json
       }
       read_sitefit_economics: {
         Args: { p_analysis: string; p_owner: string; p_run: string }
@@ -2044,6 +2144,35 @@ export type Database = {
           },
         ]
       }
+      native_area_operands: {
+        Row: {
+          areas: number[]
+          generated_at: string
+          release_checksum: string
+          release_id: string
+        }
+        Insert: {
+          areas: number[]
+          generated_at?: string
+          release_checksum: string
+          release_id: string
+        }
+        Update: {
+          areas?: number[]
+          generated_at?: string
+          release_checksum?: string
+          release_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "native_area_operands_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: true
+            referencedRelation: "dataset_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       native_memberships: {
         Row: {
           lad22_code: string
@@ -2284,6 +2413,10 @@ export type Database = {
       same_numbat_binary64: {
         Args: { p_actual: Json; p_expected: Json }
         Returns: boolean
+      }
+      sitefit_assessment_evidence_reference: {
+        Args: { e: Json }
+        Returns: Json
       }
       valid_constraint_native_date: { Args: { v: Json }; Returns: boolean }
     }

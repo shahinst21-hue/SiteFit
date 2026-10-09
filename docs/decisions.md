@@ -1,4 +1,16 @@
+# Decisions
+
+## D83 accepted Phase 11 implementation and context-only index — 2026-10-09
+
+Owner approves Steps 11.0–11.9, claim admission, deterministic rules, separate premises/readiness, immutable assessment persistence and bounded QA. Name the initial number **Resident & Workplace Context Index**. It measures only dated residential/workplace density context, never demand, success, competition, profit or suitability. Business weights/native comparisons are explicitly hypothetical versioned policy, conditional on real evidence, sensitivity and combined-versus-individual interpretive validation. No number on failed admission or method validation and no weaker substitution. Decisions, strengths, risks and next actions remain more important; high context cannot conceal premises blockers. Recheck actual capacity before hosted writes and preserve the internal checkpoint. No paid requests, new providers, subscriptions, infrastructure purchases or Phase 12/13. See [approved plan](phase11_plan.md) and [implementation status](phase-11-status.md).
+
 # Architecture Decision Log
+
+## Phase 11 planning request — proposal awaiting approval, 9 October 2026
+
+After Phase 10 completion, the owner requests a complete Evidence, Scoring and Decision Logic proposal, with an audit of earlier models/prompts/approval history before redesign. Customer objective: SiteFit answers the selected business's location strengths and risks, then supports an explainable evidence-backed score. Planning only; no implementation, purchases, changed historical reports or Phase 12/13.
+
+[Audit](phase-11-design-audit.md) distinguishes implemented/frozen/proposed/superseded work, including the advanced prototype and D76's withdrawn absolute provisional rejection. [Plan](phase11_plan.md) proposes a small fixed resident/workplace preliminary index, qualitative broader market/access/premises/rental decision logic, separate readiness and narrow private immutable assessment persistence. Its limited scope, transforms, priorities, comparator/publication policy and storage choice **require explicit approval**. No new accepted scoring decision is recorded by this paragraph; D77/D78/D79/D80/D82 and immutable/security boundaries remain intact. Existing candidates are not runtime configuration.
 
 ## D76 accepted Phase 8 data implementation and frozen scoring boundaries — 2026-10-07
 
