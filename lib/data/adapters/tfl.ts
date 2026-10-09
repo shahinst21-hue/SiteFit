@@ -1,5 +1,5 @@
 import "server-only";
-import type { DataAdapter, ExecutionContext, TransportAccessPoints } from "../contracts.ts";
+import type { DataAdapter, ExecutionContext, TransportAccessPoints, SourceDefinition } from "../contracts.ts";
 import { coverage } from "../coverage.ts";
 import { SourceError, safeError } from "../errors.ts";
 import { definitions } from "../registry.ts";
@@ -8,6 +8,7 @@ import { object, text, validateContext, validateResult } from "../validation.ts"
 import { validPoint } from "../../spatial/model.ts";
 import { createTransport, processQuota } from "../transport.ts";
 import type { JsonTransport } from "../transport.ts";
+import { queryPoint } from "../query-point.ts";
 const quota = processQuota(30);
 const modes: Record<string, TransportAccessPoints["items"][number]["mode"]> = { bus:"bus", tube:"tube", dlr:"rail", "national-rail":"rail", overground:"rail", "elizabeth-line":"rail", tram:"tram", "river-bus":"water", "river-tour":"water" };
 function invalid(): never { throw new SourceError("invalid_response"); }
@@ -28,14 +29,19 @@ export function normaliseTfl(value: unknown, maxRecords: number): TransportAcces
   return { schemaVersion:1,kind:"transport_access_points",complete:totalKnown && data.total===data.stopPoints.length && data.stopPoints.length<=maxRecords,items };
 }
 export function tflAdapter(factory: (execution: ExecutionContext) => JsonTransport = e => createTransport(definitions["tfl-stop-points"],e,{key:process.env.TFL_APP_KEY,quota})): DataAdapter {
-  const source=definitions["tfl-stop-points"];
+  return registeredAdapter(definitions["tfl-stop-points"],factory,false);
+}
+export function tflStationsAdapter(factory: (execution: ExecutionContext) => JsonTransport = e => createTransport(definitions["tfl-stations"],e,{key:process.env.TFL_APP_KEY,quota})): DataAdapter {
+  return registeredAdapter(definitions["tfl-stations"],factory,true);
+}
+function registeredAdapter(source:SourceDefinition,factory:(execution:ExecutionContext)=>JsonTransport,stations:boolean):DataAdapter {
   return { source,supports:c=>coverage(source.id,c),async retrieve(request,execution) {
     validateContext(request.context); const result=initialResult(source,request,execution);const eligible=coverage(source.id,request.context);let transport:JsonTransport|undefined;
     if(!eligible.eligible){result.outcome=eligible.outcome;result.error={code:eligible.code,retryable:false,status:null};return validateResult(result);}
     try {
       if(!Number.isSafeInteger(request.radiusMetres)||request.radiusMetres<1||request.radiusMetres>1000)throw new SourceError("invalid_request");
-      const point=request.context.selectedProperty.point!;transport=factory(execution);
-      const data=await transport.request({lat:String(point.latitude),lon:String(point.longitude),radius:String(request.radiusMetres),stopTypes:"NaptanPublicBusCoachTram,NaptanMetroStation,NaptanRailStation,NaptanFerryPort",useStopPointHierarchy:"false",returnLines:"false",categories:"none"});
+      const point=queryPoint(request.context)!;transport=factory(execution);
+      const data=await transport.request({lat:String(point.latitude),lon:String(point.longitude),radius:String(stations?1000:request.radiusMetres),stopTypes:stations?"NaptanMetroStation,NaptanRailStation":"NaptanPublicBusCoachTram,NaptanMetroStation,NaptanRailStation,NaptanFerryPort",useStopPointHierarchy:stations?"true":"false",returnLines:"false",categories:"none"});
       const payload=normaliseTfl(data,source.maxRecords);
       result.outcome=payload.items.length?payload.complete?"success":"partial":"empty";
       result.payload=payload.items.length?payload:null;

@@ -20,3 +20,8 @@ export function purchaseSameOrigin(request: Request,env: Readonly<Record<string,
  const origin=purchaseOrigin(env);
  return !!origin&&request.headers.get("origin")===origin&&request.headers.get("sec-fetch-site")!=="cross-site";
 }
+/** Presentation only; mutation identity, ownership and same-origin checks remain
+ * authoritative. Immutable Preview URLs must not advertise an unusable purchase. */
+export function purchaseAvailableOnHost(env: Readonly<Record<string,string|undefined>>, host: string | null) {
+ try { return !!host && new URL(stripeConfig(env).origin).host === host; } catch { return false; }
+}

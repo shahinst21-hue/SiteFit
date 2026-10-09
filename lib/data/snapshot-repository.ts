@@ -5,6 +5,7 @@ import { SourceError } from "./errors.ts";
 import { object, uuid, validateContext, validateResult } from "./validation.ts";
 import { frameworkClient } from "./server-client.ts";
 import { assertPolicy } from "./policy.ts";
+import { validateEnrichmentInput, type EnrichmentInput } from "./enrichment-input.ts";
 
 type Preparation = Pick<CollectionContext, "region" | "geography" | "releases">;
 function json(value: unknown): Json { return value as Json; }
@@ -17,7 +18,11 @@ function decode(value: unknown): StoredSnapshot {
   if (result.meta.source !== row.source || result.meta.datasetReleaseId !== row.dataset_release_id) throw new SourceError("persistence_failed");
   return { id: row.id, analysisId: row.analysis_id, inputId: row.input_id, collectionKey: row.collection_key, requestHash: row.request_sha256, result };
 }
-export function snapshotRepository(ownerId: string): SnapshotRepository & { prepare(analysisId: string, userSupplied: Json, context: Preparation): Promise<CollectionContext> } {
+type PreparedRepository = SnapshotRepository & {
+  prepare(analysisId: string, userSupplied: Json, context: Preparation): Promise<CollectionContext>;
+  prepareEnriched(analysisId: string, userSupplied: Json, context: Preparation, enrichment: EnrichmentInput): Promise<CollectionContext>;
+};
+export function snapshotRepository(ownerId: string): PreparedRepository {
   // Caller supplies a verified identity, never an identity from a public request body.
   if (!uuid(ownerId)) throw new SourceError("permission_denied");
   // Separate short-lived privileged client; no Auth cookie/session and no browser consumer.
@@ -29,7 +34,21 @@ export function snapshotRepository(ownerId: string): SnapshotRepository & { prep
     if (error || !data || data.owner_id !== ownerId) throw new SourceError("permission_denied");
     return data;
   }
-  const repository: SnapshotRepository & { prepare(analysisId: string, userSupplied: Json, context: Preparation): Promise<CollectionContext> } = {
+  const repository: PreparedRepository = {
+    async prepareEnriched(analysisId, userSupplied, context, enrichment) {
+      if (!uuid(analysisId)) throw new SourceError("invalid_request");
+      const validated = validateEnrichmentInput(enrichment);
+      await owned(analysisId);
+      const bound = AbortSignal.timeout(8000);
+      const { data, error } = await client.rpc("prepare_sitefit_enriched_input", {
+        p_analysis_id: analysisId, p_user_supplied: userSupplied, p_context: json(context), p_enrichment: json(validated),
+      }).abortSignal(bound);
+      checkAbort(bound);
+      if (error || !data) throw new SourceError("persistence_failed");
+      const frozen = validateContext(data.resolved_context);
+      if (frozen.schemaVersion !== 2 || frozen.analysisId !== analysisId) throw new SourceError("persistence_failed");
+      return frozen;
+    },
     async prepare(analysisId, userSupplied, context) {
       if (!uuid(analysisId)) throw new SourceError("invalid_request");
       await owned(analysisId);

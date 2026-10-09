@@ -1,6 +1,7 @@
 import type { Geography, Point, Precision } from "../spatial/model.ts";
+import type { EnrichmentInput } from "./enrichment-input.ts";
 
-export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments"] as const;
+export const sourceIds = ["ons-population", "tfl-stop-points", "fsa-establishments", "planning-conservation", "planning-article4", "geoapify-walking", "ons-catchments", "overture-catchments", "tfl-stations", "geoapify-access", "tfl-station-activity", "propertydata-premises", "propertydata-flood", "propertydata-rent", "ons-income-context", "ons-jobs-context", "govuk-non-domestic-epc"] as const;
 export type SourceId = (typeof sourceIds)[number];
 export type Category = "coffee-shop" | "restaurant" | "hair-beauty-salon";
 export type Outcome = "success" | "partial" | "empty" | "unavailable" | "unsupported" | "not_applicable" | "policy_blocked";
@@ -10,7 +11,8 @@ export const errorCodes = ["invalid_request", "unsupported_geography", "insuffic
 export type ErrorCode = (typeof errorCodes)[number];
 export type SafeSourceError = { code: ErrorCode; retryable: boolean; status: number | null };
 export type CollectionContext = {
-  schemaVersion: 1; analysisId: string; inputId: string; inputVersion: number; analysisTimestamp: string;
+  schemaVersion: 1 | 2; analysisId: string; inputId: string; inputVersion: number; analysisTimestamp: string;
+  enrichment?: EnrichmentInput;
   selectedProperty: { id: string; formattedAddress: string; postcode: string | null; provider: string | null;
     providerAddressId: string | null; uprn: string | null; point: Point | null; resolution: "provider_verified" | "manual_unverified" };
   businessType: "coffee-shop" | "restaurant" | "hair-salon" | "beauty-salon"; category: Category;
@@ -18,7 +20,7 @@ export type CollectionContext = {
   geography: Geography | null; releases: { population: string | null; geography: string | null };
 };
 export type ObservationRef = { id: string; path: string; recordId: string; reference: string; observedAt: string | null;
-  units: string; geography: string | null; sourceClass: "official_public_data"; kind: "direct_register" | "measured" | "modelled" | "inferred"; limitations: string[] };
+  units: string; geography: string | null; sourceClass: "official_public_data" | "commercial_data" | "community_open_data"; kind: "direct_register" | "measured" | "modelled" | "inferred"; limitations: string[] };
 export type RetentionPermission = { allowed: boolean; maxDays: number | null; condition: string };
 export type LicenceMetadata = { policyId: string; version: number; reviewedAt: string; termsUrl: string;
   raw: RetentionPermission; normalised: RetentionPermission; derived: RetentionPermission; references: RetentionPermission;
@@ -41,7 +43,14 @@ export type TransportAccessPoints = { schemaVersion: 1; kind: "transport_access_
   items: { id: string; name: string; mode: "bus" | "rail" | "tube" | "tram" | "water" | "other"; originalMode: string; point: Point | null }[] };
 export type FoodEstablishments = { schemaVersion: 1; kind: "food_establishments"; complete: boolean;
   items: { id: string; authorityId: string; name: string; businessType: string; point: Point | null; observedAt: string | null }[] };
-export type Payload = AreaPopulation | TransportAccessPoints | FoodEstablishments;
+export type PlanningConstraints = { schemaVersion: 1; kind: "planning_constraints";
+  lookup: ReturnType<typeof import("./planning-constraints.ts").validateConstraintLookup> };
+export type WalkingGeometry = { schemaVersion: 1; kind: "walking_geometry";
+  walking: import("./adapters/geoapify.ts").WalkingCatchments; topology: import("./walking-result.ts").WalkingTopology };
+export type Payload = import("./epc-result.ts").EpcResult | import("./native-context-result.ts").NativeContextResult | AreaPopulation | TransportAccessPoints | FoodEstablishments | PlanningConstraints | WalkingGeometry |
+  import("./property-fact-result.ts").PropertyFactResult |
+  import("./station-walking-result.ts").StationWalkingResult | import("./station-activity-result.ts").StationActivityResult |
+  import("./catchment-sources.ts").CatchmentSources | import("./catchment-sources.ts").CatchmentPlaces;
 export type ProviderResult = { schemaVersion: 1; outcome: Outcome; payload: Payload | null; observations: ObservationRef[];
   meta: RetrievalMetadata; limitations: string[]; error: SafeSourceError | null };
 export type SourceRequest = { context: CollectionContext; collectionKey: string; radiusMetres: number };

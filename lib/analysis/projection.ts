@@ -1,3 +1,4 @@
+import { validateEnrichedSpatialProjection, type EnrichedSpatialProjection } from "./enriched-spatial-projection.ts";
 import type { CollectionContext } from "../data/contracts.ts";
 import type { interpretSections, synthesiseSections } from "./section-engine.ts";
 import type { Evidence } from "./evidence.ts";
@@ -5,15 +6,18 @@ import type { Dimension, EvidenceStrength } from "./scoring.ts";
 import type { residentialMetric } from "./metrics.ts";
 type Sections = Awaited<ReturnType<typeof interpretSections>>["sections"];
 type EarlyView = Awaited<ReturnType<typeof synthesiseSections>>;
-export type FreeProjection = { schemaVersion: 2; analysisId: string; generatedAt: string;
+export type LegacyFreeProjection = { schemaVersion: 2; analysisId: string; generatedAt: string;
   property: { address: string; resolution: string; precision: string }; businessType: string;
   earlyView: { headline: string; reason: string; meaning: string; strength: EvidenceStrength; keyQuestions: string[]; coverage: string };
   dimensions: { id: Dimension; title: string; conclusion: string; reason: string; strength: EvidenceStrength; meaning: string;
     score: number | null; scoreNote: string; question: string; implication: string;
     why: { support: string[]; opposition: string[]; alternatives: string[]; unknowns: string[];
-      observations: { label: string; value: number | string | null; units: string | null; effectiveAt: string | null; scope: string }[];
+      observations: { label: string; value: number | string | null; units: string | null; effectiveAt: string | null; scope: string;
+        sourceType?: "official" | "observed" | "modelled" | "inferred" }[];
       comparison: { description: string; density: number | null; units: string; percentile: number | null; peers: number | null; limitations: string[] } | null;
       sources: { provider: string; dataset: string; url: string | null; retrievedAt: string | null; notices: string[] }[] } }[] };
+export type EnrichedFreeProjection = Omit<LegacyFreeProjection, "schemaVersion"> & {schemaVersion: 3; spatial: EnrichedSpatialProjection};
+export type FreeProjection = LegacyFreeProjection | EnrichedFreeProjection;
 const labels: Record<Dimension, string> = { "customer-base": "Customer Base", "market-position": "Market Position", "customer-access": "Customer Access", premises: "Premises" };
 const suppression: Record<Dimension, string> = {
   "customer-base": "Score needs current daytime demand, purchasing power and customer-fit evidence.",
@@ -24,7 +28,7 @@ const suppression: Record<Dimension, string> = {
 function sourceUrl(value: string): string | null {
   try { const url = new URL(value); return url.protocol === "https:" && !url.username && !url.password && !url.search && !url.hash ? url.href : null; } catch { return null; }
 }
-export function freeProjection(context: CollectionContext, sections: Sections, early: EarlyView, evidence: readonly Evidence[], residential: ReturnType<typeof residentialMetric> | null, generatedAt: string): FreeProjection {
+export function freeProjection(context: CollectionContext, sections: Sections, early: EarlyView, evidence: readonly Evidence[], residential: ReturnType<typeof residentialMetric> | null, generatedAt: string): LegacyFreeProjection {
   if (sections.length !== 4) throw new Error("incomplete_projection");
   return { schemaVersion: 2, analysisId: context.analysisId, generatedAt,
     property: { address: context.selectedProperty.formattedAddress, resolution: context.selectedProperty.resolution, precision: context.selectedProperty.point?.precision ?? "unknown" }, businessType: context.businessType,
@@ -51,10 +55,10 @@ export function validateFreeProjection(value: unknown): FreeProjection {
   const list = (value: unknown): string[] => { if (!Array.isArray(value) || value.length > 32) throw new Error("invalid_projection_list"); return value.map(item => text(item)); };
   const strength = (value: unknown): EvidenceStrength => { if (value !== "limited" && value !== "sufficient" && value !== "insufficient") throw new Error("invalid_projection_strength"); return value; };
   const meaning = (value: unknown) => { if (!["favourable", "trade_off", "conditional", "no_basis"].includes(String(value))) throw new Error("invalid_projection_meaning"); return String(value); };
-  if (row.schemaVersion !== 2 || !/^[0-9a-f-]{36}$/i.test(row.analysisId) || !Number.isFinite(Date.parse(row.generatedAt)) || !Array.isArray(row.dimensions) || row.dimensions.length !== 4 || new Set(row.dimensions.map(d => d.id)).size !== 4) throw new Error("invalid_free_projection");
+  if (![2,3].includes(row.schemaVersion) || !/^[0-9a-f-]{36}$/i.test(row.analysisId) || !Number.isFinite(Date.parse(row.generatedAt)) || !Array.isArray(row.dimensions) || row.dimensions.length !== 4 || new Set(row.dimensions.map(d => d.id)).size !== 4) throw new Error("invalid_free_projection");
   const numeric = (value: unknown): number | null => { if (value === null) return null; if (typeof value !== "number" || !Number.isFinite(value) || value < 0) throw new Error("invalid_projection_number"); return value; };
   if (!["coffee-shop", "restaurant", "hair-salon", "beauty-salon"].includes(row.businessType)) throw new Error("invalid_projection_business");
-  return { schemaVersion: 2, analysisId: row.analysisId, generatedAt: row.generatedAt,
+  const reconstructed: LegacyFreeProjection = { schemaVersion: 2, analysisId: row.analysisId, generatedAt: row.generatedAt,
     property: { address: text(row.property?.address, 500), resolution: text(row.property?.resolution), precision: text(row.property?.precision) }, businessType: text(row.businessType),
     earlyView: { headline: text(row.earlyView?.headline), reason: text(row.earlyView?.reason), meaning: meaning(row.earlyView?.meaning), strength: strength(row.earlyView?.strength), keyQuestions: list(row.earlyView?.keyQuestions), coverage: text(row.earlyView?.coverage) },
     dimensions: row.dimensions.map(d => {
@@ -65,9 +69,14 @@ export function validateFreeProjection(value: unknown): FreeProjection {
       return { id: d.id, title: labels[d.id], conclusion: text(d.conclusion), reason: text(d.reason), strength: strength(d.strength), meaning: meaning(d.meaning), score: d.score,
         scoreNote: text(d.scoreNote), question: text(d.question), implication: text(d.implication), why: {
           support: list(d.why.support), opposition: list(d.why.opposition), alternatives: list(d.why.alternatives), unknowns: list(d.why.unknowns),
-          observations: d.why.observations.map(o => ({ label: text(o.label), value: o.value === null ? null : typeof o.value === "number" ? numeric(o.value) : text(o.value), units: o.units === null ? null : text(o.units), effectiveAt: o.effectiveAt === null ? null : text(o.effectiveAt), scope: text(o.scope) })),
+          observations: d.why.observations.map(o => {
+            if (row.schemaVersion === 3 && !["official", "observed", "modelled", "inferred"].includes(String(o.sourceType))) throw new Error("invalid_projection_source_type");
+            return { label: text(o.label), value: o.value === null ? null : typeof o.value === "number" ? numeric(o.value) : text(o.value), units: o.units === null ? null : text(o.units), effectiveAt: o.effectiveAt === null ? null : text(o.effectiveAt), scope: text(o.scope),
+              ...(row.schemaVersion === 3 ? {sourceType: o.sourceType} : {}) };
+          }),
           comparison: comparison === null ? null : { description: text(comparison.description), density: numeric(comparison.density), units: text(comparison.units), percentile: numeric(comparison.percentile), peers: numeric(comparison.peers), limitations: list(comparison.limitations) },
           sources: d.why.sources.map(source => ({ provider: text(source.provider), dataset: text(source.dataset), url: source.url === null ? null : sourceUrl(text(source.url)), retrievedAt: source.retrievedAt === null ? null : text(source.retrievedAt), notices: list(source.notices) })),
         } };
     }) };
+  return row.schemaVersion === 3 ? {...reconstructed, schemaVersion: 3, spatial: validateEnrichedSpatialProjection(row.spatial)} : reconstructed;
 }

@@ -2,6 +2,15 @@ import { SourceError } from "./errors.ts";
 import { sourceIds, errorCodes } from "./contracts.ts";
 import type { CollectionContext, ProviderResult } from "./contracts.ts";
 import { validPoint } from "../spatial/model.ts";
+import { validateEnrichmentInput } from "./enrichment-input.ts";
+import { validateStoredConstraintLookup } from "./planning-constraints.ts";
+import { validateWalkingCatchments, validateWalkingTopology } from "./walking-result.ts";
+import { validateCatchmentSources, validateCatchmentPlaces } from "./catchment-sources.ts";
+import { validateStationWalkingResult } from "./station-walking-result.ts";
+import { validateStationActivityResult } from "./station-activity-result.ts";
+import { validateNativeContextResult } from "./native-context-result.ts";
+import { validatePropertyFactResult } from "./property-fact-result.ts";
+import { validateEpcResult } from "./epc-result.ts";
 
 export function object(value: unknown): Record<string, unknown> {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new SourceError("invalid_response");
@@ -29,9 +38,9 @@ function keys(value: Record<string, unknown>, allowed: string) { const fields = 
 
 export function validateContext(value: unknown): CollectionContext {
   const c = object(value), p = object(c.selectedProperty), r = object(c.region), releases = object(c.releases);
-  keys(c, "schemaVersion analysisId inputId inputVersion analysisTimestamp selectedProperty businessType category region geography releases");
+  keys(c, "schemaVersion analysisId inputId inputVersion analysisTimestamp selectedProperty businessType category region geography releases enrichment");
   keys(p, "id formattedAddress postcode provider providerAddressId uprn point resolution"); keys(r, "id boundaryReleaseId eligible method"); keys(releases, "population geography");
-  demand(c.schemaVersion === 1 && uuid(c.analysisId) && uuid(c.inputId) && integer(c.inputVersion) && Number(c.inputVersion) > 0 && timestamp(c.analysisTimestamp));
+  demand([1, 2].includes(Number(c.schemaVersion)) && typeof c.schemaVersion === "number" && uuid(c.analysisId) && uuid(c.inputId) && integer(c.inputVersion) && Number(c.inputVersion) > 0 && timestamp(c.analysisTimestamp));
   demand(uuid(p.id) && text(p.formattedAddress) && (p.postcode === null || text(p.postcode, 20)) && (p.point === null || validPoint(p.point)));
   for (const key of ["provider", "providerAddressId", "uprn"]) demand(p[key] === null || text(p[key], 120));
   demand(["provider_verified", "manual_unverified"].includes(String(p.resolution)));
@@ -41,6 +50,10 @@ export function validateContext(value: unknown): CollectionContext {
   for (const v of Object.values(releases)) demand(v === null || uuid(v));
   demand("population" in releases && "geography" in releases);
   if (c.geography !== null) { const g = object(c.geography); demand(/^E00\d{6}$/.test(String(g.code)) && g.type === "OA2021" && uuid(g.releaseId) && typeof g.ambiguous === "boolean" && ["point_in_polygon", "centroid_proxy"].includes(String(g.method))); }
+  if (c.schemaVersion === 2) {
+    const enriched = validateEnrichmentInput(c.enrichment);
+    demand(enriched.releases.geographyReleaseId === releases.geography && enriched.releases.geographyReleaseId === r.boundaryReleaseId);
+  } else demand(!("enrichment" in c));
   return structuredClone(value) as CollectionContext;
 }
 
@@ -68,22 +81,88 @@ export function validateResult(value: unknown): ProviderResult {
   demand((cost.money === null) === (cost.currency === null) && ["observed", "estimated", "unknown"].includes(String(cost.category)) && (cost.priceReference === null || reference(cost.priceReference)));
   demand(integer(execution.durationMs) && integer(execution.attempts, 20) && integer(execution.pages, 10) && (execution.httpStatus === null || integer(execution.httpStatus, 599)) && (execution.providerRequestId === null || /^[A-Za-z0-9-]{1,100}$/.test(String(execution.providerRequestId))));
   demand(strings(r.limitations) && Array.isArray(r.observations) && r.observations.length <= 500);
-  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === "official_public_data" && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
+  for (const observation of r.observations) { const o = object(observation); keys(o, "id path recordId reference observedAt units geography sourceClass kind limitations"); for (const key of ["id", "path", "recordId", "units"]) demand(text(o[key], 200)); demand(reference(o.reference) && o.sourceClass === (["geoapify-walking", "geoapify-access"].includes(String(m.source)) || String(m.source).startsWith("propertydata-") ? "commercial_data" : m.source === "overture-catchments" ? "community_open_data" : "official_public_data") && ["direct_register", "measured", "modelled", "inferred"].includes(String(o.kind)) && strings(o.limitations) && (o.geography === null || text(o.geography, 100))); nullableDate(o.observedAt); }
   if (["success", "partial"].includes(String(r.outcome))) {
     const p = object(r.payload); demand(p.schemaVersion === 1 && r.observations.length > 0);
-    if (m.source === "ons-population") {
+    if (m.source === "govuk-non-domestic-epc") {
+      const checked=validateEpcResult(p);
+      demand(m.provider==="govuk-energy-data" && m.dataset==="non-domestic-CEPC8" && m.operation==="conditional-uprn-certificate" &&
+        m.sourceRetrievedAt===checked.discovery.retrievedAt && m.datasetReleaseId===null && q.precision==="building" &&
+        q.truncated===!checked.discovery.complete && r.outcome==="partial" && r.observations.length===1 &&
+        object(r.observations[0]).path==="discovery" && object(r.observations[0]).recordId===checked.binding.uprn);
+    } else if (m.source === "ons-income-context" || m.source === "ons-jobs-context") {
+      const checked = validateNativeContextResult(p), d = checked.distribution, target = object(d.target);
+      demand(m.provider === "ons" && m.operation === "native-target-excluded-distribution" &&
+        m.dataset === (m.source === "ons-income-context" ? "income-AHC-FYE2023" : "BRES2024") &&
+        object(target.measure).dataset === m.dataset && m.datasetReleaseId === d.releaseId && m.sourceVersion === d.releaseVersion &&
+        m.sourceRetrievedAt === d.sourceRetrievedAt && m.publishedAt === d.publishedAt && q.precision === "building" &&
+        r.outcome === "success" && r.observations.length === 1 && object(r.observations[0]).path === "distribution" &&
+        object(r.observations[0]).recordId === object(target.geography).code && object(r.observations[0]).units === object(target.measure).unit &&
+        object(r.observations[0]).kind === (m.source === "ons-income-context" ? "modelled" : "measured"));
+    } else if (String(m.source).startsWith("propertydata-")) {
+      const checked = validatePropertyFactResult(p);
+      const operation = m.source === "propertydata-premises" ? "uprn" : m.source === "propertydata-flood" ? "flood-risk" : "rents-commercial";
+      demand(checked.operation === operation && m.operation === operation && m.provider === "propertydata" &&
+        m.dataset === (operation === "uprn" ? "selected-property-facts" : operation === "flood-risk" ? "point-rivers-sea" : "commercial-quoting-rent") &&
+        m.sourceRetrievedAt === checked.facts.retrievedAt && q.truncated === false &&
+        cost.units === (checked.facts.cost.observedCredits ?? checked.facts.cost.estimatedCreditCeiling) &&
+        cost.category === (checked.facts.cost.observedCredits === null ? "estimated" : "observed") &&
+        m.datasetReleaseId === null && q.precision === "building" && r.outcome === "partial" && r.observations.length === 1 &&
+        object(r.observations[0]).recordId === checked.binding.uprn && object(r.observations[0]).path === "facts" &&
+        object(r.observations[0]).kind === (operation === "uprn" ? "direct_register" : "modelled"));
+    } else if (m.source === "ons-population") {
       keys(p, "schemaVersion kind geographyCode geographyReleaseId measure count missingReason units universe effectiveAt releaseId");
       demand(p.kind === "area_population" && /^E00\d{6}$/.test(String(p.geographyCode)) && uuid(p.geographyReleaseId) && uuid(p.releaseId) && p.measure === "TS001-total" && p.units === "persons" && p.universe === "usual_residents" && timestamp(p.effectiveAt));
       demand((p.count === null && text(p.missingReason)) || (integer(p.count) && p.missingReason === null));
       demand(r.observations.length === 1 && object(r.observations[0]).path === "count" && object(r.observations[0]).recordId === p.geographyCode && object(r.observations[0]).units === "persons");
+    } else if (m.source === "geoapify-access" || m.source === "tfl-station-activity") {
+      const walking = m.source === "geoapify-access";
+      const checked = walking ? validateStationWalkingResult(p) : validateStationActivityResult(p);
+      demand(q.precision === "building" && r.observations.length === 1 && object(r.observations[0]).recordId === checked.parent.snapshotId &&
+        object(r.observations[0]).kind === "modelled" && object(r.observations[0]).path === (walking ? "matrix" : "stations") &&
+        m.provider === (walking ? "geoapify" : "tfl") && m.dataset === (walking ? "walking-matrix" : "NUMBAT2025"));
+      demand(walking ? m.datasetReleaseId === null : uuid(m.datasetReleaseId) && checked.kind === "station_activity" && checked.releaseId === m.datasetReleaseId);
+      const incomplete = !checked.registerComplete || checked.omittedIds.length > 0 || checked.truncatedReviewedIds.length > 0;
+      const failed = checked.kind === "station_walking" ? checked.matrix.targets.some(t => t.outcome !== "success") : checked.failures.length > 0;
+      demand(r.outcome === (incomplete || failed ? "partial" : "success") && q.truncated === incomplete &&
+        object(r.observations[0]).units === (walking ? "metres_seconds" : "typical_day_gateline_passenger_movements"));
+    } else if (m.source === "ons-catchments" || m.source === "overture-catchments") {
+      const statistics = m.source === "ons-catchments";
+      const checked = statistics ? validateCatchmentSources(p) : validateCatchmentPlaces(p);
+      const outcomes = checked.kind === "catchment_statistics" ? checked.ranges.flatMap(range => range.statistics) : checked.ranges;
+      demand(outcomes.some(item => item.outcome === "success") && q.precision === "building" &&
+        m.provider === (statistics ? "ons" : "overture") && m.dataset === (statistics ? "census-income-bres" : "places") &&
+        m.datasetReleaseId === (checked.kind === "catchment_statistics" ? null : checked.releaseId) &&
+        r.outcome === (outcomes.every(item => item.outcome === "success") ? "success" : "partial") &&
+        r.observations.length === 1 && object(r.observations[0]).path === "ranges" &&
+        object(r.observations[0]).recordId === checked.parent.snapshotId &&
+        object(r.observations[0]).units === (statistics ? "native_statistical_operands" : "native_place_records"));
+    } else if (m.source === "geoapify-walking") {
+      keys(p, "schemaVersion kind walking topology"); demand(p.kind === "walking_geometry" && q.precision === "building");
+      validateWalkingCatchments(p.walking);
+      const topology = object(p.topology); demand(uuid(topology.geographyReleaseId));
+      const checkedTopology = validateWalkingTopology(topology, topology.geographyReleaseId);
+      demand(m.provider === "geoapify" && m.dataset === "walking-isolines" && m.datasetReleaseId === null &&
+        r.observations.length === 1 && object(r.observations[0]).path === "walking" &&
+        object(r.observations[0]).sourceClass === "commercial_data" && object(r.observations[0]).kind === "modelled" &&
+        object(r.observations[0]).units === "seconds_metres_geometry" && r.outcome === (checkedTopology.parts[2].londonCoverageFraction === 1 ? "success" : "partial"));
+    } else if (m.source === "planning-conservation" || m.source === "planning-article4") {
+      keys(p, "schemaVersion kind lookup");
+      demand(p.kind === "planning_constraints" && uuid(m.datasetReleaseId) && r.outcome === "partial" && q.precision === "building");
+      const dataset = m.source === "planning-conservation" ? "conservation-area" : "article-4-direction-area";
+      validateStoredConstraintLookup(p.lookup, m.datasetReleaseId, dataset);
+      demand(m.provider === "planning-data" && m.dataset === dataset && r.observations.length === 1 &&
+        object(r.observations[0]).path === "lookup" && object(r.observations[0]).recordId === m.datasetReleaseId &&
+        object(r.observations[0]).units === "published_designation_profiles");
     } else {
       keys(p, "schemaVersion kind complete items");
-      demand(p.kind === (m.source === "tfl-stop-points" ? "transport_access_points" : "food_establishments") && typeof p.complete === "boolean" && Array.isArray(p.items) && p.items.length > 0 && p.items.length <= 500);
+      const transport = m.source === "tfl-stop-points" || m.source === "tfl-stations";
+      demand(p.kind === (transport ? "transport_access_points" : "food_establishments") && typeof p.complete === "boolean" && Array.isArray(p.items) && p.items.length > 0 && p.items.length <= 500);
       demand(r.outcome !== "success" || p.complete === true); demand(!q.truncated || r.outcome === "partial");
       const ids = new Set<string>();
       for (const item of p.items) { const i = object(item); demand(text(i.id, 120) && !ids.has(i.id) && text(i.name, 300) && (i.point === null || validPoint(i.point))); ids.add(i.id);
-        keys(i, m.source === "tfl-stop-points" ? "id name mode originalMode point" : "id authorityId name businessType point observedAt");
-        if (m.source === "tfl-stop-points") demand(["bus", "rail", "tube", "tram", "water", "other"].includes(String(i.mode)) && text(i.originalMode, 100));
+        keys(i, transport ? "id name mode originalMode point" : "id authorityId name businessType point observedAt");
+        if (transport) demand(["bus", "rail", "tube", "tram", "water", "other"].includes(String(i.mode)) && text(i.originalMode, 100));
         else { demand(text(i.authorityId, 120) && text(i.businessType, 120)); nullableDate(i.observedAt); }
       }
       demand(r.observations.length === p.items.length);
@@ -96,3 +175,6 @@ export function validateResult(value: unknown): ProviderResult {
   const encoded = JSON.stringify(value); demand(encoded.length <= 2_000_000 && !/(?:sb_secret_|sk_live_|app_key=|"(?:authorization|headers|rawResponse|stack)"\s*:)/i.test(encoded));
   return structuredClone(value) as ProviderResult;
 }
+
+
+

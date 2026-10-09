@@ -24,7 +24,8 @@ export type SnapshotFactor = {
 export type SnapshotMap = {
   status: DataState; description: string; bounds: [number, number, number, number] | null;
   layers: { id: string; label: string; kind: "property" | "catchment" | "competitor" | "complementary" | "transport";
-    status: DataState; colour: string; points: [number, number][]; polygons: [number, number][][] }[];
+    status: DataState; colour: string; points: [number, number][]; polygons: [number, number][][];
+    polygonParts?: [number, number][][][] }[];
 };
 export type SnapshotTransport = { id: string; name: string; mode: string | null; distanceMetres: number | null; walkingMinutes: number | null; information: string | null; status: DataState };
 export type SnapshotView = {
@@ -50,6 +51,19 @@ export function emptyMetric(id: string, label: string, status: DataState = "unkn
 export function snapshotFromStored(report: FreeProjection): SnapshotView {
   const sources = report.dimensions.flatMap(d => d.why.sources);
   const count = new Set(sources.map(s => `${s.provider}:${s.dataset}`)).size;
+  const spatial = report.schemaVersion === 3 ? report.spatial : null;
+  const point = (p: {longitude: number; latitude: number}): [number,number] => [p.longitude,p.latitude];
+  const layers: SnapshotMap["layers"] = spatial ? [
+    ...(spatial.origin ? [{id: "property", label: "OS building point · entrance unconfirmed", kind: "property" as const, status: "available" as const, colour: "#cf3540", points: [point(spatial.origin)], polygons: []}] : []),
+    ...spatial.catchments.map(c => ({id: `walk-${c.seconds}`, label: `${c.seconds / 60} minute modelled walk`, kind: "catchment" as const,
+      status: "available" as const, colour: c.seconds === 300 ? "#cf3540" : c.seconds === 600 ? "#5681c5" : "#9166c4", points: [], polygons: [],
+      polygonParts: (c.geometry.type === "Polygon" ? [c.geometry.coordinates] : c.geometry.coordinates) as [number,number][][][]})),
+    ...(spatial.stations.length ? [{id: "stations", label: "Reviewed station register points · entrances unconfirmed", kind: "transport" as const,
+      status: "available" as const, colour: "#287eaa", points: spatial.stations.map(s => point(s.point)), polygons: []}] : []),
+  ] : [];
+  const coordinates = layers.flatMap(l => [...l.points, ...l.polygons.flat(), ...(l.polygonParts?.flat(2) ?? [])]);
+  const bounds: SnapshotMap["bounds"] = coordinates.length ? [Math.min(...coordinates.map(p => p[0]))-.0002, Math.min(...coordinates.map(p => p[1]))-.0002,
+    Math.max(...coordinates.map(p => p[0]))+.0002, Math.max(...coordinates.map(p => p[1]))+.0002] : null;
   return {
     schemaVersion: 1, mode: "production", generatedAt: report.generatedAt, analysisStatus: "available",
     property: { address: report.property.address, confirmation: report.property.resolution === "provider_verified" ? "Postal address confirmed" : "Manually entered address",
@@ -59,12 +73,15 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
       quality: qualities[report.earlyView.strength], score: { status: "unavailable", value: null, label: "Overall location assessment", explanation: "An overall score needs complete demand, competition, access and premises evidence. Available findings are shown below.", method: null } },
     supportiveSignals: [...new Set(report.dimensions.flatMap(d => d.why.support))].slice(0, 3),
     openQuestions: report.earlyView.keyQuestions, coverage: report.earlyView.coverage,
-    map: { status: "unavailable", description: "Verified walking catchments, business locations and transport routes are not available in this saved analysis.", bounds: null, layers: [] },
-    transport: { status: "unavailable", places: [], note: "Nearby stop observations do not establish station distances, walking times or usable journeys." },
+    map: spatial ? {status: bounds && spatial.catchments.length ? "available" : "unavailable", description: spatial.limitations.join(" "), bounds, layers} : { status: "unavailable", description: "Verified walking catchments, business locations and transport routes are not available in this saved analysis.", bounds: null, layers: [] },
+    transport: spatial ? {status: spatial.stations.length ? "available" : "unavailable", places: spatial.stations.map(s => ({id: s.id, name: s.name, mode: s.mode,
+      distanceMetres: s.metres, walkingMinutes: s.seconds === null ? null : s.seconds / 60,
+      information: "Modelled walking route to station register point; entrance and usable services unconfirmed.", status: s.outcome === "success" ? "available" : "unavailable"})),
+      note: "Stored modelled routes; not observed journeys or step-free guarantees."} : { status: "unavailable", places: [], note: "Nearby stop observations do not establish station distances, walking times or usable journeys." },
     factors: report.dimensions.map(d => {
       const metrics: SnapshotMetric[] = d.why.observations.slice(0, 3).map((o, i) => ({ id: `${d.id}-${i}`, label: o.label,
         value: o.value, unit: o.units, description: o.scope, comparison: null, status: o.value === null ? "unknown" : "available",
-        evidenceQuality: qualities[d.strength], sourceCount: d.why.sources.length || null, updatedAt: o.effectiveAt, sourceType: "official" }));
+        evidenceQuality: qualities[d.strength], sourceCount: d.why.sources.length || null, updatedAt: o.effectiveAt, sourceType: o.sourceType ?? "official" }));
       if (d.id === "customer-base" && d.why.comparison?.density !== null && d.why.comparison?.density !== undefined) {
         metrics.push({ ...emptyMetric("resident-density", "Usual resident density"), value: Math.round(d.why.comparison.density), unit: d.why.comparison.units,
           status: "available", evidenceQuality: qualities[d.strength], sourceType: "official", description: "Whole Census output area; not a walking catchment or current customer count." });
@@ -121,14 +138,17 @@ export function validateSnapshotView(value: unknown, expectedMode: SnapshotView[
   }
   if (!row.map || !states.includes(row.map.status) || !Array.isArray(row.map.layers) || row.map.layers.length > 12 || !row.transport || !states.includes(row.transport.status) || !Array.isArray(row.transport.places) || row.transport.places.length > 30) throw new Error("invalid_snapshot_context");
   if (row.map.bounds !== null && (row.map.bounds.length !== 4 || !row.map.bounds.every(Number.isFinite) || row.map.bounds[0] >= row.map.bounds[2] || row.map.bounds[1] >= row.map.bounds[3])) throw new Error("invalid_map_bounds");
-  for (const l of row.map.layers) if (!text(l.id) || !text(l.label) || !states.includes(l.status) || !/^#[0-9a-f]{6}$/i.test(l.colour) || !Array.isArray(l.points) || !Array.isArray(l.polygons) || [...l.points, ...l.polygons.flat()].some(p => p.length !== 2 || !p.every(Number.isFinite))) throw new Error("invalid_map_layer");
+  for (const l of row.map.layers) if (!text(l.id) || !text(l.label) || !states.includes(l.status) || !/^#[0-9a-f]{6}$/i.test(l.colour) || !Array.isArray(l.points) || !Array.isArray(l.polygons) ||
+    l.polygonParts !== undefined && (!Array.isArray(l.polygonParts) || l.polygonParts.length > 100 || l.polygonParts.some(p => !Array.isArray(p) || !p.length || p.some(r => !Array.isArray(r) || r.length < 4))) ||
+    [...l.points, ...l.polygons.flat(), ...(l.polygonParts?.flat(2) ?? [])].some(p => p.length !== 2 || !p.every(Number.isFinite))) throw new Error("invalid_map_layer");
   for (const p of row.transport.places) if (!text(p.name) || !states.includes(p.status) || !number(p.distanceMetres) || !number(p.walkingMinutes) || p.status !== "available" && (p.distanceMetres !== null || p.walkingMinutes !== null)) throw new Error("invalid_transport");
   if (!row.financialPreview || !["available", "locked"].includes(row.financialPreview.status) || !Object.values(row.financialPreview.inputs).every(number) || !row.evidenceSummary || !number(row.evidenceSummary.sourceCount) || !date(row.evidenceSummary.updatedAt)) throw new Error("invalid_snapshot_preview");
   if (expectedMode === "production" && row.financialPreview.status !== "locked") throw new Error("production_preview_requires_verified_engine");
   // In particular, never forward arbitrary provider metadata to client props.
   return structuredClone({ ...row,
     map: { status: row.map.status, description: row.map.description, bounds: row.map.bounds,
-      layers: row.map.layers.map(l => ({ id: l.id, label: l.label, kind: l.kind, status: l.status, colour: l.colour, points: l.points, polygons: l.polygons })) },
+      layers: row.map.layers.map(l => ({ id: l.id, label: l.label, kind: l.kind, status: l.status, colour: l.colour, points: l.points, polygons: l.polygons,
+        ...(l.polygonParts ? {polygonParts: l.polygonParts} : {}) })) },
     financialPreview: { status: row.financialPreview.status, inputs: { annualRent: row.financialPreview.inputs.annualRent, averageSpend: row.financialPreview.inputs.averageSpend, tradingDays: row.financialPreview.inputs.tradingDays } },
   });
 }

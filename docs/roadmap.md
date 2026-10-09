@@ -1,5 +1,7 @@
 # SiteFit development roadmap
 
+Phase 8 data implementation is now owner-approved under D76 and in progress; [phase-8-status.md](phase-8-status.md) supersedes the historical unauthorised/planning status below. Scoring and grouped analytical prompts are frozen candidate specifications; calibration resumes in separately authorised Full Report work. Phase 9/10 remain unauthorised.
+
 Current authority: Phase 6 and the [Free Snapshot UI refinement](free-snapshot-ui-status.md) are complete and frozen. The owner now approves Phase 7 Steps 7.0–7.9 under [phase7_plan.md](phase7_plan.md), with D73's private frozen Checkout contact amendment. Phase 7 is complete through protected PR #20 and successful post-merge CI; [phase-7-status.md](phase-7-status.md) records all 23 gates and remaining separately authorised pre-launch work. Phase 8 remains unauthorised.
 
 Recorded 2026-10-03; reviewed 2026-10-04. Phases 0–5 are complete. See [phase-3-status.md](phase-3-status.md) for implemented schema/Auth and [phase-4-status.md](phase-4-status.md) for address resolution/property persistence and their completed Definitions of Done. Phase 2.5 is complete under the updated UK-wide, Mobile First contract; see [phase-2.5-status.md](phase-2.5-status.md) for observed checks and protected delivery. Phase 5 is complete under the revised approved plan (see [phase-5-status.md](phase-5-status.md)); Phases 6–7 are also complete; Phases 8–17 remain planning only. Implement one phase per authorised task; passing a gate does not authorise the next phase. Record actual checks before declaring completion.
@@ -181,3 +183,11 @@ Steps 5.0–5.9 are implemented and verified through protected PR #13 and requir
 ## Active gate: Phase 6 (authorised 2026-10-06)
 
 Steps 6.0–6.9 are complete and verified in `phase-6-status.md`, including actual hosted/AI/Preview checks and protected PRs #15/#16 with required post-merge CI. The completion record follows its own protected documentation workflow. D70 supersedes earlier no-implementation/no-score and early-POI proposals. Foursquare/PropertyData/Valhalla remain deferred. Phase 7 and Phase 8 require new explicit authority; neither has started.
+
+## Owner priority update — 9 October 2026
+
+D78 changes prioritisation to revenue validation first: stop unnecessary supplementary spatial QA and avoid speculative engineering work. Preserve minimum honest-sale, customer-security and reliable-delivery requirements; mandatory unresolved gates remain explicit. This does not authorise live payments, launch, a new phase or selling an unavailable Full Report. Final paid-deliverable work and willingness-to-pay validation require their appropriate explicit authorisation; do not extend Phase 8 to implement them.
+
+## Accepted delivery priorities — 9 October 2026
+
+D79 preserves completion of each approved phase while applying D78. Close Phase 8's essential security/CI/protected-delivery gates first. Keep property history, economic calculations, scoring and AI work in Phases 9–12 focused on the paid report; Phase 13 delivers the real Full Report, AI Native Dashboard and PDF. Phases 14–15 provide dependable delivery/recovery, cost control and security. Phases 16–17 prioritise the pre-payment journey, conversion and real willingness to pay. Supplementary engineering polish must not replace that sequence. This update does not start another phase within Phase 8 or enable Production/live payments.

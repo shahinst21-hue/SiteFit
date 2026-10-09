@@ -17,6 +17,9 @@ import type { CollectionContext } from "../data/contracts.ts";
 import { evidenceIndex, type Evidence } from "./evidence.ts";
 import { validatePacket, type InterpretationPacket } from "./interpretation.ts";
 import { packetDigest } from "./canonical.ts";
+import { selectEnrichmentReleases, prepareEnrichmentIdentity } from "../data/enrichment-preparation.ts";
+import { generateEnrichedSnapshot } from "./generate-enriched.ts";
+import type { ResolvedAddress } from "../addresses/model.ts";
 const json = (value: unknown) => value as Json;
 const dimensions: Dimension[] = ["customer-base", "market-position", "customer-access", "premises"];
 export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal) {
@@ -48,15 +51,25 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
       precision: property.coordinate_precision, source: property.coordinate_source ?? "unknown",
     };
     if (!point || !validPoint(point) || point.precision === "unknown" || property.address_resolution_state !== "provider_verified") throw new Error("location_precision_unavailable");
-    const releases = await comparisonRepository().releases();
+    const selection = await selectEnrichmentReleases(bound);
+    const releases = selection.legacy;
     bound.throwIfAborted();
-    const geography = await spatialRepository().geography(releases.geography, point);
+    const spatial = spatialRepository();
+    const geography = await spatial.geography(releases.geography, point);
     bound.throwIfAborted();
     if (!geography.region.eligible) throw new Error("outside_analysis_coverage");
-    context = await data.repository.prepare(analysis.id, {}, { region: geography.region, geography: geography.geography, releases });
+    const selected: ResolvedAddress = {formattedAddress: property.formatted_address, lines: [], postcode: property.postcode ?? "",
+      postTown: property.post_town ?? "", country: null, components: property.address_components as ResolvedAddress["components"],
+      provider: property.address_provider, providerAddressId: property.provider_address_id, udprn: property.udprn, uprn: null,
+      latitude: property.latitude, longitude: property.longitude, coordinatePrecision: point.precision === "postcode_centroid" ? "postcode_centroid" : "unknown",
+      coordinateSource: property.coordinate_source, resolution: "provider_verified"};
+    const enrichment = await prepareEnrichmentIdentity(selected, selection.enrichment, bound);
+    const precise = enrichment.identity.point ? await spatial.geography(releases.geography, enrichment.identity.point) : geography;
+    context = await data.repository.prepareEnriched(analysis.id, {}, {region: precise.region, geography: precise.geography, releases}, enrichment);
   }
   const { data: unfinished, error: unfinishedReadError } = await client.from("reports").select("provenance").eq("analysis_id", analysis.id).eq("version", 1).neq("status", "ready").abortSignal(databaseBound(8000)).maybeSingle();
   if (unfinishedReadError) throw new Error("stored_report_read_unavailable");
+  if (context.schemaVersion === 2) return generateEnrichedSnapshot(ownerId, context, bound, unfinished?.provenance);
   const collection = await data.collectSources(context, ["ons-population", "tfl-stop-points", "fsa-establishments"], "free-v1", bound);
   const snapshots = collection.outcomes.flatMap(outcome => outcome.snapshot ? [outcome.snapshot] : []);
   if (snapshots.length !== 3) throw new Error("source_persistence_incomplete");
