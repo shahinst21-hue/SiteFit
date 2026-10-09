@@ -1,5 +1,9 @@
 # Potential data sources
 
+## Phase 9 source research — 9 October 2026
+
+The [research comparison](phase-9-research.md) verifies public provider capabilities/prices and identifies unresolved licences/coverage. The [implementation proposal](phase9_plan.md) prefers existing Phase 8 observations plus bounded official London planning metadata and reviewed exact-premises facts. Neither document admits or activates a provider. Specialist retail surveys, title purchases, company-level history, search APIs and imagery are not default dependencies. Public records, nearby applications and provider disappearance cannot establish complete occupancy, closure reasons or continuous vacancy. Source-specific commercial historical-display/retention rights remain admission gates.
+
 Recorded 2026-10-03. This is a candidate register, not a promise of integration, comprehensive UK coverage or permission for SiteFit's use. No adapter, API account or source dataset has been implemented or queried for a property.
 
 Official overview pages were consulted for the references below on the record date. They establish only the stated broad capabilities. Every proposed use still requires verification of the exact dataset/endpoint, coverage across England, Scotland, Wales and Northern Ireland, update frequency, cost, attribution, commercial use, retention and PDF/display rights before integration. Expected reliability is an assessment to validate, not a measured guarantee.

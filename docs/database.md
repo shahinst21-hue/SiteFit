@@ -1,5 +1,9 @@
 # Phase 3 database foundation
 
+## Phase 9 planning boundary — 9 October 2026
+
+Phase 8 is complete; [status](phase-8-status.md) supersedes earlier in-progress notes. The [Phase 9 proposal](phase9_plan.md) reuses owned immutable `data_snapshots`/`evidence_items` with a narrow deeper-collection purpose and versioned timeline payload. It proposes forward checked RPC/source guards, not edits to applied migrations or ready Free graphs. The existing `premises_events` date/confidence fields must not force invented tenancy dates or numerical confidence; no new event table or population of that table is required by the proposed V1. Actual implementation/migrations are not authorised or created here. Final measured Phase 8 database size is 374,060,723 bytes; further admission respects the existing storage policy and does not assume an upgrade.
+
 ## Phase 8 in progress — bounded geometry and native Census
 
 `20261007130000_enrichment_polygon_contract.sql` is applied to hosted development and fresh PostgreSQL/PostGIS. `source_data.checked_enrichment_polygon(jsonb)` accepts bounded valid 2D WGS84 Polygon/MultiPolygon and returns MultiPolygon without repairing topology, relabelling CRS or flattening holes/parts. Execution is service-role only; no source table, report lifecycle, payment policy or historical row changes. Fresh and hosted rollback tests pass; all six fingerprints of the 21 existing ready report graphs match. Dataset/precise-property/walking persistence extensions remain pending; see [Phase 8 status](phase-8-status.md).
