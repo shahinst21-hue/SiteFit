@@ -183,3 +183,7 @@ Steps 5.0–5.9 are implemented and verified through protected PR #13 and requir
 ## Active gate: Phase 6 (authorised 2026-10-06)
 
 Steps 6.0–6.9 are complete and verified in `phase-6-status.md`, including actual hosted/AI/Preview checks and protected PRs #15/#16 with required post-merge CI. The completion record follows its own protected documentation workflow. D70 supersedes earlier no-implementation/no-score and early-POI proposals. Foursquare/PropertyData/Valhalla remain deferred. Phase 7 and Phase 8 require new explicit authority; neither has started.
+
+## Owner priority update — 9 October 2026
+
+D78 changes prioritisation to revenue validation first: stop unnecessary supplementary spatial QA and avoid speculative engineering work. Preserve minimum honest-sale, customer-security and reliable-delivery requirements; mandatory unresolved gates remain explicit. This does not authorise live payments, launch, a new phase or selling an unavailable Full Report. Final paid-deliverable work and willingness-to-pay validation require their appropriate explicit authorisation; do not extend Phase 8 to implement them.
