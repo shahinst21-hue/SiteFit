@@ -8,7 +8,7 @@ import { validateContext, validateResult } from "../validation.ts";
 import { propertyDataFacts, type PropertyFactsSelection } from "./propertydata-facts.ts";
 
 export function premisesAdapter(id: "propertydata-premises" | "propertydata-flood" | "propertydata-rent",
-  factory: () => ReturnType<typeof propertyDataFacts> = () => propertyDataFacts({key: process.env.PROPERTYDATA_API_KEY})): DataAdapter {
+  factory: () => Pick<ReturnType<typeof propertyDataFacts>, "premises" | "flood" | "rent"> = () => propertyDataFacts({key: process.env.PROPERTYDATA_API_KEY})): DataAdapter {
   const source = definitions[id];
   return {source, supports: c => coverage(id, c), async retrieve(request, execution) {
     validateContext(request.context);

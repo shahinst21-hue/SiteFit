@@ -1,5 +1,9 @@
 # Potential data sources
 
+## Phase 9 source research — 9 October 2026
+
+The earlier [research comparison](phase-9-research.md) is background, superseded for implementation by D80 and the [approved plan](phase9_plan.md). Phase 9 uses only existing PropertyData Planning, official EPC non-address fields and frozen Phase 8 references. No GLA/new provider/importer, title purchase, search API or imagery. Planning receipt records radius/default type exclusions and no age filter; incomplete search is never complete history. Existing historical PropertyData policy and OGL EPC subset apply; raw candidates/documents/personal/restricted postal data are discarded. Current source names/removals do not establish occupancy or closure. Launch/termination display-rights review remains open.
+
 Recorded 2026-10-03. This is a candidate register, not a promise of integration, comprehensive UK coverage or permission for SiteFit's use. No adapter, API account or source dataset has been implemented or queried for a property.
 
 Official overview pages were consulted for the references below on the record date. They establish only the stated broad capabilities. Every proposed use still requires verification of the exact dataset/endpoint, coverage across England, Scotland, Wales and Northern Ireland, update frequency, cost, attribution, commercial use, retention and PDF/display rights before integration. Expected reliability is an assessment to validate, not a measured guarantee.

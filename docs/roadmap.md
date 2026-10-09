@@ -1,6 +1,6 @@
 # SiteFit development roadmap
 
-Phase 8 data implementation is now owner-approved under D76 and in progress; [phase-8-status.md](phase-8-status.md) supersedes the historical unauthorised/planning status below. Scoring and grouped analytical prompts are frozen candidate specifications; calibration resumes in separately authorised Full Report work. Phase 9/10 remain unauthorised.
+Current checkpoint, 9 October 2026: Phase 8 is complete through protected PRs #24/#25 and passing post-merge CI. D80 authorises immediate [Phase 9 existing-provider implementation](phase9_plan.md) under D78/D79; GLA/new providers/importer are excluded. [Phase 9 status](phase-9-status.md) records actual gates. No purchase, subscription, Full Report generation or Phase 10 is authorised. Scoring/grouped prompts remain frozen candidates; calibration resumes only in separately authorised later work. Earlier dated paragraphs below are historical.
 
 Current authority: Phase 6 and the [Free Snapshot UI refinement](free-snapshot-ui-status.md) are complete and frozen. The owner now approves Phase 7 Steps 7.0–7.9 under [phase7_plan.md](phase7_plan.md), with D73's private frozen Checkout contact amendment. Phase 7 is complete through protected PR #20 and successful post-merge CI; [phase-7-status.md](phase-7-status.md) records all 23 gates and remaining separately authorised pre-launch work. Phase 8 remains unauthorised.
 
@@ -101,7 +101,7 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 ## Phase 9: Premises History
 
 - Objective: present supported premises observations and unresolved history.
-- Codex implements: permissible event collection, identity/date matching, evidence links and unknown-state presentation.
+- Proposed implementation: reuse Phase 8 evidence, add one bounded admitted planning-history source, and allow small reviewed factual imports for a sourced premises timeline. Exact unit/date matching, separate building context, immutable deeper collection and explicit gaps replace a broad title/lease/occupier database. See [complete proposed sequence and DoD](phase9_plan.md); approval is pending.
 - Human action: source permissions or user-supplied evidence where relevant.
 - Definition of Done: events link to sources; conflicting/ambiguous identities remain explicit; absent records are not treated as proof of vacancy, failure, lease permission or a complete history. No national historical property database.
 
