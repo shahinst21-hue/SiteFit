@@ -107,9 +107,11 @@ The Product Contract in [product.md](product.md) controls scope. Definitions of 
 
 ## Phase 10: Economic Engine
 
-- Objective: calculate reproducible supplementary financial scenarios from optional explicit inputs in a separate post-main-report Economics area (D65/D69). The free locked benefit previews break-even sales, daily customers and cost/rent sensitivity; no formulas or financial execution move into Phase 6. Entitlement verification precedes inputs/run when the paid path is enabled. Main report purchase/readiness/access does not depend on it; new supplement versions preserve all ready historical reports.
+Owner-authorised Phase 10 implementation: [approved plan](phase10_plan.md) and [status](phase-10-status.md). Separate source-first Financial Engine backend with labelled illustrative scenarios and deterministic arithmetic; no final interactive UI or embedded form/calculations in Snapshot, Full Report or PDF. Independently prepare rental evidence from both existing PropertyData endpoints; incompatible area falls back to qualified benchmark. Six existing trial credits maximum; no new providers, purchases or historical-name integrations.
+
+- Objective: deliver separate prepopulated economic capabilities and immutable scenarios, with optional edits. Supported rent context independently feeds later Full Report preparation; purchase/report access never depends on engine inputs.
 - Codex implements: deterministic calculations, validated units/periods, versioned methods, rounding and scenario outputs with missing-input behaviour.
-- Human action: approve formulas, scenario assumptions, inclusion of costs and presentation; provide benchmark economics or approve labelled synthetic calculation-only cases.
+- Owner scope/formula and six-credit existing-trial authority recorded; genuine expired access or new expenditure requires separate approval.
 - Definition of Done: independent expected-value tests pass for approved formulas and boundary conditions; missing inputs remain unknown; AI performs no core financial calculation; scenarios are not forecasts of success.
 
 ## Phase 11: Evidence Engine
@@ -205,3 +207,5 @@ Existing-provider premises history is implemented and verified through protected
 D81 inserts a bounded paid-preparation discovery stage after Phase 9, without renumbering/reopening completed phases. Scope: property-specific commercial rent and verifiable past business activity, exact-unit/date/source/rights admission, reconciliation with existing evidence and compact immutable persistence. [Plan](phase9.5_plan.md), [status](phase-9.5-status.md). No Full Report UI, financial execution or Phase 10 implementation. Recurring paid search is not enabled by the one US$0.50 development proof. Required verified/security/CI/protected-delivery gates remain explicit.
 
 Protected PR #29 and post-merge main CI 37978182341 passed. Initial automatic admission is limited to permitted independently verified FSA observations; agency rents and historical narratives remain qualified references where rights/date/unit proof is unavailable. This is bounded discovery with explicit missingness, not comprehensive historical tenancy or a current-rent feed. Completion does not authorise a later phase, recurring AI spend or additional provider investment.
+
+Phase 10 separation: later Full Report UI/PDF consumes qualified rental evidence only, never Financial Engine inputs/calculations. Final separate-engine interactive UI is not built in Phase 10. No Phase 11–13 implementation is authorised.

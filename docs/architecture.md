@@ -1,5 +1,9 @@
 # SiteFit architecture
 
+## Phase 10 planning boundary — 9 October 2026
+
+Phase 9 is complete in [status](phase-9-status.md). The owner's new request authorises planning only. [Economic Engine proposal](phase10_plan.md) uses a pure deterministic kernel and private claim/entitlement-aware immutable supplements in existing economic_models; their assumption versions reference the original frozen analysis input without inserting into or weakening the ready source graph. Rent is qualified existing-provider market context, not an agreed selected-unit lease. Economics remains separate from scores/readiness, with no provider/AI/calculator execution on stored read. Phase 13 later connects the voluntary post-main-report form/dashboard/PDF. No proposed migration, code or new source has been implemented or approved here.
+
 ## Current checkpoint and Phase 9 implementation — 9 October 2026
 
 Phase 8 is complete within its qualified [verified scope](phase-8-status.md); older progress notes below are historical. D80 authorises [Phase 9](phase9_plan.md), existing providers only. A focused private section collector reuses PropertyData transport/EPC normalisation and frozen Phase 8 references. One bounded immutable bundle per analysis/input is stored in the existing `premises_events` table; ready Free source graphs/guards are untouched. Stored replay invokes no provider, AI or scoring. GLA/new providers/importer are excluded. [Status](phase-9-status.md) distinguishes implementation from verified gates. No Full Report, UI redesign, workflow infrastructure or Production activation.
@@ -199,3 +203,7 @@ The final network verification is temporary Local loopback wire inspection of ac
 ## Phase 9.5 private web-discovery sidecar — verified implementation
 
 Bounded AI search proposes references; source adapters independently validate facts and exact unit/date/reuse conditions. The initial verifier admits OGL FSA register observations only; agent rent and historical narratives remain references, not admitted report facts. Frozen source outcomes and ready report sections are never rewritten. A server-confirmed entitled permanent owner may append a separate discovery bundle against the original input in private premises infrastructure; reopening reads stored outcomes without collection or AI. No Free Snapshot route, crawler, job system or final Full Report UI is introduced. See [plan](phase9.5_plan.md) and [actual limits/status](phase-9.5-status.md).
+
+## Phase 10 separate economics and rental context — implemented, verification in progress
+
+D82 supersedes report-embedded Economics. Pure exact-rational financial kernel, closed provenance/units contract and versioned illustrative prepopulation live in lib/economics. No provider or AI participates in arithmetic. Separate owned economic_models append-only bundles store scenarios; a different rental_evidence bundle supplies qualified PropertyData rent context to future Full Report preparation without financial inputs/calculations. No customer route/UI/PDF is introduced. Source-labelled rent requires a matching stored selected-property valuation; local average total rent is never treated as selected-unit rent. Both existing endpoint boundaries preserve area basis/error/dated rights; incompatible GIA/NIA leaves valuation unavailable. Stored reads never rerun either engine. Phase 9.5 references are reused as references with digest, not invented rent/history.

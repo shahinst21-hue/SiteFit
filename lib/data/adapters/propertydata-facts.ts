@@ -8,7 +8,7 @@ import { normalisePostcode } from "../../addresses/model.ts";
 
 export type PropertyFactsSelection = PropertyMatch & { osReleaseId: string; coordinateBasis: "address_building_not_entrance";
   selectedParts?: NonNullable<EnrichmentInput["identity"]["selectedParts"]> };
-type Operation = "uprn" | "flood-risk" | "rents-commercial" | "planning-applications";
+type Operation = "uprn" | "flood-risk" | "rents-commercial" | "planning-applications" | "valuation-commercial-rent";
 type Cost = { observedCredits: number | null; estimatedCreditCeiling: number };
 const cost = (v: Record<string, unknown>, ceiling: number): Cost => {
   if (v.api_calls_cost === undefined) return { observedCredits: null, estimatedCreditCeiling: ceiling };
@@ -111,5 +111,11 @@ export function propertyDataFacts(options: { key: string | undefined; fetcher?: 
     async premises(selected: PropertyFactsSelection, signal?: AbortSignal) { validateSelected(selected); const r = await request("uprn", { uprn: selected.uprn }, signal); return { ...normalisePremises(r.value, selected), retrievedAt: r.retrievedAt }; },
     async flood(selected: PropertyFactsSelection, signal?: AbortSignal) { const location = validateSelected(selected), r = await request("flood-risk", { location }, signal); return { ...normalisePointFlood(r.value, location), retrievedAt: r.retrievedAt }; },
     async rent(selected: PropertyFactsSelection, type: "restaurants" | "retail", signal?: AbortSignal) { const location = validateSelected(selected); if (!["restaurants", "retail"].includes(type)) throw new SourceError("invalid_request"); const r = await request("rents-commercial", { location, type }, signal); return { ...normaliseRentBenchmark(r.value, location, type), retrievedAt: r.retrievedAt }; },
+    async commercialValuation(input: { postcode: string; type: "restaurants" | "retail"; area: string; areaUnit: "sqft" | "sqm"; areaBasis: "GIA" }, signal?: AbortSignal) {
+      const postcode=normalisePostcode(input.postcode);
+      if (!postcode || !["restaurants","retail"].includes(input.type) || input.areaBasis!=="GIA" || !["sqft","sqm"].includes(input.areaUnit) ||
+        !/^(0|[1-9]\d{0,5})(\.\d{1,2})?$/.test(input.area) || Number(input.area)<=0) throw new SourceError("invalid_request");
+      return request("valuation-commercial-rent",{postcode:postcode.replace(/ /g,""),property_type:input.type,internal_area:input.area,area_unit:input.areaUnit,output:"json"},signal);
+    },
   };
 }
