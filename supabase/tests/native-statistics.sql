@@ -1,8 +1,8 @@
 begin;
 do $$
-declare oa uuid; geo uuid; income uuid; jobs uuid; c uuid; m jsonb; p jsonb; p2 jsonb; licence jsonb; cols jsonb; x jsonb; shape jsonb;
+declare population uuid; oa uuid; geo uuid; income uuid; jobs uuid; c uuid; m jsonb; p jsonb; p2 jsonb; licence jsonb; cols jsonb; x jsonb; shape jsonb;
 begin
- licence:='{"policyId":"ons-native-statistics","normalised":{"allowed":true},"raw":{"allowed":false},"attribution":["Synthetic rollback fixture"]}'::jsonb;
+ licence:='{"policyId":"ons-native-statistics","normalised":{"allowed":true},"derived":{"allowed":true},"raw":{"allowed":false},"attribution":["Synthetic rollback fixture"]}'::jsonb;
  oa:=(public.stage_sitefit_release(jsonb_build_object('provider','ons','dataset','london-geography','version','synthetic-native-parent','subset','london',
   'sha256',repeat('a',64),'sourceUrl','https://example.org/synthetic','retrievedAt','2026-10-07T00:00:00Z','licence',licence))->>'id')::uuid;
  perform public.import_sitefit_geographies(oa,'[
@@ -81,6 +81,14 @@ begin
  if public.lookup_sitefit_native_comparison(income,oa,'E02000001') is not null
   or has_function_privilege('anon','public.lookup_sitefit_native_comparison(uuid,uuid,text)','execute')
   or has_function_privilege('authenticated','public.lookup_sitefit_native_comparison(uuid,uuid,text)','execute') then raise exception 'Native comparison parent/private boundary'; end if;
+
+ population:=(public.stage_sitefit_release(jsonb_build_object('provider','ons','dataset','TS001','version','synthetic-context-population','subset','london','sha256',repeat('d',64),'sourceUrl','https://example.org/synthetic','retrievedAt','2026-10-07T00:00:00Z','licence',licence))->>'id')::uuid;
+ perform public.import_sitefit_statistics(population,oa,'[{"code":"E00100001","count":0},{"code":"E00100002","count":100}]');
+ perform public.activate_sitefit_release(population,2);
+ x:=public.lookup_sitefit_context_density(population,oa,geo,jobs,'E00100001','resident');
+ if x->>'count'<>'0' or x->>'density'<>'0.000000' or x->>'peers'<>'1' or x->>'less'<>'0' then raise exception 'Context resident zero/rank';end if;
+ x:=public.lookup_sitefit_context_density(population,oa,geo,jobs,'E00100001','workplace');
+ if x->>'count'<>'0' or x->>'code'<>'E01000001' or x->>'footprintVerified'<>'true' then raise exception 'Context job footprint';end if;
+ if public.lookup_sitefit_context_density(population,oa,oa,jobs,'E00100001','workplace') is not null or has_function_privilege('anon','public.lookup_sitefit_context_density(uuid,uuid,uuid,uuid,text,text)','EXECUTE') then raise exception 'Context incompatible/private';end if;
 end $$;
 rollback;
-

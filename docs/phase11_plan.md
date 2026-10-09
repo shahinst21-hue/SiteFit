@@ -1,16 +1,21 @@
-# Phase 11: Evidence, Scoring and Decision Logic — proposal
+# Phase 11: Evidence, Scoring and Decision Logic — approved implementation
 
-Prepared 9 October 2026 at main `02a0d4c011548dde0aa13dba7b46948c1b1811e5`. **Planning and review only; implementation awaits explicit owner approval.** Phases 8/9/9.5/10 are complete with their documented qualifications. No service calls, purchases, activated scoring, migrations, changed customer UI or historical reports are authorised by this document. [Repository/decision/prototype/prompt audit](phase-11-design-audit.md) is the foundation; [Product Contract](product.md), D76–D82 and current owner instructions prevail over historical candidate prose.
+Prepared 9 October 2026 at main `02a0d4c011548dde0aa13dba7b46948c1b1811e5`. **Owner approved Steps 11.0–11.9 on 9 October 2026, with D83 amendments below.** Phases 8/9/9.5/10 are complete with their documented qualifications. Implementation and existing-source database verification are authorised. No paid requests, new providers, customer UI changes or historical report rewrites are authorised. [Repository/decision/prototype/prompt audit](phase-11-design-audit.md) is the foundation; [Product Contract](product.md), D76–D82 and current owner instructions prevail over historical candidate prose.
+
+
+## Owner amendment — authoritative
+
+The initial numeric output is **Resident & Workplace Context Index**, measuring dated residential and workplace density context only. It is neither overall nor preliminary commercial suitability, actual demand, success, competition, profitability nor premises suitability. The weights and native comparison method are versioned hypothetical policy. Combined interpretive value beyond both individual components must pass real evidence and sensitivity review before a customer numerical projection is admitted. Failed admission/method validation withholds the number without weaker substitution. Premises constraints and Decision Readiness remain independent and dominate decisions. Recheck actual hosted capacity before additional writes; preserve the 375,000,000-byte checkpoint. No paid requests/new providers/infrastructure or Phase 12/13. Proposed wording below is historical rationale wherever it conflicts with this amendment; D83 governs implementation.
 
 ## 1. Customer outcome and recommendation
 
 Answer **“What strengths and risks does this place have for opening my coffee shop, restaurant or salon?”** SiteFit must give the customer an evidence-linked position, not require them to analyse datasets. Deliver a scoped conclusion, strongest supported advantages, material trade-offs, unresolved premises questions and up to three decision-changing actions. The number supports this answer; it does not replace it.
 
-Recommend one existing analysis/evidence boundary, a small deterministic **preliminary location index**, and separate qualitative market/access/premises/readiness assessments. Do not restart the 34-parameter model, introduce three scoring engines or wait for complete competition, consent, service-hour and financial evidence before producing any numerical value.
+Recommend one existing analysis/evidence boundary, a small deterministic **Resident & Workplace Context Index**, and separate qualitative market/access/premises/readiness assessments. Do not restart the 34-parameter model, introduce three scoring engines or wait for complete competition, consent, service-hour and financial evidence before producing any numerical value.
 
-**Important approval choice:** the initially publishable index has a deliberately limited, fixed scope: **resident and workplace context**. The customer label must be **“Preliminary location score — resident and workplace context”**, with the scored scope visible beside the number. It is an initial business-weighted indicator of the measurable local customer base, not a comprehensive suitability score. Competition, access, premises and rent are still assessed in the report and can materially change the decision, but do not get fabricated numerical transforms. This limitation cannot be hidden in an accordion or a generic disclaimer.
+**Accepted owner policy:** the conditionally publishable index has a deliberately limited, fixed scope: **resident and workplace context**. The customer label must be **“Resident & Workplace Context Index”**, with the scored scope visible beside the number. It is a business-weighted summary of two dated native density contexts, not customer demand or a suitability score. Competition, access, premises and rent are still assessed in the report and can materially change the decision, but do not get fabricated numerical transforms. This limitation cannot be hidden in an accordion or a generic disclaimer.
 
-This is the commercially practical compromise with available sources. If the owner instead requires the initial number to measure comprehensive customer/competition/access attractiveness, the current sources do not support that promise; broader activation must remain blocked rather than inventing calibration. This plan seeks approval for the **limited preliminary** construct, not a silent redefinition of an approved complete score. A future fuller method gets a new fixed manifest and version after evidence supports it; it never upgrades an old result on reopening.
+The owner accepted this limited construct under D83. A future broader numerical method requires a new approved scope and version; it never upgrades an old result on reopening.
 
 ## 2. Alternatives considered
 
@@ -20,7 +25,7 @@ This is the commercially practical compromise with available sources. If the own
 | Legacy complete four-dimension score | Complete theoretical fit assessment | Every one of 17 slots plus calibrated transforms; premises/legal unknowns pervasive | Continual absence of scores; contradicts D76's withdrawn prerequisite; keep historical only |
 | Qualitative strengths/risks only | Immediately useful and honest | Existing evidence and a small decision-rule library | Does not satisfy owner's numeric objective; fallback, not recommended sole product |
 | Three-domain composite with an “available-data” denominator | Frequent numbers | Easy to calculate from whatever turns up | Source loss can improve score; missing competition/poor service coverage disappears; reject |
-| **Fixed two-factor preliminary index + full qualitative decision layer** | A useful inspectable business-specific number now, with broader strengths/risks | Reuse resident density, admit one native job-density derivative using existing releases; no new providers/catchment peer collection | Narrow scope can be mistaken for full suitability; explicit label, exclusions, independent risks and finite real-packet review required; recommended |
+| **Fixed two-factor context index + full qualitative decision layer** | A useful inspectable business-specific number now, with broader strengths/risks | Reuse resident density, admit one native job-density derivative using existing releases; no new providers/catchment peer collection | Narrow scope can be mistaken for full suitability; explicit label, exclusions, independent risks and finite real-packet review required; recommended |
 
 No point can truthfully be guaranteed for every property. Unresolved identity or missing essential numerical operands produce a precise unavailable state and useful surviving conclusions. The proposed gate concerns two observable inputs, not perfect evidence across every report topic.
 
@@ -41,7 +46,7 @@ Coffee/restaurant/shared salon reuse one evaluator plus versioned profile data. 
 
 ## 4. Proposed numerical specification: small, explicit, reviewable
 
-Method candidate `location-context-preliminary-v1`; numerical policy `native-density-index-v1`; profile policy `business-context-priority-v1`. These are **proposed IDs**, not activated configs.
+Method candidate `resident-workplace-context-v1`; numerical policy `native-density-index-v1`; profile policy `business-context-priority-v1`. These are versioned hypothetical policies; their scoped native method review is recorded in [Phase 11 QA](phase-11-qa.md).
 
 ### 4.1 Observable components and comparators
 
@@ -63,7 +68,7 @@ For each component, use existing midrank principles: `P = 100 * (less + equal/2)
 | Restaurant | 55% | 45% | Existing 25:20 priorities, rounded; generic resident/workplace context, not evening trade proof |
 | Hair / beauty salon | 80% | 20% | Existing 40:10 priorities; repeat resident appointment context is a hypothesis, not measured retention |
 
-These are declared product preferences, **not learned commercial coefficients**. Higher measured density is proposed as stronger support for this narrow potential-customer-base construct, not automatically better net suitability. Correlated centrality can affect both; cap ownership to this single context budget and never award the same residents/jobs again in other domains. Do not describe two correlated observations as independent confidence. Finite sensitivity/real-case review must check whether the combined index is useful relative to R alone; no exhaustive research programme or hidden weight optimisation.
+These are declared product preferences, **not learned commercial coefficients**. Higher measured density represents higher relative resident/workplace density within this narrow descriptive construct, not automatically better net suitability. Correlated centrality can affect both; cap ownership to this single context budget and never award the same residents/jobs again in other domains. Do not describe two correlated observations as independent confidence. Finite sensitivity/real-case review must check whether the combined index is useful relative to R alone; no exhaustive research programme or hidden weight optimisation.
 
 ```text
 S_exact = (w_R * P_R + w_J * P_J) / 100
@@ -74,19 +79,18 @@ Keep rank arithmetic as exact fractions from `less/equal/N` and weights; reuse t
 
 Synthetic arithmetic examples **only**: R=80/J=40 yields coffee 58, restaurant 62, salon 72. R=40/J=80 yields 62/58/48. R=J=50 yields 50 for all. Those are not London scores or evidence of valid calibration. A score of 80 is not “80% chance of success” or “top 20% of commercial properties”. The composite itself is not a percentile, despite percentile-derived components.
 
-No production Good/Excellent/poor-site score bands are proposed. Initially publish the integer, preliminary scope and component context, with the evidence-linked decision statement separately. The number cannot substitute for the actual answer or customer-friendly strengths/risks. Phase 12 handles wording; Phase 13 handles presentation after their approvals.
+No production Good/Excellent/poor-site score bands are proposed. Initially publish the integer, dated density-only scope and component context, with the evidence-linked decision statement separately. The number cannot substitute for the actual answer or customer-friendly strengths/risks. Phase 12 handles wording; Phase 13 handles presentation after their approvals.
 
 ### 4.3 Missingness and publication
 
-- `preliminary`: both R and J pass their own claim/comparator/identity rules; score is available **within the fixed limited scope**. Missing competitor strength, entrance verification, legal use, detailed offer, income or rent does not withhold this index. They remain visible in other assessments.
+- `available`: both R and J pass their own claim/comparator/identity rules; score is available **within the fixed limited scope**. Missing competitor strength, entrance verification, legal use, detailed offer, income or rent does not withhold this index. They remain visible in other assessments.
 - `withheld`: either numerical component or its method is missing, invalid, materially conflicting, unpermitted or incompatible. Do not renormalise the surviving weight, impute zero/50, pick a more favourable cohort or switch a profile. Preserve the surviving descriptive metric.
 - Optional logical bounds for known valid transforms: retain fixed missing slot over 0..100, `L = known weighted contribution`, `U = L + missing weight`. They are **logical missing-input bounds**, not a forecast/confidence interval or scored midpoint. If a transform itself is undefined, do not manufacture those bounds.
-- `assessed_full`: reserved but **not produced in this baseline**. A future broader approved method is a new scope/version. Do not claim this preliminary index exhausts location attractiveness.
-- No source failure makes a previously withheld broader score become a narrower favourable point. Scope is selected by approved method before source retrieval, not by available values. The current proposed preliminary method is always the same two-factor construct.
+- No source failure makes a previously withheld broader score become a narrower favourable point. Scope is selected by approved method before source retrieval, not by available values. The approved context-index method is always the same two-factor construct.
 - Present two scored factors and broader unassessed domains explicitly. Internal numerical input presence can be 100% for this tiny index, but never display it as “100% evidence coverage” for the whole report.
 - Separate readiness can bind the decision even beside a high number. Confirmed blocker does not change R/J arithmetic; it must dominate the decision statement. No signing/lease clearance follows from score.
 
-If the proposed narrow construct or J footprint fails bounded QA, do not invent a substitute to fill the UI. Report the specific problem, deliver independent evidence/decision work, and request owner resolution of the numerical scope gate. No new providers or spending. This is the one explicit risk to preliminary-number activation, not permission to reopen every completed phase.
+If the proposed narrow construct or J footprint fails bounded QA, do not invent a substitute to fill the UI. Report the specific problem, deliver independent evidence/decision work, and request owner resolution of the numerical scope gate. No new providers or spending. This is the one explicit risk to context-index admission, not permission to reopen every completed phase.
 
 ## 5. Claim admission, quality, conflicts and decision rules
 
@@ -124,11 +128,11 @@ Premises status: `supported_in_defined_scope`, `conditional`, `confirmed_incompa
 
 Rules prioritise: confirmed unit/concept blocker → material unresolved prerequisite → demonstrated commercial trade-off → smaller evidence gap. A priority is tied to decision consequence, not missing-field count or rhetorical severity. Collapse duplicate aspects of the same unresolved issue. Baseline current data will often produce targeted checks; this is not a failing or empty report.
 
-Decision output: `investigate_further`, `resolve_material_condition_first`, `rework_present_concept`, `do_not_proceed_with_present_concept`, `insufficient_basis_for_case`. A confirmed blocker under an approved rule binds the latter concept-specific decision; an unknown is not a confirmed blocker. No automatic “buy/sign lease” verdict based on a high preliminary score. Emit concise reason/strengths/risks/actions references for Phase 12, not final generated report prose.
+Decision output: `investigate_further`, `resolve_material_condition_first`, `rework_present_concept`, `do_not_proceed_with_present_concept`, `insufficient_basis_for_case`. A confirmed blocker under an approved rule binds the latter concept-specific decision; an unknown is not a confirmed blocker. No automatic “buy/sign lease” verdict based on a high context index. Emit concise reason/strengths/risks/actions references for Phase 12, not final generated report prose.
 
 ## 6. Data contracts and interfaces
 
-New closed **proposed** `AssessmentBundle` schema 1 inside `lib/analysis/`, not a parallel scoring platform:
+New closed `AssessmentBundle` schema 1 inside `lib/analysis/`, not a parallel scoring platform:
 
 ```text
 identity: assessmentId, analysisId, inputId, propertyId, businessCategory,
@@ -206,7 +210,7 @@ No customer UI change in Phase 11, therefore no new cosmetic redesign or repeate
 
 **Phase 12, separately approved:** interprets only admitted assessment packets; extends existing bounded prompts/schemas, grouped customer/market/access/premises+rental tasks and validated-only synthesis; copies score unchanged; preserves mandatory opposition/binding conditions and exact claims. A broad narrative can be decisive within evidence without inventing precision. It must validate exact citation support, number/unit/scope and conclusion strength, not just ID existence; repairs are bounded and independent successful sections survive failure. No implicit browsing/new source collection or runtime weight choice. Finance prompts are excluded from main report under D82. GPT 6.1 Sol remains the existing owner constraint; live budget and packet/call limits require that phase's approval. This plan proposes responsibilities, not final prompt wording or dispatch authority.
 
-**Phase 13, separately approved:** consumes original stored assessment + validated interpretation; delivers the genuine £29 Full Report/AI Native Dashboard/PDF with conclusion first, limited score scope beside number, separate premise/readiness conditions and per-section Why. Safe DTO explicitly supports preliminary/withheld states and does not force legacy four-factor Snapshot validation. Final UI uses shared report content, not read-time provider/score/AI work. Rental context appears independently; no Financial Engine forms/calculations in report or PDF. Financial Engine UI remains a separate experience under later explicit scope. Historical free projections remain byte-identical; no retroactive “fix” of stored conclusions. Phase 13 decides any prospective Free display extension only under explicit approval, not by merging this plan.
+**Phase 13, separately approved:** consumes original stored assessment + validated interpretation; delivers the genuine £29 Full Report/AI Native Dashboard/PDF with conclusion first, limited score scope beside number, separate premise/readiness conditions and per-section Why. Safe DTO explicitly supports available/withheld states and does not force legacy four-factor Snapshot validation. Final UI uses shared report content, not read-time provider/score/AI work. Rental context appears independently; no Financial Engine forms/calculations in report or PDF. Financial Engine UI remains a separate experience under later explicit scope. Historical free projections remain byte-identical; no retroactive “fix” of stored conclusions. Phase 13 decides any prospective Free display extension only under explicit approval, not by merging this plan.
 
 Exclude: new providers/history-name integration, paid research, market-competition score under D77, proprietary footfall, sales conversion, survival or success probability, income attractiveness, finance in main score/report, bespoke scoring platforms, nonlinear/correlation penalty machinery, risk caps, Monte Carlo, model training, long expert-calibration project, 24/27 AI calls, report Q&A/chat/vector store, jobs/leases/request ownership/reservations/billing ledgers/shared cache, broad cohort bulk storage, final UI/PDF/delivery/live payment/Production activation and Phase 12/13 implementation. No exhaustive new river/rail/barrier QA or speculative production scaling.
 
@@ -214,7 +218,7 @@ Exclude: new providers/history-name integration, paid research, market-competiti
 
 | Risk / dependency | Treatment |
 | --- | --- |
-| Customer reads preliminary number as comprehensive site suitability | Visible fixed scope, broader strengths/risks beside it, separate binding readiness. Owner must approve narrow construct or choose broader gated alternative |
+| Customer reads context index as comprehensive site suitability | Visible fixed scope, broader strengths/risks beside it, separate binding readiness. Owner must approve narrow construct or choose broader gated alternative |
 | Native density proxies centrality, not concept demand; R/J correlation | Explain what is measured, use modest inherited priorities, one context budget, limited comparison against R-only baseline; no causal/conversion claim |
 | Historical Census/jobs are stale for current demand | Admit dated structural context only, dates visible; no “current demand measured” copy |
 | J native footprint cannot be independently validated | Keep derivative blocked; no raw-count substitution, new provider or invented area; finish independent work and request numerical-gate resolution |
@@ -223,23 +227,23 @@ Exclude: new providers/history-name integration, paid research, market-competiti
 | Tight 375MB checkpoint | Reuse existing distributions; small measured assessment writes; report actual storage before changing capacity policy; no purchase |
 | Free ready guards and old score DTO do not support new score | Narrow new private result table, no freeze exception; new paid contract consumed later, legacy UI unchanged |
 
-**Approval genuinely required before implementation:**
+**Owner approved these baseline boundaries under D83:**
 
-1. Fixed limited preliminary resident/workplace score as the initial numeric product output, with exact visible scope; broader access/market/premises decisions remain qualitative. This is not final comprehensive calibration.
+1. Fixed limited context resident/workplace score as the initial numeric product output, with exact visible scope; broader access/market/premises decisions remain qualitative. This is not final comprehensive calibration.
 2. Proposed positive-context transform (native-density midrank), inherited 45:55 / 55:45 / 80:20 priorities, all-London same-unit frame, two-input publication/null policy, no universal score bands. These are policy hypotheses, not established truths.
 3. One private immutable `analysis_assessments` result table and owned paid-preparation integration, without ready Free or payment lifecycle changes.
 4. Revised Phase 11 scope/steps/DoD and six-real/two-synthetic bounded review; resume only this necessary numerical-method work now, leaving actual narrative generation and final presentation to Phases 12/13.
 
 No purchase, credential entry, provider activation or separate subscription is required for this proposed baseline. Planning approval is not Production/live launch approval. No owner acceptance of current visual UX is assumed.
 
-## 12. Definition of Done — proposed, all unchecked
+## 12. Definition of Done — approved, evidence tracked in Phase 11 status
 
-- [ ] Explicit owner approval of Section 11 policy/scope decisions; implementation authority recorded separately from this proposal.
+- [x] Owner approval recorded under D83; exact context-only name and conditional numerical publication supersede proposal wording.
 - [ ] Audit references/legacy/candidate status retained; new method never silently activates frozen 34-parameter config or rewrites Phase 6/8 outputs.
 - [ ] Steps 11.0–11.9 complete with actual evidence and deviations in Phase 11 status.
 - [ ] Claim-specific admission, semantic scope/date/rights/parents/conflicts/missingness verified; observed zero is not unknown and unknown is not favourable/adverse by default.
 - [ ] Resident and proposed employee-job density/comparators independently admitted using matched existing releases, areas/universes/eligibility/target exclusion; failed derivative not substituted.
-- [ ] One deterministic business-profile evaluator produces exact approved arithmetic and trace, final-only rounding, preliminary/withheld states; no dynamic weights, finance, D77 metric, hidden renormalisation or success probability.
+- [ ] One deterministic business-profile evaluator produces exact approved arithmetic and trace, final-only rounding, available/withheld states; no dynamic weights, finance, D77 metric, hidden renormalisation or success probability.
 - [ ] Finite real-packet review supports understandable scoped strengths/risks and at least one admitted trace for each category, or explicit owner-approved numerical-gate resolution; synthetic controls separately labelled. No missing proof recorded as passed.
 - [ ] Market/access/history/rent limitations and counterevidence preserved; current premises suitability/readiness remains separate; high score cannot clear a confirmed blocker or erase unknowns.
 - [ ] Private owned/entitled append, immutable replay, foreign input/source/tamper/grants/refund and safe projection gates pass fresh and hosted; reopening performs zero provider, AI or calculation calls.
@@ -249,4 +253,4 @@ No purchase, credential entry, provider activation or separate subscription is r
 - [ ] No paid requests/provider purchase/subscription/new service/deferred infrastructure; any genuine dependency resolution explicit rather than silent scope waiver.
 - [ ] Exact-head required CI, protected PR merge, post-main CI and clean main=origin pass for **implementation**, after separate approval. This planning PR does not satisfy implementation DoD.
 
-Stop for review after this proposal. No Phase 11 implementation, historical mutation, Phase 12 or Phase 13 begins without approval.
+Proceed through approved Phase 11 only. Phase 12/13 require separate approval. Historical mutation remains prohibited.

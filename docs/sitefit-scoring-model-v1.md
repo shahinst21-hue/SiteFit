@@ -430,3 +430,7 @@ Primary candidate: supplied `sitefit-analysis-design-fa.md`, `parameter-registry
 Methodological reference: [OECD/European Union/EC-JRC, Handbook on Constructing Composite Indicators (2008)](https://www.oecd.org/en/publications/handbook-on-constructing-composite-indicators-methodology-and-user-guide_9789264043466-en.html), especially weighting/aggregation and uncertainty/sensitivity chapters. It supports explicitly examining those methodological choices; it does not validate SiteFit's weights, thresholds or predictive claims. This recommendation follows the independent algebra and experiments above.
 
 Internal authorities: [product](product.md), [architecture](architecture.md), [database](database.md), [data sources](data-sources.md), [decisions](decisions.md), [Phase 6 completion](phase-6-status.md), [Phase 7 completion](phase-7-status.md), [Phase 8 proposal](phase8_plan.md) and current analysis/Snapshot code. Historical prose is not used to override later accepted decisions or actual completion records. No accepted decision or phase gate is weakened by this proposal.
+
+## D83 superseding implementation boundary — 2026-10-09
+
+The frozen commercial scoring candidate remains inactive. Phase 11 implements a separately named Resident & Workplace Context Index, not overall/preliminary commercial suitability. Its limited hypothetical policy and independent decision architecture are recorded in [approved plan](phase11_plan.md). No runtime candidate JSON activation is authorised.

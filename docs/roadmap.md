@@ -221,3 +221,7 @@ Phase 10 separation: later Full Report UI/PDF consumes qualified rental evidence
 ## Phase 10 verified implementation — 9 October 2026
 
 Steps 10.0–10.8 and required arithmetic/source/security/immutability/storage/regression proofs pass; protected PR #28 and post-main CI 37984861941 pass. Final separation/completion correction follows protected CI. See phase-10-status.md. Financial Engine remains a separate backend capability, without final interactive UI; future Full Report consumes qualified rental evidence independently. No Phase 11 is authorised.
+
+## Phase 11 authorised under D83 — 2026-10-09
+
+Steps 11.0–11.9 are under implementation. Initial numeric output is Resident & Workplace Context Index, subject to scoped evidence/method admission; broader decision and premises/readiness remain separate. Phases 12/13 are not authorised. [Status](phase-11-status.md) records actual remaining gates.
