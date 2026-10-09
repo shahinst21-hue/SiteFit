@@ -195,3 +195,7 @@ D79 preserves completion of each approved phase while applying D78. Close Phase 
 ## Phase 8 completed implementation gate — 9 October 2026
 
 Steps 8.0–8.9 and mandatory data/security/Preview/regression gates are verified with qualified source outcomes. Protected PR #24 merged after exact-head CI; post-merge CI 37921803941 passes. See phase-8-status.md for the complete evidence/Definition of Done and the separate protected completion-document record. D77 leaves unique competitor counts/percentiles unavailable. D78/D79 guide the paid-deliverable sequence without starting Phase 9 here; final visual UX/UI remains not approved for launch. Production purchase/deployment, Full Report, Economics execution, PDF and scoring/prompt calibration remain outside this completed phase.
+
+## Phase 9 completed — 9 October 2026
+
+Existing-provider premises history is implemented and verified through protected PR #26 and passing post-merge CI 37934156053; [status](phase-9-status.md) records all Steps 9.0–9.9, qualified evidence, immutable storage, security, costs and limits. The completion record follows protected CI separately. No Phase 10 authority, new provider, purchase, Production activation or Full Report generation follows automatically.

@@ -1,6 +1,6 @@
 # Phase 9 status
 
-9 October 2026. **Implementation and data/security proofs complete; protected delivery still pending.** Owner authorised the revised [plan](phase9_plan.md) under D80, existing providers only. Baseline main: 2807e1fbd401a843bfd2c4beace01d2e6bec95a7. Protected delivery uses PR #26. This checkpoint does not declare Phase 9 complete.
+9 October 2026. **Phase 9 implementation complete and verified through protected PR #26.** Owner authorised the revised [plan](phase9_plan.md) under D80, existing providers only. Baseline main: 2807e1fbd401a843bfd2c4beace01d2e6bec95a7. Protected delivery uses PR #26. The completion documentation follows its own protected CI workflow; final response waits for that merge and clean main.
 
 ## Steps and actual results
 
@@ -13,7 +13,7 @@
 - **9.6:** Two forward migrations applied to hosted development: 20261009110000_premises_history.sql, 20261009120000_history_missing_identity.sql. Existing premises_events stores one private immutable bundle per analysis/input; no new tables or exceptions to Free freeze guards. Fresh PostgreSQL/PostGIS suite and hosted rollback suite pass. Actual live write/replay passes; cross-owner read, changed UPRN/input/property/context digest, forged parent and altered re-freeze reject. Existing authorised guest-account claim projection is exercised on the real ready context; original identity remains frozen. All **28 pre-existing ready report row fingerprints unchanged**. Stored replay provider calls: **0**, no AI/scoring calls.
 - **9.7:** Six stored bundles cover three business concepts at the positive premises, one sparse matched premises and two unresolved contexts. This is a deliberately small mixed proof set, **not six independently sampled businesses or a London coverage benchmark**. Positive cases each preserve four planning dates plus one EPC date. Sparse case rejects all ten nearby candidates and records no EPC results. Unresolved cases call no provider. Existing source limits and D77 remain.
 - **9.8:** Private repository and explicit development CLI integrate frozen owned inputs, existing policies/transport and later section projection. No public collector/customer UI change. npm ci (166 packages, zero audit vulnerabilities), lint, strict types, **238 tests** including complete fresh DB suite, and production build pass at the recorded implementation checkpoint. Final public/Preview/privacy checks and exact-head CI are pending below until evidenced. No repeat purchase/200% acceptance claim for untouched UI; existing Phase 7/8 regression suite remains intact.
-- **9.9:** Pending protected delivery, exact-head CI, post-merge CI and final main sync.
+- **9.9:** Protected PR #26 merged after exact-head required CI; implementation merge f38749d6fcfbf8360e575a3e3db678db6e61ee23 passes post-merge CI 37934156053. Local main matches origin at that checkpoint and is clean. Completion documentation follows the same protected workflow.
 
 ## Measured cost, storage and performance
 
@@ -27,7 +27,7 @@ Actual baseline PostgreSQL bytes: **374,093,491**; after two migrations/six bund
 - [x] Frozen context reuse, unchanged ready reports, source failure preservation and zero-call stored replay.
 - [x] Runtime/fresh/hosted ownership/claim/input/immutability/grant tests.
 - [x] Actual trial usage, licence limits, storage and read latency recorded.
-- [ ] Final required public/Preview/privacy and exact-head/post-merge CI; protected merge; clean main=origin.
+- [x] Final public/Preview/privacy checks, exact-head/post-merge CI, protected implementation merge and clean main=origin evidenced.
 - [x] No new provider, service, purchase, subscription, live payment, scoring calibration, Full Report/economics/PDF or Phase 10.
 
 ## Limitations and deferred work
@@ -47,3 +47,10 @@ Protected Phase 9 Preview is a build/public/security deployment check. Its branc
 Implementation head **28c6f539f8bb08cd88cfc0d678ae67567ad52748** passes both required CI runs [37932971816](https://github.com/shahinst21-hue/SiteFit/actions/runs/37932971816) and [37932964679](https://github.com/shahinst21-hue/SiteFit/actions/runs/37932964679). Vercel's success status on that exact commit points to deployment dpl_GmxUHT49y1SaC1ig7HjW6GfyGSDn; inspected state READY/Preview and URL https://sitefit-fyyrntus2-shahinst21-hues-projects.vercel.app. The protected in-app browser renders Check a Location and navigates to the unchanged email login; an unauthenticated HTTP request returns 302 to protection. No bypass token or protection change. This is a deployment/read check, not customer acceptance or a new Google/Stripe claim. Generic login remains email; Google purchase authentication remains the existing Phase 7/8 purchase gate.
 
 Final delivery status update still requires exact-head CI before PR #26 can merge. Post-merge CI and clean main synchronisation remain open. All data/runtime/security gates above are evidenced; no source or licence gap has been silently converted into a confirmed fact.
+
+
+### Protected completion record — 9 October 2026
+
+All Steps 9.0–9.9 are complete within the revised existing-provider scope and stated source qualifications. Required exact-head runs [37933762174](https://github.com/shahinst21-hue/SiteFit/actions/runs/37933762174) and [37933754654](https://github.com/shahinst21-hue/SiteFit/actions/runs/37933754654) pass on ec01ffbb6c2f0b1c64aed036d668b25d2434d082. PR [#26](https://github.com/shahinst21-hue/SiteFit/pull/26) was made ready, reviewed for scope/security and merged through existing protection (required CI, strict up-to-date rule, admin enforcement retained). Merge **f38749d6fcfbf8360e575a3e3db678db6e61ee23** passes [post-merge CI 37934156053](https://github.com/shahinst21-hue/SiteFit/actions/runs/37934156053). Local main equals origin/main with clean tree at the implementation checkpoint. Both migrations were applied successfully and generated types were read from hosted development. A later optional dry-run hit a transport error; it is not recorded as passed and adds no new migration.
+
+This documentation-only completion record uses a separate protected PR, with its own exact-head CI, merge, post-merge CI and final main check before the completion response. Older pending paragraphs are dated checkpoint history. No browser test tab remains; the ordinary Local production-built app is restored. No provider calls beyond 18 trial credits, database upgrade, subscription, Production activation or Phase 10. Existing Phase 8 customer functionality and ready reports are preserved. The phase delivers private evidence/projection for later report generation; it does not itself sell or generate a Full Report. UX/UI remains not approved for launch and pre-launch retention/display/Live Stripe gates remain explicit.
