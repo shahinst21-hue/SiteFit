@@ -1,6 +1,6 @@
 # Phase 11 implementation status
 
-Owner approved Steps 11.0–11.9 under D83. Implementation and backend verification are complete through the checks below; protected delivery is still pending. Phase 11 is not yet declared complete.
+Owner approved Steps 11.0–11.9 under D83. Steps 11.0–11.9 are complete within the approved D83 scope. Implementation merged through protected PR #32 and post-main CI passed. This completion record follows the same protected delivery workflow.
 
 ## Verified work
 
@@ -25,9 +25,9 @@ Full existing evidence envelopes exceeded 64 KB, so assessments store compact im
 
 Current sources leave exact-unit permitted use, physical suitability and lease conditions unresolved. The context index is a descriptive hypothetical summary only, sensitive by up to 8.37 points under the declared ±10 weight perturbation. Two legacy checksum-deficient inputs cannot prepare a new assessment; their original reports remain available. No new paid calls/AI/search/provider credits consumed.
 
-## Open mandatory delivery gates
+## Completed mandatory delivery gates
 
-Final changed-source regression, protected Preview deployment/protection and unchanged public behaviour, exact-head required CI, protected PR #32 merge, post-main CI, main=origin and clean working tree. Record their actual results before declaring completion.
+Final changed-source regression passed: 269 tests, lint/types and production build. Protected Preview boundary/privacy checks passed; exact-head CI and protected PR #32 merge passed, followed by successful main CI. Local main equalled origin/main and working tree was clean at implementation completion.
 
 Phase 12/13 have not started. UX/UI remains not approved for launch; no new customer numerical projection, Full Report, financial form, AI generation or PDF is introduced.
 
@@ -35,4 +35,21 @@ Phase 12/13 have not started. UX/UI remains not approved for launch; no new cust
 
 Implementation commit `d486260c068165d3bc1aa2d29bb7358a9b74cde1`: push CI 38003533846 and PR CI 38003535816 passed (all required checks). PR #32 is ready for review. Protected Preview `https://sitefit-7huqyhpts-shahinst21-hues-projects.vercel.app` is READY; deployment `dpl_5icZhxcHHuJLT77zL2xw6EFChXFG` retains Vercel authentication. This deployment's payment-origin configuration intentionally disables purchase/webhook access (403); it is not a new Stripe E2E proof. Existing Auth/Test regression and historical payment verification remain intact; no live payments or protection changes.
 
-Final capacity recheck: 374,855,347 bytes; zero retained QA assessments (all synthetic write proofs rolled back). Existing ready graphs: 28 unchanged. Actual merge/post-main verification remains pending; completion is conditional on those protected gates.
+Final capacity recheck: 374,855,347 bytes; zero retained QA assessments (all synthetic write proofs rolled back). Existing ready graphs: 28 unchanged. PR #32 squash merged as `3842f799f422e4b7201dfbd16d6007a0da1eea0b`; exact-head final branch CI 38004269091/38004274403 passed. Post-main CI 38004438242 passed. Local main and origin/main matched that SHA with a clean working tree.
+
+## Final Definition of Done
+
+- [x] Approved Steps 11.0–11.9 and D83 boundaries implemented.
+- [x] Scoped evidence admission, missingness, provenance and conflict isolation.
+- [x] Real native R/J area/comparator admission and hypothetical exact numerical policy.
+- [x] Six-area/category interpretive/sensitivity review and synthetic controls; no commercial calibration claim.
+- [x] Independent premises/readiness/actions; no high-index clearance or invented blocker.
+- [x] Existing source/history/rental integration; immutable owned storage and stored-only replay.
+- [x] Fresh/hosted security, measured storage/latency, legacy graph equality and failed-source isolation.
+- [x] Complete regression/build/public HTTP, artifact/RPC/Preview privacy and protected deployment.
+- [x] Exact-head CI, protected implementation merge and post-main CI.
+- [x] Limitations and implementation refinements documented; no paid calls or Phase 12/13.
+
+Preview verification made seven controlled HTTP checks, scanned nine private values with zero findings, and confirmed unauthenticated access redirects to Vercel protection (302). Purchase/webhook access on this deployment is intentionally unavailable under the existing configured payment-origin boundary; no new Checkout acceptance is claimed.
+
+PHASE 11 COMPLETE
