@@ -1,3 +1,5 @@
+Current authority, 10 October 2026: Phase 12 implementation Steps 12.0–12.9 approved under D86. Specific report quality, durable interruption safety and aggregate US$1 live verification ceiling are mandatory. See [Phase 12 status](phase-12-status.md). Phase 13 remains unauthorised.
+
 # SiteFit development roadmap
 
 **Current authority, 10 October 2026:** Phases 8, 9, 9.5, 10 and 11 are complete. Phase 12 is **planning/review only**; [full proposal](phase12_plan.md), [reuse audit](phase-12-design-audit.md) and [eight-reference Phase 13 handoff](phase-13-design-handoff.md) await implementation approval. All eight UI references are confirmed complete; design examples are not evidence. D84 raises only the internal database checkpoint to 400,000,000 bytes (actual 374,855,347; margin 25,144,653). No upgrade, paid AI or Production/later implementation authorised. Earlier dated checkpoints are historical, not current authority.

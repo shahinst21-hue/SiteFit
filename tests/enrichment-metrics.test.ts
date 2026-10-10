@@ -9,6 +9,8 @@ import { definitions } from "../lib/data/registry.ts";
 import type { CollectionContext, StoredSnapshot } from "../lib/data/contracts.ts";
 import { context } from "./fixtures/data/framework.ts";
 import { randomUUID } from "node:crypto";
+import { buildAssessment } from "../lib/analysis/assessment.ts";
+import { storedProfiles } from "../lib/report-intelligence/profiles.ts";
 function fixture(){
  const id=context().region.boundaryReleaseId, c:CollectionContext={...context(),schemaVersion:2,enrichment:{schemaVersion:1,
   releases:Object.fromEntries(enrichmentReleaseKeys.map(k=>[k,id])) as EnrichmentInput["releases"],identity:{state:"matched",uprn:"10008292401",point:{longitude:-.1,latitude:51.5,crs:"EPSG:4326",precision:"building",source:"os-open-uprn"},coordinateBasis:"address_building_not_entrance",method:"exact_selected_address_components",retrievedAt:"2026-10-08T10:00:00Z",selectedParts:{primary:"67",secondary:null,street:"Synthetic Street",town:"London",postcode:"E8 4PH"},observedCredits:10,missingReason:null}}};
@@ -39,4 +41,17 @@ test("a missing native cell and a zero denominator cannot become a fabricated ra
  const metric=enrichmentMetrics(c,[s])[0];if(metric.id!=="census.walking-native-operands")throw Error();const missing=metric.ranges[0].tables[2].series![1];assert.equal(missing.value,null);assert.equal(missing.shareOfSameTableTotal,null);assert.equal(missing.ratioMissingReason,"incomplete_operands");
  raw.oaOperands[0].values[0]=0;raw.censusEstimates[0].knownContribution=0;
  const zero=enrichmentMetrics(c,[s])[0];if(zero.id!=="census.walking-native-operands")throw Error();assert.equal(zero.ranges[0].tables[2].series![2].ratioMissingReason,"zero_denominator");
+});
+test("Full profile projection retains frozen Census ordinals and rejects foreign or changed source bindings",()=>{
+ const {c,s}=fixture(), {payload,...metadata}=s.result;
+ const a=buildAssessment(c,[],[],[{snapshotId:s.id,checksum:s.result.meta.checksum!}],null,null,false,[],new Date("2026-10-10T00:00:00Z"));
+ const row={id:s.id,analysis_id:s.analysisId,input_id:s.inputId,collection_key:s.collectionKey,request_sha256:s.requestHash,provider_metadata:metadata,normalised_data:payload};
+ const p=storedProfiles(c,a,[row]);
+ assert.equal(p.tables.length,12);assert.equal(p.tables[0].seconds,300);
+ assert.equal(p.tables[0].values[0][1],20);
+ assert.equal("columnSets" in p&&p.columnSets?.TS007A?.[0].ordinal,1);
+ assert.throws(()=>storedProfiles(c,a,[{...row,input_id:randomUUID()}]),/profile_source_not_admitted/);
+ assert.throws(()=>storedProfiles(c,{...a,sourceBindings:[{snapshotId:s.id,checksum:"a".repeat(64)}]},[row]),/profile_source_not_admitted/);
+ const denied=structuredClone(row);denied.provider_metadata.meta.licence.derived.allowed=false;
+ assert.throws(()=>storedProfiles(c,a,[denied]),/profile_source_not_admitted/);
 });

@@ -25,6 +25,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       await db.exec(await readFile(new URL(file, dir), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/economics.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/assessments.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/full-intelligence.sql", import.meta.url), "utf8"));
     await db.exec(
       await readFile(
         new URL("../supabase/tests/ownership.sql", import.meta.url),
