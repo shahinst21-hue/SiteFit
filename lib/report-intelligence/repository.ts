@@ -18,6 +18,7 @@ type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
   profiles?: ReturnType<typeof storedProfiles>;
+  identityOmissions?: string[];
   presentation?: { freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
     spatial: { reportId: string; digest: string | null; state: "available" | "unavailable" }; photo: { state: "unavailable" } };
   packetDigests: { context: string; premises: string } };
@@ -59,7 +60,13 @@ export function fullRepository(owner: string, client = frameworkClient()) {
         throw Error("capacity_checkpoint");
       // First paid preparation may have no Phase 11 supplement yet. Reuse that
       // existing frozen-input method once; no provider/AI/scoring-policy change.
-      await assessmentRepository(owner, client).prepare(context.analysisId, context.inputId);
+      const assessments = assessmentRepository(owner, client);
+      try { await assessments.prepare(context.analysisId, context.inputId); }
+      catch {
+        // A concurrent first preparation can win the immutable assessment
+        // write. Reuse that winner; never recalculate or overwrite it.
+        if (!await assessments.read(context.analysisId, context.inputId)) throw Error("assessment_preparation_unavailable");
+      }
       return this.start(freeReportId);
     }
     const assessment = validateAssessment(material.assessment);
@@ -70,12 +77,12 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     const catalog = buildCatalog(assessment, evidence, new Date(), material.discovery === null ? null : validateDiscovery(material.discovery));
     const profiles = storedProfiles(context, assessment, Array.isArray(material.profileSnapshots) ? material.profileSnapshots : []);
     profileFocus(catalog, profiles);
+    const identityOmissions = [context.selectedProperty.formattedAddress, context.selectedProperty.postcode, context.selectedProperty.uprn,
+      context.selectedProperty.providerAddressId].filter((v): v is string => typeof v === "string" && v.length > 3);
     const packet = (keys: SectionKey[]) => {
-      const projected = catalogPacket(catalog, keys), encoded = JSON.stringify(projected);
+      const projected = catalogPacket(catalog, keys, identityOmissions), encoded = JSON.stringify(projected);
       // Protect against identity hidden in free source text, not just named JSON fields.
-      const denied = [context.selectedProperty.formattedAddress, context.selectedProperty.postcode, context.selectedProperty.uprn,
-        context.selectedProperty.providerAddressId].filter((v): v is string => typeof v === "string" && v.length > 3);
-      if (denied.some(v => encoded.toLowerCase().includes(v.toLowerCase())) || /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i.test(encoded) ||
+      if (identityOmissions.some(v => encoded.toLowerCase().includes(v.toLowerCase())) || /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i.test(encoded) ||
         /(?:sb_secret_|sk-(?:proj-)?|Bearer\s|guestClaim|authorization)/i.test(encoded)) throw Error("full_packet_identity_rejected");
       fullRequest(keys.includes("premises") ? "premises" : "context", projected, groupInstructions, selectionSchema);
       return projected;
@@ -83,7 +90,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
       assessmentDigest: String(material.assessmentDigest), catalog,
-      profiles,
+      profiles, identityOmissions,
       presentation: { freeReportId, analysisTimestamp: context.analysisTimestamp,
         property: { id: context.selectedProperty.id, label: context.selectedProperty.formattedAddress,
           precision: context.enrichment?.identity.point?.precision ?? context.selectedProperty.point?.precision ?? "unknown" },

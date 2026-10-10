@@ -143,7 +143,16 @@ export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at:
 }
 
 /** Model receives report-local atoms, never private IDs, source URLs or exact identity. */
-export function catalogPacket(catalog: Catalog, keys: SectionKey[]) {
+export function modelSafeText(text: string, omissions: readonly string[]) {
+  for (const value of omissions.filter(v => v.length > 3)) {
+    let cursor = 0, position = text.toLowerCase().indexOf(value.toLowerCase(), cursor);
+    while (position >= 0) { text = text.slice(0, position) + "[selected premises]" + text.slice(position + value.length);
+      cursor = position + "[selected premises]".length;
+      position = text.toLowerCase().indexOf(value.toLowerCase(), cursor); }
+  }
+  return text.replace(/\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/gi, "[postcode omitted]");
+}
+export function catalogPacket(catalog: Catalog, keys: SectionKey[], omissions: readonly string[] = []) {
   const candidates = catalog.atoms.filter(a => keys.includes(a.section) && a.role !== "caution");
   const required = new Set(candidates.flatMap(a => a.factIds)), facts = catalog.facts.filter(f => required.has(f.id)), scopes = [...new Set(facts.map(f => f.scope))],
     datasets = [...new Set(facts.map(f => f.dataset))];
@@ -151,8 +160,9 @@ export function catalogPacket(catalog: Catalog, keys: SectionKey[]) {
     // Qualifications are rendered mandatorily, not candidates the model may omit.
     atomFields: ["id", "section", "role", "text", "factIds"],
     atoms: candidates.map(({ id, section, role, text, factIds }) =>
-      [id, section, role, role === "reason" && factIds.length ? null : text, factIds]),
+      [id, section, role, role === "reason" && factIds.length ? null : modelSafeText(text, omissions), factIds]),
     factFields: ["id", "datasetIndex", "value", "units", "scopeIndex", "effectiveAt", "strength"],
-    facts: facts.map(f => [f.id, datasets.indexOf(f.dataset), f.value, f.units, scopes.indexOf(f.scope), f.effectiveAt, f.strength]), scopes, datasets,
-    unknowns: catalog.unknowns, scope: "No actual customers, success probability, economic forecast or legal clearance." };
+    facts: facts.map(f => [f.id, datasets.indexOf(f.dataset), typeof f.value === "string" ? modelSafeText(f.value, omissions) : f.value,
+      f.units, scopes.indexOf(f.scope), f.effectiveAt, f.strength]), scopes: scopes.map(s => modelSafeText(s, omissions)), datasets,
+    unknowns: catalog.unknowns.map(s => modelSafeText(s, omissions)), scope: "No actual customers, success probability, economic forecast or legal clearance." };
 }

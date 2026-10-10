@@ -11,8 +11,11 @@ import type { fullProvider } from "../lib/report-intelligence/provider.ts";
 import { verificationEnabled } from "../lib/report-intelligence/http.ts";
 import { suggestedAnswer } from "../lib/report-intelligence/questions.ts";
 
-function store() {
+function store(supported = false) {
   const a = buildAssessment(context(), [], [], [], null, null, false, [], new Date(date)), catalog = buildCatalog(a, [], new Date(date));
+  if (supported) for (const key of ["customer-context", "premises"] as const) catalog.atoms.push(
+    {id:`reason-${key}`,section:key,role:"reason",text:"Synthetic controlled support",factIds:[],rule:"synthetic"},
+    {id:`lead-${key}`,section:key,role:"conclusion",text:"Synthetic controlled conclusion",factIds:[],rule:"synthetic"});
   const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1", analysisId: ids.analysis,
     inputId: ids.input, assessmentId: ids.property, assessmentDigest: packetDigest(a), catalog, packetDigests: {
       context: packetDigest(catalogPacket(catalog, ["customer-context", "competition", "access"])),
@@ -25,10 +28,12 @@ function store() {
   return { repo: repo as unknown as ReturnType<typeof fullRepository>, value: () => value };
 }
 test("group failure preserves successes; explicit interrupted recovery cannot redispatch", async () => {
-  const db = store(); let calls = 0;
-  const provider = { async interpret(d: { group: string }, packet: { sections: string[] }) {
+  const db = store(true); let calls = 0;
+  const provider = { async interpret(d: { group: string }, packet: ReturnType<typeof catalogPacket>) {
     calls++; if (d.group === "premises") throw Error("process-loss");
-    return { state: "received", output: { sections: packet.sections.map(key => ({ key, lead: "unavailable", reasons: [], implications: [], actions: [] })) }, receipt: {} };
+    return { state: "received", output: { sections: packet.sections.map(key => ({ key,
+      lead: String(packet.atoms.find(a=>a[1]===key&&a[2]==="conclusion")?.[0]??"unavailable"),
+      reasons: packet.atoms.filter(a=>a[1]===key&&a[2]==="reason").map(a=>String(a[0])), implications: [], actions: [] })) }, receipt: {} };
   } } as unknown as ReturnType<typeof fullProvider>;
   await generateFullIntelligence(ids.analysis, ids.property, { repository: db.repo, provider });
   assert.equal(db.value().checkpoint.dispatches[0].state, "accepted");
@@ -50,8 +55,8 @@ test("ready replay and deterministic answers never invoke a provider", async () 
   assert.equal(answer.immutableReport, true); assert.equal(packetDigest(db.value()), before);
 });
 test("verification can never activate Production or an unknown deployment", () => {
-  assert.equal(verificationEnabled({ SITEFIT_PHASE12_VERIFICATION: "1", VERCEL_ENV: "production" }, "localhost"), false);
-  assert.equal(verificationEnabled({ SITEFIT_PHASE12_VERIFICATION: "1" }, "sitefit.example"), false);
-  assert.equal(verificationEnabled({ SITEFIT_PHASE12_VERIFICATION: "1" }, "localhost"), true);
-  assert.equal(verificationEnabled({ SITEFIT_PHASE12_VERIFICATION: "1", VERCEL_ENV: "preview", VERCEL: "1" }, "preview.example"), true);
+  assert.equal(verificationEnabled({ SITEFIT_REPORT_INTELLIGENCE_VERIFICATION: "1", VERCEL_ENV: "production" }, "localhost"), false);
+  assert.equal(verificationEnabled({ SITEFIT_REPORT_INTELLIGENCE_VERIFICATION: "1" }, "sitefit.example"), false);
+  assert.equal(verificationEnabled({ SITEFIT_REPORT_INTELLIGENCE_VERIFICATION: "1" }, "localhost"), true);
+  assert.equal(verificationEnabled({ SITEFIT_REPORT_INTELLIGENCE_VERIFICATION: "1", VERCEL_ENV: "preview", VERCEL: "1" }, "preview.example"), true);
 });

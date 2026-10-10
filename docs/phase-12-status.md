@@ -14,9 +14,12 @@ Authorised 10 October 2026 under D86 and the amended phase12_plan.md. In progres
 ## Actual checks and measurements
 
 - `npm ci`: Node 24/npm 11; succeeded, zero audit vulnerabilities.
-- `npm run check`: lint, strict types, **279 tests**, production build passed. Subsequent SQL material/question assertions additionally passed `npm run check:database` and the hosted rollback suite; final exact-head regression is still required after remaining changes.
+- `npm run check`: lint, strict types, **280 tests**, production build passed. SQL material/question assertions additionally passed `npm run check:database` and the hosted rollback suite; final exact-head regression is still required after remaining changes.
 - Production server `npm run check:public`: 13 pages/articles, 13 internal paths, metadata/JSON-LD, sitemap/robots/social image, 404 and four safe address boundaries passed.
-- Dry real-source packet probe: representative enriched case, 34 admitted/report-local facts; A **9,584 bytes**, B **3,043 bytes**, twelve stored profile tables **32,142 bytes**. No provider dispatch. Dictionary/tuple encoding avoids repeating source/column labels; all necessary findings retained.
+- Dry real-source packet probe: representative enriched case, 34 admitted/report-local facts; A **9,584 bytes**, B **3,043 bytes**, twelve stored profile tables **48,222 bytes**, including actual bng1/bng2 allocation version, boundary residuals, release bindings and qualifications. No provider dispatch. Dictionary/tuple encoding avoids repeating source/column labels; all necessary findings retained.
+- Actual Local HTTP: three anonymous private routes denied, cross-origin start denied; no-store/no-referrer headers verified. Twenty-one public artifact files and Account HTML checked against nine actual private variable values in process memory: zero matches. No captures/values exposed. Repeat on the final deployment remains required.
+- Draft implementation [PR #35](https://github.com/shahinst21-hue/SiteFit/pull/35). First CI head exposed the environment template's letters-only naming contract; verification flag renamed to `SITEFIT_REPORT_INTELLIGENCE_VERIFICATION`, without weakening the empty-value check. Exact final head CI pending.
+- Protected Preview branch-only verification/Test purchase configuration and two development callbacks set using existing approved Test credentials; Production untouched. Deployed artifact inspection confirms intelligence timeout **150s**, question timeout **40s**, Node 24. This verifies configured budget, not successful leave-page/background completion. Actual account/live report gates remain open.
 - Historical checksum-deficient cases were rejected, not repaired or regenerated. Read-only hosted audit found **no ready Free report with both a frozen source context and active succeeded/verified Test purchase**. This is an actual live API verification prerequisite, not an authorisation to fabricate customer entitlement.
 
 ## Implementation clarifications
@@ -25,6 +28,7 @@ Authorised 10 October 2026 under D86 and the amended phase12_plan.md. In progres
 - One known semantic selection repair is permitted only on explicit resume under the shared lifetime allowance. Refusal, provider/transport ambiguity and unreceipted loss are never retry permissions.
 - Persist dispatch time. Concurrent resume cannot cancel a still-bounded active invocation; a stale pending intent is exposed truthfully as interrupted and may be marked ambiguous explicitly, never resent automatically. This is not a durable worker or an exactly-once provider claim.
 - Exact request preflight runs before consuming dispatch authority. Ready reads terminate before AI/source/calculator construction. Per-section exports include all retained timeline/rental source references, not only AI-ranked items.
+- Source prose may contain a selected address even when its JSON field is not named address. AI-only projection replaces the bound exact identity/postcodes with omission markers; stored authorised evidence and final deterministic text remain unchanged. The same projection applies to report-grounded questions. Identity/secret preflight still rejects residual private content.
 
 ## Mandatory pending gates
 

@@ -24,7 +24,10 @@ export function storedProfiles(context: CollectionContext, assessment: Assessmen
     if (t.series === null) return { dataset: t.dataset, releaseId: t.releaseId, seconds: range.seconds,
       state: t.state, missingReason: t.missingReason, sourceSnapshotId: m.sourceSnapshotId, columns: [], values: [] };
     return { dataset: t.dataset, releaseId: t.releaseId, seconds: range.seconds, state: t.state,
-      referencePeriod: "2021-03-21", universe: t.universe, method: "area-uniform-bng1", sourceSnapshotId: m.sourceSnapshotId,
+      referencePeriod: "2021-03-21", universe: t.universe, method: t.allocation.methodVersion, sourceSnapshotId: m.sourceSnapshotId,
+      allocation: { releases: t.allocation.releases, boundaryResidualAreaM2: t.allocation.boundaryResidualAreaM2,
+        allocationCoveredAreaM2: t.allocation.allocationCoveredAreaM2, londonCoverageFraction: t.allocation.londonCoverageFraction,
+        limitations: t.allocation.limitations },
       // Keep published ordinals. Parent and child categories and cumulative
       // contours are not combined, and partial contributions are not totals.
       columns: t.series.map(s => ({ ordinal: s.columnOrdinal, label: s.label })),
@@ -59,7 +62,7 @@ export function profileFocus(catalog: Catalog, profiles: ReturnType<typeof store
   const fact = { ...base, id: `profile-${packetDigest({ source: table.sourceSnapshotId, ordinal: focus.ordinal }).slice(0, 16)}`,
     value: Number(focus.cell[1]), units: `estimated residents; ${column.label}`, statistical: {
       profileOrdinal: focus.ordinal, profileDataset: "TS007A", referencePeriod: "2021-03-21", seconds: 600,
-      method: "area-uniform-bng1", sourceSnapshotId: table.sourceSnapshotId, parentEvidenceId: base.evidenceId } };
+      method: "method" in table ? table.method : null, sourceSnapshotId: table.sourceSnapshotId, parentEvidenceId: base.evidenceId } };
   catalog.facts.push(fact);
   const atom = (role: Atom["role"], text: string, rule: string): Atom => ({ id: `a-${packetDigest({ text, fact: fact.id }).slice(0, 16)}`,
     section: "customer-context", role, text, factIds: [fact.id], rule });

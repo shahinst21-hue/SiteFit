@@ -2,7 +2,7 @@ import "server-only";
 import { packetDigest } from "../analysis/canonical.ts";
 import { type Catalog, type SectionKey, sectionKeys, catalogPacket } from "./catalog.ts";
 import { reserveDispatch, settleDispatch, recoverCheckpoint, type Checkpoint, type Group } from "./execution.ts";
-import { fullProvider, fullRequest } from "./provider.ts";
+import { fullProvider, fullRequest, type ProviderOutcome } from "./provider.ts";
 import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
 
@@ -59,7 +59,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     const repair = previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
       previous.every(d => d.state === "invalid" && (d.receipt as { validation?: string } | null)?.validation === "selection_rejected");
     if (previous.length && !repair) continue;
-    const packet = catalogPacket(edition.preparation.catalog, groupKeys[group]);
+    const packet = catalogPacket(edition.preparation.catalog, groupKeys[group], edition.preparation.identityOmissions);
     if (packetDigest(packet) !== edition.preparation.packetDigests[group]) throw Error("stored_packet_changed");
     fullRequest(group, packet, groupInstructions, selectionSchema);
     const reserved = reserveDispatch(edition.checkpoint, group, packet, groupInstructions, selectionSchema, repair);
@@ -67,7 +67,13 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     catch { return repo.read(reportId); } // A duplicate worker has not acquired dispatch authority.
   }
   await Promise.allSettled(pending.map(async ({ group, dispatch }) => {
-    const outcome = await provider.interpret(dispatch, catalogPacket(edition.preparation.catalog, groupKeys[group]), groupInstructions, selectionSchema);
+    const catalog = edition.preparation.catalog, keys = groupKeys[group], packet = catalogPacket(catalog, keys, edition.preparation.identityOmissions);
+    const supported = catalog.atoms.some(a => keys.includes(a.section) && a.role === "reason");
+    const outcome: ProviderOutcome = supported ? await provider.interpret(dispatch, packet, groupInstructions, selectionSchema) :
+      { state: "received", output: { sections: keys.map(key => ({ key, lead: "unavailable", reasons: [], implications: [],
+        actions: catalog.atoms.filter(a => a.section === key && a.role === "action").slice(0, 3).map(a => a.id) })) },
+        receipt: { model: "none", promptVersion: "deterministic-unavailable-v1", generatedAt: new Date().toISOString(),
+          durationMs: 0, inputTokens: 0, outputTokens: 0, estimatedMicros: 0, requestDigest: packetDigest(packet), store: false } };
     let accepted: Selection | null = null;
     if (outcome.state === "received") {
       try { accepted = validateSelection(outcome.output, edition.preparation.catalog, groupKeys[group]); } catch { /* Paid semantic failure retains receipt. */ }
@@ -82,7 +88,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   if (groups.some(d => !d) || edition.checkpoint.dispatches.some(d => d.state === "intent" || d.state === "ambiguous")) return edition;
   const selections = groups.map((d, i) => validateSelection(d!.output, edition.preparation.catalog, groupKeys[i === 0 ? "context" : "premises"]));
   const synthesis = synthesisCatalog(edition.preparation.catalog, selections);
-  const packet = { ...catalogPacket(synthesis, groupKeys.synthesis), version: "full-decision-v1",
+  const packet = { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
     readiness: synthesis.readiness, scope: "Resident & Workplace Context Index is not a commercial suitability score. No finance or legal clearance." };
   let dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
   const repair = dispatch?.state === "invalid" && options.resume === true && !edition.checkpoint.repairUsed &&
@@ -117,13 +123,14 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     sourceDirectory: catalog.facts, supplementReferences: catalog.supplementReferences, financialEngineIncluded: false as const };
   const projection: FullProjection = { ...content, contentDigest: packetDigest(content) };
   if (Buffer.byteLength(JSON.stringify(projection)) > 131072) throw Error("full_report_bounds");
+  if (edition.checkpoint.state !== "validating") edition = await commit(repo, reportId, c => ({ ...c, revision: c.revision + 1, state: "validating" }));
   return repo.freeze(edition, projection);
 }
 
 export function fullStatus(edition: StoredEdition) {
   const staleIntent = edition.checkpoint.dispatches.some(d => d.state === "intent" && (!d.reservedAt || Date.now() - Date.parse(d.reservedAt) > 180_000));
   return { reportId: edition.id, status: edition.status,
-    stage: edition.status === "ready" ? "ready" : staleIntent || edition.checkpoint.dispatches.some(d => d.state === "ambiguous") ? "interrupted" :
+    stage: edition.status === "ready" ? "ready" : edition.checkpoint.state === "validating" ? "validating-and-saving" : staleIntent || edition.checkpoint.dispatches.some(d => d.state === "ambiguous") ? "interrupted" :
       edition.checkpoint.dispatches.some(d => d.state === "invalid") ? "validation_failed" : edition.checkpoint.dispatches.at(-1)?.group ?? "checking-evidence",
     completed: edition.checkpoint.dispatches.filter(d => d.state === "accepted").map(d => d.group),
     recoveryAvailable: edition.status !== "ready" && staleIntent,

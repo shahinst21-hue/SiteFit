@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { buildAssessment } from "../lib/analysis/assessment.ts";
 import { context, date } from "./fixtures/data/framework.ts";
-import { buildCatalog } from "../lib/report-intelligence/catalog.ts";
+import { buildCatalog, catalogPacket, modelSafeText } from "../lib/report-intelligence/catalog.ts";
 import { validateSelection, renderSelection } from "../lib/report-intelligence/selection.ts";
 
 test("a favourable selected lead cannot remove mandatory opposition or substitute another section's evidence",()=>{
@@ -16,4 +16,13 @@ test("a favourable selected lead cannot remove mandatory opposition or substitut
  assert.equal(rendered.cautions[0].id,"risk");assert.equal(rendered.direction,"conditional");
  assert.throws(()=>validateSelection({sections:[{...selection.sections[0],reasons:["foreign"]}]},c,["access"]),/unsupported_selection/);
  assert.throws(()=>validateSelection({sections:[{...selection.sections[0],lead:"Invented success probability"}]},c,["access"]),/unsupported_lead/);
+});
+test("AI projection omits exact premises identity inside source prose without rewriting stored evidence",()=>{
+ const c=buildCatalog(buildAssessment(context(),[],[],[],null,null,false,[],new Date(date)),[],new Date(date));
+ const text="Recorded at 99 Synthetic Street, W1D 1BS on 2020-04-01; 82 sqm, building-only evidence.";
+ c.atoms.push({id:"historical",section:"premises",role:"reason",text,factIds:[],rule:"synthetic"});
+ const packet=JSON.stringify(catalogPacket(c,["premises"],["99 Synthetic Street"]));
+ assert.doesNotMatch(packet,/99 Synthetic Street|W1D 1BS/);assert.match(packet,/2020-04-01; 82 sqm/);
+ assert.equal(c.atoms.at(-1)!.text,text);
+ assert.equal(modelSafeText("[selected premises]",["[selected premises]"]),"[selected premises]");
 });
