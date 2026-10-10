@@ -1,5 +1,13 @@
 # Decisions
 
+## D84 accepted internal capacity policy and Phase 12 planning — 2026-10-10
+
+Owner raises the internal PostgreSQL checkpoint to **400,000,000 bytes** (decimal 400 MB), without changing provider limits or authorising any Supabase upgrade/purchase. Read-only measurement: **374,855,347 bytes**, margin **25,144,653**. Recheck before hosted writes; preserve historical data/security. Existing 375 MB historical records/applied SQL remain unchanged; documentation does not deploy new ingestion guards. Phase 11 is complete. Phase 12 **planning/review only** is authorised; [implementation proposal](phase12_plan.md) awaits approval. No paid AI, Production or later implementation authorised.
+
+## D85 accepted dashboard-first product requirement and reference boundary — 2026-10-10
+
+All eight reference pages are complete and are **UI/component/design references only**, never facts, scores or analytical policy. Full Report is an AI Native interactive decision dashboard; PDF is its shareable/archive export. Users understand the conclusion, inspect reasons/details, then evidence/source/method. Bounded report-grounded questions must be evaluated in Phases 12/13. Phase 13 requires standalone current-tab and complete-report print-specific PDFs from the same immutable edition, with identity/date/sources/limitations and secure access. If users cannot understand the result/data/reasons and next action in the dashboard without PDF, Phase 13 is incomplete. D82's separate Financial Engine and D83's context-only index supersede conflicting historical examples in the attachment/images. This product requirement is not implementation or launch approval; see [handoff](phase-13-design-handoff.md).
+
 ## D83 accepted Phase 11 implementation and context-only index — 2026-10-09
 
 Owner approves Steps 11.0–11.9, claim admission, deterministic rules, separate premises/readiness, immutable assessment persistence and bounded QA. Name the initial number **Resident & Workplace Context Index**. It measures only dated residential/workplace density context, never demand, success, competition, profit or suitability. Business weights/native comparisons are explicitly hypothetical versioned policy, conditional on real evidence, sensitivity and combined-versus-individual interpretive validation. No number on failed admission or method validation and no weaker substitution. Decisions, strengths, risks and next actions remain more important; high context cannot conceal premises blockers. Recheck actual capacity before hosted writes and preserve the internal checkpoint. No paid requests, new providers, subscriptions, infrastructure purchases or Phase 12/13. See [approved plan](phase11_plan.md) and [implementation status](phase-11-status.md).

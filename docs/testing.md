@@ -1,5 +1,11 @@
 # Future testing strategy
 
+## Current Phase 12 planned gates — 10 October 2026
+
+[Phase 12 proposal](phase12_plan.md#10-execution-steps-and-required-verification) defines finite three-concept real-source intelligence QA, deterministic claim/value/scope/opposition validation, mocked failure/injection controls, fresh/hosted changed SQL/security, stored replay without external calls, actual background completion/recovery, bounded questions and protected CI delivery. Planning runs no paid calls or implementation tests. D78/D79 forbid low-value exhaustive QA, not these essential accuracy/privacy/history requirements. D84 capacity checkpoint is 400,000,000 bytes and must be measured before writes.
+
+Phase 13 separately verifies the [eight-reference visual/function checklist](phase-13-design-handoff.md#8-concrete-visualfunction-acceptance-checklist), current-tab/full PDF agreement, real mobile/keyboard/200% operation and owner acceptance. CI/reference completeness is not UX launch acceptance. No old zoom/checkout confirmation is reused as new Full Report proof.
+
 Recorded 2026-10-03. The strategy below covers future phases. Phase 0 introduced no executable tests. Phase 1 now introduces lint, strict types, Node unit tests and production build scripts with a GitHub Actions workflow. Later phases add tests alongside implemented behaviour, not speculative suites or tests that merely mirror code.
 
 ## Validation by layer

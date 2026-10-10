@@ -1,5 +1,7 @@
 # SiteFit development roadmap
 
+**Current authority, 10 October 2026:** Phases 8, 9, 9.5, 10 and 11 are complete. Phase 12 is **planning/review only**; [full proposal](phase12_plan.md), [reuse audit](phase-12-design-audit.md) and [eight-reference Phase 13 handoff](phase-13-design-handoff.md) await implementation approval. All eight UI references are confirmed complete; design examples are not evidence. D84 raises only the internal database checkpoint to 400,000,000 bytes (actual 374,855,347; margin 25,144,653). No upgrade, paid AI or Production/later implementation authorised. Earlier dated checkpoints are historical, not current authority.
+
 **Authoritative checkpoint, 9 October 2026:** Phases 8, 9, 9.5 and 10 are complete within their recorded qualified scope. Phase 10 implementation/completion PRs #28/#31 and post-main CI 37986830919 passed; main baseline is `02a0d4c011548dde0aa13dba7b46948c1b1811e5`. The owner requests **Phase 11 planning/review only**: [complete proposal](phase11_plan.md), [earlier-model/prompt/decision audit](phase-11-design-audit.md). No scoring policy in that proposal is approved or activated yet. Implementation awaits explicit approval; Phases 12/13 remain separately authorised later work. Earlier dated checkpoints below are history, not current phase authority.
 
 Current checkpoint, 9 October 2026: Phase 8 is complete through protected PRs #24/#25 and passing post-merge CI. D80 authorises immediate [Phase 9 existing-provider implementation](phase9_plan.md) under D78/D79; GLA/new providers/importer are excluded. [Phase 9 status](phase-9-status.md) records actual gates. No purchase, subscription, Full Report generation or Phase 10 is authorised. Scoring/grouped prompts remain frozen candidates; calibration resumes only in separately authorised later work. Earlier dated paragraphs below are historical.
@@ -128,22 +130,20 @@ Owner-authorised Phase 10 implementation: [approved plan](phase10_plan.md) and [
 
 ## Phase 12: AI Report Engine
 
-- Phase 11 handoff proposal: consume its admitted evidence/rules, exact preliminary-score scope/trace, separate readiness and mandatory opposition/gaps. No model-authored numbers/weights or score upgrades; finance prompts are outside the main report under D82. See [responsibilities](phase11_plan.md#10-phase-12--13-contracts-and-exclusions); no Phase 12 implementation authority follows from planning.
+- Status: complete proposal awaiting owner implementation approval. [Steps 12.0–12.9 and full DoD](phase12_plan.md); [implemented prompt/schema audit](phase-12-design-audit.md).
+- Objective: useful evidence-linked business-specific report intelligence from existing stored evidence/assessments, including independent qualified rent context. Preserve exact Resident & Workplace Context Index scope/publication, separate premises/readiness and material opposition. No new scoring policy or finance calculations in report.
+- Proposed implementation: two parallel grouped analyses plus one dependent synthesis, one shared repair, deterministic figures/Appendix, narrow immutable Full edition beside ready Free, actual-stage bounded background completion/recovery and stored-only reads. Report-grounded questions use deterministic common answers and separately budgeted bounded model answers. No final dashboard/PDF code in Phase 12.
+- Owner gates: implementation approval; separately bounded live AI QA budget; material content acceptance. Current planning authorises none of those paid calls. No new provider/account/infrastructure purchase baseline.
+- DoD: versioned validated useful intelligence for three concepts; exact evidence/metric/scope/conflict lineage; failures retain accepted groups; legacy history unchanged and read-time external calls zero; real lifecycle/recovery, security/ownership/refund/capacity, grounded questions and export contracts; full regression/exact-head CI/protected merge. Numeric index never conceals unresolved premises requirements.
 
-- Objective: expand bounded validated section analysis into the full report.
-- Proposed sequencing: the minimal AI adapter, prompt/schema versions, relevant section packets, validation/repair and validated-only synthesis move into Phase 6 to demonstrate free analytical value. This phase adds deeper subanalyses/full synthesis, not the first AI interpretation.
-- Codex implements after its own approval: full-report tasks/schemas/evaluations/cross-section reconciliation, preserving prior free history and source/metric/evidence contracts.
-- Human action: provider access and secure credentials, budget and approval of material report wording/rules.
-- Definition of Done: schema and evidence validation pass; fabricated references, missing-data invention and success probabilities are rejected; deterministic financial values remain unchanged; provider-specific objects stay behind the boundary.
+## Phase 13: AI Native Interactive Report Dashboard & Multi Level PDF Export
 
-## Phase 13: Full Report UI, PDF and Delivery
-
-- Phase 11 handoff proposal: a new safe paid view supports explicitly limited preliminary/withheld scores and separate binding premises/readiness, rather than forcing the old four-factor Snapshot DTO. Rental context independently appears; Financial Engine remains a separate experience, with no financial form/calculations in report or PDF. Historical views remain unchanged. Final UX/UI requires approval and is not approved for launch by automated checks.
-
-- Objective: deliver the paid report consistently across web and PDF.
-- Codex implements: approved result-first report dimensions/subsections with short reason/small strength and closed per-section Why this result (D69), permitted PDF generation/storage and secure delivery from persisted ready content. Sixteen legacy storage keys are not a mandatory UI hierarchy; new keys require explicit migration. PDF rendering/retries use the frozen snapshot without provider retrieval, recalculation or AI regeneration.
-- Human action: approve report template and delivery/account policy; external delivery account access if a service is selected.
-- Definition of Done: authorised paid users access the original stored report; UI/PDF agree on evidence, calculations and unknowns; reopening performs no collection/calculation/AI generation; a later analysis leaves the earlier report unchanged; PDF layout and links are verified; failed exports recover without duplicate charges, historical-content changes or leakage.
+- Objective under D85: dashboard is the primary product, PDF its shareable/archive export. Users must understand the conclusion, reasons, data and next action without downloading PDF. [Complete eight-reference handoff](phase-13-design-handoff.md) governs visual/component direction; example figures/claims/tab content are not evidence.
+- Separate approval required. Implement result-first tabs, cards, maps, appropriate charts, evidence/source/method inspection, bounded report questions, genuine controls and professional actual-stage progress/recovery. Do not automatically preserve an older dashboard where it conflicts with references.
+- Exact Phase 11 context index only; independent readiness/premises and gaps. Qualified rental evidence belongs in main report. Financial Engine remains separate: no financial form/calculations/scenarios in Free/Full/PDF. New section keys require forward validation/migration, not legacy 24-tab assumptions.
+- Mandatory first Full delivery: print-specific **current-tab PDF and full-report PDF**, same immutable report/version/digest. Every tab export independently identifies property/business/date/sources/limitations; complete PDF includes final Appendix. Retries render stored content only.
+- Owner decisions: final design/content/function acceptance, rental tab label, question allowance, export/download/retention terms. Technical choices must respect existing source/map/photo rights; no new service/purchase implied.
+- DoD: useful in-dashboard decision without PDF; all visible controls work or are honestly unavailable; stored-only authorised reads and report-grounded answers; source/figure/UI/PDF agreement; responsive/keyboard/real 200% checks and owner acceptance; secure recoverable exports with no repeat charge/regeneration/history change. Current UX/UI remains not approved for launch.
 
 ## Accepted cross-phase gate: historical report snapshots
 
@@ -163,6 +163,8 @@ Owner-authorised Phase 10 implementation: [approved plan](phase10_plan.md) and [
 - Definition of Done: interruption, timeout and duplicate-work scenarios recover safely; cost limits and privileged access are tested; logs redact sensitive data; admin remains internal and does not expand into an enterprise dashboard.
 
 ## Phase 15: Security, Testing and Production Hardening
+
+- D85 adds actual end-to-end dashboard/current-tab and full-report PDF checks: owned access, report-grounded questions, browser compatibility, performance, export recovery and immutable UI/PDF agreement. Phase 13's owner acceptance remains separate; this does not authorise new work in Phase 12 planning.
 
 - Objective: validate security and critical paths before launch.
 - Codex implements: comprehensive relevant checks from [testing.md](testing.md), deployment hardening and documented remediation/recovery procedures. Security begins in earlier phases and is reviewed here.
