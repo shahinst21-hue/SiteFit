@@ -43,3 +43,6 @@ Owner Google sign-in confirmed and observed on the Phase 12 branch; the original
 
 A new branch-origin Test Session was created and bound correctly (open/unpaid, GBP 2,900 minor units). Actual Stripe URL has provider fragment state; the shared client redirect guard rejected every fragment, causing the visible Checkout error even after successful Session creation. Fix preserves provider state only for the exact HTTPS Stripe Checkout origin/path and rejects URL credentials, foreign hosts and internal anchors. Added regression coverage; real repaired browser/Checkout and subsequent signed confirmation remain pending. No payment data or provider fragment recorded here. Local official Test listener and production server prepared; no live payment or AI spending.
 
+
+Repaired head `a4abdaeda520d987c43907bc2871b0d2cc8dbc77` passed Local lint/types/all 281 tests/build/public HTTP and both protected CI jobs. Ready exact-head Preview: `sitefit-3stonq1lx-shahinst21-hues-projects.vercel.app`. Actual resumed customer action now navigates to Stripe; saved browser permission blocks tool access to checkout.stripe.com. No circumvention attempted; owner Test completion requested. Session remains unpaid until server-confirmed Stripe state. AI spending remains zero; real content/entitlement/background gates open.
+
