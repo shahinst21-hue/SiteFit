@@ -1,5 +1,11 @@
 # SiteFit architecture
 
+## Current Phase 12 planning boundary — 10 October 2026
+
+Phase 11 is complete. [Phase 12 proposal](phase12_plan.md) reuses admitted immutable assessments/evidence/history/rental outcomes and existing GPT 6.1 Sol transport. Proposed two parallel groups plus one validated synthesis, deterministic figures/Appendix, narrow Full edition checkpoints/ready guards, stored-only owned reads and bounded report questions; no new provider or generic workflow infrastructure. This architecture awaits owner implementation approval; no code/migration/service activation occurs in planning. Existing ready Free child guards require a narrow forward Full-section exception, not a broad historical thaw. There is no implemented ai_interpretations table; proposal uses existing report provenance.
+
+D85 makes the interactive dashboard primary, with per-tab/full-report PDF exports of identical frozen content in Phase 13. References govern design only. D82 excludes Financial Engine from report/PDF while retaining rental evidence; D83 context index is not overall attractiveness. The [reference handoff](phase-13-design-handoff.md) supersedes incompatible older layouts. D84 sets the internal capacity checkpoint to 400,000,000 bytes; historical applied 375 MB gates are not changed by planning. Background lifecycle support is bounded and requires actual deployment verification, not a durable/exactly-once execution claim.
+
 ## Phase 10 planning boundary — 9 October 2026
 
 Phase 9 is complete in [status](phase-9-status.md). The owner's new request authorises planning only. [Economic Engine proposal](phase10_plan.md) uses a pure deterministic kernel and private claim/entitlement-aware immutable supplements in existing economic_models; their assumption versions reference the original frozen analysis input without inserting into or weakening the ready source graph. Rent is qualified existing-provider market context, not an agreed selected-unit lease. Economics remains separate from scores/readiness, with no provider/AI/calculator execution on stored read. Phase 13 later connects the voluntary post-main-report form/dashboard/PDF. No proposed migration, code or new source has been implemented or approved here.

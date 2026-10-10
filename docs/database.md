@@ -1,5 +1,11 @@
 # Phase 3 database foundation
 
+## Current capacity and Phase 12 proposal — 10 October 2026
+
+D84 sets the internal checkpoint to **400,000,000 bytes**. Current read-only PostgreSQL measurement: **374,855,347 bytes**, margin **25,144,653**. Provider allowance/plan unchanged; no upgrade or data deletion. Historical 375 MB measurements and applied ingestion guards remain intact; any needed deployed guard adjustment is a future approved forward migration, not a history edit. See [capacity policy](infrastructure.md#current-capacity-policy--10-october-2026).
+
+[Phase 12 planning proposal](phase12_plan.md) uses existing reports/report_sections for a separate Full edition and bounded in-progress provenance checkpoints, references immutable source/assessment bundles, and proposes service-only owned start/checkpoint/finalise/read plus ready immutability. Existing Free ready child guards currently prohibit new sections under that analysis: implement only a narrow non-ready Full edition exception after approval, preserving all existing frozen inputs/source/evidence/Free graph. No migration/write occurs in planning. No AI interpretation table or generic job/lease platform is assumed. Customer Q&A usage metadata remains separate from immutable report facts. UI and current-tab/full PDF use the same content digest; finance excluded.
+
 ## Proposed Phase 10 supplement storage — planning only, 9 October 2026
 
 [Phase 10 proposal](phase10_plan.md) extends existing economic_models through a future forward migration: closed immutable assumptions/results, model/schema/context/content digests, explicit run identity and linked parent version. Reference the original analysis_inputs row; economic assumptions belong inside the append-only supplement, because ready Free inputs/source/evidence are frozen. Narrow service-only writers/readers enforce current authorised claim ownership, permanent account and server-confirmed entitlement, source bindings, unchanged replay and mutation denial. No public table grants, payment/analysis lifecycle change or historical rewrite. This is an unapproved design, not an applied migration or financial capability. Actual Step 10.6 storage/security measurements remain pending.
