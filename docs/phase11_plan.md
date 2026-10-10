@@ -239,18 +239,20 @@ No purchase, credential entry, provider activation or separate subscription is r
 ## 12. Definition of Done — approved, evidence tracked in Phase 11 status
 
 - [x] Owner approval recorded under D83; exact context-only name and conditional numerical publication supersede proposal wording.
-- [ ] Audit references/legacy/candidate status retained; new method never silently activates frozen 34-parameter config or rewrites Phase 6/8 outputs.
-- [ ] Steps 11.0–11.9 complete with actual evidence and deviations in Phase 11 status.
-- [ ] Claim-specific admission, semantic scope/date/rights/parents/conflicts/missingness verified; observed zero is not unknown and unknown is not favourable/adverse by default.
-- [ ] Resident and proposed employee-job density/comparators independently admitted using matched existing releases, areas/universes/eligibility/target exclusion; failed derivative not substituted.
-- [ ] One deterministic business-profile evaluator produces exact approved arithmetic and trace, final-only rounding, available/withheld states; no dynamic weights, finance, D77 metric, hidden renormalisation or success probability.
-- [ ] Finite real-packet review supports understandable scoped strengths/risks and at least one admitted trace for each category, or explicit owner-approved numerical-gate resolution; synthetic controls separately labelled. No missing proof recorded as passed.
-- [ ] Market/access/history/rent limitations and counterevidence preserved; current premises suitability/readiness remains separate; high score cannot clear a confirmed blocker or erase unknowns.
-- [ ] Private owned/entitled append, immutable replay, foreign input/source/tamper/grants/refund and safe projection gates pass fresh and hosted; reopening performs zero provider, AI or calculation calls.
-- [ ] All original ready report fingerprints/source bindings unchanged; actual new storage/index/bundle/lookup measurements remain within approved capacity policy.
-- [ ] Required lint/types/tests/build/public HTTP, relevant legacy Auth/Test/security regressions, protected Preview boundary, changed client/log/projection privacy checks pass on stated actual scope; no unverified launch/browser acceptance claimed.
-- [ ] Phase 12/13 handoff/schema/prompts compatibility documented, with no final narrative/Full Report/UI/PDF/financial embedding or later-phase execution.
-- [ ] No paid requests/provider purchase/subscription/new service/deferred infrastructure; any genuine dependency resolution explicit rather than silent scope waiver.
-- [ ] Exact-head required CI, protected PR merge, post-main CI and clean main=origin pass for **implementation**, after separate approval. This planning PR does not satisfy implementation DoD.
+- [x] Audit references/legacy/candidate status retained; new method never silently activates frozen 34-parameter config or rewrites Phase 6/8 outputs.
+- [x] Steps 11.0–11.9 complete with actual evidence and deviations in Phase 11 status.
+- [x] Claim-specific admission, semantic scope/date/rights/parents/conflicts/missingness verified; observed zero is not unknown and unknown is not favourable/adverse by default.
+- [x] Resident and proposed employee-job density/comparators independently admitted using matched existing releases, areas/universes/eligibility/target exclusion; failed derivative not substituted.
+- [x] One deterministic business-profile evaluator produces exact approved arithmetic and trace, final-only rounding, available/withheld states; no dynamic weights, finance, D77 metric, hidden renormalisation or success probability.
+- [x] Finite real-packet review supports understandable scoped strengths/risks and at least one admitted trace for each category, or explicit owner-approved numerical-gate resolution; synthetic controls separately labelled. No missing proof recorded as passed.
+- [x] Market/access/history/rent limitations and counterevidence preserved; current premises suitability/readiness remains separate; high score cannot clear a confirmed blocker or erase unknowns.
+- [x] Private owned/entitled append, immutable replay, foreign input/source/tamper/grants/refund and safe projection gates pass fresh and hosted; reopening performs zero provider, AI or calculation calls.
+- [x] All original ready report fingerprints/source bindings unchanged; actual new storage/index/bundle/lookup measurements remain within approved capacity policy.
+- [x] Required lint/types/tests/build/public HTTP, relevant legacy Auth/Test/security regressions, protected Preview boundary, changed client/log/projection privacy checks pass on stated actual scope; no unverified launch/browser acceptance claimed.
+- [x] Phase 12/13 handoff/schema/prompts compatibility documented, with no final narrative/Full Report/UI/PDF/financial embedding or later-phase execution.
+- [x] No paid requests/provider purchase/subscription/new service/deferred infrastructure; any genuine dependency resolution explicit rather than silent scope waiver.
+- [x] Exact-head required CI, protected PR merge, post-main CI and clean main=origin pass for **implementation**, after separate approval. This planning PR does not satisfy implementation DoD.
 
 Proceed through approved Phase 11 only. Phase 12/13 require separate approval. Historical mutation remains prohibited.
+
+Implementation and bounded verification completed under D83; see [actual status](phase-11-status.md) and [QA/limitations](phase-11-qa.md). Completed checkboxes refer to the revised density-context construct and qualified evidence scope, not customer UI publication or commercial calibration.
