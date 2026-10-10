@@ -1,5 +1,9 @@
 # Decisions
 
+## D86 accepted Phase 12 implementation, quality and interruption/budget amendments — 2026-10-10
+
+Owner authorises Steps 12.0–12.9 under the amended [Phase 12 plan](phase12_plan.md). Specific useful analysis across eight pages is the acceptance priority, not test quantity or a three-call checkbox; Appendix is factual/deterministic. Preserve pinned inputs/stages/dispatch reservations/accepted results across browser/server interruption; ambiguous external calls must never be automatically repeated. Aggregate real Phase 12 AI verification budget is **US$1**, including failed/unknown requests and Q&A, replacing the $2 proposal. Obtain approval before any excess, continue independent work. No new provider/purchase, financial report embedding, Production or Phase 13 implementation authorised.
+
 ## D84 accepted internal capacity policy and Phase 12 planning — 2026-10-10
 
 Owner raises the internal PostgreSQL checkpoint to **400,000,000 bytes** (decimal 400 MB), without changing provider limits or authorising any Supabase upgrade/purchase. Read-only measurement: **374,855,347 bytes**, margin **25,144,653**. Recheck before hosted writes; preserve historical data/security. Existing 375 MB historical records/applied SQL remain unchanged; documentation does not deploy new ingestion guards. Phase 11 is complete. Phase 12 **planning/review only** is authorised; [implementation proposal](phase12_plan.md) awaits approval. No paid AI, Production or later implementation authorised.

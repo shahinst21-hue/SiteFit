@@ -1,6 +1,14 @@
-# Phase 12: AI interpretation and report intelligence — implementation proposal
+# Phase 12: AI interpretation and report intelligence — approved implementation
 
-Prepared 10 October 2026. **Planning only; implementation and paid verification await owner approval.** Phases 8–11 are complete. D78/D79/D80, D82 and D83 remain authoritative. D84 changes the internal capacity checkpoint only; D85 records the dashboard/product clarification. No source coverage, scoring calibration, payment policy or Production activation is proposed here.
+## Authoritative owner amendments — 10 October 2026
+
+Owner approves implementation Steps 12.0–12.9 with three amendments. **Report quality outweighs test counts:** the nominal three calls must supply specific analytical content for all eight pages (Appendix remains deterministic). Reject generic statements that merely say population is suitable or further checks are needed; real QA must demonstrate evidence-specific comparisons, business implications, material trade-offs and decision-changing actions. Call count is a bounded baseline, not permission to publish inadequate content; if it cannot produce acceptable content, document the actual failure and seek a scoped resolution rather than silently widening spending or weakening admission.
+
+**Persistent interruption safety:** browser closure and server interruption must not lose report identity, pinned inputs, stages, dispatch reservations, accepted outputs or receipts. Persist intent before every provider dispatch, and accepted output before advancing. An interrupted/ambiguous dispatch is never automatically reissued by reopen, duplicate start, resume, restart or deployment. Safe manual reconciliation remains possible; never claim exactly-once external execution. Resume only demonstrably never-dispatched stages under the original binding and remaining allowance.
+
+**US$1 aggregate live Phase 12 verification ceiling**, replacing the proposed US$2. All real AI tests, including failed/ambiguous calls and Q&A, share this phase budget. Reserve the conservative maximum before dispatch and retain unknown charges. Prior phase budgets do not add allowance. Three reports at a $0.30 reserve plus one $0.04 question fit only if actual configured/request bounds justify it. If essential valid verification cannot fit, stop only that paid dependency and obtain explicit approval before additional spending. No additional providers/purchases/Production/Phase 13 authorised. See D86 and [actual status](phase-12-status.md).
+
+Prepared 10 October 2026. **Implementation authorised under D86; aggregate live verification ceiling US$1.** Phases 8–11 are complete. D78/D79/D80, D82 and D83 remain authoritative. D84 changes the internal capacity checkpoint only; D85 records the dashboard/product clarification. No source coverage, scoring calibration, payment policy or Production activation is proposed here.
 
 Read with [reuse audit](phase-12-design-audit.md), [reference-based Phase 13 handoff](phase-13-design-handoff.md), [capacity policy](infrastructure.md#current-capacity-policy--10-october-2026), [Product Contract](product.md) and [Phase 11 completion](phase-11-status.md). All eight supplied reference pages are received, reviewed and owner-confirmed complete. Their numbers, claims, tab wording and example data are not product evidence.
 
@@ -103,6 +111,8 @@ Owned ready reads return the stored safe projection and terminate before constru
 
 Store compact catalog/receipts/validated selections, referencing existing SQL-verified originals. Avoid duplicating raw envelopes, full geometries or repeated claim prose in provenance and sections. Target additional report storage **80–200 KB including estimated index/TOAST overhead**, provisional until actual measurement; cap structured report payload at 128 KB and bounded checkpoint content at 64 KB, with mandatory findings never truncated. Measure actual database and relation sizes before/after representative writes; roll back synthetic QA where possible.
 
+Implementation bound clarification: the frozen preparation is capped at 128,000 serialized bytes to include existing validated Census table operands alongside the admitted catalog. Store column dictionaries once; no geometry/raw API bodies in the preparation. Checkpoint/final projection bounds and AI request/cost ceilings remain unchanged. Preparation and final output both preserve source lineage; no report read reruns the operand projection.
+
 At 374,855,347 bytes, the 400,000,000 checkpoint leaves **25,144,653 bytes**. A rough 80–200 KB/edition projection permits around **125–314 editions** if nothing else grows; this is not a capacity guarantee. Native source growth and PostgreSQL overhead consume that margin too. Recheck before hosted writes, reserve known migration/QA growth, and stop the dependent write if the essential measured footprint would exceed the checkpoint. No upgrade, pruning historical reports or automatic expiry is authorised.
 
 ## 7. Actual stages, background completion and recovery
@@ -148,7 +158,7 @@ Optimisations: reuse exact stored evidence/assessment, two parallel groups, dete
 
 ## 10. Execution steps and required verification
 
-Implementation is not yet authorised. After approval create and maintain `docs/phase-12-status.md`, record each step's actual results/deviations and proceed in this order. Use Node 24/npm 11 and `npm ci`; run focused tests, lint/types for relevant changes; full build/regression at integration/final delivery, not repeatedly for unchanged work.
+Implementation is authorised. Maintain `docs/phase-12-status.md`, record each step's actual results/deviations and proceed in this order. Use Node 24/npm 11 and `npm ci`; run focused tests, lint/types for relevant changes; full build/regression at integration/final delivery, not repeatedly for unchanged work.
 
 | Step | Defined scope | Evidence required to close |
 | --- | --- | --- |
@@ -163,7 +173,7 @@ Implementation is not yet authorised. After approval create and maintain `docs/p
 | **12.8** | Proportionate real intelligence QA/security/capacity | Three existing-evidence reports, one per concept; one bounded real Q&A if budget approved; fixed failure/contradiction cases mocked. Independent manual claim/value/scope/material-risk review, actual receipts/latency, browser/HTTP response and artifact privacy; no raw private captures |
 | **12.9** | Final regression and protected delivery | `npm run check`, fresh DB/security + hosted changed SQL proof, running build/public HTTP, applicable protected Preview private API checks, exact-head required CI, protected PR merge/post-main CI, local main=origin and clean tree; complete status/limits |
 
-Live generation/Q&A verification budget proposal: **up to US$2 total**, separately approved only when needed (three reports reserved at $0.30 + one $0.04 answer; remaining allowance covers known metering uncertainty, not additional calls). Nominal nine generation calls plus one Q&A, maximum thirteen including shared repairs. No new source API calls. If access/budget remains pending, finish mocks/contracts/security independently; do not mark live quality/latency verified. Do not substitute synthetic evidence for a real-source packet. Test entitlement remains authoritative for development; Production disabled.
+Live generation/Q&A verification budget: **up to US$1 total**, owner-approved under D86 (three reports reserved at $0.30 + one $0.04 answer; the $0.06 remaining reserve is not permission for additional requests). Nominal nine generation calls plus one Q&A, maximum thirteen including shared repairs. No new source API calls. If access/budget remains pending, finish mocks/contracts/security independently; do not mark live quality/latency verified. Do not substitute synthetic evidence for a real-source packet. Test entitlement remains authoritative for development; Production disabled.
 
 Manual QA is about decision value and factual scope: opening answers whether to pursue and why; each prominent sentence maps to permitted evidence/rule; strongest contrary evidence visible; unknown permissions not refusals; no fabricated customer counts/closure reasons; actions specific and decision-changing; source dates and rental kinds correct. Have the owner review the three representative outputs as content acceptance; automated pass is not customer acceptance or UI launch approval.
 
@@ -184,7 +194,7 @@ Manual QA is about decision value and factual scope: opening answers whether to 
 
 ## 12. Approval questions, risks and explicit exclusions
 
-Approve the Phase 12 plan before implementation. Review the three-call architecture, narrowly persisted execution checkpoint, constrained useful prose, question-answer boundary and proposed Rent & Lease Context label. Owner confirmation that references are complete is already received; no repeated reference request is necessary. A separate live development budget is needed before paid QA, not during planning. Production hosting commercial-use suitability, direct Live Stripe launch gate and final retention/customer terms remain pre-launch decisions, not permission to upgrade now.
+Phase 12 implementation is approved under D86. Preserve the three-call architecture, narrowly persisted execution checkpoint, constrained useful prose, question-answer boundary and proposed Rent & Lease Context label. Owner confirmation that references are complete is already received; no repeated reference request is necessary. The aggregate US$1 live development budget is approved; additional spending requires explicit prior approval. Production hosting commercial-use suitability, direct Live Stripe launch gate and final retention/customer terms remain pre-launch decisions, not permission to upgrade now.
 
 Risks: evidence gaps and rights limit richness; small remaining capacity; anchored prose may need bounded variants to avoid repetition; existing historical inputs may lack required checksums; provider outages/ambiguous dispatch may require safe manual recovery; deployment duration is unverified until Step 12.5; model alias behavior and pricing can change; no exact-unit photos/visibility data or admitted overall score. None is cured by invented UI figures or newer-wins source selection.
 
