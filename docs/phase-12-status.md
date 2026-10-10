@@ -36,3 +36,10 @@ Three real-source concept reports with useful specific analysis; eight-page cont
 
 Phase 13 UI/PDF, financial report forms/scenarios, Production activation and new provider spending remain excluded. Current UX/UI is not approved for launch.
 
+
+## Google and Test purchase verification continuation
+
+Owner Google sign-in confirmed and observed on the Phase 12 branch; the original enriched Snapshot remains in account history. Fresh database usage is 375,019,187 bytes. An expired old Test attempt remained pending because its prior Local listener was absent at expiration. Read the actual matching Stripe expiration event and reconciled through the existing verified-state payment reducer: failed/no access, no fabricated event or entitlement. This is an operator reconciliation, not signed delivery evidence.
+
+A new branch-origin Test Session was created and bound correctly (open/unpaid, GBP 2,900 minor units). Actual Stripe URL has provider fragment state; the shared client redirect guard rejected every fragment, causing the visible Checkout error even after successful Session creation. Fix preserves provider state only for the exact HTTPS Stripe Checkout origin/path and rejects URL credentials, foreign hosts and internal anchors. Added regression coverage; real repaired browser/Checkout and subsequent signed confirmation remain pending. No payment data or provider fragment recorded here. Local official Test listener and production server prepared; no live payment or AI spending.
+
