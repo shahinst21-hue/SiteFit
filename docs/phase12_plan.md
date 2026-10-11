@@ -1,5 +1,7 @@
 # Phase 12: AI interpretation and report intelligence — approved implementation
 
+**11 October consultant-output amendment, D88:** [Consultant model v1](report-consultant-model-v1.md) supersedes the atom-only final prose described below for **new** preparations. Keep two grouped evidence selections plus one synthesis; the final call writes evidence-linked analysis for all eight pages and the three-line Verdict/strengths/risks/Priority Action. Runtime reference/slot checks do not establish semantic truth: actual content review remains mandatory. Operator comparison distinguishes total, offers/strength, brand, customer reputation and hygiene; restaurant operating scenarios remain gated. No automatic paid repair for this version. Groups retain 20 KB requests/3,000 output caps; narrative synthesis uses 28 KB/6,000 tokens and 120 seconds. Route configuration is 200 seconds after three actual 60-second timeouts; deployed behavior remains open. All old ready editions replay unchanged. Web competition discovery can prepare candidates, but is not automatically dispatched/admitted or newly budget-approved. The aggregate US$1 ceiling remains binding.
+
 **Owner-approved 11 October 2026 amendment:** [Scenario-fit evaluator v1](scenario-fit-v1.md) adds a shared versioned operating-format decision to new Full Report preparations. The Executive Summary and all report views must use that decision and its evidence ledger. The Phase 11 index remains context-only; an overall numerical score remains inactive. The existing two analysis groups plus synthesis architecture and US$1 live verification ceiling remain. Existing assessments/ready reports are not rewritten. This amendment does not approve Phase 13 implementation.
 
 ## Authoritative owner amendments — 10 October 2026
@@ -77,7 +79,7 @@ Nominal **3 calls**, fewer when a group is entirely unsupported. **Maximum 4 dis
 
 Proposed new prompt versions: `full-context-v1`, `full-premises-rent-v1`, `full-decision-v1`; Q&A `report-answer-v1`. Keep legacy `section-analyst-v3` and validated-synthesis receipts unchanged. Freeze exact instructions/schema digests, actual model/version returned, configuration and packet digests. An alias does not promise rerun reproducibility; historical reproducibility means replaying the stored validated edition with its original receipts.
 
-### 4.1 Useful AI analysis without unverifiable prose
+### 4.1 Original atom-only design — superseded for new D88 preparations
 
 AI selects, ranks and reconciles **reviewed evidence-linked claim and implication atoms**; it does not author numerical facts. Extend the existing proposition approach only for currently supported report facts and conditional business implications. Every factual or inferential sentence is represented by admitted fact/claim IDs and an approved composition/rule, with scope/limitation IDs. Deterministic rendering supplies numbers, units, dates and required caveats. Business-specific implications must state their condition, not predict customers or profit.
 
@@ -86,6 +88,8 @@ Permit connective/editorial wording only through bounded reviewed variants; unsu
 Mandatory hard checks: closed JSON schema/lengths, valid same-edition IDs, exact claim role, admitted rule and prerequisites, numeric/date equality, scope compatibility, material opposition and unknown preservation, no legal clearance from history, no unsupported score/probability, no economics leakage and no source instruction execution. [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs) supplies schema constraints, not factual validation. A model refusal/incomplete response fails safely.
 
 ## 5. Structured report and dashboard contracts
+
+New D88 preparations additionally bind `consultant-narrative-v1`, eight ordered section commentaries and the ranked Executive Summary. Deterministic numbers are resolved from same-edition references and formatted approximately for readers; source operands and material cautions remain exact. The original group selections remain internal checkpoint/preparation content rather than duplicated final prose. See the versioned model for current timeout, cost, source and QA rules; the original estimates below are historical candidate estimates, not measurements of the larger narrative.
 
 `FullReportV1`: report/analysis/input version binding; generated/analysis timestamps; business identity; manifest and assessment digests; source/release/method/config versions; group/synthesis receipts; section order; index with publication reason; independent premises/readiness; supporting/opposing claim IDs; material unknowns; ranked actions; source/evidence directory; content digest. No HTML, executable Markdown, frontend code or private chain-of-thought.
 

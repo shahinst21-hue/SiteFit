@@ -7,6 +7,9 @@ import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
 import { compactSources, compactSectionAtoms } from "./export.ts";
 import { decisionSummary } from "./decision-summary.ts";
+import { narrativePacket, narrativeSchema, narrativeInstructions, validateNarrative, type ConsultantNarrative } from "./narrative.ts";
+import { operatingComparison } from "./operating-comparison.ts";
+import { competitionBrief } from "./competition.ts";
 
 const groupKeys: Record<Group, SectionKey[]> = { context: ["customer-context", "competition", "access"], premises: ["premises", "rental-context"], synthesis: ["overview", "actions"] };
 /** Synthesis can rank accepted evidence but cannot invent a stronger overall judgement. */
@@ -57,7 +60,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const pending: { group: Group; dispatch: ReturnType<typeof reserveDispatch>["dispatch"] }[] = [];
   for (const group of ["context", "premises"] as const) {
     const previous = edition.checkpoint.dispatches.filter(d => d.group === group);
-    const repair = previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
+    const repair = !edition.preparation.narrativeVersion && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
       previous.every(d => d.state === "invalid" && (d.receipt as { validation?: string } | null)?.validation === "selection_rejected");
     if (previous.length && !repair) continue;
     const packet = catalogPacket(edition.preparation.catalog, groupKeys[group], edition.preparation.identityOmissions);
@@ -89,49 +92,74 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   if (groups.some(d => !d) || edition.checkpoint.dispatches.some(d => d.state === "intent" || d.state === "ambiguous")) return edition;
   const selections = groups.map((d, i) => validateSelection(d!.output, edition.preparation.catalog, groupKeys[i === 0 ? "context" : "premises"]));
   const synthesis = synthesisCatalog(edition.preparation.catalog, selections);
-  const packet = { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
+  const useNarrative = edition.preparation.narrativeVersion === "consultant-narrative-v1" && edition.preparation.scenarioFit;
+  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions),
+    groupFocus: selections } :
+    { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
     readiness: synthesis.readiness,
     scenarioDecision: edition.preparation.scenarioFit ? { version: edition.preparation.scenarioFit.version,
       status: edition.preparation.scenarioFit.status, leadingFormatId: edition.preparation.scenarioFit.leadingFormatId,
       priorityAction: edition.preparation.scenarioFit.priorityAction } : null,
     scope: "Resident & Workplace Context Index is not a commercial suitability score. No finance or legal clearance." };
+  const instructions = useNarrative ? narrativeInstructions : groupInstructions, schema = useNarrative ? narrativeSchema : selectionSchema;
   let dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
-  const repair = dispatch?.state === "invalid" && options.resume === true && !edition.checkpoint.repairUsed &&
+  const repair = !useNarrative && dispatch?.state === "invalid" && options.resume === true && !edition.checkpoint.repairUsed &&
     (dispatch.receipt as { validation?: string } | null)?.validation === "selection_rejected";
   if (!dispatch || repair) {
-    fullRequest("synthesis", packet, groupInstructions, selectionSchema);
-    const reserved = reserveDispatch(edition.checkpoint, "synthesis", packet, groupInstructions, selectionSchema, repair);
+    fullRequest("synthesis", packet, instructions, schema);
+    const reserved = reserveDispatch(edition.checkpoint, "synthesis", packet, instructions, schema, repair);
     try { edition = await repo.checkpoint(edition, reserved.checkpoint); dispatch = reserved.dispatch; }
     catch { return repo.read(reportId); }
-    const outcome = await provider.interpret(dispatch, packet, groupInstructions, selectionSchema);
-    let accepted: Selection | null = null;
-    if (outcome.state === "received") try { accepted = validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch { /* No partial publication. */ }
+    const outcome = await provider.interpret(dispatch, packet, instructions, schema);
+    let accepted: Selection | ConsultantNarrative | null = null;
+    if (outcome.state === "received") try { accepted = useNarrative ? validateNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!) :
+      validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch { /* No partial publication. */ }
     edition = await commit(repo, reportId, c => settleDispatch(c, dispatch!.ordinal,
       accepted ? { state: "accepted", output: accepted, receipt: outcome.receipt } :
         { state: outcome.state === "ambiguous" ? "ambiguous" : "invalid", receipt: outcome.state === "received" ?
-          { ...outcome.receipt, validation: "selection_rejected" } : outcome.receipt }));
+          { ...outcome.receipt, validation: useNarrative ? "narrative_rejected" : "selection_rejected" } : outcome.receipt }));
     dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
   }
   if (dispatch?.state !== "accepted") return edition;
-  const finalSelection = validateSelection(dispatch.output, synthesis, groupKeys.synthesis), catalog = edition.preparation.catalog;
-  const rendered = [...renderSelection(selections[0], catalog), ...renderSelection(selections[1], catalog), ...renderSelection(finalSelection, synthesis)];
+  const catalog = edition.preparation.catalog, narrative = useNarrative ? validateNarrative(dispatch.output, catalog, edition.preparation.scenarioFit!) : null;
+  const finalSelection = narrative ? null : validateSelection(dispatch.output, synthesis, groupKeys.synthesis);
+  const rendered = [...renderSelection(selections[0], catalog), ...renderSelection(selections[1], catalog),
+    ...(finalSelection ? renderSelection(finalSelection, synthesis) : [])];
+  if (narrative) for (const section of rendered) {
+    // The accepted group selections remain in the immutable checkpoint/preparation.
+    // The final narrative is the customer content. Retain deterministic cautions,
+    // evidence bindings and missingness, rather than a second obsolete prose layer.
+    Object.assign(section, { reasons: [], implications: [], actions: [] });
+  }
   const summary = edition.preparation.scenarioFit ? decisionSummary(edition.preparation.scenarioFit, catalog.facts) : null;
   const sections = sectionKeys.map(key => key === "appendix" ? { key, availability: "assessed", evidenceIds: catalog.facts.map(f => f.evidenceId),
-    methodology: "Stored scoped evidence; deterministic figures and reviewed implication rules; AI ranks admitted atoms. Missing records do not imply absence.",
-    limitations: catalog.unknowns, sourceIds: catalog.facts.map(f => f.id) } : { ...rendered.find(s => s.key === key)!,
-      ...(key === "overview" && summary ? { conclusion: summary.consultantVerdict[0], executiveSummary: summary,
+    ...(narrative ? { commentaryIndex: 7 } : {}),
+    methodology: narrative ? "Stored scoped evidence; deterministic operands and scenario gates; evidence-linked AI interpretation. Missing records do not imply absence." :
+      "Stored scoped evidence; deterministic figures and reviewed implication rules; AI ranks admitted atoms. Missing records do not imply absence.",
+    limitations: catalog.unknowns, sourceIds: catalog.facts.map(f => f.id) } : { ...rendered.find(s => s.key === key), key,
+      ...(key === "overview" && summary && !narrative ? { conclusion: summary.consultantVerdict[0], executiveSummary: summary,
         scenarioFit: edition.preparation.scenarioFit,
         factIds: [...new Set([...(rendered.find(s => s.key === "overview")?.factIds ?? []),
           ...summary.strengths.flatMap(s => s.factIds), ...summary.weaknesses.flatMap(s => s.factIds)])],
         evidenceIds: [...new Set([...(rendered.find(s => s.key === "overview")?.evidenceIds ?? []),
           ...catalog.facts.filter(f => [...summary.strengths, ...summary.weaknesses].some(s => s.factIds.includes(f.id))).map(f => f.evidenceId)])] } : {}),
-      ...(key === "actions" && summary ? { conclusion: summary.priorityNextAction, rankedActions: summary.rankedActions } : {}),
-      ...(key === "competition" && catalog.operators ? { operators: catalog.operators } : {}),
+      ...(key === "actions" && summary && !narrative ? { conclusion: summary.priorityNextAction, rankedActions: summary.rankedActions } : {}),
+      ...(narrative ? { commentaryIndex: sectionKeys.indexOf(key) } : {}),
+      ...(key === "competition" && catalog.operators ? { operators: catalog.operators, ...(narrative ? { comparison: competitionBrief(catalog) } : {}) } : {}),
       ...(key === "customer-context" ? { profiles: edition.preparation.profiles ?? null } : {}),
       ...(key === "premises" ? { timeline: catalog.timeline } : {}), ...(key === "rental-context" ? { rentalObservations: catalog.rentalObservations } : {}) });
+  if (narrative) for (const s of sections) {
+    const page = narrative.sections.find(n => n.key === s.key)!;
+    const claims = [page.conclusion, ...page.analysis, page.decisionTest,
+      ...(s.key === "overview" ? [...narrative.verdict, ...narrative.strengths, ...narrative.risks, narrative.priorityAction] : []),
+      ...(s.key === "actions" ? narrative.actions.flatMap(a => [a.action, a.consequence]) : [])];
+    const ids = [...new Set([...(Array.isArray((s as { factIds?: string[] }).factIds) ? (s as { factIds: string[] }).factIds : []), ...claims.flatMap(c => c.factIds)])];
+    Object.assign(s, { factIds: ids, evidenceIds: catalog.facts.filter(f => ids.includes(f.id)).map(f => f.evidenceId) });
+  }
   const content = { version: "full-report-v1" as const, bindingDigest: edition.checkpoint.bindingDigest, generatedAt: new Date().toISOString(),
     business: catalog.business, index: catalog.index, readiness: catalog.readiness, premises: catalog.premises, stance: catalog.stance, ...compactSectionAtoms(sections),
     ...(edition.preparation.scenarioFit ? { scenarioFit: edition.preparation.scenarioFit } : {}),
+    ...(narrative ? { narrative, operatingComparison: operatingComparison(catalog, edition.preparation.scenarioFit!) } : {}),
     presentation: edition.preparation.presentation ?? null,
     chartOperands: catalog.facts.filter(f => typeof f.value === "number").map(f => ({ factId: f.id, value: f.value,
       unit: f.units, period: f.effectiveAt, scopeFactId: f.id, comparator: null, available: true })),
@@ -150,6 +178,6 @@ export function fullStatus(edition: StoredEdition) {
     completed: edition.checkpoint.dispatches.filter(d => d.state === "accepted").map(d => d.group),
     recoveryAvailable: edition.status !== "ready" && staleIntent,
     resumable: edition.status !== "ready" && !edition.checkpoint.dispatches.some(d => d.state === "intent" || d.state === "ambiguous") &&
-      (!edition.checkpoint.dispatches.some(d => d.state === "invalid") || !edition.checkpoint.repairUsed &&
+      (!edition.checkpoint.dispatches.some(d => d.state === "invalid") || !edition.preparation.narrativeVersion && !edition.checkpoint.repairUsed &&
         edition.checkpoint.dispatches.filter(d => d.state === "invalid").every(d => (d.receipt as { validation?: string } | null)?.validation === "selection_rejected")) };
 }

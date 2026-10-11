@@ -4,17 +4,20 @@ import type { Catalog } from "./catalog.ts";
 import { object, uuid, validateResult } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
 
-export type OperatorDirectory = { version: "register-shortlist-v1"; selection: string; returnedRecords: number;
+export type OperatorDirectory = { version: "register-shortlist-v1" | "register-shortlist-v2"; selection: string; returnedRecords: number;
+  excludedSelectedRecordIds?: string[];
   sources: { sourceFactId: string; snapshotId: string; checksum: string }[];
   omittedFromShortlist: number; complete: false; items: { recordId: string; name: string; businessType: string;
     authorityId: string; point: FoodEstablishments["items"][number]["point"]; observedAt: string | null;
-    sourceIndex: number; reference: string }[] };
+    sourceIndex: number; reference: string; hygiene?: FoodEstablishments["items"][number]["hygiene"] }[] };
 
 /** Preserve permitted register fields; never infer offers, trading status or direct competition.
  * The full source remains immutable. Only a bounded, explicitly labelled shortlist enters AI.
  */
 export function projectOperators(context: CollectionContext, assessment: AssessmentBundle, catalog: Catalog, rows: unknown[], at: Date) {
-  const items: OperatorDirectory["items"] = [], sources: OperatorDirectory["sources"] = []; let returnedRecords = 0;
+  const items: OperatorDirectory["items"] = [], sources: OperatorDirectory["sources"] = [], excludedSelectedRecordIds: string[] = [];
+  const normal = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const selected = normal(context.selectedProperty.formattedAddress); let returnedRecords = 0;
   for (const value of rows) {
     const row = object(value), result = validateResult({ ...object(row.provider_metadata), payload: row.normalised_data });
     if (!uuid(row.id) || row.analysis_id !== context.analysisId || row.input_id !== context.inputId ||
@@ -32,21 +35,29 @@ export function projectOperators(context: CollectionContext, assessment: Assessm
     const sourceIndex = sources.length;
     sources.push({ sourceFactId: fact.id, snapshotId: String(row.id), checksum: result.meta.checksum });
     for (const item of result.payload.items) {
-      if (items.length >= 12) break;
+      // The selected operator cannot compete with itself. Shared-point market
+      // stalls are not merged into one business, and brand names are not inferred.
+      if (normal(item.name).length >= 5 && selected.includes(normal(item.name))) { excludedSelectedRecordIds.push(item.id); continue; }
+      if (items.some(i => i.recordId === item.id && i.authorityId === item.authorityId)) continue;
       items.push({ recordId: item.id, name: item.name, businessType: item.businessType, authorityId: item.authorityId,
         point: structuredClone(item.point), observedAt: item.observedAt,
-        sourceIndex, reference: `https://ratings.food.gov.uk/business/${encodeURIComponent(item.id)}` });
+        sourceIndex, reference: `https://ratings.food.gov.uk/business/${encodeURIComponent(item.id)}`,
+        ...(item.hygiene ? { hygiene: structuredClone(item.hygiene) } : {}) });
     }
-    const selected = items.filter(i => i.sourceIndex === sourceIndex);
-    if (selected.length) {
+    const retained = items.filter(i => i.sourceIndex === sourceIndex);
+    if (retained.length) {
       const atom = { section: "competition" as const, role: "reason" as const,
         text: "Named register leads and registered categories are preserved in the operator directory for an offer audit. Actual offers, direct competition and current activity are unverified.",
         factIds: [fact.id], rule: "register-operator-context-v1" };
-      catalog.atoms.push({ ...atom, id: `operator-${packetDigest({ snapshot: row.id, records: selected.map(i => i.recordId) }).slice(0, 16)}` });
+      catalog.atoms.push({ ...atom, id: `operator-${packetDigest({ snapshot: row.id, records: retained.map(i => i.recordId) }).slice(0, 16)}` });
     }
   }
-  const directory: OperatorDirectory = { version: "register-shortlist-v1", selection: "First 12 in frozen provider order; not ranked by proximity/strength. Full records remain in immutable source snapshots.",
-    returnedRecords, omittedFromShortlist: returnedRecords - items.length, complete: false, sources, items };
-  if (items.length) catalog.operators = directory;
+  const priority = (i: OperatorDirectory["items"][number]) => /Restaurant.?Cafe|Pub.?bar/i.test(i.businessType) ? 0 : /caterer/i.test(i.businessType) ? 1 : 2;
+  const first = items.slice(0, 6), ranked = items.map((item, ordinal) => ({ item, ordinal })).filter(v => !first.includes(v.item))
+    .toSorted((a, b) => priority(a.item) - priority(b.item) || a.ordinal - b.ordinal).slice(0, 6).map(v => v.item);
+  const shortlist = [...first, ...ranked];
+  const directory: OperatorDirectory = { version: "register-shortlist-v2", selection: "First six frozen provider leads plus six registered cafe/restaurant/pub-first leads; selected-name matches excluded. Not ranked by strength or verified walking distance. Full records remain immutable.",
+    returnedRecords, excludedSelectedRecordIds, omittedFromShortlist: returnedRecords - shortlist.length - excludedSelectedRecordIds.length, complete: false, sources, items: shortlist };
+  if (shortlist.length) catalog.operators = directory;
   return directory;
 }

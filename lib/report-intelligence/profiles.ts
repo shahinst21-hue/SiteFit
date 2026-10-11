@@ -47,12 +47,15 @@ export function storedProfiles(context: CollectionContext, assessment: Assessmen
     const limitationsDigest = packetDigest(limitations);
     let limitationsIndex = limitationPositions.get(limitationsDigest);
     if (limitationsIndex === undefined) { limitationsIndex = allocationLimitations.length; limitationPositions.set(limitationsDigest, limitationsIndex); allocationLimitations.push(limitations); }
-    return { ...table, allocation: { ...allocation, releaseIndex, limitationsIndex } };
+    const compact = table.values.length > 0 && table.values.every(v => v[0] === "available" &&
+      typeof v[1] === "number" && v[1] === v[2] && v[3] === 0 && (v[5] === null || typeof v[5] === "string"));
+    return { ...table, ...(compact ? { cellCodec: "available-equal-contribution-v1",
+      values: table.values.map(v => [v[1], v[4], v[5]]) } : {}), allocation: { ...allocation, releaseIndex, limitationsIndex } };
   });
   const sources = snapshots.map(s => ({ snapshotId: s.id, checksum: s.result.meta.checksum,
     releaseId: s.result.meta.datasetReleaseId, retrievedAt: s.result.meta.sourceRetrievedAt,
     freshness: s.result.meta.freshness, licence: s.result.meta.licence, limitations: s.result.meta.quality.limitations }));
-  return { version: "stored-profiles-v2", state: tables.length ? "available" : "unavailable",
+  return { version: "stored-profiles-v3", state: tables.length ? "available" : "unavailable",
     reason: tables.length ? null : "stored_profile_unavailable", tables: compactTables, columnSets, allocationReleases, allocationLimitations, sources,
     valueFields: ["state", "value", "knownContribution", "missingAreaM2", "share", "ratioMissingReason"],
     limitations: ["Dated Census context, not actual customers or current demand.",
@@ -63,11 +66,17 @@ export function storedProfiles(context: CollectionContext, assessment: Assessmen
 /** Section consumers receive full method metadata. Historical v1 is unchanged. */
 export function expandedProfiles(value: unknown) {
   const p = object(value);
-  if (p.version !== "stored-profiles-v2") return p;
+  if (p.version !== "stored-profiles-v2" && p.version !== "stored-profiles-v3") return p;
   if (!Array.isArray(p.tables) || !Array.isArray(p.allocationReleases) || !Array.isArray(p.allocationLimitations) ||
     !Array.isArray(p.valueFields) || !p.valueFields.length || p.valueFields.some(v => typeof v !== "string")) throw Error("invalid_profile_metadata");
   return { ...p, tables: p.tables.map(value => {
-    const table = object(value); if (!table.allocation) return table;
+    const table = { ...object(value) }; if (!table.allocation) return table;
+    if (table.cellCodec !== undefined) {
+      if (p.version !== "stored-profiles-v3" || table.cellCodec !== "available-equal-contribution-v1" || !Array.isArray(table.values) ||
+        table.values.some(v => !Array.isArray(v) || ![2, 3].includes(v.length) || !Number.isFinite(v[0]) || !(v[1] === null || Number.isFinite(v[1])) ||
+          v.length === 3 && !(v[2] === null || typeof v[2] === "string"))) throw Error("invalid_profile_metadata");
+      table.values = table.values.map(v => ["available", v[0], v[0], 0, v[1], v.length === 3 ? v[2] : null]);
+    }
     const { releaseIndex, limitationsIndex, ...allocation } = object(table.allocation);
     if (!Number.isInteger(releaseIndex) || Number(releaseIndex) < 0 || Number(releaseIndex) >= (p.allocationReleases as unknown[]).length ||
       !Number.isInteger(limitationsIndex) || Number(limitationsIndex) < 0 || Number(limitationsIndex) >= (p.allocationLimitations as unknown[]).length) throw Error("invalid_profile_metadata");
@@ -80,10 +89,10 @@ export function expandedProfiles(value: unknown) {
  * score transform. Complete profiles remain available outside the AI packet. */
 export function profileFocus(catalog: Catalog, profiles: ReturnType<typeof storedProfiles>) {
   if (!("columnSets" in profiles)) return;
-  const table = profiles.tables.find(t => t.dataset === "TS007A" && t.seconds === 600 && t.state === "available");
+  const table = (expandedProfiles(profiles).tables as Record<string, unknown>[]).find(t => t.dataset === "TS007A" && t.seconds === 600 && t.state === "available");
   const base = catalog.facts.find(f => f.dataset.includes("TS007A") && /600|10.?min/i.test(f.scope));
-  if (!table || !base || !table.values.length) return;
-  const bands = table.values.slice(1).map((cell, i) => ({ cell, ordinal: i + 2 }));
+  if (!table || !base || !Array.isArray(table.values) || !table.values.length) return;
+  const bands = (table.values as unknown[][]).slice(1).map((cell, i) => ({ cell, ordinal: i + 2 }));
   if (bands.some(b => b.cell[0] !== "available" || typeof b.cell[1] !== "number")) return;
   const focus = bands.toSorted((a, b) => Number(b.cell[1]) - Number(a.cell[1]) || a.ordinal - b.ordinal)[0];
   if (!focus || Number(focus.cell[1]) <= 0) return;

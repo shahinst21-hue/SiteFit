@@ -18,6 +18,7 @@ import { projectOperators } from "./operators.ts";
 
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
+  narrativeVersion?: "consultant-narrative-v1";
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
   scenarioFit?: ScenarioFit;
   profiles?: ReturnType<typeof storedProfiles>;
@@ -102,6 +103,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       return projected;
     };
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
+      narrativeVersion: "consultant-narrative-v1",
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
       assessmentDigest: String(material.assessmentDigest), catalog,
       scenarioFit,

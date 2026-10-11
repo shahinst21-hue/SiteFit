@@ -6,7 +6,9 @@ import { fullRepository } from "@/lib/report-intelligence/repository";
 import { fullStatus, generateFullIntelligence } from "@/lib/report-intelligence/generate";
 
 export const runtime = "nodejs";
-export const maxDuration = 150;
+// Parallel evidence groups (45s) followed by bounded eight-page synthesis (120s),
+// with time reserved for validation/checkpoint persistence. No paid retry.
+export const maxDuration = 200;
 const reply = (body: unknown, status = 200) => Response.json(body, { status, headers: {
   "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow" } });
 async function owner() {

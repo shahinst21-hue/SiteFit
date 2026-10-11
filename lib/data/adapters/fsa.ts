@@ -24,7 +24,10 @@ export function normaliseFsa(value:unknown,expectedPage:number){
     const row=object(value);if(!Number.isSafeInteger(row.FHRSID)||Number(row.FHRSID)<1||!text(row.BusinessName,300)||!text(row.BusinessType,120)||!text(row.LocalAuthorityCode,120))invalid();
     const geo=row.geocode===null||row.geocode===undefined?{}:object(row.geocode),longitude=coordinate(geo.longitude),latitude=coordinate(geo.latitude);
     const point=longitude===null||latitude===null?null:{longitude,latitude,crs:"EPSG:4326" as const,precision:"unknown" as const,source:"fsa-register"};if(point&&!validPoint(point))invalid();
-    return{id:String(row.FHRSID),authorityId:row.LocalAuthorityCode,name:row.BusinessName,businessType:row.BusinessType,point,observedAt:null};
+    const rating = typeof row.RatingValue === "string" && /^[0-5]$/.test(row.RatingValue) ? Number(row.RatingValue) : null;
+    const inspectedAt = timestamp(row.RatingDate) ? row.RatingDate : null;
+    return{id:String(row.FHRSID),authorityId:row.LocalAuthorityCode,name:row.BusinessName,businessType:row.BusinessType,point,observedAt:null,
+      ...(row.SchemeType === "FHRS" && rating !== null && inspectedAt ? { hygiene: { scheme: "FHRS" as const, value: rating, inspectedAt } } : {})};
   });
   if(new Set(items.map(i=>i.id)).size!==items.length||items.length>Number(meta.totalCount))invalid();
   return{items,totalPages:Number(meta.totalPages),totalCount:Number(meta.totalCount),extractDate:timestamp(meta.extractDate)?meta.extractDate:null};
@@ -51,9 +54,10 @@ export function fsaAdapter(factory:(execution:ExecutionContext)=>JsonTransport=e
     }catch(error){result.error=safeError(error);result.outcome=items.length?"partial":"unavailable";complete=false;}
     result.payload=items.length?{schemaVersion:1,kind:"food_establishments",complete,items}:null;
     result.meta.sourceVersion="FHRS-api-v2";
+    result.meta.normalisationVersion="fsa-register-with-hygiene-v2";
     result.meta.quality.truncated=!complete;result.meta.quality.missing=["record_observation_date","source_publication_date","dataset_release_version","cross_border_coverage_unassessed","exact_radius_selection_unverified"];
     if(items.some(i=>!i.point))result.meta.quality.missing.push("withheld_or_missing_coordinates");
-    result.limitations=["Food register only; not exhaustive competition, business occupancy, demand or survival evidence.","FHRS identifiers may be recycled; these are dated historical records, not current ratings.","Private contact/address/rating fields are discarded; withheld locations remain unknown.","Source point accuracy is unspecified; property postcode-centroid input does not identify the premises.","Provider query radius may be capped/cross London; no exact catchment or geodesic proximity claim."];
+    result.limitations=["Food register only; not exhaustive competition, business occupancy, demand or survival evidence.","FHRS identifiers may be recycled; these are dated historical records, not current trading evidence.","Private contact/address fields are discarded; withheld locations remain unknown. Retained dated FHRS hygiene inspection scores are not customer reviews, commercial quality or competitor strength.","Source point accuracy is unspecified; property postcode-centroid input does not identify the premises.","Provider query radius may be capped/cross London; no exact catchment or geodesic proximity claim."];
     if(!complete)result.limitations.push("Page/attempt limit or source failure leaves an incomplete register result.");
     if(extractDate)result.limitations.push(`Provider extract timestamp ${extractDate}; not a registration, observation or publication date.`);
     result.observations=items.map((item,index)=>({id:item.id,path:`items/${index}`,recordId:item.id,reference:`https://ratings.food.gov.uk/business/${encodeURIComponent(item.id)}`,observedAt:null,units:"registered_establishment",geography:null,sourceClass:"official_public_data",kind:"direct_register",limitations:["Dated register identity; ID may be recycled."]}));

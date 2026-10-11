@@ -1,9 +1,11 @@
 import { object } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
-import { sectionKeys, type SectionKey, type Fact } from "./catalog.ts";
+import { sectionKeys, type SectionKey, type Fact, type Catalog } from "./catalog.ts";
 import { scenarioSummary } from "./scenario-fit.ts";
 import { decisionSummary } from "./decision-summary.ts";
 import { expandedProfiles } from "./profiles.ts";
+import { validateNarrative, renderCommentary } from "./narrative.ts";
+import type { ScenarioFit } from "./scenario-fit.ts";
 
 /** Lossless shared provenance: identical metadata is stored once, never omitted. */
 export function compactSources(facts: Fact[]) {
@@ -50,6 +52,11 @@ function expandedSection(p: Record<string,unknown>,value:unknown){
   });
   return section;
 }
+function narrativeCatalog(p: Record<string, unknown>) {
+  const competition = object((p.sections as unknown[])[2]);
+  return { facts: expandedSources(p), operators: competition.operators, supplementReferences: p.supplementReferences,
+    rentalObservations: object((p.sections as unknown[])[5]).rentalObservations ?? [] } as Catalog;
+}
 
 /** Shared content contract for later dashboard/PDF renderers; no PDF generation. */
 export function validateFullProjection(value: unknown) {
@@ -63,7 +70,7 @@ export function validateFullProjection(value: unknown) {
     const section = expandedSection(p,s);
     if (section.profiles) expandedProfiles(section.profiles);
   }
-  if (p.scenarioFit) {
+  if (p.scenarioFit && !p.narrative) {
     const fit = p.scenarioFit as Parameters<typeof scenarioSummary>[0];
     const overview = object(p.sections[0]), actions = object(p.sections[6]);
     const summary = object(overview.executiveSummary).version === "decision-summary-v2" ?
@@ -76,11 +83,20 @@ export function validateFullProjection(value: unknown) {
         s.factIds.some(id => !(overview.factIds as string[]).includes(id)))) throw Error("scenario_summary_mismatch");
   }
   expandedSources(p);
+  if (p.narrative) {
+    if (!p.scenarioFit) throw Error("narrative_scenario_missing");
+    const fit = p.scenarioFit as ScenarioFit;
+    if (fit.version !== "scenario-fit-v1" || fit.numericalScore !== null ||
+      !Array.isArray(fit.scenarios) || !["coffee-shop", "restaurant", "hair-salon", "beauty-salon"].includes(fit.businessType) ||
+      (p.business === "hair-beauty-salon" ? !["hair-salon", "beauty-salon"].includes(fit.businessType) : p.business !== fit.businessType))
+      throw Error("narrative_scenario_mismatch");
+    validateNarrative(p.narrative, narrativeCatalog(p), fit);
+  }
   return p;
 }
 export function sectionExport(value: unknown, key: SectionKey) {
   const p = validateFullProjection(value), section = expandedSection(p,(p.sections as unknown[]).find(s => object(s).key === key));
-  const facts = expandedSources(p) as { id: string; evidenceId: string }[], supplements = p.supplementReferences as { id: string }[];
+  const facts = expandedSources(p) as Fact[], supplements = p.supplementReferences as { id: string }[];
   const ids = key === "appendix" ? facts.map(f => f.id) : section.factIds as string[];
   if (!Array.isArray(ids) || ids.some(id => !facts.some(f => f.id === id))) throw Error("invalid_export_evidence");
   const requiredSupplementIds = new Set(Array.isArray(section.supplementReferenceIds) ? section.supplementReferenceIds as string[] : []);
@@ -91,6 +107,22 @@ export function sectionExport(value: unknown, key: SectionKey) {
     requiredSupplementIds.add(reference);
   }
   if (section.profiles) section.profiles = expandedProfiles(section.profiles);
+  if (p.narrative) {
+    const catalog = narrativeCatalog(p), narrative = validateNarrative(p.narrative, catalog, p.scenarioFit as ScenarioFit);
+    const page = narrative.sections.find(s => s.key === key)!, render = (c: Parameters<typeof renderCommentary>[0]) => renderCommentary(c, catalog);
+    section.conclusion = render(page.conclusion).text;
+    section.analysis = page.analysis.map(render); section.decisionTest = render(page.decisionTest);
+    if (key === "overview") section.executiveSummary = { version: "consultant-summary-v1",
+      consultantVerdict: narrative.verdict.map(c => render(c).text), strengths: narrative.strengths.map(render),
+      weaknesses: narrative.risks.map(render), priorityNextAction: render(narrative.priorityAction).text };
+    if (key === "actions") section.rankedActions = narrative.actions.map((a, i) => ({ rank: i + 1,
+      action: render(a.action).text, consequence: render(a.consequence).text, factIds: [...new Set([...a.action.factIds, ...a.consequence.factIds])] }));
+    section.operatingComparison = p.operatingComparison;
+    for (const c of [page.conclusion, ...page.analysis, page.decisionTest,
+      ...(key === "overview" ? [...narrative.verdict, ...narrative.strengths, ...narrative.risks, narrative.priorityAction] : []),
+      ...(key === "actions" ? narrative.actions.flatMap(a => [a.action, a.consequence]) : [])])
+      for (const id of c.referenceIds) requiredSupplementIds.add(id);
+  }
   return { version: "full-section-export-v1", contentDigest: p.contentDigest, bindingDigest: p.bindingDigest,
     generatedAt: p.generatedAt, business: p.business, presentation: p.presentation, section,
     sources: facts.filter(f => ids.includes(f.id)),

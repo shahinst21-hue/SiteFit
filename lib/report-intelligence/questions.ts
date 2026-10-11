@@ -3,7 +3,7 @@ import { object } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
 import { fullProvider, fullRequest, type FullReceipt } from "./provider.ts";
 import { type StoredEdition } from "./repository.ts";
-import { type Atom, modelSafeText } from "./catalog.ts";
+import { type Atom, modelSafeText, sectionKeys } from "./catalog.ts";
 import { sectionExport } from "./export.ts";
 
 export type ReportAnswer = { state: "answered" | "unavailable" | "out_of_scope"; statements: { id: string; text: string; factIds: string[] }[];
@@ -16,6 +16,15 @@ export function suggestedAnswer(edition: StoredEdition, intent: "main-risk" | "s
   const projection = object(edition.projection), sections = Array.isArray(projection.sections) ? projection.sections.map(object) : [];
   const key = intent === "before-signing" ? "actions" : "overview";
   const target = sections.some(s => s.key === key) ? sectionExport(edition.projection, key).section : undefined;
+  if (projection.narrative && target) {
+    const summary = intent === "before-signing" ? target.rankedActions : object(target.executiveSummary)[intent === "main-risk" ? "weaknesses" : "strengths"];
+    const rows = Array.isArray(summary) ? summary.slice(0, 5).map((value, i) => {
+      const row = object(value);
+      return { id: `stored-${intent}-${i}`, text: String(intent === "before-signing" ? `${row.action} ${row.consequence}` : row.text),
+        factIds: row.factIds as string[], section: key, role: "reason", rule: "stored-narrative-v1" } as Atom;
+    }) : [];
+    return response(edition, rows.length ? "answered" : "unavailable", rows);
+  }
   const selected = intent === "main-risk" ? edition.preparation.catalog.atoms.filter(a => a.rule === "mandatory-premises-unknown-v1") :
     Array.isArray(target?.reasons) ? target.reasons as Atom[] : [];
   return response(edition, selected.length ? "answered" : "unavailable", selected.slice(0, 5));
@@ -29,7 +38,16 @@ export async function groundedQuestion(edition: StoredEdition, question: string,
   const address = edition.preparation.presentation?.property.label;
   if (address && question.toLowerCase().includes(address.toLowerCase()) || /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i.test(question)) throw Error("private_question_rejected");
   const words = new Set(question.toLowerCase().split(/\W+/).filter(w => w.length > 3));
-  const candidates = edition.preparation.catalog.atoms.filter(a => a.role !== "conclusion")
+  const projection = object(edition.projection);
+  const storedAtoms = projection.narrative ? sectionKeys.flatMap(key => {
+    const section = sectionExport(edition.projection, key).section;
+    return (Array.isArray(section.analysis) ? section.analysis : []).map((value, i) => {
+      const c = object(value);
+      return { id: `stored-${key}-${i}`, section: key, role: "reason", rule: "stored-narrative-v1",
+        text: String(c.text), factIds: c.factIds as string[] } as Atom;
+    });
+  }) : edition.preparation.catalog.atoms;
+  const candidates = storedAtoms.filter(a => a.role !== "conclusion")
     .map(a => ({ a, relevance: a.text.toLowerCase().split(/\W+/).filter(w => words.has(w)).length }))
     .filter(a => a.relevance > 0).sort((a, b) => b.relevance - a.relevance || a.a.id.localeCompare(b.a.id)).slice(0, 12).map(v => v.a);
   if (!candidates.length) return response(edition, "unavailable", []);

@@ -2,7 +2,7 @@ import { packetDigest } from "../analysis/canonical.ts";
 
 export const intelligencePolicy = Object.freeze({ version: "full-intelligence-v1", model: "gpt-6.1-sol",
   phaseBudgetMicros: 1_000_000, reportReserveMicros: 300_000, questionReserveMicros: 40_000,
-  maxDispatches: 4, maxRequestBytes: 20_000, maxCheckpointBytes: 65_536, maxPreparationBytes: 128_000 });
+  maxDispatches: 4, maxRequestBytes: 28_000, maxCheckpointBytes: 65_536, maxPreparationBytes: 128_000 });
 export type Group = "context" | "premises" | "synthesis";
 export type Dispatch = { ordinal: number; group: Group; packetDigest: string; instructionsDigest: string;
   schemaDigest: string; state: "intent" | "accepted" | "invalid" | "ambiguous";

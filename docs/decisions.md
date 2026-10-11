@@ -1,5 +1,11 @@
 # Decisions
 
+## D88 accepted consultant content and operator comparison amendment — 2026-10-11
+
+Owner requires a commercially useful, property/concept-specific Full Report, with an integrated three-line Verdict, strengths/risks, one Priority Action and decision-consequence actions. Coffee and restaurant competition must address genuine count, propositions/strength, customer ratings and recognised brands using admitted exact-operator evidence. Unknowns remain explicit: names/register categories do not prove current offers, customer reputation or chain affiliation; hygiene is not a customer rating. Restaurants must compare kitchen/extraction, hot cooking, lunch, evening dining, seating, collection/delivery and operational restrictions. Customer prose rounds numbers; exact operands and lineage remain frozen.
+
+Accept revision of the report output model and bounded AI/search capability where necessary, within existing source rights and the **unchanged US$1 Phase 12 aggregate budget**. This is not uncapped search/inference, a provider purchase or authority to fill evidence gaps from model memory. New structured consultant synthesis is a reviewable candidate; reference checks do not prove semantic truth. Historical ready reports, scenario gates, Phase 11 index and the separate Financial Engine remain unchanged. See [versioned model](report-consultant-model-v1.md). Revised three-concept editorial reviews and failed live attempts must not be labelled successful model output or owner acceptance. Phase 13 remains excluded.
+
 ## D87 accepted shared scenario-fit decision amendment — 2026-10-11
 
 Owner approves implementing [scenario-fit-v1](scenario-fit-v1.md) as part of the authorised Phase 12 design. Physical feasibility, commercial context, format comparison and Executive Summary use one versioned decision. Confirmed blockers take precedence; missing evidence withholds capacity, a leading format or any future overall score as appropriate. Phase 11's Resident & Workplace Context Index is unchanged. No new overall score, historical rewrite, extra normal AI call, provider purchase, Production or Phase 13 implementation is authorised.
