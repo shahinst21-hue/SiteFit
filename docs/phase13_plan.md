@@ -32,7 +32,7 @@ The report workspace consumes `full-report-v1` through its versioned section rea
 
 ## Read architecture and security
 
-`/reports/[id]?section=…` and `/reports/[id]/pdf` share a Local/protected-Preview gate, verified permanent session and existing database paid-owner read. The server validates the frozen projection, then supplies only section presentation, admitted source metadata and permitted chart/map operands. Preparation, private packets, omitted identities, budgets, checkpoints and provider credentials stay server-side. Missing/foreign/refunded/unconfirmed sessions fail closed. Status is read-only; refreshing cannot start/resume AI.
+`/reports/[id]?section=…` and `/reports/[id]/pdf` share an independent `SITEFIT_DASHBOARD_VERIFICATION` Local/protected-Preview read gate, verified permanent session and existing database paid-owner read. The server validates the frozen projection, then supplies only section presentation, admitted source metadata and permitted chart/map operands. Preparation, private packets, omitted identities, budgets, checkpoints and provider credentials stay server-side. Missing/foreign/refunded/unconfirmed sessions fail closed. Status is read-only; refreshing cannot start/resume AI.
 
 The map optionally reads the original owned Free projection only when its stored spatial digest matches the Full preparation binding. It does not generate new geometry or change report content. Existing walking polygons preserve holes and register-point uncertainty. No purchased basemap or new provider is necessary. Export renderer and font are local, with licence notices bundled; unsupported font characters produce an honest unavailable export rather than altered report content.
 
@@ -51,3 +51,5 @@ The map optionally reads the original owned Free projection only when its stored
 ## Explicit exclusions
 
 No providers, subscriptions, purchases, inference, live payments, new scoring, editorial cycle, report generation on read, persisted checklist, report financial calculations, new backend intelligence, distributed workflow/cache, fabricated capacity/ratings/rent/permissions or Production release. Source coverage and report reasoning improvements belong to versioned later work.
+
+Google sign-in reuses the existing flow when the read-only dashboard gate is enabled; it is not coupled to enabling Stripe Checkout. Add only the exact protected branch `/auth/callback` to the hosted development allowlist before actual sign-in verification; no wildcard or Production change.
