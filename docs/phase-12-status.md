@@ -1,5 +1,24 @@
 # Phase 12 implementation status
 
+## Current gate ledger — owner D89, 11 October 2026
+
+Current content structure, Executive Summary, Scenario Fit and concept-specific reasoning are **accepted as the V1 baseline**. Editorial cycles and requests for three more manually reviewed concept reports are closed. Historical rejection/review entries below remain historical evidence, not a renewed acceptance requirement. Phase 12 is not technically complete; Phase 13 implementation is conditional on closure/protected delivery.
+
+| Gate | Current evidence/status |
+|---|---|
+| V1 content baseline | Accepted by owner D89; versioned contract/backlog in full-report-v1-release.md |
+| Malformed rendering | All three tables fixed through shared customer-readable sectionExport; literal/object/control-character prose/source slots fail closed; exact evidence remains unchanged |
+| Final fixture regression | Final hardening including private verification surface: 295 tests, lint/types/build and running-build public HTTP passed; fresh PostgreSQL security/rebuild and hosted changed SQL proofs passed |
+| Hosted changed SQL | 20261011130000 applied; actual same-owner source material, foreign-owner denial and private grants pass. Fresh rebuild/security passed. Five historical graph fingerprints unchanged |
+| Capacity | Actual PostgreSQL database 375,338,675 bytes; 24,661,325 margin under 400,000,000; no upgrade/pruning |
+| Preview isolation/privacy | Four actual protected HTTP boundaries pass (401/403), 10 JS artifacts and 50-log request scan with nine private values found no matches; protection 302; observed Node 24 / 200s configuration. Browser Account retains signed-in owner, saved case/active Test access; console has no warn/error entries. Not a DevTools Network/body inspection |
+| Owned HTTP replay | Operator-only verification surface prepared to exercise the existing private APIs without exposing source packets in page text; actual deployed replay still pending. Surface unavailable in Production/without verification flag, requires verified session and paid owner |
+| Live Q&A | Earlier real bounded answer, unchanged report digest and receipt documented below; suggested answers reuse stored content without calls |
+| Actual new background execution/recovery | Open. Existing fixtures prove intent/CAS/loss/replay; configured timeout is not actual leave-page proof. Do not retry three ambiguous calls |
+| Budget | Hosted sum confirmed 940,000 microdollars conservatively reserved; US$0.06 remains. New Full execution requires the existing US$0.30 before-dispatch reservation, so the current US$1 gate rejects another real execution. No reservation erased and no additional spending approved |
+| Protected delivery | Previous head 6440e77 required CI passed. Final hardening head/Preview/merge/main verification pending; PR remains draft |
+
+Historical source reports and snapshots are preserved. No new provider, context-index change, financial calculations in reports, Production/live payment or Phase 13 UI is introduced. The private verification page is a technical proof surface, not the final dashboard.
 ## 11 October 2026 scenario-fit amendment
 
 Owner approved the [shared scenario-fit contract](scenario-fit-v1.md) under D87. The new deterministic format registry/evaluator is integrated into new Full Report preparation and the immutable Overview projection. It withholds capacity and a leading format on present real-source packets without reviewed exact-unit layout evidence. A confirmed blocker takes precedence in the rule contract, and no overall numerical score is produced. The Phase 11 context index and existing stored editions are unchanged. Synthetic rule tests and local regression are recorded separately from the still-open real-source, paid-entitlement, Preview lifecycle and protected-delivery gates below. Phase 12 is **not complete**.

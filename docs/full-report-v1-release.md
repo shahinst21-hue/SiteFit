@@ -1,0 +1,26 @@
+# Full Report V1 release baseline
+
+Owner accepted 11 October 2026 under D89. Content baseline accepted; technical release and Phase 12 completion remain pending. No additional editorial review is required.
+
+## Versioned contracts
+
+Preserve `full-preparation-v1`, `full-intelligence-v1`, `full-report-v1`, `consultant-narrative-v1`, `consultant-summary-v1`, `scenario-fit-v1`, `operating-formats-v1` and `full-section-export-v1`. Phase 11's `resident-workplace-context-v1` is unchanged. Existing historical atom/summary/profile versions retain their readers; no regeneration or silent upgrade on reopening.
+
+The eight ordered sections are Overview, Customer Context, Competition, Access, Premises, Rental Context, Actions and Appendix. Executive Summary preserves a three-line Consultant Verdict, prioritised strengths and risks, one Priority Action. Actions include decision consequences. Scenario Fit withholds a leading format or capacity without its admitted exact-unit evidence. Charts, names, numbers and sources come from frozen evidence, never screenshot examples or AI arithmetic. Financial Engine calculations remain outside report/UI/PDF.
+
+Rendering resolves bound values explicitly, rounds customer numbers and preserves exact source operands and statistical universes. Operating-period objects expose period and hypothesis qualifications; they cannot be implicitly stringified. Malformed prose or source slots fail closed. Unknown, rejected and unavailable evidence cannot become verified through presentation.
+
+## Remaining release work
+
+Only mandatory technical gates: final contract/rendering regression, hosted changed SQL, privacy/ownership/entitlement, actual configured execution/background/recovery, immutable replay, capacity, exact-head CI, protected merge and matching clean main. Existing fixtures and content acceptance replace repeated editorial evaluation. Live spending remains capped at US$1; US$0.94 conservative reservations include three unknown-usage timeouts. Do not retry ambiguous calls or erase reservations. Keep every unverified gate explicit.
+
+## Prioritised versioned enhancement backlog
+
+1. **High customer value:** admit exact-branch competitor offers, trading times, customer reviews and brand affiliation when approved lawful sources exist. Current food-register leads are incomplete and not an active/direct-competitor census; no unique competitor count or reputation score is supported.
+2. **High customer value:** expand compatible dated selected-unit rental/lease and measured usable-layout evidence. Current missing rental or layout evidence does not justify an invented figure or operating recommendation.
+3. **After dashboard integration:** measure generation latency and grounded interpretation on more real cases under separately approved spending; resolve provider ambiguity operationally, never automatic duplicate dispatch.
+4. **Later versions:** additional lawful premises-history depth, data coverage and comparative reasoning. Preserve evidence lineage and history; do not reopen scoring calibration or add providers merely to fill dashboard cards.
+
+## Phase 13 handoff
+
+After formal Phase 12 completion, build the approved eight-page responsive dashboard from these immutable contracts and [the reference handoff](phase-13-design-handoff.md). Result first, accessible evidence inspection, honest missing states, qualified rental information, real maps/charts, actual progress/recovery and owned exports. No financial form/calculations in Full Report, no new provider or unapproved payments. Preserve the references' visual composition while replacing unsupported example content with actual findings.

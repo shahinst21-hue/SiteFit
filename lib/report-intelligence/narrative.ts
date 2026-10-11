@@ -75,7 +75,8 @@ export function validateNarrative(value: unknown, catalog: Catalog, fit: Scenari
         rents.has(id) && (c.referenceIds as string[]).includes(id))) throw Error("unbound_narrative_value");
       return "[bound evidence]";
     });
-    if (/\d|\{\{|https?:|Bearer|sb_secret_|sk-(?:proj-)?|@/i.test(text) ||
+    if (/\d|\{\{|\[object (?:Object|Array)\]|https?:|Bearer|sb_secret_|sk-(?:proj-)?|@/i.test(text) ||
+      Array.from(text).some(ch => ch.charCodeAt(0) < 32 && !"\n\r\t".includes(ch)) ||
       /(?:guaranteed success|overall (?:score|suitability)|(?:demonstrates|proves|establishes) (?:measured customer demand|observed footfall))/i.test(text) ||
       fit.leadingFormatId === null && /(?:recommend|best|leading|choose).{0,25}(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:format|model)|(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:is best|recommended|is the leading)/i.test(text)) throw Error("unsupported_narrative_claim");
     if (c.kind !== "unknown" && !c.factIds.length && !c.operatorIds.length && !c.referenceIds.length) throw Error("narrative_evidence_missing");
@@ -93,11 +94,17 @@ export function validateNarrative(value: unknown, catalog: Catalog, fit: Scenari
   return structuredClone(n) as ConsultantNarrative;
 }
 export function renderCommentary(c: Commentary, catalog: Catalog) {
+  const readable = (value: unknown): string => {
+    if (typeof value !== "string" || !value.trim() || /\[object (?:Object|Array)\]|\{\{/.test(value) ||
+      Array.from(value).some(ch => ch.charCodeAt(0) < 32 && !"\n\r\t".includes(ch)))
+      throw Error("malformed_customer_text");
+    return value;
+  };
   return { ...c, text: c.text.replace(/\{\{([for]):([^{}]+)\}\}/g, (_, kind: string, id: string) => {
-    if (kind === "o") return catalog.operators!.items.find(o => o.recordId === id)!.name;
+    if (kind === "o") return readable(catalog.operators!.items.find(o => o.recordId === id)!.name);
     if (kind === "r") { const r = catalog.rentalObservations.find(r => r.id === id)!;
       return `${consultantNumber(r.annualValue, "GBP")}${r.kind === "local_asking_benchmark" ? " per square foot per year" : " per year"}`; }
     const f = catalog.facts.find(f => f.id === id)!;
-    return typeof f.value === "number" ? consultantNumber(f.value, f.units, f.dataset) : f.value;
+    return typeof f.value === "number" ? consultantNumber(f.value, f.units, f.dataset) : readable(f.value);
   }) };
 }

@@ -57,6 +57,8 @@ begin
  edition:=public.freeze_sitefit_full(owner,fid,6,projection::text);
  if edition->>'status'<>'ready' or (select count(*) from public.report_sections where report_id=fid)<>8 then raise exception 'Full publication failed';end if;
  if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'profileSnapshots')<>'array' then raise exception 'Stored profile material unavailable';end if;
+ if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'operatorSnapshots')<>'array' then raise exception 'Stored operator material unavailable';end if;
+ begin perform public.read_sitefit_full_material(other,report);raise exception 'Foreign operator material exposed';exception when insufficient_privilege then null;end;
  for step in 1..5 loop
   if public.reserve_sitefit_full_question(owner,fid)<>step then raise exception 'Question ordinal changed';end if;
   perform public.settle_sitefit_full_question(owner,fid,step,'null','ambiguous');

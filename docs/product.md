@@ -1,5 +1,7 @@
 # SiteFit Product Contract
 
+D89 (11 October 2026): current Full Report V1 structure, Executive Summary, Scenario Fit and concept-specific reasoning are accepted. Stop editorial cycles. Phase 13's eight-page reference-driven dashboard is authorised after mandatory Phase 12 technical and protected-delivery gates close; no new providers, context-index change, report Financial Engine calculations or unapproved payments. See [V1 baseline and backlog](full-report-v1-release.md).
+
 ## Current report product requirements — 10 October 2026
 
 **11 October amendment, D88:** The consultant report must integrate the whole case in a three-line Verdict, prioritised strengths/risks and one Priority Action. Four ranked actions explain how their answers change the decision. Coffee/restaurant competition separately covers count, genuine offers/strength, dated customer reviews and verified brands; unavailable fields must remain explicit. Restaurants compare hot-food/extraction, lunch, evening, seating, collection and restrictions. Rounded customer prose retains exact internal operands. [Consultant model v1](report-consultant-model-v1.md) is implemented as a candidate; real quality and owner acceptance remain open. No report price/value is certified by test counts.

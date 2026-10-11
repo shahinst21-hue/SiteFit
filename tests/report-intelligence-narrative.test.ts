@@ -27,7 +27,7 @@ test("consultant prose binds rounded values without changing operands or admitti
   const { c, fit, claim, n } = fixture(); const accepted = validateNarrative(n, c, fit);
   assert.match(renderCommentary(accepted.verdict[0], c).text, /about 15,000/);
   assert.equal(c.facts[0].value, 14766.980617);
-  for (const text of ["The site supports 40 seats.", "I recommend the takeaway format here.", "Use {{f:foreign}} as a strong base."]) {
+  for (const text of ["The site supports 40 seats.", "I recommend the takeaway format here.", "Use {{f:foreign}} as a strong base.", "The period is [object Object] here."]) {
     const wrong = structuredClone(n); wrong.priorityAction = { ...claim, text };
     assert.throws(() => validateNarrative(wrong, c, fit));
   }
@@ -36,6 +36,9 @@ test("consultant prose binds rounded values without changing operands or admitti
   assert.ok(Buffer.byteLength(narrativeInstructions) < 4000); assert.ok(Buffer.byteLength(JSON.stringify(narrativeSchema)) < 4000);
   assert.equal(consultantNumber(1423567), "about 1.4 million");
   assert.equal(consultantNumber(525, "seconds", "route seconds"), "about 9 minutes");
+  const malformed = structuredClone(c);
+  malformed.facts[0].value = {} as unknown as string;
+  assert.throws(() => renderCommentary(claim, malformed), /malformed_customer_text/);
 });
 test("restaurant scenarios distinguish lunch, evening and collection with binding physical gates", () => {
   const { c, fit } = fixture(); const comparison = operatingComparison(c, fit);

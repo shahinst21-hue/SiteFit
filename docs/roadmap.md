@@ -235,3 +235,7 @@ Steps 11.0–11.9 are under implementation. Initial numeric output is Resident &
 ## Phase 11 completion — 10 October 2026
 
 Steps 11.0–11.9 complete under D83 through protected PR #32 and successful post-main CI; see [completion record](phase-11-status.md). Resident & Workplace Context Index remains a dated density-only hypothetical construct, with separate premises/readiness. No customer numerical UI or Phase 12/13 is activated. Subsequent phases require separate owner approval. Storage is 374,855,347 bytes; preserve the 375,000,000 checkpoint before additional hosted writes.
+
+## D89 delivery direction — 11 October 2026
+
+Current Full Report structure/reasoning is accepted as the V1 baseline. Finish Phase 12 mandatory technical gates without editorial cycles, freeze its versioned contract, then implement Phase 13's eight-page dashboard and required exports using the complete approved UI references. Evidence/reasoning enhancements belong to later versions unless a serious factual/security/integrity defect blocks release. No new provider, index recalibration, report financial calculations or unapproved payment. Phase 12 remains open until technical/protected-delivery evidence exists.

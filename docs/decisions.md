@@ -1,5 +1,10 @@
-# Decisions
+# Accepted decisions
 
+## D89 — Accepted Full Report V1 baseline and conditional Phase 13 implementation — 11 October 2026
+
+The owner accepts the current report structure, three-line Consultant Verdict, prioritised strengths/risks, one Priority Action, Scenario Fit withholding architecture and concept-specific reasoning as V1. Stop editorial cycles and requests for three more manually reviewed concept reports. Only release-blocking rendering, factual, security and integrity defects justify this final hardening pass. Preserve eight sections, evidence admission, source snapshots, historical editions and the unchanged Phase 11 context index. No fabricated capacity, overall score, reviews, footfall, rent or permissions; no new provider, Financial Engine embedding or unapproved payment.
+
+Content acceptance is not technical completion. Mandatory security/ownership/entitlement, lifecycle/recovery, persistence/replay, build, exact-head CI and protected merge remain gates. The US$1 verification ceiling is unchanged; unknown charges keep their reservations. After these gates close, freeze/version the V1 contract, record a prioritised versioned-enhancement backlog, close Phase 12 and implement the eight-page Phase 13 dashboard against the complete approved UI references. Phase 13 implementation is conditional on Phase 12 completion, not authorised to bypass an open blocker. No further editorial acceptance request is needed.
 ## D88 accepted consultant content and operator comparison amendment — 2026-10-11
 
 Owner requires a commercially useful, property/concept-specific Full Report, with an integrated three-line Verdict, strengths/risks, one Priority Action and decision-consequence actions. Coffee and restaurant competition must address genuine count, propositions/strength, customer ratings and recognised brands using admitted exact-operator evidence. Unknowns remain explicit: names/register categories do not prove current offers, customer reputation or chain affiliation; hygiene is not a customer rating. Restaurants must compare kitchen/extraction, hot cooking, lunch, evening dining, seating, collection/delivery and operational restrictions. Customer prose rounds numbers; exact operands and lineage remain frozen.

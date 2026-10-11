@@ -1,4 +1,8 @@
-# Phase 12: AI interpretation and report intelligence — approved implementation
+# Phase 12 implementation plan
+
+## Current authority: D89
+
+Owner accepts the current V1 structure, Executive Summary, Scenario Fit and concept-specific reasoning. The editorial/manual-three-concept acceptance requirements below are historical and closed by that decision, supported by existing frozen-source fixtures. Do not request another rewrite or three more manually reviewed reports. Mandatory technical delivery/lifecycle/security gates are retained. No increased spending is approved. Phase 13 is authorised only after Phase 12 is formally complete. See [V1 release contract and backlog](full-report-v1-release.md).
 
 **11 October consultant-output amendment, D88:** [Consultant model v1](report-consultant-model-v1.md) supersedes the atom-only final prose described below for **new** preparations. Keep two grouped evidence selections plus one synthesis; the final call writes evidence-linked analysis for all eight pages and the three-line Verdict/strengths/risks/Priority Action. Runtime reference/slot checks do not establish semantic truth: actual content review remains mandatory. Operator comparison distinguishes total, offers/strength, brand, customer reputation and hygiene; restaurant operating scenarios remain gated. No automatic paid repair for this version. Groups retain 20 KB requests/3,000 output caps; narrative synthesis uses 28 KB/6,000 tokens and 120 seconds. Route configuration is 200 seconds after three actual 60-second timeouts; deployed behavior remains open. All old ready editions replay unchanged. Web competition discovery can prepare candidates, but is not automatically dispatched/admitted or newly budget-approved. The aggregate US$1 ceiling remains binding.
 
