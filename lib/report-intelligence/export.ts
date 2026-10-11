@@ -6,6 +6,7 @@ import { decisionSummary } from "./decision-summary.ts";
 import { expandedProfiles } from "./profiles.ts";
 import { validateNarrative, renderCommentary } from "./narrative.ts";
 import type { ScenarioFit } from "./scenario-fit.ts";
+import { operatingFormatTable } from "./operating-comparison.ts";
 
 /** Lossless shared provenance: identical metadata is stored once, never omitted. */
 export function compactSources(facts: Fact[]) {
@@ -123,6 +124,7 @@ export function sectionExport(value: unknown, key: SectionKey) {
       ...(key === "actions" ? narrative.actions.flatMap(a => [a.action, a.consequence]) : [])])
       for (const id of c.referenceIds) requiredSupplementIds.add(id);
   }
+  if (key === "premises" && p.scenarioFit) section.operatingFormatTable = operatingFormatTable(p.scenarioFit as ScenarioFit);
   return { version: "full-section-export-v1", contentDigest: p.contentDigest, bindingDigest: p.bindingDigest,
     generatedAt: p.generatedAt, business: p.business, presentation: p.presentation, section,
     sources: facts.filter(f => ids.includes(f.id)),

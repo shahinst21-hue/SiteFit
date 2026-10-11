@@ -88,9 +88,9 @@ The retained river-and-sea point result is Very Low. That supports a narrowly qu
 
 | Candidate | Commercial hypothesis | Physical gate |
 |---|---|---|
-| styling-led hair salon | [object Object], [object Object] occasions to test | styling position; washing provision; cleaning and circulation; unresolved |
-| multi-station hair salon | [object Object], [object Object] occasions to test | multiple styling positions; washing provision; cleaning and circulation; unresolved |
-| specialist hair salon | [object Object], [object Object] occasions to test | specified services and equipment; washing provision; cleaning and circulation; unresolved |
+| styling-led hair salon | weekday (hypothesis only), weekend (hypothesis only) | styling position; washing provision; cleaning and circulation; unresolved |
+| multi-station hair salon | weekday (hypothesis only), weekend (hypothesis only) | multiple styling positions; washing provision; cleaning and circulation; unresolved |
+| specialist hair salon | weekday (hypothesis only), weekend (hypothesis only) | specified services and equipment; washing provision; cleaning and circulation; unresolved |
 
 No leading format, usable area or capacity is established for this case.
 

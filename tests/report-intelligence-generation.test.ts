@@ -96,6 +96,21 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
   const overview=sectionExport(ready.projection,"overview");
   assert.equal((overview.section.executiveSummary as {consultantVerdict:string[]}).consultantVerdict.length,3);
   assert.equal((sectionExport(ready.projection,"actions").section.rankedActions as unknown[]).length,4);
+  const table = sectionExport(ready.projection, "premises").section.operatingFormatTable;
+  assert.equal(typeof table, "string");
+  assert.match(table as string, /morning \(hypothesis only/);
+  assert.match(table as string, /weekday \(hypothesis only/);
+  assert.match(table as string, /unresolved/);
+  assert.doesNotMatch(table as string, /\[object Object\]|undefined/);
+  for (const businessType of ["restaurant", "hair-salon", "beauty-salon"] as const) {
+    const { contentDigest: oldDigest, ...content } = structuredClone(ready.projection) as Record<string, unknown>; void oldDigest;
+    content.business = businessType.endsWith("salon") ? "hair-beauty-salon" : businessType;
+    content.scenarioFit = evaluateScenarioFit({ businessType, facts: p.catalog.facts });
+    const readable = sectionExport({ ...content, contentDigest: packetDigest(content) }, "premises").section.operatingFormatTable as string;
+    assert.match(readable, businessType === "restaurant" ? /lunch \(hypothesis only/ : /weekend \(hypothesis only/);
+    assert.match(readable, /unresolved/);
+    assert.doesNotMatch(readable, /\[object Object\]|undefined/);
+  }
   assert.equal(overview.sources[0].value,14766.980617);
   for(const intent of ["main-risk","strongest-support","before-signing"] as const){
     const answer=suggestedAnswer(ready,intent);assert.equal(answer.state,"answered");

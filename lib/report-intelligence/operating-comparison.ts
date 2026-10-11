@@ -1,6 +1,17 @@
 import type { Catalog } from "./catalog.ts";
 import type { ScenarioFit } from "./scenario-fit.ts";
 
+/** Customer-readable export; structured trading evidence must never be string-coerced. */
+export function operatingFormatTable(fit: ScenarioFit): string {
+  const cell = (text: string) => text.replace(/\|/g, "\\|").replace(/[\r\n]+/g, " ");
+  return ["| Candidate | Commercial hypothesis | Physical gate |", "|---|---|---|",
+    ...fit.scenarios.map(s => {
+      const periods = s.commercial.tradingPeriods.map(p => `${p.period} (hypothesis only${p.evidenceIds.length ? "" : "; no supporting period evidence"})`).join(", ");
+      const gate = [...s.requirements, s.physical.state, ...(s.physical.blocker ? [s.physical.blocker] : [])].join("; ");
+      return `| ${cell(s.label)} | ${cell(periods)} | ${cell(gate)} |`;
+    })].join("\n");
+}
+
 /** Trading hypotheses are distinct from permission, layout and capacity admission. */
 export function operatingComparison(catalog: Catalog, fit: ScenarioFit) {
   const residents = catalog.facts.filter(f => /TS007A.*total/i.test(f.dataset)).map(f => f.id);

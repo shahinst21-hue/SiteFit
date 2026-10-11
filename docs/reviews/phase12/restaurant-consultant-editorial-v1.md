@@ -107,9 +107,9 @@ The retained river-and-sea point result is Very Low. That supports a narrowly qu
 
 | Candidate | Commercial hypothesis | Physical gate |
 |---|---|---|
-| dine-in-led restaurant | [object Object], [object Object] occasions to test | kitchen and extraction; dining and circulation; storage and waste; unresolved |
-| takeaway-led restaurant | [object Object], [object Object] occasions to test | kitchen and extraction; collection and queue; storage and waste; unresolved |
-| hybrid restaurant | [object Object], [object Object] occasions to test | kitchen and extraction; dining and circulation; collection and queue; unresolved |
+| dine-in-led restaurant | lunch (hypothesis only), evening (hypothesis only) | kitchen and extraction; dining and circulation; storage and waste; unresolved |
+| takeaway-led restaurant | lunch (hypothesis only), evening (hypothesis only) | kitchen and extraction; collection and queue; storage and waste; unresolved |
+| hybrid restaurant | lunch (hypothesis only), evening (hypothesis only) | kitchen and extraction; dining and circulation; collection and queue; unresolved |
 
 No leading format, usable area or capacity is established for this case.
 

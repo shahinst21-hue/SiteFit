@@ -107,9 +107,9 @@ The retained river-and-sea point result is Very Low. That supports a narrowly qu
 
 | Candidate | Commercial hypothesis | Physical gate |
 |---|---|---|
-| takeaway-led coffee | [object Object], [object Object] occasions to test | counter and queue; preparation and washing; storage and circulation; unresolved |
-| balanced coffee | [object Object], [object Object] occasions to test | counter and queue; preparation and washing; seating and circulation; unresolved |
-| sit-in-led coffee | [object Object], [object Object] occasions to test | preparation and washing; seating and circulation; customer facilities; unresolved |
+| takeaway-led coffee | morning (hypothesis only), weekday (hypothesis only) | counter and queue; preparation and washing; storage and circulation; unresolved |
+| balanced coffee | weekday (hypothesis only), weekend (hypothesis only) | counter and queue; preparation and washing; seating and circulation; unresolved |
+| sit-in-led coffee | daytime (hypothesis only), weekend (hypothesis only) | preparation and washing; seating and circulation; customer facilities; unresolved |
 
 No leading format, usable area or capacity is established for this case.
 
