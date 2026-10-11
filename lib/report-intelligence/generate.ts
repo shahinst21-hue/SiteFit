@@ -7,7 +7,7 @@ import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
 import { compactSources, compactSectionAtoms } from "./export.ts";
 import { decisionSummary } from "./decision-summary.ts";
-import { narrativePacket, narrativeSchema, narrativeInstructions, validateNarrative, type ConsultantNarrative } from "./narrative.ts";
+import { narrativePacket, narrativeSchema, narrativeInstructions, validateNarrative, narrativeFailureCode, type ConsultantNarrative } from "./narrative.ts";
 import { operatingComparison } from "./operating-comparison.ts";
 import { competitionBrief } from "./competition.ts";
 
@@ -112,12 +112,17 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     catch { return repo.read(reportId); }
     const outcome = await provider.interpret(dispatch, packet, instructions, schema);
     let accepted: Selection | ConsultantNarrative | null = null;
+    let validationReason: string | undefined;
     if (outcome.state === "received") try { accepted = useNarrative ? validateNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!) :
-      validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch { /* No partial publication. */ }
+      validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch (error) {
+        if (useNarrative) validationReason = narrativeFailureCode(error);
+        /* No partial publication or rejected prose persistence. */
+      }
     edition = await commit(repo, reportId, c => settleDispatch(c, dispatch!.ordinal,
       accepted ? { state: "accepted", output: accepted, receipt: outcome.receipt } :
         { state: outcome.state === "ambiguous" ? "ambiguous" : "invalid", receipt: outcome.state === "received" ?
-          { ...outcome.receipt, validation: useNarrative ? "narrative_rejected" : "selection_rejected" } : outcome.receipt }));
+          { ...outcome.receipt, validation: useNarrative ? "narrative_rejected" : "selection_rejected",
+            ...(validationReason ? { validationReason } : {}) } : outcome.receipt }));
     dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
   }
   if (dispatch?.state !== "accepted") return edition;

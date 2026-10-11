@@ -14,8 +14,8 @@ Current content structure, Executive Summary, Scenario Fit and concept-specific 
 | Preview isolation/privacy | Four actual protected HTTP boundaries pass (401/403), 10 JS artifacts and 50-log request scan with nine private values found no matches; protection 302; observed Node 24 / 200s configuration. Browser Account retains signed-in owner, saved case/active Test access; console has no warn/error entries. Not a DevTools Network/body inspection |
 | Owned HTTP replay | Operator-only verification surface prepared to exercise the existing private APIs without exposing source packets in page text; actual deployed replay still pending. Surface unavailable in Production/without verification flag, requires verified session and paid owner |
 | Live Q&A | Earlier real bounded answer, unchanged report digest and receipt documented below; suggested answers reuse stored content without calls |
-| Actual new background execution/recovery | Open. Existing fixtures prove intent/CAS/loss/replay; configured timeout is not actual leave-page proof. Do not retry three ambiguous calls |
-| Budget | Hosted sum confirmed 940,000 microdollars conservatively reserved; US$0.06 remains. New Full execution requires the existing US$0.30 before-dispatch reservation, so the current US$1 gate rejects another real execution. No reservation erased and no additional spending approved |
+| Actual new background execution/recovery | Final bounded Preview proof continued after navigating away; two groups accepted, synthesis returned but was rejected. Ready completion/replay of this new V1 remains BLOCKED. No automatic retry or partial publication |
+| Budget | D90 total US$1.24 approved for one proof. Hosted reservations now 1,240,000 microdollars; allowance exhausted. Final proof estimated US$0.07134; earlier ambiguous charges remain unknown. No retry/new paid requests |
 | Protected delivery | Previous head 6440e77 required CI passed. Final hardening head/Preview/merge/main verification pending; PR remains draft |
 
 Historical source reports and snapshots are preserved. No new provider, context-index change, financial calculations in reports, Production/live payment or Phase 13 UI is introduced. The private verification page is a technical proof surface, not the final dashboard.
@@ -121,4 +121,20 @@ Root cause: the editorial writer joined structured tradingPeriods objects rather
 ### Final technical proof approval — D90
 
 Owner approved total US$1.24 for one final technical proof. Existing US$0.94 conservative reservations are preserved. A forward migration raises only the development allowance; new execution, page departure, completion and replay remain unverified until actual evidence is recorded.
+
+
+## D90 final technical proof — actual result, release BLOCKED
+
+The owner authorised one new technical edition of the same frozen coffee case, at most three calls, no retrieval/search/retry. Forward migration `20261011160000_phase12_final_proof_budget.sql` was applied to development; it changes only the existing allowance to 1,240,000 microdollars. All earlier reservations and security/ownership/capacity guards are preserved. Fresh PostgreSQL migration/security rebuild passed.
+
+The verified signed-in paid owner opened the private Preview verification page, requested execution once and navigated to Account before completion. Returning showed `validation_failed`, with context and premises completed. Hosted receipts confirm exactly three GPT 6.1 Sol dispatches: context accepted (3,484 input / 316 output tokens, 6,128 ms, US$0.010128); premises accepted (1,132 / 155 tokens, 4,320 ms, US$0.003814); synthesis returned then rejected (5,029 / 4,734 tokens, 71,282 ms, US$0.057398). Total **9,645 input / 5,205 output tokens; estimated US$0.07134**. This is estimated provider usage, not an invoiced charge. Execution continued after browser departure; a successful ready report was **not** produced. No retry, source retrieval, partial publication or history overwrite occurred.
+
+The saved synthesis receipt says `narrative_rejected`; rejected output is not persisted, and the previous code discarded the specific validator exception. Therefore the exact violated rule cannot be established retrospectively. Do not invent a root cause or weaken admission. A small hardening change now persists only allowlisted validator reason codes, never rejected prose, payloads or arbitrary exception details. It cannot repair or retroactively diagnose this failed paid attempt. Any subsequent paid verification needs separate owner approval; none is requested or executed in this checkpoint.
+
+Original ready eight-section hosted edition still replays with identical digest, zero AI/external requests and disabled provider keys. Actual database **375,445,171 bytes**, leaving **24,554,829 bytes** below the 400,000,000 checkpoint. Conservative reservations total **US$1.24**; known estimated usage across recorded successful/received calls is US$0.095578, excluding the three earlier unknown-charge timeouts. No reservation is erased.
+
+Protected Preview security probes still return anonymous 401 and cross-origin 403, private/no-store/no-referrer headers; ten deployed JS artifacts and fifty runtime-log entries scanned against nine private values found no matches. Preview protection remains active (302). This is controlled HTTP/artifact/log evidence, not a DevTools Network-body inspection. Existing mandatory ownership/security evidence remains valid; the new ready completion/replay gate remains open. PR #35 stays draft and unmerged; Phase 12 is not complete and Phase 13 has not begun.
+
+
+Final no-spend hardening validation: npm run check passed lint, strict types, 296 tests and production build. Fresh database rebuild/security passed for the new forward budget migration. Built-app check:public passed at port 3013. Exact-head CI for the diagnostic/status checkpoint is pending; the earlier allowance head 6405c1e passed both required CI jobs.
 

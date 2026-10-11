@@ -7,7 +7,7 @@ import { consultantNumber } from "../lib/report-intelligence/display.ts";
 import { evaluateScenarioFit } from "../lib/report-intelligence/scenario-fit.ts";
 import { operatingComparison } from "../lib/report-intelligence/operating-comparison.ts";
 import { competitionBrief } from "../lib/report-intelligence/competition.ts";
-import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary } from "../lib/report-intelligence/narrative.ts";
+import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode } from "../lib/report-intelligence/narrative.ts";
 import { sectionKeys, type Fact } from "../lib/report-intelligence/catalog.ts";
 import { expandedProfiles } from "../lib/report-intelligence/profiles.ts";
 
@@ -23,6 +23,11 @@ function fixture() {
     sections: sectionKeys.map(key => ({ key, conclusion: claim, analysis: [claim], decisionTest: claim })) };
   return { c, fit, claim, n };
 }
+test("rejection diagnostics retain only allowlisted validator codes, never private errors or prose", () => {
+  assert.equal(narrativeFailureCode(new Error("unbound_narrative_value")), "unbound_narrative_value");
+  assert.equal(narrativeFailureCode(new Error("Private provider body or credential")), "narrative_validation_failed");
+  assert.equal(narrativeFailureCode({ message: "invalid_narrative" }), "narrative_validation_failed");
+});
 test("consultant prose binds rounded values without changing operands or admitting unsupported numbers/format", () => {
   const { c, fit, claim, n } = fixture(); const accepted = validateNarrative(n, c, fit);
   assert.match(renderCommentary(accepted.verdict[0], c).text, /about 15,000/);

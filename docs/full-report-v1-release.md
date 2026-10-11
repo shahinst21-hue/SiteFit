@@ -25,3 +25,6 @@ Only mandatory technical gates: final contract/rendering regression, hosted chan
 
 After formal Phase 12 completion, build the approved eight-page responsive dashboard from these immutable contracts and [the reference handoff](phase-13-design-handoff.md). Result first, accessible evidence inspection, honest missing states, qualified rental information, real maps/charts, actual progress/recovery and owned exports. No financial form/calculations in Full Report, no new provider or unapproved payments. Preserve the references' visual composition while replacing unsupported example content with actual findings.
 
+
+Final technical proof under D90 returned a rejected synthesis. Content acceptance remains intact, but technical release is BLOCKED; no ready new V1, merge or Phase 13 start is claimed. See the actual receipts and limitations in [Phase 12 status](phase-12-status.md).
+

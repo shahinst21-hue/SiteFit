@@ -11,6 +11,12 @@ export type ConsultantNarrative = { version: "consultant-narrative-v1";
   verdict: Commentary[]; strengths: Commentary[]; risks: Commentary[]; priorityAction: Commentary;
   actions: { action: Commentary; consequence: Commentary }[];
   sections: { key: SectionKey; conclusion: Commentary; analysis: Commentary[]; decisionTest: Commentary }[] };
+/** Persist a bounded validator code, never rejected prose or exception details. */
+export function narrativeFailureCode(error: unknown): string {
+  const allowed = ["invalid_narrative", "invalid_narrative_claim", "unbound_narrative_value",
+    "unsupported_narrative_claim", "narrative_evidence_missing", "narrative_operator_lineage_missing"];
+  return error instanceof Error && allowed.includes(error.message) ? error.message : "narrative_validation_failed";
+}
 const claim = { type: "object", additionalProperties: false, required: ["text", "kind", "factIds", "operatorIds", "referenceIds"], properties: {
   text: { type: "string", maxLength: 800 }, kind: { type: "string", enum: ["interpretation", "hypothesis", "unknown"] },
   factIds: { type: "array", maxItems: 8, items: { type: "string" } }, operatorIds: { type: "array", maxItems: 6, items: { type: "string" } },
