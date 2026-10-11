@@ -7,6 +7,9 @@ import { verifiedUser } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
 import { purchaseOrigin } from "@/lib/payments/config";
 import { accountHistory } from "@/lib/auth/account-history";
+import { headers } from "next/headers";
+import { verificationEnabled } from "@/lib/report-intelligence/http";
+import { findReadyDashboard } from "@/lib/report-dashboard/history";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Your account",
@@ -27,6 +30,8 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
     const {data}=await client.rpc('read_sitefit_purchase',{p_report:report.id});
     return data&&typeof data==='object'&&!Array.isArray(data)&&typeof data.access==='string'?data.access:null;
   })):[];
+  const host=(await headers()).get('host')?.split(':')[0]??'';
+  const fullReports=verificationEnabled(process.env,host)&&!user.is_anonymous&&user.email_confirmed_at?await Promise.all(reports.map(report=>findReadyDashboard(user.id,report.id))):[];
   return (
     <div className="page-wrap narrow-page">
       <div className="auth-brand">
@@ -48,7 +53,7 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
           <Icon name="document" />
         </span>
         <h2>Your saved Snapshots</h2>
-        {reports.length ? <ul>{reports.map((report,index) => <li key={report.id}><p>{report.address} · {report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}>Open Snapshot →</Link>{paymentStates[index]&&<p>Test purchase access: {paymentStates[index]}. Full Report generation is not enabled.</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
+        {reports.length ? <ul>{reports.map((report,index) => <li key={report.id}><p>{report.address} · {report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}>Open Snapshot →</Link>{fullReports[index]&&<p><Link href={`/reports/${fullReports[index]}`}>Open stored Full Report →</Link></p>}{paymentStates[index]&&<p>Test purchase access: {paymentStates[index]}. New report generation remains disabled.</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
         <nav aria-label="Snapshot history pages">{page>0&&<Link href={`/account?page=${page-1}`}>Previous page</Link>}{Array.isArray(history)&&history.length===20&&page<500&&<Link href={`/account?page=${page+1}`}>Next page</Link>}</nav>
         {historyError && <p role="status">Saved Snapshots are temporarily unavailable. Your session is still active.</p>}
         {error && (

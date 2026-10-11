@@ -239,3 +239,6 @@ Steps 11.0–11.9 complete under D83 through protected PR #32 and successful pos
 ## D89 delivery direction — 11 October 2026
 
 Current Full Report structure/reasoning is accepted as the V1 baseline. Finish Phase 12 mandatory technical gates without editorial cycles, freeze its versioned contract, then implement Phase 13's eight-page dashboard and required exports using the complete approved UI references. Evidence/reasoning enhancements belong to later versions unless a serious factual/security/integrity defect blocks release. No new provider, index recalibration, report financial calculations or unapproved payment. Phase 12 remains open until technical/protected-delivery evidence exists.
+# Active owner authority — Phase 13 development (11 October 2026)
+
+D92 authorises [Phase 13 implementation](phase13_plan.md) now on a dedicated branch/PR dependent on draft Phase 12 PR #35. Phase 12 remains incomplete; its new Ready/replay gate and unapproved extra budget remain open. No premature merge into main or customer paid release. All eight views, evidence-connected interactions, stored maps/charts, responsive accessibility and immutable current-tab/full PDFs are the milestone. [Status](phase-13-status.md) distinguishes implemented, verified and accepted. No financial calculations, new inference/providers or later phase is authorised.

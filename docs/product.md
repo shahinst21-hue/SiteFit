@@ -101,3 +101,6 @@ The owner's subsequent Kingston redesign instruction supersedes the earlier layo
 ## D83 context-only numerical boundary — 2026-10-09
 
 The initial Resident & Workplace Context Index is a dated density-context summary only. It does not measure customers, success, competition, profitability or overall premises suitability. Business weights are explicit hypothetical policy. Premises and Decision Readiness dominate practical decisions independently; financial execution remains separate. Failed method/evidence admission withholds the number. Final UI/Full Report/AI generation still requires Phase 12/13 approval.
+# Current Phase 13 development authority
+
+11 October 2026 owner brief (D92) authorises the premium eight-page AI-native Full Report dashboard and immutable exports on frozen V1 while Phase 12's live Ready/replay release gate remains open. Development is Local/protected Preview, independently stacked on PR #35; customer-facing Production paid release remains disabled. Current screenshots define UI/components only. All facts, figures, formats, permissions, rent and limitations follow admitted stored evidence; no overall score, financial calculations or new model/provider calls are introduced. See [Phase 13 plan](phase13_plan.md).
