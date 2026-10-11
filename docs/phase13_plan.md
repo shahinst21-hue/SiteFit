@@ -1,6 +1,6 @@
 # Phase 13 — authorised dashboard development
 
-D95 presentation amendment: qualified PropertyData rental benchmarks/model estimates use explicitly approximate labels, native area basis and dated attribution. Absent admitted prices produce no pricing placeholder in dashboard/PDF; preserve frozen empty-rent assessment in Appendix and existing lease actions. Requested real-web fallback remains disabled pending spending authority and rental-source admission. Never fetch on reopening. See [D95](decisions.md).
+D95 presentation amendment: qualified PropertyData rental benchmarks/model estimates use explicitly approximate labels, native area basis and dated attribution. Absent admitted prices produce no pricing placeholder in dashboard/PDF; preserve frozen empty-rent assessment in Appendix and existing lease actions. The separately approved one-shot rent proof was consumed with zero candidates; recurring real-web fallback remains disabled pending recurring spending authority and rental-source admission. Never fetch on reopening. See [D95](decisions.md).
 
 11 October 2026. Owner's Phase 13 brief and Emil skills addendum authorise development now, independently of unfinished Phase 12 PR #35. This supersedes the earlier conditional Phase 13 authority in D89/D91. No paid request, Production activation or historical report rewrite is authorised.
 
@@ -20,7 +20,7 @@ The report workspace consumes `full-report-v1` through its versioned section rea
 
 13.3: Overview Consultant Verdict, separate limited context index/readiness, prioritised strengths/risks/action and cross-page evidence navigation. Legacy editions display their original content without creating a new executive conclusion.
 
-13.4: Customer Context, Competition and Access. Keep native universes, cumulative contours and dates separate. Named FSA leads are not unique direct competitors. Stored maps link named point/list selection; no street basemap or new map-provider retrieval is implied.
+13.4: Customer Context, Competition and Access. Keep native universes, cumulative contours and dates separate. Named FSA leads are not unique direct competitors. Stored maps link named point/list selection. The owner-approved redesign adds a clearly labelled current OSM street background for presentation only; analytical geometry and observations remain frozen, with visible attribution and no new analytical retrieval.
 
 13.5: Premises Scenario Fit and dated event timeline. Candidate formats retain physical gates, period hypotheses, blockers and withheld capacity/leading-format reasons. No inference from GIA/EPC to usable places.
 

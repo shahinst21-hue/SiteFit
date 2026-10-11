@@ -1,5 +1,13 @@
 # Phase 13 status
 
+## Current closing audit — 11 October 2026
+
+Authoritative consolidated status: [delivery report](phase-13-delivery-report.md). Eight-tab dashboard, site-wide brand and immutable exports are implemented; application head `eb04a26b16d933d724a01634dbd0dfd0d550915b` passed both exact-head CI jobs and protected Preview deployment. Owner answered «okeye» to the current-version real-phone, real desktop 200% and visual/usability acceptance request. Those acceptance gates are now recorded as passed, without approving Production or waiving technical gates.
+
+Closing read-only verification: hosted historical Ready replay unchanged and foreign owner denied; real authenticated Preview full-PDF download succeeded (47 pages, eight sections, no configured private-value matches or malformed text). All 43 pages of the existing frozen development PDF were visually screened. Controlled local wire inspection covered 51 browser requests with zero private/session-marker matches and no raw-body persistence; its local session did not own the Preview report. Rendered authenticated Preview HTML checks and PDF scans are bounded evidence, **not complete authenticated Preview Network-body inspection**.
+
+**Formal Phase 13 closure remains pending** on that actual owned Network gate and protected delivery; Phase 12 successful new V1 Ready/replay remains a separate mandatory release dependency. No paid request, provider retrieval, hosted write, report regeneration, main merge or Production activation occurred in this closing audit. Earlier open-item lists below are historical checkpoints; use the consolidated gate table in the delivery report for the current state.
+
 ## D95 rental presentation and one-shot discovery — 11 October
 
 Qualified stored PropertyData benchmarks and property-model estimates now use approximate labels, source/model date, retrieval date, native GIA/NIA and provider-reported margin. Shared dashboard/PDF presentation rejects malformed, mismatched-unit or unbound/non-PropertyData price rows; no benchmark-to-unit multiplication or invented confidence. Multiple observations remain separate. Missing pricing produces no price card, empty-price message or pricing headline. Frozen empty-rental reasoning/missingness is retained in Appendix; existing decision-changing lease actions stay accessible. Eight sections and historical content digests/fixtures are unchanged. No hosted write or historical regeneration.
@@ -25,7 +33,7 @@ Dedicated branch `codex/phase-13-dashboard`, dependent on draft Phase 12 PR #35.
 
 ## Gates still open
 
-Remaining: final exact-head CI/Preview after the last read-only gate correction, authenticated browser/PDF and deployed payload inspection, complete PDF page review, real hardware/200% and owner design acceptance. Phase 12 live-validation remains separately open.
+Current remaining gates: complete authenticated owned Preview Network-body inspection, unresolved Phase 12 new V1 live-validation and final protected merge/release sequence. Exact application-head CI, authenticated browser/PDF, full fixture-PDF page screening and owner current-version hardware/200%/design acceptance are verified in the closing audit above. The delivery-record-only head requires its own CI.
 
 ## Verified local evidence
 
