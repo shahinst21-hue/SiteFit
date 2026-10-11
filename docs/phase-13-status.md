@@ -98,3 +98,13 @@ After the palette, spacing/type sheets and Astra integration, `npm run check` pa
 ### Canonical brand record
 
 All owner sheets are retained under `docs/brand-references/`, with exact palette, type sizes/weights/line heights, spacing/radii and icon requirements in [brand-identity.md](brand-identity.md). Product Contract links to it; D93 records owner acceptance. Historical design notes remain historical. Large desktop statistics use the supplied 54 px role; card headings use 16 px/400/1.5, with responsive hierarchy retained.
+
+### Protected delivery of owner brand identity — 11 October
+
+UI/source head `cbf4ac51438a94dd7c28caa91dfc6ecfd0ff35c9` passed both exact-head CI runs (clean installation, lint/types, 306 tests, build/public smoke). Its Vercel deployment `sitefit-2bg5yqysh-shahinst21-hues-projects.vercel.app` was READY; the stable protected branch alias was opened and inspected.
+
+Actual deployed computed styles confirmed brand RGB(178,243,76), 56 px desktop page heading, 54 px statistic, 24 px card padding, 16 px card radius, 32 px feature radius and 400 card-heading weight. All eight mobile views at 390 px and 720 px reflow showed no document overflow/malformed output. Named search returned Saray Cafe, inspection selected its map point, Escape dismissed the panel, selection reset worked, and the lease uncertainty connected to existing ranked action 4. Refreshed desktop/mobile screenshots are in ignored `supabase/.temp/phase13-qa/brand-preview-*` artifacts.
+
+Following actual Account → stored Full Report opened the owner's historical Ready revision 7, preserving absent modern summary/format fields. Its Full Report PDF downloaded through the actual Export menu; captured browser console had no warning/error. This legacy read/export does **not** close the new Phase 12 V1 Ready/replay proof. No regeneration, provider retrieval, AI request or hosted write occurred.
+
+The original human 200% gate remains open for this redesigned interface; requested only functional verification of the latest Preview. Authenticated Network payload inspection, physical hardware and owner visual acceptance are still unverified. No Phase 13 completion, Production release or main merge is claimed. This delivery-record-only follow-up requires its own exact-head CI, independently of the above UI head.
