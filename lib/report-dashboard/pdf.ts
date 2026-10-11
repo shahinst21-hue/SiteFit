@@ -6,16 +6,18 @@ import fontkit from '@pdf-lib/fontkit';
 import type {Dashboard} from './model.ts';
 import {reportPages,readableNumber,displayDate} from './model.ts';
 import type {SectionKey} from '../report-intelligence/catalog.ts';
+import {rentalCards} from './rental.ts';
 
 /** One display contract for immutable tab and full exports. No private preparation/checkpoints or external resources. */
 export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;heading?:boolean}[]{
   const p=report.pages.find(p=>p.key===key);if(!p)throw Error('invalid_export_section');
   const rows:{text:string;heading?:boolean}[]=[];
   const add=(text:string,heading=false)=>{if(text.trim()&&!rows.some(r=>r.text===text))rows.push({text,heading});};
-  add(reportPages.find(x=>x.key===key)!.label,true);add(p.conclusion);
+  const emptyPricing=key==='rental-context'&&!report.rental.length;
+  add(reportPages.find(x=>x.key===key)!.label,true);if(!emptyPricing)add(p.conclusion);
   if(key==='overview'&&report.summary){add('Consultant Verdict',true);report.summary.verdict.forEach(t=>add(t));add('Key strengths',true);report.summary.strengths.forEach(s=>add(s.text));add('Key risks & unknowns',true);report.summary.risks.forEach(s=>add(s.text));add('Priority action',true);add(report.summary.priority);add(`${report.index.label}: ${report.index.value??'withheld'}. ${report.index.scope}. Hypothetical context policy only; not demand, profitability or suitability.`);add(`Decision readiness: ${report.readiness}`);}
-  p.analysis.forEach(s=>add(`${s.kind.replaceAll('_',' ')}: ${s.text}`));
-  if(p.test){add('What could change the decision?',true);add(p.test.text);}
+  if(!emptyPricing)p.analysis.forEach(s=>add(`${s.kind.replaceAll('_',' ')}: ${s.text}`));
+  if(p.test&&!emptyPricing){add('What could change the decision?',true);add(p.test.text);}
   if(key==='competition'){
     add('Qualified register shortlist — not unique or verified direct competitors',true);
     for(const o of report.operators?.items??[])add(`${o.name} · ${o.businessType}. Observed ${displayDate(o.observedAt)}. Offer, current activity, customer rating and chain affiliation unverified. ${o.reference}`);
@@ -28,13 +30,14 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
     for(const t of report.timeline)add(`${displayDate(t.date)} · ${t.fact}. ${t.dateMeaning}; ${t.scope}. Source reference ${t.referenceId}.`);
   }
   if(key==='rental-context'){
-    for(const r of report.rental)add(`${r.kind.replaceAll('_',' ')}: ${readableNumber(r.annualValue,'GBP')} ${r.unit}; ${r.areaBasis}. Retrieved ${displayDate(r.retrievedAt)}; source date ${displayDate(r.sourceDate)}.${r.reportedError!==null?` Provider-reported margin ${readableNumber(r.reportedError,'GBP')}; not statistical confidence.`:''} Not the selected unit's actual asking or agreed rent.`);
-    if(!report.rental.length)add('No qualified rental figure is stored in this edition. No valuation or floor area has been invented.');
+    for(const r of rentalCards(report))add(`${r.label}: ${r.amount} ${r.unit}; ${r.areaBasis}. ${r.dates}. ${r.margin??''} ${r.qualification}`);
+    if(report.rental.length>1)add('Separate dated observations, not an averaged rent or an automatically preferred newest figure.');
+    if(emptyPricing)for(const a of report.actions.filter(a=>/rent|lease|terms/i.test(a.action))){add(a.action);add(`Decision consequence: ${a.consequence}`);}
   }
   if(key==='actions')for(const a of report.actions){add(`${a.rank}. ${a.action}`,true);add(`Decision consequence: ${a.consequence}`);}
   if(key==='access')for(const t of report.transport)add(`${t.name}: ${t.walkingMinutes===null?'route unavailable':`${readableNumber(t.walkingMinutes)} minute modelled walk; ${readableNumber(t.distanceMetres??0)} metres`}. ${t.information}`);
   if(key==='customer-context')for(const t of report.profiles){add(`${t.dataset} · ${t.seconds/60} minute contour · ${t.period}`,true);add(`Universe: ${t.universe}. Method: ${t.method}. Published categories are not additive; contours are cumulative.`);for(const c of t.columns)add(`${c.label}: ${c.value===null?c.state:readableNumber(c.value)}.`);t.limitations.forEach(l=>add(l));}
-  add('Supporting sources & material qualifications',true);
+  if(!emptyPricing)add('Supporting sources & material qualifications',true);
   const ids=new Set([...p.factIds,...p.analysis.flatMap(s=>s.factIds),...(p.test?.factIds??[])]);
   const refs=new Set([...p.referenceIds,...p.analysis.flatMap(s=>s.referenceIds),...(p.test?.referenceIds??[])]);
   if(key==='overview'&&report.summary)for(const s of [...report.summary.strengths,...report.summary.risks]){s.factIds.forEach(id=>ids.add(id));s.referenceIds.forEach(id=>refs.add(id));}
@@ -42,7 +45,9 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
   if(key==='rental-context')report.rental.forEach(r=>refs.add(r.id));
   for(const s of report.sources.filter(s=>key==='appendix'||ids.has(s.id))){add(`${s.id} · ${s.label}`,true);add(`${typeof s.value==='number'?readableNumber(s.value,s.units):s.value} ${s.units??''}. ${s.scope}. ${s.kind}; evidence ${s.strength}; precision ${s.precision}. Period ${displayDate(s.effectiveAt)}; retrieved ${displayDate(s.retrievedAt)}.`);s.limitations.forEach(l=>add(l));add(`Provider ${s.provider}; release ${s.release??'not specified'}; adapter ${s.adapter}; policy ${s.licence}.`);s.notices.forEach(n=>add(n));if(s.reference)add(s.reference);}
   for(const r of report.references.filter(r=>key==='appendix'||refs.has(r.id)))add(`${r.id} · ${r.source}; ${r.scope}. Source date ${displayDate(r.effectiveAt)}; retrieved ${displayDate(r.retrievedAt)}; policy ${r.licence}. ${r.url??'Public URL unavailable.'}`);
-  p.cautions.forEach(s=>add(s.text));p.unknowns.forEach(u=>add(u));
+  if(!emptyPricing){p.cautions.forEach(s=>add(s.text));p.unknowns.forEach(u=>add(u));}
+  if(key==='appendix'&&!report.rental.length){const rent=report.pages.find(p=>p.key==='rental-context')!;
+    add('Stored rental assessment & limitations',true);add(rent.conclusion);rent.analysis.forEach(s=>add(s.text));if(rent.test)add(rent.test.text);rent.cautions.forEach(s=>add(s.text));rent.unknowns.forEach(u=>add(u));}
   if(key==='appendix')add(`Full Report V1 content digest: ${report.digest}. Stored interpretation and source snapshots are not refreshed on reopen. Financial Engine calculations are excluded.`);
   return rows;
 }

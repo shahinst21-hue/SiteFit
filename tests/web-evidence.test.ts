@@ -25,7 +25,7 @@ test("web discovery is explicit, one dispatch, sourced, private and bounded", as
   const provider = webEvidenceSearch({ enabled: true, approvedUsd: .5, key: "sk-synthetic-not-a-credential", fetch: async (url, init) => {
     calls++; assert.equal(url, "https://api.openai.com/v1/responses");
     const request = JSON.parse(String(init?.body));
-    assert.equal(request.max_tool_calls, 1); assert.equal(request.max_output_tokens, 512); assert.equal(request.store, false);
+    assert.equal(request.max_tool_calls, 1); assert.equal(request.max_output_tokens, 512); assert.equal(request.store, false); assert.equal(request.service_tier,'default');
     assert.equal(request.tools[0].search_context_size, "low"); assert.equal(request.tools[0].return_token_budget, "default");
     assert.doesNotMatch(request.input, /ownerId|uprn|guest|email/);
     return Response.json({ model: "gpt-6.1-sol", status: "completed", usage: { input_tokens: 1000, output_tokens: 100 }, output: [
@@ -44,6 +44,22 @@ test("failed requests consume dispatch and disabled discovery makes no request",
   const on = webEvidenceSearch({ enabled: true, approvedUsd: .5, key: "sk-synthetic", fetch: fetcher });
   await assert.rejects(on.discover("10 Synthetic Road"), /provider_unavailable/);
   await assert.rejects(on.discover("10 Synthetic Road"), /dispatch_limit/); assert.equal(calls, 1);
+});
+
+test("rent-only fallback search remains a gated one-shot lead finder and empty results are not prices",async()=>{
+  let calls=0;
+  const provider=webEvidenceSearch({enabled:true,approvedUsd:.5,key:'sk-synthetic',fetch:async(_url,init)=>{
+    calls++;const request=JSON.parse(String(init?.body));
+    assert.match(request.input,/exact London property and trading unit/);assert.match(request.input,/reuse review before admission/);
+    assert.doesNotMatch(request.input,/former businesses|registered food-business/);
+    return Response.json({model:'gpt-6.1-sol',status:'completed',usage:{input_tokens:100,output_tokens:10},output:[
+      {type:'web_search_call',action:{sources:[]}},
+      {type:'message',content:[{type:'output_text',text:JSON.stringify({candidates:[]})}]}]});
+  }});
+  assert.deepEqual((await provider.discover('10 Synthetic Road London E8 4PH',{kind:'rent'})).candidates,[]);
+  await assert.rejects(provider.discover('10 Synthetic Road London E8 4PH',{kind:'rent'}),/dispatch_limit/);assert.equal(calls,1);
+  const off=webEvidenceSearch({enabled:false,approvedUsd:.5,fetch:async()=>{throw Error('must not dispatch');}});
+  await assert.rejects(off.discover('10 Synthetic Road London E8 4PH',{kind:'rent'}),/disabled/);
 });
 test("unsafe references and address prompt payloads fail closed; long context pricing is explicit", async () => {
   for (const url of ["http://example.org", "https://localhost/", "https://127.0.0.1/", "https://user:pass@example.org/", "https://example.org/?token=private"]) assert.equal(publicReference(url), false);

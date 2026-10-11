@@ -1,5 +1,7 @@
 # SiteFit Product Contract
 
+D95 (11 October 2026): rental pricing uses qualified existing PropertyData first and separately validated real-web discovery when absent. Display estimates as estimates; if no admitted price exists, omit pricing and empty-price placeholders. Preserve material lease actions, frozen evidence/missingness in Appendix and immutable historical editions. Additional search spending/runtime enablement remains separately gated; see [decision D95](decisions.md).
+
 D89 (11 October 2026): current Full Report V1 structure, Executive Summary, Scenario Fit and concept-specific reasoning are accepted. Stop editorial cycles. Phase 13's eight-page reference-driven dashboard is authorised after mandatory Phase 12 technical and protected-delivery gates close; no new providers, context-index change, report Financial Engine calculations or unapproved payments. See [V1 baseline and backlog](full-report-v1-release.md).
 
 ## Current report product requirements — 10 October 2026

@@ -1,5 +1,7 @@
 # Phase 13 — authorised dashboard development
 
+D95 presentation amendment: qualified PropertyData rental benchmarks/model estimates use explicitly approximate labels, native area basis and dated attribution. Absent admitted prices produce no pricing placeholder in dashboard/PDF; preserve frozen empty-rent assessment in Appendix and existing lease actions. Requested real-web fallback remains disabled pending spending authority and rental-source admission. Never fetch on reopening. See [D95](decisions.md).
+
 11 October 2026. Owner's Phase 13 brief and Emil skills addendum authorise development now, independently of unfinished Phase 12 PR #35. This supersedes the earlier conditional Phase 13 authority in D89/D91. No paid request, Production activation or historical report rewrite is authorised.
 
 ## Delivery and boundaries
