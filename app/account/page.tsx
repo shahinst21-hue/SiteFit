@@ -8,7 +8,7 @@ import { signOut } from "@/app/auth/actions";
 import { purchaseOrigin } from "@/lib/payments/config";
 import { accountHistory } from "@/lib/auth/account-history";
 import { headers } from "next/headers";
-import { verificationEnabled } from "@/lib/report-intelligence/http";
+import { dashboardEnabled } from "@/lib/report-dashboard/gate";
 import { findReadyDashboard } from "@/lib/report-dashboard/history";
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
     return data&&typeof data==='object'&&!Array.isArray(data)&&typeof data.access==='string'?data.access:null;
   })):[];
   const host=(await headers()).get('host')?.split(':')[0]??'';
-  const fullReports=verificationEnabled(process.env,host)&&!user.is_anonymous&&user.email_confirmed_at?await Promise.all(reports.map(report=>findReadyDashboard(user.id,report.id))):[];
+  const fullReports=dashboardEnabled(process.env,host)&&!user.is_anonymous&&user.email_confirmed_at?await Promise.all(reports.map(report=>findReadyDashboard(user.id,report.id))):[];
   return (
     <div className="page-wrap narrow-page">
       <div className="auth-brand">

@@ -1,7 +1,8 @@
 import 'server-only';
 import { headers } from 'next/headers';
 import { verifiedUser } from '../supabase/server.ts';
-import { verificationEnabled, intelligenceId } from '../report-intelligence/http.ts';
+import { intelligenceId } from '../report-intelligence/http.ts';
+import {dashboardEnabled} from './gate.ts';
 import { fullRepository } from '../report-intelligence/repository.ts';
 import { fullStatus } from '../report-intelligence/generate.ts';
 import { dashboardFromStored } from './model.ts';
@@ -12,7 +13,7 @@ import { packetDigest } from '../analysis/canonical.ts';
 /** All browser/exports use this same verified-session + database-paid-ownership boundary. No write methods. */
 export async function readDashboard(id:string) {
   const host=(await headers()).get('host')?.split(':')[0]??'';
-  if(!verificationEnabled(process.env,host)||!intelligenceId(id))return null;
+  if(!dashboardEnabled(process.env,host)||!intelligenceId(id))return null;
   const {user,client}=await verifiedUser();
   if(!user||!client||user.is_anonymous||!user.email_confirmed_at)return null;
   const session=await client.rpc('sitefit_session_available');

@@ -69,25 +69,27 @@ export async function renderReportPDF(report:Dashboard,key?:SectionKey){
     }if(row)line(row,size,colour);y-=7;
   };
   const keys=key?[key]:reportPages.map(p=>p.key);
-  const map=()=>{
+  const map=(operators=false)=>{
     const m=report.map;if(!m?.bounds||m.status!=='available')return;
     if(y<290)fresh();const [w,s,e,n]=m.bounds,bottom=y-210;
     const xy=(p:[number,number])=>[42+(p[0]-w)/(e-w)*508,bottom+(p[1]-s)/(n-s)*210];
     page.drawRectangle({x:42,y:bottom,width:508,height:210,color:rgb(.94,.96,.94)});
     for(const l of m.layers.filter(l=>l.kind==='catchment').toReversed())for(const part of l.polygonParts??l.polygons.map(p=>[p]))for(const ring of part){
-      for(let i=1;i<ring.length;i++){const a=xy(ring[i-1]),b=xy(ring[i]);page.drawLine({start:{x:a[0],y:a[1]},end:{x:b[0],y:b[1]},thickness:1,color:rgb(.35,.49,.65)});}
+      const c=/^#[\da-f]{6}$/i.test(l.colour)?rgb(parseInt(l.colour.slice(1,3),16)/255,parseInt(l.colour.slice(3,5),16)/255,parseInt(l.colour.slice(5,7),16)/255):muted;
+      for(let i=1;i<ring.length;i++){const a=xy(ring[i-1]),b=xy(ring[i]);page.drawLine({start:{x:a[0],y:a[1]},end:{x:b[0],y:b[1]},thickness:1,color:c});}
     }
     for(const l of m.layers.filter(l=>l.kind==='property'||l.id==='stations'))for(const p of l.points){const [x,py]=xy(p);page.drawCircle({x,y:py,size:l.kind==='property'?5:3,color:l.kind==='property'?rgb(.8,.2,.25):rgb(.15,.45,.7)});}
+    if(operators)for(const o of report.operators?.items??[]){if(!o.point)continue;const [x,py]=xy([o.point.longitude,o.point.latitude]);if(x>=42&&x<=550&&py>=bottom&&py<=bottom+210)page.drawCircle({x,y:py,size:2,color:rgb(.54,.33,.79)});}
     y=bottom-18;paragraph('Stored modelled contour boundaries. Red: property building point; blue: station register points. No street basemap or confirmed entrances.',8,muted);
+    paragraph(m.layers.filter(l=>l.kind==='catchment').map(l=>`${l.label} (${l.colour})`).join('; ')+(operators?'. Purple: FSA register coordinates, precision unknown; not verified current competitors.':''),8,muted);
     report.spatialNotices.forEach(t=>paragraph(t,8,muted));
   };
   for(const [i,k] of keys.entries()){
     if(i)fresh();paragraph('SITEFIT',20,green);paragraph(report.address,14);paragraph(`${report.businessLabel} · ${report.editionLabel} · Generated ${displayDate(report.generatedAt)}`,9,muted);
     paragraph(key?'Standalone section export · Full Report V1':'Full Report V1 · stored historical edition',9,muted);
-    if(k==='overview'||k==='access')map();
+    if(k==='overview'||k==='access'||k==='competition')map(k==='competition');
     for(const r of exportParagraphs(report,k)){if(r.heading&&y<110)fresh();paragraph(r.text,r.heading?13:10,r.heading?green:ink);}
   }
   const pages=pdf.getPages();pages.forEach((p,i)=>{p.drawLine({start:{x:42,y:46},end:{x:550,y:46},thickness:.5,color:rgb(.8,.85,.83)});p.drawText(`SiteFit · ${report.digest.slice(0,16)} · Page ${i+1} / ${pages.length}`,{x:42,y:29,size:8,font,color:muted});});
   if(pages.length>150)throw Error('pdf_bounds');return pdf.save();
 }
-

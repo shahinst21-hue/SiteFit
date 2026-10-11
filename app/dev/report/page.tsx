@@ -1,7 +1,7 @@
 import type {Metadata} from 'next';
 import {headers} from 'next/headers';
 import {notFound} from 'next/navigation';
-import {verificationEnabled} from '@/lib/report-intelligence/http';
+import {dashboardEnabled} from '@/lib/report-dashboard/gate';
 import {ReportDashboard} from '@/components/report-dashboard/dashboard';
 import {reportPages,type Dashboard} from '@/lib/report-dashboard/model';
 import type {SectionKey} from '@/lib/report-intelligence/catalog';
@@ -13,7 +13,7 @@ export const dynamic='force-dynamic';
 export const metadata:Metadata={title:'Dashboard development review',robots:{index:false,follow:false}};
 export default async function DevelopmentReport({searchParams}:{searchParams:Promise<{concept?:string;section?:string;data?:string}>}){
   const host=(await headers()).get('host')?.split(':')[0]??'';
-  if(process.env.NODE_ENV!=='development'&&!verificationEnabled(process.env,host))notFound();
+  if(process.env.NODE_ENV!=='development'&&!dashboardEnabled(process.env,host))notFound();
   const params=await searchParams;
   const selected=params.concept==='restaurant'?restaurant:params.concept==='salon'?salon:coffee;
   const report=structuredClone(selected) as unknown as Dashboard;
@@ -27,4 +27,3 @@ export default async function DevelopmentReport({searchParams}:{searchParams:Pro
   const initial=reportPages.some(p=>p.key===params.section)?params.section as SectionKey:'overview';
   return <><div className="page-wrap" style={{paddingTop:16,paddingBottom:0}}><p><b>Development review:</b> frozen real-source editorial drafts, not hosted Ready reports or purchased reports. Stress states are synthetic.</p><nav aria-label="Development report fixture"><a href="/dev/report?concept=coffee">Coffee shop</a> · <a href="/dev/report?concept=restaurant">Restaurant</a> · <a href="/dev/report?concept=salon">Salon</a> · <a href="/dev/report?data=worst">Worst case</a> · <a href="/dev/report?data=empty">Empty</a> · <a href="/dev/report-prototypes">Overview prototypes</a></nav></div><ReportDashboard report={report} initial={initial}/></>;
 }
-

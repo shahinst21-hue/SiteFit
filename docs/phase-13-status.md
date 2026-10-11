@@ -15,11 +15,11 @@ Dedicated branch `codex/phase-13-dashboard`, dependent on draft Phase 12 PR #35.
 
 ## Gates still open
 
-Required check/build/public smoke, rendered responsive/keyboard/map/chart/scenario/evidence QA, adversarial presentation QA, standalone PDF visual/extraction checks, HTTP ownership/privacy/immutable replay, exact-head CI/stacked PR/protected Preview, real hardware/200% and owner design acceptance. Record actual results before closing anything.
+Remaining: final exact-head CI/Preview after the last read-only gate correction, authenticated browser/PDF and deployed payload inspection, complete PDF page review, real hardware/200% and owner design acceptance. Phase 12 live-validation remains separately open.
 
 ## Verified local evidence
 
-- `npm run check`: lint, strict types, all 302 tests and production build passed. Added actual customer-readable eight-section exports for all three frozen concepts, source URL/rounding protections and standalone/full PDF construction and input-immutability tests.
+- `npm run check`: lint, strict types, all 303 tests (302 before the independent read-only gate test was added) and production build passed. Added actual customer-readable eight-section exports for all three frozen concepts, source URL/rounding protections and standalone/full PDF construction and input-immutability tests.
 - Production `check:public` on port 3013 passed: 13 public pages/articles, metadata, links, 404s and safe address boundaries.
 - Real browser: all eight views at 390px; no document overflow or malformed output. 360px worst/empty fixtures passed; restaurant scenarios inspected at 768px; Overview inspected/captured at 1440px. Search reduced named cards to Saray Cafe; TS066 selection retained its distinct universe; Appendix topic/search reduced evidence rows; Base UI Escape restored focus after its close transition. Remaining controls/widths are still being checked.
 - Whole fixture PDF: 43 A4 pages; text extraction confirms all eight sections and no object/undefined/NaN output; first page visually inspected with stored contour boundaries and attribution. This is a labelled frozen development draft, not proof of a new hosted Ready V1 edition.
@@ -37,3 +37,8 @@ No migrations, database writes, provider retrieval, AI inference, upgrade/subscr
 - Historical editions without modern summary/scenario/profile fields show their original content and explicit absence.
 - Arbitrary AI Q&A and report generation/recovery dispatch remain disabled by the no-spend and unresolved Phase 12 release gate; progress reads remain available.
 - Unsupported PDF font characters return an honest export-unavailable state; report remains readable and unchanged.
+
+- Follow-up browser controls passed: zoom changes and enables zoom-out; point/list inspection, pan/reset, keyboard Enter section navigation, local checklist, contextual stored answers and browser Back. Three isolated Overview variants switched correctly.
+- Hosted existing Ready legacy edition read/export/re-read passed without mutation; foreign owner RPC denied. Its missing modern summary stays absent, rather than being regenerated. This is not the unresolved Phase 12 new V1 proof.
+- Dashboard uses a separate `SITEFIT_DASHBOARD_VERIFICATION` flag (branch Preview only), which cannot enable Phase 12 intelligence dispatch or Production. No Stripe purchase activation is added for this branch.
+- Stacked draft PR [#36](https://github.com/shahinst21-hue/SiteFit/pull/36), base Phase 12 branch. First implementation head CI clean install/check/public smoke and Vercel checks passed; final head must pass independently.

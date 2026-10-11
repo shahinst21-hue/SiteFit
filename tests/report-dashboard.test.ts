@@ -4,8 +4,17 @@ import fs from 'node:fs';
 import {PDFDocument} from 'pdf-lib';
 import {renderReportPDF,exportParagraphs} from '../lib/report-dashboard/pdf.ts';
 import {sourceURL,readableNumber,reportPages,type Dashboard} from '../lib/report-dashboard/model.ts';
+import {dashboardEnabled} from '../lib/report-dashboard/gate.ts';
+import {verificationEnabled} from '../lib/report-intelligence/http.ts';
 
 const fixtures=['coffee-shop','restaurant','hair-salon'].map(name=>JSON.parse(fs.readFileSync(`tests/fixtures/dashboard/${name}.json`,'utf8')) as Dashboard);
+test('read-only Preview flag cannot enable paid intelligence dispatch or Production dashboard access',()=>{
+  const env={SITEFIT_DASHBOARD_VERIFICATION:'1',VERCEL_ENV:'preview'};
+  assert.equal(dashboardEnabled(env,'sitefit.vercel.app'),true);
+  assert.equal(verificationEnabled(env,'sitefit.vercel.app'),false);
+  assert.equal(dashboardEnabled({...env,VERCEL_ENV:'production'},'sitefit.app'),false);
+  assert.equal(dashboardEnabled({SITEFIT_DASHBOARD_VERIFICATION:'1'},'example.com'),false);
+});
 test('all eight customer-readable exports preserve frozen findings without object coercion or invented rental/capacity',()=>{
   for(const report of fixtures){
     const original=JSON.stringify(report);
