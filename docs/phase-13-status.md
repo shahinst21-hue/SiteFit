@@ -42,3 +42,14 @@ No migrations, database writes, provider retrieval, AI inference, upgrade/subscr
 - Hosted existing Ready legacy edition read/export/re-read passed without mutation; foreign owner RPC denied. Its missing modern summary stays absent, rather than being regenerated. This is not the unresolved Phase 12 new V1 proof.
 - Dashboard uses a separate `SITEFIT_DASHBOARD_VERIFICATION` flag (branch Preview only), which cannot enable Phase 12 intelligence dispatch or Production. No Stripe purchase activation is added for this branch.
 - Stacked draft PR [#36](https://github.com/shahinst21-hue/SiteFit/pull/36), base Phase 12 branch. First implementation head CI clean install/check/public smoke and Vercel checks passed; final head must pass independently.
+
+## Protected Preview verification — 11 October
+
+- Exact implementation head `8fa56b0` passed both required CI runs, including clean `npm ci`, lint, strict types, all tests, production build and public/snapshot smoke; Vercel checks passed.
+- Owner approved the exact Phase 13 development `/auth/callback`. It was added to Supabase development only; all existing entries were preserved. Google remains enabled; no wildcard or Production change.
+- Actual stable Preview Google sign-in returned to Account. The original claimed Snapshot and stored Full Report link appeared. Following that link opened the owned historical Ready edition, with all eight navigation entries and honest legacy-field absence.
+- Both customer UI download links completed: Overview PDF and full historical report PDF. No prepared download URL or new generation was substituted for these clicks.
+- Anonymous direct HTTP access to protected Preview redirects to Vercel login and exposes no report content. Protection remains enabled.
+- Whole draft PDF text extraction covered all 43 pages; representative first, operating-format and final Appendix pages were visually inspected. Scenario fields render as readable text, without object serialization defects.
+
+Still open: authenticated deployed payload/privacy inspection, real hardware/200% usability and owner visual acceptance. Documentation-only follow-up commits require their own CI. Phase 12 new V1 live-validation remains open; neither legacy replay nor draft fixtures close it. No customer-facing paid release or main merge is approved while prerequisites remain unresolved.
