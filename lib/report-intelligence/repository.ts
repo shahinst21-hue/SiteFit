@@ -13,10 +13,12 @@ import { validateFullProjection } from "./export.ts";
 import { storedProfiles, profileFocus } from "./profiles.ts";
 import { fullRequest } from "./provider.ts";
 import { groupInstructions, selectionSchema } from "./selection.ts";
+import { evaluateScenarioFit, type ScenarioFit } from "./scenario-fit.ts";
 
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
+  scenarioFit?: ScenarioFit;
   profiles?: ReturnType<typeof storedProfiles>;
   identityOmissions?: string[];
   presentation?: { freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
@@ -30,10 +32,18 @@ export function validateStoredEdition(value: unknown): StoredEdition {
     p.version !== "full-preparation-v1" || p.analysisId !== row.analysisId || p.inputId !== row.inputId || p.configuration !== "full-intelligence-v1") throw Error("invalid_full_edition");
   const checkpoint = validateCheckpoint(provenance.checkpoint as Checkpoint);
   if (checkpoint.bindingDigest !== packetDigest(p) || checkpoint.revision !== row.revision) throw Error("invalid_full_binding");
+  if (p.scenarioFit) {
+    const fit = p.scenarioFit as ScenarioFit;
+    const category = fit.businessType === "hair-salon" || fit.businessType === "beauty-salon" ? "hair-beauty-salon" : fit.businessType;
+    if (fit.version !== "scenario-fit-v1" || fit.registryVersion !== "operating-formats-v1" ||
+      fit.numericalScore !== null || fit.scenarios.length !== 3 || category !== (p.catalog as Catalog).business ||
+      fit.subtype === "barber" && fit.businessType !== "hair-salon") throw Error("invalid_scenario_binding");
+  }
   if (row.status === "ready") {
     const projection = validateFullProjection(row.projection);
     if (projection.bindingDigest !== checkpoint.bindingDigest || packetDigest(projection.index) !== packetDigest(object(p.catalog).index) ||
-      packetDigest(projection.readiness) !== packetDigest(object(p.catalog).readiness)) throw Error("invalid_full_replay");
+      packetDigest(projection.readiness) !== packetDigest(object(p.catalog).readiness) ||
+      p.scenarioFit && packetDigest(projection.scenarioFit) !== packetDigest(p.scenarioFit)) throw Error("invalid_full_replay");
   }
   return { id: String(row.id), analysisId: String(row.analysisId), inputId: String(row.inputId), revision: Number(row.revision),
     status: row.status as StoredEdition["status"], preparation: p as Preparation, checkpoint, projection: row.projection };
@@ -75,6 +85,8 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       packetDigest(assessment) !== material.assessmentDigest || !uuid(material.assessmentId) || !Array.isArray(material.evidence)) throw Error("full_source_binding_invalid");
     const evidence: Evidence[] = material.evidence.map(e => { validateEvidence(e); return e; });
     const catalog = buildCatalog(assessment, evidence, new Date(), material.discovery === null ? null : validateDiscovery(material.discovery));
+    const scenarioFit = evaluateScenarioFit({ businessType: context.businessType, facts: catalog.facts,
+      history: catalog.timeline, rental: catalog.rentalObservations });
     const profiles = storedProfiles(context, assessment, Array.isArray(material.profileSnapshots) ? material.profileSnapshots : []);
     profileFocus(catalog, profiles);
     const identityOmissions = [context.selectedProperty.formattedAddress, context.selectedProperty.postcode, context.selectedProperty.uprn,
@@ -90,6 +102,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
       assessmentDigest: String(material.assessmentDigest), catalog,
+      scenarioFit,
       profiles, identityOmissions,
       presentation: { freeReportId, analysisTimestamp: context.analysisTimestamp,
         property: { id: context.selectedProperty.id, label: context.selectedProperty.formattedAddress,

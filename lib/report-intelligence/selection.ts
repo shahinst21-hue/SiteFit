@@ -52,7 +52,10 @@ export function renderSelection(selection: Selection, catalog: Catalog) {
     const supportingFacts = catalog.facts.filter(f => factIds.includes(f.id));
     return { key: s.key, availability: s.lead === "unavailable" ? "unavailable" : "partial",
     direction: s.lead === "unavailable" ? "unavailable" : "conditional",
-    evidenceBasis: supportingFacts.map(f => ({ factId: f.id, strength: f.strength, period: f.effectiveAt, scope: f.scope })),
+    // Dates, scopes and qualifications are resolved from the same-edition
+    // source directory rather than duplicated across every section.
+    evidenceBasisSource: "sourceDirectory",
+    evidenceBasis: supportingFacts.map(f => ({ factId: f.id, strength: f.strength })),
     conclusion: s.lead === "unavailable" ? "Available evidence does not support a scoped conclusion for this topic." : atoms.get(s.lead)!.text,
     reasons: s.reasons.map(id => atoms.get(id)!), implications: s.implications.map(id => atoms.get(id)!),
     actions: s.actions.map(id => atoms.get(id)!),

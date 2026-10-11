@@ -1,5 +1,9 @@
 # Phase 12 implementation status
 
+## 11 October 2026 scenario-fit amendment
+
+Owner approved the [shared scenario-fit contract](scenario-fit-v1.md) under D87. The new deterministic format registry/evaluator is integrated into new Full Report preparation and the immutable Overview projection. It withholds capacity and a leading format on present real-source packets without reviewed exact-unit layout evidence. A confirmed blocker takes precedence in the rule contract, and no overall numerical score is produced. The Phase 11 context index and existing stored editions are unchanged. Synthetic rule tests and local regression are recorded separately from the still-open real-source, paid-entitlement, Preview lifecycle and protected-delivery gates below. Phase 12 is **not complete**.
+
 Authorised 10 October 2026 under D86 and the amended phase12_plan.md. In progress; **not complete**. Quality of specific analytical content across eight pages is primary. Aggregate live verification budget US$1; spent/reserved **US$0** at authorisation. No paid requests made yet.
 
 ## Checkpoint
@@ -45,4 +49,19 @@ A new branch-origin Test Session was created and bound correctly (open/unpaid, G
 
 
 Repaired head `a4abdaeda520d987c43907bc2871b0d2cc8dbc77` passed Local lint/types/all 281 tests/build/public HTTP and both protected CI jobs. Ready exact-head Preview: `sitefit-3stonq1lx-shahinst21-hues-projects.vercel.app`. Actual resumed customer action now navigates to Stripe; saved browser permission blocks tool access to checkout.stripe.com. No circumvention attempted; owner Test completion requested. Session remains unpaid until server-confirmed Stripe state. AI spending remains zero; real content/entitlement/background gates open.
+
+
+## 11 October real-source execution checkpoint
+
+Owner completed the actual Test Checkout. Preview return remained verifying because a signed Local delivery had not settled it. Actual matching Stripe completed event was retrieved and reconciled through the existing server-verifying reducer: succeeded/active. No synthetic payment or fabricated entitlement; operator reconciliation is not evidence of signed webhook delivery.
+
+First real coffee-shop Full intelligence edition: three accepted GPT 6.1 Sol outputs persisted. Receipts: context 3,067 input/327 output tokens, 6,357 ms, US$0.009404; premises 1,085/155, 4,717 ms, US$0.003720; synthesis 2,599/309, 6,528 ms, US$0.008288. Total estimated model cost **US$0.021412** (6,751 input/791 output tokens), within aggregate US$1; durable report reservation US$0.30 remains conservative. No further AI request occurred during repair/reopening.
+
+Original final projection exceeded the 128 KiB bound; all accepted outputs survived non-ready state. Reused them without dispatch to compact repeated source metadata and atom text losslessly, and resolve repeated scope/date metadata through fact references. Section exports reconstruct complete provenance/text. Application projection **122,445 bytes**, PostgreSQL JSONB text **129,191**, stored projection **45,892**. Database **375,330,483 bytes**, remaining 400 MB checkpoint margin **24,669,517**; compared with previous 375,019,187 checkpoint, observed growth **311,296 bytes** includes payment reconciliation, assessment, checkpoints, report and event writes, not isolated report overhead. Full edition ready; no original Free graph rewritten. New focused lossless export test, existing generation/selection tests and strict types pass; final complete check/CI for fixes pending.
+
+Internal first-case content review export: ignored `supabase/.temp/phase12-first-report-review.md`. Owner content review requested. Three-concept quality, live Q&A, actual deployed background/interruption/replay/privacy and final protected delivery remain open. Concurrent scenario-fit edits observed in the shared working tree; preserve them without overwriting or attributing their verification to this checkpoint.
+
+
+Owner first-case content review **rejected**: do not treat ready persistence or automated success as £29 analytical acceptance. Preserve that ready edition. The concurrently owner-approved `scenario-fit-v1` amendment is present locally in the Phase 12 preparation/synthesis/Overview/actions contracts; later actual QA must exercise a new immutable edition, not silently rewrite the first one. Live bounded grounded question answered with five admitted statements; report digest unchanged. Question receipt: 1,048 input/73 output tokens, 3,311 ms, US$0.002826. Aggregate actual estimated Phase 12 AI cost **US$0.024238**, conservative reservations US$0.34; no additional paid call authorised or required for persistence repair. Suggested answers resolve compact texts losslessly. Full regression currently passes all 286 tests and type/lint; production build passed as well. Required exact-head CI and actual amended content quality remain pending.
+
 

@@ -1,5 +1,7 @@
 # Phase 12: AI interpretation and report intelligence — approved implementation
 
+**Owner-approved 11 October 2026 amendment:** [Scenario-fit evaluator v1](scenario-fit-v1.md) adds a shared versioned operating-format decision to new Full Report preparations. The Executive Summary and all report views must use that decision and its evidence ledger. The Phase 11 index remains context-only; an overall numerical score remains inactive. The existing two analysis groups plus synthesis architecture and US$1 live verification ceiling remain. Existing assessments/ready reports are not rewritten. This amendment does not approve Phase 13 implementation.
+
 ## Authoritative owner amendments — 10 October 2026
 
 Owner approves implementation Steps 12.0–12.9 with three amendments. **Report quality outweighs test counts:** the nominal three calls must supply specific analytical content for all eight pages (Appendix remains deterministic). Reject generic statements that merely say population is suitable or further checks are needed; real QA must demonstrate evidence-specific comparisons, business implications, material trade-offs and decision-changing actions. Call count is a bounded baseline, not permission to publish inadequate content; if it cannot produce acceptable content, document the actual failure and seek a scoped resolution rather than silently widening spending or weakening admission.

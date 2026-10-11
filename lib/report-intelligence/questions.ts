@@ -4,6 +4,7 @@ import { packetDigest } from "../analysis/canonical.ts";
 import { fullProvider, fullRequest, type FullReceipt } from "./provider.ts";
 import { type StoredEdition } from "./repository.ts";
 import { type Atom, modelSafeText } from "./catalog.ts";
+import { sectionExport } from "./export.ts";
 
 export type ReportAnswer = { state: "answered" | "unavailable" | "out_of_scope"; statements: { id: string; text: string; factIds: string[] }[];
   qualifications: string[]; reportId: string; immutableReport: true };
@@ -13,7 +14,8 @@ const response = (e: StoredEdition, state: ReportAnswer["state"], atoms: Atom[])
 export function suggestedAnswer(edition: StoredEdition, intent: "main-risk" | "strongest-support" | "before-signing"): ReportAnswer {
   if (edition.status !== "ready") return response(edition, "unavailable", []);
   const projection = object(edition.projection), sections = Array.isArray(projection.sections) ? projection.sections.map(object) : [];
-  const target = sections.find(s => s.key === (intent === "before-signing" ? "actions" : "overview"));
+  const key = intent === "before-signing" ? "actions" : "overview";
+  const target = sections.some(s => s.key === key) ? sectionExport(edition.projection, key).section : undefined;
   const selected = intent === "main-risk" ? edition.preparation.catalog.atoms.filter(a => a.rule === "mandatory-premises-unknown-v1") :
     Array.isArray(target?.reasons) ? target.reasons as Atom[] : [];
   return response(edition, selected.length ? "answered" : "unavailable", selected.slice(0, 5));

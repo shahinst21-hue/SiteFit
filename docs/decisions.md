@@ -1,5 +1,9 @@
 # Decisions
 
+## D87 accepted shared scenario-fit decision amendment — 2026-10-11
+
+Owner approves implementing [scenario-fit-v1](scenario-fit-v1.md) as part of the authorised Phase 12 design. Physical feasibility, commercial context, format comparison and Executive Summary use one versioned decision. Confirmed blockers take precedence; missing evidence withholds capacity, a leading format or any future overall score as appropriate. Phase 11's Resident & Workplace Context Index is unchanged. No new overall score, historical rewrite, extra normal AI call, provider purchase, Production or Phase 13 implementation is authorised.
+
 ## D86 accepted Phase 12 implementation, quality and interruption/budget amendments — 2026-10-10
 
 Owner authorises Steps 12.0–12.9 under the amended [Phase 12 plan](phase12_plan.md). Specific useful analysis across eight pages is the acceptance priority, not test quantity or a three-call checkbox; Appendix is factual/deterministic. Preserve pinned inputs/stages/dispatch reservations/accepted results across browser/server interruption; ambiguous external calls must never be automatically repeated. Aggregate real Phase 12 AI verification budget is **US$1**, including failed/unknown requests and Q&A, replacing the $2 proposal. Obtain approval before any excess, continue independent work. No new provider/purchase, financial report embedding, Production or Phase 13 implementation authorised.

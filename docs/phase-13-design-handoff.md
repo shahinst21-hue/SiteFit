@@ -1,5 +1,7 @@
 # Phase 13: AI Native Interactive Report Dashboard & Multi Level PDF Export
 
+**11 October 2026 approved Phase 12 handoff amendment:** the future Overview and exports consume the immutable `scenario-fit-v1` decision and Executive Summary in [the shared contract](scenario-fit-v1.md). Show candidate formats, physical conditions, evidence-led trade-offs, conditional capacity or withholding reason, and the same leading decision in all views. The Resident & Workplace Context Index retains its limited label. This is a handoff requirement, not Phase 13 implementation authority.
+
 10 October 2026. **Proposed handoff, not implemented UI or launch acceptance.** All eight references have been inspected and owner-confirmed complete. Owner clarifies images are UI/component/design references only. The dashboard is the primary product; PDF is a shareable/archive export. Factual content and score semantics follow D82/D83, not screenshot examples. Phase 12 prepares contracts; Phase 13 requires separate implementation approval.
 
 ## 1. Complete reference register

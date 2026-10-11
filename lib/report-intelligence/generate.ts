@@ -5,6 +5,8 @@ import { reserveDispatch, settleDispatch, recoverCheckpoint, type Checkpoint, ty
 import { fullProvider, fullRequest, type ProviderOutcome } from "./provider.ts";
 import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
+import { compactSources, compactSectionAtoms } from "./export.ts";
+import { scenarioSummary } from "./scenario-fit.ts";
 
 const groupKeys: Record<Group, SectionKey[]> = { context: ["customer-context", "competition", "access"], premises: ["premises", "rental-context"], synthesis: ["overview", "actions"] };
 /** Synthesis can rank accepted evidence but cannot invent a stronger overall judgement. */
@@ -27,7 +29,7 @@ function synthesisCatalog(catalog: Catalog, selections: Selection[]): Catalog {
 }
 export type FullProjection = { version: "full-report-v1"; bindingDigest: string; generatedAt: string;
   business: Catalog["business"]; index: Catalog["index"]; readiness: Catalog["readiness"];
-  sections: unknown[]; sourceDirectory: Catalog["facts"]; financialEngineIncluded: false; contentDigest: string };
+  sections: unknown[]; sourceDirectory: ReturnType<typeof compactSources>["sourceDirectory"]; financialEngineIncluded: false; contentDigest: string };
 
 /** Database CAS is retried; external requests never are. */
 async function commit(repo: ReturnType<typeof fullRepository>, reportId: string, change: (c: Checkpoint) => Checkpoint) {
@@ -38,7 +40,6 @@ async function commit(repo: ReturnType<typeof fullRepository>, reportId: string,
   }
   throw Error("checkpoint_commit_unavailable");
 }
-
 export async function generateFullIntelligence(owner: string, reportId: string,
   options: { repository?: ReturnType<typeof fullRepository>; provider?: ReturnType<typeof fullProvider>; resume?: boolean } = {}) {
   const repo = options.repository ?? fullRepository(owner);
@@ -89,7 +90,11 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const selections = groups.map((d, i) => validateSelection(d!.output, edition.preparation.catalog, groupKeys[i === 0 ? "context" : "premises"]));
   const synthesis = synthesisCatalog(edition.preparation.catalog, selections);
   const packet = { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
-    readiness: synthesis.readiness, scope: "Resident & Workplace Context Index is not a commercial suitability score. No finance or legal clearance." };
+    readiness: synthesis.readiness,
+    scenarioDecision: edition.preparation.scenarioFit ? { version: edition.preparation.scenarioFit.version,
+      status: edition.preparation.scenarioFit.status, leadingFormatId: edition.preparation.scenarioFit.leadingFormatId,
+      priorityAction: edition.preparation.scenarioFit.priorityAction } : null,
+    scope: "Resident & Workplace Context Index is not a commercial suitability score. No finance or legal clearance." };
   let dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
   const repair = dispatch?.state === "invalid" && options.resume === true && !edition.checkpoint.repairUsed &&
     (dispatch.receipt as { validation?: string } | null)?.validation === "selection_rejected";
@@ -110,17 +115,26 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   if (dispatch?.state !== "accepted") return edition;
   const finalSelection = validateSelection(dispatch.output, synthesis, groupKeys.synthesis), catalog = edition.preparation.catalog;
   const rendered = [...renderSelection(selections[0], catalog), ...renderSelection(selections[1], catalog), ...renderSelection(finalSelection, synthesis)];
+  const summary = edition.preparation.scenarioFit ? scenarioSummary(edition.preparation.scenarioFit) : null;
   const sections = sectionKeys.map(key => key === "appendix" ? { key, availability: "assessed", evidenceIds: catalog.facts.map(f => f.evidenceId),
     methodology: "Stored scoped evidence; deterministic figures and reviewed implication rules; AI ranks admitted atoms. Missing records do not imply absence.",
     limitations: catalog.unknowns, sourceIds: catalog.facts.map(f => f.id) } : { ...rendered.find(s => s.key === key)!,
+      ...(key === "overview" && summary ? { conclusion: summary.consultantVerdict[0], executiveSummary: summary,
+        scenarioFit: edition.preparation.scenarioFit,
+        factIds: [...new Set([...(rendered.find(s => s.key === "overview")?.factIds ?? []),
+          ...summary.strengths.flatMap(s => s.factIds), ...summary.weaknesses.flatMap(s => s.factIds)])],
+        evidenceIds: [...new Set([...(rendered.find(s => s.key === "overview")?.evidenceIds ?? []),
+          ...catalog.facts.filter(f => [...summary.strengths, ...summary.weaknesses].some(s => s.factIds.includes(f.id))).map(f => f.evidenceId)])] } : {}),
+      ...(key === "actions" && summary ? { conclusion: summary.priorityNextAction } : {}),
       ...(key === "customer-context" ? { profiles: edition.preparation.profiles ?? null } : {}),
       ...(key === "premises" ? { timeline: catalog.timeline } : {}), ...(key === "rental-context" ? { rentalObservations: catalog.rentalObservations } : {}) });
   const content = { version: "full-report-v1" as const, bindingDigest: edition.checkpoint.bindingDigest, generatedAt: new Date().toISOString(),
-    business: catalog.business, index: catalog.index, readiness: catalog.readiness, premises: catalog.premises, stance: catalog.stance, sections,
+    business: catalog.business, index: catalog.index, readiness: catalog.readiness, premises: catalog.premises, stance: catalog.stance, ...compactSectionAtoms(sections),
+    ...(edition.preparation.scenarioFit ? { scenarioFit: edition.preparation.scenarioFit } : {}),
     presentation: edition.preparation.presentation ?? null,
     chartOperands: catalog.facts.filter(f => typeof f.value === "number").map(f => ({ factId: f.id, value: f.value,
-      unit: f.units, period: f.effectiveAt, scope: f.scope, comparator: null, available: true })),
-    sourceDirectory: catalog.facts, supplementReferences: catalog.supplementReferences, financialEngineIncluded: false as const };
+      unit: f.units, period: f.effectiveAt, scopeFactId: f.id, comparator: null, available: true })),
+    ...compactSources(catalog.facts), supplementReferences: catalog.supplementReferences, financialEngineIncluded: false as const };
   const projection: FullProjection = { ...content, contentDigest: packetDigest(content) };
   if (Buffer.byteLength(JSON.stringify(projection)) > 131072) throw Error("full_report_bounds");
   if (edition.checkpoint.state !== "validating") edition = await commit(repo, reportId, c => ({ ...c, revision: c.revision + 1, state: "validating" }));
