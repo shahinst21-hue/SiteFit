@@ -7,7 +7,7 @@ import { consultantNumber } from "../lib/report-intelligence/display.ts";
 import { evaluateScenarioFit } from "../lib/report-intelligence/scenario-fit.ts";
 import { operatingComparison } from "../lib/report-intelligence/operating-comparison.ts";
 import { competitionBrief } from "../lib/report-intelligence/competition.ts";
-import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode } from "../lib/report-intelligence/narrative.ts";
+import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode, type Commentary } from "../lib/report-intelligence/narrative.ts";
 import { sectionKeys, type Fact } from "../lib/report-intelligence/catalog.ts";
 import { expandedProfiles } from "../lib/report-intelligence/profiles.ts";
 
@@ -16,7 +16,7 @@ function fixture() {
   c.facts.push({ id: "population", section: "customer-context", dataset: "TS007A all residents", value: 14766.980617,
     units: "usual residents", effectiveAt: "2021-03-21", retrievedAt: date, statistical: null } as Fact);
   const fit = evaluateScenarioFit({ businessType: "restaurant", facts: c.facts });
-  const claim = { text: "The {{f:population}} resident context supports testing neighbourhood meals, rather than an observed sales claim.",
+  const claim: Commentary = { text: "The {{f:population}} resident context supports testing neighbourhood meals, rather than an observed sales claim.",
     kind: "hypothesis" as const, factIds: ["population"], operatorIds: [], referenceIds: [] };
   const n = { version: "consultant-narrative-v1", verdict: [claim, claim, claim], strengths: [claim], risks: [claim], priorityAction: claim,
     actions: Array.from({ length: 4 }, () => ({ action: claim, consequence: claim })),
@@ -27,6 +27,59 @@ test("rejection diagnostics retain only allowlisted validator codes, never priva
   assert.equal(narrativeFailureCode(new Error("unbound_narrative_value")), "unbound_narrative_value");
   assert.equal(narrativeFailureCode(new Error("Private provider body or credential")), "narrative_validation_failed");
   assert.equal(narrativeFailureCode({ message: "invalid_narrative" }), "narrative_validation_failed");
+});
+test("explicit format withholding renders without permitting a positive recommendation", () => {
+  const { c, fit, claim, n } = fixture();
+  for (const text of ["We cannot recommend a takeaway format without verified layout evidence.",
+    "Do not choose the dine-in model before the physical requirements are verified."]) {
+    const candidate = structuredClone(n); candidate.priorityAction = { ...claim, text };
+    assert.equal(renderCommentary(validateNarrative(candidate, c, fit).priorityAction, c).text, text);
+  }
+  for (const text of ["We recommend a takeaway format for this property.",
+    "We cannot recommend a takeaway format, but we recommend a hybrid model.",
+    "We should not choose the dine-in model, but a takeaway format is best."]) {
+    const candidate = structuredClone(n); candidate.priorityAction = { ...claim, text };
+    assert.throws(() => validateNarrative(candidate, c, fit), /unsupported_narrative_claim/);
+  }
+});
+test("all eight sections retain exact order, cardinality, claim length and whole-response bounds", () => {
+  const { c, fit, claim, n } = fixture();
+  assert.equal(narrativeSchema.$defs.claim.properties.text.minLength, 12);
+  const reordered = structuredClone(n); reordered.sections.reverse();
+  assert.throws(() => validateNarrative(reordered, c, fit), /invalid_narrative/);
+  const duplicate = structuredClone(n); duplicate.sections[1].key = duplicate.sections[0].key;
+  assert.throws(() => validateNarrative(duplicate, c, fit), /invalid_narrative/);
+  const missing = structuredClone(n); missing.sections.pop();
+  assert.throws(() => validateNarrative(missing, c, fit), /invalid_narrative/);
+  const short = structuredClone(n); short.priorityAction = { ...claim, text: "Unknown" };
+  assert.throws(() => validateNarrative(short, c, fit), /invalid_narrative_claim/);
+  const long = structuredClone(n); long.priorityAction = { ...claim, text: "a".repeat(801) };
+  assert.throws(() => validateNarrative(long, c, fit), /invalid_narrative_claim/);
+  const oversized = JSON.parse(JSON.stringify(n).replaceAll(claim.text, "Context remains an unmeasured trading hypothesis. ".repeat(15)));
+  assert.ok(Buffer.byteLength(JSON.stringify(oversized)) > 24_000);
+  assert.throws(() => validateNarrative(oversized, c, fit), /invalid_narrative/);
+  assert.match(narrativeInstructions, /packet.sections order/);
+  assert.match(narrativeInstructions, /twenty-four thousand UTF-8 bytes/);
+});
+test("named operators require both admitted identity and source-fact lineage, including unknown claims", () => {
+  const { c, fit, claim, n } = fixture();
+  c.operators = { version: "register-shortlist-v2", selection: "bounded", returnedRecords: 1, omittedFromShortlist: 0,
+    complete: false, sources: [{ sourceFactId: "population", snapshotId: "synthetic", checksum: "synthetic" }],
+    items: [{ recordId: "one", name: "Synthetic Cafe", businessType: "Restaurant/Cafe/Canteen", authorityId: "a", point: null,
+      observedAt: null, sourceIndex: 0, reference: "https://ratings.food.gov.uk/business/1" }] };
+  const candidate = structuredClone(n);
+  candidate.priorityAction = { ...claim, text: "The offer of {{o:one}} remains unknown; verify it before relying on differentiation.",
+    kind: "unknown", operatorIds: ["one"] };
+  assert.match(renderCommentary(validateNarrative(candidate, c, fit).priorityAction, c).text, /Synthetic Cafe/);
+  candidate.priorityAction.factIds = [];
+  assert.throws(() => validateNarrative(candidate, c, fit), /narrative_operator_lineage_missing/);
+  candidate.priorityAction.operatorIds = ["foreign"];
+  assert.throws(() => validateNarrative(candidate, c, fit), /invalid_narrative_claim/);
+  const duplicate = structuredClone(n); duplicate.priorityAction.factIds = ["population", "population"];
+  assert.throws(() => validateNarrative(duplicate, c, fit), /invalid_narrative_claim/);
+  const unbound = structuredClone(n); unbound.priorityAction.text = "The rent is {{r:not-admitted}} and cannot support a lease decision.";
+  assert.throws(() => validateNarrative(unbound, c, fit), /unbound_narrative_value/);
+  assert.match(narrativeInstructions, /operator factIds/);
 });
 test("consultant prose binds rounded values without changing operands or admitting unsupported numbers/format", () => {
   const { c, fit, claim, n } = fixture(); const accepted = validateNarrative(n, c, fit);

@@ -138,3 +138,8 @@ Protected Preview security probes still return anonymous 401 and cross-origin 40
 
 Final no-spend hardening validation: npm run check passed lint, strict types, 296 tests and production build. Fresh database rebuild/security passed for the new forward budget migration. Built-app check:public passed at port 3013. Exact-head CI for the diagnostic/status checkpoint is pending; the earlier allowance head 6405c1e passed both required CI jobs.
 
+
+## Local synthesis/validator contract audit — no spend
+
+Owner requested local reproduction and small definite fixes only. [Audit](phase-12-synthesis-contract-audit.md) reproduces a false rejection of explicit format withholding, aligns the schema's minimum text length and states the unchanged order/size/ID/lineage requirements in the prompt. Positive ungated recommendations, invented/unbound values and foreign evidence remain rejected. All 299 tests/build passed; the actual generation/eight-section export/replay fixture now covers readable withholding. No AI/provider request, hosted write, retry, budget change or historical rewrite occurred. The rejected live response is still unavailable: these demonstrated defects cannot be claimed as its exact root cause. Phase 12 remains open on successful new V1 technical completion; PR stays draft and Phase 13 unstarted.
+

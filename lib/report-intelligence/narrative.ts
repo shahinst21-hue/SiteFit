@@ -18,7 +18,7 @@ export function narrativeFailureCode(error: unknown): string {
   return error instanceof Error && allowed.includes(error.message) ? error.message : "narrative_validation_failed";
 }
 const claim = { type: "object", additionalProperties: false, required: ["text", "kind", "factIds", "operatorIds", "referenceIds"], properties: {
-  text: { type: "string", maxLength: 800 }, kind: { type: "string", enum: ["interpretation", "hypothesis", "unknown"] },
+  text: { type: "string", minLength: 12, maxLength: 800 }, kind: { type: "string", enum: ["interpretation", "hypothesis", "unknown"] },
   factIds: { type: "array", maxItems: 8, items: { type: "string" } }, operatorIds: { type: "array", maxItems: 6, items: { type: "string" } },
   referenceIds: { type: "array", maxItems: 4, items: { type: "string" } } } };
 const claims = (minItems: number, maxItems: number) => ({ type: "array", minItems, maxItems, items: { $ref: "#/$defs/claim" } });
@@ -38,7 +38,8 @@ Competition must answer count, proposition/level, brand and ratings individually
 All claims are interpretation, hypothesis or unknown, never newly measured facts. Link factual premises to factIds, named operators to operatorIds, rent/history to referenceIds. Numerical statements use {{f:ID}} or {{r:RENT_ID}} exclusively; named operators use {{o:ID}}. Do not write raw digits, source URLs, coordinates, exact premises identity or personal details. Rendering inserts rounded values. Do not use spelled-out amounts to bypass this.
 Operating comparison and scenarioDecision are binding: no seating/capacity, leading takeaway/dine-in recommendation, legal clearance, profit forecast, success probability or overall score beyond admitted gates. Missing compatible layout means explain which evidence prevents choosing between formats, not pick one anyway.
 Rental: use admitted actual, benchmark and estimated context distinctly; if empty explain the lease decision gap and request actual terms, not substitute rejected figures. Financial Engine is separate and excluded.
-Keep material qualifications next to affected conclusions; consolidate detailed methodology in Appendix. Use clear commercially useful language, specific trade-offs, and falsifiable implications. Do not repeat technical caveats everywhere. Return the strict schema.`;
+Keep material qualifications next to affected conclusions; consolidate detailed methodology in Appendix. Use clear commercially useful language, specific trade-offs, and falsifiable implications. Do not repeat technical caveats everywhere.
+Contract: return each section exactly once, in packet.sections order. Every text is twelve to eight hundred characters; keep the entire compact JSON under twenty-four thousand UTF-8 bytes. Reference arrays contain distinct admitted IDs only. Every operatorIds entry must also include its supplied operator factIds in the claim's factIds, even for unknown claims. Non-unknown claims require at least one admitted reference. Use only rental/history IDs supplied in the packet for referenceIds; do not invent IDs. Return the strict schema.`;
 
 export function narrativePacket(catalog: Catalog, fit: ScenarioFit, omissions: readonly string[] = []) {
   const scopes = [...new Set(catalog.facts.map(f => f.scope))], datasets = [...new Set(catalog.facts.map(f => f.dataset))];
@@ -81,10 +82,13 @@ export function validateNarrative(value: unknown, catalog: Catalog, fit: Scenari
         rents.has(id) && (c.referenceIds as string[]).includes(id))) throw Error("unbound_narrative_value");
       return "[bound evidence]";
     });
+    // A narrowly explicit withholding statement is not a recommendation. Remove
+    // only its exact clause for the format check; any positive clause still fails.
+    const formatText = text.replace(/\b(?:cannot|can't|do not|must not|should not) (?:recommend|choose) (?:a |the )?(?:takeaway|dine.in|sit.in|hybrid) (?:format|model)\b/gi, "[withheld format]");
     if (/\d|\{\{|\[object (?:Object|Array)\]|https?:|Bearer|sb_secret_|sk-(?:proj-)?|@/i.test(text) ||
       Array.from(text).some(ch => ch.charCodeAt(0) < 32 && !"\n\r\t".includes(ch)) ||
       /(?:guaranteed success|overall (?:score|suitability)|(?:demonstrates|proves|establishes) (?:measured customer demand|observed footfall))/i.test(text) ||
-      fit.leadingFormatId === null && /(?:recommend|best|leading|choose).{0,25}(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:format|model)|(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:is best|recommended|is the leading)/i.test(text)) throw Error("unsupported_narrative_claim");
+      fit.leadingFormatId === null && /(?:recommend|best|leading|choose).{0,25}(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:format|model)|(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:is best|recommended|is the leading)/i.test(formatText)) throw Error("unsupported_narrative_claim");
     if (c.kind !== "unknown" && !c.factIds.length && !c.operatorIds.length && !c.referenceIds.length) throw Error("narrative_evidence_missing");
     for (const id of c.operatorIds as string[]) if (!c.factIds.includes(catalog.operators!.sources[operators.get(id)!.sourceIndex].sourceFactId)) throw Error("narrative_operator_lineage_missing");
     return c as Commentary;

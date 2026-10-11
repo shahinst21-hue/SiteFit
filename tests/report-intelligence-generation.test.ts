@@ -79,6 +79,8 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
   const narrative={version:"consultant-narrative-v1",verdict:[claim,claim,claim],strengths:[claim],risks:[claim],priorityAction:claim,
     actions:Array.from({length:4},()=>({action:claim,consequence:claim})),
     sections:sectionKeys.map(key=>({key,conclusion:claim,analysis:[claim],decisionTest:claim}))};
+  narrative.priorityAction = { ...claim,
+    text: "We cannot recommend a takeaway format without verified layout evidence." };
   let calls=0;
   const provider={async interpret(d:{group:string},packet:ReturnType<typeof catalogPacket>){
     calls++;
@@ -95,6 +97,7 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
     assert.match(String(exportValue.section.conclusion),/about 15,000/);}
   const overview=sectionExport(ready.projection,"overview");
   assert.equal((overview.section.executiveSummary as {consultantVerdict:string[]}).consultantVerdict.length,3);
+  assert.match(JSON.stringify(overview.section.executiveSummary), /cannot recommend a takeaway format/);
   assert.equal((sectionExport(ready.projection,"actions").section.rankedActions as unknown[]).length,4);
   const table = sectionExport(ready.projection, "premises").section.operatingFormatTable;
   assert.equal(typeof table, "string");
