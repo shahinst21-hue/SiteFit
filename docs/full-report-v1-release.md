@@ -23,7 +23,7 @@ Only mandatory technical gates: final contract/rendering regression, hosted chan
 
 ## Phase 13 handoff
 
-After formal Phase 12 completion, build the approved eight-page responsive dashboard from these immutable contracts and [the reference handoff](phase-13-design-handoff.md). Result first, accessible evidence inspection, honest missing states, qualified rental information, real maps/charts, actual progress/recovery and owned exports. No financial form/calculations in Full Report, no new provider or unapproved payments. Preserve the references' visual composition while replacing unsupported example content with actual findings.
+Under D91, Phase 13 requires separate owner approval. The frozen contracts and [reference handoff](phase-13-design-handoff.md) are suitable for approved dashboard development with local fixtures and existing stored editions; this is development readiness, not live-report or release acceptance. Result first, accessible evidence inspection, honest missing states, qualified rental information, real maps/charts, actual progress/recovery and owned exports. No financial form/calculations in Full Report, no new provider or unapproved payments. Preserve the references' visual composition while replacing unsupported example content with actual findings. Keep the Phase 12 new V1 live ready/replay gate explicit and customer-facing paid release disabled until it passes.
 
 
 Final technical proof under D90 returned a rejected synthesis. Content acceptance remains intact, but technical release is BLOCKED; no ready new V1, merge or Phase 13 start is claimed. See the actual receipts and limitations in [Phase 12 status](phase-12-status.md).

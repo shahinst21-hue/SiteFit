@@ -309,3 +309,7 @@ Preserve three-line Consultant Verdict, prioritised strengths and weaknesses/ris
 
 Owner approves a total US$1.24 conservative development ceiling for one final technical Full Report proof on the existing frozen case, at most three bounded GPT 6.1 Sol requests, no retry, web search or provider retrieval. Previous US$0.94 reservations remain intact, including unknown usage. The new US$0.30 reservation exhausts this allowance. This does not authorise editorial rewrites, subscriptions, Production or further paid requests.
 
+## D91 — Bounded synthesis correction accepted; Phase 13 approval separate (11 October 2026)
+
+Owner accepts the local synthesis contract corrections without reopening editorial reviews or redesigning the reporting engine. Complete exact-head CI and remaining no-spend checks. The previous live rejection remains retrospectively undiagnosed; the reproduced regex defect is not its confirmed cause. Preserve all evidence/security/validation guards and US$1.24 reservations, including unknown charges. Any further paid proof requires explicit approval of the exact increase before dispatch; no automatic retry or reservation release. The frozen V1 contracts may be assessed for dashboard development readiness, but Phase 13 requires separate owner approval, superseding D89's conditional start instruction. Customer-facing paid release remains disabled while the mandatory live-validation gate is unresolved.
+
