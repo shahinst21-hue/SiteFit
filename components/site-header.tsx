@@ -14,6 +14,7 @@ export function SiteHeader() {
   const menu = useRef<HTMLButtonElement>(null),
     resourceToggle = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
+  if(pathname.startsWith('/reports/')||pathname.startsWith('/dev/report'))return null;
   function close() {
     setOpen(false);
     setResources(false);

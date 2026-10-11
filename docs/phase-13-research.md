@@ -39,3 +39,11 @@ Emil repository [fixed revision](https://github.com/emilkowalski/skills/tree/646
 | [PDF-LIB](https://pdf-lib.js.org/) / [DejaVu licence](https://dejavu-fonts.github.io/License.html) | Local immutable standalone exports; redistributable font with licence | Render/extract PDF; no remote resources or document mutation |
 
 Skill instructions requiring another minor prototype-selection stop are superseded by the owner's explicit instruction to decide and implement independently. None grants spending, evidence, security or phase authority.
+
+## Applied redesign follow-up — 11 October
+
+[Linear's 12 March 2026 UI refresh](https://linear.app/changelog/2026-03-12-ui-refresh) and [design rationale](https://linear.app/now/behind-the-latest-design-refresh) informed receding navigation, compact persistent context and a focused working surface. Current [Notion dashboard patterns](https://www.notion.com/en-gb/help/dashboards) informed direct data exploration; SiteFit keeps the operands immutable. These replace the earlier text-card canvas in the actual implementation.
+
+Emil **emil-design-eng**, **prototype** and **mobile-native** skills were actively read and applied to two distinct Overview prototypes, then a shared eight-view implementation: result/action hierarchy, bounded type and spacing, press/focus feedback, static charts, accessible inspection panels, 44px map controls, 16px inputs, safe-area/dynamic viewport and reduced-motion support. Owner delegated selection; Decision Workspace selected over Spatial Brief, and the temporary prototype surface removed. No additional conceptual approval requested.
+
+The public [OSM tile usage policy](https://operations.osmfoundation.org/policies/tiles/) was reviewed before replacing the schematic background with normal browser-loaded street context. Scope, attribution, privacy, caching, fallback and pre-launch service limitations are recorded in phase-13-status.md. No new analytical provider or paid service was added.

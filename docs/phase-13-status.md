@@ -31,7 +31,7 @@ No migrations, database writes, provider retrieval, AI inference, upgrade/subscr
 
 ## Known limitations / honest UI states
 
-- No verified property photo or licensed street basemap is stored; show no fake photo/streets.
+- No verified property photo is stored. The redesigned view uses a labelled, current OSM public street background; historical contours and source observations remain frozen. The background is presentation only, not new property evidence.
 - Existing source coverage does not establish unique direct competitors, customer ratings/brand strength, actual frontage footfall or full occupation history.
 - Frozen case rental section has no admitted figure; no new provider query is used to fill it.
 - Historical editions without modern summary/scenario/profile fields show their original content and explicit absence.
@@ -53,3 +53,29 @@ No migrations, database writes, provider retrieval, AI inference, upgrade/subscr
 - Whole draft PDF text extraction covered all 43 pages; representative first, operating-format and final Appendix pages were visually inspected. Scenario fields render as readable text, without object serialization defects.
 
 Still open: authenticated deployed payload/privacy inspection, real hardware/200% usability and owner visual acceptance. Documentation-only follow-up commits require their own CI. Phase 12 new V1 live-validation remains open; neither legacy replay nor draft fixtures close it. No customer-facing paid release or main merge is approved while prerequisites remain unresolved.
+
+## Owner-authorised decision workspace redesign — 11 October
+
+Supersedes the initial presentation composition, not the frozen V1 report engine. No additional planning/approval cycle, content rewrite, provider retrieval or paid AI call.
+
+- Two isolated Overview prototypes were rendered and inspected: **Decision Workspace** (persistent forest-green navigation, compact identity, verdict/action and connected findings) and **Spatial Brief** (map-centred reading). Decision Workspace selected for immediate decision/action clarity; the prototype route and picker were removed after promotion. Screenshots retained in ignored QA artifacts.
+- All eight tabs now use the shared workspace: quiet property context; restrained typography and result colours; exact stored opening summaries; full original Consultant Verdict and qualifications in an accessible explanation panel. Technical source identifiers and external evidence links are centralised in Appendix. Mandatory map attribution remains on the map.
+- Customer context has qualified native operands and original-cell profile charts, with resident and economic-activity universes kept distinct. The limited index is a secondary context detail, never an overall score in Overview. Competition connects named register leads to their map points; ratings, chain affiliation/current activity remain unverified. Access compares stored station approaches, not observed shopfront footfall. Premises compares frozen format requirements/trading hypotheses and withholds capacity/leading formats as before. Rent distinguishes the stored benchmark/estimate or displays honest missingness. Actions preserve ranks and decision consequences.
+- Risk → topic → existing action navigation uses shared admitted operands or a single unambiguous stored-topic match for an explicit missingness requirement. It never creates an action or an analytical claim. Browser Back, focus restoration, source filters, layers, marker selection/reset and page-memory checklist remain functional.
+- Snapshot changes are limited to number presentation and closing sources/methodology inside its existing explanation disclosure. Purchase/authentication/navigation and Snapshot product scope are unchanged.
+- Browser QA: eight mobile views at 390px, worst/empty at 360px, desktop 1440px and 720px reflow inspected. Fixed map intrinsic-width overflow and server/browser trig serialization hydration mismatch with 0.001 display-pixel rounding; WGS84 operands are untouched. Lease risk navigates to Rent & lease and highlights existing action 4. Escape restores the verdict trigger. No malformed object output observed. Real browser 200% and physical hardware remain unverified; width testing is not represented as actual zoom.
+
+### Street background policy
+
+Reviewed [OSM tile policy](https://operations.osmfoundation.org/policies/tiles/) and [attribution/licence](https://www.openstreetmap.org/copyright). Human interactive browser viewport requests only, HTTPS standard tiles, browser caching/default User-Agent, explicit origin-only referrer and visible contributor attribution. No server proxy, API key, bulk download, prefetch, offline map or tile persistence. Public commercial location context only: report pathname/ID, account identity and authentication tokens are not sent in the referrer. OSM sees normal browser IP and viewport tile coordinates. Loaded viewport tiles and historical vectors share Web Mercator display coordinates. Zoom/pan transform the loaded view; they do not perform route retrieval. On tile failure the historical geometry and accessible named records remain usable with an explicit background-unavailable label.
+
+The current basemap is not a historical data snapshot or frozen PDF asset. The community service is best effort, with no SLA; a sustainable launch tile arrangement is a pre-launch dependency if required by actual usage/policy. No account, subscription, infrastructure or paid map service has been activated.
+
+### Release state
+
+The redesign is Preview-only. Exact-head checks and deployment evidence follow below when verified. Phase 12 new V1 live-validation, authenticated payload inspection, actual 200%/hardware and owner design acceptance remain open; none is waived by the redesign. No paid customer release or merge to main.
+
+
+### Redesign local release checks
+
+`npm run check` passed lint, strict types, **306/306 tests** and production build. Production-server `check:public` passed all 13 public pages/articles and safe route boundaries. A fresh production-browser tab showed no console error/warning and eight loaded OSM viewport tiles after the display-pixel hydration fix. A private-value scan of 45 implementation/fixture/client/HTTP artifacts found zero matches; unauthenticated report content stayed withheld and PDF returned 404, with no-store/noindex. This is not an authenticated network-body inspection. Protected exact-head CI and new deployed browser evidence remain separate below.
