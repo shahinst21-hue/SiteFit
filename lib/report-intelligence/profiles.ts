@@ -35,15 +35,45 @@ export function storedProfiles(context: CollectionContext, assessment: Assessmen
       values: t.series.map(s => [s.state, s.value, s.knownContribution, s.missingAreaM2, s.shareOfSameTableTotal, s.ratioMissingReason]) };
   })));
   const columnSets = Object.fromEntries(tables.filter(t => t.columns.length).map(t => [t.dataset, t.columns]));
-  const compactTables = tables.map(t => { const table = { ...t }; delete (table as Partial<typeof t>).columns; return table; });
+  const allocationReleases: unknown[] = [], releasePositions = new Map<string, number>(),
+    allocationLimitations: string[][] = [], limitationPositions = new Map<string, number>();
+  const compactTables = tables.map(t => {
+    const table = { ...t }; delete (table as Partial<typeof t>).columns;
+    delete (table as Partial<typeof t>).valueFields;
+    if (!("allocation" in table) || !table.allocation) return table;
+    const { releases, limitations, ...allocation } = table.allocation, digest = packetDigest(releases);
+    let releaseIndex = releasePositions.get(digest);
+    if (releaseIndex === undefined) { releaseIndex = allocationReleases.length; releasePositions.set(digest, releaseIndex); allocationReleases.push(releases); }
+    const limitationsDigest = packetDigest(limitations);
+    let limitationsIndex = limitationPositions.get(limitationsDigest);
+    if (limitationsIndex === undefined) { limitationsIndex = allocationLimitations.length; limitationPositions.set(limitationsDigest, limitationsIndex); allocationLimitations.push(limitations); }
+    return { ...table, allocation: { ...allocation, releaseIndex, limitationsIndex } };
+  });
   const sources = snapshots.map(s => ({ snapshotId: s.id, checksum: s.result.meta.checksum,
     releaseId: s.result.meta.datasetReleaseId, retrievedAt: s.result.meta.sourceRetrievedAt,
     freshness: s.result.meta.freshness, licence: s.result.meta.licence, limitations: s.result.meta.quality.limitations }));
-  return { version: "stored-profiles-v1", state: tables.length ? "available" : "unavailable",
-    reason: tables.length ? null : "stored_profile_unavailable", tables: compactTables, columnSets, sources,
+  return { version: "stored-profiles-v2", state: tables.length ? "available" : "unavailable",
+    reason: tables.length ? null : "stored_profile_unavailable", tables: compactTables, columnSets, allocationReleases, allocationLimitations, sources,
+    valueFields: ["state", "value", "knownContribution", "missingAreaM2", "share", "ratioMissingReason"],
     limitations: ["Dated Census context, not actual customers or current demand.",
       "Area-uniform allocation; never sum hierarchical categories or cumulative walking contours.",
       "No invented local comparator or customer conversion assumption."] };
+}
+
+/** Section consumers receive full method metadata. Historical v1 is unchanged. */
+export function expandedProfiles(value: unknown) {
+  const p = object(value);
+  if (p.version !== "stored-profiles-v2") return p;
+  if (!Array.isArray(p.tables) || !Array.isArray(p.allocationReleases) || !Array.isArray(p.allocationLimitations) ||
+    !Array.isArray(p.valueFields) || !p.valueFields.length || p.valueFields.some(v => typeof v !== "string")) throw Error("invalid_profile_metadata");
+  return { ...p, tables: p.tables.map(value => {
+    const table = object(value); if (!table.allocation) return table;
+    const { releaseIndex, limitationsIndex, ...allocation } = object(table.allocation);
+    if (!Number.isInteger(releaseIndex) || Number(releaseIndex) < 0 || Number(releaseIndex) >= (p.allocationReleases as unknown[]).length ||
+      !Number.isInteger(limitationsIndex) || Number(limitationsIndex) < 0 || Number(limitationsIndex) >= (p.allocationLimitations as unknown[]).length) throw Error("invalid_profile_metadata");
+    return { ...table, valueFields: p.valueFields, allocation: { ...allocation, releases: (p.allocationReleases as unknown[])[Number(releaseIndex)],
+      limitations: (p.allocationLimitations as unknown[])[Number(limitationsIndex)] } };
+  }) };
 }
 
 /** One supported descriptive focus, never an invented target market or a new
@@ -60,6 +90,7 @@ export function profileFocus(catalog: Catalog, profiles: ReturnType<typeof store
   const column = profiles.columnSets?.TS007A?.find(c => c.ordinal === focus.ordinal);
   if (!column) return;
   const fact = { ...base, id: `profile-${packetDigest({ source: table.sourceSnapshotId, ordinal: focus.ordinal }).slice(0, 16)}`,
+    dataset: `TS007A ${column.label}, 10 minute walking estimate`,
     value: Number(focus.cell[1]), units: `estimated residents; ${column.label}`, statistical: {
       profileOrdinal: focus.ordinal, profileDataset: "TS007A", referencePeriod: "2021-03-21", seconds: 600,
       method: "method" in table ? table.method : null, sourceSnapshotId: table.sourceSnapshotId, parentEvidenceId: base.evidenceId } };

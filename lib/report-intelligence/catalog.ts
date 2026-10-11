@@ -14,6 +14,7 @@ export type Fact = { id: string; evidenceId: string; section: SectionKey; datase
 export type Atom = { id: string; section: SectionKey; role: "conclusion" | "reason" | "implication" | "caution" | "action";
   text: string; factIds: string[]; rule: string };
 export type Catalog = { version: "full-catalog-v1"; business: AssessmentBundle["business"]; assessmentDigest: string;
+  operators?: import("./operators.ts").OperatorDirectory;
   facts: Fact[]; atoms: Atom[]; unknowns: string[]; index: AssessmentBundle["index"]; readiness: AssessmentBundle["decision"]["readiness"];
   premises: AssessmentBundle["decision"]["premises"]; stance: AssessmentBundle["decision"]["stance"];
   timeline: { id: string; fact: string; date: string; dateMeaning: string; scope: string; referenceId: string }[];
@@ -157,6 +158,10 @@ export function catalogPacket(catalog: Catalog, keys: SectionKey[], omissions: r
   const required = new Set(candidates.flatMap(a => a.factIds)), facts = catalog.facts.filter(f => required.has(f.id)), scopes = [...new Set(facts.map(f => f.scope))],
     datasets = [...new Set(facts.map(f => f.dataset))];
   return { version: catalog.version, business: catalog.business, sections: keys,
+    ...(keys.includes("competition") && catalog.operators ? { operatorFields: ["recordId", "name", "businessType", "observedAt", "sourceFactId"],
+      operators: catalog.operators.items.map(i => [i.recordId, modelSafeText(i.name, omissions), modelSafeText(i.businessType, omissions), i.observedAt, catalog.operators!.sources[i.sourceIndex].sourceFactId]),
+      operatorScope: "Bounded register shortlist, not direct competitors or current trading status. Point coordinates remain in stored report only.",
+      operatorSelection: catalog.operators.selection } : {}),
     // Qualifications are rendered mandatorily, not candidates the model may omit.
     atomFields: ["id", "section", "role", "text", "factIds"],
     atoms: candidates.map(({ id, section, role, text, factIds }) =>

@@ -205,3 +205,13 @@ Exclusions: new data providers or paid retrieval, renewed scoring/prompt calibra
 ## Planning validation record
 
 10 October 2026: read existing documentation/code and external prompt package; inspected all eight attached UI references; owner confirmed completeness and clarified images are design-only. Read-only hosted SQL measured **374,855,347 bytes**. Official model/lifecycle sources reviewed; no paid calls, hosted writes, migration, source change or service configuration. The planning PR contains documentation only; its approval is separate from implementation authority. Existing historical 375 MB records/applied SQL remain unchanged; a future approved forward change is required if an old ingestion gate itself must be raised.
+
+## 11 October owner content amendment
+
+Accepted structure for future reports: three-line Consultant Verdict; prioritised Key Strengths and Weaknesses/Risks; one Priority Action; ranked actions with explicit consequences for the lease decision. Exact-unit permission/layout, genuine offer differentiation, frontage/routes and lease terms remain distinct. Binding constraints take precedence.
+
+Implemented candidate: decision-summary-v2 and qualified FSA register-shortlist projection. Same-owner/input snapshots must match assessment source checksums and allowed retention; denied evidence cannot inject records. Names, categories, points/precision, dates, native IDs and provenance survive into the stored report shortlist. AI receives bounded names/categories and source links, not point coordinates. Full 200 source records remain immutable; the first-12 provider-order shortlist is explicitly incomplete with omitted count, never a nearest/strength ranking. Food-register records cannot identify salon competitors. No claims of activity, prices, reviews, direct competition or unique competitor totals are inferred.
+
+A forward migration adds existing FSA snapshot material to the existing protected server preparation function; historical ready editions and v1 summary replay remain unchanged. The TS007A subgroup label is corrected for new preparations. No provider or AI retrieval, paid request, new scoring, UI or later-phase functionality.
+
+Three same-property editorial review reports are stored in docs/reviews/phase12/. They reuse frozen original coffee-shop evidence under distinct review concepts; they are not three newly persisted analyses or live AI outputs. Do not relabel historical input contexts. Owner acceptance and actual amended-generation gates remain open.

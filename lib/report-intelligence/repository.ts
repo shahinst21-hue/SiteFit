@@ -14,6 +14,7 @@ import { storedProfiles, profileFocus } from "./profiles.ts";
 import { fullRequest } from "./provider.ts";
 import { groupInstructions, selectionSchema } from "./selection.ts";
 import { evaluateScenarioFit, type ScenarioFit } from "./scenario-fit.ts";
+import { projectOperators } from "./operators.ts";
 
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
@@ -85,6 +86,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       packetDigest(assessment) !== material.assessmentDigest || !uuid(material.assessmentId) || !Array.isArray(material.evidence)) throw Error("full_source_binding_invalid");
     const evidence: Evidence[] = material.evidence.map(e => { validateEvidence(e); return e; });
     const catalog = buildCatalog(assessment, evidence, new Date(), material.discovery === null ? null : validateDiscovery(material.discovery));
+    projectOperators(context, assessment, catalog, Array.isArray(material.operatorSnapshots) ? material.operatorSnapshots : [], new Date());
     const scenarioFit = evaluateScenarioFit({ businessType: context.businessType, facts: catalog.facts,
       history: catalog.timeline, rental: catalog.rentalObservations });
     const profiles = storedProfiles(context, assessment, Array.isArray(material.profileSnapshots) ? material.profileSnapshots : []);

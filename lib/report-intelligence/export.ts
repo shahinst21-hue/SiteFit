@@ -2,6 +2,8 @@ import { object } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
 import { sectionKeys, type SectionKey, type Fact } from "./catalog.ts";
 import { scenarioSummary } from "./scenario-fit.ts";
+import { decisionSummary } from "./decision-summary.ts";
+import { expandedProfiles } from "./profiles.ts";
 
 /** Lossless shared provenance: identical metadata is stored once, never omitted. */
 export function compactSources(facts: Fact[]) {
@@ -58,11 +60,14 @@ export function validateFullProjection(value: unknown) {
     Buffer.byteLength(JSON.stringify(value)) > 131072) throw Error("invalid_full_projection");
   for (const [i, s] of p.sections.entries()) {
     if (object(s).key !== sectionKeys[i]) throw Error("invalid_full_section_order");
-    expandedSection(p,s);
+    const section = expandedSection(p,s);
+    if (section.profiles) expandedProfiles(section.profiles);
   }
   if (p.scenarioFit) {
     const fit = p.scenarioFit as Parameters<typeof scenarioSummary>[0];
-    const overview = object(p.sections[0]), actions = object(p.sections[6]), summary = scenarioSummary(fit);
+    const overview = object(p.sections[0]), actions = object(p.sections[6]);
+    const summary = object(overview.executiveSummary).version === "decision-summary-v2" ?
+      decisionSummary(fit, expandedSources(p) as Fact[]) : scenarioSummary(fit);
     if (fit.version !== "scenario-fit-v1" || fit.numericalScore !== null ||
       packetDigest(overview.scenarioFit) !== packetDigest(fit) ||
       packetDigest(overview.executiveSummary) !== packetDigest(summary) ||
@@ -85,6 +90,7 @@ export function sectionExport(value: unknown, key: SectionKey) {
     if (typeof reference !== "string" || !supplements.some(s => s.id === reference)) throw Error("invalid_export_supplement");
     requiredSupplementIds.add(reference);
   }
+  if (section.profiles) section.profiles = expandedProfiles(section.profiles);
   return { version: "full-section-export-v1", contentDigest: p.contentDigest, bindingDigest: p.bindingDigest,
     generatedAt: p.generatedAt, business: p.business, presentation: p.presentation, section,
     sources: facts.filter(f => ids.includes(f.id)),

@@ -6,7 +6,7 @@ import { fullProvider, fullRequest, type ProviderOutcome } from "./provider.ts";
 import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
 import { compactSources, compactSectionAtoms } from "./export.ts";
-import { scenarioSummary } from "./scenario-fit.ts";
+import { decisionSummary } from "./decision-summary.ts";
 
 const groupKeys: Record<Group, SectionKey[]> = { context: ["customer-context", "competition", "access"], premises: ["premises", "rental-context"], synthesis: ["overview", "actions"] };
 /** Synthesis can rank accepted evidence but cannot invent a stronger overall judgement. */
@@ -115,7 +115,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   if (dispatch?.state !== "accepted") return edition;
   const finalSelection = validateSelection(dispatch.output, synthesis, groupKeys.synthesis), catalog = edition.preparation.catalog;
   const rendered = [...renderSelection(selections[0], catalog), ...renderSelection(selections[1], catalog), ...renderSelection(finalSelection, synthesis)];
-  const summary = edition.preparation.scenarioFit ? scenarioSummary(edition.preparation.scenarioFit) : null;
+  const summary = edition.preparation.scenarioFit ? decisionSummary(edition.preparation.scenarioFit, catalog.facts) : null;
   const sections = sectionKeys.map(key => key === "appendix" ? { key, availability: "assessed", evidenceIds: catalog.facts.map(f => f.evidenceId),
     methodology: "Stored scoped evidence; deterministic figures and reviewed implication rules; AI ranks admitted atoms. Missing records do not imply absence.",
     limitations: catalog.unknowns, sourceIds: catalog.facts.map(f => f.id) } : { ...rendered.find(s => s.key === key)!,
@@ -125,7 +125,8 @@ export async function generateFullIntelligence(owner: string, reportId: string,
           ...summary.strengths.flatMap(s => s.factIds), ...summary.weaknesses.flatMap(s => s.factIds)])],
         evidenceIds: [...new Set([...(rendered.find(s => s.key === "overview")?.evidenceIds ?? []),
           ...catalog.facts.filter(f => [...summary.strengths, ...summary.weaknesses].some(s => s.factIds.includes(f.id))).map(f => f.evidenceId)])] } : {}),
-      ...(key === "actions" && summary ? { conclusion: summary.priorityNextAction } : {}),
+      ...(key === "actions" && summary ? { conclusion: summary.priorityNextAction, rankedActions: summary.rankedActions } : {}),
+      ...(key === "competition" && catalog.operators ? { operators: catalog.operators } : {}),
       ...(key === "customer-context" ? { profiles: edition.preparation.profiles ?? null } : {}),
       ...(key === "premises" ? { timeline: catalog.timeline } : {}), ...(key === "rental-context" ? { rentalObservations: catalog.rentalObservations } : {}) });
   const content = { version: "full-report-v1" as const, bindingDigest: edition.checkpoint.bindingDigest, generatedAt: new Date().toISOString(),
