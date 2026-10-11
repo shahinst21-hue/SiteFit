@@ -94,3 +94,7 @@ Owner-requested [Astra Icons](https://github.com/uiastra/astraicons) integrated 
 ### Owner design-system validation checkpoint
 
 After the palette, spacing/type sheets and Astra integration, `npm run check` passed lint, strict types, 306/306 tests and production build. `npm run check:public -- http://localhost:3013` passed against this build. All eight mobile tabs at 390 px showed no document overflow or malformed output; production worst/empty states at 360 px also passed with no browser errors/warnings. The controlled configured-private-value scan covered 46 implementation/fixture/client/HTTP artifacts with zero matches; unauthorised report content remained withheld and PDF returned 404/no-store/noindex. Exact-head CI, refreshed protected Preview screenshots and final owner usability/visual acceptance remain separate delivery gates. No AI/provider request or hosted write was performed.
+
+### Canonical brand record
+
+All owner sheets are retained under `docs/brand-references/`, with exact palette, type sizes/weights/line heights, spacing/radii and icon requirements in [brand-identity.md](brand-identity.md). Product Contract links to it; D93 records owner acceptance. Historical design notes remain historical. Large desktop statistics use the supplied 54 px role; card headings use 16 px/400/1.5, with responsive hierarchy retained.

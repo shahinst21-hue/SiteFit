@@ -70,6 +70,8 @@ Sample Report content is visibly labelled Sample Report, with fictional scenario
 
 ## Mobile First and visual quality
 
+The owner-approved [SiteFit brand identity V1](brand-identity.md) (D93, 11 October 2026) is authoritative for exact colours, typography, spacing, shape and Astra Icons. It supersedes conflicting older visual-token guidance; responsive readability, evidence truth and phase boundaries remain intact.
+
 Mobile First is mandatory: solve 390px first, then 360/375px, 430px, 768px and 1440px. Apply to every customer screen, including Account and Blog articles. Hero sequence: clear proposition, short explanation, address/direct check action, trust, then product visual. Main CTA must be quickly reachable. Each location step has one decision. Stack Snapshot cards; disclose evidence and economics progressively; avoid horizontal scrolling, tiny targets, form zoom and administrative sidebars.
 
 A modern analytical SiteFit identity uses strong action hierarchy, location/evidence visual language, clean cards, contrast and simple navigation. Reference direction guides principles, not copied wording, branding, exact type, colour or illustrations. Avoid editorial/luxury, generic SaaS, estate-agency or GIS presentation.
