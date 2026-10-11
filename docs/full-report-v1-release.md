@@ -12,7 +12,7 @@ Rendering resolves bound values explicitly, rounds customer numbers and preserve
 
 ## Remaining release work
 
-Only mandatory technical gates: final contract/rendering regression, hosted changed SQL, privacy/ownership/entitlement, actual configured execution/background/recovery, immutable replay, capacity, exact-head CI, protected merge and matching clean main. Existing fixtures and content acceptance replace repeated editorial evaluation. Live spending remains capped at US$1; US$0.94 conservative reservations include three unknown-usage timeouts. Do not retry ambiguous calls or erase reservations. Keep every unverified gate explicit.
+Only mandatory technical gates: final contract/rendering regression, hosted changed SQL, privacy/ownership/entitlement, actual configured execution/background/recovery, immutable replay, capacity, exact-head CI, protected merge and matching clean main. Existing fixtures and content acceptance replace repeated editorial evaluation. Under D90, live spending is capped at US$1.24 for one final technical proof; US$0.94 conservative reservations include three unknown-usage timeouts. Do not retry ambiguous calls or erase reservations. Keep every unverified gate explicit.
 
 ## Prioritised versioned enhancement backlog
 
@@ -24,3 +24,4 @@ Only mandatory technical gates: final contract/rendering regression, hosted chan
 ## Phase 13 handoff
 
 After formal Phase 12 completion, build the approved eight-page responsive dashboard from these immutable contracts and [the reference handoff](phase-13-design-handoff.md). Result first, accessible evidence inspection, honest missing states, qualified rental information, real maps/charts, actual progress/recovery and owned exports. No financial form/calculations in Full Report, no new provider or unapproved payments. Preserve the references' visual composition while replacing unsupported example content with actual findings.
+

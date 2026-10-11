@@ -304,3 +304,8 @@ Owner authorises full revised Steps 10.0–10.9 under D78/D79/D80. Source-first,
 ### Phase 12 owner content amendment — accepted 11 October 2026
 
 Preserve three-line Consultant Verdict, prioritised strengths and weaknesses/risks, one Priority Action, and ranked actions with a specific decision consequence in future report contracts. Preserve admitted named operator register fields through projection; name/type alone must not establish current activity, prices, reviews or direct competition. Same-property coffee-shop, restaurant and salon content comparisons are requested without rewriting historical reports or inventing absent evidence. Review artifacts do not substitute for live-generation quality acceptance.
+
+## D90 — Final Phase 12 technical proof budget (accepted, 11 October 2026)
+
+Owner approves a total US$1.24 conservative development ceiling for one final technical Full Report proof on the existing frozen case, at most three bounded GPT 6.1 Sol requests, no retry, web search or provider retrieval. Previous US$0.94 reservations remain intact, including unknown usage. The new US$0.30 reservation exhausts this allowance. This does not authorise editorial rewrites, subscriptions, Production or further paid requests.
+

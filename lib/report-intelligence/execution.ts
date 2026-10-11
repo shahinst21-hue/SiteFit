@@ -1,7 +1,7 @@
 import { packetDigest } from "../analysis/canonical.ts";
 
 export const intelligencePolicy = Object.freeze({ version: "full-intelligence-v1", model: "gpt-6.1-sol",
-  phaseBudgetMicros: 1_000_000, reportReserveMicros: 300_000, questionReserveMicros: 40_000,
+  phaseBudgetMicros: 1_240_000, reportReserveMicros: 300_000, questionReserveMicros: 40_000,
   maxDispatches: 4, maxRequestBytes: 28_000, maxCheckpointBytes: 65_536, maxPreparationBytes: 128_000 });
 export type Group = "context" | "premises" | "synthesis";
 export type Dispatch = { ordinal: number; group: Group; packetDigest: string; instructionsDigest: string;
@@ -69,3 +69,4 @@ export function usageMicros(inputTokens: number, outputTokens: number): number {
   if (![inputTokens, outputTokens].every(v => Number.isSafeInteger(v) && v >= 0)) throw Error("invalid_usage");
   return inputTokens * 2 + outputTokens * 10;
 }
+

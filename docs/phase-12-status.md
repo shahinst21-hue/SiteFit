@@ -117,3 +117,8 @@ Local validation: npm run check passed lint, strict types, **295 tests** and pro
 
 ## Operating-format readable export correction
 Root cause: the editorial writer joined structured tradingPeriods objects rather than their period fields, producing [object Object]. A shared operatingFormatTable renderer now explicitly renders periods, hypothesis-only qualifications, absent supporting period evidence, requirements, physical state and blockers. sectionExport supplies the readable table; all three editorial drafts consume that export. No frozen projection or source is rewritten, and no paid request occurs. Regression coverage exercises customer-readable sectionExport for coffee, restaurant, hair and beauty scenarios, rather than schema validity alone. Verification: all three real-source editorial drafts regenerated through the shared section export with zero network/provider calls or hosted writes; no table contains object coercion. npm run check passed lint, strict types, all 295 tests and production build. Built-app check:public passed. Exact-head CI is pending for this correction; owner content acceptance and Phase 12 completion remain open.
+
+### Final technical proof approval — D90
+
+Owner approved total US$1.24 for one final technical proof. Existing US$0.94 conservative reservations are preserved. A forward migration raises only the development allowance; new execution, page departure, completion and replay remain unverified until actual evidence is recorded.
+
