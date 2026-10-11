@@ -58,7 +58,7 @@ export default function Home() {
           </p>
           <LocationEntry />
           <Link className="text-link" href="/sample-report">
-            Explore a Sample Report ↗
+            Explore a Sample Report <Icon name="external"/>
           </Link>
           <div className="hero-benefits">
             <span>
@@ -101,7 +101,7 @@ export default function Home() {
           </span>
         </div>
         <Link className="text-link" href="/methodology">
-          Our methodology ↗
+          Our methodology <Icon name="external"/>
         </Link>
       </section>
       <section className="section-block value-section">
@@ -172,7 +172,7 @@ export default function Home() {
               <h3>The approach route</h3>
               <p>Visibility and access could change the picture.</p>
               <Link href="/sample-report" className="text-link">
-                Read the sample reasoning ↗
+                Read the sample reasoning <Icon name="external"/>
               </Link>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function Home() {
             <h2>Start free. Understand the deeper value.</h2>
           </div>
           <Link className="text-link" href="/pricing">
-            Compare the options ↗
+            Compare the options <Icon name="external"/>
           </Link>
         </div>
         <PricingCards />

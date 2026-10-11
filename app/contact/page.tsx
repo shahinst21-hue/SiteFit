@@ -1,3 +1,5 @@
+
+import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
@@ -31,12 +33,13 @@ export default function Contact() {
             "/login",
             "Account sign-in",
           ],
-        ].map(([title, text, href, label]) => (
+        ].map(([title, text, href, label], index) => (
           <section className="simple-panel" key={title}>
+            <span className={`icon-disc ${index === 0 ? "green" : index === 1 ? "blue" : "amber"}`}><Icon name={index === 0 ? "pin" : index === 1 ? "document" : "account"}/></span>
             <h2>{title}</h2>
             <p>{text}</p>
             <Link className="text-link" href={href}>
-              {label} ↗
+              {label} <Icon name="external"/>
             </Link>
           </section>
         ))}

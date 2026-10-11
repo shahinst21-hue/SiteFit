@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+import "./brand.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { websiteOrigin } from "@/lib/seo";
@@ -13,6 +14,8 @@ export const metadata: Metadata = {
   description: site.tagline,
   robots: { index: false, follow: false },
 };
+
+export const viewport: Viewport = { themeColor: "#eaeaea", viewportFit: "cover" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

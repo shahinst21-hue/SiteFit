@@ -1,114 +1,68 @@
 "use client";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Dialog } from "@base-ui/react/dialog";
+import { Popover } from "@base-ui/react/popover";
 import { Wordmark, Arrow } from "./ui";
-const links = [
-  { href: "/how-it-works", label: "How it works" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/sample-report", label: "Sample Report" },
+import { Icon, type IconName } from "./icon";
+import { formatPrice, site } from "@/lib/site-config";
+
+const links: {href: string; label: string; icon: IconName; detail: string}[] = [
+  {href: "/how-it-works", label: "How it works", icon: "evidence", detail: "From an address to a clearer decision"},
+  {href: "/pricing", label: "Pricing", icon: "cost", detail: `Start free. Go deeper for ${formatPrice(site.pricing.fullReport)}`},
+  {href: "/sample-report", label: "Sample Report", icon: "document", detail: "Explore an illustrative example"},
 ];
+const resources: {href: string; label: string; icon: IconName; detail: string}[] = [
+  {href: "/blog", label: "Guides & articles", icon: "document", detail: "Practical reading before the lease"},
+  {href: "/methodology", label: "Methodology", icon: "shield", detail: "How evidence informs a decision"},
+  {href: "/contact", label: "Help & contact", icon: "help", detail: "Find the right next step"},
+];
+
 export function SiteHeader() {
-  const [open, setOpen] = useState(false),
-    [resources, setResources] = useState(false);
-  const menu = useRef<HTMLButtonElement>(null),
-    resourceToggle = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  if(pathname.startsWith('/reports/')||pathname.startsWith('/dev/report'))return null;
-  function close() {
-    setOpen(false);
-    setResources(false);
-  }
-  return (
-    <header
-      className="site-header"
-      onKeyDown={(e) => {
-        if (e.key === "Escape") {
-          if (resources) {
-            setResources(false);
-            resourceToggle.current?.focus();
-          } else {
-            setOpen(false);
-            menu.current?.focus();
-          }
-        }
-      }}
-    >
-      <div className="header-inner">
-        <Link href="/" aria-label="SiteFit home" onClick={close}>
-          <Wordmark />
-        </Link>
-        <button
-          className="menu-toggle"
-          type="button"
-          ref={menu}
-          aria-expanded={open}
-          aria-controls="public-navigation"
-          onClick={() => {
-            setOpen(!open);
-            setResources(false);
-          }}
-        >
-          {open ? "Close" : "Menu"}
-          <span aria-hidden="true">{open ? "×" : "☰"}</span>
-        </button>
-        <nav
-          id="public-navigation"
-          aria-label="Main navigation"
-          className={open ? "public-nav is-open" : "public-nav"}
-        >
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              aria-current={pathname.startsWith(l.href) ? "page" : undefined}
-              onClick={close}
-            >
-              {l.label}
-            </Link>
-          ))}
-          <div className="nav-resources">
-            <button
-              type="button"
-              ref={resourceToggle}
-              className="resource-toggle"
-              aria-expanded={resources}
-              aria-controls="resource-links"
-              onClick={() => setResources(!resources)}
-            >
-              Resources <span aria-hidden="true">⌄</span>
-            </button>
-            <div
-              id="resource-links"
-              className="resource-links"
-              hidden={!resources}
-            >
-              <Link
-                href="/blog"
-                onClick={close}
-                aria-current={pathname.startsWith("/blog") ? "page" : undefined}
-              >
-                Guides & articles
-                <span>Practical reading before the lease</span>
-              </Link>
-              <Link href="/methodology" onClick={close}>
-                Methodology<span>How evidence informs a decision</span>
-              </Link>
-            </div>
-          </div>
-          <Link
-            href="/login"
-            className="login-link"
-            aria-current={pathname === "/login" ? "page" : undefined}
-            onClick={close}
-          >
-            Sign in
-          </Link>
-          <Link href="/check-location" className="nav-cta" onClick={close}>
-            Check a Location <Arrow />
-          </Link>
-        </nav>
-      </div>
-    </header>
-  );
+  const [open, setOpen] = useState(false), [resourceOpen, setResourceOpen] = useState(false);
+  const [instant, setInstant] = useState(false);
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1100px)");
+    const resize = () => { if (desktop.matches) setOpen(false); else setResourceOpen(false); };
+    desktop.addEventListener("change", resize);
+    return () => desktop.removeEventListener("change", resize);
+  }, []);
+  if (pathname.startsWith("/reports/") || pathname.startsWith("/dev/report")) return null;
+  const current = (href: string) => pathname.startsWith(href) ? "page" as const : undefined;
+  const close = () => { setOpen(false); setResourceOpen(false); };
+  return <header className="site-header"><div className="header-inner">
+    <Link href="/" aria-label="SiteFit home" onClick={close}><Wordmark /></Link>
+    <nav className="public-nav" aria-label="Main navigation">
+      {links.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)}>{l.label}</Link>)}
+      <Popover.Root open={resourceOpen} onOpenChange={setResourceOpen}>
+        <Popover.Trigger className="resource-toggle">Resources <Icon name="down" /></Popover.Trigger>
+        <Popover.Portal><Popover.Positioner sideOffset={12} className="brand-resource-positioner">
+          <Popover.Popup className="brand-resource-popup" aria-label="Resources">
+            {resources.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><Icon name={l.icon}/><span><b>{l.label}</b><small>{l.detail}</small></span><Icon name="external"/></Link>)}
+          </Popover.Popup>
+        </Popover.Positioner></Popover.Portal>
+      </Popover.Root>
+      <Link href="/login" className="login-link" aria-current={current("/login")}><Icon name="login"/> Sign in</Link>
+      <Link href="/check-location" className="nav-cta">Check a Location <Arrow /></Link>
+    </nav>
+    <Dialog.Root open={open} onOpenChange={(next, details) => { setInstant(details.event instanceof KeyboardEvent || (details.event instanceof MouseEvent && details.event.detail === 0)); setOpen(next); }}>
+      <Dialog.Trigger className="menu-toggle" aria-label="Open navigation menu">Menu <Icon name="menu"/></Dialog.Trigger>
+      <Dialog.Portal><Dialog.Backdrop className="brand-menu-backdrop" data-instant={instant || undefined}/>
+        <Dialog.Popup className="brand-menu-popup" data-instant={instant || undefined}>
+          <div className="brand-menu-top"><Link href="/" aria-label="SiteFit home" onClick={close}><Wordmark/></Link><Dialog.Close className="brand-icon-button" aria-label="Close navigation menu"><Icon name="close"/></Dialog.Close></div>
+          <Dialog.Title className="sr-only">SiteFit navigation</Dialog.Title>
+          <Dialog.Description className="brand-menu-label">A closer look before a big commitment.</Dialog.Description>
+          <nav aria-label="Mobile navigation" className="brand-mobile-links">
+            {links.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><span className="brand-nav-icon"><Icon name={l.icon}/></span><span><b>{l.label}</b><small>{l.detail}</small></span><Arrow/></Link>)}
+            <span className="brand-menu-label">EXPLORE SITEFIT</span>
+            {resources.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><span className="brand-nav-icon"><Icon name={l.icon}/></span><span><b>{l.label}</b></span><Icon name="external"/></Link>)}
+          </nav>
+          <div className="brand-menu-actions"><Link href="/login" className="button button-secondary" onClick={close}><Icon name="login"/> Sign in</Link><Link href="/check-location" className="button button-primary" onClick={close}>Check a Location <Arrow/></Link></div>
+          <div className="brand-menu-legal"><Link href="/privacy" onClick={close}>Privacy</Link><Link href="/terms" onClick={close}>Terms</Link></div>
+        </Dialog.Popup>
+      </Dialog.Portal>
+    </Dialog.Root>
+  </div></header>;
 }

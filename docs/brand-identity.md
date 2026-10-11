@@ -67,7 +67,7 @@ Use [Astra Icons](https://github.com/uiastra/astraicons), currently pinned **`@a
 
 ## Application and acceptance
 
-Phase 13 applies this identity to all eight report views. Other surfaces adopt it through their authorised scope; this document does not expand the work into a separate Snapshot, Account or marketing redesign. Preserve the existing wordmark and product contracts.
+Phase 13 applies this identity to all eight report views. The owner's subsequent site-wide authorisation (D94) extends the shared identity to all public, account, authentication, purchase, Snapshot, editorial and error surfaces, including mobile/tablet navigation. Preserve their existing product behaviour and security boundaries. Use the owner's re-supplied vector logo at `public/brand/sitefit-wordmark.svg`, including the dashboard; never approximate the wordmark with live text. Snapshot changes remain presentation only.
 
 Verify actual desktop/mobile composition, contrast, keyboard/focus, readable real 200% zoom, long/missing data and interactions. Compilation and screenshots are not customer acceptance. Technical sources belong in Appendix; material limitations and map attribution remain in context. Reference figures are never report evidence.
 
@@ -81,4 +81,4 @@ Design references only; their dark display canvas does not mandate a dark theme.
 - [Neutral palette](brand-references/neutrals.png)
 - [Midnight Ink](brand-references/midnight-ink.png)
 
-Implementation: [dashboard stylesheet](../app/report-dashboard.css), [icon adapter](../components/report-dashboard/icon.tsx). Delivery and open gates: [Phase 13 status](phase-13-status.md).
+Implementation: [site-wide stylesheet](../app/brand.css), [dashboard stylesheet](../app/report-dashboard.css), [shared icon adapter](../components/icon.tsx). Selected package has no dedicated dining, rail or scissors glyph; explicit labels accompany neutral role icons instead of misleading pictograms. Delivery and open gates: [Phase 13 status](phase-13-status.md).

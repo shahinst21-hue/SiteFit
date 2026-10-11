@@ -3,6 +3,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import type { PublicSupabaseConfig } from "@/lib/supabase/config";
 import { emailInput } from "@/lib/auth/flow";
+import { Icon } from "./icon";
 export function LoginForm({ config,google=false }: { config: PublicSupabaseConfig | null;google?:boolean }) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
@@ -53,7 +54,7 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
   }
   return (
     <section className="simple-panel" aria-label="Email sign-in">
-      {google&&<button type="button" className="button button-secondary" disabled={!config||state==='sending'} onClick={googleSignIn}>Continue with Google</button>}
+      {google&&<><button type="button" className="button button-secondary" disabled={!config||state==='sending'} onClick={googleSignIn}><Icon name="login"/>Continue with Google</button><div className="auth-divider">or use email</div></>}
       {!config && (
         <p role="status">
           We could not connect to sign-in. Please try again later, or start a
@@ -112,6 +113,7 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
             type="submit"
             disabled={!config || state === "sending"}
           >
+            <Icon name="email"/>
             {state === "sending"
               ? "Sending your link…"
               : "Email me a sign-in link"}

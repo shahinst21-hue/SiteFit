@@ -1,3 +1,5 @@
+
+import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { PageIntro, Wordmark } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
@@ -47,7 +49,7 @@ export default async function Login({
         <section className="simple-panel">
           <p>Signed in as {user.email}</p>
           <Link className="text-link" href="/account">
-            Open your account ↗
+            Open your account <Icon name="external"/>
           </Link>
           <form action={signOut}>
             <button className="button button-secondary" type="submit">
@@ -62,7 +64,7 @@ export default async function Login({
         />
       )}
       <Link href="/check-location" className="text-link">
-        Start a Free Snapshot ↗
+        Start a Free Snapshot <Icon name="external"/>
       </Link>
     </div>
   );

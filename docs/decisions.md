@@ -326,3 +326,7 @@ Owner authorises a substantial eight-tab visual and interaction redesign, compac
 ## D93 — SiteFit brand identity V1 (accepted, 11 October 2026)
 
 Owner requires all supplied colour, typography and spacing/shape sheets, primary #b2f34c and Astra Icons to define the official brand identity. Exact values, roles, responsive/accessibility rules and retained reference images are recorded in [brand-identity.md](brand-identity.md). This supersedes conflicting earlier visual tokens, without changing evidence admission, frozen conclusions, security, phase scope or release gates. All eight Phase 13 tabs use the shared identity; other surfaces follow their separately authorised scope.
+
+## D94 — Site-wide brand application (accepted, 11 October 2026)
+
+Owner explicitly extends the approved identity to the whole website: every page, navigation/hamburger menu, shared controls and details at mobile, tablet and desktop sizes, using the re-supplied `SiteFit logo.svg` and appropriate Astra icons. This authorises presentation and navigation refinement on existing surfaces; it does not change frozen report reasoning, data admission, purchase/authentication authority, prices, budgets, provider coverage or Production activation. Existing Phase 12 live-validation/privacy/launch gates remain open independently of this work. No additional conceptual approval cycle is required.

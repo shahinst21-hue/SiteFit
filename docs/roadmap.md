@@ -242,3 +242,5 @@ Current Full Report structure/reasoning is accepted as the V1 baseline. Finish P
 # Active owner authority — Phase 13 development (11 October 2026)
 
 D92 authorises [Phase 13 implementation](phase13_plan.md) now on a dedicated branch/PR dependent on draft Phase 12 PR #35. Phase 12 remains incomplete; its new Ready/replay gate and unapproved extra budget remain open. No premature merge into main or customer paid release. All eight views, evidence-connected interactions, stored maps/charts, responsive accessibility and immutable current-tab/full PDFs are the milestone. [Status](phase-13-status.md) distinguishes implemented, verified and accepted. No financial calculations, new inference/providers or later phase is authorised.
+
+D94 additionally authorises applying the approved brand identity and owner's vector logo throughout the existing website, including mobile/tablet menus, public/editorial pages, Account, authentication, purchase and shared Snapshot presentation. No completed data phase is reopened; no later phase, paid call or Production release is started. Existing functional and evidence contracts remain authoritative.

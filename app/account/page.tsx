@@ -53,7 +53,7 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
           <Icon name="document" />
         </span>
         <h2>Your saved Snapshots</h2>
-        {reports.length ? <ul>{reports.map((report,index) => <li key={report.id}><p>{report.address} · {report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}>Open Snapshot →</Link>{fullReports[index]&&<p><Link href={`/reports/${fullReports[index]}`}>Open stored Full Report →</Link></p>}{paymentStates[index]&&<p>Test purchase access: {paymentStates[index]}. New report generation remains disabled.</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
+        {reports.length ? <ul className="account-history">{reports.map((report,index) => <li key={report.id}><p><strong>{report.address}</strong></p><p>{report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}><Icon name="document"/>Open Snapshot <Icon name="arrow"/></Link>{fullReports[index]&&<p><Link href={`/reports/${fullReports[index]}`}><Icon name="evidence"/>Open stored Full Report <Icon name="arrow"/></Link></p>}{paymentStates[index]&&<p className="field-help">Test purchase access: {paymentStates[index]}. New report generation remains disabled.</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
         <nav aria-label="Snapshot history pages">{page>0&&<Link href={`/account?page=${page-1}`}>Previous page</Link>}{Array.isArray(history)&&history.length===20&&page<500&&<Link href={`/account?page=${page+1}`}>Next page</Link>}</nav>
         {historyError && <p role="status">Saved Snapshots are temporarily unavailable. Your session is still active.</p>}
         {error && (
@@ -62,14 +62,15 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
             active.
           </p>
         )}
-        <Link className="button button-primary" href="/check-location">
-          Start a Free Snapshot ↗
+        <div className="account-controls"><Link className="button button-primary" href="/check-location">
+          Start a Free Snapshot <Icon name="external"/>
         </Link>
         <form action={signOut}>
           <button className="button button-secondary" type="submit">
+            <Icon name="logout"/>
             Sign out
           </button>
-        </form>
+        </form></div>
       </section>
     </div>
   );
