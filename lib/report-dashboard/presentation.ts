@@ -14,7 +14,7 @@ export function humanMeasure(label:string):string {
   if(/TS066.*total/i.test(label))return 'Economic-activity population estimate';
   if(/TS003.*total/i.test(label))return 'Household estimate';
   if(/TS001/i.test(label))return 'Published population record';
-  if(/TS045.*total/i.test(label))return 'Car availability population';
+  if(/TS045.*total/i.test(label))return 'Households by vehicle availability';
   if(/BRES|employee.jobs/i.test(label))return 'Workplace jobs context';
   if(/income/i.test(label))return 'Household income context';
   return label.replace(/\bTS\d+[A-Z]?\b\s*/g,'').replace(/Native primary-family records/i,'Mapped business records').trim();

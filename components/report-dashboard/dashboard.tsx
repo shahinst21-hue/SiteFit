@@ -2,7 +2,7 @@
 import {useEffect,useRef,useState} from 'react';
 import Link from 'next/link';
 import {Dialog} from '@base-ui/react/dialog';
-import {Icon} from '@/components/icon';
+import {Icon} from './icon';
 import type {Dashboard,Page,Statement,Source,Reference} from '@/lib/report-dashboard/model';
 import {reportPages,readableNumber,displayDate} from '@/lib/report-dashboard/display';
 import {opening,humanMeasure,targetFor,linkedAction,customerMetrics,estimateNumber,sourcePeriod,topicFor} from '@/lib/report-dashboard/presentation';

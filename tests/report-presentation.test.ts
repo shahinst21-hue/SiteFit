@@ -11,6 +11,7 @@ test('presentation uses exact stored openings and never modifies the report or m
   for(const p of report.pages){const text=opening(p.conclusion);assert.ok(p.conclusion.startsWith(text.replace(/\.$/,'')));}
   assert.equal(humanMeasure('TS007A total, 10 minute walking estimate'),'Resident population estimate');
   assert.equal(humanMeasure('TS066 total, 10 minute walking estimate'),'Economic-activity population estimate');
+  assert.equal(humanMeasure('TS045 total'),'Households by vehicle availability');
   const selected=customerMetrics(report.sources.filter(s=>s.section==='customer-context'));
   assert.ok(selected.some(s=>s.label==='TS007A total, 10 minute walking estimate'));
   assert.ok(!selected.some(s=>s.label.startsWith('TS066')));

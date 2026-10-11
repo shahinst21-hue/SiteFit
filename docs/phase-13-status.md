@@ -79,3 +79,18 @@ The redesign is Preview-only. Exact-head checks and deployment evidence follow b
 ### Redesign local release checks
 
 `npm run check` passed lint, strict types, **306/306 tests** and production build. Production-server `check:public` passed all 13 public pages/articles and safe route boundaries. A fresh production-browser tab showed no console error/warning and eight loaded OSM viewport tiles after the display-pixel hydration fix. A private-value scan of 45 implementation/fixture/client/HTTP artifacts found zero matches; unauthenticated report content stayed withheld and PDF returned 404, with no-store/noindex. This is not an authenticated network-body inspection. Protected exact-head CI and new deployed browser evidence remain separate below.
+
+
+### Owner palette refinement
+
+The owner's supplied colour sheets supersede the initial forest-green tinting: primary brand **#b2f34c**, Midnight Ink **#0d1400** primary text/outline, Graphite Ink **#1b1b1b** supporting neutral, Steel **#60646c** secondary text, Ash **#7c7c7c** receding decoration, Hairline **#e0e1e6** borders, Drafting Gray **#eaeaea** canvas and Marble **#ffffff** cards/navigation. Peach **#ffe4c3**, Sky **#cbedff** and Mint **#caf3aa** are restrained category washes. Brand CTA/selection is distinct from outcome and evidence quality; essential metadata uses readable Steel rather than low-contrast Ash. No analytical content or source geometry is recoloured into a stronger claim.
+
+### Owner spacing, typography and icons
+
+Applied the supplied comfortable-density system: 4 px base, 48 px major section separation, 24 px card padding, 8 px element gaps; links 6 px, buttons 12 px, cards 16 px, large verdict/action/map frames 32 px. Mobile keeps readable cards and an immediate verdict rather than shrinking all text into a dense grid. The type hierarchy uses the supplied 14 px minor-third reference with 16 px body/card labels, 36 px decision heading and up to 54/56 px statistics/page headings, responsive to the available width. 68 px display is a reserved token, not an oversized property heading.
+
+Owner-requested [Astra Icons](https://github.com/uiastra/astraicons) integrated as pinned MIT `@astraicons/react@1.7.0`, linear set, selected named imports; decorative SVGs retain visible text labels and no network runtime. Scoped to the Full Report workspace, without a site-wide Snapshot redesign. Existing frozen conclusions, source admission, numeric operands and lifecycle are unchanged.
+
+### Owner design-system validation checkpoint
+
+After the palette, spacing/type sheets and Astra integration, `npm run check` passed lint, strict types, 306/306 tests and production build. `npm run check:public -- http://localhost:3013` passed against this build. All eight mobile tabs at 390 px showed no document overflow or malformed output; production worst/empty states at 360 px also passed with no browser errors/warnings. The controlled configured-private-value scan covered 46 implementation/fixture/client/HTTP artifacts with zero matches; unauthorised report content remained withheld and PDF returned 404/no-store/noindex. Exact-head CI, refreshed protected Preview screenshots and final owner usability/visual acceptance remain separate delivery gates. No AI/provider request or hosted write was performed.
