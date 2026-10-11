@@ -18,4 +18,3 @@ begin
   'evidence',coalesce((select jsonb_agg(envelope order by id) from public.evidence_items where analysis_id=f.analysis_id and input_id=f.input_id),'[]'::jsonb),
   'discovery',public.read_sitefit_web_discovery(p_owner,f.analysis_id,f.input_id));
 end $$;
-
