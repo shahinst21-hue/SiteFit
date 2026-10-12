@@ -9,7 +9,7 @@ test("malformed/refused paid output retains usage; transport uncertainty cannot 
   let requests = 0;
   const provider = fullProvider({ key: "sk-synthetic", fetch: async (_url, request) => {
     requests++; const body = JSON.parse(String(request?.body));
-    assert.equal(body.store, false); assert.equal(body.model, "gpt-6.1-sol"); assert.equal(body.tools, undefined);
+    assert.equal(body.store, false); assert.equal(body.model, "gpt-6.1-sol"); assert.equal(body.service_tier, "default"); assert.equal(body.tools, undefined);
     return Response.json({ status: "completed", model: "gpt-6.1-sol", usage: { input_tokens: 50, output_tokens: 10 },
       output: [{ type: "message", content: [{ type: "refusal" }] }] });
   } });
