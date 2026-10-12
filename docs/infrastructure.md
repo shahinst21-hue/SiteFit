@@ -1,5 +1,9 @@
 # Phase 1 infrastructure and environments
 
+## Current capacity policy — D99, 12 October 2026
+
+Owner-approved internal checkpoint **450,000,000 bytes** supersedes the historical policies below. Supabase Free's documented 500 MB database quota supports this without upgrade; actual plan/provider limits are unchanged. No disk/compute expansion or purchase. Before DDL: 375,830,195 bytes; margin 74,169,805. Maintain 50 MB beneath conservative provider allowance and remeasure PostgreSQL before/after hosted writes. [Implementation/receipts](phase-12-d99-corrections.md).
+
 ## Current capacity policy — 10 October 2026
 
 Accepted D84 internal operating checkpoint: **400,000,000 bytes**, decimal 400 MB, superseding 375,000,000 for current planning. This is not a provider limit change or upgrade permission. Read-only `pg_database_size(current_database())` measured **374,855,347 bytes** on 10 October; current internal margin **25,144,653 bytes**. Against the existing conservative 500,000,000-byte planning allowance the margin is 125,144,653; the internal checkpoint preserves 100,000,000 below that assumption. PostgreSQL size is a measured database footprint, not a claim to equal the provider's billing/dashboard metric.

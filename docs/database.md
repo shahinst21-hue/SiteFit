@@ -1,5 +1,7 @@
 # Phase 3 database foundation
 
+D99 supersedes current capacity policy with **450,000,000 bytes**. Forward migration `20261012120000_capacity_checkpoint_450mb.sql` changes only active function capacity literals, retaining state/integrity/security/spending guards; historical migration records remain untouched. Before DDL: 375,830,195 bytes, margin 74,169,805. No upgrade/pruning or report mutation. [Current verification](phase-12-d99-corrections.md).
+
 D98 forward development migration `20261012110000_phase12_rental_proof_budget.sql` raises only report-start ceiling from 1,540,000 to 1,840,000 microdollars for the owner's one bounded proof. Earlier reservations and the entire question function/grants remain unchanged. No source grant, deletion, infrastructure or Production change. [Current proof/capacity receipts](phase-12-rental-comparables-proof.md).
 
 After the failed D98 proof: PostgreSQL **375,830,195 bytes**, +57,344; margin **24,169,805** below 400,000,000. US$1.84 reservations retained, zero search grants. Historical Ready and rent-source fingerprints/question function unchanged. New edition remains draft with null projection and zero sections; no partial publication or raw rejected prose.

@@ -1,5 +1,7 @@
 # SiteFit Product Contract
 
+D99 (12 October): internal checkpoint **450,000,000 bytes**, no upgrade. Qualified structured rental evidence may remain visible/exportable within an authorised owner's existing Preview Rent & Lease tab while the Full edition is Draft. This is explicitly not a Ready/customer report; Full export/publication still requires Ready. New report Appendix is deterministic methodology; eight-section/V1 evidence and historical guarantees remain. No new spending or Phase 13 reopening. See [correction record](phase-12-d99-corrections.md).
+
 D95 (11 October 2026): rental pricing uses qualified existing PropertyData first and separately validated real-web discovery when absent. Display estimates as estimates; if no admitted price exists, omit pricing and empty-price placeholders. Preserve material lease actions, frozen evidence/missingness in Appendix and immutable historical editions. Additional search spending/runtime enablement remains separately gated; see [decision D95](decisions.md).
 
 D89 (11 October 2026): current Full Report V1 structure, Executive Summary, Scenario Fit and concept-specific reasoning are accepted. Stop editorial cycles. Phase 13's eight-page reference-driven dashboard is authorised after mandatory Phase 12 technical and protected-delivery gates close; no new providers, context-index change, report Financial Engine calculations or unapproved payments. See [V1 baseline and backlog](full-report-v1-release.md).

@@ -1,6 +1,9 @@
 begin;
 do $$ declare owner uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;g uuid:=gen_random_uuid();report uuid;payment uuid:=gen_random_uuid();run uuid:=gen_random_uuid();e uuid;b jsonb;c public.analysis_inputs;ctx text;par jsonb; prep text; cp jsonb; edition jsonb; fid uuid; step integer; dg jsonb; projection jsonb;
 begin
+ if exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','source_data')
+   and p.prokind='f' and (p.prosrc like '%375000000%' or p.prosrc like '%400000000%')) then raise exception 'Old capacity gate remains';end if;
+ if position('450000000' in pg_get_functiondef('public.start_sitefit_full(uuid,uuid,text,text)'::regprocedure))=0 then raise exception '450 MB gate missing';end if;
  if source_data.sitefit_report_private_text('{"description":"A risk-based desk-based review"}') or
    source_data.sitefit_report_private_text('{"policy":{"rawResponseRetained":false}}') then raise exception 'Benign private-text false positive';end if;
  if not source_data.sitefit_report_private_text('{"rawResponse":"forbidden provider body"}') or

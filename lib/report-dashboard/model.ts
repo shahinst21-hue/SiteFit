@@ -17,6 +17,7 @@ export type Profile = {dataset:string; seconds:number; period:string; universe:s
 export type Page = {key:SectionKey; conclusion:string; analysis:Statement[]; test:Statement|null; cautions:Statement[];
   factIds:string[]; referenceIds:string[]; unknowns:string[]; availability:string; direction:string};
 export type Dashboard = {version:'report-dashboard-v1'; reportId:string|null; digest:string; generatedAt:string;
+  structuredPreview?:{stage:string};
   address:string; business:string; businessLabel:string; precision:string; analysisTimestamp:string|null; editionLabel:string;
   pages:Page[]; sources:Source[]; references:Reference[]; summary:{verdict:string[]; strengths:Statement[]; risks:Statement[]; priority:string}|null;
   readiness:string; index:{label:string; value:number|null; scope:string; method:string; components:{label:string; weight:number; density:number|null; period:string; code:string}[]};

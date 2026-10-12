@@ -7,7 +7,7 @@ import { consultantNumber } from "../lib/report-intelligence/display.ts";
 import { evaluateScenarioFit } from "../lib/report-intelligence/scenario-fit.ts";
 import { operatingComparison } from "../lib/report-intelligence/operating-comparison.ts";
 import { competitionBrief } from "../lib/report-intelligence/competition.ts";
-import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode, narrativeFailureDiagnostic, type Commentary } from "../lib/report-intelligence/narrative.ts";
+import { validateNarrative, validateGeneratedNarrative, narrativeContract, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode, narrativeFailureDiagnostic, type Commentary } from "../lib/report-intelligence/narrative.ts";
 import { sectionKeys, type Fact } from "../lib/report-intelligence/catalog.ts";
 import { expandedProfiles } from "../lib/report-intelligence/profiles.ts";
 
@@ -23,6 +23,28 @@ function fixture() {
     sections: sectionKeys.map(key => ({ key, conclusion: claim, analysis: [claim], decisionTest: claim })) };
   return { c, fit, claim, n };
 }
+
+test("explicit scope exclusions are accepted; positive or contradictory outcome claims still reject",()=>{
+  const {c,fit,n,claim}=fixture();
+  for(const text of ['This context index is not an overall suitability score.','This evidence does not measure overall suitability.']){
+    const candidate=structuredClone(n);candidate.sections[7].conclusion={...claim,text};
+    assert.equal(validateNarrative(candidate,c,fit).sections[7].conclusion.text,text);
+  }
+  for(const text of ['This site has strong overall suitability.','This index is not an overall score, but this site has an overall suitability score.','The data proves observed footfall.']){
+    const candidate=structuredClone(n);candidate.sections[7].conclusion={...claim,text};
+    assert.throws(()=>validateNarrative(candidate,c,fit),/unsupported_narrative_claim/);
+  }
+});
+test("seven validated commercial pages gain a deterministic Appendix; no model page is discarded",()=>{
+  const {c,fit,n,claim}=fixture(),seven=structuredClone(n);seven.sections.pop();
+  const result=validateGeneratedNarrative(seven,c,fit,true);
+  assert.equal(result.sections.length,8);assert.match(result.sections[7].conclusion.text,/adds no location verdict/);
+  assert.throws(()=>validateGeneratedNarrative(n,c,fit,true),/invalid_narrative/);
+  seven.sections[6].conclusion={...claim,text:'The property has an overall suitability score.'};
+  assert.throws(()=>validateGeneratedNarrative(seven,c,fit,true),/unsupported_narrative_claim/);
+  const contract=narrativeContract(true);assert.equal(contract.schema.properties.sections.maxItems,7);
+  assert.ok(Buffer.byteLength(contract.instructions)<4000);
+});
 test("rejection diagnostics retain only allowlisted validator codes, never private errors or prose", () => {
   assert.equal(narrativeFailureCode(new Error("unbound_narrative_value")), "unbound_narrative_value");
   assert.equal(narrativeFailureCode(new Error("Private provider body or credential")), "narrative_validation_failed");

@@ -7,7 +7,7 @@ import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
 import { compactSources, compactSectionAtoms } from "./export.ts";
 import { decisionSummary } from "./decision-summary.ts";
-import { narrativePacket, narrativeSchema, narrativeInstructions, validateNarrative, narrativeFailureCode, narrativeFailureDiagnostic, type ConsultantNarrative } from "./narrative.ts";
+import { narrativePacket, narrativeContract, validateGeneratedNarrative, validateNarrative, narrativeFailureCode, narrativeFailureDiagnostic, type ConsultantNarrative } from "./narrative.ts";
 import { operatingComparison } from "./operating-comparison.ts";
 import { competitionBrief } from "./competition.ts";
 
@@ -93,7 +93,9 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const selections = groups.map((d, i) => validateSelection(d!.output, edition.preparation.catalog, groupKeys[i === 0 ? "context" : "premises"]));
   const synthesis = synthesisCatalog(edition.preparation.catalog, selections);
   const useNarrative = edition.preparation.narrativeVersion === "consultant-narrative-v1" && edition.preparation.scenarioFit;
-  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions),
+  const deterministicAppendix=edition.preparation.appendixPolicy==="deterministic-appendix-v1";
+  const contract=narrativeContract(deterministicAppendix);
+  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions,deterministicAppendix),
     groupFocus: selections } :
     { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
     readiness: synthesis.readiness,
@@ -101,7 +103,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
       status: edition.preparation.scenarioFit.status, leadingFormatId: edition.preparation.scenarioFit.leadingFormatId,
       priorityAction: edition.preparation.scenarioFit.priorityAction } : null,
     scope: "Resident & Workplace Context Index is not a commercial suitability score. No finance or legal clearance." };
-  const instructions = useNarrative ? narrativeInstructions : groupInstructions, schema = useNarrative ? narrativeSchema : selectionSchema;
+  const instructions = useNarrative ? contract.instructions : groupInstructions, schema = useNarrative ? contract.schema : selectionSchema;
   let dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
   const repair = !useNarrative && dispatch?.state === "invalid" && options.resume === true && !edition.checkpoint.repairUsed &&
     (dispatch.receipt as { validation?: string } | null)?.validation === "selection_rejected";
@@ -114,7 +116,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     let accepted: Selection | ConsultantNarrative | null = null;
     let validationReason: string | undefined;
     let validationDiagnostic: ReturnType<typeof narrativeFailureDiagnostic>;
-    if (outcome.state === "received") try { accepted = useNarrative ? validateNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!) :
+    if (outcome.state === "received") try { accepted = useNarrative ? validateGeneratedNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!,deterministicAppendix) :
       validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch (error) {
         if (useNarrative) { validationReason = narrativeFailureCode(error); validationDiagnostic = narrativeFailureDiagnostic(error); }
         /* No partial publication or rejected prose persistence. */

@@ -1,5 +1,7 @@
 # SiteFit architecture
 
+D99 current implementation amendment: **450,000,000-byte** internal database/application checkpoint; independent qualified structured rental reads in existing owned Preview report/PDF, with Full Ready publication unchanged; versioned deterministic Appendix for new preparations. Historical contracts and the completed Phase 13 Preview milestone remain closed. [Technical correction](phase-12-d99-corrections.md).
+
 ## Current Phase 12 planning boundary — 10 October 2026
 
 Phase 11 is complete. [Phase 12 proposal](phase12_plan.md) reuses admitted immutable assessments/evidence/history/rental outcomes and existing GPT 6.1 Sol transport. Proposed two parallel groups plus one validated synthesis, deterministic figures/Appendix, narrow Full edition checkpoints/ready guards, stored-only owned reads and bounded report questions; no new provider or generic workflow infrastructure. This architecture awaits owner implementation approval; no code/migration/service activation occurs in planning. Existing ready Free child guards require a narrow forward Full-section exception, not a broad historical thaw. There is no implemented ai_interpretations table; proposal uses existing report provenance.

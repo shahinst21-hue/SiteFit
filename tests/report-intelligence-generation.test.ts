@@ -91,8 +91,10 @@ test("failed synthesis persists safe field diagnostics, withholds every section 
 });
 
 test("new eight-page narrative reaches owned exports once, preserves exact operands, and reopens without regeneration", async () => {
+  for(const deterministicAppendix of [false,true]){
   const db=store(true), p=db.value().preparation;
   p.narrativeVersion="consultant-narrative-v1";
+  if(deterministicAppendix)p.appendixPolicy="deterministic-appendix-v1";
   p.catalog.facts.push({id:"synthetic-residents",evidenceId:"synthetic-evidence",section:"customer-context",dataset:"TS007A total",
     value:14766.980617,units:"usual residents",scope:"dated allocated resident context",effectiveAt:"2021-03-21",retrievedAt:date,
     limitations:["Not observed purchasing"],source:{provider:"official"},licence:{retention:"derived permitted"},statistical:null,
@@ -108,6 +110,7 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
     sections:sectionKeys.map(key=>({key,conclusion:claim,analysis:[claim],decisionTest:claim}))};
   narrative.priorityAction = { ...claim,
     text: "We cannot recommend a takeaway format without verified layout evidence; use a risk-based review." };
+  if(deterministicAppendix)narrative.sections.pop();
   let calls=0;
   const provider={async interpret(d:{group:string},packet:ReturnType<typeof catalogPacket>){
     calls++;
@@ -121,7 +124,7 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
   const ready=await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider});
   assert.equal(ready.status,"ready");assert.equal(calls,3);validateFullProjection(ready.projection);
   for(const key of sectionKeys){const exportValue=sectionExport(ready.projection,key);assert.equal(exportValue.section.key,key);
-    assert.match(String(exportValue.section.conclusion),/about 15,000/);}
+    assert.match(String(exportValue.section.conclusion),deterministicAppendix&&key==='appendix'?/adds no location verdict/:/about 15,000/);}
   const overview=sectionExport(ready.projection,"overview");
   assert.equal((overview.section.executiveSummary as {consultantVerdict:string[]}).consultantVerdict.length,3);
   assert.match(JSON.stringify(overview.section.executiveSummary), /cannot recommend a takeaway format/);
@@ -153,4 +156,5 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
   (wrong.scenarioFit as {businessType:string}).businessType="restaurant";
   const {contentDigest:discard,...changed}=wrong;void discard;
   assert.throws(()=>validateFullProjection({...changed,contentDigest:packetDigest(changed)}),/narrative_scenario_mismatch/);
+  }
 });

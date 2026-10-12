@@ -13,6 +13,8 @@ import { rentalCards } from "../lib/report-dashboard/rental.ts";
 import { validateEconomicBundle } from "../lib/economics/bundle.ts";
 import { commercialComparableTypes } from "../lib/economics/rental-comparables.ts";
 import { fullRepository } from "../lib/report-intelligence/repository.ts";
+import {structuredRentalPreview,canExportDashboard} from '../lib/report-dashboard/structured-preview.ts';
+import {exportParagraphs,renderReportPDF} from '../lib/report-dashboard/pdf.ts';
 
 async function fixture(type: "restaurants" | "retail" = "restaurants", snapshotId = ids.correlation) {
   const point = { latitude: 51.5, longitude: -.1, crs: "EPSG:4326" as const, precision: "building" as const, source: "os-open-uprn" };
@@ -94,6 +96,17 @@ test("actual Full preparation includes qualified rental cohorts and source diges
   assert.equal(edition.preparation.rentalPreparation?.sourceBindings[0].snapshotId,row.id);
   assert.deepEqual(calls,['find_sitefit_full','read_sitefit_full_material','start_sitefit_full']);
   assert.ok(preparation);
+  const material={context:c,assessment,assessmentDigest:packetDigest(assessment),evidence:[],rentalSnapshots:[row]};
+  const preview=structuredRentalPreview(edition,material,'validation_failed',new Date(date));
+  assert.equal(preview.rental.length,1);assert.equal(preview.summary,null);assert.equal(preview.index.value,null);
+  assert.equal(canExportDashboard(preview,null),false);assert.equal(canExportDashboard(preview,'rental-context'),true);
+  assert.deepEqual(structuredRentalPreview(edition,{...material,rentalSnapshots:[]},'validation_failed',new Date(date)).rental,[]);
+  assert.throws(()=>structuredRentalPreview({...edition,status:'ready'},material,'ready',new Date(date)),/draft_preview_only/);
+  assert.throws(()=>structuredRentalPreview(edition,{...material,assessmentDigest:'foreign'},'failed',new Date(date)),/preview_source_binding/);
+  const paragraphs=exportParagraphs(preview,'rental-context').map(r=>r.text).join('\n');
+  assert.match(paragraphs,/not a Ready Full Report/);assert.match(paragraphs,/About £35/);assert.match(paragraphs,/NIA/);
+  await assert.rejects(()=>renderReportPDF(preview),/full_report_not_ready/);
+  assert.ok((await renderReportPDF(preview,'rental-context')).length>10000);
 });
 test("rent source admission enforces lineage, native fields, rights, concept and explicit missingness", async () => {
   const { c, row, assessment } = await fixture();
