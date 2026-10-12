@@ -40,6 +40,7 @@ test('actual rental component and PDF omit missing prices; admitted PropertyData
   report.rental[0].comparison={sample:20,type:'restaurants',radius:.5,radiusUnits:null,dispersion:null,limitations:['selected_format_comparability']};
   report.references=report.rental.map(r=>({id:r.id,source:'propertydata',url:'https://propertydata.co.uk/api/documentation/licensing',scope:'synthetic test only',retrievedAt:r.retrievedAt,effectiveAt:null,licence:'synthetic-test'}));
   const before=JSON.stringify(report),html=render(report),pdf=exportParagraphs(report,'rental-context').map(r=>r.text).join('\n');
+  assert.match(html, /<b>NIA<\/b> · <small>Source\/model date/);
   for(const text of [html,pdf])assert.match(text,/20 restaurant properties.*price spread.*comparability/);
   for(const text of [html,pdf]){assert.match(text,/PropertyData/);assert.match(text,/About £38/);assert.match(text,/per sq ft \/ year/);assert.match(text,/NIA/);assert.match(text,/GIA/);assert.match(text,/About £42,000/);assert.match(text,/±£5,000/);assert.match(text,/not statistical confidence/);assert.match(text,/Source\/model date not supplied/);assert.match(text,/not.*quoted or agreed rent/i);assert.match(text,/not an averaged rent/);assert.doesNotMatch(text,/\[object Object\]|NaN|undefined/);}
   assert.equal(JSON.stringify(report),before);
