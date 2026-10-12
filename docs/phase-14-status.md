@@ -44,3 +44,6 @@ Phase 14 implementation remains present and under verification: durable SQL queu
 
 
 Continuation receipts (12 October): 17 targeted generator/dashboard/PDF/worker checks passed, including v2 Ready and immutable zero-dispatch replay fixtures. Hosted read-only recheck: 376,395,443 bytes, nine 450 MB guards, zero obsolete guards; US$2.14 remains reserved. Historical Ready and rental fingerprints and question-function hash are unchanged; anonymous Full read and browser raw material access remain denied. Latest budget request is US$0.30 additional (total US$2.44), pending owner approval, not spending authority. No provider request was made.
+
+
+D102 live Phase12 dependency update: new v2 generation, Ready, immutable replay, actual owned eight-tab dashboard and authenticated PDF passed; see [technical receipt](phase-12-d102-proof.md). Prior references to an open Ready gate are historical. Phase14 final delivery and its own acceptance remain distinct; support allowlist stays empty, operational paid execution/scheduler remain disabled. No customer paid release follows automatically.

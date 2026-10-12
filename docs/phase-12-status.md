@@ -1,3 +1,5 @@
+12 October D102: new v2 generation → Ready → immutable replay → owned dashboard → authenticated PDF PASSED. [Actual proof](phase-12-d102-proof.md). All US$2.44 reservations retained. Earlier blocked records below are historical; final protected delivery remains pending. No main, Production, paid release or Phase15 authority.
+
 12 October D100: Phase 14 is authorised for protected Development/Preview only; [plan](phase14_plan.md), [status](phase-14-status.md). One separately approved D99 proof failed the customer-context literal-number gate; [actual result](phase-12-d100-proof.md). Phase 12 new V1 Ready/replay/PDF stays BLOCKED; total conservative reservations US$2.14 retained. No further paid calls, main merge, Production or Phase 15. Phase 13 milestone remains closed.
 
 # Phase 12 implementation status

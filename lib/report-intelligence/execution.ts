@@ -1,7 +1,7 @@
 import { packetDigest } from "../analysis/canonical.ts";
 
 export const intelligencePolicy = Object.freeze({ version: "full-intelligence-v1", model: "gpt-6.1-sol",
-  phaseBudgetMicros: 2_140_000, reportReserveMicros: 300_000, questionReserveMicros: 40_000,
+  phaseBudgetMicros: 2_440_000, reportReserveMicros: 300_000, questionReserveMicros: 40_000,
   maxDispatches: 4, maxRequestBytes: 28_000, maxCheckpointBytes: 65_536, maxPreparationBytes: 128_000 });
 export type Group = "context" | "premises" | "synthesis";
 export type Dispatch = { ordinal: number; group: Group; packetDigest: string; instructionsDigest: string;
