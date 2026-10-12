@@ -1,10 +1,10 @@
 # Phase 14 status
 
-12 October 2026 — implemented work in progress, not a completion certificate. Authority D100; [execution plan](phase14_plan.md), [D99 proof result](phase-12-d100-proof.md).
+12 October 2026 — Development/Preview implementation and verification complete; protected delivery is recorded on PR #43. This is not customer launch approval. Authority D100; [execution plan](phase14_plan.md), [D99 proof result](phase-12-d100-proof.md).
 
 Actual infrastructure: Vercel Hobby, Fluid Compute true; Supabase Free/ACTIVE_HEALTHY. Before writes 375,830,195 bytes; after proof and initial fulfilment migration 376,034,995 bytes. No infrastructure purchase. PostgreSQL extensions pg_cron/pg_net installed in development; named scheduler runs only the fixed dispatcher. Control disabled and support account allowlist empty. Paid execution remains hard-disabled in the worker endpoint.
 
-Implemented: transactional future Test-purchase admission, unique queue, atomic claim/fencing, interruption/validation withholding, current entitlement checks before dispatch, safe support recovery, private audit metadata, bounded owner admission, durable customer progress and machine-only endpoint. Protected scheduling/network verification and final exact-head delivery remain pending.
+Implemented: transactional future Test-purchase admission, unique queue, atomic claim/fencing, interruption/validation withholding, current entitlement checks before dispatch, safe support recovery, private audit metadata, bounded owner admission, durable customer progress and machine-only endpoint. Protected scheduling/network verification passed; see the receipts below and PR #43 for exact-head delivery.
 
 Fresh PostgreSQL and hosted rollback checks verify duplicate job/claim denial, no Draft-to-Ready publication, foreign-owner progress denial, default support denial, wrong fencing token rejection and invalid-output recovery denial. All hosted fixture changes roll back. No customer report/evidence/input graph is changed.
 
@@ -18,6 +18,10 @@ The latest D100 paid proof failed the numeric-reference gate. Phase 12 Ready/rep
 - Actual signed-in Local Account and purchase-return display the saved queue state; closing/reopening the browser tab preserves it. Mobile 390px has no horizontal overflow or Ready link for an unready report. Keyboard mobile menu Enter/Escape and public shell smoke pass. No new real-200% acceptance claim; accepted Phase 13 milestone remains closed.
 - Actual `check:public`: 13 public pages/articles, metadata, internal paths and address boundaries. Anonymous support/runner return 404. No new sign-in, Checkout or AI was triggered by these checks.
 - Database after scheduler proof: 376,362,675 bytes, margin 73,637,325 beneath 450 MB; nine effective capacity guards, zero old guards. Historical Ready/rent/question fingerprints unchanged; all US$2.14 reservations held.
-- Implementation commit `2129ddfb6b0ac6e0469ea4e80ab483a79c9b3965`: exact-head CI 38266913441 and 38266799062 success; protected Preview deployment `dpl_9LReRJ4dzaigH3sZUrDhNJjnBD9a` READY. Final Account/recovery changes and delivery receipt require their own exact-head CI before merge.
+- Implementation commit `2129ddfb6b0ac6e0469ea4e80ab483a79c9b3965`: exact-head CI 38266913441 and 38266799062 success; protected Preview deployment `dpl_9LReRJ4dzaigH3sZUrDhNJjnBD9a` READY. Final Account/recovery code `a07aa03f5a519535dc4075b9a862e2e58a8139a3`: exact-head CI 38271354436 and 38271346759 success; protected Preview `dpl_J7uN6FZGWtJFF6PJvqvdVENCLddE` READY. Documentation completion follows the same CI-gated PR; its final merge/commit receipt is on PR #43.
 
 Preview: https://sitefit-git-codex-phase-14-reliability-shahinst21-hues-projects.vercel.app . PR #43 targets gated Phase 12 development, never main. Ready generation/customer release remain blocked by Phase 12. New operating spend, support account grants, main merge, Production and Phase 15 remain separately unauthorised.
+
+## Explicit remaining dependencies
+
+Phase 12 new V1 Ready/replay/new full PDF remains blocked by D100. No further paid proof or Phase 14 operating allowance is approved. Support has zero approved accounts and is intentionally unavailable. The new machine endpoint is verified in protected Preview; signed-in browser progress was verified Local using the existing session, not by claiming a fresh remote Google sign-in or new 200% acceptance. Existing Auth allowlists were preserved. Main/Production/Phase 15 remain unauthorised. Vercel Hobby is restricted to personal non-commercial use: [current official policy](https://vercel.com/docs/plans/hobby). Resolve eligible commercial hosting under separate owner approval before public £29 sales; no upgrade or trial has been activated.
