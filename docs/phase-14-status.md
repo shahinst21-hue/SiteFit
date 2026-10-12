@@ -1,6 +1,6 @@
 # Phase 14 status
 
-12 October 2026 — Development/Preview implementation and verification complete; protected delivery is recorded on PR #43. This is not customer launch approval. Authority D100; [execution plan](phase14_plan.md), [D99 proof result](phase-12-d100-proof.md).
+12 October 2026 — Development/Preview implementation exists; final assignment acceptance and protected delivery remain IN PROGRESS. PR #43 is not phase completion. This is not customer launch approval. Authority D100; [execution plan](phase14_plan.md), [D99 proof result](phase-12-d100-proof.md).
 
 Actual infrastructure: Vercel Hobby, Fluid Compute true; Supabase Free/ACTIVE_HEALTHY. Before writes 375,830,195 bytes; after proof and initial fulfilment migration 376,034,995 bytes. No infrastructure purchase. PostgreSQL extensions pg_cron/pg_net installed in development; named scheduler runs only the fixed dispatcher. Control disabled and support account allowlist empty. Paid execution remains hard-disabled in the worker endpoint.
 
@@ -34,3 +34,13 @@ New preparations use `consultant-narrative-v2`; historical v1 reports and snapsh
 A concise indicative AI disclaimer is included in the application-produced Appendix through shared dashboard/PDF exports, preserving statutory consumer rights. Structured Scenario Fit withholding and qualified rental evidence remain unchanged. No paid calls, retries, provider retrievals, reservation release or spending were performed for this correction. D100's prior live failure remains retrospectively undiagnosed. The successful new V1 Ready → immutable replay → PDF live gate remains OPEN; offline validation does not close it. Phase 14 remains Development/Preview only, support default-denied, with no main merge, Production activation or Phase 15 authority.
 
 Verification: npm run check passed: lint, strict types, 329 tests (including PostgreSQL/security fixtures) and production build. After the final dispatch-version binding correction, strict types and 14 narrative regressions passed again. Protected exact-head CI and Preview delivery remain pending.
+
+
+## Owner continuation — Phase 12 first, Phase 14 independent
+
+Phase 12 v2 offline verification now exercises the actual three-group generator, Ready projection, immutable replay, eight dashboard exports and full PDF generation, alongside historical v1. The fixture's representation licence is explicit and synthetic; no source admission was loosened. The initial fixture lacked representation permission and correctly failed dashboard export; this was a fixture correction, not removal of the licensing guard.
+
+Phase 14 implementation remains present and under verification: durable SQL queue and scheduler, atomic claim/fencing/reservation/admission/capacity controls, persisted progress, support denial and audit recovery. Additional fencing regression checks loss of entitlement/lease between dispatches prevents another provider call. Scheduler and paid execution stay disabled pending specific operational authority. No new paid request or source retrieval is made while Phase 12 proof approval is pending. Final exact-head CI, delivery and phase acceptance are recorded separately from PR43 validator simplification.
+
+
+Continuation receipts (12 October): 17 targeted generator/dashboard/PDF/worker checks passed, including v2 Ready and immutable zero-dispatch replay fixtures. Hosted read-only recheck: 376,395,443 bytes, nine 450 MB guards, zero obsolete guards; US$2.14 remains reserved. Historical Ready and rental fingerprints and question-function hash are unchanged; anonymous Full read and browser raw material access remain denied. Latest budget request is US$0.30 additional (total US$2.44), pending owner approval, not spending authority. No provider request was made.

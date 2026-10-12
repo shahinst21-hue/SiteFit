@@ -11,6 +11,9 @@ import type { fullProvider } from "../lib/report-intelligence/provider.ts";
 import { verificationEnabled } from "../lib/report-intelligence/http.ts";
 import { suggestedAnswer } from "../lib/report-intelligence/questions.ts";
 import { evaluateScenarioFit } from "../lib/report-intelligence/scenario-fit.ts";
+import { dashboardFromStored } from "../lib/report-dashboard/model.ts";
+import { renderReportPDF, exportParagraphs } from "../lib/report-dashboard/pdf.ts";
+import { PDFDocument } from "pdf-lib";
 import { sectionExport, validateFullProjection } from "../lib/report-intelligence/export.ts";
 
 function store(supported = false) {
@@ -91,13 +94,13 @@ test("failed synthesis persists safe field diagnostics, withholds every section 
 });
 
 test("new eight-page narrative reaches owned exports once, preserves exact operands, and reopens without regeneration", async () => {
-  for(const deterministicAppendix of [false,true]){
+  for(const narrativeVersion of ["consultant-narrative-v1", "consultant-narrative-v2"] as const) for(const deterministicAppendix of [false,true]){
   const db=store(true), p=db.value().preparation;
-  p.narrativeVersion="consultant-narrative-v1";
+  p.narrativeVersion=narrativeVersion;
   if(deterministicAppendix)p.appendixPolicy="deterministic-appendix-v1";
   p.catalog.facts.push({id:"synthetic-residents",evidenceId:"synthetic-evidence",section:"customer-context",dataset:"TS007A total",
     value:14766.980617,units:"usual residents",scope:"dated allocated resident context",effectiveAt:"2021-03-21",retrievedAt:date,
-    limitations:["Not observed purchasing"],source:{provider:"official"},licence:{retention:"derived permitted"},statistical:null,
+    limitations:["Not observed purchasing"],source:{provider:"official"},licence:{retention:"derived permitted",representationAllowed:true,expiresAt:null,policyId:"synthetic-test-only"},statistical:null,
     strength:"limited",kind:"derived",sourceClass:"official",freshness:"dated",precision:"area"} as unknown as Fact);
   p.scenarioFit=evaluateScenarioFit({businessType:"coffee-shop",facts:p.catalog.facts});
   p.packetDigests.context=packetDigest(catalogPacket(p.catalog,["customer-context","competition","access"]));
@@ -105,7 +108,7 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
   db.value().checkpoint=newCheckpoint(p);
   const claim={text:"The {{f:synthetic-residents}} dated resident context supports testing repeat visits, not a measured sales forecast.",
     kind:"hypothesis",factIds:["synthetic-residents"],operatorIds:[],referenceIds:[]};
-  const narrative={version:"consultant-narrative-v1",verdict:[claim,claim,claim],strengths:[claim],risks:[claim],priorityAction:claim,
+  const narrative={version:narrativeVersion,verdict:[claim,claim,claim],strengths:[claim],risks:[claim],priorityAction:claim,
     actions:Array.from({length:4},()=>({action:claim,consequence:claim})),
     sections:sectionKeys.map(key=>({key,conclusion:claim,analysis:[claim],decisionTest:claim}))};
   narrative.priorityAction = { ...claim,
@@ -148,6 +151,15 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
   for(const intent of ["main-risk","strongest-support","before-signing"] as const){
     const answer=suggestedAnswer(ready,intent);assert.equal(answer.state,"answered");
     assert.ok(answer.statements.every(s=>!s.text.includes("{{")));assert.equal(answer.immutableReport,true);
+  }
+  if (narrativeVersion === "consultant-narrative-v2" && deterministicAppendix) {
+    const dashboard = dashboardFromStored(ready.projection, { reportId: ready.id });
+    assert.equal(dashboard.pages.length, 8);
+    const text = dashboard.pages.flatMap(page => exportParagraphs(dashboard, page.key).map(row => row.text)).join("\n");
+    assert.match(text, /statutory consumer rights/);
+    assert.doesNotMatch(text, /\[object Object\]|\{\{|\bundefined\b/);
+    const pdf = await PDFDocument.load(await renderReportPDF(dashboard));
+    assert.ok(pdf.getPageCount() >= 8);
   }
   const before=packetDigest(ready.projection);
   await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true});

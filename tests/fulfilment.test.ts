@@ -54,3 +54,18 @@ test("worker exception persists intervention without exposing the private failur
   assert.equal(await fulfilOne({ ...f, generate, paidExecutionApproved: true }), "idle");
   assert.equal(calls, 1); assert.deepEqual(f.finished, [{ state: "intervention", reason: "execution_interrupted" }]);
 });
+
+
+test("lease or entitlement loss between dispatches prevents a second provider execution", async () => {
+  const f = fixture(); let bindings = 0, paidCalls = 0;
+  const queue = { ...f.queue, async bind() { bindings++; if (bindings === 3) throw Error("entitlement_revoked"); } };
+  const provider = { async interpret() { paidCalls++; return { state: "received", output: {}, receipt: {} }; } };
+  const generate = (async (_owner, _report, options) => {
+    await options!.provider!.interpret({} as never, {}, "", {});
+    await options!.provider!.interpret({} as never, {}, "", {});
+    throw Error("must not reach Ready");
+  }) as typeof generateFullIntelligence;
+  assert.equal(await fulfilOne({ ...f, queue, provider: provider as never, generate, paidExecutionApproved: true }), "intervention");
+  assert.equal(paidCalls, 1);
+  assert.deepEqual(f.finished, [{ state: "intervention", reason: "execution_interrupted" }]);
+});
