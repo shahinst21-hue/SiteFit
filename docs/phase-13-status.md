@@ -1,10 +1,12 @@
 # Phase 13 status
 
-## 12 October final independent dashboard gate ledger
+## 12 October — independent Phase 13 Preview milestone completed
 
 The Phase 13 eight-tab Preview dashboard, site-wide identity, immutable exports and owner hardware/200%/visual acceptance are verified. Its own privacy gate now passes through the authorised alternative controlled method: **191 actual owner browser requests**, nine private values and six current session markers checked, no secret/private-packet matches; complete/current-tab PDF responses were extracted and checked **in memory**. Account → historical Ready report, all eight views, source explanation, owned Snapshot, existing Test purchase status and safe rejected-report status were exercised. No raw traffic, cookies or tokens were saved. The exact temporary localhost:3015 callback was owner-approved, added to development, verified, then removed; all 20 previous URLs and undeclared settings were preserved. Inspector and its own server were stopped. This is not a claim of DevTools inspection or inspection of external Google/Supabase/Stripe/OSM traffic.
 
-Combined with protected Preview HTML/client/log/owned-PDF checks and unchanged read/serialization contracts, this closes the proportionate Phase 13 private-payload gate. Final combined-head CI, protected Preview and stacked PR #36 delivery remain to be recorded before formal dashboard milestone closure. D92/13.9 explicitly allow that Preview development milestone while Phase 12 remains open; no main merge or customer paid release is authorised.
+Combined with protected Preview HTML/client/log/owned-PDF checks and unchanged read/serialization contracts, this closes the proportionate Phase 13 private-payload gate. Final combined head `da0440504b9cc8d16c950aa39a2d10425373b5c0` passed both exact-head CI jobs ([38210846835](https://github.com/shahinst21-hue/SiteFit/actions/runs/38210846835), [38210843770](https://github.com/shahinst21-hue/SiteFit/actions/runs/38210843770)); protected deployment `sitefit-2d4a19s83-shahinst21-hues-projects.vercel.app` was READY and the stable dashboard was reopened in the browser. [PR #36](https://github.com/shahinst21-hue/SiteFit/pull/36) merged into `codex/phase-12-intelligence` at `fe8bf07dd3daf6df8aedf82579651f80f39c8029`, after the head/base/CI and parent-draft guards passed. This completes Steps 13.0–13.9 and the independent Preview dashboard Definition of Done under D92. This completion record follows the same stacked CI workflow. No main merge or customer paid release is authorised.
+
+Post-merge source CI also passed on `fe8bf07`: [38211197701](https://github.com/shahinst21-hue/SiteFit/actions/runs/38211197701) and [38211194257](https://github.com/shahinst21-hue/SiteFit/actions/runs/38211194257); protected deployment `sitefit-3jwbjl3p4-shahinst21-hues-projects.vercel.app` was READY. No application change follows that checked source in this completion record.
 
 The one new D96 Phase 12 proof **failed synthesis** (`unsupported_narrative_claim`), estimated cost US$0.076866. New V1 Ready/replay remains blocked; all US$1.54 conservative reservations stay intact. No retry, narrative rewrite, source retrieval or additional spending. The known failed synthesis does not invalidate the separate stored-only dashboard/PDF read proofs, and does not establish its exact rejected sentence or the previous failure's cause.
 
@@ -41,7 +43,7 @@ Dedicated branch `codex/phase-13-dashboard`, dependent on draft Phase 12 PR #35.
 
 ## Gates still open
 
-For the independently authorised Phase 13 Preview dashboard: final combined-head CI/Preview and stacked PR completion. Its owned private-payload gate has passed the approved controlled method recorded above. Phase 12 new V1 Ready/replay, main merge and paid release remain blocked separately. Historical checkpoints below retain their original unverified states; they are superseded by the current ledger.
+No Phase 13 Preview product/security acceptance gate remains open. Completion documentation and post-merge checks follow the protected stacked workflow. Phase 12 new V1 Ready/replay, main merge and paid release remain blocked separately. Historical checkpoints below retain their original unverified states; they are superseded by the current completion ledger.
 
 ## Verified local evidence
 
