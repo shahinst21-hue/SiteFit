@@ -1,3 +1,7 @@
+12 October D102: new v2 generation → Ready → immutable replay → owned dashboard → authenticated PDF PASSED. [Actual proof](phase-12-d102-proof.md). All US$2.44 reservations retained. Earlier blocked records below are historical; final protected delivery remains pending. No main, Production, paid release or Phase15 authority.
+
+12 October D100: Phase 14 is authorised for protected Development/Preview only; [plan](phase14_plan.md), [status](phase-14-status.md). One separately approved D99 proof failed the customer-context literal-number gate; [actual result](phase-12-d100-proof.md). Phase 12 new V1 Ready/replay/PDF stays BLOCKED; total conservative reservations US$2.14 retained. No further paid calls, main merge, Production or Phase 15. Phase 13 milestone remains closed.
+
 # Phase 12 implementation status
 
 D99 authorises no-spend capacity/Appendix/structured-rental correction; [actual record](phase-12-d99-corrections.md). Checkpoint 450 MB, seven validated AI commercial sections plus deterministic eighth Appendix for new preparations, independent qualified rental display/export in the existing owned Preview report. Draft remains unpublished. Historical contracts/reports and Phase 13 milestone stay closed. Live new V1 Ready/replay remains BLOCKED; no retry/new expenditure authorised.
@@ -182,3 +186,12 @@ Actual database remains **375,445,171 bytes**; conservative reservations remain 
 
 **Readiness:** the frozen eight-section schemas, Executive Summary, Scenario Fit, deterministic evidence presentation, private owned exports and fixture-backed lifecycle are suitable for separately approved Phase 13 dashboard development. Its visual references/handoff are complete. No reporting redesign, new providers or new paid inference is needed to begin fixture/stored-edition UI work if approved. The new V1 live-generation-to-ready/replay proof remains unresolved; previous failure is retrospectively undiagnosed. Keep it explicit, do not mark Phase 12 complete, do not merge as completed delivery, and do not activate customer-facing paid release. Phase 13 has not started and requires separate owner approval under D91. Documentation head CI is verified separately in PR #35.
 
+
+
+## D101 — Essential intelligence validation (owner authorised)
+
+New preparations use `consultant-narrative-v2`; historical v1 reports and snapshots are unchanged. All eight sections and supported concepts use the same essential contract. Schema/order/required fields, admitted reference IDs, operator source lineage, bound numerical slots, private-text safety, immutable digests, ownership, entitlement and Ready publication requirements remain enforced. Blanket digit rejection, broad outcome/format keyword policing and mandatory sentence-level references for ordinary qualitative advice are removed for v2. Critical numerical assertions must still use admitted evidence slots; dates and ordinary context labels do not automatically invalidate prose. Structured source mapping, units, dates and limitations remain authoritative; no independent re-proof of provider observations or additional AI validator is introduced.
+
+A concise indicative AI disclaimer is included in the application-produced Appendix through shared dashboard/PDF exports, preserving statutory consumer rights. Structured Scenario Fit withholding and qualified rental evidence remain unchanged. No paid calls, retries, provider retrievals, reservation release or spending were performed for this correction. D100's prior live failure remains retrospectively undiagnosed. The successful new V1 Ready → immutable replay → PDF live gate remains OPEN; offline validation does not close it. Phase 14 remains Development/Preview only, support default-denied, with no main merge, Production activation or Phase 15 authority.
+
+Verification: npm run check passed: lint, strict types, 329 tests (including PostgreSQL/security fixtures) and production build. After the final dispatch-version binding correction, strict types and 14 narrative regressions passed again. Protected exact-head CI and Preview delivery remain pending.

@@ -45,7 +45,7 @@ export function dashboardFromStored(value:unknown, options:{reportId?:string; ed
   if(facts.some(f=>!f.licence.representationAllowed||(f.licence.expiresAt!==null&&Date.parse(f.licence.expiresAt)<=Date.now())))throw Error('report_representation_unavailable');
   const sources:Source[]=facts.map(f=>({id:f.id,section:f.section,label:f.dataset,value:f.value,units:f.units,scope:f.scope,
     kind:f.kind,strength:f.strength,precision:f.precision,effectiveAt:f.effectiveAt,retrievedAt:f.retrievedAt,
-    reference:sourceURL(f.source.reference),provider:f.source.provider,release:f.source.releaseId,adapter:f.source.adapterVersion,
+    reference:sourceURL(f.source.reference),provider:f.source.provider,release:f.source.releaseId,adapter:str(f.source.adapterVersion,"not specified"),
     limitations:f.limitations,licence:f.licence.policyId,notices:f.licence.notices??[],statistical:JSON.stringify(f.statistical??{})}));
   const references:Reference[]=supplements.map(v=>{const r=record(v),l=record(r.licence);return {id:str(r.id),source:str(r.source),url:sourceURL(r.reference),scope:str(r.scope),retrievedAt:str(r.retrievedAt),effectiveAt:typeof r.effectiveAt==='string'?r.effectiveAt:null,licence:str(l.policyId,'Recorded source policy')};});
   const pages:Page[]=exports.map(e=>{

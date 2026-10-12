@@ -44,7 +44,7 @@ async function commit(repo: ReturnType<typeof fullRepository>, reportId: string,
   throw Error("checkpoint_commit_unavailable");
 }
 export async function generateFullIntelligence(owner: string, reportId: string,
-  options: { repository?: ReturnType<typeof fullRepository>; provider?: ReturnType<typeof fullProvider>; resume?: boolean } = {}) {
+  options: { repository?: ReturnType<typeof fullRepository>; provider?: ReturnType<typeof fullProvider>; resume?: boolean; allowSemanticRepair?: boolean } = {}) {
   const repo = options.repository ?? fullRepository(owner);
   let edition = await repo.read(reportId);
   if (edition.status === "ready") return edition; // No packet/provider/calculator work on replay.
@@ -60,7 +60,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const pending: { group: Group; dispatch: ReturnType<typeof reserveDispatch>["dispatch"] }[] = [];
   for (const group of ["context", "premises"] as const) {
     const previous = edition.checkpoint.dispatches.filter(d => d.group === group);
-    const repair = !edition.preparation.narrativeVersion && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
+    const repair = options.allowSemanticRepair !== false && !edition.preparation.narrativeVersion && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
       previous.every(d => d.state === "invalid" && (d.receipt as { validation?: string } | null)?.validation === "selection_rejected");
     if (previous.length && !repair) continue;
     const packet = catalogPacket(edition.preparation.catalog, groupKeys[group], edition.preparation.identityOmissions);
@@ -92,10 +92,11 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   if (groups.some(d => !d) || edition.checkpoint.dispatches.some(d => d.state === "intent" || d.state === "ambiguous")) return edition;
   const selections = groups.map((d, i) => validateSelection(d!.output, edition.preparation.catalog, groupKeys[i === 0 ? "context" : "premises"]));
   const synthesis = synthesisCatalog(edition.preparation.catalog, selections);
-  const useNarrative = edition.preparation.narrativeVersion === "consultant-narrative-v1" && edition.preparation.scenarioFit;
+  const useNarrative = Boolean(edition.preparation.narrativeVersion) && edition.preparation.scenarioFit;
   const deterministicAppendix=edition.preparation.appendixPolicy==="deterministic-appendix-v1";
-  const contract=narrativeContract(deterministicAppendix);
-  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions,deterministicAppendix),
+  const essential=edition.preparation.narrativeVersion==="consultant-narrative-v2";
+  const contract=narrativeContract(deterministicAppendix,essential);
+  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions,deterministicAppendix,essential),
     groupFocus: selections } :
     { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
     readiness: synthesis.readiness,
@@ -116,7 +117,9 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     let accepted: Selection | ConsultantNarrative | null = null;
     let validationReason: string | undefined;
     let validationDiagnostic: ReturnType<typeof narrativeFailureDiagnostic>;
-    if (outcome.state === "received") try { accepted = useNarrative ? validateGeneratedNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!,deterministicAppendix) :
+    if (outcome.state === "received") try {
+      if (useNarrative && (outcome.output as { version?: unknown })?.version !== edition.preparation.narrativeVersion) throw Error("invalid_narrative");
+      accepted = useNarrative ? validateGeneratedNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!,deterministicAppendix) :
       validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch (error) {
         if (useNarrative) { validationReason = narrativeFailureCode(error); validationDiagnostic = narrativeFailureDiagnostic(error); }
         /* No partial publication or rejected prose persistence. */

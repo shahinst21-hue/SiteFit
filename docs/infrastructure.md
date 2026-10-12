@@ -1,3 +1,5 @@
+12 October Phase 14 verified plans: Vercel Hobby with Fluid Compute enabled; Supabase organisation Free. Use existing pg_cron/pg_net/Vault for a fixed protected Preview runner, not daily-only Hobby Cron. No upgrade/subscription. Application maxDuration 200 seconds is beneath Fluid Hobby maximum 300 seconds. Paid dispatch disabled; [operating plan](phase14_plan.md), [runbook](fulfilment-runbook.md). Current reservations US$2.14; failed D100 proof remains a separate release blocker.
+
 # Phase 1 infrastructure and environments
 
 ## Current capacity policy — D99, 12 October 2026
@@ -163,3 +165,5 @@ Protected Preview requires an exact stable branch URL, Preview-only test keys/en
 `SITEFIT_REPORT_INTELLIGENCE_VERIFICATION=1` is a non-secret server-only Local/protected Preview flag. Unset it outside controlled verification. Production is refused even if configured, and unknown non-Vercel hosts are refused. Reuse existing privately configured development OpenAI/Supabase keys; no new service or provider is introduced. Both routes are private/no-store/noindex/no-referrer, validate body/origin/session and rely on owner-bound paid SQL RPCs. Browser receives no source packets, credentials or payment parameters.
 
 Intelligence route requests `maxDuration=200`; groups time out at 45 seconds, historical atom synthesis at 30 seconds and consultant-narrative-v1 synthesis at 120 seconds. This updates the concrete timeout failure; it does not prove actual background execution or permit retry of ambiguous calls. Effective Preview duration must still be verified; a source declaration alone is not proof. Dispatch timestamps permit truthful interrupted status after the bounded invocation window. No GET schedules work and no ambiguous external execution is retried. Global US$1 development reservations are persisted before calls, including known semantic repairs/unknown losses; no Production budget or customer Q&A launch is authorised. Consult [current Phase 12 status](phase-12-status.md) before any paid probe.
+
+12 October launch dependency: verified [Vercel Hobby terms](https://vercel.com/docs/plans/hobby) restrict use to non-commercial personal projects. Commercial launch eligibility is not established by free execution capacity. No upgrade, trial or purchase is authorised or activated; owner must resolve this before public sales.

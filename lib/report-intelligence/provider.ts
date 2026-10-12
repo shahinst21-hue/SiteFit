@@ -9,7 +9,7 @@ export type ProviderOutcome = { state: "received"; output: unknown; receipt: Ful
 /** Pure preflight: reject oversized/private packets before persisting a dispatch
  * intent. The exact same bounded request is used for actual execution. */
 export function fullRequest(group: Group, packet: unknown, instructions: string, schema: Record<string, unknown>, question = false) {
-  const narrative = !question && group === "synthesis" && (packet as { version?: string })?.version === "consultant-narrative-v1";
+  const narrative = !question && group === "synthesis" && ["consultant-narrative-v1", "consultant-narrative-v2"].includes(String((packet as { version?: string })?.version));
   const input = JSON.stringify(packet), maxOutput = question ? 1000 : narrative ? 6000 : group === "synthesis" ? 2000 : 3000;
   if (Buffer.byteLength(input) > (question ? 8000 : narrative ? 20_000 : 12_000) || Buffer.byteLength(instructions) > 4000 || Buffer.byteLength(JSON.stringify(schema)) > 4000 ||
     question && Buffer.byteLength(instructions) + Buffer.byteLength(JSON.stringify(schema)) > 6000 ||
@@ -29,10 +29,10 @@ export function fullProvider(options: { fetch?: typeof fetch; key?: string; now?
       dispatch.instructionsDigest !== packetDigest(instructions) || dispatch.schemaDigest !== packetDigest(schema)) throw Error("dispatch_binding_invalid");
     const question = options.profile === "question";
     const promptVersion = question ? "report-answer-v1" : dispatch.group === "context" ? "full-context-v1" : dispatch.group === "premises" ? "full-premises-rent-v1" :
-      (packet as { version?: string })?.version === "consultant-narrative-v1" ? "consultant-narrative-v1" : "full-decision-v1";
+      ["consultant-narrative-v1", "consultant-narrative-v2"].includes(String((packet as { version?: string })?.version)) ? String((packet as { version?: string }).version) : "full-decision-v1";
     const { request, encoded } = fullRequest(dispatch.group, packet, instructions, schema, question);
     const now = options.now ?? (() => new Date()), started = now().getTime();
-    const signal = AbortSignal.timeout(question ? 25_000 : promptVersion === "consultant-narrative-v1" ? 120_000 : dispatch.group === "synthesis" ? 30_000 : 45_000);
+    const signal = AbortSignal.timeout(question ? 25_000 : promptVersion.startsWith("consultant-narrative-") ? 120_000 : dispatch.group === "synthesis" ? 30_000 : 45_000);
     let receipt: FullReceipt | null = null;
     try {
       const response = await (options.fetch ?? fetch)("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal,

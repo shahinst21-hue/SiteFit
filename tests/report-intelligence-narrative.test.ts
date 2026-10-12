@@ -24,6 +24,20 @@ function fixture() {
   return { c, fit, claim, n };
 }
 
+test("D100 customer-context rejection is reproducible; admitted numerical references remain valid", () => {
+  const { c, fit, n, claim } = fixture();
+  const literal = structuredClone(n);
+  literal.sections[1].analysis[0] = { ...claim, text: "About 14,800 residents support a neighbourhood trading hypothesis, not observed demand." };
+  try { validateNarrative(literal, c, fit); assert.fail("Unbound literal accepted"); } catch (error) {
+    assert.deepEqual(narrativeFailureDiagnostic(error), { version: "narrative-diagnostic-v1", path: "sections[1].analysis[0]", rule: "literal_number" });
+  }
+  const referenced = structuredClone(n); referenced.sections[1].analysis[0] = { ...claim,
+    text: "The {{f:population}} resident context supports a neighbourhood trading hypothesis, not observed demand." };
+  const validated = validateNarrative(referenced, c, fit);
+  assert.match(renderCommentary(validated.sections[1].analysis[0], c).text, /about 15,000/);
+  // This proves the local contract behaviour, not the contents of the discarded live sentence.
+});
+
 test("explicit scope exclusions are accepted; positive or contradictory outcome claims still reject",()=>{
   const {c,fit,n,claim}=fixture();
   for(const text of ['This context index is not an overall suitability score.','This evidence does not measure overall suitability.']){
@@ -174,4 +188,25 @@ test("profile cell codec preserves exact contribution/share and rejects ambiguou
   const p = expandedProfiles(profile); assert.deepEqual((p.tables as { values: unknown[][] }[])[0].values, [["available", 14766.980617, 14766.980617, 0, .14, null]]);
   assert.deepEqual(profile.tables[0].values, [[14766.980617, .14]]);
   const invalid = structuredClone(profile); invalid.tables[0].values = [[1, 2, 3, 4]]; assert.throws(() => expandedProfiles(invalid));
+});
+
+
+test("essential v2 accepts ordinary qualitative analysis across all pages, retaining critical integrity", () => {
+  const { c, fit, n, claim } = fixture();
+  const candidate = { ...structuredClone(n), version: "consultant-narrative-v2" };
+  for (const section of candidate.sections) {
+    section.conclusion = { ...claim, text: "Overall suitability remains conditional; a takeaway model is worth testing against the lease and layout.", factIds: [] };
+    section.analysis = [{ ...claim, text: "The 2021 context supports a trading hypothesis, rather than a measured demand forecast." }];
+  }
+  assert.equal(validateNarrative(candidate, c, fit).sections.length, 8);
+  assert.throws(() => validateNarrative({ ...candidate, sections: [] }, c, fit), /invalid_narrative/);
+  for (const text of ["Rent is £90000 per year at this property.", "There are 99999 residents in this catchment.", "The expected margin is 80% for this business.", "Read https://private.example for details.", "Malformed [object Object] customer content."]) {
+    const bad = structuredClone(candidate); bad.sections[7].conclusion = { ...claim, text };
+    assert.throws(() => validateNarrative(bad, c, fit));
+  }
+  const bad = structuredClone(candidate); bad.sections[0].conclusion.factIds = ["foreign-fact"];
+  assert.throws(() => validateNarrative(bad, c, fit), /invalid_narrative_claim/);
+  const seven = structuredClone(candidate); seven.sections.pop();
+  const output = validateGeneratedNarrative(seven, c, fit, true);
+  assert.match(renderCommentary(output.sections[7].decisionTest, c).text, /statutory consumer rights/);
 });

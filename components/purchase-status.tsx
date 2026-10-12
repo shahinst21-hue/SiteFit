@@ -1,13 +1,15 @@
 "use client";
 import { useEffect,useState } from "react";
 import Link from "next/link";
-type State={id:string;report:string;status:string;access:string};
+import { progressLabel, parseProgress, type Progress } from "@/lib/fulfilment/policy";
+type State={id:string;report:string;status:string;access:string;fulfilment?:Progress|null};
 export function PurchaseStatus({initial,cancelled}:{initial:State;cancelled:boolean}){
  const [state,setState]=useState(initial),[finished,setFinished]=useState(false);
  useEffect(()=>{
-  if(initial.status!=="pending")return;
-  const controller=new AbortController();const deadline=Date.now()+30000;let timer:ReturnType<typeof setTimeout>;
-  const stopTimer=setTimeout(()=>{controller.abort();clearTimeout(timer);setFinished(true);},30000);
+  if(initial.status!=="pending"&&!(initial.access==='active'&&['queued','running'].includes(initial.fulfilment?.state??'')))return;
+  const duration=initial.status==='pending'?30000:120000;
+  const controller=new AbortController();const deadline=Date.now()+duration;let timer:ReturnType<typeof setTimeout>;
+  const stopTimer=setTimeout(()=>{controller.abort();clearTimeout(timer);setFinished(true);},duration);
   const pause=()=>{if(document.hidden){controller.abort();clearTimeout(timer);clearTimeout(stopTimer);setFinished(true);}};
   document.addEventListener('visibilitychange',pause);
   async function poll(){
@@ -17,7 +19,9 @@ export function PurchaseStatus({initial,cancelled}:{initial:State;cancelled:bool
     const response=await fetch(`/purchase/status?purchase=${encodeURIComponent(initial.id)}`,{cache:"no-store",signal:controller.signal});
     const value:unknown=await response.json();
     if(response.ok&&value&&typeof value==="object"&&"id" in value&&value.id===initial.id&&"status" in value&&typeof value.status==="string"&&"access" in value&&typeof value.access==="string"){
-     setState({...initial,status:value.status,access:value.access});if(value.status!=="pending"){clearTimeout(stopTimer);setFinished(true);return;}
+     const fulfilment=parseProgress('fulfilment' in value?value.fulfilment:null);
+     setState({...initial,status:value.status,access:value.access,fulfilment});
+     if(value.status!=="pending"&&!(value.access==='active'&&['queued','running'].includes(fulfilment?.state??''))){clearTimeout(stopTimer);setFinished(true);return;}
     }
    }catch{if(controller.signal.aborted)return;}
    timer=setTimeout(poll,2000);
@@ -25,5 +29,5 @@ export function PurchaseStatus({initial,cancelled}:{initial:State;cancelled:bool
   timer=setTimeout(poll,2000);return()=>{controller.abort();clearTimeout(timer);clearTimeout(stopTimer);document.removeEventListener('visibilitychange',pause);};
  },[initial]);
  const confirmed=state.status==="succeeded"&&state.access==="active";
- return <section className="simple-panel"><h1>{confirmed?"Test payment confirmed.":state.access==="suspended"?"Test purchase access is suspended.":state.access==="revoked"?"Test purchase access has been revoked.":state.status==="failed"?"Checkout was not completed.":cancelled?"Your Free Snapshot is still saved.":"Payment confirmation is being verified."}</h1><p role="status">{confirmed?"Full Report generation is not enabled in this development phase.":cancelled&&state.status==="pending"?"You can return to your Snapshot or try Checkout again.":finished?"Verification has paused. Refresh or check your Account shortly.":"Your original Snapshot remains unchanged."}</p><Link className="button button-secondary" href={`/snapshots/${state.report}`}>Return to your Snapshot</Link><Link href="/account">Your account</Link></section>;
+ return <section className="simple-panel"><h1>{confirmed?"Test payment confirmed.":state.access==="suspended"?"Test purchase access is suspended.":state.access==="revoked"?"Test purchase access has been revoked.":state.status==="failed"?"Checkout was not completed.":cancelled?"Your Free Snapshot is still saved.":"Payment confirmation is being verified."}</h1><p role="status">{confirmed?(state.fulfilment?progressLabel(state.fulfilment.state):"Full Report generation is not enabled in this development phase."):cancelled&&state.status==="pending"?"You can return to your Snapshot or try Checkout again.":finished?"Verification has paused. Refresh or check your Account shortly.":"Your original Snapshot remains unchanged."}</p>{confirmed&&state.fulfilment?.stage&&<p role="status">{({context:"Interpreting local context",premises:"Interpreting premises evidence",synthesis:"Preparing the report",validating:"Validating and saving"} as Record<string,string>)[state.fulfilment.stage]}</p>}{confirmed&&finished&&["queued","running"].includes(state.fulfilment?.state??"")&&<p>Progress refresh has paused. Your saved progress is available when you return.</p>}{confirmed&&state.fulfilment?.state==='ready'&&state.fulfilment.reportId&&<Link className="button button-primary" href={`/reports/${state.fulfilment.reportId}`}>Open your stored report</Link>}<Link className="button button-secondary" href={`/snapshots/${state.report}`}>Return to your Snapshot</Link><Link href="/account">Your account</Link></section>;
 }

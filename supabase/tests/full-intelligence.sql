@@ -1,5 +1,5 @@
 begin;
-do $$ declare owner uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;g uuid:=gen_random_uuid();report uuid;payment uuid:=gen_random_uuid();run uuid:=gen_random_uuid();e uuid;b jsonb;c public.analysis_inputs;ctx text;par jsonb; prep text; cp jsonb; edition jsonb; fid uuid; step integer; dg jsonb; projection jsonb;
+do $$ declare owner uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;g uuid:=gen_random_uuid();report uuid;payment uuid:=gen_random_uuid();run uuid:=gen_random_uuid();e uuid;b jsonb;c public.analysis_inputs;ctx text;par jsonb; prep text; cp jsonb; edition jsonb; fid uuid; step integer; dg jsonb; projection jsonb; job jsonb; jid uuid; lease uuid;
 begin
  if exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','source_data')
    and p.prokind='f' and (p.prosrc like '%375000000%' or p.prosrc like '%400000000%')) then raise exception 'Old capacity gate remains';end if;
@@ -50,6 +50,18 @@ begin
  prep:=jsonb_build_object('version','full-preparation-v1','configuration','full-intelligence-v1','analysisId',a,'inputId',i,'assessmentId',(select id from public.analysis_assessments where analysis_id=a),'assessmentDigest',(select content_digest from public.analysis_assessments where analysis_id=a),'catalog',jsonb_build_object('assessmentDigest',(select content_digest from public.analysis_assessments where analysis_id=a),'index',b->'index','readiness',b#>'{decision,readiness}','premises',b#>'{decision,premises}','stance',b#>'{decision,stance}'))::text;
  cp:=jsonb_build_object('version','full-intelligence-v1','revision',0,'bindingDigest',encode(sha256(convert_to(prep,'UTF8')),'hex'),'state','prepared','dispatches','[]'::jsonb,'repairUsed',false);
  edition:=public.start_sitefit_full(owner,report,prep,cp::text);fid:=(edition->>'id')::uuid;
+ if has_table_privilege('anon','public.report_fulfilment','SELECT') or has_function_privilege('authenticated','public.claim_sitefit_fulfilment()','EXECUTE') then raise exception 'Fulfilment exposed';end if;
+ if public.claim_sitefit_fulfilment() is not null or public.tick_sitefit_fulfilment() is not null then raise exception 'Default dispatch enabled';end if;
+ job:=public.enqueue_sitefit_fulfilment(owner,payment);jid:=(job->>'id')::uuid;
+ if public.enqueue_sitefit_fulfilment(owner,payment)->>'id'<>jid::text then raise exception 'Duplicate job';end if;
+ begin perform public.read_sitefit_fulfilment(other,payment);raise exception 'Foreign progress exposed';exception when insufficient_privilege then null;end;
+ begin perform public.sitefit_fulfilment_support(owner);raise exception 'Default support enabled';exception when insufficient_privilege then null;end;
+ update public.fulfilment_control set enabled=true;
+ job:=public.claim_sitefit_fulfilment();lease:=(job->>'token')::uuid;
+ if public.claim_sitefit_fulfilment() is not null then raise exception 'Concurrent claim admitted';end if;
+ perform public.bind_sitefit_fulfilment(jid,lease,fid);
+ begin perform public.finish_sitefit_fulfilment(jid,lease,'ready',null);raise exception 'Draft published';exception when raise_exception then if sqlerrm='Draft published' then raise;end if;end;
+ begin perform public.bind_sitefit_fulfilment(jid,gen_random_uuid(),fid);raise exception 'Wrong lease admitted';exception when serialization_failure then null;end;
  if public.start_sitefit_full(owner,report,prep,cp::text)->>'id'<>fid::text then raise exception 'Duplicate edition';end if;
  begin perform public.read_sitefit_full(other,fid);raise exception 'Cross owner Full exposed';exception when insufficient_privilege then null;end;
  for step in 1..3 loop
@@ -63,6 +75,17 @@ begin
  end loop;
  projection:=jsonb_build_object('version','full-report-v1','bindingDigest',cp->>'bindingDigest','index',b->'index','readiness',b#>'{decision,readiness}','premises',b#>'{decision,premises}','stance',b#>'{decision,stance}','financialEngineIncluded',false,'sourceDirectory','[]'::jsonb,'supplementReferences','[]'::jsonb,'contentDigest',repeat('d',64),'sections',(select jsonb_agg(jsonb_build_object('key',k,'evidenceIds','[]'::jsonb) order by pos) from unnest(array['overview','customer-context','competition','access','premises','rental-context','actions','appendix']) with ordinality as x(k,pos)));
  edition:=public.freeze_sitefit_full(owner,fid,6,projection::text);
+ perform public.finish_sitefit_fulfilment(jid,lease,'ready',null);
+ if public.read_sitefit_fulfilment(owner,payment)->>'reportId'<>fid::text then raise exception 'Ready progress missing';end if;
+ -- Simulate a worker dying after freeze but before recording its completion.
+ update public.report_fulfilment set state='running',lease_token=gen_random_uuid(),lease_until=now()-interval '1 second' where id=jid;
+ job:=public.claim_sitefit_fulfilment();
+ if job is not null or (select state from public.report_fulfilment where id=jid)<>'intervention' then raise exception 'Expired execution redispatched';end if;
+ insert into public.fulfilment_support_accounts(owner_id) values(owner);
+ perform public.resume_sitefit_fulfilment(owner,jid);
+ if public.read_sitefit_fulfilment(owner,payment)->>'state'<>'ready' then raise exception 'Stored Ready recovery failed';end if;
+ delete from public.fulfilment_support_accounts where owner_id=owner;
+ update public.fulfilment_control set enabled=false;
  if edition->>'status'<>'ready' or (select count(*) from public.report_sections where report_id=fid)<>8 then raise exception 'Full publication failed';end if;
  if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'profileSnapshots')<>'array' then raise exception 'Stored profile material unavailable';end if;
  if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'operatorSnapshots')<>'array' then raise exception 'Stored operator material unavailable';end if;
@@ -80,14 +103,14 @@ begin
  begin update public.reports set full_projection='{}' where id=fid;raise exception 'Ready Full rewritten';exception when check_violation then null;end;
  begin update public.report_sections set structured_content='{}' where report_id=fid;raise exception 'Ready section rewritten';exception when check_violation then null;end;
  begin delete from public.system_events where report_id=fid and event_type='phase12-report-reserved';raise exception 'Budget receipt deleted';exception when check_violation then null;end;
- -- Existing reservations total 0.50 here. Four independent technical bindings
- -- add 1.20; a fifth must exceed the approved 1.84 report cap.
- for step in 1..4 loop
+ -- Existing reservations total 0.50 here. Six independent technical bindings
+ -- add 1.80; a seventh must exceed the separately approved 2.44 report cap.
+ for step in 1..6 loop
   prep:=jsonb_set(prep::jsonb,'{verificationRunId}',to_jsonb('synthetic-budget-'||step))::text;
   cp:=jsonb_build_object('version','full-intelligence-v1','revision',0,'bindingDigest',encode(sha256(convert_to(prep,'UTF8')),'hex'),'state','prepared','dispatches','[]'::jsonb,'repairUsed',false);
   perform public.start_sitefit_full(owner,report,prep,cp::text);
  end loop;
- if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>1700000 then raise exception 'Prior reservations changed';end if;
+ if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>2300000 then raise exception 'Prior reservations changed';end if;
  prep:=jsonb_set(prep::jsonb,'{verificationRunId}','"synthetic-budget-excess"')::text;
  cp:=jsonb_set(cp,'{bindingDigest}',to_jsonb(encode(sha256(convert_to(prep,'UTF8')),'hex')));
  begin perform public.start_sitefit_full(owner,report,prep,cp::text);raise exception 'Report budget exceeded';exception when check_violation then null;end;
@@ -108,7 +131,7 @@ begin
  begin delete from public.system_events where safe_metadata->>'grantId'=run::text;raise exception 'Search reservation released';exception when check_violation then null;end;
  perform public.settle_sitefit_rent_search(owner,a,i,run,'null','unknown');
  begin perform public.settle_sitefit_rent_search(owner,a,i,run,'null','unknown');raise exception 'Search settled twice';exception when check_violation then null;end;
- if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>1700000 then raise exception 'Search altered Full reservations';end if;
+ if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>2300000 then raise exception 'Search altered Full reservations';end if;
  perform public.confirm_sitefit_payment(payment,'evt_fullrefund','refund.updated',2,'cs_test_assessmentfixture','pi_assessmentfixture','paid','full_refund');
  begin perform public.read_sitefit_full(owner,fid);raise exception 'Refund read accepted';exception when insufficient_privilege then null;end;
  if (select full_projection from public.reports where id=fid)<>projection then raise exception 'Refund erased report';end if;
