@@ -71,6 +71,18 @@ begin
  begin update public.reports set full_projection='{}' where id=fid;raise exception 'Ready Full rewritten';exception when check_violation then null;end;
  begin update public.report_sections set structured_content='{}' where report_id=fid;raise exception 'Ready section rewritten';exception when check_violation then null;end;
  begin delete from public.system_events where report_id=fid and event_type='phase12-report-reserved';raise exception 'Budget receipt deleted';exception when check_violation then null;end;
+ -- Existing reservations total 0.50 here. Three independent technical bindings
+ -- add 0.90; a fourth must exceed the approved 1.54 report cap.
+ for step in 1..3 loop
+  prep:=jsonb_set(prep::jsonb,'{verificationRunId}',to_jsonb('synthetic-budget-'||step))::text;
+  cp:=jsonb_build_object('version','full-intelligence-v1','revision',0,'bindingDigest',encode(sha256(convert_to(prep,'UTF8')),'hex'),'state','prepared','dispatches','[]'::jsonb,'repairUsed',false);
+  perform public.start_sitefit_full(owner,report,prep,cp::text);
+ end loop;
+ if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>1400000 then raise exception 'Prior reservations changed';end if;
+ prep:=jsonb_set(prep::jsonb,'{verificationRunId}','"synthetic-budget-excess"')::text;
+ cp:=jsonb_set(cp,'{bindingDigest}',to_jsonb(encode(sha256(convert_to(prep,'UTF8')),'hex')));
+ begin perform public.start_sitefit_full(owner,report,prep,cp::text);raise exception 'Report budget exceeded';exception when check_violation then null;end;
+ if position('reserved+40000>1240000' in pg_get_functiondef('public.reserve_sitefit_full_question(uuid,uuid)'::regprocedure))=0 then raise exception 'Question spending broadened';end if;
  perform public.confirm_sitefit_payment(payment,'evt_fullrefund','refund.updated',2,'cs_test_assessmentfixture','pi_assessmentfixture','paid','full_refund');
  begin perform public.read_sitefit_full(owner,fid);raise exception 'Refund read accepted';exception when insufficient_privilege then null;end;
  if (select full_projection from public.reports where id=fid)<>projection then raise exception 'Refund erased report';end if;

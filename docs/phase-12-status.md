@@ -1,5 +1,15 @@
 # Phase 12 implementation status
 
+## D96 independent technical proof — authorised 12 October 2026
+
+The owner approved exactly US$0.30 additional conservative reservation for one independent three-call proof, raising the total ceiling to US$1.54. Prior US$1.24 reservations remain intact. No retry, browsing, new provider retrieval, Q&A budget or Production activation. A forward migration changes only report-start spending; question ceiling remains unchanged. A private verification-run marker separates the new immutable technical edition without changing admitted sources or AI packets. Successful completion/replay is pending actual receipts.
+
+Read-only pre-write capacity: **375,764,659 bytes**, leaving **24,235,341 bytes** below the unchanged 400,000,000-byte checkpoint; conservative reservations total 1,240,000 microdollars and one Ready historical Full edition exists. No upgrade is required or purchased. Correction is isolated from Phase 13 in the managed `codex/phase-12-technical-proof` worktree.
+
+Forward migration `20261012090000_phase12_independent_proof_budget.sql` is applied in development. Hosted definition hashes confirm its only change is the report-start ceiling; grants and the entire question function are unchanged, and browser execution remains denied. Existing reservations were still 1,240,000 microdollars before the one new preparation. Fresh PostgreSQL/PostGIS/security rebuild and full `npm run check` (299 tests/build), production HTTP smoke passed. Requests explicitly select `service_tier: default`; prompts, validators, schemas and output caps are unchanged.
+
+The one new private preparation copies the previous failed technical preparation's exact frozen catalog/Scenario Fit and adds only the private run marker. Old edition remains untouched. Request preflight sizes: **14,109 / 5,565 / 23,200 bytes**. Published [pricing](https://developers.openai.com/api/docs/pricing), rechecked 12 October, gives standard short-context $2/M input, $10/M output and $2.50/M cache-write input; conservatively using 68,500 total bounded input tokens including framing margin and 12,000 capped output yields **US$0.29125** without cache discounts, below the new US$0.30 reserve. One-shot preparation marker prevents accidental repeat; **zero AI/source calls so far**. Actual execution and successful Ready/replay remain pending protected delivery.
+
 ## Current gate ledger — owner D89, 11 October 2026
 
 Current content structure, Executive Summary, Scenario Fit and concept-specific reasoning are **accepted as the V1 baseline**. Editorial cycles and requests for three more manually reviewed concept reports are closed. Historical rejection/review entries below remain historical evidence, not a renewed acceptance requirement. Phase 12 is not technically complete; Phase 13 implementation is conditional on closure/protected delivery.
