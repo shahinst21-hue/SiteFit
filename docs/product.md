@@ -1,5 +1,7 @@
 # SiteFit Product Contract
 
+D95 (11 October 2026): rental pricing uses qualified existing PropertyData first and separately validated real-web discovery when absent. Display estimates as estimates; if no admitted price exists, omit pricing and empty-price placeholders. Preserve material lease actions, frozen evidence/missingness in Appendix and immutable historical editions. Additional search spending/runtime enablement remains separately gated; see [decision D95](decisions.md).
+
 D89 (11 October 2026): current Full Report V1 structure, Executive Summary, Scenario Fit and concept-specific reasoning are accepted. Stop editorial cycles. Phase 13's eight-page reference-driven dashboard is authorised after mandatory Phase 12 technical and protected-delivery gates close; no new providers, context-index change, report Financial Engine calculations or unapproved payments. See [V1 baseline and backlog](full-report-v1-release.md).
 
 ## Current report product requirements — 10 October 2026
@@ -70,6 +72,8 @@ Sample Report content is visibly labelled Sample Report, with fictional scenario
 
 ## Mobile First and visual quality
 
+The owner-approved [SiteFit brand identity V1](brand-identity.md) (D93, 11 October 2026) is authoritative for exact colours, typography, spacing, shape and Astra Icons. It supersedes conflicting older visual-token guidance; responsive readability, evidence truth and phase boundaries remain intact.
+
 Mobile First is mandatory: solve 390px first, then 360/375px, 430px, 768px and 1440px. Apply to every customer screen, including Account and Blog articles. Hero sequence: clear proposition, short explanation, address/direct check action, trust, then product visual. Main CTA must be quickly reachable. Each location step has one decision. Stack Snapshot cards; disclose evidence and economics progressively; avoid horizontal scrolling, tiny targets, form zoom and administrative sidebars.
 
 A modern analytical SiteFit identity uses strong action hierarchy, location/evidence visual language, clean cards, contrast and simple navigation. Reference direction guides principles, not copied wording, branding, exact type, colour or illustrations. Avoid editorial/luxury, generic SaaS, estate-agency or GIS presentation.
@@ -101,3 +105,6 @@ The owner's subsequent Kingston redesign instruction supersedes the earlier layo
 ## D83 context-only numerical boundary — 2026-10-09
 
 The initial Resident & Workplace Context Index is a dated density-context summary only. It does not measure customers, success, competition, profitability or overall premises suitability. Business weights are explicit hypothetical policy. Premises and Decision Readiness dominate practical decisions independently; financial execution remains separate. Failed method/evidence admission withholds the number. Final UI/Full Report/AI generation still requires Phase 12/13 approval.
+# Current Phase 13 development authority
+
+11 October 2026 owner brief (D92) authorises the premium eight-page AI-native Full Report dashboard and immutable exports on frozen V1 while Phase 12's live Ready/replay release gate remains open. Development is Local/protected Preview, independently stacked on PR #35; customer-facing Production paid release remains disabled. Current screenshots define UI/components only. All facts, figures, formats, permissions, rent and limitations follow admitted stored evidence; no overall score, financial calculations or new model/provider calls are introduced. See [Phase 13 plan](phase13_plan.md).

@@ -95,7 +95,7 @@ export default function SampleReport() {
       <aside className="report-sidebar">
         <Wordmark />
         <Link className="text-link" href="/">
-          ← Back to SiteFit
+          <Icon name="back"/> Back to SiteFit
         </Link>
         <div className="sidebar-property">
           <span className="icon-disc amber">
@@ -236,7 +236,7 @@ export default function SampleReport() {
               <h2>Observation. Interpretation. Next check.</h2>
             </div>
             <Link className="text-link" href="/methodology">
-              Read the methodology ↗
+              Read the methodology <Icon name="external"/>
             </Link>
           </div>
           <div className="two-columns">

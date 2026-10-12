@@ -1,5 +1,20 @@
 # Phase 12 implementation status
 
+## D96 actual result — 12 October 2026, paid release remains BLOCKED
+
+The single approved independent proof ran through the protected Phase 12 Preview after exact-head CI/protected correction PR #37 merged into the Phase 12 branch. Execution was requested once through the authorised owner session; the browser left the verification page for Account. Processing continued and all three dispatches settled. Context and premises were accepted; synthesis returned and was rejected with the allowlisted reason **`unsupported_narrative_claim`**. The new edition remains draft at revision 6, with no published sections, no new Ready V1, no automatic retry and no source retrieval. UI exposes only safe stored failure/progress, not private preparation or rejected prose.
+
+| Group | Input / output tokens | Provider duration | Estimated cost |
+| --- | ---: | ---: | ---: |
+| Context | 3,484 / 327 | 6,694 ms | US$0.010238 |
+| Premises | 1,132 / 155 | 4,577 ms | US$0.003814 |
+| Synthesis, rejected | 5,137 / 5,254 | 83,022 ms | US$0.062814 |
+| Total | **9,753 / 5,736** | About 91 seconds between first provider dispatch and last provider receipt; not total end-to-end latency | **US$0.076866** |
+
+These are usage-derived estimates, not invoiced charges. All conservative reservations now total **US$1.54** and remain intact. No further paid verification is authorised. The synthesis output was below the 6,000-token cap; the reason identifies the unsupported-claim guard, not the exact sentence or which of its prohibited-pattern branches matched. Rejected prose remains unretained. Do not infer a specific fabricated claim, a false-positive regex, or the earlier run's cause from this receipt. No editorial cycle or validator relaxation was performed.
+
+The prior failed edition's complete digest and the new preparation's frozen catalog/Scenario Fit remain unchanged. The existing Ready graph fingerprint remains `d1b7ad7acdac8d86cde7fbbb89bba27c`, with one historical Ready Full report. Actual post-proof database size is **375,764,659 bytes**, leaving **24,235,341 bytes** below the unchanged 400 MB checkpoint. Successful new V1 Ready/replay remains the genuine Phase 12 release blocker. D92 independently permits completion of Phase 13's Preview dashboard scope; it does not permit main merge or customer paid release while this blocker persists.
+
 ## D96 independent technical proof — authorised 12 October 2026
 
 The owner approved exactly US$0.30 additional conservative reservation for one independent three-call proof, raising the total ceiling to US$1.54. Prior US$1.24 reservations remain intact. No retry, browsing, new provider retrieval, Q&A budget or Production activation. A forward migration changes only report-start spending; question ceiling remains unchanged. A private verification-run marker separates the new immutable technical edition without changing admitted sources or AI packets. Successful completion/replay is pending actual receipts.

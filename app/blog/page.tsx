@@ -1,3 +1,5 @@
+
+import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui";
 import { PostCard } from "@/components/blog-content";
@@ -31,7 +33,7 @@ export default async function Blog() {
             commercial lease decision.
           </p>
           <Link href="/check-location" className="text-link">
-            Put your next property in context ↗
+            Put your next property in context <Icon name="external"/>
           </Link>
         </PageIntro>
         {featured && <PostCard post={featured} featured />}

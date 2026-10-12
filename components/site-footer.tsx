@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Wordmark } from "./ui";
 import { site } from "@/lib/site-config";
+import { Icon } from "./icon";
 
 export function SiteFooter() {
   return (
@@ -17,9 +18,9 @@ export function SiteFooter() {
           </p>
         </div>
         <nav aria-label="Footer navigation">
-          <Link href="/blog">Resources</Link>
-          <Link href="/methodology">Methodology</Link>
-          <Link href="/contact">Contact</Link>
+          <Link href="/blog"><Icon name="document"/>Resources</Link>
+          <Link href="/methodology"><Icon name="shield"/>Methodology</Link>
+          <Link href="/contact"><Icon name="help"/>Contact</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
         </nav>

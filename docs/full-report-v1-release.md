@@ -1,5 +1,7 @@
 # Full Report V1 release baseline
 
+12 October update: owner-approved D96 independent proof settled three requests, but synthesis was rejected with `unsupported_narrative_claim`. No new Ready V1 exists; paid release and main merge remain blocked. Usage-derived cost US$0.076866; conservative reservations US$1.54 retained, with no further paid request authorised. See [actual receipt record](phase-12-status.md). The accepted content baseline and independently authorised Phase 13 Preview dashboard are not reopened by this failure.
+
 Owner accepted 11 October 2026 under D89. Content baseline accepted; technical release and Phase 12 completion remain pending. No additional editorial review is required.
 
 ## Versioned contracts
@@ -26,5 +28,5 @@ Only mandatory technical gates: final contract/rendering regression, hosted chan
 Under D91, Phase 13 requires separate owner approval. The frozen contracts and [reference handoff](phase-13-design-handoff.md) are suitable for approved dashboard development with local fixtures and existing stored editions; this is development readiness, not live-report or release acceptance. Result first, accessible evidence inspection, honest missing states, qualified rental information, real maps/charts, actual progress/recovery and owned exports. No financial form/calculations in Full Report, no new provider or unapproved payments. Preserve the references' visual composition while replacing unsupported example content with actual findings. Keep the Phase 12 new V1 live ready/replay gate explicit and customer-facing paid release disabled until it passes.
 
 
-Final technical proof under D90 returned a rejected synthesis. Content acceptance remains intact, but technical release is BLOCKED; no ready new V1, merge or Phase 13 start is claimed. See the actual receipts and limitations in [Phase 12 status](phase-12-status.md).
+Historical D90 checkpoint: the final technical proof returned a rejected synthesis. Content acceptance remains intact, but technical release is BLOCKED; no ready new V1 or main merge is claimed. D92 subsequently authorised Phase 13 development independently of that open gate. Its delivered dashboard and owner UI acceptance do not close the Phase 12 proof; see [Phase 12 status](phase-12-status.md) and [Phase 13 delivery report](phase-13-delivery-report.md).
 
