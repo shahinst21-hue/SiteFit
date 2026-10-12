@@ -45,6 +45,20 @@ test("failed requests consume dispatch and disabled discovery makes no request",
   await assert.rejects(on.discover("10 Synthetic Road"), /provider_unavailable/);
   await assert.rejects(on.discover("10 Synthetic Road"), /dispatch_limit/); assert.equal(calls, 1);
 });
+test("rental search restricts approved source domains and binds the filter into its immutable receipt", async () => {
+  let calls = 0, expectedDigest = "";
+  const provider = webEvidenceSearch({ enabled: true, approvedUsd: .5, allowedDomains: ["example.org"], key: "sk-synthetic", fetch: async (_url, init) => {
+    calls++; const request = JSON.parse(String(init?.body));
+    assert.deepEqual(request.tools[0].filters.allowed_domains, ["example.org"]);
+    expectedDigest = packetDigest({ input: request.input, instructions: request.instructions, allowedDomains: ["example.org"] });
+    return Response.json({ model: "gpt-6.1-sol", status: "completed", usage: { input_tokens: 100, output_tokens: 20 },
+      output: [{ type: "web_search_call", action: { sources: [] } }, { type: "message", content: [{ type: "output_text", text: '{"candidates":[]}' }] }] });
+  } });
+  assert.equal((await provider.discover("10 Synthetic Road", { kind: "rent" })).receipt.packetDigest, expectedDigest);
+  const invalid = webEvidenceSearch({ enabled: true, approvedUsd: .5, allowedDomains: ["127.0.0.1"], key: "sk-synthetic", fetch: async () => { calls++; throw Error("must not fetch"); } });
+  await assert.rejects(invalid.discover("10 Synthetic Road", { kind: "rent" }), /invalid_request/);
+  assert.equal(calls, 1);
+});
 
 test("rent-only fallback search remains a gated one-shot lead finder and empty results are not prices",async()=>{
   let calls=0;

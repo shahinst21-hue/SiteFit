@@ -1,6 +1,7 @@
 import "server-only";
 import { packetDigest } from "../analysis/canonical.ts";
 import { object, text, timestamp } from "../data/validation.ts";
+import { privateTokenText } from "../data/private-text.ts";
 
 export const discoverySearch = Object.freeze({ model: "gpt-6.1-sol", promptVersion: "commercial-discovery-v1",
   maxOutputTokens: 512, timeoutMs: 30_000, maxBytes: 128_000, maxCalls: 1, priceVersion: "openai-standard-2026-10-09" });
@@ -30,13 +31,15 @@ const schema = { type: "object", additionalProperties: false, required: ["candid
 
 /** One explicit authorised development dispatch per instance. Not a customer route.
  * Search proposals are untrusted and cannot be persisted as admitted evidence. */
-export function webEvidenceSearch(options: { enabled: boolean; approvedUsd: number; key?: string; fetch?: typeof fetch; now?: () => Date }) {
+export function webEvidenceSearch(options: { enabled: boolean; approvedUsd: number; key?: string; fetch?: typeof fetch; now?: () => Date; allowedDomains?: readonly string[] }) {
   let dispatched = false;
   const receipts: SearchReceipt[] = [];
   const now = options.now ?? (() => new Date());
   return { receipts: () => structuredClone(receipts), async discover(publicCommercialAddress: string,
     purpose: SearchPurpose | null = null): Promise<{ candidates: SearchCandidate[]; receipt: SearchReceipt }> {
     if (!options.enabled || options.approvedUsd !== .5) throw new DiscoveryError("disabled");
+    if (options.allowedDomains && (options.allowedDomains.length < 1 || options.allowedDomains.length > 3 ||
+      new Set(options.allowedDomains).size !== options.allowedDomains.length || options.allowedDomains.some(d => !publicReference(`https://${d}/`) || new URL(`https://${d}/`).hostname !== d))) throw new DiscoveryError("invalid_request");
     if (!text(publicCommercialAddress, 250) || /@|https?:|Bearer|sk-|[{}<>]/i.test(publicCommercialAddress)) throw new DiscoveryError("invalid_request");
     if (purpose && (purpose.kind !== "rent" && purpose.kind !== "competition" || purpose.kind === "competition" &&
       (!Array.isArray(purpose.operators) || purpose.operators.length < 1 || purpose.operators.length > 6 ||
@@ -55,7 +58,8 @@ export function webEvidenceSearch(options: { enabled: boolean; approvedUsd: numb
       response = await (options.fetch ?? fetch)("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal,
         headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: JSON.stringify({
           model: discoverySearch.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: discoverySearch.maxOutputTokens,
-          max_tool_calls: 1, parallel_tool_calls: false, tools: [{ type: "web_search", search_context_size: "low", return_token_budget: "default" }],
+          max_tool_calls: 1, parallel_tool_calls: false, tools: [{ type: "web_search", search_context_size: "low", return_token_budget: "default",
+            ...(options.allowedDomains ? { filters: { allowed_domains: options.allowedDomains } } : {}) }],
           tool_choice: { type: "web_search" }, include: ["web_search_call.action.sources"], instructions, input,
           text: { format: { type: "json_schema", name: "sitefit_discovery", strict: true, schema } },
         }) });
@@ -72,7 +76,8 @@ export function webEvidenceSearch(options: { enabled: boolean; approvedUsd: numb
     if (![usage.input_tokens, usage.output_tokens].every(n => Number.isSafeInteger(n) && Number(n) >= 0) || Number(usage.output_tokens) > discoverySearch.maxOutputTokens || typeof body.model !== "string") throw new DiscoveryError("invalid_response");
     const generatedAt = now().toISOString(); if (!timestamp(generatedAt)) throw new DiscoveryError("invalid_response");
     const reportedCalls = Array.isArray(body.output) ? body.output.filter(raw => object(raw).type === "web_search_call").length : 0;
-    const receipt: SearchReceipt = { model: body.model, promptVersion: discoverySearch.promptVersion, generatedAt, packetDigest: packetDigest({ input, instructions }),
+    const receipt: SearchReceipt = { model: body.model, promptVersion: discoverySearch.promptVersion, generatedAt, packetDigest: packetDigest({ input, instructions,
+      ...(options.allowedDomains ? { allowedDomains: options.allowedDomains } : {}) }),
       inputTokens: Number(usage.input_tokens), outputTokens: Number(usage.output_tokens), toolCalls: reportedCalls, durationMs: now().getTime() - started,
       estimatedUsd: estimatedSearchUsd(Number(usage.input_tokens), Number(usage.output_tokens), reportedCalls), priceVersion: discoverySearch.priceVersion, store: false };
     receipts.push(receipt); // Retain usage even if the candidate/status validation fails.
@@ -91,7 +96,7 @@ export function webEvidenceSearch(options: { enabled: boolean; approvedUsd: numb
     try { output = object(JSON.parse(texts[0])); } catch { throw new DiscoveryError("invalid_response"); }
     if (Object.keys(output).length !== 1 || !Array.isArray(output.candidates) || output.candidates.length > 3) throw new DiscoveryError("invalid_response");
     const candidates = output.candidates.map(raw => { const c = object(raw);
-      if (Object.keys(c).length !== 2 || !publicReference(c.url) || !sources.has(c.url) || !text(c.proposedFact, 500) || /Bearer|sk-|sb_secret_|@[a-z0-9]/i.test(c.proposedFact)) throw new DiscoveryError("invalid_response");
+      if (Object.keys(c).length !== 2 || !publicReference(c.url) || !sources.has(c.url) || !text(c.proposedFact, 500) || privateTokenText(c.proposedFact) || /@[a-z0-9]/i.test(c.proposedFact)) throw new DiscoveryError("invalid_response");
       return c as unknown as SearchCandidate; });
     return { candidates, receipt };
   } };

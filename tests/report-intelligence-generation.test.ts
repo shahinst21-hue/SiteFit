@@ -62,6 +62,33 @@ test("verification can never activate Production or an unknown deployment", () =
   assert.equal(verificationEnabled({ SITEFIT_REPORT_INTELLIGENCE_VERIFICATION: "1" }, "localhost"), true);
   assert.equal(verificationEnabled({ SITEFIT_REPORT_INTELLIGENCE_VERIFICATION: "1", VERCEL_ENV: "preview", VERCEL: "1" }, "preview.example"), true);
 });
+test("failed synthesis persists safe field diagnostics, withholds every section and never retries the rejected call", async () => {
+  const db = store(true), p = db.value().preparation;
+  p.narrativeVersion = "consultant-narrative-v1";
+  p.scenarioFit = evaluateScenarioFit({ businessType: "coffee-shop", facts: [] });
+  db.value().checkpoint = newCheckpoint(p);
+  const claim = { text: "The exact operating evidence remains unresolved before a lease commitment.", kind: "unknown", factIds: [], operatorIds: [], referenceIds: [] };
+  const rejected = { version: "consultant-narrative-v1", verdict: [claim, claim, claim], strengths: [claim], risks: [claim],
+    priorityAction: { ...claim, text: "The property supports 40 seats; this invented claim must never reach the customer." },
+    actions: Array.from({ length: 4 }, () => ({ action: claim, consequence: claim })),
+    sections: sectionKeys.map(key => ({ key, conclusion: claim, analysis: [claim], decisionTest: claim })) };
+  let calls = 0;
+  const provider = { async interpret(d: { group: string }, packet: ReturnType<typeof catalogPacket>) {
+    calls++;
+    return { state: "received", output: d.group === "synthesis" ? rejected : { sections: packet.sections.map(key => ({ key,
+      lead: String(packet.atoms.find(a => a[1] === key && a[2] === "conclusion")?.[0] ?? "unavailable"),
+      reasons: packet.atoms.filter(a => a[1] === key && a[2] === "reason").map(a => String(a[0])), implications: [], actions: [] })) }, receipt: {} };
+  } } as unknown as ReturnType<typeof fullProvider>;
+  const failed = await generateFullIntelligence(ids.analysis, ids.property, { repository: db.repo, provider });
+  assert.equal(failed.status, "draft"); assert.equal(failed.projection, null);
+  const dispatch = failed.checkpoint.dispatches[2];
+  assert.equal(dispatch.state, "invalid"); assert.equal(dispatch.output, null);
+  assert.deepEqual(dispatch.receipt, { validation: "narrative_rejected", validationReason: "unsupported_narrative_claim",
+    validationDiagnostic: { version: "narrative-diagnostic-v1", rule: "literal_number", path: "priorityAction" } });
+  assert.doesNotMatch(JSON.stringify(failed.checkpoint), /40 seats|invented claim/);
+  await generateFullIntelligence(ids.analysis, ids.property, { repository: db.repo, provider, resume: true });
+  assert.equal(calls, 3); assert.equal(db.value().status, "draft");
+});
 
 test("new eight-page narrative reaches owned exports once, preserves exact operands, and reopens without regeneration", async () => {
   const db=store(true), p=db.value().preparation;
@@ -80,7 +107,7 @@ test("new eight-page narrative reaches owned exports once, preserves exact opera
     actions:Array.from({length:4},()=>({action:claim,consequence:claim})),
     sections:sectionKeys.map(key=>({key,conclusion:claim,analysis:[claim],decisionTest:claim}))};
   narrative.priorityAction = { ...claim,
-    text: "We cannot recommend a takeaway format without verified layout evidence." };
+    text: "We cannot recommend a takeaway format without verified layout evidence; use a risk-based review." };
   let calls=0;
   const provider={async interpret(d:{group:string},packet:ReturnType<typeof catalogPacket>){
     calls++;

@@ -37,12 +37,30 @@ test('actual rental component and PDF omit missing prices; admitted PropertyData
   const report=structuredClone(fixtures[0]);
   report.rental=[{id:'synthetic:benchmark',kind:'local_asking_benchmark',annualValue:37.5,unit:'GBP per square foot per year',areaBasis:'NIA',retrievedAt:'2026-10-09T12:00:00Z',sourceDate:null,reportedError:null,selectedUnitRent:false},
     {id:'synthetic:valuation',kind:'property_estimate',annualValue:42000,unit:'GBP per year',areaBasis:'GIA',retrievedAt:'2026-10-09T12:00:00Z',sourceDate:null,reportedError:5000,selectedUnitRent:false}];
+  report.rental[0].comparison={sample:20,type:'restaurants',radius:.5,radiusUnits:null,dispersion:null,limitations:['selected_format_comparability']};
   report.references=report.rental.map(r=>({id:r.id,source:'propertydata',url:'https://propertydata.co.uk/api/documentation/licensing',scope:'synthetic test only',retrievedAt:r.retrievedAt,effectiveAt:null,licence:'synthetic-test'}));
   const before=JSON.stringify(report),html=render(report),pdf=exportParagraphs(report,'rental-context').map(r=>r.text).join('\n');
+  for(const text of [html,pdf])assert.match(text,/20 restaurant properties.*price spread.*comparability/);
   for(const text of [html,pdf]){assert.match(text,/PropertyData/);assert.match(text,/About £38/);assert.match(text,/per sq ft \/ year/);assert.match(text,/NIA/);assert.match(text,/GIA/);assert.match(text,/About £42,000/);assert.match(text,/±£5,000/);assert.match(text,/not statistical confidence/);assert.match(text,/Source\/model date not supplied/);assert.match(text,/not.*quoted or agreed rent/i);assert.match(text,/not an averaged rent/);assert.doesNotMatch(text,/\[object Object\]|NaN|undefined/);}
   assert.equal(JSON.stringify(report),before);
   for(const patch of [{annualValue:NaN},{annualValue:0},{areaBasis:'unknown'},{unit:'GBP per month'},{selectedUnitRent:true},{kind:'asking_rent'},{sourceDate:'invalid-date'}]){const bad=structuredClone(report);Object.assign(bad.rental[0],patch);assert.throws(()=>rentalCards(bad),/invalid_rental_display/);}
   const foreign=structuredClone(report);foreign.references[0].source='unverified web search';assert.throws(()=>rentalCards(foreign),/invalid_rental_display/);
+});
+test('independently admitted original-source rental prices render with separate dates and no lease certainty',()=>{
+  const report=structuredClone(fixtures[0]);
+  report.rental=[{id:'synthetic:web-rent',kind:'source_asking_rent',annualValue:35000,unit:'GBP per year',areaBasis:'unknown',retrievedAt:'2026-10-12T12:00:00Z',sourceDate:'2026-09-01',reportedError:null,selectedUnitRent:true,
+    web:{policyId:'synthetic-source-policy',sourceLabel:'Synthetic original agent',match:'exact_unit',publishedDate:'2026-09-01',effectiveDate:null,amountQualifier:'exact',vat:'unknown',limitations:['Dated source only']}}];
+  report.references=[{id:'synthetic:web-rent',source:'rental-web:synthetic-source-policy',url:'https://example.org/listing',scope:'synthetic exact-unit source',retrievedAt:'2026-10-12T12:00:00Z',effectiveAt:'2026-09-01',licence:'Synthetic policy'}];
+  const before=JSON.stringify(report),rendered=spawnSync(process.execPath,['tests/fixtures/render-rental.mjs'],{input:JSON.stringify(report),encoding:'utf8'});
+  assert.equal(rendered.status,0,rendered.stderr);
+  for(const text of [rendered.stdout,exportParagraphs(report,'rental-context').map(r=>r.text).join('\n')]){
+    assert.match(text,/Source quotes £35,000/);assert.match(text,/dated asking rent/);assert.match(text,/Published.*Observed/);
+    assert.match(text,/not verified current or agreed lease/);assert.match(text,/Area basis not supplied/);
+    assert.doesNotMatch(text,/\[object Object\]|undefined|NaN/);
+  }
+  assert.equal(JSON.stringify(report),before);
+  const wrong=structuredClone(report);wrong.references[0].source='unreviewed-search';assert.throws(()=>rentalCards(wrong),/invalid_rental_display/);
+  const undated=structuredClone(report);undated.rental[0].sourceDate=null;assert.throws(()=>rentalCards(undated),/invalid_rental_display/);
 });
 test('public source links reject credential and private query-bearing URLs; display rounding does not fabricate precision',()=>{
   for(const value of ['javascript:alert(1)','https://user:secret@example.com','https://example.com?token=secret','https://example.com#secret','http://example.com'])assert.equal(sourceURL(value),null);

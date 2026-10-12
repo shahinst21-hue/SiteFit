@@ -1,6 +1,11 @@
 begin;
 do $$ declare owner uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;g uuid:=gen_random_uuid();report uuid;payment uuid:=gen_random_uuid();run uuid:=gen_random_uuid();e uuid;b jsonb;c public.analysis_inputs;ctx text;par jsonb; prep text; cp jsonb; edition jsonb; fid uuid; step integer; dg jsonb; projection jsonb;
 begin
+ if source_data.sitefit_report_private_text('{"description":"A risk-based desk-based review"}') or
+   source_data.sitefit_report_private_text('{"policy":{"rawResponseRetained":false}}') then raise exception 'Benign private-text false positive';end if;
+ if not source_data.sitefit_report_private_text('{"rawResponse":"forbidden provider body"}') or
+   not source_data.sitefit_report_private_text('{"policy":{"rawResponseRetained":true}}') or
+   not source_data.sitefit_report_private_text('{"value":"prefixsk-proj-synthetic"}') then raise exception 'Private text guard weakened';end if;
  if has_function_privilege('anon','public.freeze_sitefit_economics(uuid,uuid,uuid,uuid,uuid,text,text)','EXECUTE') or has_function_privilege('authenticated','public.read_sitefit_economics(uuid,uuid,uuid)','EXECUTE') or
  has_table_privilege('authenticated','public.economic_models','SELECT') then raise exception 'Browser economics exposed';end if;
  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(owner,'assessment@example.invalid',now(),false),(other,'other@example.invalid',now(),false);
@@ -49,7 +54,7 @@ begin
   cp:=jsonb_set(jsonb_set(cp,'{revision}',to_jsonb(step*2-1)),'{dispatches}',(cp->'dispatches')||jsonb_build_array(dg));cp:=jsonb_set(cp,'{state}','"running"');
   edition:=public.checkpoint_sitefit_full(owner,fid,step*2-2,cp::text);
   begin perform public.checkpoint_sitefit_full(owner,fid,step*2-2,cp::text);raise exception 'Stale CAS accepted';exception when serialization_failure then null;end;
-  dg:=dg||jsonb_build_object('state','accepted','output',jsonb_build_object('sections','[]'::jsonb),'receipt',jsonb_build_object('model','gpt-6.1-sol','inputTokens',0,'outputTokens',0));
+  dg:=dg||jsonb_build_object('state','accepted','output',jsonb_build_object('sections','[]'::jsonb,'summary','A risk-based desk-based review'),'receipt',jsonb_build_object('model','gpt-6.1-sol','inputTokens',0,'outputTokens',0));
   cp:=jsonb_set(jsonb_set(cp,array['dispatches',(step-1)::text],dg),'{revision}',to_jsonb(step*2));
   edition:=public.checkpoint_sitefit_full(owner,fid,step*2-1,cp::text);
  end loop;
@@ -58,6 +63,7 @@ begin
  if edition->>'status'<>'ready' or (select count(*) from public.report_sections where report_id=fid)<>8 then raise exception 'Full publication failed';end if;
  if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'profileSnapshots')<>'array' then raise exception 'Stored profile material unavailable';end if;
  if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'operatorSnapshots')<>'array' then raise exception 'Stored operator material unavailable';end if;
+ if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'rentalSnapshots')<>'array' then raise exception 'Stored rental material unavailable';end if;
  begin perform public.read_sitefit_full_material(other,report);raise exception 'Foreign operator material exposed';exception when insufficient_privilege then null;end;
  for step in 1..5 loop
   if public.reserve_sitefit_full_question(owner,fid)<>step then raise exception 'Question ordinal changed';end if;
@@ -83,6 +89,23 @@ begin
  cp:=jsonb_set(cp,'{bindingDigest}',to_jsonb(encode(sha256(convert_to(prep,'UTF8')),'hex')));
  begin perform public.start_sitefit_full(owner,report,prep,cp::text);raise exception 'Report budget exceeded';exception when check_violation then null;end;
  if position('reserved+40000>1240000' in pg_get_functiondef('public.reserve_sitefit_full_question(uuid,uuid)'::regprocedure))=0 then raise exception 'Question spending broadened';end if;
+ -- Separate fictitious search grant, rollback only. No provider/search dispatch.
+ if has_function_privilege('anon','public.reserve_sitefit_rent_search(uuid,uuid,uuid,uuid,jsonb)','EXECUTE') or
+   has_function_privilege('authenticated','public.settle_sitefit_rent_search(uuid,uuid,uuid,uuid,jsonb,text)','EXECUTE') then raise exception 'Search browser authority exposed';end if;
+ run:=gen_random_uuid();
+ begin perform public.reserve_sitefit_rent_search(owner,a,i,run,'["synthetic-policy"]');raise exception 'Unapproved search funded';exception when insufficient_privilege then null;end;
+ perform set_config('sitefit.rent_writer','owner-approved',true);
+ insert into public.system_events(id,analysis_id,event_type,safe_metadata) values(run,a,'rent-search-owner-approved',
+   jsonb_build_object('ownerId',owner,'inputId',i,'reserveMicros',500000,'maxCalls',1,'expiresAt',now()+interval '1 hour','policyBindings',jsonb_build_array('synthetic-policy')));
+ perform set_config('sitefit.rent_writer','',true);
+ begin perform public.reserve_sitefit_rent_search(other,a,i,run,'["synthetic-policy"]');raise exception 'Foreign search funded';exception when insufficient_privilege then null;end;
+ begin perform public.reserve_sitefit_rent_search(owner,a,i,run,'["unapproved-policy"]');raise exception 'Changed source policy funded';exception when insufficient_privilege then null;end;
+ if public.reserve_sitefit_rent_search(owner,a,i,run,'["synthetic-policy"]')->>'reservedMicros'<>'500000' then raise exception 'Search reservation changed';end if;
+ begin perform public.reserve_sitefit_rent_search(owner,a,i,run,'["synthetic-policy"]');raise exception 'Consumed search grant reused';exception when insufficient_privilege then null;end;
+ begin delete from public.system_events where safe_metadata->>'grantId'=run::text;raise exception 'Search reservation released';exception when check_violation then null;end;
+ perform public.settle_sitefit_rent_search(owner,a,i,run,'null','unknown');
+ begin perform public.settle_sitefit_rent_search(owner,a,i,run,'null','unknown');raise exception 'Search settled twice';exception when check_violation then null;end;
+ if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>1400000 then raise exception 'Search altered Full reservations';end if;
  perform public.confirm_sitefit_payment(payment,'evt_fullrefund','refund.updated',2,'cs_test_assessmentfixture','pi_assessmentfixture','paid','full_refund');
  begin perform public.read_sitefit_full(owner,fid);raise exception 'Refund read accepted';exception when insufficient_privilege then null;end;
  if (select full_projection from public.reports where id=fid)<>projection then raise exception 'Refund erased report';end if;

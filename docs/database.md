@@ -1,5 +1,11 @@
 # Phase 3 database foundation
 
+## 12 October — bounded rental/Synthesis correction, development applied
+
+Forward migration `20261012100000_full_rental_material.sql` uses a shared private-text predicate for Full/economic/assessment writers, avoiding ordinary hyphenated-word and boolean-false discard-policy false positives. Actual raw responses, private keys and all ownership, source, lifecycle, budget and freeze guards remain enforced. The private Full material reader adds at most four retained rental rows for a maximum-three preparation bound. Existing rows/assessments are not rewritten.
+
+The optional rental fallback reuses private `system_events`: an explicit scoped owner approval and policy hashes are required before a single $0.50 reservation; intents and settlements are append-only, unknown outcomes never reset. No grant-creation RPC or browser execution is introduced. The source registry and actual grant count remain empty; the feature is disabled. Phase 12 report/question allowance is unchanged. Actual development footprint 375,772,851 bytes (+8,192), historical Ready and rent-source fingerprints unchanged. [Audit and verification](phase-12-rent-synthesis-hardening.md). Production/main release stays blocked independently.
+
 ## Current capacity and Phase 12 proposal — 10 October 2026
 
 D84 sets the internal checkpoint to **400,000,000 bytes**. Current read-only PostgreSQL measurement: **374,855,347 bytes**, margin **25,144,653**. Provider allowance/plan unchanged; no upgrade or data deletion. Historical 375 MB measurements and applied ingestion guards remain intact; any needed deployed guard adjustment is a future approved forward migration, not a history edit. See [capacity policy](infrastructure.md#current-capacity-policy--10-october-2026).

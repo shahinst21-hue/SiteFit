@@ -22,7 +22,7 @@ export type Dashboard = {version:'report-dashboard-v1'; reportId:string|null; di
   readiness:string; index:{label:string; value:number|null; scope:string; method:string; components:{label:string; weight:number; density:number|null; period:string; code:string}[]};
   scenarios:ScenarioFit|null; operators:OperatorDirectory|null; profiles:Profile[];
   timeline:{id:string; fact:string; date:string; dateMeaning:string; scope:string; referenceId:string}[];
-  rental:{id:string; kind:string; annualValue:number; unit:string; areaBasis:string; retrievedAt:string; sourceDate:string|null; reportedError:number|null; selectedUnitRent:false}[];
+  rental:import('../report-intelligence/catalog.ts').Catalog['rentalObservations'];
   actions:{rank:number; action:string; consequence:string; factIds:string[]}[];
   map:SnapshotMap|null; transport:SnapshotTransport[]; spatialNotices:string[]; demo:boolean};
 const record=(v:unknown):Record<string,unknown>=>v&&typeof v==='object'&&!Array.isArray(v)?v as Record<string,unknown>:{};
