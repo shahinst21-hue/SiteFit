@@ -250,3 +250,5 @@ D94 additionally authorises applying the approved brand identity and owner's vec
 D97 authorises the bounded [no-spend Synthesis/rental correction](phase-12-rent-synthesis-hardening.md). New-preparation rental bridging and a disabled one-shot source/budget-gated fallback do not reopen the accepted dashboard/editorial baseline. Historical editions stay frozen; the Phase 12 live Ready/replay and paid-release gates remain open. No later phase or additional expenditure is authorised.
 
 D98 authorises [independent commercial rental comparables and one US$0.30 technical proof](phase-12-rental-comparables-proof.md), total conservative US$1.84. No new provider retrieval/search, main/customer paid release or Phase 14. Complete only on actual new Ready/replay and protected delivery; a failure remains blocked without retry.
+
+D98 outcome: Context/Premises accepted; Synthesis rejected `unsupported_outcome` at `sections[7].conclusion`. New Ready/replay/dashboard/PDF gates remain blocked. Three calls consumed the single proof authority; US$1.84 reservations retained. No retry, main merge, customer paid activation or Phase 14.
