@@ -1,6 +1,14 @@
 # Phase 13 status
 
-## Current closing audit — 11 October 2026
+## 12 October final independent dashboard gate ledger
+
+The Phase 13 eight-tab Preview dashboard, site-wide identity, immutable exports and owner hardware/200%/visual acceptance are verified. Its own privacy gate now passes through the authorised alternative controlled method: **191 actual owner browser requests**, nine private values and six current session markers checked, no secret/private-packet matches; complete/current-tab PDF responses were extracted and checked **in memory**. Account → historical Ready report, all eight views, source explanation, owned Snapshot, existing Test purchase status and safe rejected-report status were exercised. No raw traffic, cookies or tokens were saved. The exact temporary localhost:3015 callback was owner-approved, added to development, verified, then removed; all 20 previous URLs and undeclared settings were preserved. Inspector and its own server were stopped. This is not a claim of DevTools inspection or inspection of external Google/Supabase/Stripe/OSM traffic.
+
+Combined with protected Preview HTML/client/log/owned-PDF checks and unchanged read/serialization contracts, this closes the proportionate Phase 13 private-payload gate. Final combined-head CI, protected Preview and stacked PR #36 delivery remain to be recorded before formal dashboard milestone closure. D92/13.9 explicitly allow that Preview development milestone while Phase 12 remains open; no main merge or customer paid release is authorised.
+
+The one new D96 Phase 12 proof **failed synthesis** (`unsupported_narrative_claim`), estimated cost US$0.076866. New V1 Ready/replay remains blocked; all US$1.54 conservative reservations stay intact. No retry, narrative rewrite, source retrieval or additional spending. The known failed synthesis does not invalidate the separate stored-only dashboard/PDF read proofs, and does not establish its exact rejected sentence or the previous failure's cause.
+
+## Historical closing audit — 11 October 2026
 
 Authoritative consolidated status: [delivery report](phase-13-delivery-report.md). Eight-tab dashboard, site-wide brand and immutable exports are implemented; application head `eb04a26b16d933d724a01634dbd0dfd0d550915b` passed both exact-head CI jobs and protected Preview deployment. Owner answered «okeye» to the current-version real-phone, real desktop 200% and visual/usability acceptance request. Those acceptance gates are now recorded as passed, without approving Production or waiving technical gates.
 
@@ -33,7 +41,7 @@ Dedicated branch `codex/phase-13-dashboard`, dependent on draft Phase 12 PR #35.
 
 ## Gates still open
 
-Current remaining gates: complete authenticated owned Preview Network-body inspection, unresolved Phase 12 new V1 live-validation and final protected merge/release sequence. Exact application-head CI, authenticated browser/PDF, full fixture-PDF page screening and owner current-version hardware/200%/design acceptance are verified in the closing audit above. The delivery-record-only head requires its own CI.
+For the independently authorised Phase 13 Preview dashboard: final combined-head CI/Preview and stacked PR completion. Its owned private-payload gate has passed the approved controlled method recorded above. Phase 12 new V1 Ready/replay, main merge and paid release remain blocked separately. Historical checkpoints below retain their original unverified states; they are superseded by the current ledger.
 
 ## Verified local evidence
 

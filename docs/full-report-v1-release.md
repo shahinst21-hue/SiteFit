@@ -1,5 +1,7 @@
 # Full Report V1 release baseline
 
+12 October update: owner-approved D96 independent proof settled three requests, but synthesis was rejected with `unsupported_narrative_claim`. No new Ready V1 exists; paid release and main merge remain blocked. Usage-derived cost US$0.076866; conservative reservations US$1.54 retained, with no further paid request authorised. See [actual receipt record](phase-12-status.md). The accepted content baseline and independently authorised Phase 13 Preview dashboard are not reopened by this failure.
+
 Owner accepted 11 October 2026 under D89. Content baseline accepted; technical release and Phase 12 completion remain pending. No additional editorial review is required.
 
 ## Versioned contracts
