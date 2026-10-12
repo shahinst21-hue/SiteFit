@@ -92,10 +92,11 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   if (groups.some(d => !d) || edition.checkpoint.dispatches.some(d => d.state === "intent" || d.state === "ambiguous")) return edition;
   const selections = groups.map((d, i) => validateSelection(d!.output, edition.preparation.catalog, groupKeys[i === 0 ? "context" : "premises"]));
   const synthesis = synthesisCatalog(edition.preparation.catalog, selections);
-  const useNarrative = edition.preparation.narrativeVersion === "consultant-narrative-v1" && edition.preparation.scenarioFit;
+  const useNarrative = Boolean(edition.preparation.narrativeVersion) && edition.preparation.scenarioFit;
   const deterministicAppendix=edition.preparation.appendixPolicy==="deterministic-appendix-v1";
-  const contract=narrativeContract(deterministicAppendix);
-  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions,deterministicAppendix),
+  const essential=edition.preparation.narrativeVersion==="consultant-narrative-v2";
+  const contract=narrativeContract(deterministicAppendix,essential);
+  const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions,deterministicAppendix,essential),
     groupFocus: selections } :
     { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
     readiness: synthesis.readiness,
@@ -116,7 +117,9 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     let accepted: Selection | ConsultantNarrative | null = null;
     let validationReason: string | undefined;
     let validationDiagnostic: ReturnType<typeof narrativeFailureDiagnostic>;
-    if (outcome.state === "received") try { accepted = useNarrative ? validateGeneratedNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!,deterministicAppendix) :
+    if (outcome.state === "received") try {
+      if (useNarrative && (outcome.output as { version?: unknown })?.version !== edition.preparation.narrativeVersion) throw Error("invalid_narrative");
+      accepted = useNarrative ? validateGeneratedNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!,deterministicAppendix) :
       validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch (error) {
         if (useNarrative) { validationReason = narrativeFailureCode(error); validationDiagnostic = narrativeFailureDiagnostic(error); }
         /* No partial publication or rejected prose persistence. */

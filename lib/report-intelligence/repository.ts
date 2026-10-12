@@ -23,7 +23,7 @@ import { applyRentalDiscovery } from "./rental-discovery.ts";
 
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
-  narrativeVersion?: "consultant-narrative-v1";
+  narrativeVersion?: "consultant-narrative-v1" | "consultant-narrative-v2";
   verificationRunId?: string;
   appendixPolicy?: "deterministic-appendix-v1";
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
@@ -146,7 +146,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       return projected;
     };
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
-      narrativeVersion: "consultant-narrative-v1",
+      narrativeVersion: "consultant-narrative-v2",
       appendixPolicy: "deterministic-appendix-v1",
       ...(verificationRunId ? { verificationRunId } : {}),
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
