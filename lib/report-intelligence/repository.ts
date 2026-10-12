@@ -24,6 +24,7 @@ import { applyRentalDiscovery } from "./rental-discovery.ts";
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
   narrativeVersion?: "consultant-narrative-v1";
+  verificationRunId?: string;
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
   scenarioFit?: ScenarioFit;
   profiles?: ReturnType<typeof storedProfiles>;
@@ -67,11 +68,14 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     if (!uuid(reportId)) throw Error("invalid_request");
     return validateStoredEdition(await invoke("read_sitefit_full", { p_report: reportId }));
   };
-  return { read, async start(freeReportId: string, rentalExecution: { grantId: string; sources?: readonly RentSourceAdapter[] } | null = null): Promise<StoredEdition> {
+  return { read, async start(freeReportId: string, rentalExecution: { grantId: string; sources?: readonly RentSourceAdapter[] } | null = null,
+    verificationRunId?: string): Promise<StoredEdition> {
     if (!uuid(freeReportId)) throw Error("invalid_request");
+    // Private operator proof only; HTTP handlers never accept this argument.
+    if (verificationRunId && (!uuid(verificationRunId) || process.env.VERCEL_ENV === "production")) throw Error("invalid_technical_proof");
     const existing = await rpc.rpc("find_sitefit_full", { p_owner: owner, p_free: freeReportId });
     if (existing.error) throw Error("full_operation_unavailable");
-    if (existing.data !== null) return validateStoredEdition(existing.data);
+    if (existing.data !== null && !verificationRunId) return validateStoredEdition(existing.data);
     const material = object(await invoke("read_sitefit_full_material", { p_free: freeReportId }));
     const context = validateContext(material.context);
     if (material.assessment === null) {
@@ -86,7 +90,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
         // write. Reuse that winner; never recalculate or overwrite it.
         if (!await assessments.read(context.analysisId, context.inputId)) throw Error("assessment_preparation_unavailable");
       }
-      return this.start(freeReportId, rentalExecution);
+      return this.start(freeReportId, rentalExecution, verificationRunId);
     }
     const assessment = validateAssessment(material.assessment);
     if (assessment.contextDigest !== packetDigest(context) || assessment.analysisId !== context.analysisId ||
@@ -139,6 +143,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     };
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
       narrativeVersion: "consultant-narrative-v1",
+      ...(verificationRunId ? { verificationRunId } : {}),
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
       assessmentDigest: String(material.assessmentDigest), catalog,
       scenarioFit,

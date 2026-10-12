@@ -5,6 +5,7 @@ import type { AssessmentBundle } from "../analysis/assessment.ts";
 import { packetDigest } from "../analysis/canonical.ts";
 import { rentalReportProjection } from "../economics/rent.ts";
 import { validateEconomicBundle, type EconomicBundle } from "../economics/bundle.ts";
+import { commercialComparableTypes } from "../economics/rental-comparables.ts";
 
 /** Frozen Phase 8 candidates -> approved Phase 10 qualified context, for NEW
  * Full preparations only. Neither the Phase 11 admission nor the source changes. */
@@ -27,8 +28,8 @@ export function storedRentalSupplements(input: CollectionContext, assessment: As
     const permit = result.meta.licence, retrieved = result.payload.facts.retrievedAt;
     if ([permit.normalised, permit.references, permit.timestamps].some(p => !p.allowed ||
       p.maxDays !== null && Date.parse(retrieved) + p.maxDays * 86400000 <= at.getTime())) continue;
-    const benchmark = result.payload.facts, type = context.category === "hair-beauty-salon" ? "retail" : "restaurants";
-    if (benchmark.type !== type || benchmark.pointsAnalysed <= 0 || benchmark.poundsPerSqftYear <= 0) continue;
+    const benchmark = result.payload.facts;
+    if (!commercialComparableTypes(context.businessType).includes(benchmark.type) || benchmark.pointsAnalysed <= 0 || benchmark.poundsPerSqftYear <= 0) continue;
     if (assessment.supplements.some(s => s.kind === "rental" && s.bundle.sourceBindings.some(b => b.snapshotId === row.id))) continue;
     bundles.push(validateEconomicBundle({ schemaVersion: 1, kind: "rental_evidence", analysisId: context.analysisId,
       inputId: context.inputId, propertyId: context.selectedProperty.id, business: context.businessType,

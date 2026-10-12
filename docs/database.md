@@ -1,5 +1,7 @@
 # Phase 3 database foundation
 
+D98 forward development migration `20261012110000_phase12_rental_proof_budget.sql` raises only report-start ceiling from 1,540,000 to 1,840,000 microdollars for the owner's one bounded proof. Earlier reservations and the entire question function/grants remain unchanged. No source grant, deletion, infrastructure or Production change. [Current proof/capacity receipts](phase-12-rental-comparables-proof.md).
+
 ## 12 October — bounded rental/Synthesis correction, development applied
 
 Forward migration `20261012100000_full_rental_material.sql` uses a shared private-text predicate for Full/economic/assessment writers, avoiding ordinary hyphenated-word and boolean-false discard-policy false positives. Actual raw responses, private keys and all ownership, source, lifecycle, budget and freeze guards remain enforced. The private Full material reader adds at most four retained rental rows for a maximum-three preparation bound. Existing rows/assessments are not rewritten.

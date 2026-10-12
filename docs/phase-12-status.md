@@ -1,5 +1,7 @@
 # Phase 12 implementation status
 
+D98 authorises one additional US$0.30 technical proof (total US$1.84) and concept-relevant independent commercial rental cohorts. [Current correction/proof record](phase-12-rental-comparables-proof.md) supersedes the previous no-additional-budget instruction only for this single execution. No paid search/provider retrieval, main merge or customer paid activation; Ready/replay remains pending actual validation.
+
 12 October no-spend correction: [technical audit](phase-12-rent-synthesis-hardening.md) reproduces credential-prefix/false discard-flag defects across runtime and SQL, bridges the retained £35 NIA PropertyData benchmark for new preparations, and implements a disabled, explicitly budget/source-gated rental fallback. Historical reports and US$1.54 reservations remain intact. These local/hosted correction proofs do not diagnose D96's exact rejected sentence or establish a new live Ready V1. A proposed additional US$0.30 proof is **not authorised**; main/paid release remain blocked.
 
 ## D96 actual result — 12 October 2026, paid release remains BLOCKED
