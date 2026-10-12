@@ -13,6 +13,11 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
   const p=report.pages.find(p=>p.key===key);if(!p)throw Error('invalid_export_section');
   const rows:{text:string;heading?:boolean}[]=[];
   const add=(text:string,heading=false)=>{if(text.trim()&&!rows.some(r=>r.text===text))rows.push({text,heading});};
+  if(report.structuredPreview){
+    if(key!=='rental-context')throw Error('full_report_not_ready');
+    add('Owner Preview — qualified structured rental evidence, not a Ready Full Report',true);
+    add(`Stored generation stage: ${report.structuredPreview.stage}. No incomplete AI narrative is published.`);
+  }
   const emptyPricing=key==='rental-context'&&!report.rental.length;
   add(reportPages.find(x=>x.key===key)!.label,true);if(!emptyPricing)add(p.conclusion);
   if(key==='overview'&&report.summary){add('Consultant Verdict',true);report.summary.verdict.forEach(t=>add(t));add('Key strengths',true);report.summary.strengths.forEach(s=>add(s.text));add('Key risks & unknowns',true);report.summary.risks.forEach(s=>add(s.text));add('Priority action',true);add(report.summary.priority);add(`${report.index.label}: ${report.index.value??'withheld'}. ${report.index.scope}. Hypothetical context policy only; not demand, profitability or suitability.`);add(`Decision readiness: ${report.readiness}`);}
@@ -56,6 +61,7 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
 }
 
 export async function renderReportPDF(report:Dashboard,key?:SectionKey){
+  if(report.structuredPreview&&key!=='rental-context')throw Error('full_report_not_ready');
   const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);
   const font=await pdf.embedFont(await fs.readFile(path.join(process.cwd(),'public/fonts/DejaVuSans.ttf')),{subset:true});
   const charset=new Set(font.getCharacterSet()), ink=rgb(.09,.15,.19),muted=rgb(.34,.41,.47),green=rgb(.04,.36,.24);
@@ -94,7 +100,7 @@ export async function renderReportPDF(report:Dashboard,key?:SectionKey){
   };
   for(const [i,k] of keys.entries()){
     if(i)fresh();paragraph('SITEFIT',20,green);paragraph(report.address,14);paragraph(`${report.businessLabel} · ${report.editionLabel} · Generated ${displayDate(report.generatedAt)}`,9,muted);
-    paragraph(key?'Standalone section export · Full Report V1':'Full Report V1 · stored historical edition',9,muted);
+    paragraph(report.structuredPreview?'Structured rental evidence export · Preview only':key?'Standalone section export · Full Report V1':'Full Report V1 · stored historical edition',9,muted);
     if(k==='overview'||k==='access'||k==='competition')map(k==='competition');
     for(const r of exportParagraphs(report,k)){if(r.heading&&y<110)fresh();paragraph(r.text,r.heading?13:10,r.heading?green:ink);}
   }

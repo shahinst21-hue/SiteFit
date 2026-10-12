@@ -25,6 +25,7 @@ type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
   narrativeVersion?: "consultant-narrative-v1";
   verificationRunId?: string;
+  appendixPolicy?: "deterministic-appendix-v1";
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
   scenarioFit?: ScenarioFit;
   profiles?: ReturnType<typeof storedProfiles>;
@@ -68,7 +69,10 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     if (!uuid(reportId)) throw Error("invalid_request");
     return validateStoredEdition(await invoke("read_sitefit_full", { p_report: reportId }));
   };
-  return { read, async start(freeReportId: string, rentalExecution: { grantId: string; sources?: readonly RentSourceAdapter[] } | null = null,
+  return { read, async material(freeReportId:string){
+    if(!uuid(freeReportId))throw Error('invalid_request');
+    return invoke('read_sitefit_full_material',{p_free:freeReportId});
+  }, async start(freeReportId: string, rentalExecution: { grantId: string; sources?: readonly RentSourceAdapter[] } | null = null,
     verificationRunId?: string): Promise<StoredEdition> {
     if (!uuid(freeReportId)) throw Error("invalid_request");
     // Private operator proof only; HTTP handlers never accept this argument.
@@ -79,7 +83,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     const material = object(await invoke("read_sitefit_full_material", { p_free: freeReportId }));
     const context = validateContext(material.context);
     if (material.assessment === null) {
-      if (!Number.isSafeInteger(material.databaseBytes) || Number(material.databaseBytes) + 400_000 > 400_000_000)
+      if (!Number.isSafeInteger(material.databaseBytes) || Number(material.databaseBytes) + 400_000 > 450_000_000)
         throw Error("capacity_checkpoint");
       // First paid preparation may have no Phase 11 supplement yet. Reuse that
       // existing frozen-input method once; no provider/AI/scoring-policy change.
@@ -143,6 +147,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     };
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
       narrativeVersion: "consultant-narrative-v1",
+      appendixPolicy: "deterministic-appendix-v1",
       ...(verificationRunId ? { verificationRunId } : {}),
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
       assessmentDigest: String(material.assessmentDigest), catalog,

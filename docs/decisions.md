@@ -1,5 +1,11 @@
 # Accepted decisions
 
+## D99 — No-spend Phase 12 completion corrections (accepted, 12 October 2026)
+
+Owner authorises checkpoint **450,000,000 bytes** after confirming unchanged Free hosting allowance; adjust effective database/application gates via forward migration, no purchase. Fix demonstrated generator/validator incompatibilities with deterministic regression and versioned deterministic Appendix where appropriate. All model claims remain validated; no ignored bad output or admission weakening. New preparations use seven generated commercial pages plus fixed methodology Appendix; final report still has eight sections. Historical contracts/editions remain immutable; D98's unretained rejected sentence remains undiagnosed.
+
+Qualified PropertyData evidence is independent of AI publication and may be read/exported within the **existing** authorised owner Preview Rent & Lease tab/PDF endpoint when a Full edition is Draft. No failed narrative, Full projection, customer publication or full-report PDF before Ready. Preserve paid ownership/refund/session/source/privacy guards, source dates/native units and independently qualified cohorts; omit missing figures. No new page/route/dashboard, paid AI/retry/provider/search/spending or Phase 13 reopening. Phase 12 closes only on genuinely successful new V1 Ready/replay; main/Production/customer paid release and Phase 14 remain prohibited. [Actual implementation](phase-12-d99-corrections.md).
+
 ## D89 — Accepted Full Report V1 baseline and conditional Phase 13 implementation — 11 October 2026
 
 The owner accepts the current report structure, three-line Consultant Verdict, prioritised strengths/risks, one Priority Action, Scenario Fit withholding architecture and concept-specific reasoning as V1. Stop editorial cycles and requests for three more manually reviewed concept reports. Only release-blocking rendering, factual, security and integrity defects justify this final hardening pass. Preserve eight sections, evidence admission, source snapshots, historical editions and the unchanged Phase 11 context index. No fabricated capacity, overall score, reviews, footfall, rent or permissions; no new provider, Financial Engine embedding or unapproved payment.

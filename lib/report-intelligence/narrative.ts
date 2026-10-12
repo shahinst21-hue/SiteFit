@@ -57,12 +57,33 @@ Rental: modelled quoting benchmarks are not live listings, achieved rent or veri
 Keep material qualifications next to affected conclusions; consolidate detailed methodology in Appendix. Use clear commercially useful language, specific trade-offs, and falsifiable implications. Do not repeat technical caveats everywhere.
 Contract: return each section exactly once, in packet.sections order. Every text is twelve to eight hundred characters; keep the entire compact JSON under twenty-four thousand UTF-8 bytes. Reference arrays contain distinct admitted IDs only. Every operatorIds entry must also include its supplied operator factIds in the claim's factIds, even for unknown claims. Non-unknown claims require at least one admitted reference. Use only rental/history IDs supplied in the packet for referenceIds; do not invent IDs. Return the strict schema.`;
 
-export function narrativePacket(catalog: Catalog, fit: ScenarioFit, omissions: readonly string[] = []) {
+/** New preparations request seven commercial sections. Appendix is application
+ * methodology, not another AI location verdict. Historical eight-page outputs stay valid. */
+export function narrativeContract(deterministicAppendix = false) {
+  if (!deterministicAppendix) return {instructions:narrativeInstructions,schema:narrativeSchema};
+  const schema=structuredClone(narrativeSchema);
+  schema.properties.sections.minItems=7;schema.properties.sections.maxItems=7;
+  schema.properties.sections.items.properties.key.enum=sectionKeys.filter(k=>k!=="appendix");
+  return {schema,instructions:narrativeInstructions.replace("Cover all eight requested pages.",
+    "Cover the seven requested commercial pages only. Appendix is produced by application methodology, not model output.").replace("twenty-four thousand UTF-8 bytes","twenty-three thousand UTF-8 bytes")};
+}
+export function validateGeneratedNarrative(value:unknown,catalog:Catalog,fit:ScenarioFit,deterministicAppendix=false) {
+  if(!deterministicAppendix)return validateNarrative(value,catalog,fit);
+  const n=object(value);
+  if(Buffer.byteLength(JSON.stringify(n))>23000||!Array.isArray(n.sections)||n.sections.length!==7||n.sections.some((s,i)=>object(s).key!==sectionKeys[i]))throw Error("invalid_narrative");
+  const metadata=(text:string):Commentary=>({text,kind:"unknown",factIds:[],operatorIds:[],referenceIds:[]});
+  // Validate every model claim; nothing is discarded/replaced to hide a failure.
+  return validateNarrative({...n,sections:[...n.sections,{key:"appendix",
+    conclusion:metadata("Admitted sources, dates and limitations are recorded here; this appendix adds no location verdict."),
+    analysis:[metadata("Source observations, estimates and interpretations remain distinct. Missing evidence remains unknown.")],
+    decisionTest:metadata("Inspect the linked evidence and its stated scope before relying on a finding.")} ]},catalog,fit);
+}
+export function narrativePacket(catalog: Catalog, fit: ScenarioFit, omissions: readonly string[] = [],deterministicAppendix=false) {
   const scopes = [...new Set(catalog.facts.map(f => f.scope))], datasets = [...new Set(catalog.facts.map(f => f.dataset))];
   const limitationTexts = [...new Set(catalog.facts.flatMap(f => f.limitations.map(l => modelSafeText(l, omissions))))];
   const competition = competitionBrief(catalog), discovery = competitionDiscoveryNeeds(catalog);
   const attribute = (a: { state: string; value?: unknown; factId?: unknown }) => a.state === "unknown" ? null : a;
-  return { version: "consultant-narrative-v1", business: fit.businessType, sections: sectionKeys,
+  return { version: "consultant-narrative-v1", business: fit.businessType, sections: deterministicAppendix?sectionKeys.filter(k=>k!=="appendix"):sectionKeys,
     factFields: ["id", "datasetIndex", "value", "unit", "scopeIndex", "period", "strength"],
     facts: catalog.facts.map(f => [f.id, datasets.indexOf(f.dataset), typeof f.value === "number" ? consultantNumber(f.value, f.units, f.dataset) : modelSafeText(f.value, omissions),
       f.units, scopes.indexOf(f.scope), f.effectiveAt, f.strength]), datasets, scopes: scopes.map(s => modelSafeText(s, omissions)),
@@ -105,7 +126,8 @@ export function validateNarrative(value: unknown, catalog: Catalog, fit: Scenari
     if (/\d/.test(text)) reject("literal_number");
     if (/\{\{|\[object (?:Object|Array)\]|https?:|@/i.test(text) || privateTokenText(text)) reject("unsafe_text");
     if (Array.from(text).some(ch => ch.charCodeAt(0) < 32 && !"\n\r\t".includes(ch))) reject("control_character");
-    if (/(?:guaranteed success|overall (?:score|suitability)|(?:demonstrates|proves|establishes) (?:measured customer demand|observed footfall))/i.test(text)) reject("unsupported_outcome");
+    const outcomeText=text.replace(/\b(?:is not|does not (?:measure|represent)|cannot establish) (?:an? )?overall (?:suitability(?: score)?|score)\b/gi,"[explicit scope exclusion]");
+    if (/(?:guaranteed success|overall (?:score|suitability)|(?:demonstrates|proves|establishes) (?:measured customer demand|observed footfall))/i.test(outcomeText)) reject("unsupported_outcome");
     if (fit.leadingFormatId === null && /(?:recommend|best|leading|choose).{0,25}(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:format|model)|(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:is best|recommended|is the leading)/i.test(formatText)) reject("withheld_format");
     if (c.kind !== "unknown" && !c.factIds.length && !c.operatorIds.length && !c.referenceIds.length) throw new NarrativeValidationError("narrative_evidence_missing", "missing_evidence", path);
     for (const id of c.operatorIds as string[]) if (!c.factIds.includes(catalog.operators!.sources[operators.get(id)!.sourceIndex].sourceFactId)) throw new NarrativeValidationError("narrative_operator_lineage_missing", "operator_lineage", path);

@@ -1,5 +1,7 @@
 # Future testing strategy
 
+D99 adds no-spend regressions for explicit negative scope statements versus unsupported affirmative/mixed outcomes; seven-page generated contract plus deterministic Appendix versus unexpected/unsafe pages; successful/failing synthesis and immutable eight-page exports; qualified/missing/foreign/expired rental evidence, owner Preview-only rental PDF versus denied Full export. Fresh PostgreSQL verifies all effective capacity gates are 450 MB and source/ownership/security/budgets remain. Actual results in [D99 record](phase-12-d99-corrections.md); no new live AI proof is authorised.
+
 ## D97 no-spend reproducible regression — 12 October
 
 Run `node --conditions=react-server --test tests/report-intelligence-narrative.test.ts tests/report-intelligence-generation.test.ts tests/report-rental-preparation.test.ts tests/rental-fallback.test.ts tests/report-dashboard.test.ts tests/web-evidence.test.ts`. The fixtures use mocked provider/HTTP responses, not real credentials or paid calls. Actual TSX and customer-readable PDF assertions cover qualified rent, dates, native area basis, absent/rejected prices and source-type distinctions. The eight-page regression reproduces the former risk-/desk-based false rejection through export/replay; an invalid synthesis preserves only rule/path diagnostics and never retries.

@@ -198,7 +198,7 @@ Manual QA is about decision value and factual scope: opening answers whether to 
 - [ ] Actual background leave-page completion and truthful interruption/recovery verified on the configured protected Preview; no durable execution claim unsupported by evidence.
 - [ ] Grounded question contract/service verified, with approved live allowance or an explicitly owner-approved deterministic-only first-release resolution; no report mutation or hidden recurring AI spend.
 - [ ] Dashboard and per-tab/full-report PDF contracts complete against all eight references; no Phase 13 UI/PDF implemented.
-- [ ] Security/RLS, secret/private-payload, ownership/refund, changed SQL and full regression gates pass; measured database stays within 400,000,000 bytes.
+- [ ] Security/RLS, secret/private-payload, ownership/refund, changed SQL and full regression gates pass; measured database stays within D99's 450,000,000-byte checkpoint.
 - [ ] Exact-head CI, protected merge, post-main CI and clean matching main evidenced.
 - [ ] Limitations/cost/sample latency documented; no new provider, purchase, Production/live payment, Financial Engine embedding or later phase.
 
