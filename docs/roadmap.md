@@ -1,3 +1,5 @@
+Phase15 authorised under D103, Development/protected Preview only. Policies, versioned consent/confirmation, cancellation requests and security/recovery hardening are in progress; policy approval and complete legally suitable seller/address particulars remain gates. Phase17 MUST resolve compliant commercial hosting before sales; no Hobby upgrade or Production activation authorised.
+
 Final D102 development delivery: Phase12 live technical gate closed and Phase14 independent implementation delivered through PR43/66d3b2d with passing post-merge CI. New Preview Google callback is approved/applied; read-only dashboard flag is enabled for the Phase14 branch only. No main/Production/customer paid release/Phase15 authority.
 
 12 October D102 update: Phase12 new v2 Ready/replay/dashboard/PDF technical proof passed; docs/phase-12-d102-proof.md. Phase14 protected development delivery continues independently. Main/Production/customer release/Phase15 are not authorised.

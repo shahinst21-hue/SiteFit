@@ -1,60 +1,11 @@
-import { PageIntro } from "@/components/ui";
-import { pageMetadata } from "@/lib/seo";
-export const metadata = pageMetadata("/terms");
-// Contracting entity, tax/refunds, entitlement and liability need owner/legal review before sales.
-export default function Terms() {
-  return (
-    <div className="page-wrap narrow-page">
-      <PageIntro
-        eyebrow="SERVICE INFORMATION"
-        title="Using SiteFit responsibly."
-      >
-        <p>
-          Information about the website and the limits of its guidance. Updated
-          4 October 2026.
-        </p>
-      </PageIntro>
-      <div className="prose">
-        <h2>Your location brief</h2>
-        <p>
-          The location check organises the address and business type you enter,
-          with relevant verification questions. Local evidence has not been
-          verified for that address. Financial inputs are not required to
-          purchase or receive a report; financial planning is a separate
-          experience and is not calculated within this report.
-        </p>
-        <h2>Samples and editorial guidance</h2>
-        <p>
-          The Sample Report is a clearly labelled fictional scenario. It is not
-          an assessment of a real property. Blog articles provide general
-          guidance. Neither establishes premises suitability, demand or business
-          success.
-        </p>
-        <h2>Before a lease commitment</h2>
-        <p>
-          Inspect the premises, verify source documents and consult
-          appropriately qualified advisers on lease, planning and financial
-          matters. SiteFit does not guarantee an outcome.
-        </p>
-        <h2>Accounts and prices</h2>
-        <p>
-          Email sign-in establishes your account session; it does not create
-          report or purchase entitlement. Displayed prices describe the product
-          proposition. No payment is collected through this website.
-        </p>
-        <h2>Responsible use</h2>
-        <p>
-          Do not submit sensitive documents or misuse the website. The location
-          checker keeps entries in page memory and clears them on navigation or
-          reload.
-        </p>
-        <h2>Purchase and legal terms</h2>
-        <p>
-          This information is not a purchase agreement or a claim of completed
-          legal review. Contracting identity, tax, refunds, delivery, rights and
-          liability require specific terms before a transaction.
-        </p>
-      </div>
-    </div>
-  );
-}
+import {PageIntro} from "@/components/ui";
+import {pageMetadata} from "@/lib/seo";
+export const metadata=pageMetadata("/terms");
+export default function Terms(){return <div className="page-wrap narrow-page"><PageIntro eyebrow="SERVICE INFORMATION" title="SiteFit sale terms."><p>Development draft · 12 October 2026. Seller details, tax treatment, supply classification and contract-confirmation delivery await approval.</p></PageIntro><div className="prose">
+<h2>The report</h2><p>A location-specific eight-section decision-support report with dashboard and PDF export. The existing Test/Preview price is £29; final tax-inclusive commercial pricing awaits approval. Financial Engine calculations are separate.</p>
+<h2>Businesses and consumers</h2><p>SiteFit serves both. A business declaration does not itself remove applicable consumer protections.</p>
+<h2>Immediate supply and cancellation</h2><p>V1 consumers receive an additional contractual 14-day cancellation right, including after immediate delivery. Statutory cancellation and other remedies remain unaffected. Immediate supply requires the legally applicable express request and acknowledgement; payment or report preparation does not automatically waive rights. Final classification and wording must be approved before new supply.</p>
+<h2>Delivery and purchase assistance</h2><p>Payment confirmation, report readiness and delivery are distinct. Leaving Stripe cancels checkout only. A confirmed purchase can have a separate cancellation, failed-delivery or report-problem request recorded against its original payment. A request is not confirmation of an issued refund. Do not purchase again to resolve failed delivery.</p>
+<h2>AI and statutory rights</h2><p>Analysis is indicative and may contain inaccuracies. Verify material facts before committing to a lease or business decision. No AI disclaimer excludes mandatory quality, delivery or consumer obligations.</p>
+<h2>Final contract particulars</h2><p>Trading name: SiteFit. Support: info@sitefit.co.uk. The owner confirms SiteFit is not VAT registered. Owner-provided address: Manorgate Rd, Kingston upon Thames, KT2 7UA. Postal completeness, verified seller particulars, access commitment and complete approved policies remain pending. This draft is not authorisation for Production sales.</p>
+</div></div>;}

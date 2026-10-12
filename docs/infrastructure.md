@@ -1,3 +1,5 @@
+Phase15 D103: retain existing Hobby Development/Preview subject to terms. Commercial hosting upgrade or compliant alternative is a mandatory Phase17 prelaunch dependency, not authorised now. New Checkout/supply defaults denied pending approved policy/classification/confirmation. Support and operational paid execution remain off. Current Phase12 Ready gate is closed; US$2.44 held.
+
 12 October Phase 14 verified plans: Vercel Hobby with Fluid Compute enabled; Supabase organisation Free. Use existing pg_cron/pg_net/Vault for a fixed protected Preview runner, not daily-only Hobby Cron. No upgrade/subscription. Application maxDuration 200 seconds is beneath Fluid Hobby maximum 300 seconds. Paid dispatch disabled; [operating plan](phase14_plan.md), [runbook](fulfilment-runbook.md). Current reservations US$2.14; failed D100 proof remains a separate release blocker.
 
 # Phase 1 infrastructure and environments

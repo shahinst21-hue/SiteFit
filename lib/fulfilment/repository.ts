@@ -21,6 +21,9 @@ export function fulfilmentRepository() {
       if (![j.id, j.ownerId, j.freeReportId, j.token].every(uuid) || j.reportId !== null && !uuid(j.reportId)) throw Error("invalid_fulfilment_job");
       return j as unknown as Job;
     },
+    async supplyAllowed(job: Job) {
+      return (await invoke("authorise_sitefit_supply", {p_job:job.id,p_token:job.token})) === true;
+    },
     async bind(job: Job, reportId: string) {
       if (!uuid(reportId)) throw Error("invalid_report");
       await invoke("bind_sitefit_fulfilment", { p_job: job.id, p_token: job.token, p_report: reportId });

@@ -29,7 +29,7 @@ export function SiteFooter() {
         <span>
           © {new Date().getFullYear()} {site.name}
         </span>
-        <span>Decision support. No guarantees of business success.</span>
+        <span>Census data: ONS, <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</span>
       </div>
     </footer>
   );

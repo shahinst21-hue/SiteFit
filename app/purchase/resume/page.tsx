@@ -8,7 +8,7 @@ import { readClaim } from "@/lib/auth/claim-repository";
 import { purchaseOrigin } from "@/lib/payments/config";
 import { activeTestPurchaseId } from "@/lib/payments/purchase-projection";
 import { PurchaseClaim } from "@/components/purchase-claim";
-import { PurchaseButton } from "@/components/purchase-button";
+import { PurchaseTerms } from "@/components/purchase-terms";
 export const dynamic="force-dynamic";
 export const metadata: Metadata={title:"Continue your purchase",robots:{index:false,follow:false},referrer:"no-referrer"};
 export default async function Resume({searchParams}:{searchParams:Promise<{report?:string}>}){
@@ -21,7 +21,7 @@ export default async function Resume({searchParams}:{searchParams:Promise<{repor
   if(purchase.error)notFound();
   const active=activeTestPurchaseId(purchase.data);
   if(active)redirect(`/purchase/return?purchase=${active}`);
-  return <div className="page-wrap narrow-page"><p className="eyebrow">READY FOR CHECKOUT</p><h1>Your account is verified. Your Snapshot is saved.</h1><section className="simple-panel"><p>Your sign-in is complete. Continue below to open Stripe for the one-off £29 Test Checkout.</p><p className="field-help">No real payment is taken. Full Report generation is not enabled. Your original Snapshot stays unchanged.</p><PurchaseButton report={report} checkout/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
+  return <div className="page-wrap narrow-page"><p className="eyebrow">READY FOR CHECKOUT</p><h1>Your account is verified. Your Snapshot is saved.</h1><section className="simple-panel"><p>Your sign-in is complete. Continue below to open Stripe for the one-off £29 Test Checkout.</p><p className="field-help">No real payment is taken. New supply is held until approved purchase policies and confirmation requirements are met. Your original Snapshot stays unchanged.</p><PurchaseTerms report={report}/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
  }
  const proof=claimCookie((await cookies()).get(CLAIM_COOKIE)?.value);if(!proof)notFound();
  let claim;try{claim=await readClaim(proof);}catch{notFound();}
