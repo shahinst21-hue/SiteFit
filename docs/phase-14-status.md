@@ -47,3 +47,10 @@ Continuation receipts (12 October): 17 targeted generator/dashboard/PDF/worker c
 
 
 D102 live Phase12 dependency update: new v2 generation, Ready, immutable replay, actual owned eight-tab dashboard and authenticated PDF passed; see [technical receipt](phase-12-d102-proof.md). Prior references to an open Ready gate are historical. Phase14 final delivery and its own acceptance remain distinct; support allowlist stays empty, operational paid execution/scheduler remain disabled. No customer paid release follows automatically.
+
+
+## Final independent implementation verification
+
+Implementation is working in protected Development/Preview, not merely a validator proposal: database admission/claim/fencing, scheduler transport, saved progress/reopening, default-denied support and audited recovery are implemented. Fresh PostgreSQL suite covers lifecycle, ownership, duplicate admission/claims, expired-lease intervention, capacity/reservation and current-entitlement safeguards. Worker fixtures cover concurrent attempts, ambiguous/invalid stopping, no retry and revocation between dispatches. Latest complete check passed 330 tests/build; public HTTP smoke passed. Machine worker/scheduler live proof made zero AI/source calls and retained awaiting_authorisation truthfully. Operational paid execution and support remain intentionally disabled under owner instructions, not presented as active customer fulfilment.
+
+Phase12's actual new Ready/replay/dashboard/PDF dependency now passed D102; browser wire privacy inspection found zero private matches in 41 exchanges. Final protected development delivery is via PR43, exact-head CI required; main, Production, paid customer release and Phase15 remain forbidden. This record does not treat PR43 validator simplification alone as assignment completion.
