@@ -30,9 +30,12 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
     for(const t of report.timeline)add(`${displayDate(t.date)} · ${t.fact}. ${t.dateMeaning}; ${t.scope}. Source reference ${t.referenceId}.`);
   }
   if(key==='rental-context'){
-    for(const r of rentalCards(report))add(`${r.label}: ${r.amount} ${r.unit}; ${r.areaBasis}. ${r.dates}. ${r.margin??''} ${r.qualification}`);
+    for(const r of rentalCards(report)){
+      add(`${r.label}: ${r.amount} ${r.unit}; ${r.areaBasis}. ${r.dates}. ${r.margin??''} ${r.qualification}`);
+      for(const d of r.details)add(`${d.label}: ${d.value}.`);
+      if(r.relevance)add(r.relevance);
+    }
     if(report.rental.length>1)add('Separate dated observations, not an averaged rent or an automatically preferred newest figure.');
-    if(emptyPricing)for(const a of report.actions.filter(a=>/rent|lease|terms/i.test(a.action))){add(a.action);add(`Decision consequence: ${a.consequence}`);}
   }
   if(key==='actions')for(const a of report.actions){add(`${a.rank}. ${a.action}`,true);add(`Decision consequence: ${a.consequence}`);}
   if(key==='access')for(const t of report.transport)add(`${t.name}: ${t.walkingMinutes===null?'route unavailable':`${readableNumber(t.walkingMinutes)} minute modelled walk; ${readableNumber(t.distanceMetres??0)} metres`}. ${t.information}`);
