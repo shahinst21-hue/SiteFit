@@ -14,7 +14,7 @@ export function fullRequest(group: Group, packet: unknown, instructions: string,
   if (Buffer.byteLength(input) > (question ? 8000 : narrative ? 20_000 : 12_000) || Buffer.byteLength(instructions) > 4000 || Buffer.byteLength(JSON.stringify(schema)) > 4000 ||
     question && Buffer.byteLength(instructions) + Buffer.byteLength(JSON.stringify(schema)) > 6000 ||
     /"(?:formattedAddress|postcode|uprn|ownerId|email|providerAddressId|latitude|longitude|secret|apiKey)"\s*:/i.test(input)) throw Error("invalid_packet");
-  const request = { model: intelligencePolicy.model, store: false, reasoning: { effort: "low" }, max_output_tokens: maxOutput,
+  const request = { model: intelligencePolicy.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: maxOutput,
     instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
     text: { format: { type: "json_schema", name: "sitefit_full_intelligence", strict: true, schema } } };
   const encoded = JSON.stringify(request);
