@@ -13,8 +13,10 @@ export type RentReview = { address: AddressParts; url: string; observedAt: strin
   annualGbp: number; amountQualifier: "exact" | "offers_above" | "approximate";
   areaSquareMetres: number | null; areaBasis: "GIA" | "NIA" | "unknown";
   leaseTerms: string | null; additionalCharges: string | null; vat: "included" | "excluded" | "not_applicable" | "unknown";
-  reuse: "unknown" | "prohibited" };
-export function reviewRent(value: unknown, selected: AddressParts) {
+  reuse: "unknown" | "prohibited" | "permitted" };
+export type RentPermission = { id: string; sourceLabel: string; host: string; reviewedAt: string; termsReference: string;
+  retention: "dated_historical_facts"; permitted: true };
+export function reviewRent(value: unknown, selected: AddressParts, permission: RentPermission | null = null) {
   const r = object(value); const allowed = "address url observedAt publishedDate effectiveDate kind annualGbp amountQualifier areaSquareMetres areaBasis leaseTerms additionalCharges vat reuse".split(" ");
   if (Object.keys(r).length !== allowed.length || Object.keys(r).some(k => !allowed.includes(k)) || !publicReference(r.url) || !timestamp(r.observedAt) ||
     !(r.publishedDate === null || historyDate(r.publishedDate)) || !(r.effectiveDate === null || historyDate(r.effectiveDate)) ||
@@ -23,13 +25,20 @@ export function reviewRent(value: unknown, selected: AddressParts) {
     !["exact","offers_above","approximate"].includes(String(r.amountQualifier)) ||
     !(r.areaSquareMetres === null || typeof r.areaSquareMetres === "number" && Number.isFinite(r.areaSquareMetres) && r.areaSquareMetres>0 && r.areaSquareMetres<100_000) ||
     !["GIA","NIA","unknown"].includes(String(r.areaBasis)) || ![r.leaseTerms,r.additionalCharges].every(v => v === null || text(v,500)) ||
-    !["included","excluded","not_applicable","unknown"].includes(String(r.vat)) || !["unknown","prohibited"].includes(String(r.reuse))) throw new Error("rent_review_invalid");
+    !["included","excluded","not_applicable","unknown"].includes(String(r.vat)) || !["unknown","prohibited","permitted"].includes(String(r.reuse))) throw new Error("rent_review_invalid");
   if (r.publishedDate !== null && String(r.publishedDate)>String(r.observedAt).slice(0,10)) throw new Error("rent_review_invalid");
   const address = object(r.address);
   if (Object.keys(address).length!==4 || !["primary","street","postcode","unit"].every(k => k in address) || !(address.unit===null || text(address.unit,200))) throw new Error("rent_review_invalid");
   const match = addressMatch(selected,address as unknown as AddressParts);
-  return { match, reference: String(r.url), retainContent: false as const,
-    reason: match === "rejected" ? "wrong_property_or_unit" : r.reuse === "prohibited" ? "reuse_prohibited" : "commercial_reuse_unconfirmed",
+  const permissionAllowed = permission !== null && permission.permitted === true && permission.retention === "dated_historical_facts" &&
+    text(permission.id,100) && text(permission.sourceLabel,100) && timestamp(permission.reviewedAt) &&
+    Date.parse(permission.reviewedAt) <= Date.parse(String(r.observedAt)) && publicReference(permission.termsReference) &&
+    permission.host === new URL(String(r.url)).hostname && r.reuse === "permitted";
+  const dated = r.publishedDate !== null || r.effectiveDate !== null;
+  if (r.effectiveDate !== null && String(r.effectiveDate) > String(r.observedAt).slice(0,10)) throw new Error("rent_review_invalid");
+  return { match, reference: String(r.url), retainContent: permissionAllowed && match === "exact_unit" && dated,
+    reason: match === "rejected" ? "wrong_property_or_unit" : r.reuse === "prohibited" ? "reuse_prohibited" :
+      !permissionAllowed ? "commercial_reuse_unconfirmed" : match !== "exact_unit" ? "unit_unconfirmed" : !dated ? "source_date_unknown" : "verified_dated_source",
     classification: r.kind, currentRentEstablished: false as const,
     limitations: ["Source asking rent is not contracted rent; reported contract rent is not verified lease evidence.",
       "Publication/effective dates remain distinct; URL dates are not publication proof.",

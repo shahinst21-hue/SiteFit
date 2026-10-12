@@ -7,7 +7,7 @@ import { consultantNumber } from "../lib/report-intelligence/display.ts";
 import { evaluateScenarioFit } from "../lib/report-intelligence/scenario-fit.ts";
 import { operatingComparison } from "../lib/report-intelligence/operating-comparison.ts";
 import { competitionBrief } from "../lib/report-intelligence/competition.ts";
-import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode, type Commentary } from "../lib/report-intelligence/narrative.ts";
+import { validateNarrative, narrativeSchema, narrativeInstructions, renderCommentary, narrativeFailureCode, narrativeFailureDiagnostic, type Commentary } from "../lib/report-intelligence/narrative.ts";
 import { sectionKeys, type Fact } from "../lib/report-intelligence/catalog.ts";
 import { expandedProfiles } from "../lib/report-intelligence/profiles.ts";
 
@@ -97,6 +97,36 @@ test("consultant prose binds rounded values without changing operands or admitti
   const malformed = structuredClone(c);
   malformed.facts[0].value = {} as unknown as string;
   assert.throws(() => renderCommentary(claim, malformed), /malformed_customer_text/);
+});
+test("credential guard preserves ordinary hyphenated consultancy language without admitting key prefixes", () => {
+  const { c, fit, claim, n } = fixture();
+  for (const text of ["Use a risk-based review of the admitted premises evidence before committing.",
+    "This desk-based assessment cannot establish inspected physical suitability.",
+    "A risk-led decision still requires the exact-unit operating constraints to be resolved."]) {
+    const candidate = structuredClone(n); candidate.priorityAction = { ...claim, text };
+    assert.equal(renderCommentary(validateNarrative(candidate, c, fit).priorityAction, c).text, text);
+  }
+  for (const token of ["sk-" + "short", "sk-" + "proj-" + "synthetic", "prefixsk-" + "proj-" + "synthetic",
+    "prefixsk-" + "A".repeat(32), "sb_" + "secret_synthetic", "Bearer synthetic"]) {
+    const candidate = structuredClone(n); candidate.priorityAction = { ...claim, text: `Do not publish the private value ${token} in this report.` };
+    assert.throws(() => validateNarrative(candidate, c, fit), /unsupported_narrative_claim/);
+  }
+});
+test("claim/evidence rejection identifies only the structural field and rule, never rejected text or identifiers", () => {
+  const { c, fit, claim, n } = fixture();
+  for (const [text, rule] of [["This property supports 40 seats in the proposed cafe.", "literal_number"],
+    ["Use {{f:foreign-private-id}} as a reliable resident base.", "unbound_slot"],
+    ["We recommend the takeaway format for this property.", "withheld_format"],
+    ["This location has an overall score that establishes suitability.", "unsupported_outcome"]]) {
+    const candidate = structuredClone(n); candidate.sections[2].analysis[0] = { ...claim, text };
+    try { validateNarrative(candidate, c, fit); assert.fail("must reject"); } catch (error) {
+      const diagnostic = narrativeFailureDiagnostic(error);
+      assert.deepEqual(diagnostic, { version: "narrative-diagnostic-v1", rule, path: "sections[2].analysis[0]" });
+      assert.equal(JSON.stringify(diagnostic).includes(text), false);
+      assert.doesNotMatch(JSON.stringify(diagnostic), /foreign-private-id|40 seats/);
+    }
+  }
+  assert.equal(narrativeFailureDiagnostic(new Error("Private provider prose")), undefined);
 });
 test("restaurant scenarios distinguish lunch, evening and collection with binding physical gates", () => {
   const { c, fit } = fixture(); const comparison = operatingComparison(c, fit);

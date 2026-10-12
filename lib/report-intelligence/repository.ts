@@ -15,6 +15,11 @@ import { fullRequest } from "./provider.ts";
 import { groupInstructions, selectionSchema } from "./selection.ts";
 import { evaluateScenarioFit, type ScenarioFit } from "./scenario-fit.ts";
 import { projectOperators } from "./operators.ts";
+import { privateTokenText } from "../data/private-text.ts";
+import { storedRentalSupplements } from "./rental-preparation.ts";
+import { rentalFallback, approvedRentalSources, type RentSourceAdapter, type RentalFallback } from "../web-evidence/rental-fallback.ts";
+import { webEvidenceSearch } from "../web-evidence/search.ts";
+import { applyRentalDiscovery } from "./rental-discovery.ts";
 
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
@@ -22,6 +27,8 @@ export type Preparation = { version: "full-preparation-v1"; configuration: "full
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
   scenarioFit?: ScenarioFit;
   profiles?: ReturnType<typeof storedProfiles>;
+  rentalPreparation?: { version: "rental-preparation-v1"; supplementDigests: string[]; sourceBindings: { snapshotId: string; checksum: string }[];
+    fallback: { state: RentalFallback["state"]; receipt: RentalFallback["receipt"]; findingDigests: string[]; findings: RentalFallback["findings"] } };
   identityOmissions?: string[];
   presentation?: { freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
     spatial: { reportId: string; digest: string | null; state: "available" | "unavailable" }; photo: { state: "unavailable" } };
@@ -60,7 +67,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     if (!uuid(reportId)) throw Error("invalid_request");
     return validateStoredEdition(await invoke("read_sitefit_full", { p_report: reportId }));
   };
-  return { read, async start(freeReportId: string): Promise<StoredEdition> {
+  return { read, async start(freeReportId: string, rentalExecution: { grantId: string; sources?: readonly RentSourceAdapter[] } | null = null): Promise<StoredEdition> {
     if (!uuid(freeReportId)) throw Error("invalid_request");
     const existing = await rpc.rpc("find_sitefit_full", { p_owner: owner, p_free: freeReportId });
     if (existing.error) throw Error("full_operation_unavailable");
@@ -79,14 +86,42 @@ export function fullRepository(owner: string, client = frameworkClient()) {
         // write. Reuse that winner; never recalculate or overwrite it.
         if (!await assessments.read(context.analysisId, context.inputId)) throw Error("assessment_preparation_unavailable");
       }
-      return this.start(freeReportId);
+      return this.start(freeReportId, rentalExecution);
     }
     const assessment = validateAssessment(material.assessment);
     if (assessment.contextDigest !== packetDigest(context) || assessment.analysisId !== context.analysisId ||
       assessment.inputId !== context.inputId || assessment.propertyId !== context.selectedProperty.id ||
       packetDigest(assessment) !== material.assessmentDigest || !uuid(material.assessmentId) || !Array.isArray(material.evidence)) throw Error("full_source_binding_invalid");
     const evidence: Evidence[] = material.evidence.map(e => { validateEvidence(e); return e; });
-    const catalog = buildCatalog(assessment, evidence, new Date(), material.discovery === null ? null : validateDiscovery(material.discovery));
+    const preparedAt = new Date();
+    const rentalSupplements = storedRentalSupplements(context, assessment, Array.isArray(material.rentalSnapshots) ? material.rentalSnapshots : [], preparedAt);
+    const catalog = buildCatalog(assessment, evidence, preparedAt, material.discovery === null ? null : validateDiscovery(material.discovery), rentalSupplements);
+    let discoveryExecution = rentalExecution;
+    if (!discoveryExecution && !catalog.rentalObservations.length && process.env.SITEFIT_RENT_DISCOVERY_ENABLED === "1" &&
+      process.env.VERCEL_ENV !== "production" && approvedRentalSources.length) {
+      // Owner-configured activation still needs a scoped durable approval. Never
+      // accept grants, policies or parsers from a customer request body.
+      const { data: grants, error } = await client.from("system_events").select("id").eq("analysis_id", context.analysisId)
+        .eq("event_type", "rent-search-owner-approved").eq("safe_metadata->>ownerId", owner).eq("safe_metadata->>inputId", context.inputId)
+        .order("occurred_at", { ascending: false }).limit(1);
+      if (error) throw Error("rental_grant_read_unavailable");
+      if (grants?.[0]) discoveryExecution = { grantId: grants[0].id, sources: approvedRentalSources };
+    }
+    const fallback = await rentalFallback(context, catalog.rentalObservations.length, discoveryExecution ? {
+      grantId: discoveryExecution.grantId, sources: discoveryExecution.sources ?? approvedRentalSources,
+      reserve: async (grantId, policies) => {
+        if (!Number.isSafeInteger(material.reservedMicros) || Number(material.reservedMicros) + intelligencePolicy.reportReserveMicros > intelligencePolicy.phaseBudgetMicros)
+          throw Error("full_report_budget_unavailable");
+        await invoke("reserve_sitefit_rent_search", { p_analysis: context.analysisId, p_input: context.inputId, p_grant: grantId, p_policies: policies });
+      },
+      discover: address => webEvidenceSearch({ enabled: true, approvedUsd: .5,
+        allowedDomains: (discoveryExecution.sources ?? approvedRentalSources).map(s => s.permission.host) }).discover(address, { kind: "rent" }),
+      settle: async (receipt, state) => {
+        await invoke("settle_sitefit_rent_search", { p_analysis: context.analysisId, p_input: context.inputId,
+          p_grant: discoveryExecution.grantId, p_receipt: receipt as unknown as Json, p_state: state });
+      },
+    } : null);
+    applyRentalDiscovery(context, catalog, fallback);
     projectOperators(context, assessment, catalog, Array.isArray(material.operatorSnapshots) ? material.operatorSnapshots : [], new Date());
     const scenarioFit = evaluateScenarioFit({ businessType: context.businessType, facts: catalog.facts,
       history: catalog.timeline, rental: catalog.rentalObservations });
@@ -98,7 +133,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       const projected = catalogPacket(catalog, keys, identityOmissions), encoded = JSON.stringify(projected);
       // Protect against identity hidden in free source text, not just named JSON fields.
       if (identityOmissions.some(v => encoded.toLowerCase().includes(v.toLowerCase())) || /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i.test(encoded) ||
-        /(?:sb_secret_|sk-(?:proj-)?|Bearer\s|guestClaim|authorization)/i.test(encoded)) throw Error("full_packet_identity_rejected");
+        privateTokenText(encoded) || /guestClaim|authorization/i.test(encoded)) throw Error("full_packet_identity_rejected");
       fullRequest(keys.includes("premises") ? "premises" : "context", projected, groupInstructions, selectionSchema);
       return projected;
     };
@@ -107,6 +142,9 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,
       assessmentDigest: String(material.assessmentDigest), catalog,
       scenarioFit,
+      rentalPreparation: { version: "rental-preparation-v1", supplementDigests: rentalSupplements.map(packetDigest),
+        sourceBindings: rentalSupplements.flatMap(s => s.sourceBindings),
+        fallback: { state: fallback.state, receipt: fallback.receipt, findingDigests: fallback.findings.map(f => f.id), findings: fallback.findings } },
       profiles, identityOmissions,
       presentation: { freeReportId, analysisTimestamp: context.analysisTimestamp,
         property: { id: context.selectedProperty.id, label: context.selectedProperty.formattedAddress,

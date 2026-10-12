@@ -1,0 +1,41 @@
+{
+  "version": "retained-rental-source-proof-v1",
+  "property": "Climpson & Sons, 67 Broadway Market, LONDON, E8 4PH",
+  "rental": [
+    {
+      "id": "00e4739d-0e2c-4188-844e-5de810721c8b:benchmark",
+      "kind": "local_asking_benchmark",
+      "annualValue": 35,
+      "unit": "GBP per square foot per year",
+      "areaBasis": "NIA",
+      "retrievedAt": "2026-10-08T18:47:02.375Z",
+      "sourceDate": null,
+      "reportedError": null,
+      "selectedUnitRent": false,
+      "comparison": {
+        "sample": 20,
+        "type": "restaurants",
+        "radius": 0.57,
+        "radiusUnits": null,
+        "dispersion": null,
+        "limitations": [
+          "source_model_vintage",
+          "radius_units",
+          "dispersion",
+          "selected_format_comparability"
+        ]
+      }
+    }
+  ],
+  "references": [
+    {
+      "id": "00e4739d-0e2c-4188-844e-5de810721c8b:benchmark",
+      "source": "propertydata",
+      "url": "https://propertydata.co.uk/api/documentation/rents-commercial",
+      "scope": "local-market-not-selected-unit",
+      "retrievedAt": "2026-10-08T18:47:02.375Z",
+      "effectiveAt": null,
+      "licence": "PropertyData dated historical observation; not a current cache"
+    }
+  ]
+}

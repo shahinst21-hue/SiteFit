@@ -3,6 +3,7 @@ import { validateEvidence, type Evidence } from "../analysis/evidence.ts";
 import { packetDigest } from "../analysis/canonical.ts";
 import { object } from "../data/validation.ts";
 import { validateDiscovery, type DiscoveryBundle } from "../web-evidence/model.ts";
+import { validateEconomicBundle, type EconomicBundle } from "../economics/bundle.ts";
 
 export const sectionKeys = ["overview", "customer-context", "competition", "access", "premises", "rental-context", "actions", "appendix"] as const;
 export type SectionKey = typeof sectionKeys[number];
@@ -18,8 +19,11 @@ export type Catalog = { version: "full-catalog-v1"; business: AssessmentBundle["
   facts: Fact[]; atoms: Atom[]; unknowns: string[]; index: AssessmentBundle["index"]; readiness: AssessmentBundle["decision"]["readiness"];
   premises: AssessmentBundle["decision"]["premises"]; stance: AssessmentBundle["decision"]["stance"];
   timeline: { id: string; fact: string; date: string; dateMeaning: string; scope: string; referenceId: string }[];
-  rentalObservations: { id: string; kind: "local_asking_benchmark" | "property_estimate"; annualValue: number; unit: string;
-    areaBasis: string; retrievedAt: string; sourceDate: string | null; reportedError: number | null; selectedUnitRent: false }[];
+  rentalObservations: { id: string; kind: "local_asking_benchmark" | "property_estimate" | "source_asking_rent" | "source_reported_contract_rent" | "source_market_estimate"; annualValue: number; unit: string;
+    areaBasis: string; retrievedAt: string; sourceDate: string | null; reportedError: number | null; selectedUnitRent: boolean;
+    web?: { policyId: string; sourceLabel: string; match: "exact_unit"; publishedDate: string | null; effectiveDate: string | null;
+      amountQualifier: string; vat: string; limitations: string[] };
+    comparison?: { sample: number; type: string; radius: number; radiusUnits: string | null; dispersion: number | null; limitations: string[] } }[];
   supplementReferences: { id: string; bundleDigest: string; source: string; reference: string; retrievedAt: string; effectiveAt: string | null; scope: string; licence: unknown }[] };
 const label = (business: Catalog["business"]) => business === "coffee-shop" ? "coffee shop" : business === "restaurant" ? "restaurant" : "salon";
 const section = (e: Evidence): SectionKey | null => {
@@ -30,7 +34,7 @@ const section = (e: Evidence): SectionKey | null => {
   return null;
 };
 /** Only frozen evidence admitted by the existing assessment is projected. */
-export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at: Date, storedDiscovery: DiscoveryBundle | null = null): Catalog {
+export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at: Date, storedDiscovery: DiscoveryBundle | null = null, additionalRentals: EconomicBundle[] = []): Catalog {
   const assessment = validateAssessment(value), byId = new Map(envelopes.map(e => { validateEvidence(e); return [e.id, e]; }));
   const facts: Fact[] = [], atoms: Atom[] = [], supplementReferences: Catalog["supplementReferences"] = [],
     timeline: Catalog["timeline"] = [], rentalObservations: Catalog["rentalObservations"] = [];
@@ -76,7 +80,17 @@ export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at:
       add(key, "action", "Walk the modelled station approach at the intended opening and closing times; verify the usable entrance, barriers and pedestrian access before treating the route as a trading advantage.", [fact.id], "route-ground-check-v1");
     }
   }
-  for (const supplement of assessment.supplements) {
+  if (additionalRentals.length > 3) throw Error("rental_context_bounds");
+  const supplements = [...assessment.supplements];
+  for (const raw of additionalRentals) {
+    const bundle = validateEconomicBundle(raw);
+    if (bundle.kind !== "rental_evidence" || bundle.analysisId !== assessment.analysisId || bundle.inputId !== assessment.inputId ||
+      bundle.propertyId !== assessment.propertyId || bundle.contextDigest !== assessment.contextDigest ||
+      (bundle.business.endsWith("salon") ? "hair-beauty-salon" : bundle.business) !== assessment.business || !bundle.sourceBindings.length ||
+      !bundle.sourceBindings.every(s => assessment.sourceBindings.some(b => b.snapshotId === s.snapshotId && b.checksum === s.checksum))) throw Error("foreign_rental_supplement");
+    if (!supplements.some(s => s.kind === "rental" && s.bundle.runId === bundle.runId)) supplements.push({ kind: "rental", bundle });
+  }
+  for (const supplement of supplements) {
     if (supplement.kind === "history") {
       for (const event of supplement.bundle.events) {
         const receipt = supplement.bundle.receipts.find(r => r.source === event.source);
@@ -99,7 +113,10 @@ export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at:
         add("rental-context", "reason", `Local modelled asking-rent benchmark: £${benchmark.poundsPerSqftYear} per square foot per year, on ${benchmark.areaBasis} basis; ${benchmark.sample} analysed observations. This is not the selected premises' actual rent.`, [], `rental-benchmark:${supplement.bundle.runId}`);
         rentalObservations.push({ id: `${supplement.bundle.runId}:benchmark`, kind: "local_asking_benchmark", annualValue: benchmark.poundsPerSqftYear,
           unit: "GBP per square foot per year", areaBasis: String(benchmark.areaBasis), retrievedAt: String(benchmark.retrievedAt),
-          sourceDate: benchmark.sourceDate as string | null, reportedError: null, selectedUnitRent: false });
+          sourceDate: benchmark.sourceDate as string | null, reportedError: null, selectedUnitRent: false,
+          comparison: { sample: Number(benchmark.sample), type: String(benchmark.type), radius: Number(benchmark.nativeRadius),
+            radiusUnits: benchmark.radiusUnits as string | null, dispersion: benchmark.dispersion as number | null,
+            limitations: Array.isArray(benchmark.limitations) ? benchmark.limitations as string[] : [] } });
         add("rental-context", "caution", "Local asking-rent context is not a contracted lease, and an unknown source date or radius limits comparability. Do not multiply an NIA benchmark by a GIA floor area.", [], "rent-kind-area-v1");
       }
       const valuation = result.valuation === null ? null : object(result.valuation);
@@ -115,7 +132,7 @@ export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at:
       for (const [kind, item] of [["benchmark", benchmark], ["valuation", valuation]] as const) if (item) {
         const policy = object(item.policy);
         supplementReferences.push({ id: `${supplement.bundle.runId}:${kind}`, bundleDigest: packetDigest(supplement.bundle), source: "propertydata",
-          reference: String(policy.source), retrievedAt: String(item.retrievedAt), effectiveAt: item.sourceDate as string | null,
+          reference: `https://propertydata.co.uk/api/documentation/${kind === "benchmark" ? "rents-commercial" : "valuation-commercial-rent"}`, retrievedAt: String(item.retrievedAt), effectiveAt: item.sourceDate as string | null,
           scope: kind === "benchmark" ? "local-market-not-selected-unit" : "property-specific-model-not-lease", licence: policy });
       }
       if (result.propertySpecificState === "unavailable") add("rental-context", "caution", String(result.propertySpecificReason), [], "valuation-unavailable-v1");
@@ -137,7 +154,7 @@ export function buildCatalog(value: AssessmentBundle, envelopes: Evidence[], at:
   if (atoms.some(a => a.section === "premises" && a.role === "reason")) add("premises", "conclusion", "Available premises evidence remains incomplete; current permission and exact trading-unit suitability are unresolved.", [], "history-conclusion-v1");
   if (atoms.some(a => a.section === "rental-context" && a.role === "reason")) add("rental-context", "conclusion", "Qualified rental context supports comparison; it does not establish the selected unit's agreed lease costs.", [], "rental-conclusion-v1");
   add("rental-context", "action", "Obtain the selected unit's written rent, service charge, insurance, lease length and break terms; compare them with the qualified market context without treating a benchmark as an offer.", [], "lease-terms-action-v1");
-  if (assessment.supplements.filter(s => s.kind === "rental").length > 1) add("rental-context", "caution", "Multiple stored rental outcomes remain separate. No newest-result preference or averaging has been applied; compare rent kind, area basis, source date and exact-unit compatibility.", [], "rental-conflict-v1");
+  if (supplements.filter(s => s.kind === "rental").length > 1) add("rental-context", "caution", "Multiple stored rental outcomes remain separate. No newest-result preference or averaging has been applied; compare rent kind, area basis, source date and exact-unit compatibility.", [], "rental-conflict-v1");
   return { version: "full-catalog-v1", business: assessment.business, assessmentDigest: packetDigest(assessment), facts, atoms, unknowns,
     index: structuredClone(assessment.index), readiness: structuredClone(assessment.decision.readiness),
     premises: structuredClone(assessment.decision.premises), stance: assessment.decision.stance, supplementReferences, timeline, rentalObservations };

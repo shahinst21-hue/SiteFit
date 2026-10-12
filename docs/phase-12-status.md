@@ -1,5 +1,7 @@
 # Phase 12 implementation status
 
+12 October no-spend correction: [technical audit](phase-12-rent-synthesis-hardening.md) reproduces credential-prefix/false discard-flag defects across runtime and SQL, bridges the retained £35 NIA PropertyData benchmark for new preparations, and implements a disabled, explicitly budget/source-gated rental fallback. Historical reports and US$1.54 reservations remain intact. These local/hosted correction proofs do not diagnose D96's exact rejected sentence or establish a new live Ready V1. A proposed additional US$0.30 proof is **not authorised**; main/paid release remain blocked.
+
 ## D96 actual result — 12 October 2026, paid release remains BLOCKED
 
 The single approved independent proof ran through the protected Phase 12 Preview after exact-head CI/protected correction PR #37 merged into the Phase 12 branch. Execution was requested once through the authorised owner session; the browser left the verification page for Account. Processing continued and all three dispatches settled. Context and premises were accepted; synthesis returned and was rejected with the allowlisted reason **`unsupported_narrative_claim`**. The new edition remains draft at revision 6, with no published sections, no new Ready V1, no automatic retry and no source retrieval. UI exposes only safe stored failure/progress, not private preparation or rejected prose.

@@ -8,13 +8,23 @@ import type {SectionKey} from '@/lib/report-intelligence/catalog';
 import coffee from '@/tests/fixtures/dashboard/coffee-shop.json';
 import restaurant from '@/tests/fixtures/dashboard/restaurant.json';
 import salon from '@/tests/fixtures/dashboard/hair-salon.json';
+import rentalProof from '@/tests/fixtures/dashboard/rental-source-proof.json';
+import {RentalEvidence} from '@/components/report-dashboard/rent';
 import '../../report-dashboard.css';
 export const dynamic='force-dynamic';
 export const metadata:Metadata={title:'Dashboard development review',robots:{index:false,follow:false}};
-export default async function DevelopmentReport({searchParams}:{searchParams:Promise<{concept?:string;section?:string;data?:string}>}){
+export default async function DevelopmentReport({searchParams}:{searchParams:Promise<{concept?:string;section?:string;data?:string;rentalProof?:string}>}){
   const host=(await headers()).get('host')?.split(':')[0]??'';
   if(process.env.NODE_ENV!=='development'&&!dashboardEnabled(process.env,host))notFound();
   const params=await searchParams;
+  if(params.rentalProof==='1')return <main id="main-content" className="dw-workspace" style={{display:'block',minHeight:'auto'}}><div className="dw-content">
+    <p className="eyebrow">Development source verification · not a Ready report</p>
+    <div className="dw-heading"><h1>Retained rental evidence</h1></div><p>{rentalProof.property}</p>
+    <p>This demonstrates the repaired rental preparation bridge using the stored PropertyData observation. Original frozen reports and their conclusions remain unchanged.</p>
+    <RentalEvidence report={{rental:rentalProof.rental,references:rentalProof.references} as unknown as Dashboard}/>
+    <p>No AI or provider request runs on this page. These dated figures are market context, not an offer for the selected unit.</p>
+    <a href="/dev/report?section=rental-context">Back to the frozen report</a>
+  </div></main>;
   const selected=params.concept==='restaurant'?restaurant:params.concept==='salon'?salon:coffee;
   const report=structuredClone(selected) as unknown as Dashboard;
   if(params.data==='worst'){

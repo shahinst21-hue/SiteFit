@@ -5,6 +5,22 @@ import { operatingComparison } from "./operating-comparison.ts";
 import { competitionBrief } from "./competition.ts";
 import type { ScenarioFit } from "./scenario-fit.ts";
 import { competitionDiscoveryNeeds } from "./discovery-needs.ts";
+import { privateTokenText } from "../data/private-text.ts";
+
+const failureRules = ["literal_number", "unsafe_text", "control_character", "unsupported_outcome", "withheld_format",
+  "invalid_references", "unbound_slot", "missing_evidence", "operator_lineage"] as const;
+type FailureRule = typeof failureRules[number];
+class NarrativeValidationError extends Error {
+  readonly rule: FailureRule;
+  readonly path: string;
+  constructor(code: string, rule: FailureRule, path: string) { super(code); this.rule = rule; this.path = path; }
+}
+/** Structural coordinates only: no rejected prose, source IDs or private values. */
+export function narrativeFailureDiagnostic(error: unknown) {
+  if (!(error instanceof NarrativeValidationError) || !failureRules.includes(error.rule) ||
+    !/^(?:verdict|strengths|risks)\[[0-3]\]$|^priorityAction$|^actions\[[0-3]\]\.(?:action|consequence)$|^sections\[[0-7]\]\.(?:conclusion|decisionTest|analysis\[[0-2]\])$/.test(error.path)) return undefined;
+  return { version: "narrative-diagnostic-v1", rule: error.rule, path: error.path };
+}
 
 export type Commentary = { text: string; kind: "interpretation" | "hypothesis" | "unknown"; factIds: string[]; operatorIds: string[]; referenceIds: string[] };
 export type ConsultantNarrative = { version: "consultant-narrative-v1";
@@ -70,37 +86,39 @@ export function validateNarrative(value: unknown, catalog: Catalog, fit: Scenari
     Buffer.byteLength(JSON.stringify(n)) > 24_000) throw Error("invalid_narrative");
   const facts = new Set(catalog.facts.map(f => f.id)), operators = new Map((catalog.operators?.items ?? []).map(o => [o.recordId, o]));
   const references = new Set(catalog.supplementReferences.map(r => r.id)), rents = new Set(catalog.rentalObservations.map(r => r.id));
-  const check = (value: unknown) => {
+  const check = (value: unknown, path: string) => {
     const c = object(value);
     if (Object.keys(c).length !== 5 || typeof c.text !== "string" || c.text.length < 12 || c.text.length > 800 ||
       !["interpretation", "hypothesis", "unknown"].includes(String(c.kind)) || !Array.isArray(c.factIds) || !Array.isArray(c.operatorIds) ||
       c.factIds.length > 8 || c.operatorIds.length > 6 || new Set(c.factIds).size !== c.factIds.length || new Set(c.operatorIds).size !== c.operatorIds.length ||
       !Array.isArray(c.referenceIds) || c.referenceIds.length > 4 || new Set(c.referenceIds).size !== c.referenceIds.length ||
-      c.factIds.some(id => !facts.has(id)) || c.operatorIds.some(id => !operators.has(id)) || c.referenceIds.some(id => !references.has(id))) throw Error("invalid_narrative_claim");
+      c.factIds.some(id => !facts.has(id)) || c.operatorIds.some(id => !operators.has(id)) || c.referenceIds.some(id => !references.has(id))) throw new NarrativeValidationError("invalid_narrative_claim", "invalid_references", path);
     const text = c.text.replace(/\{\{([for]):([^{}]+)\}\}/g, (_, kind: string, id: string) => {
       if (!(kind === "f" ? (c.factIds as string[]).includes(id) : kind === "o" ? (c.operatorIds as string[]).includes(id) :
-        rents.has(id) && (c.referenceIds as string[]).includes(id))) throw Error("unbound_narrative_value");
+        rents.has(id) && (c.referenceIds as string[]).includes(id))) throw new NarrativeValidationError("unbound_narrative_value", "unbound_slot", path);
       return "[bound evidence]";
     });
     // A narrowly explicit withholding statement is not a recommendation. Remove
     // only its exact clause for the format check; any positive clause still fails.
     const formatText = text.replace(/\b(?:cannot|can't|do not|must not|should not) (?:recommend|choose) (?:a |the )?(?:takeaway|dine.in|sit.in|hybrid) (?:format|model)\b/gi, "[withheld format]");
-    if (/\d|\{\{|\[object (?:Object|Array)\]|https?:|Bearer|sb_secret_|sk-(?:proj-)?|@/i.test(text) ||
-      Array.from(text).some(ch => ch.charCodeAt(0) < 32 && !"\n\r\t".includes(ch)) ||
-      /(?:guaranteed success|overall (?:score|suitability)|(?:demonstrates|proves|establishes) (?:measured customer demand|observed footfall))/i.test(text) ||
-      fit.leadingFormatId === null && /(?:recommend|best|leading|choose).{0,25}(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:format|model)|(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:is best|recommended|is the leading)/i.test(formatText)) throw Error("unsupported_narrative_claim");
-    if (c.kind !== "unknown" && !c.factIds.length && !c.operatorIds.length && !c.referenceIds.length) throw Error("narrative_evidence_missing");
-    for (const id of c.operatorIds as string[]) if (!c.factIds.includes(catalog.operators!.sources[operators.get(id)!.sourceIndex].sourceFactId)) throw Error("narrative_operator_lineage_missing");
+    const reject = (rule: FailureRule) => { throw new NarrativeValidationError("unsupported_narrative_claim", rule, path); };
+    if (/\d/.test(text)) reject("literal_number");
+    if (/\{\{|\[object (?:Object|Array)\]|https?:|@/i.test(text) || privateTokenText(text)) reject("unsafe_text");
+    if (Array.from(text).some(ch => ch.charCodeAt(0) < 32 && !"\n\r\t".includes(ch))) reject("control_character");
+    if (/(?:guaranteed success|overall (?:score|suitability)|(?:demonstrates|proves|establishes) (?:measured customer demand|observed footfall))/i.test(text)) reject("unsupported_outcome");
+    if (fit.leadingFormatId === null && /(?:recommend|best|leading|choose).{0,25}(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:format|model)|(?:takeaway|dine.in|sit.in|hybrid).{0,12}(?:is best|recommended|is the leading)/i.test(formatText)) reject("withheld_format");
+    if (c.kind !== "unknown" && !c.factIds.length && !c.operatorIds.length && !c.referenceIds.length) throw new NarrativeValidationError("narrative_evidence_missing", "missing_evidence", path);
+    for (const id of c.operatorIds as string[]) if (!c.factIds.includes(catalog.operators!.sources[operators.get(id)!.sourceIndex].sourceFactId)) throw new NarrativeValidationError("narrative_operator_lineage_missing", "operator_lineage", path);
     return c as Commentary;
   };
-  const list = (v: unknown, min: number, max: number) => {
-    if (!Array.isArray(v) || v.length < min || v.length > max) throw Error("invalid_narrative"); return v.map(check);
+  const list = (v: unknown, min: number, max: number, path: string) => {
+    if (!Array.isArray(v) || v.length < min || v.length > max) throw Error("invalid_narrative"); return v.map((c, i) => check(c, `${path}[${i}]`));
   };
-  list(n.verdict, 3, 3); list(n.strengths, 1, 4); list(n.risks, 1, 4); check(n.priorityAction);
+  list(n.verdict, 3, 3, "verdict"); list(n.strengths, 1, 4, "strengths"); list(n.risks, 1, 4, "risks"); check(n.priorityAction, "priorityAction");
   if (!Array.isArray(n.actions) || n.actions.length !== 4 || !Array.isArray(n.sections) || n.sections.length !== 8) throw Error("invalid_narrative");
-  for (const a of n.actions) { const r = object(a); if (Object.keys(r).length !== 2) throw Error("invalid_narrative"); check(r.action); check(r.consequence); }
+  for (const [i, a] of n.actions.entries()) { const r = object(a); if (Object.keys(r).length !== 2) throw Error("invalid_narrative"); check(r.action, `actions[${i}].action`); check(r.consequence, `actions[${i}].consequence`); }
   for (const [i, s] of n.sections.entries()) { const r = object(s);
-    if (Object.keys(r).length !== 4 || r.key !== sectionKeys[i]) throw Error("invalid_narrative"); check(r.conclusion); list(r.analysis, 1, 3); check(r.decisionTest); }
+    if (Object.keys(r).length !== 4 || r.key !== sectionKeys[i]) throw Error("invalid_narrative"); check(r.conclusion, `sections[${i}].conclusion`); list(r.analysis, 1, 3, `sections[${i}].analysis`); check(r.decisionTest, `sections[${i}].decisionTest`); }
   return structuredClone(n) as ConsultantNarrative;
 }
 export function renderCommentary(c: Commentary, catalog: Catalog) {

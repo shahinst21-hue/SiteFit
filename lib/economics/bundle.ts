@@ -1,5 +1,6 @@
 import { object, uuid, timestamp } from "../data/validation.ts";
 import { validateEconomicInput } from "./model.ts";
+import { privateReportData } from "../data/private-text.ts";
 import type { economicScenarios } from "./prepare.ts";
 import type { rentalReportProjection } from "./rent.ts";
 export type EconomicBundle = { schemaVersion:1;kind:"financial_engine"|"rental_evidence";analysisId:string;inputId:string;propertyId:string;business:string;
@@ -11,7 +12,7 @@ export function validateEconomicBundle(value:unknown):EconomicBundle {
   const keys=["schemaVersion","kind","analysisId","inputId","propertyId","business","contextDigest","runId","parentRunId","generatedAt","sourceBindings","result"];
   const json=JSON.stringify(b);
   if (Object.keys(b).length!==keys.length||Object.keys(b).some(k=>!keys.includes(k))||json.length>100000||
-    /(sb_secret_|sk-(proj-)?|sk_(live|test)_|Bearer\s|rawResponse|authorization|guestClaim)/i.test(json)||b.schemaVersion!==1||
+    privateReportData(b)||b.schemaVersion!==1||
     !["financial_engine","rental_evidence"].includes(String(b.kind))||![b.analysisId,b.inputId,b.propertyId,b.runId].every(uuid)||
     !(b.parentRunId===null||uuid(b.parentRunId))||!timestamp(b.generatedAt)||!/^([a-f0-9]{64})$/.test(String(b.contextDigest))||
     !["coffee-shop","restaurant","hair-salon","beauty-salon"].includes(String(b.business))||!Array.isArray(b.sourceBindings)||b.sourceBindings.length>30)throw new Error("invalid_economic_bundle");
