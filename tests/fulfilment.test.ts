@@ -40,7 +40,17 @@ test("unknown and rejected dispatches stop without repair or retry", async () =>
   for (const state of ["intent", "ambiguous", "invalid"]) {
     const f = fixture("draft", [{ state }]); assert.equal(await fulfilOne({ ...f, paidExecutionApproved: true }), "intervention");
     assert.equal(f.calls(), 0); assert.equal((f.finished[0] as { reason: string }).reason, state === "invalid" ? "validation_failed" : "dispatch_ambiguous");
+    const disabled = fixture("draft", [{ state }]);
+    assert.equal(await fulfilOne(disabled), "intervention", "an existing ambiguous/invalid execution remains intervention even when new spending is disabled");
   }
   assert.equal(completion("draft", []).reason, "execution_interrupted");
   assert.match(progressLabel("intervention"), /retained/); assert.doesNotMatch(progressLabel("running"), /%|minute/);
+});
+
+test("worker exception persists intervention without exposing the private failure or retrying", async () => {
+  const f = fixture(); let calls = 0;
+  const generate = (async () => { calls++; throw Error("private provider response must not escape"); }) as typeof generateFullIntelligence;
+  assert.equal(await fulfilOne({ ...f, generate, paidExecutionApproved: true }), "intervention");
+  assert.equal(await fulfilOne({ ...f, generate, paidExecutionApproved: true }), "idle");
+  assert.equal(calls, 1); assert.deepEqual(f.finished, [{ state: "intervention", reason: "execution_interrupted" }]);
 });

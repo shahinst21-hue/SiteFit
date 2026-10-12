@@ -77,6 +77,14 @@ begin
  edition:=public.freeze_sitefit_full(owner,fid,6,projection::text);
  perform public.finish_sitefit_fulfilment(jid,lease,'ready',null);
  if public.read_sitefit_fulfilment(owner,payment)->>'reportId'<>fid::text then raise exception 'Ready progress missing';end if;
+ -- Simulate a worker dying after freeze but before recording its completion.
+ update public.report_fulfilment set state='running',lease_token=gen_random_uuid(),lease_until=now()-interval '1 second' where id=jid;
+ job:=public.claim_sitefit_fulfilment();
+ if job is not null or (select state from public.report_fulfilment where id=jid)<>'intervention' then raise exception 'Expired execution redispatched';end if;
+ insert into public.fulfilment_support_accounts(owner_id) values(owner);
+ perform public.resume_sitefit_fulfilment(owner,jid);
+ if public.read_sitefit_fulfilment(owner,payment)->>'state'<>'ready' then raise exception 'Stored Ready recovery failed';end if;
+ delete from public.fulfilment_support_accounts where owner_id=owner;
  update public.fulfilment_control set enabled=false;
  if edition->>'status'<>'ready' or (select count(*) from public.report_sections where report_id=fid)<>8 then raise exception 'Full publication failed';end if;
  if jsonb_typeof(public.read_sitefit_full_material(owner,report)->'profileSnapshots')<>'array' then raise exception 'Stored profile material unavailable';end if;

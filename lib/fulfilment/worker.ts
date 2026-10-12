@@ -15,6 +15,10 @@ export async function fulfilOne(options: { queue?: Queue; reports?: (owner: stri
   try {
     const repo = (options.reports ?? fullRepository)(job.ownerId);
     let edition = job.reportId ? await repo.read(job.reportId) : null;
+    if (edition && edition.status !== "ready" && edition.checkpoint.dispatches.some(d => ["intent", "ambiguous", "invalid"].includes(d.state))) {
+      await queue.bind(job, edition.id);
+      await queue.finish(job, completion(edition.status, edition.checkpoint.dispatches)); return "intervention";
+    }
     // Disabled execution cannot prepare a new edition or reserve money.
     if (edition?.status !== "ready" && options.paidExecutionApproved !== true) {
       await queue.finish(job, { state: "awaiting_authorisation", reason: "budget_unavailable" }); return "awaiting_authorisation";
