@@ -24,6 +24,20 @@ function fixture() {
   return { c, fit, claim, n };
 }
 
+test("D100 customer-context rejection is reproducible; admitted numerical references remain valid", () => {
+  const { c, fit, n, claim } = fixture();
+  const literal = structuredClone(n);
+  literal.sections[1].analysis[0] = { ...claim, text: "About 14,800 residents support a neighbourhood trading hypothesis, not observed demand." };
+  try { validateNarrative(literal, c, fit); assert.fail("Unbound literal accepted"); } catch (error) {
+    assert.deepEqual(narrativeFailureDiagnostic(error), { version: "narrative-diagnostic-v1", path: "sections[1].analysis[0]", rule: "literal_number" });
+  }
+  const referenced = structuredClone(n); referenced.sections[1].analysis[0] = { ...claim,
+    text: "The {{f:population}} resident context supports a neighbourhood trading hypothesis, not observed demand." };
+  const validated = validateNarrative(referenced, c, fit);
+  assert.match(renderCommentary(validated.sections[1].analysis[0], c).text, /about 15,000/);
+  // This proves the local contract behaviour, not the contents of the discarded live sentence.
+});
+
 test("explicit scope exclusions are accepted; positive or contradictory outcome claims still reject",()=>{
   const {c,fit,n,claim}=fixture();
   for(const text of ['This context index is not an overall suitability score.','This evidence does not measure overall suitability.']){

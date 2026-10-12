@@ -1,3 +1,5 @@
+12 October D100: Phase 14 is authorised for protected Development/Preview only; [plan](phase14_plan.md), [status](phase-14-status.md). One separately approved D99 proof failed the customer-context literal-number gate; [actual result](phase-12-d100-proof.md). Phase 12 new V1 Ready/replay/PDF stays BLOCKED; total conservative reservations US$2.14 retained. No further paid calls, main merge, Production or Phase 15. Phase 13 milestone remains closed.
+
 # Full Report V1 release baseline
 
 12 October update: owner-approved D96 independent proof settled three requests, but synthesis was rejected with `unsupported_narrative_claim`. No new Ready V1 exists; paid release and main merge remain blocked. Usage-derived cost US$0.076866; conservative reservations US$1.54 retained, with no further paid request authorised. See [actual receipt record](phase-12-status.md). The accepted content baseline and independently authorised Phase 13 Preview dashboard are not reopened by this failure.

@@ -44,7 +44,7 @@ async function commit(repo: ReturnType<typeof fullRepository>, reportId: string,
   throw Error("checkpoint_commit_unavailable");
 }
 export async function generateFullIntelligence(owner: string, reportId: string,
-  options: { repository?: ReturnType<typeof fullRepository>; provider?: ReturnType<typeof fullProvider>; resume?: boolean } = {}) {
+  options: { repository?: ReturnType<typeof fullRepository>; provider?: ReturnType<typeof fullProvider>; resume?: boolean; allowSemanticRepair?: boolean } = {}) {
   const repo = options.repository ?? fullRepository(owner);
   let edition = await repo.read(reportId);
   if (edition.status === "ready") return edition; // No packet/provider/calculator work on replay.
@@ -60,7 +60,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const pending: { group: Group; dispatch: ReturnType<typeof reserveDispatch>["dispatch"] }[] = [];
   for (const group of ["context", "premises"] as const) {
     const previous = edition.checkpoint.dispatches.filter(d => d.group === group);
-    const repair = !edition.preparation.narrativeVersion && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
+    const repair = options.allowSemanticRepair !== false && !edition.preparation.narrativeVersion && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
       previous.every(d => d.state === "invalid" && (d.receipt as { validation?: string } | null)?.validation === "selection_rejected");
     if (previous.length && !repair) continue;
     const packet = catalogPacket(edition.preparation.catalog, groupKeys[group], edition.preparation.identityOmissions);

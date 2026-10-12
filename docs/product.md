@@ -1,3 +1,5 @@
+12 October D100: Phase 14 is authorised for protected Development/Preview only; [plan](phase14_plan.md), [status](phase-14-status.md). One separately approved D99 proof failed the customer-context literal-number gate; [actual result](phase-12-d100-proof.md). Phase 12 new V1 Ready/replay/PDF stays BLOCKED; total conservative reservations US$2.14 retained. No further paid calls, main merge, Production or Phase 15. Phase 13 milestone remains closed.
+
 # SiteFit Product Contract
 
 D99 (12 October): internal checkpoint **450,000,000 bytes**, no upgrade. Qualified structured rental evidence may remain visible/exportable within an authorised owner's existing Preview Rent & Lease tab while the Full edition is Draft. This is explicitly not a Ready/customer report; Full export/publication still requires Ready. New report Appendix is deterministic methodology; eight-section/V1 evidence and historical guarantees remain. No new spending or Phase 13 reopening. See [correction record](phase-12-d99-corrections.md).

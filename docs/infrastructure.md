@@ -1,3 +1,5 @@
+12 October Phase 14 verified plans: Vercel Hobby with Fluid Compute enabled; Supabase organisation Free. Use existing pg_cron/pg_net/Vault for a fixed protected Preview runner, not daily-only Hobby Cron. No upgrade/subscription. Application maxDuration 200 seconds is beneath Fluid Hobby maximum 300 seconds. Paid dispatch disabled; [operating plan](phase14_plan.md), [runbook](fulfilment-runbook.md). Current reservations US$2.14; failed D100 proof remains a separate release blocker.
+
 # Phase 1 infrastructure and environments
 
 ## Current capacity policy — D99, 12 October 2026
