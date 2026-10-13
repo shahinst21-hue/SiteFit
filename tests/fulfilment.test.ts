@@ -11,7 +11,7 @@ const job: Job = { id: "00000000-0000-4000-8000-000000000001", ownerId: "0000000
 function fixture(status = "draft", dispatches: { state: string }[] = []) {
   let claimed = false; let calls = 0; const finished: unknown[] = [];
   const edition = { id: job.reportId, status, revision: 0, checkpoint: { dispatches } } as StoredEdition;
-  const queue = { async claim() { if (claimed) return null; claimed = true; return job; }, async bind() {},
+  const queue = { async claim() { if (claimed) return null; claimed = true; return job; }, async supplyAllowed() {return true;}, async bind() {},
     async finish(_job: Job, outcome: unknown) { finished.push(outcome); } } as unknown as ReturnType<typeof fulfilmentRepository>;
   const reports = () => ({ async read() { return edition; }, async start() { throw Error("unexpected reservation"); } }) as unknown as ReturnType<typeof fullRepository>;
   const generate = (async () => { calls++; return { ...edition, status: "ready" }; }) as unknown as typeof generateFullIntelligence;
@@ -68,4 +68,10 @@ test("lease or entitlement loss between dispatches prevents a second provider ex
   assert.equal(await fulfilOne({ ...f, queue, provider: provider as never, generate, paidExecutionApproved: true }), "intervention");
   assert.equal(paidCalls, 1);
   assert.deepEqual(f.finished, [{ state: "intervention", reason: "execution_interrupted" }]);
+});
+
+test("unapproved supply stops before report preparation, reservation and inference",async()=>{
+ const f=fixture(),queue={...f.queue,async supplyAllowed(){return false;}};
+ assert.equal(await fulfilOne({...f,queue,paidExecutionApproved:true}),"awaiting_authorisation");
+ assert.equal(f.calls(),0);assert.deepEqual(f.finished,[{state:"awaiting_authorisation",reason:"configuration_unavailable"}]);
 });

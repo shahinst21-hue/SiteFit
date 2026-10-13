@@ -1,4 +1,5 @@
 import "server-only";
+import {readSale} from "../legal/repository.ts";
 import { verifiedUser } from "../supabase/server.ts";
 import { permanentIdentity,purchaseUuid } from "../auth/purchase-flow.ts";
 import { paymentById } from "./repository.ts";
@@ -14,5 +15,6 @@ export async function ownedPurchase(id:string){
   const row=await fulfilmentRepository().progress(user.id,payment.id);
   fulfilment=parseProgress(row);
  }catch{/* Payment confirmation remains independently readable during a queue outage. */}
- return {id:payment.id,report:payment.report_id,status:payment.status,access:payment.access_state,test:true,reportGenerated:fulfilment?.state==='ready',fulfilment};
+ let confirmationAvailable=false;try{const sale=await readSale(user.id,payment.id);confirmationAvailable=!!sale&&typeof sale==="object"&&"policy" in sale&&!!sale.policy&&typeof sale.policy==="object"&&"termsText" in sale.policy;}catch{/* Existing payment/history reads remain available. */}
+ return {confirmationAvailable,id:payment.id,report:payment.report_id,status:payment.status,access:payment.access_state,test:true,reportGenerated:fulfilment?.state==='ready',fulfilment};
 }

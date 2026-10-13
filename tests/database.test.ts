@@ -71,6 +71,20 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
         ).rows[0].count,
         0,
       );
+    // Isolated recovery proof using synthetic data, never a hosted dump or credential export.
+    const recoveryFixture = await readFile(new URL("../supabase/tests/full-intelligence.sql", import.meta.url), "utf8");
+    await db.exec(recoveryFixture.replace(/rollback;\s*$/i, "commit;"));
+    const fingerprintSql = "select md5(string_agg(id::text||coalesce(full_projection::text,free_projection::text),'|' order by id)) as digest from public.reports where status='ready'";
+    const before = (await db.query<{digest:string}>(fingerprintSql)).rows[0].digest;
+    assert.ok(before);
+    const backup = await db.dumpDataDir();
+    const restored = new PGlite({loadDataDir:backup,extensions:{postgis}});
+    try {
+      assert.equal((await restored.query<{digest:string}>(fingerprintSql)).rows[0].digest,before);
+      const check=(await restored.query<{denied:boolean;frozen:boolean}>("select not has_table_privilege('authenticated','public.sale_contracts','SELECT') as denied, exists(select 1 from pg_trigger where tgname='sale_contracts_frozen' and not tgisinternal) as frozen")).rows[0];
+      assert.equal(check.denied,true);assert.equal(check.frozen,true);
+      assert.equal((await restored.query<{count:number}>("select count(*)::int as count from public.sale_contracts")).rows[0].count,1);
+    } finally {await restored.close();}
   } finally {
     await db.close();
   }

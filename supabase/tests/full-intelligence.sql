@@ -28,6 +28,20 @@ begin
  par:=jsonb_build_object('mode','payment','customer_email','assessment@example.invalid','metadata',jsonb_build_object('purchase_id',payment,'analysis_id',a));
  perform public.prepare_sitefit_payment(owner,report,payment,'price_assessmenttest',par,now()+interval '1 hour');
  begin perform public.authorise_sitefit_economics(owner,a,i);raise exception 'Pending authorised';exception when insufficient_privilege then null;end;
+
+ -- Synthetic, transaction-local legal records; no real policy approval or delivery.
+ if has_table_privilege('authenticated','public.sale_contracts','SELECT') or has_table_privilege('service_role','public.sale_policies','UPDATE') or
+ has_function_privilege('anon','public.record_sitefit_sale(uuid,uuid,text,jsonb)','EXECUTE') then raise exception 'Sale records exposed';end if;
+ begin perform public.record_sitefit_sale(owner,payment,'sitefit-sale-v1-draft','{}');raise exception 'Draft sale approved';exception when check_violation then null;end;
+ begin perform public.record_sitefit_sale(other,payment,'sitefit-sale-v1-draft','{}');raise exception 'Foreign sale accepted';exception when insufficient_privilege then null;end;
+ insert into public.sale_policies(version,approved,classification,confirmation_channel,snapshot) values('synthetic-phase15',true,'digital_content','synthetic-test-only',
+ '{"sellerName":"Synthetic test only","sellerAddress":"Synthetic address","privacyContact":"test@example.invalid","supportContact":"test@example.invalid","taxTreatment":"synthetic-only","termsText":"Synthetic policy for SQL verification only","privacyText":"Synthetic privacy for SQL verification only","retentionText":"Synthetic retention for SQL verification only"}');
+ begin perform public.record_sitefit_sale(owner,payment,'synthetic-phase15','{"version":"synthetic-phase15","buyerKind":"consumer","termsAccepted":false,"immediateRequested":true,"acknowledgement":true}');raise exception 'Unchecked sale accepted';exception when check_violation then null;end;
+ perform public.record_sitefit_sale(owner,payment,'synthetic-phase15','{"version":"synthetic-phase15","buyerKind":"consumer","termsAccepted":true,"immediateRequested":true,"acknowledgement":true}');
+ perform public.record_sitefit_sale(owner,payment,'synthetic-phase15','{"version":"synthetic-phase15","buyerKind":"consumer","termsAccepted":true,"immediateRequested":true,"acknowledgement":true}');
+ if (select count(*) from public.sale_contracts where payment_id=payment)<>1 then raise exception 'Duplicate contract';end if;
+ begin update public.sale_contracts set consent='{}' where payment_id=payment;raise exception 'Contract changed';exception when check_violation then null;end;
+ begin perform public.request_sitefit_cancellation(owner,payment,'failed_delivery');raise exception 'Unpaid cancellation accepted';exception when insufficient_privilege then null;end;
  perform public.bind_sitefit_checkout(payment,'cs_test_assessmentfixture');
  perform public.confirm_sitefit_payment(payment,'evt_assessmentfixture','checkout.session.completed',1,'cs_test_assessmentfixture','pi_assessmentfixture','paid','none');
 
@@ -59,9 +73,22 @@ begin
  update public.fulfilment_control set enabled=true;
  job:=public.claim_sitefit_fulfilment();lease:=(job->>'token')::uuid;
  if public.claim_sitefit_fulfilment() is not null then raise exception 'Concurrent claim admitted';end if;
+
+ if public.authorise_sitefit_supply(jid,lease) then raise exception 'Undelivered confirmation enabled supply';end if;
+ begin perform public.bind_sitefit_fulfilment(jid,lease,fid);raise exception 'Unconfirmed supply admitted';exception when check_violation then null;end;
+ -- Synthetic sender receipt in this rolled-back fixture; no real policy/channel approval.
+ perform public.confirm_sitefit_sale_delivery(owner,payment,'synthetic-test-only',repeat('c',64));
+ perform public.confirm_sitefit_sale_delivery(owner,payment,'synthetic-test-only',repeat('c',64));
+ if not public.authorise_sitefit_supply(jid,lease) then raise exception 'Approved confirmed fixture supply rejected';end if;
  perform public.bind_sitefit_fulfilment(jid,lease,fid);
  begin perform public.finish_sitefit_fulfilment(jid,lease,'ready',null);raise exception 'Draft published';exception when raise_exception then if sqlerrm='Draft published' then raise;end if;end;
  begin perform public.bind_sitefit_fulfilment(jid,gen_random_uuid(),fid);raise exception 'Wrong lease admitted';exception when serialization_failure then null;end;
+ perform public.request_sitefit_cancellation(owner,payment,'change_of_mind');
+ perform public.request_sitefit_cancellation(owner,payment,'change_of_mind');
+ if (select count(*) from public.purchase_requests where payment_id=payment)<>1 then raise exception 'Duplicate purchase request';end if;
+ begin perform public.request_sitefit_cancellation(other,payment,'other');raise exception 'Foreign request accepted';exception when insufficient_privilege then null;end;
+ begin perform public.read_sitefit_sale(other,payment);raise exception 'Foreign contract exposed';exception when insufficient_privilege then null;end;
+ if public.read_sitefit_sale(owner,payment)->>'confirmationDelivered'<>'true' then raise exception 'Confirmed fixture receipt missing';end if;
  if public.start_sitefit_full(owner,report,prep,cp::text)->>'id'<>fid::text then raise exception 'Duplicate edition';end if;
  begin perform public.read_sitefit_full(other,fid);raise exception 'Cross owner Full exposed';exception when insufficient_privilege then null;end;
  for step in 1..3 loop

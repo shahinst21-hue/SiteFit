@@ -23,6 +23,9 @@ export async function fulfilOne(options: { queue?: Queue; reports?: (owner: stri
     if (edition?.status !== "ready" && options.paidExecutionApproved !== true) {
       await queue.finish(job, { state: "awaiting_authorisation", reason: "budget_unavailable" }); return "awaiting_authorisation";
     }
+    if (edition?.status !== "ready" && !await queue.supplyAllowed(job)) {
+      await queue.finish(job, {state:"awaiting_authorisation",reason:"configuration_unavailable"});return "awaiting_authorisation";
+    }
     edition ??= await repo.start(job.freeReportId);
     await queue.bind(job, edition.id);
     if (edition.status !== "ready") {

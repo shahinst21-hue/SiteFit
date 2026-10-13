@@ -381,3 +381,14 @@ Verification: npm run check passed: lint, strict types, 329 tests (including Pos
 ## D102 — One v2 technical proof and continued Phase 14
 
 Owner explicitly approved one new bounded US$0.30 proof on 12 October 2026, raising the conservative Phase 12 total to US$2.44. All prior US$2.14 reservations remain held. Maximum three existing-model requests, output caps 3000/3000/6000, no retry, search, source acquisition or Production. Frozen-data dry preflight: request bytes 14109/6130/22090; conservative cost bound US$0.29125. This is a cap estimate, not billed usage. A forward development migration changes only the Full-report reservation ceiling; question and operational spending are unchanged. A failed proof stops and receives offline diagnosis. Phase 14 independent implementation continues; PR43 is not assignment completion. Main merge, Production, customer release, support account grants and Phase 15 remain excluded.
+
+
+## D103 — Phase15 implementation authority
+
+Owner approves Phase15 security/testing/production-readiness in protected Development/Preview only. Preserve Phase12 v2 and Phase13/14 delivery. Vercel Hobby remains subject to usage terms; compliant commercial hosting (upgrade or alternative) is mandatory for Phase17, without current purchase authority. SiteFit serves B2B and B2C; a business declaration does not remove applicable consumer rights. V1 consumers have an additional contractual 14-day cancellation right even after immediate delivery, without excluding statutory rights. Draft Privacy/Retention/Terms and versioned sale/confirmation controls are required. Seller identity, contacts, tax, retention, classification and durable delivery remain pending owner approval. No fabricated particulars, paid call/retry/new source, Live payments, main/Production activation or later phase.
+
+## Phase15 owner privacy amendment — 13 October 2026
+Owner instructs no personal legal particulars on the website, superseding prior address-publication permission. Keep SiteFit trading name and public contact email; remove personal correspondence address from public pages. This instruction does not establish compliant seller/controller disclosure or authorise Production/new sales. Preserve unapproved policy and supply fences; record outstanding mandatory Phase15 gates honestly.
+
+## Phase15 formal owner acceptance — 13 October 2026
+Status: Owner-Accepted / Closed with Exceptions. Owner accepts current development implementation and known limitations; stop further Phase15 cycles. Preserve records, historical reports and controls. Complete protected development PR/CI only; no main merge or Production permission. Original unmet DoD checks remain outstanding/deferred in launch-gate-register.md; closure is not compliance certification.

@@ -1,50 +1,11 @@
-import { PageIntro } from "@/components/ui";
-import { pageMetadata } from "@/lib/seo";
-export const metadata = pageMetadata("/privacy");
-// Controller identity, rights contact, lawful basis and retention still require owner/legal review before public launch.
-export default function Privacy() {
-  return (
-    <div className="page-wrap narrow-page">
-      <PageIntro eyebrow="YOUR INFORMATION" title="Privacy at SiteFit.">
-        <p>
-          How the website handles the information you enter. Updated 4 October
-          2026.
-        </p>
-      </PageIntro>
-      <div className="prose">
-        <h2>Location and financial details</h2>
-        <p>
-          Your location brief and optional financial entries stay in memory on
-          the current page. They are not submitted to a server or placed in
-          browser storage. Leaving or reloading clears them. Avoid entering
-          sensitive personal information.
-        </p>
-        <h2>Accounts and session cookies</h2>
-        <p>
-          Email sign-in uses Supabase Auth to process your email and establish a
-          session. Session cookies keep you signed in. SiteFit stores a minimal
-          profile linked to your account without duplicating the authentication
-          email.
-        </p>
-        <h2>Website delivery</h2>
-        <p>
-          Vercel delivers this website and may process technical request
-          information needed for hosting. No marketing analytics, mailing list
-          or payment collection is active on this website.
-        </p>
-        <h2>Property evidence</h2>
-        <p>
-          The checker does not create a saved property analysis. Schematic maps
-          and fictional Sample Reports contain no personal property
-          observations.
-        </p>
-        <h2>Controller and privacy requests</h2>
-        <p>
-          Controller identity, a privacy contact and applicable retention/rights
-          arrangements are not specified on this page. This service information
-          does not claim to be a complete legally reviewed privacy notice.
-        </p>
-      </div>
-    </div>
-  );
-}
+import {PageIntro} from "@/components/ui";
+import {pageMetadata} from "@/lib/seo";
+export const metadata=pageMetadata("/privacy");
+export default function Privacy(){return <div className="page-wrap narrow-page"><PageIntro eyebrow="YOUR INFORMATION" title="Privacy at SiteFit."><p>Development policy draft · 12 October 2026. Final controller details and retention arrangements await approval.</p></PageIntro><div className="prose">
+<h2>Property analyses and reports</h2><p>SiteFit stores the selected commercial address, business concept, permitted evidence and report versions to prepare and reopen saved analyses. Free Snapshots and purchased reports are persisted. Financial planning remains a separate experience.</p>
+<h2>Accounts and essential cookies</h2><p>Supabase Auth processes email or Google sign-in and maintains necessary session cookies. Ownership and access records protect your saved reports.</p>
+<h2>Payments and supply</h2><p>Stripe processes Test payments. SiteFit retains limited payment references, access status and audit records, not full card details. New purchases require versioned contract and immediate-supply controls; launch policies are not yet approved.</p>
+<h2>Infrastructure and AI</h2><p>Existing hosting, database, payment, AI and evidence providers process the information necessary for their functions. AI receives bounded evidence; reports can contain inaccuracies. Processor and transfer arrangements require final approval. No marketing analytics is introduced here.</p>
+<h2>Retention and your rights</h2><p>Retention depends on the purpose, applicable obligations and source licences. A category-specific schedule and verified access, correction and erasure process are being prepared. Immutable reporting does not remove applicable data rights. No unlimited personal-data retention is promised.</p>
+<h2>Controller and contact</h2><p>SiteFit is the trading name. Privacy and customer data requests: info@sitefit.co.uk. Legal controller particulars require final verification; no personal particulars are published. This draft is not a final launch privacy notice.</p>
+</div></div>;}
