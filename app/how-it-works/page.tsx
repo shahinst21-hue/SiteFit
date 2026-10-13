@@ -1,6 +1,7 @@
 import { PageIntro, ClosingCTA } from "@/components/ui";
 import { ReportOutline } from "@/components/report-outline";
 import { pageMetadata } from "@/lib/seo";
+import { formatPrice, site } from "@/lib/site-config";
 export const metadata = pageMetadata("/how-it-works");
 export default function HowItWorks() {
   return (
@@ -9,13 +10,13 @@ export default function HowItWorks() {
         eyebrow="HOW SITEFIT WORKS"
         title="Two details to start. Better questions to follow."
       >
-        <p>Bring the location into focus before adding the financial detail.</p>
+        <p>Understand the location, its risks and your next decision.</p>
       </PageIntro>
       <ol className="journey-list">
         {[
           [
             "Enter the property address",
-            "Use the commercial address and postcode, anywhere in the UK.",
+            "Enter a UK commercial address and postcode. Location analysis currently covers London.",
           ],
           [
             "Choose your business",
@@ -27,7 +28,7 @@ export default function HowItWorks() {
           ],
           [
             "Go deeper when it helps",
-            "Add optional costs after the Snapshot. Explore the Sample Report to see how supporting evidence, risks and next checks fit together.",
+            `Review the ${formatPrice(site.pricing.fullReport)} Full Report format: business context, premises risks, qualified rental evidence and priority actions. Financial planning is separate and is never required to purchase or receive the report.`,
           ],
         ].map(([title, text], i) => (
           <li key={title}>

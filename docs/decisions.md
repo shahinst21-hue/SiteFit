@@ -392,3 +392,7 @@ Owner instructs no personal legal particulars on the website, superseding prior 
 
 ## Phase15 formal owner acceptance — 13 October 2026
 Status: Owner-Accepted / Closed with Exceptions. Owner accepts current development implementation and known limitations; stop further Phase15 cycles. Preserve records, historical reports and controls. Complete protected development PR/CI only; no main merge or Production permission. Original unmet DoD checks remain outstanding/deferred in launch-gate-register.md; closure is not compliance certification.
+
+## Phase16 implementation authority — 13 October 2026
+
+Owner approves existing roadmap Phase16: necessary SEO/private indexing checks, truthful marketing claims, minimal campaign attribution/conversion, reproducible results and 2–3 campaign briefs. Reuse existing infrastructure/product contracts; no analytics dashboard, paid requests/providers/advertising, Production or Live activation. Development/protected Preview only. Implement optional explicit session consent, allowlisted campaign values, private first-touch analysis associations and trusted Test payment/report aggregates; no visitor identifier/event stream or raw sensitive-input analytics. Channel traffic/spend remain declared manual inputs. Commercial retention/privacy and Live counting are separately gated in Phase17. Phase15 remains closed with exceptions and no original gate is silently passed.

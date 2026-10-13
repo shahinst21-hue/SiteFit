@@ -1,6 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { sameOrigin, submissionBody, ownedGeneration } from "@/lib/analysis/http";
 import { generateSnapshot } from "@/lib/analysis/generate";
+import { observeCampaign } from "@/lib/marketing/repository";
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
     const active = await client.rpc("sitefit_session_available");
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const result = await ownedGeneration(user.id, input, () => generateSnapshot(user.id, input.propertyId, input.businessType, input.nonce, request.signal));
+    await observeCampaign(user.id, result.reportId);
     return reply({ reportId: result.reportId });
   } catch (error) {
     const code = error instanceof Error ? error.message : "unavailable";

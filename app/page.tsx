@@ -9,14 +9,14 @@ export const metadata = pageMetadata("/");
 const checks: [IconName, string, string, string][] = [
   [
     "demand",
-    "Customer demand",
+    "Customer context",
     "Connect the customer occasion to the people and activity around a location.",
     "green",
   ],
   [
     "shop",
     "Competitive context",
-    "Compare the offering, positioning and useful commercial clusters.",
+    "Understand nearby business records and the competing offers to investigate.",
     "amber",
   ],
   [
@@ -40,7 +40,7 @@ const checks: [IconName, string, string, string][] = [
   [
     "cost",
     "Commercial rental context",
-    "Frame costs and scenarios around the figures you choose to supply.",
+    "See qualified asking-rent benchmarks or premises estimates where supported.",
     "green",
   ],
 ];
@@ -49,7 +49,7 @@ export default function Home() {
     <div className="page-wrap home-page">
       <section className="home-hero">
         <div className="hero-content">
-          <p className="eyebrow">UK-WIDE COMMERCIAL LOCATION DECISIONS</p>
+          <p className="eyebrow">COMMERCIAL LOCATION ANALYSIS · LONDON</p>
           <h1>Choose your next location with clarity.</h1>
           <p className="hero-copy">
             Start with your property and business. Build a focused brief around
@@ -198,7 +198,7 @@ export default function Home() {
             ],
             [
               "Review the priorities",
-              "Organise the checks; add financial details only when useful.",
+              "Review the evidence and the checks that could change your lease decision.",
             ],
           ].map(([title, text], i) => (
             <li key={title}>

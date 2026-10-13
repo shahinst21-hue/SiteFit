@@ -17,6 +17,7 @@
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
     "check:supabase": "node scripts/check-supabase.ts",
     "check:public": "node scripts/check-public-site.ts",
+    "check:marketing": "node scripts/check-marketing.ts",
     "check:auth:hosted": "node scripts/check-auth-hosted.ts",
     "check:database": "node --test tests/database.test.ts",
     "verify:addresses": "node scripts/verify-addresses.ts",

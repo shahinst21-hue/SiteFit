@@ -271,3 +271,8 @@ input::placeholder,textarea::placeholder { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) {
   .brand-menu-popup,.brand-menu-backdrop,.brand-resource-popup,.button,.nav-cta { transition: none; }
 }
+
+.campaign-preference { display:flex; align-items:center; gap:24px; padding:24px; margin-bottom:24px; border:1px solid #e0e1e6; border-radius:16px; background:#fff; color:#0d1400; }
+.campaign-preference p { max-width:65ch; margin:8px 0 0; font-size:14px; }
+.campaign-preference-actions { display:flex; gap:8px; flex-wrap:wrap; flex-shrink:0; }
+@media(max-width:700px) { .campaign-preference { align-items:flex-start; flex-direction:column; } }

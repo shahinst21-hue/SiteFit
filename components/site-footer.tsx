@@ -2,10 +2,12 @@ import Link from "next/link";
 import { Wordmark } from "./ui";
 import { site } from "@/lib/site-config";
 import { Icon } from "./icon";
+import { CampaignPreference } from "./campaign-preference";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
+      <CampaignPreference />
       <div className="footer-top">
         <div>
           <Link href="/" aria-label="SiteFit home">
@@ -14,7 +16,7 @@ export function SiteFooter() {
           <p>
             A closer look before a big commitment.
             <br />
-            Commercial location decisions across the UK.
+            London location analysis. UK address entry.
           </p>
         </div>
         <nav aria-label="Footer navigation">

@@ -1,0 +1,17 @@
+# Phase16 — implementation in progress
+
+Owner approved SEO, minimal attribution/conversion, reproducible results and campaign briefs on 13 October 2026. Development/protected Preview only. No AI/source requests, advertising spending, new provider, main merge, Production or Live activation.
+
+Implemented: public London/Financial Engine/competition/rental claim corrections; explicit report/purchase/internal/dev robots exclusions; private dev headers; opt-in session-only campaign preference; owned first-touch association and purchase-start observation; bounded noncritical observer; private aggregate export and deterministic Markdown CLI; campaign briefs and Phase17 handover. No analytics dashboard or visitor event collector. Traffic/checker totals remain declared manual channel inputs and Unknown when missing. Payment/report counts are authoritative Test outcomes, not real willingness-to-pay proof.
+
+Verification and protected delivery are pending until actual receipts are recorded. Phase15 stays closed with its exceptions. Final commercial measurement privacy/retention, actual Live counting, hosting and other launch dependencies remain separate Phase17 gates.
+
+## Actual verification receipts
+- npm ci: locked install, zero reported vulnerabilities. npm run check: 339 tests, lint, strict types and build passed; phase16-final-check.log. Fresh PostgreSQL rebuild passed new campaign ownership/private grants/idempotence, frozen first-touch, old-analysis non-backfill and unchanged projection tests plus all existing suites; separate latest phase16-history-database.log passed. No trigger disabled or existing migration edited.
+- Actual built Local HTTP: 13 public pages/articles and 13 internal paths passed public metadata/JSON-LD/sitemap/robots/404/social/address-boundary checks. Campaign API consent, session-cookie shape, withdrawal, same-origin rejection, invalid/extra fields and default-disabled 503 passed. Anonymous private report/document responses retain no-store/noindex and expose no dashboard; existing streamed report not-found shell may return 200, explicitly checked as denial content rather than claimed HTTP404.
+- Actual Local browser: optional affirmative consent and Stop measurement worked by keyboard; mobile menu Enter/Escape worked. No overflow at 390, 768 or 1440 px. This is viewport testing, not a new real-device or 200% owner acceptance. Phase13 accepted UI is not reopened.
+- Before hosted writes: 376,788,659 bytes. Forward migration 20261013120000 applied/recorded in development; after 376,821,427 bytes, beneath 450,000,000. Ready fingerprint a58fd24de5b7dc735daea8e3ce06914e and all 2,440,000 held micros unchanged. Campaign rows zero; browser table read and public aggregate RPC denied.
+- Real read-only aggregate CLI succeeded on existing Test data: 28 Snapshot analyses, 8 checkout attempts, 3 confirmed payments, 2 retained, 1 full refund, 1 Ready Full Report analysis, all unattributed. No historical association inserted. This is QA/Test data, not real commercial validation. Deterministic synthetic-results.md generated from committed fixtures; no real campaign spend assumed.
+- Actual source/client scan: ten private configured values, 638 files, zero matches. No secrets exported or committed. New spending/AI/provider/ad/Production activation: none.
+
+Protected CI/Preview/merge receipts remain pending until observed. Commercial campaign measurement and Live source integration remain Phase17 dependencies; their activation is not Phase16 completion criteria.

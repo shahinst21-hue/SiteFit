@@ -16,6 +16,8 @@ export const reportAreas = [
   "Things to Check in Person",
   "Questions for the Landlord or Agent",
 ];
+/** Current delivered report contract; fictional Sample Report retains its own illustrative navigation. */
+export const fullReportAreas = ["Overview", "Customer Context", "Competition", "Access", "Premises", "Rent & Lease", "Actions", "Appendix"];
 export function ReportOutline() {
   return (
     <section id="report" className="section-block">
@@ -34,7 +36,7 @@ export function ReportOutline() {
         </p>
       </div>
       <ol className="report-grid">
-        {reportAreas.map((area, index) => (
+        {fullReportAreas.map((area, index) => (
           <li key={area}>
             <span className="report-number">
               {String(index + 1).padStart(2, "0")}

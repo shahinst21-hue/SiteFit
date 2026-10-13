@@ -77,6 +77,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     const fingerprintSql = "select md5(string_agg(id::text||coalesce(full_projection::text,free_projection::text),'|' order by id)) as digest from public.reports where status='ready'";
     const before = (await db.query<{digest:string}>(fingerprintSql)).rows[0].digest;
     assert.ok(before);
+    await db.exec(await readFile(new URL("../supabase/tests/campaign-measurement.sql", import.meta.url), "utf8"));
     const backup = await db.dumpDataDir();
     const restored = new PGlite({loadDataDir:backup,extensions:{postgis}});
     try {

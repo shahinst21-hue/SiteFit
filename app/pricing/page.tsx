@@ -36,8 +36,8 @@ export default function Pricing() {
             ],
             [
               "cost",
-              "Explicit assumptions",
-              "Put optional costs and scenarios in context.",
+              "Qualified rental evidence",
+              "See available rental context with its date, units and limitations.",
             ],
             [
               "shield",
@@ -62,6 +62,7 @@ export default function Pricing() {
       </section>
       <section className="faq-section">
         <h2>Before you decide</h2>
+        <details><summary>Where does SiteFit analyse locations?</summary><p>Current location analysis covers London. UK address entry does not imply UK-wide analysis coverage.</p></details>
         <details>
           <summary>What makes the Full Report different?</summary>
           <p>
