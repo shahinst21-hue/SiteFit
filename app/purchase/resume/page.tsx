@@ -6,7 +6,7 @@ import { verifiedUser } from "@/lib/supabase/server";
 import { CLAIM_COOKIE,AUTH_RECEIPT_COOKIE,claimCookie,permanentIdentity,purchaseUuid,validAuthReceipt } from "@/lib/auth/purchase-flow";
 import { readClaim } from "@/lib/auth/claim-repository";
 import { purchaseOrigin } from "@/lib/payments/config";
-import { activeTestPurchaseId } from "@/lib/payments/purchase-projection";
+import { activePurchaseId } from "@/lib/payments/purchase-projection";
 import { PurchaseClaim } from "@/components/purchase-claim";
 import { PurchaseTerms } from "@/components/purchase-terms";
 export const dynamic="force-dynamic";
@@ -19,9 +19,9 @@ export default async function Resume({searchParams}:{searchParams:Promise<{repor
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:report});if(error||!data)notFound();
   const purchase=await client.rpc("read_sitefit_purchase",{p_report:report});
   if(purchase.error)notFound();
-  const active=activeTestPurchaseId(purchase.data);
+  const active=activePurchaseId(purchase.data,process.env.VERCEL_ENV!=="production");
   if(active)redirect(`/purchase/return?purchase=${active}`);
-  return <div className="page-wrap narrow-page"><p className="eyebrow">READY FOR CHECKOUT</p><h1>Your account is verified. Your Snapshot is saved.</h1><section className="simple-panel"><p>Your sign-in is complete. Continue below to open Stripe for the one-off £29 Test Checkout.</p><p className="field-help">No real payment is taken. New supply is held until approved purchase policies and confirmation requirements are met. Your original Snapshot stays unchanged.</p><PurchaseTerms report={report}/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
+  return <div className="page-wrap narrow-page"><p className="eyebrow">READY FOR CHECKOUT</p><h1>Your account is verified. Your Snapshot is saved.</h1><section className="simple-panel"><p>Your sign-in is complete. Continue below to open Stripe for the one-off £29 {process.env.VERCEL_ENV==="production"?"purchase":"Test Checkout"}.</p><p className="field-help">{process.env.VERCEL_ENV!=="production"&&"No real payment is taken. "}Supply begins only after the recorded purchase and confirmation requirements are met. Your original Snapshot stays unchanged.</p><PurchaseTerms report={report}/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
  }
  const proof=claimCookie((await cookies()).get(CLAIM_COOKIE)?.value);if(!proof)notFound();
  let claim;try{claim=await readClaim(proof);}catch{notFound();}

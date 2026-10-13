@@ -16,7 +16,9 @@ The US$0.30 hold is the existing request-policy allowance, not billed usage or s
 
 ## Verification and delivery
 
-Locked npm installation passed with zero reported vulnerabilities. Final complete check passed 343 tests, lint/types and build (`phase17-final-check.log`), including merchant-account, reservation binding, fourth-dispatch rejection, exclusive/expired leases, payment/reversal/consent/private grants, historical replay/PDF and isolated restore regressions. The earlier new fixture's combined volatile claim/state expression was split into sequential assertions so PostgreSQL checks the state after the claim. No recovery rule was weakened.
+Locked npm installation passed with zero reported vulnerabilities. Final complete check passed 344 tests, lint/types and build (`phase17-delivery-check.log`), including actual Live/Test purchase rendering, merchant-account, reservation binding, fourth-dispatch rejection, exclusive/expired leases, payment/reversal/consent/private grants, historical replay/PDF and isolated restore regressions. The earlier new fixture's combined volatile claim/state expression was split into sequential assertions so PostgreSQL checks the state after the claim. No recovery rule was weakened.
+
+Purchase recovery, account history and confirmation UI now use the trusted payment mode, rather than assuming Test. Sales-paused accounts retain payment progress; a Live purchaser is not redirected into another Checkout by the legacy Test-only projection selector. The actual rendered Live status contains the Ready report link and contract download with no Test claims; separate Test fixtures retain their label. A final button-only wording change was checked by the actual checkout-render suite. No dashboard redesign.
 
 Actual built HTTP on port3017 passed 13 public pages/articles and 13 private paths, metadata/JSON-LD/sitemap/robots/404/address guards, plus campaign same-origin/consent/withdrawal/default-disabled checks. No generation/payment/source/AI invoked.
 

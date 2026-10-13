@@ -5,7 +5,7 @@ import { PageIntro, Wordmark } from "@/components/ui";
 import { Icon } from "@/components/icon";
 import { verifiedUser } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
-import { purchaseOrigin } from "@/lib/payments/config";
+import { purchaseReadOrigin } from "@/lib/payments/config";
 import { accountHistory } from "@/lib/auth/account-history";
 import { headers } from "next/headers";
 import { dashboardEnabled } from "@/lib/report-dashboard/gate";
@@ -28,14 +28,14 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
   const params=await searchParams;const page=typeof params.page==='string'&&/^\d{1,3}$/.test(params.page)?Math.min(500,Number(params.page)):0;
   const { data: history, error: historyError } = await client.rpc("list_sitefit_history",{p_offset:page*20});
   const reports = accountHistory(history);
-  const paymentStates=purchaseOrigin(process.env)?await Promise.all(reports.map(async report=>{
+  const paymentStates=purchaseReadOrigin(process.env)?await Promise.all(reports.map(async report=>{
     const {data}=await client.rpc('read_sitefit_purchase',{p_report:report.id});
     if(!data||typeof data!=='object'||Array.isArray(data)||typeof data.access!=='string')return null;
     let progress=null;
     if(data.access==='active'&&typeof data.id==='string'&&!user.is_anonymous&&user.email_confirmed_at)try{
       progress=parseProgress(await fulfilmentRepository().progress(user.id,data.id));
     }catch{/* Account history remains usable during a fulfilment outage. */}
-    return {access:data.access,progress};
+    return {access:data.access,progress,test:data.test===true};
   })):[];
   const host=(await headers()).get('host')?.split(':')[0]??'';
   const fullReports=dashboardEnabled(process.env,host)&&!user.is_anonymous&&user.email_confirmed_at?await Promise.all(reports.map(report=>findReadyDashboard(user.id,report.id))):[];
@@ -60,7 +60,7 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
           <Icon name="document" />
         </span>
         <h2>Your saved Snapshots</h2>
-        {reports.length ? <ul className="account-history">{reports.map((report,index) => <li key={report.id}><p><strong>{report.address}</strong></p><p>{report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}><Icon name="document"/>Open Snapshot <Icon name="arrow"/></Link>{fullReports[index]&&<p><Link href={`/reports/${fullReports[index]}`}><Icon name="evidence"/>Open stored Full Report <Icon name="arrow"/></Link></p>}{paymentStates[index]&&<p className="field-help">Test purchase access: {paymentStates[index]?.access}. {paymentStates[index]?.progress?progressLabel(paymentStates[index]!.progress!.state):"New report generation remains disabled."}</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
+        {reports.length ? <ul className="account-history">{reports.map((report,index) => <li key={report.id}><p><strong>{report.address}</strong></p><p>{report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}><Icon name="document"/>Open Snapshot <Icon name="arrow"/></Link>{fullReports[index]&&<p><Link href={`/reports/${fullReports[index]}`}><Icon name="evidence"/>Open stored Full Report <Icon name="arrow"/></Link></p>}{paymentStates[index]&&<p className="field-help">{paymentStates[index]?.test?"Test purchase":"Purchase"} access: {paymentStates[index]?.access}. {paymentStates[index]?.progress?progressLabel(paymentStates[index]!.progress!.state):"Report progress is temporarily unavailable."}</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
         <nav aria-label="Snapshot history pages">{page>0&&<Link href={`/account?page=${page-1}`}>Previous page</Link>}{Array.isArray(history)&&history.length===20&&page<500&&<Link href={`/account?page=${page+1}`}>Next page</Link>}</nav>
         {historyError && <p role="status">Saved Snapshots are temporarily unavailable. Your session is still active.</p>}
         {error && (
