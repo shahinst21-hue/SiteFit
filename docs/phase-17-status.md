@@ -42,6 +42,10 @@ Latest hosted read-only state: 377,083,571 bytes; Test mode, commercial activati
 
 Continuation verification: locked npm ci reported zero vulnerabilities; full check passed 346 tests, lint, types and production build. The template test initially caught nonempty disabled flag examples; values were restored to blank defaults without weakening the test. Built HTTP passed 13 public pages/articles, 13 private routes, metadata/robots/404/address boundaries, campaign consent/withdrawal/default-denial and six Production-disabled Snapshot fixture states. `check:supabase` verified the existing Data API schema response with no application records read/written. `check:release` on the unconfigured process correctly returned exit1, not a claimed successful release. Private-value scan: 10 privileged values against 651 repository/client-bundle files, zero matches. No runtime report logic, migration, dependency, account permission, hosted environment value or Fluid setting was changed. Protected continuation PR/CI receipts are recorded on delivery.
 
+## Authorised isolated Production setup — D106
+
+Owner's new project/ref and domain replace the missing-target dependency. [Actual setup receipts](phase17-production-setup.md): Free/London/PostgreSQL17.11; all75 existing migrations applied; public RLS and six rollback suites passed; actual Production token/profile/guest/signout checks passed and synthetic identities cleaned. Production-only Vercel configuration and exact Auth callback allowlist staged. No application/main promotion, paid execution or campaign activation. DNS, Google/SMTP, licensed source loading and remaining release/Live-proof gates stay explicit. Development/history/reservations preserved.
+
 ## Completion boundary
 
 Implementation preparation can be delivered through protected Development/Preview with activation disabled. Phase17 remains **OPEN** until launch dependencies, a genuine authorised operational purchase → confirmed supply → Ready → immutable replay → dashboard → PDF, and the first 2–3 campaigns are completed. Offline fixtures, prior D102 success and a production build do not satisfy that proof.
