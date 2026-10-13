@@ -22,6 +22,9 @@ export async function readDashboard(id:string) {
   let edition; try {edition=await fullRepository(user.id).read(id);}catch{return null;}
   const status=fullStatus(edition);
   if(edition.status!=='ready'){
+    // Structured rental-only Preview remains an owner-development capability.
+    // Commercial customers receive progress, never an incomplete Full Report/PDF.
+    if(process.env.VERCEL_ENV==='production')return {status,dashboard:null};
     const free=edition.preparation.presentation?.freeReportId;
     if(!free)return {status,dashboard:null};
     try{

@@ -1,12 +1,12 @@
 import { NextResponse,type NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { purchaseOrigin } from "@/lib/payments/config";
+import { purchaseReadOrigin } from "@/lib/payments/config";
 import { callbackCredentials,completeAuthCallback } from "@/lib/auth/flow";
 import { CLAIM_COOKIE,AUTH_RECEIPT_COOKIE,claimCookie,permanentIdentity,signedAuthReceipt } from "@/lib/auth/purchase-flow";
 import { readClaim,recordClaimAuth } from "@/lib/auth/claim-repository";
 export async function GET(request: NextRequest){
- const origin=purchaseOrigin(process.env);if(!origin)return new Response(null,{status:404});
+ const origin=purchaseReadOrigin(process.env);if(!origin)return new Response(null,{status:404});
  let destination="/purchase/auth?error=invalid-link";
  try{
   const proof=claimCookie((await cookies()).get(CLAIM_COOKIE)?.value);const credentials=callbackCredentials(request.nextUrl.searchParams);

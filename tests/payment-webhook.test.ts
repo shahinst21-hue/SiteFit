@@ -11,7 +11,7 @@ function setup(){
  const intent={id:'pi_proof',object:'payment_intent',livemode:false,metadata,amount:2900,amount_received:2900,currency:'gbp',status:'succeeded'} as unknown as Stripe.PaymentIntent;
  const state={session,intent,refunds:[] as Stripe.Refund[],disputes:[] as Stripe.Dispute[],more:false,commits:[] as Parameters<PaymentEventDependencies['confirm']>[0][],sessionReads:0};
  const stripe={checkout:{sessions:{retrieve:async()=>{state.sessionReads++;return state.session;},list:async()=>({data:[state.session],has_more:state.more})}},paymentIntents:{retrieve:async()=>state.intent},refunds:{list:async()=>({data:state.refunds,has_more:state.more})},disputes:{list:async()=>({data:state.disputes,has_more:state.more})}} as unknown as Stripe;
- const payment={id:purchase,analysis_id:analysis,price_reference:'price_proof',checkout_reference:null,revision:4} as NonNullable<Awaited<ReturnType<PaymentEventDependencies['read']>>>;
+ const payment={id:purchase,analysis_id:analysis,payment_version:1,test_mode:true,price_reference:'price_proof',checkout_reference:null,revision:4} as NonNullable<Awaited<ReturnType<PaymentEventDependencies['read']>>>;
  const dependencies:PaymentEventDependencies={read:async()=>payment,price:async()=>({} as Stripe.Price),session:async(_client,id,binding)=>{assert.equal(id,state.session.id);assert.deepEqual(binding,{id:purchase,analysis,price:'price_proof'});return state.session;},confirm:async value=>{state.commits.push(value);}};
  const event={id:'evt_proof',object:'event',type:'checkout.session.completed',livemode:false,api_version:STRIPE_WEBHOOK_API_VERSION,data:{object:session}} as Stripe.Event;
  return {state,stripe,payment,dependencies,event};
@@ -20,6 +20,19 @@ test('verified current objects confirm exactly the stored binding and observed r
  const f=setup();f.event.data.object={...f.state.session,amount_total:1,customer_email:'attacker@example.invalid'} as Stripe.Checkout.Session;
  await processPaymentEvent(f.event,f.stripe,f.dependencies);
  assert.deepEqual(f.state.commits,[{p_id:purchase,p_event:'evt_proof',p_type:'checkout.session.completed',p_revision:4,p_session:'cs_test_proof',p_intent:'pi_proof',p_outcome:'paid',p_reversal:'none'}]);
+});
+test('offline Live v2 webhook confirms only matching stored mode and keeps Test receipts separate',async()=>{
+ const f=setup();f.event.livemode=true;f.payment.test_mode=false;f.payment.payment_version=2;f.payment.stripe_account_id='acct_proof';
+ f.state.session.id='cs_live_proof';f.state.session.livemode=true;f.state.session.metadata={...metadata,version:'2'};
+ f.state.intent.livemode=true;f.state.intent.metadata={...metadata,version:'2'};
+ f.dependencies.session=async(_client,_id,binding)=>{assert.equal(binding.live,true);return f.state.session;};
+ await assert.rejects(()=>processPaymentEvent(f.event,f.stripe,f.dependencies,true,'acct_other'),/account_mismatch/);
+ assert.equal(f.state.commits.length,0);
+ await processPaymentEvent(f.event,f.stripe,f.dependencies,true,'acct_proof');
+ assert.equal(f.state.commits[0].p_live,true);assert.equal(f.state.commits[0].p_outcome,'paid');
+ const wrong=setup();wrong.event.livemode=true;
+ await assert.rejects(()=>processPaymentEvent(wrong.event,wrong.stripe,wrong.dependencies,true),/mode_mismatch/);
+ assert.equal(wrong.state.commits.length,0);
 });
 test('unpaid completion and failed card attempts cannot grant; current unpaid expiration is explicit',async()=>{
  for(const [type,status,expected] of [['checkout.session.completed','complete','pending'],['payment_intent.payment_failed','open','pending'],['checkout.session.expired','expired','expired']] as const){

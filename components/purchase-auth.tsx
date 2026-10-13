@@ -3,7 +3,7 @@ import { useEffect,useRef,useState,type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { PageIntro } from "@/components/ui";
 import { Icon } from "./icon";
-export function PurchaseAuth(){
+export function PurchaseAuth({test=true}:{test?:boolean}){
  const router=useRouter();const sentHeading=useRef<HTMLHeadingElement>(null);
  const [email,setEmail]=useState("");const [token,setToken]=useState("");const [busy,setBusy]=useState(false);const [sent,setSent]=useState(false);const [existingEmail,setExistingEmail]=useState(false);const [error,setError]=useState<string|null>(null);
  useEffect(()=>{
@@ -24,7 +24,7 @@ export function PurchaseAuth(){
   }catch{setError("We could not reach sign-in. Please try again.");}finally{setBusy(false);}
  }
  function submit(event: FormEvent){event.preventDefault();void action("email");}
- return <><PageIntro eyebrow="KEEP YOUR REPORT" title={sent?"Check your email.":"Create your account to keep your report and access it later."}><p>{sent?"Open the verification link in this browser. You will return to SiteFit before continuing to Checkout.":"Your Free Snapshot stays the same. Sign in securely before Checkout."}</p></PageIntro><p className="field-help">Test Mode · No real payment is taken. Full Report generation is not enabled.</p><section className="simple-panel" aria-busy={busy}>
+ return <><PageIntro eyebrow="KEEP YOUR REPORT" title={sent?"Check your email.":"Create your account to keep your report and access it later."}><p>{sent?"Open the verification link in this browser. You will return to SiteFit before continuing to Checkout.":"Your Free Snapshot stays the same. Sign in securely before Checkout."}</p></PageIntro>{test&&<p className="field-help">Test Mode · No real payment is taken.</p>}<section className="simple-panel" aria-busy={busy}>
   {!sent&&<>
   <button className="button button-primary" disabled={busy} onClick={()=>void action("google")}><Icon name="login"/>Continue with Google</button><div className="auth-divider">or use email</div>
   <form onSubmit={submit}><div className="field"><label htmlFor="purchase-email">Email address</label><input id="purchase-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} disabled={busy||sent}/></div>

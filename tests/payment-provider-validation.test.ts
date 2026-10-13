@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import type Stripe from 'stripe';
-import {verifiedPrice,verifiedSession} from '../lib/payments/stripe.ts';
+import {verifiedPrice,verifiedSession,verifiedStripeAccount} from '../lib/payments/stripe.ts';
 import {PRODUCT} from '../lib/payments/config.ts';
 
 test('provider Price admission rejects live, inactive, recurring, flexible and wrong product/money',async()=>{
@@ -10,6 +10,18 @@ test('provider Price admission rejects live, inactive, recurring, flexible and w
  const check=(value:unknown)=>verifiedPrice({prices:{retrieve:async()=>value}} as unknown as Stripe,'price_fixture');
  await check(price);
  for(const change of [{livemode:true},{active:false},{type:'recurring'},{currency:'usd'},{unit_amount:2901},{billing_scheme:'tiered'},{custom_unit_amount:{}},{recurring:{}},{product:'prod_fixture'},{product:{deleted:true}},{product:{...product,active:false}},{product:{...product,livemode:true}},{product:{...product,metadata:{sitefit_product:'other'}}}])await assert.rejects(()=>check({...price,...change}));
+});
+test('Live fixtures require matching account, mode, GBP price, v2 metadata and line items; no network is used',async()=>{
+ const product={id:'prod_fixture',active:true,livemode:true,metadata:{sitefit_product:PRODUCT}};
+ const price={id:'price_fixture',active:true,livemode:true,type:'one_time',currency:'gbp',unit_amount:2900,billing_scheme:'per_unit',product};
+ const binding={id:'purchase_fixture',analysis:'analysis_fixture',price:'price_fixture',live:true};
+ const session={id:'cs_live_fixture',livemode:true,mode:'payment',amount_total:2900,currency:'gbp',metadata:{purchase_id:binding.id,analysis_id:binding.analysis,product_type:PRODUCT,version:'2'}};
+ const line={quantity:1,price:{id:binding.price,livemode:true},amount_total:2900};
+ const client={prices:{retrieve:async()=>price},checkout:{sessions:{retrieve:async()=>session,listLineItems:async()=>({data:[line],has_more:false})}},accounts:{retrieve:async()=>({id:'acct_fixture',charges_enabled:true,payouts_enabled:true})}} as unknown as Stripe;
+ await verifiedPrice(client,'price_fixture',true);await verifiedSession(client,'cs_live_fixture',binding);await verifiedStripeAccount(client,'acct_fixture');
+ await assert.rejects(()=>verifiedPrice(client,'price_fixture'));await assert.rejects(()=>verifiedSession(client,'cs_live_fixture',{...binding,live:false}));
+ await assert.rejects(()=>verifiedStripeAccount(client,'acct_foreign'));
+ session.metadata.version='1';await assert.rejects(()=>verifiedSession(client,'cs_live_fixture',binding));
 });
 
 test('provider Session admission rejects foreign/live/mismatched money, metadata, quantity and incomplete lines',async()=>{

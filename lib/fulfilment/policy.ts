@@ -1,3 +1,4 @@
+import { commercialExecution } from "../release/policy.ts";
 export const fulfilmentPolicy = Object.freeze({ version: "fulfilment-v1", leaseSeconds: 300,
   maxJobsPerInvocation: 1, maxOwnerStartsPerTenMinutes: 5, databaseCheckpointBytes: 450_000_000 });
 
@@ -5,6 +6,9 @@ export function developmentFulfilment(env: Record<string, string | undefined>, h
   if (env.SITEFIT_FULFILMENT_ENABLED !== "1" || env.VERCEL_ENV === "production") return false;
   if (env.VERCEL === "1" || env.VERCEL_ENV) return env.VERCEL_ENV === "preview";
   return ["localhost", "127.0.0.1", "[::1]"].includes(hostname);
+}
+export function runnerEnabled(env:Record<string,string|undefined>,hostname:string){
+ return developmentFulfilment(env,hostname)||commercialExecution(env,hostname);
 }
 
 export type Completion = { state: "ready" | "intervention" | "awaiting_authorisation";

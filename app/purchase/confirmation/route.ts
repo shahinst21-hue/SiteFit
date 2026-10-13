@@ -1,10 +1,10 @@
 import {verifiedUser} from "@/lib/supabase/server";
 import {permanentIdentity,purchaseUuid} from "@/lib/auth/purchase-flow";
-import {purchaseOrigin} from "@/lib/payments/config";
+import {purchaseReadOrigin} from "@/lib/payments/config";
 import {readSale} from "@/lib/legal/repository";
 import {confirmationPDF} from "@/lib/legal/confirmation";
 export async function GET(request:Request){
- if(!purchaseOrigin(process.env))return new Response(null,{status:404});
+ if(!purchaseReadOrigin(process.env))return new Response(null,{status:404});
  try{const {user}=await verifiedUser(),payment=new URL(request.url).searchParams.get("purchase");
  if(!permanentIdentity(user)||!purchaseUuid(payment))throw Error();
  const bytes=await confirmationPDF(await readSale(user.id,payment));

@@ -2,10 +2,13 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { sameOrigin, submissionBody, ownedGeneration } from "@/lib/analysis/http";
 import { generateSnapshot } from "@/lib/analysis/generate";
 import { observeCampaign } from "@/lib/marketing/repository";
+import { sourceCollectionAllowed, commercialExecution } from "@/lib/release/policy";
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
 export async function POST(request: Request) {
+  if(!sourceCollectionAllowed(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
+  if(process.env.VERCEL_ENV==="production"&&!commercialExecution(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
   if (!sameOrigin(request)) return reply({ error: "Reload this page and try again." }, 403);
   let input;
   try { input = await submissionBody(request); } catch { return reply({ error: "Choose a resolved address and business type." }, 400); }

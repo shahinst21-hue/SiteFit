@@ -19,7 +19,7 @@ test("campaign codes reject private/free text and duplicate query keys; consent 
 });
 test("configured indexing fixtures exclude private reports, payments and internal tools; Preview blocks all", () => {
   assert.deepEqual(publicRobotsRules({ VERCEL_ENV: "preview", SITE_URL: "https://example.invalid" }), { userAgent: "*", disallow: "/" });
-  const rules = publicRobotsRules({ VERCEL_ENV: "production", SITE_URL: "https://example.invalid" }) as { disallow: string[] };
+  const rules = publicRobotsRules({ VERCEL_ENV: "production", SITE_URL: "https://example.invalid",SITEFIT_PUBLIC_INDEXING_ENABLED:"1" },{productionApproved:true,paidExecutionApproved:false,measurementApproved:false}) as { disallow: string[] };
   for (const path of ["/reports/", "/snapshots/", "/purchase/", "/internal/", "/dev/", "/account", "/api/"]) assert.ok(rules.disallow.includes(path));
 });
 test("aggregate reports are reproducible, zero-safe and do not mistake payment counts for people or delivery", () => {
@@ -28,9 +28,11 @@ test("aggregate reports are reproducible, zero-safe and do not mistake payment c
   assert.equal(report, campaignResults(data, spend)); assert.match(report, /TEST DATA ONLY/);
   assert.match(report, /40%/); assert.match(report, /£58.00/); assert.match(report, /£12.50/);
   assert.match(report, /not proof of receipt/); assert.match(report, /Unknown is not zero/);
+  assert.match(campaignResults({...data,testOnly:false},spend),/LIVE PAYMENT DATA/);
+  assert.doesNotMatch(campaignResults({...data,testOnly:false},spend),/TEST DATA ONLY/);
   assert.match(campaignResults({ ...data, rows: [] }, spend), /Unknown/);
   assert.throws(() => validateCampaignExport({ ...data, rows: [row, row] }));
-  assert.throws(() => validateCampaignExport({ ...data, testOnly: false }));
+  assert.throws(() => validateCampaignExport({ ...data, testOnly: "false" }));
   assert.throws(() => validateCampaignExport({ ...data, rows: [{ ...row, snapshots: 0 }] }));
   assert.throws(() => validateSpend([{ ...spend[0], email: "private" }]));
   assert.match(campaignResults({ ...data, rows: [{ ...row, retainedPayments: 1, fullRefunds: 1, uncertainReceipts: 1, netReceiptsMinor: null }] }), /Unknown/);

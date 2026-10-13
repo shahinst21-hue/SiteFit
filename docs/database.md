@@ -1,3 +1,5 @@
+13 October Phase17: forward commercial controls/contracts/Live aggregates/runner-target migrations are applied in Development only. Default Test mode, Checkout/execution disabled; 377,083,571 bytes below 450,000,000. Historical Ready digest and US$2.44 holds unchanged. Isolated v2 fixtures passed; no genuine Live proof. See phase-17-status.md and phase17-activation-runbook.md.
+
 12 October Phase 14: private fulfilment/control/support tables and service-only admission/read/claim/bind/finish/support RPCs are applied through forward migrations 20261012130000 and 20261012140000. Exact-input/purchase ownership, fencing and Ready guards preserve reports. Browser roles have no direct queue/control/support access. pg_cron/pg_net/Vault configured in development, dispatcher disabled after protected no-spend proof. Actual bytes 376,362,675; checkpoint 450,000,000. [Receipts](phase-14-status.md). D100 new report failed; held Phase 12 reservations US$2.14, no new Ready.
 
 # Phase 3 database foundation

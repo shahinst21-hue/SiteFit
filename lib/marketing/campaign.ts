@@ -1,3 +1,4 @@
+import { productionOrigin, releasePolicy, type ReleaseAuthority } from "../release/policy.ts";
 /** Marketing codes never contain a property, person, raw referrer or free text. */
 export const campaigns = {
   "campaign-01": { audience: "Coffee shop lease decision", source: "search", medium: "paid-search" },
@@ -15,7 +16,8 @@ export function campaignFromSearch(search: string): Campaign | null {
   return codes.length === 1 ? campaignCode(codes[0]) : null;
 }
 /** Phase17 must separately authorise Production collection and its privacy settings. */
-export function measurementEnabled(env: Record<string, string | undefined>) {
+export function measurementEnabled(env: Record<string, string | undefined>, authority: ReleaseAuthority = releasePolicy) {
+  if(env.VERCEL_ENV==="production")return env.SITEFIT_CAMPAIGN_MEASUREMENT==="1"&&authority.measurementApproved&&!!productionOrigin(env,authority);
   return env.SITEFIT_CAMPAIGN_MEASUREMENT === "1" && env.VERCEL_ENV !== "production" &&
     (env.VERCEL_ENV === "preview" || !env.VERCEL_ENV);
 }

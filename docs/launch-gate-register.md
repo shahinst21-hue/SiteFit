@@ -15,6 +15,9 @@ Recorded 13 October 2026. Phase15 development is Owner-Accepted / Closed with Ex
 | Internal support | Default denial; authorised account IDs not approved. | Keep disabled unless exact IDs separately approved. |
 | Commercial hosting | Vercel Hobby Development/Preview retained; no upgrade/purchase. | Phase17 mandatory compliant commercial hosting or alternative, separately approved. |
 | Production/Live payments | Disabled and unauthorised. | Explicit owner authorisation after applicable release dependencies. |
-| Commercial campaign measurement | Phase16 Development/Preview opt-in session attribution; no commercial collection authorised. Current aggregate export is explicitly Test-only. | Approve production privacy/retention arrangements and verify Live authoritative counting in Phase17; do not relabel Test outcomes as sales. |
+| Commercial campaign measurement | Phase17 adds disabled Production opt-in gating and a separate v2 Live aggregate, tested offline only. Existing Test exports stay Test. | Approve commercial privacy/retention and verify actual Live counting; no Test relabelling. |
+| Production database isolation | Default-Test controls forbid changing modes when payments exist. No Production database provisioned. | Approve isolated infrastructure/source loading; verify runtime/RLS/capacity/backup. Preserve Development/history. |
+| Commercial budget | US$0.30/2 MB pre-Checkout holds and three-dispatch limit prepared; commercial total not approved. US$2.44 development holds preserved. | Approve bounded operational proof and commercial/free-Snapshot/source allowances separately. No paid retry. |
+| Genuine operational Live proof | Not performed. Offline v2 fixtures are not Live proof. | One authorised real payment → receipt → browser-independent Ready → replay → dashboard/PDF. Failure stops without retry. |
 
 Historical Ready report evidence and Phase12 successful technical gate remain preserved. Do not reopen completed phases or infer new paid execution authority from this register.
