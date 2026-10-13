@@ -1,5 +1,6 @@
-export function reversalDisposition(refunds:{amount:number;status:string|null;livemode?:boolean}[],disputes:{status:string;livemode?:boolean}[],total:number){
- if(refunds.some(r=>r.livemode||!Number.isSafeInteger(r.amount)||r.amount<0||!['pending','requires_action','succeeded','failed','canceled'].includes(r.status??''))||disputes.some(d=>d.livemode||!['warning_needs_response','warning_under_review','warning_closed','needs_response','under_review','won','lost'].includes(d.status)))throw Error('reversal_unavailable');
+export function reversalDisposition(refunds:{amount:number;status:string|null;livemode?:boolean}[],disputes:{status:string;livemode?:boolean}[],total:number,live=false){
+ const wrongMode=(mode:boolean|undefined)=>live?mode!==true:mode===true;
+ if(refunds.some(r=>wrongMode(r.livemode)||!Number.isSafeInteger(r.amount)||r.amount<0||!['pending','requires_action','succeeded','failed','canceled'].includes(r.status??''))||disputes.some(d=>wrongMode(d.livemode)||!['warning_needs_response','warning_under_review','warning_closed','needs_response','under_review','won','lost'].includes(d.status)))throw Error('reversal_unavailable');
  if(disputes.some(d=>d.status==='lost'))return 'lost_dispute';
  const refunded=refunds.filter(r=>r.status==='succeeded').reduce((n,r)=>n+r.amount,0);
  if(refunded>=total)return 'full_refund';

@@ -1,9 +1,9 @@
 import type Stripe from "stripe";
 import { PRODUCT,PAYMENT_VERSION } from "./config.ts";
 import { uuid } from "../data/validation.ts";
-export function checkoutParameters(input:{id:string;analysis:string;email:string;price:string;origin:string;expires:number}): Stripe.Checkout.SessionCreateParams {
+export function checkoutParameters(input:{id:string;analysis:string;email:string;price:string;origin:string;expires:number;live?:boolean}): Stripe.Checkout.SessionCreateParams {
  if(!uuid(input.id)||!uuid(input.analysis)||!/^price_[A-Za-z0-9]+$/.test(input.price)||!Number.isSafeInteger(input.expires))throw Error("invalid_payment_parameters");
- const metadata={purchase_id:input.id,analysis_id:input.analysis,product_type:PRODUCT,version:String(PAYMENT_VERSION)};
+ const metadata={purchase_id:input.id,analysis_id:input.analysis,product_type:PRODUCT,version:String(input.live?2:PAYMENT_VERSION)};
  return {mode:"payment",allowed_payment_method_types:["card"],line_items:[{price:input.price,quantity:1}],
   customer_email:input.email,expires_at:input.expires,
   success_url:`${input.origin}/purchase/return?purchase=${input.id}`,

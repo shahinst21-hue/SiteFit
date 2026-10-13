@@ -164,7 +164,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       packetDigests: { context: packetDigest(packet(["customer-context", "competition", "access"])), premises: packetDigest(packet(["premises", "rental-context"])) } };
     const checkpoint = newCheckpoint(preparation);
     if (Buffer.byteLength(canonicalJSON(preparation)) > intelligencePolicy.maxPreparationBytes) throw Error("full_preparation_bounds");
-    return validateStoredEdition(await invoke("start_sitefit_full", { p_free: freeReportId,
+    return validateStoredEdition(await invoke(process.env.VERCEL_ENV==="production"?"start_sitefit_commercial_full":"start_sitefit_full", { p_free: freeReportId,
       p_preparation: canonicalJSON(preparation), p_checkpoint: canonicalJSON(checkpoint) }));
   }, async checkpoint(edition: StoredEdition, next: Checkpoint) {
     return validateStoredEdition(await invoke("checkpoint_sitefit_full", { p_report: edition.id, p_revision: edition.revision,
