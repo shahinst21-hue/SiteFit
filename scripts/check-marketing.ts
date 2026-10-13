@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-const base = new URL(process.argv[2] ?? "http://127.0.0.1:3050");
+const base = new URL(process.argv[2] ?? "http://127.0.0.1:3000");
 if (base.username || base.password || base.search || base.hash || !["http:", "https:"].includes(base.protocol)) throw Error("Provide a site origin");
 const enabled = process.argv[3] === "enabled";
 const url = new URL("/api/campaign", base);
