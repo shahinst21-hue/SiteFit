@@ -1,5 +1,15 @@
-# Phase15 status — implementation in progress
+# Phase15 — Owner-Accepted / Closed with Exceptions
 
+
+## Final owner acceptance — 13 October 2026
+
+The owner formally accepts the current development scope and its known limitations. Phase15 is **Owner-Accepted / Closed with Exceptions**. This supersedes earlier instructions in this status record requiring further Phase15 iteration. It is not certification that the original full DoD or unperformed checks passed. No further development/review cycle is authorised by this closure.
+
+Implementation, customer records, immutable historical reports, draft policy/supply fences and spending protections are preserved. Main merge, Production, customer paid release and later-phase implementation remain unauthorised. Outstanding dependencies are separately tracked in [launch gate register](launch-gate-register.md). Earlier progress entries below are historical receipts, not the current phase status.
+
+Latest verified implementation receipt: ea8047bd6edc276180282579315070fd8cae0110 passed local check and exact-head CI 38355301891. Closure documentation follows protected PR #45 to codex/phase-12-intelligence; final merge/CI receipts must be recorded as observed.
+
+## Historical implementation receipts
 Approved D103, Development/protected Preview only. No new AI/source request, provider purchase, subscription, Live payment/refund, main merge or Production activation.
 
 Implemented locally: draft policy registry and three complete owner-review policy drafts; existing Privacy/Terms corrected for persisted reports; independent unchecked consent controls in the existing purchase resume flow; fail-closed unapproved Checkout; immutable private consent/policy snapshots; approved-channel sender confirmation ledger; legal supply fence before new worker preparation/reservation and every inference binding; bounded idempotent post-purchase requests distinct from Stripe cancel; owner-only contract PDF preparation. Download/preparation is not marked legal delivery. Historical Ready access unchanged; legacy purchases get no inferred consent. New endpoints are authenticated purchase-flow extensions, not new product pages.

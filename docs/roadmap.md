@@ -1,3 +1,5 @@
+Current owner decision, 13 October 2026: Phase15 is **Owner-Accepted / Closed with Exceptions**. Development scope is closed; no further Phase15 iteration. Unperformed checks remain unperformed. See [closure record](phase-15-status.md) and [launch gate register](launch-gate-register.md). No Production, main merge, spending or next-phase implementation is authorised. Earlier entries below are historical.
+
 Phase15 authorised under D103, Development/protected Preview only. Policies, versioned consent/confirmation, cancellation requests and security/recovery hardening are in progress; policy approval and complete legally suitable seller/address particulars remain gates. Phase17 MUST resolve compliant commercial hosting before sales; no Hobby upgrade or Production activation authorised.
 
 Final D102 development delivery: Phase12 live technical gate closed and Phase14 independent implementation delivered through PR43/66d3b2d with passing post-merge CI. New Preview Google callback is approved/applied; read-only dashboard flag is enabled for the Phase14 branch only. No main/Production/customer paid release/Phase15 authority.

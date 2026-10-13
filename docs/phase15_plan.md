@@ -9,3 +9,6 @@ Preserve v2 evidence validation, eight sections, source qualifications and histo
 Owner gates: entity/address/privacy/support contact; VAT/final total; approved retention/access commitment; classification and acknowledgement wording; approved durable-confirmation channel; approved backup location/protection. Support IDs remain empty. Unknowns are not silently resolved.
 
 DoD: secure tested critical paths, scoped recovery proof, approved policies, valid supply/confirmation, CI/protected Preview actual receipts. Policy/data-rights/backup/channel blockers remain explicit; do not declare full Phase15 complete until satisfied.
+
+## Owner closure amendment — 13 October 2026
+Owner accepts the implemented development scope with exceptions and closes Phase15. This supersedes the requirement to continue development until every original DoD item passes. Outstanding checks are not converted into passes; launch dependencies remain in launch-gate-register.md. No additional development is authorised by closure.

@@ -389,3 +389,6 @@ Owner approves Phase15 security/testing/production-readiness in protected Develo
 
 ## Phase15 owner privacy amendment — 13 October 2026
 Owner instructs no personal legal particulars on the website, superseding prior address-publication permission. Keep SiteFit trading name and public contact email; remove personal correspondence address from public pages. This instruction does not establish compliant seller/controller disclosure or authorise Production/new sales. Preserve unapproved policy and supply fences; record outstanding mandatory Phase15 gates honestly.
+
+## Phase15 formal owner acceptance — 13 October 2026
+Status: Owner-Accepted / Closed with Exceptions. Owner accepts current development implementation and known limitations; stop further Phase15 cycles. Preserve records, historical reports and controls. Complete protected development PR/CI only; no main merge or Production permission. Original unmet DoD checks remain outstanding/deferred in launch-gate-register.md; closure is not compliance certification.
