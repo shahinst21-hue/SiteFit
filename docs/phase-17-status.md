@@ -18,7 +18,11 @@ The US$0.30 hold is the existing request-policy allowance, not billed usage or s
 
 Locked npm installation passed with zero reported vulnerabilities. Final complete check passed 343 tests, lint/types and build (`phase17-final-check.log`), including merchant-account, reservation binding, fourth-dispatch rejection, exclusive/expired leases, payment/reversal/consent/private grants, historical replay/PDF and isolated restore regressions. The earlier new fixture's combined volatile claim/state expression was split into sequential assertions so PostgreSQL checks the state after the claim. No recovery rule was weakened.
 
-Actual built HTTP on port3017 passed 13 public pages/articles and 13 private paths, metadata/JSON-LD/sitemap/robots/404/address guards, plus campaign same-origin/consent/withdrawal/default-disabled checks. No generation/payment/source/AI invoked. Protected exact-head CI and Preview delivery remain pending until recorded.
+Actual built HTTP on port3017 passed 13 public pages/articles and 13 private paths, metadata/JSON-LD/sitemap/robots/404/address guards, plus campaign same-origin/consent/withdrawal/default-disabled checks. No generation/payment/source/AI invoked.
+
+Local browser verified desktop pricing, £29 positioning, mobile390px no horizontal overflow, keyboard menu Enter/Escape with focus restored. Protected Phase17 Preview pricing rendered with the existing legal/product wording; no checkout/generation invoked or new Auth callback approved. This is not a new owned Preview Live purchase proof or hardware/200% acceptance. Phase13 acceptance is not reopened.
+
+Private-value scan checked 10 configured privileged values against 647 repository/client-bundle files: zero matches. Exact implementation head `7d85b5b3210f416bd80a8ca1ed6fdeaf59f4466f` passed both GitHub CI runs 38438884041 / 38439119678. Vercel Git deployment succeeded; actual protected branch Preview is https://sitefit-git-codex-phase-17-launch-shahinst21-hues-projects.vercel.app. PR47 targets only `codex/phase-12-intelligence`. Final documentation-head CI/protected merge is tracked on the PR; no main/Production deployment.
 
 Hosted Development: pre-write 376,952,499 bytes; four forward migrations 20261013140000/141000/142000/143000 applied and recorded, then 377,083,571 bytes. Ready digest remains `a58fd24de5b7dc735daea8e3ce06914e`; held micros remain 2,440,000. Commercial mode is Test, checkout/execution false. No source/AI/payment call or historical rewrite. This is hosted schema/default verification, not a Live purchase/runner proof.
 
