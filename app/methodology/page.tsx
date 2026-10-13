@@ -28,15 +28,14 @@ export default function Methodology() {
             Assess a source for its date, geographic coverage, business
             relevance, permitted use and limitations. A source is useful only if
             it helps answer a decision-relevant question. Current location
-            briefs use the details you enter; schematic visuals and Sample
-            Reports are explicitly illustrative.
+            reports combine existing source observations with business-specific
+            interpretation; schematic visuals and Sample Reports are explicitly illustrative.
           </p>
           <h2>Coverage follows geography</h2>
           <p>
-            England, Scotland, Wales and Northern Ireland can require different
-            evidence sources. A regional transport indicator cannot stand in for
-            national coverage. Source claims must identify the actual geography
-            and retrieval behind them.
+            Current analysis covers London. UK address entry does not establish
+            nationwide coverage. Source claims identify their actual geography,
+            date and limitations; regional context is not selected-unit footfall.
           </p>
           <h2>Separate observation from interpretation</h2>
           <p>
@@ -58,6 +57,7 @@ export default function Methodology() {
             deterministic methods. Missing inputs should omit or qualify
             dependent calculations. Scenario assumptions must be visible and
             must not be presented as forecasts.
+            The Financial Engine is separate from the Full Report and its PDF.
           </p>
           <h2>AI acts as an analyst</h2>
           <p>

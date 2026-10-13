@@ -18,13 +18,13 @@ export const publicPages = [
     path: "/",
     title: "Check a commercial location before you commit",
     description:
-      "Assess a commercial location in the UK before committing to a lease. Frame demand, competition, access and costs with SiteFit.",
+      "Assess a London commercial location before committing to a lease. Understand customer context, competition, access, premises and available rental evidence.",
   },
   {
     path: "/how-it-works",
     title: "How it works",
     description:
-      "Start with an address and business type, review a Free Snapshot, then explore deeper evidence and optional economics.",
+      "Enter a UK address and business type. London analysis offers a Free Snapshot and deeper Full Report evidence; financial planning is separate.",
   },
   {
     path: "/pricing",
@@ -78,6 +78,6 @@ export const publicPages = [
     path: "/sample-report",
     title: "Sample Report",
     description:
-      "Explore a clearly labelled fictional SiteFit report: key opportunities, risks, evidence, financial assumptions and practical lease questions.",
+      "Explore a clearly labelled fictional SiteFit report: key opportunities, risks, evidence and practical lease questions.",
   },
 ] as const;

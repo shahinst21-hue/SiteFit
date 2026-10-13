@@ -1,0 +1,14 @@
+import "server-only";
+import { writeFile } from "node:fs/promises";
+import nextEnv from "@next/env";
+import { frameworkClient } from "../../lib/data/server-client.ts";
+import { validateCampaignExport } from "../../lib/marketing/results.ts";
+const [from, to, output] = process.argv.slice(2);
+if (!from || !to || !output || process.argv.length !== 5 || !Number.isFinite(Date.parse(from)) || !Number.isFinite(Date.parse(to))) throw Error("Usage: node --conditions=react-server scripts/marketing/export-campaign.ts FROM TO output.json");
+nextEnv.loadEnvConfig(process.cwd());
+if (process.env.VERCEL_ENV === "production") throw Error("Production export is not authorised in Phase16");
+type Rpc = { rpc(name: string, args: Record<string, unknown>): { abortSignal(signal: AbortSignal): PromiseLike<{ data: unknown; error: unknown }> } };
+const result = await (frameworkClient() as unknown as Rpc).rpc("sitefit_campaign_results", { p_from: from, p_to: to }).abortSignal(AbortSignal.timeout(10000));
+if (result.error) throw Error("Campaign aggregate export unavailable; raw diagnostics withheld");
+await writeFile(output, JSON.stringify(validateCampaignExport(result.data), null, 2) + "\n");
+console.log("Test-only aggregate exported. No customer identifiers or raw payloads exported.");

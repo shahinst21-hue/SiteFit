@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, MetadataRoute } from "next";
 import type { BlogPost } from "./content/model.ts";
 import { publicPages, site } from "./site-config.ts";
 
@@ -34,6 +34,12 @@ export function publicIndexingEnabled(
     Boolean(env.SITE_URL) &&
     new URL(websiteOrigin(env)).protocol === "https:"
   );
+}
+export function publicRobotsRules(env: Record<string, string | undefined> = process.env): MetadataRoute.Robots["rules"] {
+  return publicIndexingEnabled(env) ? { userAgent: "*", allow: "/", disallow: [
+    "/login", "/account", "/snapshots/", "/reports/", "/purchase/", "/internal/", "/dev/", "/auth/",
+    "/check-location", "/preview/", "/admin/", "/api/",
+  ] } : { userAgent: "*", disallow: "/" };
 }
 export function absoluteUrl(path: string, origin = websiteOrigin()) {
   return new URL(path, origin).toString();

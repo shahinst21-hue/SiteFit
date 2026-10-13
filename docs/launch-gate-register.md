@@ -15,5 +15,6 @@ Recorded 13 October 2026. Phase15 development is Owner-Accepted / Closed with Ex
 | Internal support | Default denial; authorised account IDs not approved. | Keep disabled unless exact IDs separately approved. |
 | Commercial hosting | Vercel Hobby Development/Preview retained; no upgrade/purchase. | Phase17 mandatory compliant commercial hosting or alternative, separately approved. |
 | Production/Live payments | Disabled and unauthorised. | Explicit owner authorisation after applicable release dependencies. |
+| Commercial campaign measurement | Phase16 Development/Preview opt-in session attribution; no commercial collection authorised. Current aggregate export is explicitly Test-only. | Approve production privacy/retention arrangements and verify Live authoritative counting in Phase17; do not relabel Test outcomes as sales. |
 
 Historical Ready report evidence and Phase12 successful technical gate remain preserved. Do not reopen completed phases or infer new paid execution authority from this register.

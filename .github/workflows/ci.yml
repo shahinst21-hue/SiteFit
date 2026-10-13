@@ -45,4 +45,5 @@ jobs:
             sleep 1
           done
           npm run check:public
+          npm run check:marketing
           node scripts/check-snapshot-ui.ts http://127.0.0.1:3000 production
