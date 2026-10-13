@@ -1,10 +1,10 @@
-# Phase16 — implementation in progress
+# Phase16 — Development/Preview implementation verified
 
 Owner approved SEO, minimal attribution/conversion, reproducible results and campaign briefs on 13 October 2026. Development/protected Preview only. No AI/source requests, advertising spending, new provider, main merge, Production or Live activation.
 
 Implemented: public London/Financial Engine/competition/rental claim corrections; explicit report/purchase/internal/dev robots exclusions; private dev headers; opt-in session-only campaign preference; owned first-touch association and purchase-start observation; bounded noncritical observer; private aggregate export and deterministic Markdown CLI; campaign briefs and Phase17 handover. No analytics dashboard or visitor event collector. Traffic/checker totals remain declared manual channel inputs and Unknown when missing. Payment/report counts are authoritative Test outcomes, not real willingness-to-pay proof.
 
-Verification and protected delivery are pending until actual receipts are recorded. Phase15 stays closed with its exceptions. Final commercial measurement privacy/retention, actual Live counting, hosting and other launch dependencies remain separate Phase17 gates.
+Implementation verification receipts are recorded below; protected closure delivery is tracked on PR #46. Phase15 stays closed with its exceptions. Final commercial measurement privacy/retention, actual Live counting, hosting and other launch dependencies remain separate Phase17 gates.
 
 ## Actual verification receipts
 - npm ci: locked install, zero reported vulnerabilities. npm run check: 339 tests, lint, strict types and build passed; phase16-final-check.log. Fresh PostgreSQL rebuild passed new campaign ownership/private grants/idempotence, frozen first-touch, old-analysis non-backfill and unchanged projection tests plus all existing suites; separate latest phase16-history-database.log passed. No trigger disabled or existing migration edited.
@@ -15,3 +15,10 @@ Verification and protected delivery are pending until actual receipts are record
 - Actual source/client scan: ten private configured values, 638 files, zero matches. No secrets exported or committed. New spending/AI/provider/ad/Production activation: none.
 
 Protected CI/Preview/merge receipts remain pending until observed. Commercial campaign measurement and Live source integration remain Phase17 dependencies; their activation is not Phase16 completion criteria.
+
+## Protected delivery receipts
+Implementation head f6a6c7161c07366198797d9afe26e97a2f17fa58 passed exact-head CI runs 38363686207 and 38363679176 after correcting the new smoke script default port to the existing CI server (3000). Initial f854ec9 CI failure was the smoke port, not a product security defect. No CI bypass.
+
+Existing Vercel Git integration deployed protected Preview dpl_FgEhjgb6uCU8yHpvudS3EUKMFDJo, READY, target preview: https://sitefit-git-codex-phase-16-marketing-shahinst21-hues-projects.vercel.app. Actual browser verifies London coverage, separate financial planning and Appendix/eight-section outline. Direct browser navigation to campaign API was blocked by the client; it was not bypassed or called a passed hosted consent test. Local enabled/disabled HTTP and keyboard preference proofs passed; Preview remains default-disabled. The optional UI catches network/blocking failures. No new branch Auth callback is needed for these public checks; no Preview owner-login proof is claimed.
+
+Manual CLI deployment attempt returned Not authorized; existing account/project read and the already-authorised Git deployment succeeded. No credential or permission was changed and no manual retry used. Final documentation-head CI and protected merge/post-merge receipt are recorded on PR46 once observed. No main/Production change, Phase17 activation or new spending. Phase16's Development/Preview scope is verified; commercial collection, Live counting and campaigns remain separately gated.
