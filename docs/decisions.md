@@ -1,5 +1,13 @@
 # Accepted decisions
 
+## D108 — Bounded non-commercial Production deployment (14 October 2026)
+
+Owner explicitly approves a new Production build/deployment of reviewed PR50 after exact-head CI and protected merge to the gated Development branch, without main merge. Use separately configured Production environment, never promote the Development-configured Preview artifact. Purpose is HTTPS/Google verification only. Checkout, Live payments, paid AI, collection, fulfilment scheduler, indexing, campaign measurement/advertising and purchases remain disabled/unapproved. This is not commercial launch authority or resolution of existing launch exceptions.
+
+## D107 — DNS/Google completion and Phase17 verification (14 October 2026)
+
+Owner confirms GoDaddy A-record changes, preserved Development OAuth callback and enabled Google on the separate Production project. Continue DNS/TLS/Auth verification and Production London-data preparation on existing Hobby/Fluid, without new spending, paid AI/providers, Live payments or campaigns. This does not authorise main merge/application Production promotion or close commercial activation gates. Reuse only already approved retained London source releases, preserving source identities/licences/vintages and keeping customer/Test history isolated. [Actual receipts and unresolved deployment/login gate](phase17-dns-auth-london.md).
+
 ## D99 — No-spend Phase 12 completion corrections (accepted, 12 October 2026)
 
 Owner authorises checkpoint **450,000,000 bytes** after confirming unchanged Free hosting allowance; adjust effective database/application gates via forward migration, no purchase. Fix demonstrated generator/validator incompatibilities with deterministic regression and versioned deterministic Appendix where appropriate. All model claims remain validated; no ignored bad output or admission weakening. New preparations use seven generated commercial pages plus fixed methodology Appendix; final report still has eight sections. Historical contracts/editions remain immutable; D98's unretained rejected sentence remains undiagnosed.

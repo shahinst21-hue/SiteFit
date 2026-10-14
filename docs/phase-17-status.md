@@ -1,5 +1,7 @@
 # Phase17 — Commercial implementation; activation outstanding
 
+14 October owner DNS/Google configuration verified: correct Vercel routing, Google enabled in Production and unchanged existing Development Google client. Real Production login remains blocked by an old failed Vercel deployment/TLS. The Google login display now works independently of sales activation. Existing stored London-source reuse is underway with exact per-batch checks and unchanged evidence/privacy controls. [Current receipts](phase17-dns-auth-london.md). No application Production promotion/main merge, purchase, paid provider/AI, Live payment or campaign activation.
+
 Owner authorised implementation on 13 October 2026. Baseline: gated development `d7e5a2bf4e177f3ae026f98f5a40784164b343bb`, after accepted Phase16 PR46. Phase15 remains Owner-Accepted / Closed with Exceptions; Phase16 remains accepted. No main merge, Production activation, purchases, advertising, paid AI/source requests or real payment/refund is authorised by implementation approval.
 
 ## Implemented preparation
