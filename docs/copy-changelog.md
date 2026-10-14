@@ -72,4 +72,3 @@ Additional substantial changes:
 Unchanged intentionally: approved policy/consent text, raw source observations, applied SQL, frozen customer/report fixtures, calculations, licences, attribution, payment status semantics and security configuration.
 
 The featured price card now sends users to the existing property check, with a secondary sample link; it does not initiate payment. Mobile-menu supporting text matches the footer. Incomplete report messages use saved progress and next action rather than internal Ready vocabulary. Snapshot busy and rate-limit replies are distinct, retaining the same status and limits.
-
