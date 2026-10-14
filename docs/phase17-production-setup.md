@@ -1,5 +1,7 @@
 # Phase17 — authorised Production infrastructure setup
 
+14 October verification supersedes initial DNS/Google findings below: correct Vercel A records and Google enabled are confirmed. Domain currently has no successful Production deployment/TLS proof. Source-only reuse and current checks are in [DNS/Auth/London receipts](phase17-dns-auth-london.md); original setup receipts below remain historical.
+
 Owner confirms `sitefit.co.uk`, `sitefit-prod`, project `vsfkkroxgntoumoqcfcy`, existing Hobby/Fluid and no purchase/Live/AI/campaign authority. This is database/configuration setup, not a main merge, application promotion or commercial launch. Phase15/16 stay closed.
 
 ## Target, isolation and migrations

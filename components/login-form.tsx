@@ -53,7 +53,7 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
     }
   }
   return (
-    <section className="simple-panel" aria-label="Email sign-in">
+    <section className="simple-panel" aria-label={google ? "Sign-in options" : "Email sign-in"}>
       {google&&<><button type="button" className="button button-secondary" disabled={!config||state==='sending'} onClick={googleSignIn}><Icon name="login"/>Continue with Google</button><div className="auth-divider">or use email</div></>}
       {!config && (
         <p role="status">

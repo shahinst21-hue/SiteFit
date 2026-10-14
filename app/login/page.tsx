@@ -8,9 +8,6 @@ import { readPublicSupabaseConfig } from "@/lib/supabase/config";
 import { verifiedUser } from "@/lib/supabase/server";
 import { authFailure, authMessages } from "@/lib/auth/flow";
 import { signOut } from "@/app/auth/actions";
-import { purchaseOrigin } from "@/lib/payments/config";
-import { headers } from "next/headers";
-import { dashboardEnabled } from "@/lib/report-dashboard/gate";
 export const metadata = pageMetadata("/login");
 export const dynamic = "force-dynamic";
 export default async function Login({
@@ -22,7 +19,8 @@ export default async function Login({
   const params = await searchParams;
   const failure = authFailure(params.error);
   const signedIn=!!user&&!user.is_anonymous;
-  const dashboardAccess=dashboardEnabled(process.env,(await headers()).get('host')?.split(':')[0]??'');
+  // Account sign-in is independent of purchase/report execution authority.
+  const config=unavailable ? null : readPublicSupabaseConfig(process.env);
   return (
     <div className="page-wrap narrow-page">
       <div className="auth-brand">
@@ -36,7 +34,7 @@ export default async function Login({
         <p>
           {signedIn
             ? "Open your account or start a new location check."
-            : "Use a one-time email link. Your Free Snapshot does not require an account."}
+            : "Use Google or a one-time email link. Your Free Snapshot does not require an account."}
         </p>
       </PageIntro>
       {failure && (
@@ -59,8 +57,8 @@ export default async function Login({
         </section>
       ) : (
         <LoginForm
-          config={unavailable ? null : readPublicSupabaseConfig(process.env)}
-          google={!!purchaseOrigin(process.env)||dashboardAccess}
+          config={config}
+          google={!!config}
         />
       )}
       <Link href="/check-location" className="text-link">
