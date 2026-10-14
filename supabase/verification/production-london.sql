@@ -5,7 +5,7 @@ begin
   or exists(select 1 from source_data.dataset_releases where state<>'ready' or subset_id<>'london' or licence_metadata->'normalised'->>'allowed' is distinct from 'true')
  then raise exception 'production_london_inventory_incomplete'; end if;
  if (select array_agg(dataset_id order by dataset_id) from source_data.dataset_releases) is distinct from
-  (select array_agg(dataset order by dataset) from unnest(array['BRES2024','NUMBAT2025','TS001','TS003','TS007A','TS045','TS066','article-4-direction-area','conservation-area','income-AHC-FYE2023','london-geography','london-native-geography','open-uprn','places']::text[]) dataset)
+  (select array_agg(dataset order by dataset) from unnest(array['BRES2024','NUMBAT2025','TS001','TS003','TS007A','TS045','TS066','article-4-direction-area','conservation-area','income-AHC-FYE2023','london-geography','london-native-geography','open-uprn','places']::text[]) as expected(dataset))
  then raise exception 'production_london_inventory_changed'; end if;
  if pg_database_size(current_database())>=450000000 then raise exception 'production_london_capacity'; end if;
  if exists(select 1 from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='source_data' and c.relkind='r' and (not c.relrowsecurity or has_table_privilege('anon',c.oid,'SELECT') or has_table_privilege('authenticated',c.oid,'SELECT')))

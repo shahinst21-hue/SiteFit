@@ -1,4 +1,4 @@
-D106 Production setup: sitefit-prod / vsfkkroxgntoumoqcfcy separately verified, all75 existing migrations recorded, RLS/rollback/Auth API checks passed. No Development/Test/customer records copied; all execution off. See phase17-production-setup.md. Development source/history remains unchanged.
+D106/D107/D108 Production setup: separate project, all75 migrations, RLS/rollback/Auth API and actual Google/PKCE pass. All14 permitted London source releases are Ready, metadata/rows preserved;365,278,899 bytes below450,000,000. No Development/Test/customer records copied; all execution off. [Current receipts](phase17-dns-auth-london.md). Development history and2,440,000 reserved microdollars unchanged.
 
 13 October Phase17: forward commercial controls/contracts/Live aggregates/runner-target migrations are applied in Development only. Default Test mode, Checkout/execution disabled; 377,083,571 bytes below 450,000,000. Historical Ready digest and US$2.44 holds unchanged. Isolated v2 fixtures passed; no genuine Live proof. See phase-17-status.md and phase17-activation-runbook.md.
 
