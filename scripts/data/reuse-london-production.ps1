@@ -85,7 +85,22 @@ foreach ($table in $tables) {
   # Parameterised JSON, no interpolated data/secret; verify reconstructed PostgreSQL
   # values against the source in the same transaction, including EWKB/bytea values.
   $query = $gate + 'inserted as (insert into source_data.' + $table.name + ' select s.* from jsonb_populate_recordset(null::source_data.' + $table.name + ',$1::jsonb) s cross join gate where gate.safe=1 returning *) select 1/(case when (select jsonb_agg(' + $expression + ' order by ' + $table.key + ') from inserted t)=$1::jsonb then 1 else 0 end) as identical'
-  $null = Invoke-SiteFitProductionSql $query @($payload)
+  if ($table.name -in @('os_uprn_chunks','place_tiles') -and (Get-Command Invoke-SiteFitProductionSourceRpc -ErrorAction SilentlyContinue)) {
+   # Select the existing service-only importer before dispatch; never switch
+   # transports automatically after an ambiguous request. Its source/byte/hash/
+   # geometry guards remain active. Use the supported server SDK for these
+   # individual binary requests; do not weaken the secret-key browser guard.
+   # This does not claim payload size caused the Management upstream timeout.
+   $function=if ($table.name -eq 'os_uprn_chunks') {'import_sitefit_os_chunk'} else {'import_sitefit_place_tile'}
+   foreach ($row in ($payload | ConvertFrom-Json)) {
+    if ($row.release_id -notin $releases.record.id -or -not $row.records.StartsWith('\x')) { throw 'Binary RPC source binding invalid.' }
+    $null=Invoke-SiteFitProductionSourceRpc $function @{p_release_id=$row.release_id;p_ordinal=$row.ordinal;p_hex=$row.records.Substring(2)}
+   }
+   $hash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($payload))).ToLowerInvariant()
+   $null=Invoke-SiteFitProductionSql ('select 1/(case when (select encode(sha256(convert_to(jsonb_agg(row)::text,''UTF8'')),''hex'') from ('+$select+') ordered_rows)=$1::text then 1 else 0 end) as identical') @($hash)
+  } else {
+   $null = Invoke-SiteFitProductionSql $query @($payload)
+  }
   Write-Output "$($table.name): verified $([Math]::Min($offset+$table.batch,$table.rows))/$($table.rows)."
  }
 foreach ($entry in ($releases | Where-Object {$_.record.dataset_id -in $table.datasets})) {

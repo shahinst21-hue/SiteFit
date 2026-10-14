@@ -24,6 +24,10 @@ Metadata is initially `loading`. Each release becomes ready only after its compl
 
 Actual transfer initially stopped at a Management API upstream connection timeout during OS ingestion. Independent SQL found30 committed chunks/300,000 identities, last ordinal29; six completed geography/population/Census releases were ready, remaining eight still loading. No incomplete release was promoted. The operator continuation reconciles complete stored prefixes before any subsequent writes; the source fixture also detects a changed binary prefix. This timeout is not attributed to AI, schema, hosting duration or a proven PostgreSQL data defect.
 
+A second Management interruption was independently reconciled at115 chunks/1,150,000 identities. Binary data now uses the existing service-only OS/place importer RPCs through the existing Supabase Node SDK, selected before dispatch, with canonical batch SHA verification. Direct PowerShell REST was rejected by Supabase's secret-key browser guard; the supported server SDK preserves that guard, credentials stay private and no public/browser importer is enabled. There is no error-triggered automatic transport switch or resend; any interruption stops for reconciliation. No payload-size root cause is asserted for the upstream failures.
+
+Actual Production Data API read probe passes geography/population and TS007A/TS066 profiles for a public Soho area origin, with distinct original universes. This is not a selected-property/observed-demand claim. The publishable client cannot call the private source reader. Zero provider and AI calls.
+
 Final measured import/verification and protected-delivery receipts are recorded below after observation. This source preparation is not an operational paid report proof. Existing source-provider configuration/rights, approved sales/contract/durable delivery, budgets, application promotion and bounded genuine Live proof remain launch gates.
 
 ## Operator verification
