@@ -6,13 +6,13 @@ const cta: ContentCTA = {
   href: "/check-location",
   heading: "Start with the space you have in mind.",
   supportingText:
-    "Start with a commercial address and business type. Use your Snapshot to focus the questions that matter.",
+    "Start with a commercial address and business type. Get a Free Snapshot for a London coffee shop, restaurant or salon. No account or card needed.",
   variant: "primary",
 };
 const shared = {
   author: { name: "SiteFit", type: "Organization" as const },
   datePublished: "2026-10-03T09:00:00Z",
-  dateModified: "2026-10-03T09:00:00Z",
+  dateModified: "2026-10-14T09:00:00Z",
   status: "published" as const,
   featuredImageAlt:
     "Illustration of a shopfront with a door, display windows and an awning; no real property is depicted.",

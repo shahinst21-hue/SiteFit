@@ -44,7 +44,7 @@ test("unknown and rejected dispatches stop without repair or retry", async () =>
     assert.equal(await fulfilOne(disabled), "intervention", "an existing ambiguous/invalid execution remains intervention even when new spending is disabled");
   }
   assert.equal(completion("draft", []).reason, "execution_interrupted");
-  assert.match(progressLabel("intervention"), /retained/); assert.doesNotMatch(progressLabel("running"), /%|minute/);
+  assert.match(progressLabel("intervention"), /remain recorded/); assert.match(progressLabel("intervention"), /Do not buy again/); assert.doesNotMatch(progressLabel("running"), /%|minute/);
 });
 
 test("worker exception persists intervention without exposing the private failure or retrying", async () => {

@@ -26,14 +26,14 @@ export default async function Blog() {
       <section className="resource-hero">
         <PageIntro
           eyebrow="SITEFIT RESOURCES"
-          title="Build a clearer view of your next location."
+          title="Practical checks before a commercial lease."
         >
           <p>
             Practical guides to the evidence, questions and assumptions behind a
             commercial lease decision.
           </p>
           <Link href="/check-location" className="text-link">
-            Put your next property in context <Icon name="external"/>
+            Start a Free Snapshot <Icon name="external"/>
           </Link>
         </PageIntro>
         {featured && <PostCard post={featured} featured />}

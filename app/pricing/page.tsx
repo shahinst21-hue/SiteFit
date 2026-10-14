@@ -10,14 +10,13 @@ export default function Pricing() {
       <section className="pricing-layout">
         <PageIntro
           eyebrow="SIMPLE, ONE-OFF PRICING"
-          title="A clearer decision. No subscription."
+          title="One property. One report. One payment."
         >
           <p>
-            Start with a Free Snapshot for{" "}
-            <strong>{formatPrice(site.pricing.snapshot)}</strong>. Explore the
-            depth of a{" "}
-            <strong>{formatPrice(site.pricing.fullReport)} Full Report</strong>,
-            one-off, before your lease decision.
+            Your first look is free: a Free Snapshot for{" "}
+            <strong>{formatPrice(site.pricing.snapshot)}</strong>. A Full Report costs{" "}
+            <strong>{formatPrice(site.pricing.fullReport)}</strong>, as a
+            one-off payment with no subscription.
           </p>
         </PageIntro>
         <PricingCards />
@@ -25,7 +24,7 @@ export default function Pricing() {
       <section className="pricing-value">
         <div>
           <p className="eyebrow">THE VALUE OF A CLOSER LOOK</p>
-          <h2>Turn detail into a better decision.</h2>
+          <h2>Know what could change the lease decision.</h2>
         </div>
         {(
           [
@@ -62,13 +61,22 @@ export default function Pricing() {
       </section>
       <section className="faq-section">
         <h2>Before you decide</h2>
-        <details><summary>Where does SiteFit analyse locations?</summary><p>Current location analysis covers London. UK address entry does not imply UK-wide analysis coverage.</p></details>
+        <details>
+          <summary>What happens after payment?</summary>
+          <p>Payment confirmation and report preparation are separate steps. Check progress in your account, open the Full Report when ready and download its PDF. Reopening a saved report does not generate a new assessment.</p>
+        </details>
+        <details>
+          <summary>What if my report is not delivered?</summary>
+          <p>Do not purchase again. Check your purchase status and submit a delivery-problem request, or email info@sitefit.co.uk with your purchase reference. Cancellation and refund terms are explained before Checkout; your statutory rights remain unaffected.</p>
+        </details>
+        <details><summary>Where does SiteFit analyse locations?</summary><p>Current location analysis covers London. Analysis covers Greater London, including all 32 boroughs and the City of London. You can enter a UK address, but locations outside this area are not currently analysed.</p></details>
         <details>
           <summary>What makes the Full Report different?</summary>
           <p>
-            The value is in connecting business-specific evidence to the lease
-            decision: which signals matter, how risks change the picture and
-            what to verify. The Sample Report illustrates this reasoning.
+            The Full Report brings together a consultant-style verdict,
+            prioritised strengths and risks, operating-format constraints and
+            an action plan. Explore eight sections online and download a PDF.
+            Available rental evidence includes its dates and limitations.
           </p>
         </details>
         <details>
@@ -82,9 +90,9 @@ export default function Pricing() {
         <details>
           <summary>Will every section have verified evidence?</summary>
           <p>
-            Source coverage varies by location and geography. Insufficient
-            verified evidence must be stated clearly; missing observations are
-            never replaced by invented facts.
+            No. Coverage varies by property and source. Your report distinguishes
+            findings from estimates and unanswered questions; it cannot confirm
+            everything that a viewing or document review would establish.
           </p>
         </details>
         <details>

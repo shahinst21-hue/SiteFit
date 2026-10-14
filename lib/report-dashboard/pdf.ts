@@ -26,7 +26,7 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
   if(key==='competition'){
     add('Qualified register shortlist — not unique or verified direct competitors',true);
     for(const o of report.operators?.items??[])add(`${o.name} · ${o.businessType}. Observed ${displayDate(o.observedAt)}. Offer, current activity, customer rating and chain affiliation unverified. ${o.reference}`);
-    if(!report.operators)add('No admitted named operator shortlist stored.');
+    if(!report.operators)add('No named business shortlist is available in this report.');
   }
   if(key==='premises'){
     add('Operating-format comparison',true);
@@ -42,7 +42,7 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
     }
     if(report.rental.length>1)add('Separate dated observations, not an averaged rent or an automatically preferred newest figure.');
   }
-  if(key==='actions')for(const a of report.actions){add(`${a.rank}. ${a.action}`,true);add(`Decision consequence: ${a.consequence}`);}
+  if(key==='actions')for(const a of report.actions){add(`${a.rank}. ${a.action}`,true);add(`Why it matters: ${a.consequence}`);}
   if(key==='access')for(const t of report.transport)add(`${t.name}: ${t.walkingMinutes===null?'route unavailable':`${readableNumber(t.walkingMinutes)} minute modelled walk; ${readableNumber(t.distanceMetres??0)} metres`}. ${t.information}`);
   if(key==='customer-context')for(const t of report.profiles){add(`${t.dataset} · ${t.seconds/60} minute contour · ${t.period}`,true);add(`Universe: ${t.universe}. Method: ${t.method}. Published categories are not additive; contours are cumulative.`);for(const c of t.columns)add(`${c.label}: ${c.value===null?c.state:readableNumber(c.value)}.`);t.limitations.forEach(l=>add(l));}
   if(!emptyPricing)add('Supporting sources & material qualifications',true);
@@ -100,7 +100,7 @@ export async function renderReportPDF(report:Dashboard,key?:SectionKey){
   };
   for(const [i,k] of keys.entries()){
     if(i)fresh();paragraph('SITEFIT',20,green);paragraph(report.address,14);paragraph(`${report.businessLabel} · ${report.editionLabel} · Generated ${displayDate(report.generatedAt)}`,9,muted);
-    paragraph(report.structuredPreview?'Structured rental evidence export · Preview only':key?'Standalone section export · Full Report V1':'Full Report V1 · stored historical edition',9,muted);
+    paragraph(report.structuredPreview?'Structured rental evidence export · Preview only':key?'Section PDF · Full Report V1':'Full Report V1 · saved report',9,muted);
     if(k==='overview'||k==='access'||k==='competition')map(k==='competition');
     for(const r of exportParagraphs(report,k)){if(r.heading&&y<110)fresh();paragraph(r.text,r.heading?13:10,r.heading?green:ink);}
   }

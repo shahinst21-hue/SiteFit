@@ -10,37 +10,37 @@ const checks: [IconName, string, string, string][] = [
   [
     "demand",
     "Customer context",
-    "Connect the customer occasion to the people and activity around a location.",
+    "See who lives and works nearby, and what that could mean for your trading hours.",
     "green",
   ],
   [
     "shop",
     "Competitive context",
-    "Understand nearby business records and the competing offers to investigate.",
+    "Identify nearby business records and the offers to compare in person.",
     "amber",
   ],
   [
     "access",
     "Access & transport",
-    "Check the routes and trading hours that matter to your customers.",
+    "Explore how customers could reach you and which routes to check on a visit.",
     "blue",
   ],
   [
     "shield",
     "Premises & risk",
-    "Bring permissions, fit-out constraints and lease questions into view.",
+    "Identify use, layout and lease questions that could change your decision.",
     "rose",
   ],
   [
     "clock",
     "History & evidence",
-    "Separate dated observations from assumptions about a property’s past.",
+    "Review available dated records without guessing why previous occupiers left.",
     "violet",
   ],
   [
     "cost",
     "Commercial rental context",
-    "See qualified asking-rent benchmarks or premises estimates where supported.",
+    "Compare available rent estimates, with their dates and limits.",
     "green",
   ],
 ];
@@ -50,11 +50,11 @@ export default function Home() {
       <section className="home-hero">
         <div className="hero-content">
           <p className="eyebrow">COMMERCIAL LOCATION ANALYSIS · LONDON</p>
-          <h1>Choose your next location with clarity.</h1>
+          <h1>Found a property? Check it before you commit.</h1>
           <p className="hero-copy">
-            Start with your property and business. Build a focused brief around
-            customers, competition, access and the questions to resolve before a
-            lease.
+            Assess a London property for your coffee shop, restaurant or salon.
+            See what supports the location, what could work against it and
+            what to check before signing a lease.
           </p>
           <LocationEntry />
           <Link className="text-link" href="/sample-report">
@@ -63,15 +63,15 @@ export default function Home() {
           <div className="hero-benefits">
             <span>
               <Icon name="pin" />
-              One location
+              Your property
             </span>
             <span>
               <Icon name="evidence" />
-              Evidence-led approach
+              Sources you can inspect
             </span>
             <span>
               <Icon name="document" />
-              Practical next checks
+              Checks before signing
             </span>
           </div>
         </div>
@@ -83,21 +83,21 @@ export default function Home() {
           <Icon name="document" />
           <span>
             <strong>Official records</strong>
-            <small>Dates and geography matter</small>
+            <small>Know the period and area covered</small>
           </span>
         </div>
         <div>
           <Icon name="shop" />
           <span>
             <strong>Local business context</strong>
-            <small>Observation before inference</small>
+            <small>Listings are not proof of trading</small>
           </span>
         </div>
         <div>
           <Icon name="shield" />
           <span>
             <strong>Transparent reasoning</strong>
-            <small>Gaps remain visible</small>
+            <small>See what remains unknown</small>
           </span>
         </div>
         <Link className="text-link" href="/methodology">
@@ -108,11 +108,12 @@ export default function Home() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">WHAT MATTERS TO THE DECISION</p>
-            <h2>Make the important questions visible.</h2>
+            <h2>Know what to investigate before signing.</h2>
           </div>
           <p>
-            A location needs to fit your business. These are the factors to
-            investigate, with verified evidence wherever an assessment is made.
+            A busy area is only part of the picture. Consider the people,
+            competing offers, approach routes and premises constraints that
+            matter to your business.
           </p>
         </div>
         <div className="value-grid">
@@ -133,13 +134,13 @@ export default function Home() {
         <div className="teaser-copy">
           <p className="eyebrow">SEE THE REASONING</p>
           <h2>
-            A clearer brief.
-            <br />A better next question.
+            See the findings.
+            <br />Know your next move.
           </h2>
           <p>
-            Explore how a Full Report brings opportunities, opposing evidence
-            and practical checks into one decision. This fictional example shows
-            the depth of the format.
+            See how findings become strengths, risks and a priority action.
+            This fictional example shows the reasoning, not an assessment of
+            a real property.
           </p>
           <ButtonLink href="/sample-report">
             Explore the Sample Report
@@ -167,10 +168,10 @@ export default function Home() {
             <div className="teaser-reasoning">
               <span className="badge positive">Opportunity</span>
               <h3>Repeat weekday visits</h3>
-              <p>Complementary uses may fit the customer occasion.</p>
+              <p>Nearby workplaces could support lunchtime visits; buying intent remains untested.</p>
               <span className="badge caution">Check first</span>
               <h3>The approach route</h3>
-              <p>Visibility and access could change the picture.</p>
+              <p>Walk the crossing to see whether customers actually pass the door.</p>
               <Link href="/sample-report" className="text-link">
                 Read the sample reasoning <Icon name="external"/>
               </Link>
@@ -215,7 +216,7 @@ export default function Home() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">A CLEAR NEXT STEP</p>
-            <h2>Start free. Understand the deeper value.</h2>
+            <h2>Start free. Go deeper before you sign.</h2>
           </div>
           <Link className="text-link" href="/pricing">
             Compare the options <Icon name="external"/>

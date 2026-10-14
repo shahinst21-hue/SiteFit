@@ -3,13 +3,13 @@ export const businessTypes = [
     id: "coffee-shop",
     label: "Coffee Shop",
     category: "coffee-shop",
-    description: "Coffee, conversation and a daily routine.",
+    description: "Coffee, food and takeaway or seated service.",
   },
   {
     id: "restaurant",
     label: "Restaurant",
     category: "restaurant",
-    description: "A place to eat, meet and come back to.",
+    description: "Food preparation, dining and collection or delivery.",
   },
   {
     id: "hair-salon",
