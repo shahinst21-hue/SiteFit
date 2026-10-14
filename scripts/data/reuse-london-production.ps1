@@ -35,9 +35,9 @@ $tables = @(
  @{name='census_profiles';key='release_id,geography_type,geography_code';batch=3000;datasets=@('TS007A','TS003','TS045','TS066')},
  @{name='os_uprn_chunks';key='release_id,ordinal';batch=5;datasets=@('open-uprn')},
  @{name='native_memberships';key='release_id,oa_code';batch=3000;datasets=@('london-native-geography')},
- @{name='native_statistics';key='release_id,geography_type,geography_code';batch=3000;datasets=@('income-AHC-FYE2023','BRES2024')},
- @{name='station_activity';key='release_id,day_type,station_asc,measure';batch=1000;datasets=@('NUMBAT2025')},
- @{name='place_tiles';key='release_id,ordinal';batch=10;geometry='boundary';datasets=@('places')},
+ @{name='native_statistics';key='release_id,geography_type,geography_code';batch=200;datasets=@('income-AHC-FYE2023','BRES2024')},
+ @{name='station_activity';key='release_id,day_type,station_asc,measure';batch=100;datasets=@('NUMBAT2025')},
+ @{name='place_tiles';key='release_id,ordinal';batch=20;geometry='boundary';datasets=@('places')},
  @{name='constraint_features';key='release_id,entity';batch=200;geometry='geometry';datasets=@('conservation-area','article-4-direction-area')},
  @{name='native_area_operands';key='release_id';batch=1}
 )
@@ -63,6 +63,10 @@ if ($ResumeVerified) {
 foreach ($table in $tables) {
  $expression = 'to_jsonb(t)'
  if ($table.geometry) { $expression += " || jsonb_build_object('$($table.geometry)',t.$($table.geometry)::text)" }
+ $binaryRpc=$table.name -in @('os_uprn_chunks','place_tiles') -and (Get-Command Invoke-SiteFitProductionSourceRpc -ErrorAction SilentlyContinue)
+ # SDK dispatches individual bounded records; this larger local envelope never
+ # becomes a large Management API mutation body. Its verifier sends only a SHA.
+ $payloadLimit=if ($binaryRpc) {8000000} else {2000000}
  $start=0
  if ($ResumeVerified) {
   $start=(Invoke-SiteFitProductionSql "select count(*)::integer as rows from source_data.$($table.name)" @())[0].rows
@@ -78,30 +82,41 @@ foreach ($table in $tables) {
   }
   Write-Output "$($table.name): reconciled exact prefix $start/$($table.rows)."
  }
- for ($offset=$start; $offset -lt $table.rows; $offset += $table.batch) {
-  $select = "select $expression as row from source_data.$($table.name) t where release_id in ($ids) order by $($table.key) limit $($table.batch) offset $offset"
-  $payload = (Invoke-SiteFitDevelopmentSql "select jsonb_agg(row)::text as payload from ($select) ordered_rows" @())[0].payload
-  if ([Text.Encoding]::UTF8.GetByteCount($payload) -gt 8000000) { throw 'Unexpected batch size; stop for review.' }
+ for ($offset=$start; $offset -lt $table.rows;) {
+  $chunkSize=[Math]::Min($table.batch,$table.rows-$offset)
+  do {
+   $select = "select $expression as row from source_data.$($table.name) t where release_id in ($ids) order by $($table.key) limit $chunkSize offset $offset"
+   $payload = (Invoke-SiteFitDevelopmentSql "select jsonb_agg(row)::text as payload from ($select) ordered_rows" @())[0].payload
+   $fits=[Text.Encoding]::UTF8.GetByteCount($payload) -le $payloadLimit
+   if (-not $fits) {
+    if ($chunkSize -eq 1) { throw 'Single record exceeds reviewed transfer envelope; stop.' }
+    $chunkSize=[Math]::Max(1,[Math]::Floor($chunkSize/2))
+   }
+  } while (-not $fits)
+  # Only source reads are resized; no Production request has been dispatched.
   # Parameterised JSON, no interpolated data/secret; verify reconstructed PostgreSQL
   # values against the source in the same transaction, including EWKB/bytea values.
   $query = $gate + 'inserted as (insert into source_data.' + $table.name + ' select s.* from jsonb_populate_recordset(null::source_data.' + $table.name + ',$1::jsonb) s cross join gate where gate.safe=1 returning *) select 1/(case when (select jsonb_agg(' + $expression + ' order by ' + $table.key + ') from inserted t)=$1::jsonb then 1 else 0 end) as identical'
-  if ($table.name -in @('os_uprn_chunks','place_tiles') -and (Get-Command Invoke-SiteFitProductionSourceRpc -ErrorAction SilentlyContinue)) {
+  if ($binaryRpc) {
    # Select the existing service-only importer before dispatch; never switch
    # transports automatically after an ambiguous request. Its source/byte/hash/
    # geometry guards remain active. Use the supported server SDK for these
    # individual binary requests; do not weaken the secret-key browser guard.
    # This does not claim payload size caused the Management upstream timeout.
    $function=if ($table.name -eq 'os_uprn_chunks') {'import_sitefit_os_chunk'} else {'import_sitefit_place_tile'}
-   foreach ($row in ($payload | ConvertFrom-Json)) {
+   $requests=@(foreach ($row in ($payload | ConvertFrom-Json)) {
     if ($row.release_id -notin $releases.record.id -or -not $row.records.StartsWith('\x')) { throw 'Binary RPC source binding invalid.' }
-    $null=Invoke-SiteFitProductionSourceRpc $function @{p_release_id=$row.release_id;p_ordinal=$row.ordinal;p_hex=$row.records.Substring(2)}
-   }
+    @{p_release_id=$row.release_id;p_ordinal=$row.ordinal;p_hex=$row.records.Substring(2)}
+   })
+   # Reuse one server SDK client per batch; RPC writes remain sequential.
+   $null=Invoke-SiteFitProductionSourceRpc $function $requests
    $hash=[Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($payload))).ToLowerInvariant()
    $null=Invoke-SiteFitProductionSql ('select 1/(case when (select encode(sha256(convert_to(jsonb_agg(row)::text,''UTF8'')),''hex'') from ('+$select+') ordered_rows)=$1::text then 1 else 0 end) as identical') @($hash)
   } else {
    $null = Invoke-SiteFitProductionSql $query @($payload)
   }
-  Write-Output "$($table.name): verified $([Math]::Min($offset+$table.batch,$table.rows))/$($table.rows)."
+  $offset+=$chunkSize
+  Write-Output "$($table.name): verified $offset/$($table.rows)."
  }
 foreach ($entry in ($releases | Where-Object {$_.record.dataset_id -in $table.datasets})) {
  # Reload original ready metadata; immutable source records have not changed.
