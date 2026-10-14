@@ -24,7 +24,7 @@ export const publicPages = [
     path: "/how-it-works",
     title: "How it works",
     description:
-      "Enter a UK address and business type. London analysis offers a Free Snapshot and deeper Full Report evidence; financial planning is separate.",
+      "Check a London property for your coffee shop, restaurant or salon. Start free, then explore strengths, risks and priority checks in the Full Report.",
   },
   {
     path: "/pricing",
@@ -42,7 +42,7 @@ export const publicPages = [
     path: "/login",
     title: "Login",
     description:
-      "Sign in securely to your SiteFit account with a one-time email link. No password required.",
+      "Sign in with Google or a one-time email link to revisit your saved SiteFit Snapshots and Full Reports.",
   },
   {
     path: "/methodology",
@@ -60,7 +60,7 @@ export const publicPages = [
     path: "/privacy",
     title: "Privacy",
     description:
-      "Understand how SiteFit handles location entries, optional financial details, account information and session cookies.",
+      "Read SiteFit privacy information covering location checks, account details, purchases and cookies.",
   },
   {
     path: "/terms",

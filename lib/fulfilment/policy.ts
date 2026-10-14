@@ -21,9 +21,9 @@ export function completion(status: string, dispatches: readonly { state: string 
 }
 
 export function progressLabel(state: string) {
-  return ({ queued: "Report preparation is queued.", running: "Your report is being prepared.",
-    ready: "Your report is ready.", intervention: "Preparation needs attention. Your payment and saved analysis are retained.",
-    awaiting_authorisation: "Report preparation is awaiting authorised execution." } as Record<string, string>)[state] ?? "Report progress is unavailable.";
+  return ({ queued: "Your report is waiting to be prepared.", running: "Your report is being prepared.",
+    ready: "Your report is ready.", intervention: "Report preparation has stopped for review. Your purchase and saved analysis remain recorded. Do not buy again; contact info@sitefit.co.uk.",
+    awaiting_authorisation: "Report preparation is paused. Your purchase remains recorded; check your account or contact info@sitefit.co.uk." } as Record<string, string>)[state] ?? "Report progress is unavailable.";
 }
 
 export type Progress = { state: string; reportId: string | null; stage?: string };

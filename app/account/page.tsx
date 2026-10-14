@@ -50,16 +50,16 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
         title={
           profile?.display_name
             ? `Welcome, ${profile.display_name}.`
-            : "Your account is ready."
+            : "Your reports, in one place."
         }
       >
-        <p>{user.is_anonymous ? "Your saved Snapshots belong to this browser session. Losing its cookies or signing out can remove access." : `Signed in as ${user.email}`}</p>
+        <p>{user.is_anonymous ? "Your saved location checks belong to this browser session. Losing its cookies or signing out can remove access." : `Signed in as ${user.email}`}</p>
       </PageIntro>
       <section className="simple-panel">
         <span className="icon-disc green">
           <Icon name="document" />
         </span>
-        <h2>Your saved Snapshots</h2>
+        <h2>Your saved location checks</h2>
         {reports.length ? <ul className="account-history">{reports.map((report,index) => <li key={report.id}><p><strong>{report.address}</strong></p><p>{report.business} · {report.generatedAt ? new Date(report.generatedAt).toLocaleDateString("en-GB", { timeZone: "Europe/London" }) : "Generation date unavailable"}</p><Link href={`/snapshots/${report.id}`} aria-label={`Open Snapshot: ${report.address}`}><Icon name="document"/>Open Snapshot <Icon name="arrow"/></Link>{fullReports[index]&&<p><Link href={`/reports/${fullReports[index]}`}><Icon name="evidence"/>Open stored Full Report <Icon name="arrow"/></Link></p>}{paymentStates[index]&&<p className="field-help">{paymentStates[index]?.test?"Test purchase":"Purchase"} access: {paymentStates[index]?.access}. {paymentStates[index]?.progress?progressLabel(paymentStates[index]!.progress!.state):"Report progress is temporarily unavailable."}</p>}</li>)}</ul> : <p>No saved Snapshots on this page.</p>}
         <nav aria-label="Snapshot history pages">{page>0&&<Link href={`/account?page=${page-1}`}>Previous page</Link>}{Array.isArray(history)&&history.length===20&&page<500&&<Link href={`/account?page=${page+1}`}>Next page</Link>}</nav>
         {historyError && <p role="status">Saved Snapshots are temporarily unavailable. Your session is still active.</p>}

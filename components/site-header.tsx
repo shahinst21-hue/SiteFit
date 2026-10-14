@@ -53,7 +53,7 @@ export function SiteHeader() {
         <Dialog.Popup className="brand-menu-popup" data-instant={instant || undefined}>
           <div className="brand-menu-top"><Link href="/" aria-label="SiteFit home" onClick={close}><Wordmark/></Link><Dialog.Close className="brand-icon-button" aria-label="Close navigation menu"><Icon name="close"/></Dialog.Close></div>
           <Dialog.Title className="sr-only">SiteFit navigation</Dialog.Title>
-          <Dialog.Description className="brand-menu-label">A closer look before a big commitment.</Dialog.Description>
+          <Dialog.Description className="brand-menu-label">Check the location before you sign.</Dialog.Description>
           <nav aria-label="Mobile navigation" className="brand-mobile-links">
             {links.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><span className="brand-nav-icon"><Icon name={l.icon}/></span><span><b>{l.label}</b><small>{l.detail}</small></span><Arrow/></Link>)}
             <span className="brand-menu-label">EXPLORE SITEFIT</span>

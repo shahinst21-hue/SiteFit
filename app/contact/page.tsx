@@ -9,9 +9,9 @@ export default function Contact() {
     <div className="page-wrap">
       <PageIntro
         eyebrow="HELP AND CONTACT"
-        title="Find the right answer before you start."
+        title="How can we help?"
       >
-        <p>Guidance on your location check, report evidence and account.</p>
+        <p>Questions about a location check, your report or a purchase? Contact SiteFit at info@sitefit.co.uk.</p>
       </PageIntro>
       <div className="three-columns contact-cards">
         {[
@@ -29,7 +29,7 @@ export default function Contact() {
           ],
           [
             "Your account",
-            "Sign in using a one-time email link. Open it in the same browser and request a new link if it has expired.",
+            "Sign in with Google or a one-time email link. Open email links in the same browser and request a new link if needed.",
             "/login",
             "Account sign-in",
           ],
@@ -47,8 +47,7 @@ export default function Contact() {
       <section className="simple-panel"><h2>Contact SiteFit</h2><p>Support and privacy requests: <a href="mailto:info@sitefit.co.uk">info@sitefit.co.uk</a>. Please do not send passwords, payment-card details or authentication tokens.</p></section>
       <p className="quiet-note">
         For lease, planning or financial advice, consult an appropriately
-        qualified professional. This page does not accept messages or document
-        uploads.
+        qualified professional. Email is the contact channel; this page has no document upload.
       </p>
     </div>
   );

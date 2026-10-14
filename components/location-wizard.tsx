@@ -38,12 +38,12 @@ export function LocationWizard() {
       <li key={label} className={index === step ? "current" : index < step ? "complete" : ""} aria-current={index === step ? "step" : undefined}><span>{index + 1}</span>{label}</li>)}</ol>
     <div className="wizard-layout"><section className="wizard-panel">
       <p className="eyebrow">CHECK A COMMERCIAL LOCATION</p>
-      <h1 ref={heading} tabIndex={-1}>{step === 0 ? "Enter a UK property address to get started." : "What type of business are you planning?"}</h1>
+      <h1 ref={heading} tabIndex={-1}>{step === 0 ? "Which property are you considering?" : "What type of business are you planning?"}</h1>
       {error && <p className="error-summary" role="alert">{error}</p>}
       {step === 0 ? <AddressLookup state={lookupState} setState={setLookupState} selected={property} initialSearch={initialSearch} onInitialSearch={consumeInitialSearch}
         onSelect={selected => { setProperty(selected); nonce.current = null; setError(""); setStep(1); }} /> : <form onSubmit={generate}>
         <p className="address-context">{property?.formattedAddress}</p>
-        <fieldset disabled={busy}><legend className="muted">Your business shapes the analysis.</legend>
+        <fieldset disabled={busy}><legend className="muted">Choose the business you want to open here.</legend>
           <div className="business-options" id="businessType" tabIndex={-1}>{businessTypes.map((type, index) => <label key={type.id} className={`business-option ${business === type.id ? "selected" : ""}`}>
             <input type="radio" name="businessType" value={type.id} checked={business === type.id} required onChange={() => { setBusiness(type.id); nonce.current = null; setError(""); }} />
             <span className="business-icon" aria-hidden="true"><Icon name={( ["coffee", "restaurant", "hair", "beauty"] as IconName[])[index]} /></span>
@@ -51,8 +51,8 @@ export function LocationWizard() {
           </label>)}</div>
         </fieldset>
         <div className="wizard-actions"><button type="button" disabled={busy} className="button button-secondary" onClick={() => { setStep(0); setError(""); }}>Back</button>
-          <button className="button button-primary" disabled={busy} type="submit">{busy ? "Building your location view…" : "Generate my Snapshot"}<Arrow /></button></div>
-        <p role="status" aria-live="polite" className="field-help">{busy ? "Bringing the available evidence together. This may take a moment." : "No email required. Your Snapshot is private to this browser session or your existing account."}</p>
+          <button className="button button-primary" disabled={busy} type="submit">{busy ? "Preparing your Free Snapshot…" : "Get my Free Snapshot"}<Arrow /></button></div>
+        <p role="status" aria-live="polite" className="field-help">{busy ? "Bringing the available evidence together. This may take a moment." : "No account or card needed. Guest access depends on this browser session."}</p>
       </form>}
     </section></div>
   </div>;

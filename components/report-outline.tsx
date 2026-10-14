@@ -25,14 +25,14 @@ export function ReportOutline() {
         <div>
           <p className="eyebrow">INSIDE THE FULL REPORT</p>
           <h2>
-            A location has more
+            Eight sections.
             <br />
-            than one story.
+            One lease decision.
           </h2>
         </div>
         <p>
-          Decision-relevant sections organise the reasoning. Source coverage
-          varies; unanswered questions stay visible.
+          Start with the verdict, then explore the findings behind it.
+          See the strengths, risks and checks that matter for your business.
         </p>
       </div>
       <ol className="report-grid">
@@ -46,8 +46,9 @@ export function ReportOutline() {
         ))}
       </ol>
       <p className="fine-print">
-        Report structure shown for guidance. See the fictional Sample Report for
-        the format and reasoning; this is not a property result.
+        Source coverage varies. A report can identify an important question
+        without being able to answer it; a viewing or specialist advice may
+        still be needed.
       </p>
     </section>
   );

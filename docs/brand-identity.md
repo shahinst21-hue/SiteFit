@@ -1,5 +1,7 @@
 # SiteFit brand identity V1
 
+Customer wording follows the [approved copy direction and terminology](copy-guidelines.md), implemented under the 14 October website-copy instruction. This does not alter the visual identity or accepted report contracts.
+
 **Owner-approved requirements, 11 October 2026 (D93).** The supplied sheets define SiteFit's colours, typography, spacing, shape and icon system. They supersede conflicting older visual tokens. Evidence truth, accessibility and phase boundaries remain authoritative.
 
 ## Colours

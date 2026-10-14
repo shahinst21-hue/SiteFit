@@ -1,6 +1,7 @@
 import { formatPrice, site } from "@/lib/site-config";
 import { ButtonLink } from "./ui";
 import { Icon } from "./icon";
+import Link from "next/link";
 export function PricingCards() {
   return (
     <div className="pricing-grid">
@@ -8,7 +9,7 @@ export function PricingCards() {
         <span className="icon-disc green">
           <Icon name="document" />
         </span>
-        <p className="eyebrow">FRAME YOUR FIRST QUESTIONS</p>
+        <p className="eyebrow">YOUR FIRST LOOK</p>
         <h2>Free Snapshot</h2>
         <p className="price">
           {formatPrice(site.pricing.snapshot)}
@@ -16,8 +17,8 @@ export function PricingCards() {
         </p>
         <p>Start with the essentials and identify what needs a closer look.</p>
         <ul className="check-list">
-          <li>Your location and business brief</li>
-          <li>Demand, competition and access priorities</li>
+          <li>An initial view for your property and business</li>
+          <li>Local customer context, competition and access</li>
           <li>Evidence gaps and practical next checks</li>
         </ul>
         <p className="fine-print">
@@ -29,12 +30,12 @@ export function PricingCards() {
       </section>
       <section className="price-card price-card-featured">
         <span className="price-label badge positive">
-          A deeper decision brief
+          Before you sign
         </span>
         <span className="icon-disc amber">
           <Icon name="evidence" />
         </span>
-        <p className="eyebrow">UNDERSTAND THE LEASE DECISION</p>
+        <p className="eyebrow">THE CASE FOR AND AGAINST</p>
         <h2>Full Report</h2>
         <p className="price">
           {formatPrice(site.pricing.fullReport)}
@@ -45,15 +46,16 @@ export function PricingCards() {
           means for your business and what to verify before signing.
         </p>
         <ul className="check-list">
-          <li>Business-specific interpretation of demand and competition</li>
+          <li>What local context and competition mean for your business</li>
           <li>Supporting evidence weighed against commercial risks</li>
-          <li>Qualified commercial rental context</li>
-          <li>Prioritised landlord questions and physical checks</li>
+          <li>Rent benchmarks and estimates, where available</li>
+          <li>Ranked checks and questions for the landlord</li>
         </ul>
         <p className="fine-print">
-          See the depth and reasoning in a clearly labelled example.
+          Eight sections · Saved to your account · PDF download. No subscription.
         </p>
-        <ButtonLink href="/sample-report">View the Sample Report</ButtonLink>
+        <ButtonLink href="/check-location">Start with your property</ButtonLink>
+        <Link href="/sample-report" className="text-link">See a sample first</Link>
       </section>
     </div>
   );

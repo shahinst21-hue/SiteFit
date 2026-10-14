@@ -14,9 +14,9 @@ export function SiteFooter() {
             <Wordmark />
           </Link>
           <p>
-            A closer look before a big commitment.
+            Check the location before you sign.
             <br />
-            London location analysis. UK address entry.
+            For London coffee shops, restaurants and salons.
           </p>
         </div>
         <nav aria-label="Footer navigation">

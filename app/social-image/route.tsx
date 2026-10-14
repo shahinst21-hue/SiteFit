@@ -32,7 +32,7 @@ export function GET() {
         {site.tagline}
       </div>
       <div style={{ fontSize: 24, display: "flex" }}>
-        UK commercial locations · Evidence before assumptions
+        London premises · Check before you sign
       </div>
     </div>,
     size,

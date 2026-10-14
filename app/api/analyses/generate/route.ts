@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     console.warn("snapshot_generation", { code: safeCodes.has(code) ? code : "unavailable" });
     if (code === "outside_analysis_coverage") return reply({ error: "Location analysis currently covers London. You can choose another address." }, 422);
     if (code === "location_precision_unavailable") return reply({ error: "This address has no usable location point. Select a returned postal address to generate local analysis." }, 422);
-    if (code === "generation_busy" || code === "generation_limit") return reply({ error: "A Snapshot is running or the current generation limit has been reached. Try again later." }, 429);
+    if (code === "generation_busy" || code === "generation_limit") return reply({ error: code === "generation_busy" ? "A Snapshot is already being prepared. Wait for it to finish before starting another." : "You have reached the current Snapshot limit. Please try again later." }, 429);
     return reply({ error: "We could not complete your Snapshot. Saved source results are retained; retrying this request will reuse them." }, 503);
   }
 }

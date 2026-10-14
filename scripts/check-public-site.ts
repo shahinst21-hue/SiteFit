@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { publicPages } from "../lib/site-config.ts";
 import { localPosts } from "../lib/content/posts.ts";
 import { isPublished } from "../lib/content/safety.ts";
+import { reportPages } from "../lib/report-dashboard/display.ts";
 
 const base = new URL(process.argv[2] ?? "http://127.0.0.1:3000");
 if (
@@ -39,7 +40,7 @@ for (const path of paths) {
   if (path === "/sample-report") {
     assert.match(html, /Fictional scenario/);
     assert.match(html, /illustrative evidence/);
-    assert.equal((html.match(/class="report-section-body"/g) ?? []).length, 16);
+    assert.equal((html.match(/class="report-section-body"/g) ?? []).length, reportPages.length);
   }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `${path}: missing or duplicate title`);
