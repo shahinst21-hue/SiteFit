@@ -5,13 +5,20 @@ create temporary table reuse_source(id integer primary key,observed_at timestamp
 create temporary table reuse_target(like reuse_source including all);
 insert into reuse_source values(1,'2021-03-21T00:00:00+00:00',gis.st_setsrid(gis.st_point(-0.3,51.4),4326),decode('0000ffab','hex'),'{"unit":"persons","universe":"usual_residents","missing":null}');
 do $$
-declare payload jsonb; verified integer;
+declare payload jsonb; verified integer; source_hash text; target_hash text;
 begin
  select jsonb_agg(to_jsonb(s)||jsonb_build_object('geometry',s.geometry::text) order by id) into payload from reuse_source s;
  with inserted as (
   insert into reuse_target select * from jsonb_populate_recordset(null::reuse_target,payload) returning *
  ) select 1/(case when (select jsonb_agg(to_jsonb(t)||jsonb_build_object('geometry',t.geometry::text) order by id) from inserted t)=payload then 1 else 0 end) into verified;
  if verified<>1 or not exists(select 1 from reuse_target t join reuse_source s using(id) where gis.st_asewkb(t.geometry)=gis.st_asewkb(s.geometry) and t.records=s.records and t.metadata=s.metadata and t.observed_at=s.observed_at) then raise exception 'source_reuse_roundtrip_failed'; end if;
+ select encode(sha256(convert_to(string_agg(encode(sha256(convert_to((to_jsonb(s)||jsonb_build_object('geometry',s.geometry::text))::text,'UTF8')),'hex'),'' order by id),'UTF8')),'hex') into source_hash from reuse_source s;
+ select encode(sha256(convert_to(string_agg(encode(sha256(convert_to((to_jsonb(t)||jsonb_build_object('geometry',t.geometry::text))::text,'UTF8')),'hex'),'' order by id),'UTF8')),'hex') into target_hash from reuse_target t;
+ if source_hash is distinct from target_hash then raise exception 'verified_prefix_not_reproducible'; end if;
+ update reuse_target set records=decode('0000ffaa','hex') where id=1;
+ select encode(sha256(convert_to(string_agg(encode(sha256(convert_to((to_jsonb(t)||jsonb_build_object('geometry',t.geometry::text))::text,'UTF8')),'hex'),'' order by id),'UTF8')),'hex') into target_hash from reuse_target t;
+ if source_hash is not distinct from target_hash then raise exception 'corrupted_prefix_accepted'; end if;
+ update reuse_target t set records=s.records from reuse_source s where t.id=s.id;
  -- Reproduce a noncanonical serializer date: equal instants are not equal
  -- original JSON strings. A failed comparison must roll back the whole insert.
  payload:=jsonb_set(jsonb_set(payload,'{0,id}','2'),'{0,observed_at}','"2021-03-21T00:00:00Z"');

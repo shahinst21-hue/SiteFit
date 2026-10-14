@@ -1,7 +1,7 @@
 # Operator-only reuse of already admitted, immutable London releases. No provider calls.
 # Load the private fixed-target Development and Production SQL helpers first;
 # dot-source this script so their fixed-target script scope is preserved.
-param([switch]$Apply, [switch]$ContinueEmptyStaging)
+param([switch]$Apply, [switch]$ContinueEmptyStaging, [switch]$ResumeVerified)
 $ErrorActionPreference = 'Stop'
 foreach ($name in @('Invoke-SiteFitDevelopmentSql','Invoke-SiteFitProductionSql','Assert-SiteFitProductionTarget')) {
  if (-not (Get-Command $name -ErrorAction SilentlyContinue)) { throw 'Fixed-target private SQL helpers must be loaded first.' }
@@ -18,11 +18,17 @@ foreach ($entry in $releases) {
 if ($releases.Count -ne 14) { throw 'Reviewed inventory changed; do not import implicitly.' }
 $ids = ($releases.record.id | ForEach-Object { "'$_'::uuid" }) -join ','
 $existing = (Invoke-SiteFitProductionSql 'select count(*)::integer as n from source_data.dataset_releases' @())[0].n
-if ($existing -ne 0 -and -not $ContinueEmptyStaging) { throw 'Target is not empty. Review any interrupted import; no automatic restart.' }
+if ($existing -ne 0 -and -not ($ContinueEmptyStaging -or $ResumeVerified)) { throw 'Target is not empty. Review any interrupted import; no automatic restart.' }
+if ($ContinueEmptyStaging -and $ResumeVerified) { throw 'Choose one explicit continuation mode.' }
 $sourceSize = (Invoke-SiteFitDevelopmentSql "select sum(pg_total_relation_size(c.oid))::bigint as bytes from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='source_data' and relkind='r'" @())[0].bytes
 $targetSize = (Invoke-SiteFitProductionSql 'select pg_database_size(current_database()) as bytes' @())[0].bytes
 # Includes indexes/toast and 15% transfer margin; every write separately checks actual size.
-if ([double]$targetSize + [double]$sourceSize * 1.15 -ge 450000000) { throw 'Capacity review required before reuse.' }
+$remainingSize=[double]$sourceSize
+if ($ResumeVerified) {
+ $alreadyStored=(Invoke-SiteFitProductionSql "select coalesce(sum(pg_total_relation_size(c.oid)),0)::bigint as bytes from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='source_data' and relkind='r'" @())[0].bytes
+ $remainingSize=[Math]::Max(0,[double]$sourceSize-[double]$alreadyStored)
+}
+if ([double]$targetSize + $remainingSize * 1.15 -ge 450000000) { throw 'Capacity review required before reuse.' }
 $tables = @(
  @{name='geography_features';key='release_id,geography_type,geography_code';batch=200;geometry='geometry';datasets=@('london-geography')},
  @{name='area_statistics';key='release_id,geography_type,geography_code,measure_code';batch=3000;datasets=@('TS001')},
@@ -46,7 +52,10 @@ if (-not $Apply) { return }
 # Ready is restored only after exact row checks, with existing triggers enabled.
 $metadata = (Invoke-SiteFitDevelopmentSql "select jsonb_agg(to_jsonb(r)||jsonb_build_object('state','loading','row_count',0) order by imported_at,id)::text as payload from source_data.dataset_releases r where id in ($ids)" @())[0].payload
 $gate = 'with gate as materialized (select pg_advisory_xact_lock(17,107),1/(case when pg_database_size(current_database())<442000000 then 1 else 0 end) as safe), '
-if ($ContinueEmptyStaging) {
+if ($ResumeVerified) {
+ $original = (Invoke-SiteFitDevelopmentSql "select jsonb_agg(to_jsonb(r) order by imported_at,id)::text as payload from source_data.dataset_releases r where id in ($ids)" @())[0].payload
+ $null = Invoke-SiteFitProductionSql 'select 1/(case when (select count(*) from source_data.dataset_releases)=14 and (select count(*) from source_data.dataset_releases d join jsonb_populate_recordset(null::source_data.dataset_releases,$1::jsonb) s using(id) where (to_jsonb(d)-''state''-''row_count'')=(to_jsonb(s)-''state''-''row_count'') and ((d.state=''loading'' and d.row_count=0) or (d.state=''ready'' and d.row_count=s.row_count)))=14 then 1 else 0 end) as identical' @($original)
+} elseif ($ContinueEmptyStaging) {
  $null = Invoke-SiteFitProductionSql 'select 1/(case when (select jsonb_agg(to_jsonb(t) order by imported_at,id) from source_data.dataset_releases t)=$1::jsonb then 1 else 0 end) as identical' @($metadata)
 } else {
  $null = Invoke-SiteFitProductionSql ($gate + 'inserted as (insert into source_data.dataset_releases select s.* from jsonb_populate_recordset(null::source_data.dataset_releases,$1::jsonb) s cross join gate where gate.safe=1 returning *) select 1/(case when (select jsonb_agg(to_jsonb(t) order by imported_at,id) from inserted t)=$1::jsonb then 1 else 0 end) as identical') @($metadata)
@@ -54,7 +63,22 @@ if ($ContinueEmptyStaging) {
 foreach ($table in $tables) {
  $expression = 'to_jsonb(t)'
  if ($table.geometry) { $expression += " || jsonb_build_object('$($table.geometry)',t.$($table.geometry)::text)" }
- for ($offset=0; $offset -lt $table.rows; $offset += $table.batch) {
+ $start=0
+ if ($ResumeVerified) {
+  $start=(Invoke-SiteFitProductionSql "select count(*)::integer as rows from source_data.$($table.name)" @())[0].rows
+  if ($start -gt $table.rows) { throw 'Target has excess rows; manual review required.' }
+  if ($start -gt 0) {
+   # Exact cryptographic comparison of the entire stored prefix, not just counts
+   # or the last acknowledged batch. This reconciles an ambiguous SQL dispatch.
+   $prefix="select $expression as row,row_number() over(order by $($table.key)) as n from source_data.$($table.name) t where release_id in ($ids) order by $($table.key) limit $start"
+   $fingerprint="select encode(sha256(convert_to(string_agg(encode(sha256(convert_to(row::text,'UTF8')),'hex'),'' order by n),'UTF8')),'hex') as sha from ($prefix) prefix_rows"
+   $sourceHash=(Invoke-SiteFitDevelopmentSql $fingerprint @())[0].sha
+   $targetHash=(Invoke-SiteFitProductionSql $fingerprint @())[0].sha
+   if ($sourceHash -ne $targetHash -or $sourceHash -notmatch '^[0-9a-f]{64}$') { throw 'Stored prefix differs; do not resume.' }
+  }
+  Write-Output "$($table.name): reconciled exact prefix $start/$($table.rows)."
+ }
+ for ($offset=$start; $offset -lt $table.rows; $offset += $table.batch) {
   $select = "select $expression as row from source_data.$($table.name) t where release_id in ($ids) order by $($table.key) limit $($table.batch) offset $offset"
   $payload = (Invoke-SiteFitDevelopmentSql "select jsonb_agg(row)::text as payload from ($select) ordered_rows" @())[0].payload
   if ([Text.Encoding]::UTF8.GetByteCount($payload) -gt 8000000) { throw 'Unexpected batch size; stop for review.' }
@@ -67,7 +91,13 @@ foreach ($table in $tables) {
 foreach ($entry in ($releases | Where-Object {$_.record.dataset_id -in $table.datasets})) {
  # Reload original ready metadata; immutable source records have not changed.
  $r = (Invoke-SiteFitDevelopmentSql 'select to_jsonb(r)::text as payload from source_data.dataset_releases r where id=$1::uuid and state=''ready''' @($entry.record.id))[0].payload
- $null = Invoke-SiteFitProductionSql ($gate + 'updated as (update source_data.dataset_releases d set state=s.state,row_count=s.row_count from jsonb_populate_record(null::source_data.dataset_releases,$1::jsonb) s cross join gate where d.id=s.id and d.state=''loading'' and gate.safe=1 returning d.*) select 1/(case when (select to_jsonb(d) from updated d)=$1::jsonb then 1 else 0 end) as identical') @($r)
+ $ready=(Invoke-SiteFitProductionSql 'select state from source_data.dataset_releases where id=$1::uuid' @($entry.record.id))[0].state
+ if ($ready -eq 'ready') {
+  if ($start -ne $table.rows) { throw 'Ready release has incomplete rows; stop.' }
+  $null=Invoke-SiteFitProductionSql 'select 1/(case when (select to_jsonb(d) from source_data.dataset_releases d where id=($1::jsonb->>''id'')::uuid)=$1::jsonb then 1 else 0 end) as identical' @($r)
+ } else {
+  $null = Invoke-SiteFitProductionSql ($gate + 'updated as (update source_data.dataset_releases d set state=s.state,row_count=s.row_count from jsonb_populate_record(null::source_data.dataset_releases,$1::jsonb) s cross join gate where d.id=s.id and d.state=''loading'' and gate.safe=1 returning d.*) select 1/(case when (select to_jsonb(d) from updated d)=$1::jsonb then 1 else 0 end) as identical') @($r)
+ }
  Write-Output "Ready with existing integrity triggers: $($entry.record.dataset_id)."
 }
 }

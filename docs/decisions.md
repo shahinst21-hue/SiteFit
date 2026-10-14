@@ -1,5 +1,9 @@
 # Accepted decisions
 
+## D108 — Bounded non-commercial Production deployment (14 October 2026)
+
+Owner explicitly approves a new Production build/deployment of reviewed PR50 after exact-head CI and protected merge to the gated Development branch, without main merge. Use separately configured Production environment, never promote the Development-configured Preview artifact. Purpose is HTTPS/Google verification only. Checkout, Live payments, paid AI, collection, fulfilment scheduler, indexing, campaign measurement/advertising and purchases remain disabled/unapproved. This is not commercial launch authority or resolution of existing launch exceptions.
+
 ## D107 — DNS/Google completion and Phase17 verification (14 October 2026)
 
 Owner confirms GoDaddy A-record changes, preserved Development OAuth callback and enabled Google on the separate Production project. Continue DNS/TLS/Auth verification and Production London-data preparation on existing Hobby/Fluid, without new spending, paid AI/providers, Live payments or campaigns. This does not authorise main merge/application Production promotion or close commercial activation gates. Reuse only already approved retained London source releases, preserving source identities/licences/vintages and keeping customer/Test history isolated. [Actual receipts and unresolved deployment/login gate](phase17-dns-auth-london.md).
