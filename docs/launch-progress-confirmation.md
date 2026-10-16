@@ -2,6 +2,8 @@
 
 Implemented locally, not deployed. Production remains on the previously verified `012fd8f`; no release, Checkout, execution, runner, source, AI, indexing or campaign gate is enabled. No migration, provider call, new service or spend. Phases15/16 remain closed.
 
+Owner acceptance and continuation: the owner approved the corrected email/PDF presentation and instructed continuation into the stated protected PR/CI delivery step. This authorises development-branch delivery and its protected Preview only; Production deployment, real purchase, spending and commercial gates remain separately unauthorised. Acceptance is not a new legal-delivery record for an actual customer.
+
 ## Owner decisions
 
 The owner now explicitly authorises public seller/controller name **Shahin Shahmir**, trading as SiteFit, and **Dower House, Manorgate Rd, Kingston upon Thames, KT2 7UA**. This supersedes the earlier restriction on publishing the personal name. Contact remains info@sitefit.co.uk; non-VAT, final £29/no additional Checkout fee and30-day report access from Ready remain confirmed. Refund provisions and purpose-based retention criteria are approved. These approvals do not approve unperformed operational rights/processor checks, contract classification/formation, a guaranteed delivery deadline, global sale-policy activation or Production deployment.
