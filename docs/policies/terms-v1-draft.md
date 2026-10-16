@@ -1,11 +1,13 @@
 # SiteFit Terms of Sale — terms-v1-draft
 
-DRAFT — not approved for customer paid release. Seller legal name, status/address, support contact, VAT treatment, final £29 total, supply classification, delivery commitment and approved durable-confirmation channel remain owner decisions.
+DRAFT — not approved for customer paid release. Owner confirms final£29/no additional Checkout fee, no VAT registration, contact info@sitefit.co.uk and30-day online report access. Adequate seller/controller disclosures, supply classification and final durable-confirmation treatment remain unresolved; known fields need not be asked again.
 
 ## Product and price
-A location-specific decision-support report with eight dashboard sections and PDF export, based on retained qualified evidence and indicative AI interpretation. It does not guarantee demand, profit, permissions or suitability. Financial Engine calculations are separate. Missing evidence remains unknown; scope and material limitations are described before commitment. £29 is the existing Test/Preview configuration; tax and commercial displayed total require approval.
+A location-specific decision-support report with eight dashboard sections and PDF export, based on retained qualified evidence and indicative AI interpretation. It does not guarantee demand, profit, permissions or suitability. Financial Engine calculations are separate. Missing evidence remains unknown; scope and material limitations are described before commitment. The total payable is£29 with no additional Checkout fee. Online access lasts30 days from when the report is Ready; downloaded PDFs remain available in the customer's own files. Access expiry does not erase the contract, waive statutory remedies or retrospectively change historical purchase terms. These commercial fields are owner-approved; the complete contract remains a draft.
 
 ## Customers
+Owner confirms SiteFit is a sole-trader activity, not a registered company. Adequate seller identification/disclosure remains unresolved; this draft does not invent a company, publish withdrawn personal particulars or treat a trading name as automatically resolving all disclosure requirements.
+
 SiteFit serves businesses and consumers. Actual purpose and applicable law determine protections; a business checkbox is not a waiver. Consumer terms and remedies apply wherever required. B2B clauses must not retrospectively remove consumer protections.
 
 ## Immediate supply and cancellation

@@ -11,6 +11,7 @@ test("draft sale cannot be activated through submitted consent; all independent 
  assert.throws(()=>validateSaleConsent({...consent,version:"invented"}));assert.throws(()=>validateSaleConsent({...consent,waiver:true}));
  assert.equal(validateSaleConsent({...consent,buyerKind:"business"}).acknowledgement,true);
  assert.equal(salePolicy.consumerCancellationDays,14);
+ assert.equal(salePolicy.reportAccessDays,30);assert.equal(salePolicy.additionalCheckoutFeeMinor,0);assert.equal(salePolicy.priceMinor,2900);
 });
 test("cancellation reasons are bounded; requests are distinct from checkout cancellation",()=>{
  for(const reason of ["change_of_mind","failed_delivery","report_problem","other"])assert.equal(cancellationReason(reason),reason);
