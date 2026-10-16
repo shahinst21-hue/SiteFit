@@ -15,7 +15,7 @@ export function purchaseOrigin(env: Readonly<Record<string,string|undefined>>,au
 }
 export function stripeConfig(env: Readonly<Record<string,string|undefined>>,authority:ReleaseAuthority=releasePolicy){
  const live=env.VERCEL_ENV==="production",origin=live?productionOrigin(env,authority):purchaseOrigin(env,authority);
- if(!origin||!(live?/^sk_live_[A-Za-z0-9]+$/:/^sk_test_[A-Za-z0-9]+$/).test(env.STRIPE_SECRET_KEY??"")||!/^price_[A-Za-z0-9]+$/.test(env.STRIPE_FULL_REPORT_PRICE_ID??"")||live&&!/^acct_[A-Za-z0-9]+$/.test(env.STRIPE_ACCOUNT_ID??""))throw Error("payment_configuration_unavailable");
+ if(!origin||!(live?/^(?:sk|rk)_live_[A-Za-z0-9]+$/:/^sk_test_[A-Za-z0-9]+$/).test(env.STRIPE_SECRET_KEY??"")||!/^price_[A-Za-z0-9]+$/.test(env.STRIPE_FULL_REPORT_PRICE_ID??"")||live&&!/^acct_[A-Za-z0-9]+$/.test(env.STRIPE_ACCOUNT_ID??""))throw Error("payment_configuration_unavailable");
  return {origin,live,version:live?2:1,accountId:live?env.STRIPE_ACCOUNT_ID!:null,secret:env.STRIPE_SECRET_KEY!,priceId:env.STRIPE_FULL_REPORT_PRICE_ID!,amount:site.pricing.fullReport,currency:site.currency.toLowerCase()};
 }
 export function purchaseSameOrigin(request: Request,env: Readonly<Record<string,string|undefined>>){

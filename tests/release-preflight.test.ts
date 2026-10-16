@@ -2,6 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {releasePreflight} from '../lib/release/preflight.ts';
 const env={VERCEL_ENV:'production',SITE_URL:'https://example.invalid',SUPABASE_URL:'https://vsfkkroxgntoumoqcfcy.supabase.co',SUPABASE_PUBLISHABLE_KEY:'sb_publishable_synthetic',SUPABASE_SECRET_KEY:'sb_secret_synthetic',STRIPE_SECRET_KEY:'sk_live_synthetic',STRIPE_WEBHOOK_SECRET:'whsec_synthetic',STRIPE_FULL_REPORT_PRICE_ID:'price_synthetic',STRIPE_ACCOUNT_ID:'acct_synthetic',SITEFIT_FULFILMENT_RUNNER_SECRET:'a'.repeat(64),OPENAI_API_KEY:'sk-synthetic',POSTIO_API_KEY:'synthetic'};
+test('restricted Live preflight accepts only server Live keys and never grants approval',()=>{
+ const result=releasePreflight({...env,STRIPE_SECRET_KEY:'rk_live_synthetic'});
+ assert.equal(result.configurationComplete,true);assert.equal(result.approvals.production,false);
+ for(const key of ['rk_test_synthetic','pk_live_synthetic','rk_live_','rk_live_synthetic\n',' rk_live_synthetic'])
+  assert.equal(releasePreflight({...env,STRIPE_SECRET_KEY:key}).configuration.liveStripeKey,false);
+ assert.ok(!JSON.stringify(result).includes('rk_live_synthetic'));
+});
 test('candidate configuration inspection cannot enable Production or certify unverified delivery',()=>{
  const result=releasePreflight(env);assert.equal(result.configurationComplete,true);assert.equal(result.approvals.production,false);assert.equal(result.approvals.paidExecution,false);assert.equal(result.approvals.salePolicy,false);assert.ok(result.unverified.length>0);
  for(const key of ['SUPABASE_SECRET_KEY','STRIPE_SECRET_KEY','STRIPE_WEBHOOK_SECRET','SITEFIT_FULFILMENT_RUNNER_SECRET','OPENAI_API_KEY'])assert.ok(!JSON.stringify(result).includes(env[key as keyof typeof env]));

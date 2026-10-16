@@ -8,6 +8,16 @@ import { checkoutParameters } from "../lib/payments/parameters.ts";
 import {publicIndexingEnabled} from "../lib/seo.ts";
 const authority={productionApproved:true,paidExecutionApproved:true,measurementApproved:true};
 const env={VERCEL_ENV:"production",SITE_URL:"https://example.invalid",SITEFIT_COMMERCIAL_ENABLED:"1",SITEFIT_COMMERCIAL_EXECUTION:"1",SITEFIT_CAMPAIGN_MEASUREMENT:"1",STRIPE_SECRET_KEY:"sk_live_synthetic",STRIPE_FULL_REPORT_PRICE_ID:"price_synthetic",STRIPE_ACCOUNT_ID:"acct_synthetic"};
+test("restricted Live keys preserve release authority, merchant binding and Test separation",()=>{
+ const restricted={...env,STRIPE_SECRET_KEY:"rk_live_synthetic"};
+ assert.throws(()=>stripeConfig(restricted));
+ assert.equal(stripeConfig(restricted,authority).secret,restricted.STRIPE_SECRET_KEY);
+ assert.equal(stripeConfig(restricted,authority).live,true);
+ assert.throws(()=>stripeConfig({...restricted,STRIPE_ACCOUNT_ID:""},authority));
+ for(const key of ["rk_test_synthetic","pk_live_synthetic","rk_live_","rk_live_synthetic\n"," rk_live_synthetic"])
+  assert.throws(()=>stripeConfig({...restricted,STRIPE_SECRET_KEY:key},authority));
+ assert.throws(()=>stripeConfig({...restricted,VERCEL_ENV:"preview",SITEFIT_TEST_PURCHASES_ENABLED:"true",SITEFIT_PURCHASE_ORIGIN:"https://example.invalid"},authority));
+});
 test("implementation approval cannot activate Production or paid work; exact host and separate capabilities are required",()=>{
  assert.equal(releasePolicy.productionApproved,false);assert.equal(productionOrigin(env),null);assert.equal(commercialExecution(env,"example.invalid"),false);
  assert.equal(sourceCollectionAllowed({...env,SITEFIT_COMMERCIAL_SOURCE_COLLECTION:"1"},"example.invalid"),false);
