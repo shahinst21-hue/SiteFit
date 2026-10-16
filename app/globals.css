@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./snapshot.css";
+@import "./progress.css";
 /* Phase 4 address entry reuses the approved Phase 3.5 visual system. */
 :root {
   --ink: #12151d;

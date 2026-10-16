@@ -16,6 +16,7 @@ import { interpretSections, synthesiseSections, restoreSynthesis, type Validated
 import { validatePacket, type InterpretationPacket } from "./interpretation.ts";
 import { packetDigest } from "./canonical.ts";
 import { weightManifest, scoringVersions } from "./scoring.ts";
+import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
 
 type Early = Awaited<ReturnType<typeof synthesiseSections>>;
 type Partial = {enrichmentVersion: "phase8-observations-1"; evidence: Evidence[]; packets: InterpretationPacket[];
@@ -23,7 +24,8 @@ type Partial = {enrichmentVersion: "phase8-observations-1"; evidence: Evidence[]
 const json = (v: unknown) => v as Json;
 /** Entered only after ready replay and frozen input reads. Historical v1 inputs
  * continue through the original generator; source and AI replay stay immutable. */
-export async function generateEnrichedSnapshot(owner: string, context: CollectionContext, signal: AbortSignal, unfinished: unknown) {
+export async function generateEnrichedSnapshot(owner: string, context: CollectionContext, signal: AbortSignal, unfinished: unknown, observer?:SnapshotObserver) {
+  const progress=snapshotMilestones(observer);
   if (context.schemaVersion !== 2) throw new Error("enriched_generation_context_required");
   const data = framework(owner), client = frameworkClient(), key = "free-enriched-v1";
   const groups = await Promise.all([
@@ -42,6 +44,7 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
   const certificate=fallback.outcomes[0]?.snapshot;
   if(!certificate)throw new Error("source_persistence_incomplete");
   snapshots.push(certificate);
+  progress.sources();
   const prior = (unfinished as {partial?: Partial} | null)?.partial;
   if (prior && prior.enrichmentVersion !== "phase8-observations-1") throw new Error("stored_enrichment_version_mismatch");
   const built = enrichedPackets(context,snapshots,null,new Date());
@@ -49,7 +52,7 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
     index: evidenceIndex(prior.evidence,context.analysisId,context.inputId,new Date())} : built;
   for (const p of prepared.packets) validatePacket(p,prepared.index);
   const ai = analysisAIProvider({priorDispatches: prior?.dispatches ?? 0});
-  const interpreted = await interpretSections(prepared.packets,prepared.index,ai,signal,prior?.sections ?? []);
+  const interpreted = await interpretSections(prepared.packets,prepared.index,ai,signal,prior?.sections ?? [],progress.section);
   async function preserve(errors: unknown, early?: Early) {
     const {error} = await client.from("reports").upsert({analysis_id: context.analysisId,input_id: context.inputId,version:1,schema_version:2,tier:"free",status:"failed",
       provenance:json({partial:{enrichmentVersion:"phase8-observations-1",evidence:prepared.evidence,packets:prepared.packets,sections:interpreted.sections,
@@ -61,6 +64,7 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
   let early: Early;
   try {early=prior?.early ? restoreSynthesis(prior.early,prior.earlyPacketDigest,interpreted.sections,prepared.index) : await synthesiseSections(interpreted.sections,ai,signal);}
   catch {await preserve([{section:"early-view",code:"synthesis_unavailable"}]);throw new Error("synthesis_incomplete");}
+  progress.synthesis();
   const generatedAt=new Date().toISOString(), projection=enrichedProjection(context,interpreted.sections,early,prepared.evidence,snapshots,null,generatedAt);
   const audit={inputId:context.inputId,generatedAt,scoringVersions,
     weights:prepared.packets.map(p=>weightManifest(p.section,context.category)),

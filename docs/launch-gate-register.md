@@ -1,5 +1,9 @@
 # Launch gate register
 
+Latest owner follow-up: [progress and branded confirmation](launch-progress-confirmation.md). Public seller name/address, refunds and retention criteria are now approved; first Zoho rehearsal received/opened, branded replacement sent. Local implementation/checks are complete; no new deployment or sale-policy activation. Contract classification/formation, operational rights/processor verification, corrected recipient rendering and bounded real Live proof remain open. Older rows below are historical where superseded.
+
+16 October follow-up: [current controlled-proof readiness](launch-proof-readiness.md) and [policy approval candidate](policies/launch-approval-candidate.md) supersede stale setup statements below. PR56/`012fd8f` is deployed non-commercially; both pending migrations are applied (77 total), bucket/RLS verified, Stripe account/Price/Product reads pass, and owner attests webhook configuration. All sales/execution gates remain disabled. Final text/identity/retention/delivery, selected-case source access and bounded proof funding remain open. Active Production Storage/Auth reads pass; the mismatched local credential must not be used for operator work. No phase is reopened or activation authorised.
+
 Updated16 October 2026. Phase15 development is Owner-Accepted / Closed with Exceptions. This register preserves unresolved dependencies independently of phase closure. No entry below authorises work, spending or activation; resolve within separately authorised prelaunch scope. No unperformed test is labelled passed. [Current no-spend evidence and handoff](launch-no-spend-readiness.md).
 
 | Dependency | Actual status | Release requirement |

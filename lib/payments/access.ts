@@ -15,6 +15,6 @@ export async function ownedPurchase(id:string){
   const row=await fulfilmentRepository().progress(user.id,payment.id);
   fulfilment=parseProgress(row);
  }catch{/* Payment confirmation remains independently readable during a queue outage. */}
- let confirmationAvailable=false;try{const sale=await readSale(user.id,payment.id);confirmationAvailable=!!sale&&typeof sale==="object"&&"policy" in sale&&!!sale.policy&&typeof sale.policy==="object"&&"termsText" in sale.policy;}catch{/* Existing payment/history reads remain available. */}
- return {confirmationAvailable,id:payment.id,report:payment.report_id,status:payment.status,access:payment.access_state,test:payment.test_mode===true,reportGenerated:fulfilment?.state==='ready',fulfilment};
+ let confirmationAvailable=false,confirmationDelivered:boolean|null=null;try{const sale=await readSale(user.id,payment.id);confirmationAvailable=!!sale&&typeof sale==="object"&&"policy" in sale&&!!sale.policy&&typeof sale.policy==="object"&&"termsText" in sale.policy;if(sale&&typeof sale==='object'&&'confirmationDelivered' in sale&&typeof sale.confirmationDelivered==='boolean')confirmationDelivered=sale.confirmationDelivered;}catch{/* Existing payment/history reads remain available. */}
+ return {confirmationAvailable,confirmationDelivered,id:payment.id,report:payment.report_id,status:payment.status,access:payment.access_state,test:payment.test_mode===true,reportGenerated:fulfilment?.state==='ready',fulfilment};
 }

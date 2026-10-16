@@ -1,5 +1,7 @@
 # Existing Zoho mailbox — manual contract confirmation
 
+Latest rehearsal and branded presentation implementation: [16 October follow-up](launch-progress-confirmation.md). Use `confirmationEmail({reference: verifiedPurchaseReference})` from `lib/legal/confirmation-email.ts` for HTML/plain wording in this same manual channel; it does not send or mark delivery. Do not regenerate or replace an existing archived attachment. The owner received/opened the original rehearsal and requested branding; corrected sample sent. No genuine purchase delivery has been recorded. Later approvals supersede the historical no-public-page/no-email statements below only within their explicit scope.
+
 16 October 2026. Bounded launch preparation, not commercial activation. Owner confirms `info@sitefit.co.uk` uses Zoho Mail Free and can send/receive; authorises checking the manual process and a narrow correction if needed. No sender integration, subscription, public page, support allowlist or Production write. Phase15/16 and accepted copy stay closed.
 
 ## Findings and correction
