@@ -21,6 +21,10 @@ begin
  if public.read_sitefit_full(owner,r)->>'archiveDocuments'<>'true' then raise exception 'archive_contract_not_bound';end if;
  begin perform public.read_sitefit_full(owner,expired);raise exception 'expired_read_admitted';exception when insufficient_privilege then null;end;
  begin perform public.read_sitefit_full(other,r);raise exception 'foreign_read_admitted';exception when insufficient_privilege then null;end;
+ -- A later purchase must not impose a new expiry on an earlier edition.
+ insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,full_binding,full_revision,full_projection,provenance,created_at)
+ values(a,i,4,3,'full','ready',repeat('d',64),0,'{}',jsonb_build_object('generatedAt',now()-interval '60 days'),now()-interval '60 days');
+ if not public.sitefit_report_access_open(owner,(select id from public.reports where analysis_id=a and version=4)) then raise exception 'later_contract_changed_history';end if;
  -- Exercise RLS defensively even though current browser table grants are denied.
  -- These grants are fixture-local and roll back, never part of a migration.
  grant select on public.reports,public.analyses to authenticated;

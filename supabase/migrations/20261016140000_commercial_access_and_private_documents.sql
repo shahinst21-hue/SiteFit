@@ -11,11 +11,11 @@ begin
  if r.tier<>'full' or r.status<>'ready' then return true;end if;
  select exists(select 1 from public.sale_contracts c join public.payments p on p.id=c.payment_id
   join public.reports f on f.id=p.report_id and f.analysis_id=r.analysis_id and f.input_id=r.input_id
-  where c.owner_id=p_owner and p.owner_id=p_owner and c.policy_snapshot->'reportAccessDays'='30'::jsonb) into limited;
+  where c.owner_id=p_owner and p.owner_id=p_owner and r.created_at>=c.accepted_at and c.policy_snapshot->'reportAccessDays'='30'::jsonb) into limited;
  if not limited then return true;end if;
  if not exists(select 1 from public.sale_contracts c join public.payments p on p.id=c.payment_id
   join public.reports f on f.id=p.report_id and f.analysis_id=r.analysis_id and f.input_id=r.input_id
-  where c.owner_id=p_owner and p.owner_id=p_owner and c.policy_snapshot->'reportAccessDays'='30'::jsonb
+  where c.owner_id=p_owner and p.owner_id=p_owner and r.created_at>=c.accepted_at and c.policy_snapshot->'reportAccessDays'='30'::jsonb
   and p.status='succeeded' and p.access_state='active' and p.verified_at is not null
   and public.sitefit_payment_mode_allowed(p.payment_version,p.test_mode)) then return false;end if;
  if r.provenance->>'generatedAt' is null then return false;end if;
@@ -46,7 +46,7 @@ begin
  if not public.sitefit_report_access_open(p_owner,p_report) then raise exception 'report_access_expired' using errcode='42501';end if;
  select exists(select 1 from public.sale_contracts c join public.payments p on p.id=c.payment_id
   join public.reports f on f.id=p.report_id and f.analysis_id=r.analysis_id and f.input_id=r.input_id
-  where c.owner_id=p_owner and p.owner_id=p_owner and c.policy_snapshot->'reportAccessDays'='30'::jsonb) into archive;
+  where c.owner_id=p_owner and p.owner_id=p_owner and r.created_at>=c.accepted_at and c.policy_snapshot->'reportAccessDays'='30'::jsonb) into archive;
  return jsonb_build_object('id',r.id,'analysisId',r.analysis_id,'inputId',r.input_id,'revision',r.full_revision,'status',r.status,
   'provenance',r.provenance,'projection',r.full_projection,'archiveDocuments',archive);
 end $$;
