@@ -20,7 +20,7 @@
 | Public table privacy | Zero public ordinary tables without RLS; source-policy and privilege suites remain distinct from this aggregate |
 | Controls | Zero approved sale policies and scheduled jobs; fulfilment and commercial execution/Checkout remain disabled |
 | Authentication | Auth configuration has Google enabled and exact `https://sitefit.co.uk` site URL. This inspection is not a new end-to-end sign-in |
-| Email | Custom SMTP host absent. Existing `info@sitefit.co.uk` mailbox/sending/receipt capabilities not verified |
+| Email | Custom SMTP host absent. Owner subsequently reports Zoho Mail setup in progress for `info@sitefit.co.uk`; completion, chosen plan, sending/receiving, SMTP eligibility and receipt capabilities remain unverified. No account/service setting or email send performed |
 | Production HTTP | HTTPS200; HTTP308; anonymous Account/support denied; locked address routes reject without source calls and use no-store; indexing remains disabled |
 | Vercel configuration inventory | Existing Production Supabase/origin/runner and disabled controls present by metadata; OPENAI/EPC secrets present. Values not decrypted or printed; presence is not validity |
 | Missing Production names | No Stripe secret/webhook/price/merchant; no POSTIO, PROPERTYDATA, GEOAPIFY or TFL key in the Production environment listing |
