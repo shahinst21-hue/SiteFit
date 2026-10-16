@@ -1,5 +1,7 @@
 # Phase17 activation and rollback — prepared, not executed
 
+16 October current checkpoint: [no-spend readiness](launch-no-spend-readiness.md). Owner defers all infrastructure upgrades until after campaign01; keep plans/settings unchanged. Production domain/Supabase/Google and14 stored releases are prepared, but Live Stripe, source credentials/allowances, approved sale/confirmation, backup/rights and genuine Live proof remain open. Older initial configuration inventory below is historical. Website copy/product scope and Phase15/16 stay closed. No new activation/spending permission is inferred.
+
 This procedure records the approved implementation, not activation authority. Commercial controls remain default-denied. Keep Phase15/16 closed; resolve only their named launch dependencies.
 
 ## Release sequence
@@ -22,7 +24,7 @@ Use the actual ignored Production environment file explicitly, never automatical
 
 Alternatively `npm run check:release` inspects only the current process environment. The command performs no network request or activation, prints only configuration booleans and existing fences, and exits nonzero while configuration/required approvals are incomplete. Candidate shape validation does not verify database isolation, secret ownership, Stripe merchant/price or actual delivery. Those remain the existing operational checks, not inferred passes. Keep all values in private secure settings, not chat or committed examples.
 
-Current Vercel Production inventory: SITE_URL, SUPABASE_URL/PUBLISHABLE_KEY/SECRET_KEY, Stripe key/webhook/price/merchant and runner secret absent. OPENAI_API_KEY exists, which does not authorise execution. Only sitefit-three.vercel.app is attached; intended custom Production domain/DNS is not connected. Do not copy Preview Test credentials or bind the shared Development database to Production to fill those gaps.
+Historical inventory before D106/D108: SITE_URL, Supabase and runner settings and custom-domain connection were absent. They are now prepared, as recorded in the dated receipts; do not repeat those setup steps or copy Preview Test credentials. Stripe Live settings are still absent in the16 October read-only environment listing. Presence of OPENAI_API_KEY does not authorise execution. Never bind the shared Development database to Production.
 
 ## Stop and rollback
 
