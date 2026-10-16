@@ -36,6 +36,8 @@ Full commercial/Full-intelligence hosted fixtures were attempted and rejected by
 
 Unresolved legal particulars, real delivery/channel, permitted source/operating allowances and genuine Live proof are still launch gates. Backup deferral is an owner-accepted limitation, not a successful restore. No broad Phase15/copy/product review is reopened.
 
+Owner confirms Stripe Live activation is not yet complete. Owner action: complete the existing account's [business verification](https://dashboard.stripe.com/account/onboarding), accurate sole-trader/KYC and settlement information privately. Check the separate public business-information settings because Stripe can show them on receipts/statements. Send only non-secret confirmation that payment acceptance and payouts are enabled. No Live key, price/webhook creation, activation or genuine payment is inferred from that confirmation; those remain the next scoped setup/proof steps. [Official setup guidance](https://docs.stripe.com/get-started/account/set-up).
+
 ## Local verification
 
 Node24/npm11, npm run check: lint, types,356 tests including PostgreSQL/PostGIS/security and synthetic restore, and production build passed. Final ownership-metadata RLS correction passed the database rebuild again. Built HTTP/public checks and actual campaign consent/withdrawal/private-indexing checks passed. Archive tests cover stored-byte reuse, no overwrite, concurrent writer, auth/network failures, invalid path/PDF and default-denied owner-admin preparation. No UI layout changes; existing rendering/unchecked-consent fixtures pass. Hosted bucket/object API checks and protected delivery receipts are recorded separately after observation; no synthetic Storage shim is labelled a real API test.

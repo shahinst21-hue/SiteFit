@@ -13,7 +13,11 @@ async function prepare(){
  const [owner,purchase]=process.argv.slice(2);
  if(process.argv.length!==4||!uuid(owner)||!uuid(purchase))throw Error('invalid_request');
  requireApprovedSale();
- if(process.env.VERCEL_ENV==='production'&&!releasePolicy.productionApproved)throw Error('production_not_authorised');
+ const environment=process.env.VERCEL_ENV;
+ if(!['development','preview','production'].includes(environment??''))throw Error('explicit_environment_required');
+ const production=environment==='production';
+ if(process.env.SUPABASE_URL!==`https://${production?'vsfkkroxgntoumoqcfcy':'idlsjusbrmyucccostxt'}.supabase.co`)throw Error('project_target_mismatch');
+ if(production&&!releasePolicy.productionApproved)throw Error('production_not_authorised');
  const payment=await paymentById(purchase!);
  if(!payment||payment.owner_id!==owner||payment.status!=='succeeded'||payment.access_state!=='active'||!payment.verified_at)throw Error('payment_not_authorised');
  const sale=await readSale(owner!,purchase!);
