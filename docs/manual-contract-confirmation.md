@@ -1,6 +1,6 @@
 # Existing Zoho mailbox — manual contract confirmation
 
-Stage1: [actual verification and remaining receipt handoff](stage1-contract-readiness.md). Formation/supply wording already approved. New synthetic email/PDF received/opened in Gmail with SPF/DKIM/DMARC PASS. Received-byte identity/full EML are still pending; no genuine purchase confirmation issued/recorded.
+Stage1: [actual verification and remaining receipt handoff](stage1-contract-readiness.md). Formation/supply wording already approved. New synthetic email/PDF received/opened in Gmail with SPF/DKIM/DMARC PASS. Received-byte identity/full EML now pass after owner download; synthetic evidence privately archived and read-back hashes match. No genuine purchase confirmation issued/recorded.
 
 Latest rehearsal and branded presentation implementation: [16 October follow-up](launch-progress-confirmation.md). Use `confirmationEmail({reference: verifiedPurchaseReference})` from `lib/legal/confirmation-email.ts` for HTML/plain wording in this same manual channel; it does not send or mark delivery. Do not regenerate or replace an existing archived attachment. The owner received/opened the original rehearsal and requested branding; corrected sample sent. No genuine purchase delivery has been recorded. Later approvals supersede the historical no-public-page/no-email statements below only within their explicit scope.
 
