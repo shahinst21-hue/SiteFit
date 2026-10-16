@@ -17,7 +17,8 @@ export async function confirmationPDF(value:unknown,{rehearsal=false}:{rehearsal
  let page=newPage(),y=740;
  const consent=v.consent as Record<string,unknown>;
  pdf.setTitle(rehearsal?'SiteFit — delivery rehearsal, no contract':'SiteFit — contract confirmation');pdf.setAuthor('SiteFit');
- const text=[`Policy version: ${v.version}`,`Recorded: ${v.acceptedAt}`,
+ const text=[`Policy version: ${v.version}`,`Choices recorded: ${v.acceptedAt}`,
+ ...(['termsVersion','privacyVersion','retentionVersion'] as const).flatMap(key=>typeof p[key]==='string'?[`${key}: ${p[key]}`]:[]),
  `Purchase purpose declared: ${String(consent.buyerKind ?? "not recorded")}`,
  `Terms accepted: ${consent.termsAccepted===true?"Yes":"Not recorded"}`,
  `Immediate supply requested: ${consent.immediateRequested===true?"Yes":"Not recorded"}`,
@@ -33,6 +34,14 @@ export async function confirmationPDF(value:unknown,{rehearsal=false}:{rehearsal
  page.drawText(rehearsal?'Email delivery rehearsal':'Your contract confirmation',{x:42,y,size:24,font,color:ink});y-=28;
  page.drawText(rehearsal?'TEST ONLY — no purchase, payment or contract.':'Keep this document with your purchase records.',{x:42,y,size:10,font,color:muted});y-=32;
  heading('Recorded choices');write(text);y-=12;
+ // Only wording frozen with THIS record. Never borrow today's labels for an older contract.
+ if(p.consentLabels&&typeof p.consentLabels==='object'&&!Array.isArray(p.consentLabels)){
+  const labels=p.consentLabels as Record<string,unknown>;
+  if(!['termsAccepted','immediateRequested','acknowledgement'].every(k=>typeof labels[k]==='string'&&(labels[k] as string).length>0&&(labels[k] as string).length<=2000))throw Error('confirmation_unavailable');
+  heading('Wording shown with these choices');
+  for(const key of ['termsAccepted','immediateRequested','acknowledgement'])write(labels[key] as string);
+  y-=12;
+ }
  for(const [title,body] of [['Terms of Sale',p.termsText],['Privacy information',p.privacyText],['Retention information',p.retentionText]] as const){heading(title as string);write(body as string);y-=14;}
  const pages=pdf.getPages();for(const [index,p] of pages.entries()){p.drawLine({start:{x:42,y:55},end:{x:553,y:55},color:line,thickness:0.6});p.drawText('SiteFit  /  info@sitefit.co.uk',{x:42,y:36,size:8,font,color:muted});p.drawText(`${index+1} / ${pages.length}`,{x:519,y:36,size:8,font,color:muted});}
  return pdf.save();

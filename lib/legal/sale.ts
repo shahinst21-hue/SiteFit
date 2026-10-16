@@ -1,9 +1,10 @@
 import {site,formatPrice} from "../site-config.ts";
+import {policyVersions} from './policy-text.ts';
 /** Versioned draft. Approval requires a reviewed replacement, never an env override. */
-export const salePolicy = Object.freeze({ version: "sitefit-sale-v1-launch-draft", approved: false,
-  classification: null, priceMinor: site.pricing.fullReport, currency: site.currency, consumerCancellationDays: 14,
+export const salePolicy = Object.freeze({ version: policyVersions.sale, approved: false,
+  classification: 'digital_content', priceMinor: site.pricing.fullReport, currency: site.currency, consumerCancellationDays: 14,
   reportAccessDays: 30, additionalCheckoutFeeMinor: 0,
-  termsVersion: "terms-v1-draft", privacyVersion: "privacy-v1-draft", retentionVersion: "retention-v1-draft" });
+  termsVersion: policyVersions.terms, privacyVersion: policyVersions.privacy, retentionVersion: policyVersions.retention });
 export type SaleConsent = { version: string; buyerKind: "consumer" | "business";
   termsAccepted: boolean; immediateRequested: boolean; acknowledgement: boolean };
 export function validateSaleConsent(value: unknown): SaleConsent {
