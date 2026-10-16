@@ -3,6 +3,7 @@ import process from 'node:process';
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';
 import ts from 'typescript';import {createElement} from 'react';import {renderToStaticMarkup} from 'react-dom/server';
 registerHooks({resolve(specifier,context,next){
+ if(specifier==='next/image')return next(pathToFileURL(path.resolve('tests/fixtures/next-image-adapter.mjs')).href,context);
  if(specifier==='next/link')return next('next/link.js',context);
  if(specifier.startsWith('.')||specifier.startsWith('@/')){
  const base=specifier.startsWith('@/')?path.resolve(specifier.slice(2)):path.resolve(path.dirname(fileURLToPath(context.parentURL)),specifier);

@@ -1,5 +1,7 @@
 # Launch policy approval candidate — 16 October 2026
 
+Subsequent owner decisions: public seller/controller is Shahin Shahmir trading as SiteFit, Dower House, Manorgate Rd, Kingston upon Thames, KT2 7UA. Refund provisions and retention criteria below are approved. First Zoho attachment received/opened; branded replacement sent. These replace the earlier personal-name prohibition/address/criteria unknowns in this historical candidate. Classification/formation/acknowledgement, actual delivery commitment and operational checks remain unresolved; the overall sale policy is still unapproved. See [current implementation record](../launch-progress-confirmation.md).
+
 Internal review copy only. Not approved, deployed, inserted into `sale_policies` or accepted by any customer. The current application/database policy remains `sitefit-sale-v1-launch-draft`, unapproved. Keep earlier policy drafts, existing contracts and source snapshots unchanged. Freeze a new matching text/version/consent snapshot only through a separately approved release.
 
 ## Remaining fields, rather than another policy review cycle

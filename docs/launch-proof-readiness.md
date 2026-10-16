@@ -1,5 +1,7 @@
 # Controlled commercial proof — readiness decision, 16 October 2026
 
+Update after this review: [owner decisions and implementation](launch-progress-confirmation.md) supersede the original seller/retention/Zoho unknowns below. Public seller identity/address and retention/refund provisions are approved; first rehearsal received/opened and branded replacement sent. No Production release or real-payment authority follows. Preserve this original review as the pre-change evidence record.
+
 **NO GO for a real payment.** The no-spend review is complete; this is not activation or spending approval. Product/copy and Phases15/16 remain closed. No new feature, public legal text, Production setting, migration, deployment or infrastructure change is included. The [policy approval candidate](policies/launch-approval-candidate.md) contains the proposed final wording and only the outstanding owner inputs.
 
 ## Observed starting position

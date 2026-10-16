@@ -32,6 +32,7 @@ export function parseProgress(value: unknown): Progress | null {
   const v = value as Record<string, unknown>;
   if (typeof v.state !== "string" || !["queued", "running", "ready", "intervention", "awaiting_authorisation"].includes(v.state) ||
     v.reportId !== null && (typeof v.reportId !== "string" || !/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(v.reportId))) return null;
+  if(v.state==='ready'&&v.reportId===null)return null;
   const stage = typeof v.stage === "string" && ["context", "premises", "synthesis", "validating"].includes(v.stage) ? v.stage : undefined;
   return { state: v.state, reportId: v.state === "ready" ? v.reportId as string : null, ...(stage ? { stage } : {}) };
 }

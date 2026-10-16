@@ -1,1 +1,2 @@
-export default function ReportLoading(){return <div className="page-wrap narrow-page" role="status"><h1>Opening your saved report</h1><p>Checking access and reading this historical edition. No new analysis is being generated.</p></div>;}
+import {OpeningProgress} from '@/components/generation-progress';
+export default function ReportLoading(){return <OpeningProgress/>;}

@@ -3,6 +3,8 @@ import { sameOrigin, submissionBody, ownedGeneration } from "@/lib/analysis/http
 import { generateSnapshot } from "@/lib/analysis/generate";
 import { observeCampaign } from "@/lib/marketing/repository";
 import { sourceCollectionAllowed, commercialExecution } from "@/lib/release/policy";
+import {snapshotStream} from '@/lib/analysis/progress-stream';
+import type {SnapshotObserver} from '@/lib/analysis/progress';
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
@@ -26,10 +28,18 @@ export async function POST(request: Request) {
     }
     const active = await client.rpc("sitefit_session_available");
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
-    const result = await ownedGeneration(user.id, input, () => generateSnapshot(user.id, input.propertyId, input.businessType, input.nonce, request.signal));
-    await observeCampaign(user.id, result.reportId);
-    return reply({ reportId: result.reportId });
+    const owner=user.id;
+    const produce=async(observer?:SnapshotObserver)=>{
+      const result=await ownedGeneration(owner,input,()=>generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer));
+      await observeCampaign(owner,result.reportId);return {reportId:result.reportId};
+    };
+    if(request.headers.get('accept')==='application/x-ndjson')return snapshotStream(produce,generationFailure);
+    return reply(await produce());
   } catch (error) {
+    return generationFailure(error);
+  }
+}
+function generationFailure(error:unknown){
     const code = error instanceof Error ? error.message : "unavailable";
     const safeCodes = new Set(["submission_unavailable", "report_read_unavailable", "analysis_configuration_missing", "property_unavailable",
       "outside_analysis_coverage", "location_precision_unavailable", "source_persistence_incomplete", "stored_section_packet_mismatch",
@@ -39,5 +49,4 @@ export async function POST(request: Request) {
     if (code === "location_precision_unavailable") return reply({ error: "This address has no usable location point. Select a returned postal address to generate local analysis." }, 422);
     if (code === "generation_busy" || code === "generation_limit") return reply({ error: code === "generation_busy" ? "A Snapshot is already being prepared. Wait for it to finish before starting another." : "You have reached the current Snapshot limit. Please try again later." }, 429);
     return reply({ error: "We could not complete your Snapshot. Saved source results are retained; retrying this request will reuse them." }, 503);
-  }
 }

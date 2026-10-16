@@ -20,9 +20,11 @@ import { packetDigest } from "./canonical.ts";
 import { selectEnrichmentReleases, prepareEnrichmentIdentity } from "../data/enrichment-preparation.ts";
 import { generateEnrichedSnapshot } from "./generate-enriched.ts";
 import type { ResolvedAddress } from "../addresses/model.ts";
+import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
 const json = (value: unknown) => value as Json;
 const dimensions: Dimension[] = ["customer-base", "market-position", "customer-access", "premises"];
-export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal) {
+export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal, observer?:SnapshotObserver) {
+  const progress=snapshotMilestones(observer);
   if (![ownerId, propertyId, nonce].every(uuid) || !["coffee-shop", "restaurant", "hair-salon", "beauty-salon"].includes(businessType)) throw new Error("invalid_submission");
   const bound = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(110_000)]);
   const databaseBound = (milliseconds: number) => AbortSignal.any([bound, AbortSignal.timeout(milliseconds)]);
@@ -69,10 +71,12 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
   }
   const { data: unfinished, error: unfinishedReadError } = await client.from("reports").select("provenance").eq("analysis_id", analysis.id).eq("version", 1).neq("status", "ready").abortSignal(databaseBound(8000)).maybeSingle();
   if (unfinishedReadError) throw new Error("stored_report_read_unavailable");
-  if (context.schemaVersion === 2) return generateEnrichedSnapshot(ownerId, context, bound, unfinished?.provenance);
+  progress.context();
+  if (context.schemaVersion === 2) return generateEnrichedSnapshot(ownerId, context, bound, unfinished?.provenance,observer);
   const collection = await data.collectSources(context, ["ons-population", "tfl-stop-points", "fsa-establishments"], "free-v1", bound);
   const snapshots = collection.outcomes.flatMap(outcome => outcome.snapshot ? [outcome.snapshot] : []);
   if (snapshots.length !== 3) throw new Error("source_persistence_incomplete");
+  progress.sources();
   const provenance = unfinished?.provenance as { partial?: { sections: ValidatedSection[]; evidence: Evidence[]; packets: InterpretationPacket[];
     residential: ReturnType<typeof residentialMetric>; comparison: unknown; dispatches: number; receipts?: AIReceipt[];
     early?: Awaited<ReturnType<typeof synthesiseSections>>; earlyPacketDigest?: string } } | undefined;
@@ -87,7 +91,7 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
     index: evidenceIndex(prior.evidence, context.analysisId, context.inputId, new Date()) } : sectionPackets(context, snapshots, residential, new Date());
   for (const packet of prepared.packets) validatePacket(packet, prepared.index);
   const ai = analysisAIProvider({ priorDispatches: prior?.dispatches ?? 0 });
-  const interpreted = await interpretSections(prepared.packets, prepared.index, ai, bound, prior?.sections ?? []);
+  const interpreted = await interpretSections(prepared.packets, prepared.index, ai, bound, prior?.sections ?? [],progress.section);
   async function preserveIncomplete(errors: unknown, early?: Awaited<ReturnType<typeof synthesiseSections>>) {
     // Analytical content belongs to a private unfinished report, never operational logs.
     const { error } = await client.from("reports").upsert({ analysis_id: analysisId, input_id: context.inputId, version: 1, schema_version: 2,
@@ -108,6 +112,7 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
     } else early = await synthesiseSections(interpreted.sections, ai, bound);
   }
   catch { await preserveIncomplete([{ section: "early-view", code: "synthesis_unavailable" }]); throw new Error("synthesis_incomplete"); }
+  progress.synthesis();
   const generatedAt = new Date().toISOString();
   const projection = validateFreeProjection(freeProjection(context, interpreted.sections, early, prepared.evidence, residential, generatedAt));
   // Exact cohort operands occur once, referenced by the descriptive metric.
