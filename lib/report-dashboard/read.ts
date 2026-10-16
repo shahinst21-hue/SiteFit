@@ -45,5 +45,5 @@ export async function readDashboard(id:string) {
       }
     }catch{/* A failed map binding remains unavailable; the historical text is preserved. */}
   }
-  return {status,dashboard};
+  return {status,dashboard,archiveDocuments:edition.archiveDocuments===true};
 }

@@ -12,6 +12,13 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
         is_anonymous boolean not null default false,email_confirmed_at timestamptz,last_sign_in_at timestamptz);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
+    // Storage metadata/RLS shim only; actual object API and bytes require hosted verification.
+    await db.exec(`create schema storage;
+      create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+      create table storage.objects(bucket_id text,name text);
+      alter table storage.objects enable row level security;
+      grant usage on schema storage to anon,authenticated;grant select,insert,update,delete on storage.objects to anon,authenticated;
+      create policy synthetic_broad_access on storage.objects for all to anon,authenticated using(true) with check(true);`);
     const dir = new URL("../supabase/migrations/", import.meta.url);
     const files = (await readdir(dir))
       .filter((file) => file.endsWith(".sql"))
@@ -25,6 +32,8 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       await db.exec(await readFile(new URL(file, dir), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/source-reuse.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/commercial-release.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/verification/contract-confirmation-queue.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/document-access.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/economics.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/assessments.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/full-intelligence.sql", import.meta.url), "utf8"));

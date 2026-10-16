@@ -1,5 +1,9 @@
 # Accepted decisions
 
+## Launch price, access and primary archive — 16 October 2026
+
+Owner confirms£29 final customer total with no additional Checkout fee; new online report access30 days; SiteFit is a sole-trader activity, not a registered company. Personal particulars remain unpublished under the prior instruction. Use Ready time as the start to avoid consuming access during preparation; preserve historic terms/reports and downloaded PDF copies. Supabase Production is primary record/file storage, using private Storage and limited access. Independent backup purchase is deferred until actual sales/data value justify a decision; do not label same-project Storage an independent backup or unperformed restore a pass. Prepare the versioned unapproved launch contract, access enforcement and private PDF/receipt archive in protected Development/Preview. Existing final policy/release/paid execution approvals stay denied; no new subscription, Production activation, Live payment or source/AI spend. [Current execution](launch-execution-checkpoint.md).
+
 ## Manual Zoho confirmation preparation — 16 October 2026
 
 Owner confirms Zoho Mail Free sends/receives for info@sitefit.co.uk and authorises checking the proposed manual contract-confirmation path and a narrow necessary correction. Prepare without buying or assuming SMTP availability. Fix pending-confirmation queue stranding through a forward protected-development change; retain all consent, approved policy/channel, payment, ownership, per-dispatch, cost and immutable-history controls. No real email, policy approval, support identity, receipt archive, hosted mutation, Production deployment or Live/AI activation is authorised. Actual operator export/channel/archive and delivery proof remain launch dependencies. [Bounded result](manual-contract-confirmation.md).

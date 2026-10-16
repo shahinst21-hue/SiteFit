@@ -36,7 +36,7 @@ export type Preparation = { version: "full-preparation-v1"; configuration: "full
     spatial: { reportId: string; digest: string | null; state: "available" | "unavailable" }; photo: { state: "unavailable" } };
   packetDigests: { context: string; premises: string } };
 export type StoredEdition = { id: string; analysisId: string; inputId: string; revision: number; status: "draft" | "ready";
-  preparation: Preparation; checkpoint: Checkpoint; projection: unknown };
+  preparation: Preparation; checkpoint: Checkpoint; projection: unknown; archiveDocuments?: boolean };
 export function validateStoredEdition(value: unknown): StoredEdition {
   const row = object(value), provenance = object(row.provenance), p = object(provenance.preparation);
   if (![row.id, row.analysisId, row.inputId].every(uuid) || !Number.isSafeInteger(row.revision) || !["draft", "ready"].includes(String(row.status)) ||
@@ -57,7 +57,7 @@ export function validateStoredEdition(value: unknown): StoredEdition {
       p.scenarioFit && packetDigest(projection.scenarioFit) !== packetDigest(p.scenarioFit)) throw Error("invalid_full_replay");
   }
   return { id: String(row.id), analysisId: String(row.analysisId), inputId: String(row.inputId), revision: Number(row.revision),
-    status: row.status as StoredEdition["status"], preparation: p as Preparation, checkpoint, projection: row.projection };
+    status: row.status as StoredEdition["status"], preparation: p as Preparation, checkpoint, projection: row.projection, archiveDocuments: row.archiveDocuments === true };
 }
 export function fullRepository(owner: string, client = frameworkClient()) {
   if (!uuid(owner)) throw Error("permission_denied"); const rpc = client as unknown as Rpc;

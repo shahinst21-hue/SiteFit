@@ -10,6 +10,8 @@ Purchases use Stripe; SiteFit retains internal payment/session references, statu
 Proposed lawful-basis mapping: requested analysis/contract performance; legal obligations where applicable to financial/rights records; documented legitimate interests for proportionate security and fraud prevention. Specific mapping must be approved, not treated as blanket consent. Marketing consent is separate; no marketing analytics is introduced by Phase15.
 
 ## Recipients and transfers
+
+Owner selects Supabase Production for primary report, PDF, contract/consent and receipt storage. Files use a private bucket with server-mediated ownership/entitlement checks; no public object links. New reports have30-day online access, which is distinct from justified record retention and deletion rights. No independent backup subscription is currently approved or a completed recovery guarantee implied.
 Existing infrastructure/providers include Vercel hosting, Supabase database/Auth, Stripe payments, OpenAI interpretation and the approved evidence providers. Only required data is sent; AI receives bounded evidence, not account tokens/card details. Review processor terms, locations, subprocessors and applicable international-transfer safeguards before launch; do not promise UK-only processing. This draft does not certify each provider's independent factual accuracy.
 
 ## Rights and contact

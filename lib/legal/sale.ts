@@ -1,7 +1,8 @@
 import {site,formatPrice} from "../site-config.ts";
 /** Versioned draft. Approval requires a reviewed replacement, never an env override. */
-export const salePolicy = Object.freeze({ version: "sitefit-sale-v1-draft", approved: false,
+export const salePolicy = Object.freeze({ version: "sitefit-sale-v1-launch-draft", approved: false,
   classification: null, priceMinor: site.pricing.fullReport, currency: site.currency, consumerCancellationDays: 14,
+  reportAccessDays: 30, additionalCheckoutFeeMinor: 0,
   termsVersion: "terms-v1-draft", privacyVersion: "privacy-v1-draft", retentionVersion: "retention-v1-draft" });
 export type SaleConsent = { version: string; buyerKind: "consumer" | "business";
   termsAccepted: boolean; immediateRequested: boolean; acknowledgement: boolean };
@@ -18,4 +19,4 @@ export function cancellationReason(value: unknown) {
   if (!cancellationReasons.includes(value as never)) throw Error("invalid_cancellation_reason");
   return value as typeof cancellationReasons[number];
 }
-export const saleDisclosure = `One ${formatPrice(site.pricing.fullReport)} location report, delivered to your account with PDF export. Consumer V1 purchases include a contractual 14-day cancellation right, including after immediate delivery. Statutory rights remain unaffected. AI analysis is indicative and may contain inaccuracies; verify material facts before committing.`;
+export const saleDisclosure = `One ${formatPrice(site.pricing.fullReport)} location report, the total payable with no additional checkout fee. Access lasts 30 days from when the report is Ready, with PDF export. Consumer V1 purchases include a contractual 14-day cancellation right, including after immediate delivery. Statutory rights remain unaffected. AI analysis is indicative and may contain inaccuracies; verify material facts before committing.`;

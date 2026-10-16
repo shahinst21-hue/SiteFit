@@ -5,12 +5,12 @@ DRAFT — exact periods/criteria require owner approval. Do not invent durations
 | Category | Purpose | Period / criteria awaiting approval | End-of-retention handling |
 |---|---|---|---|
 | Auth/account/profile | Account access and verified ownership | Active-account need; closure handling and justified residual records | Controlled erasure/de-identification; preserve only justified obligations |
-| Analysis/report/provenance | Purchased delivery and reproducible reopening | Approved report-access commitment plus source rights; do not promise perpetual access | Restrict/erase permitted representations lawfully; never silently refresh |
+| Analysis/report/provenance | Purchased delivery and reproducible reopening | Owner approves30-day online access from Ready for new contracts; underlying retention remains subject to justified criteria/source rights | Access expiry is not automatic erasure; no historical mutation or silent refresh |
 | Payment/contract/consent | Payment reconciliation, disputes and contract evidence | Applicable financial/legal obligations to be confirmed | Retain required minimum; no card payload retention |
 | Purchase/data-rights requests | Resolve and evidence requests | Resolution plus justified audit need | Erase or de-identify unnecessary personal information |
 | Security/system logs | Security and diagnosis | Minimum justified duration to be approved | Bounded disposal, not deletion of immutable business records |
 | Incomplete/failed work | Safe recovery and unknown paid outcomes | Resolve ambiguity and approved operational need | Never release an unknown reservation by deleting evidence |
-| Backups | Disaster recovery | Approved rotation, location and access | Expire securely; reapply erasure decisions after restoration |
+| Backups | Disaster recovery | Owner defers independent backup purchase until sales/data value justify it; primary records/files stay in Supabase Production/private Storage | Independent rotation/recovery remains unverified; do not represent primary Storage as a backup |
 | Provider snapshots | Evidence and historical representation | Existing source-specific licence/expiry registry | Honour rights/expiry; no new retrieval on replay |
 
 Existing Phase14 cron-run history is bounded to seven days. This is an implemented technical rule, not a newly approved universal customer retention period. The contractual 14-day consumer cancellation right is not a personal-data retention duration.
