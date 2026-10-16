@@ -6,7 +6,7 @@ test("AI transport uses owner model, bounded structured output, no storage/tools
   let calls = 0;
   const provider = analysisAIProvider({ key: "sk-synthetic-fixture", fetch: async (url, init) => {
     calls++; assert.equal(url, "https://api.openai.com/v1/responses");
-    const body = JSON.parse(String(init?.body)); assert.equal(body.model, "gpt-6.1-sol"); assert.equal(body.store, false);
+    const body = JSON.parse(String(init?.body)); assert.equal(body.model, "gpt-6.1-sol"); assert.equal(body.store, false); assert.equal(body.service_tier, "default");
     assert.equal(body.reasoning.effort, "low"); assert.equal(body.text.format.strict, true); assert.equal(body.tools, undefined);
     assert.equal(body.max_output_tokens, analysisAI.maxOutputTokens); return response();
   } });
