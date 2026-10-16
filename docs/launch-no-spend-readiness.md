@@ -20,7 +20,7 @@
 | Public table privacy | Zero public ordinary tables without RLS; source-policy and privilege suites remain distinct from this aggregate |
 | Controls | Zero approved sale policies and scheduled jobs; fulfilment and commercial execution/Checkout remain disabled |
 | Authentication | Auth configuration has Google enabled and exact `https://sitefit.co.uk` site URL. This inspection is not a new end-to-end sign-in |
-| Email | Custom SMTP host absent. Owner subsequently reports Zoho Mail setup in progress for `info@sitefit.co.uk`; completion, chosen plan, sending/receiving, SMTP eligibility and receipt capabilities remain unverified. No account/service setting or email send performed |
+| Email | Custom SMTP host absent. Owner confirms Zoho Mail Free for `info@sitefit.co.uk`, sending/receiving working. DNS now has Zoho EU MX and an indirect SPF include resolving to Zoho EU. SMTP eligibility, DKIM/alignment and actual contract delivery/receipt/archive remain unverified. No account/service setting or email send performed |
 | Production HTTP | HTTPS200; HTTP308; anonymous Account/support denied; locked address routes reject without source calls and use no-store; indexing remains disabled |
 | Vercel configuration inventory | Existing Production Supabase/origin/runner and disabled controls present by metadata; OPENAI/EPC secrets present. Values not decrypted or printed; presence is not validity |
 | Missing Production names | No Stripe secret/webhook/price/merchant; no POSTIO, PROPERTYDATA, GEOAPIFY or TFL key in the Production environment listing |
@@ -36,7 +36,7 @@ Existing `PurchaseTerms` distinguishes consumer/business and starts all three te
 
 Contract PDF generation exists. `confirm_sitefit_sale_delivery` is service-role-only, binds owner/payment, approved channel and receipt digest; changed delivery replay is rejected. The application has no approved outgoing contract sender. A PDF download, generated file, browser return or fabricated digest is not evidence that a contract was delivered.
 
-Lowest-complexity candidate: use the existing business mailbox to deliver the frozen contract/PDF, if its access, sending and suitable receipt record can be demonstrated. This is a proposal, not a configured or verified manual fulfilment workflow. Before approval, verify the exact existing-channel process, legitimate receipt, private storage, operator authority and queue behaviour while confirmation is pending. Do not mark delivery or enable an automated sender now. New mail infrastructure is not authorised.
+Lowest-complexity candidate: manual delivery through the existing Zoho Free mailbox, without assuming SMTP. The [bounded audit and prepared procedure](manual-contract-confirmation.md) corrects a pending-confirmation queue defect in a forward development migration. It does not approve the policy/channel, operator access or protected receipt archive, or demonstrate actual delivery. Do not mark real delivery or enable a sender now. New mail infrastructure is not authorised.
 
 Owner inputs needed for the actual final contract remain specific: lawful seller/controller particulars compatible with the owner's privacy instruction, classification and acknowledgement wording, whether £29 is the final payable price, report-access commitment, justified retention criteria, and a suitable confirmation channel. Known trading name/email/no-VAT declaration are retained; no missing address, legal identity or period is invented.
 

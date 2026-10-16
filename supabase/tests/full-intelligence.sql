@@ -71,14 +71,16 @@ begin
  begin perform public.read_sitefit_fulfilment(other,payment);raise exception 'Foreign progress exposed';exception when insufficient_privilege then null;end;
  begin perform public.sitefit_fulfilment_support(owner);raise exception 'Default support enabled';exception when insufficient_privilege then null;end;
  update public.fulfilment_control set enabled=true;
- job:=public.claim_sitefit_fulfilment();lease:=(job->>'token')::uuid;
- if public.claim_sitefit_fulfilment() is not null then raise exception 'Concurrent claim admitted';end if;
-
- if public.authorise_sitefit_supply(jid,lease) then raise exception 'Undelivered confirmation enabled supply';end if;
- begin perform public.bind_sitefit_fulfilment(jid,lease,fid);raise exception 'Unconfirmed supply admitted';exception when check_violation then null;end;
+ if public.claim_sitefit_fulfilment() is not null or public.claim_sitefit_fulfilment() is not null then raise exception 'Undelivered confirmation consumed a lease';end if;
+ if not exists(select 1 from public.report_fulfilment where id=jid and state='queued' and lease_token is null and report_id is null) then raise exception 'Pending delivery stranded or prepared a report';end if;
+ if public.sitefit_supply_permitted(payment) then raise exception 'Undelivered confirmation enabled supply';end if;
+ begin perform public.authorise_sitefit_supply(jid,gen_random_uuid());raise exception 'Queued supply authorised';exception when serialization_failure then null;end;
  -- Synthetic sender receipt in this rolled-back fixture; no real policy/channel approval.
  perform public.confirm_sitefit_sale_delivery(owner,payment,'synthetic-test-only',repeat('c',64));
  perform public.confirm_sitefit_sale_delivery(owner,payment,'synthetic-test-only',repeat('c',64));
+ begin perform public.confirm_sitefit_sale_delivery(owner,payment,'synthetic-test-only',repeat('d',64));raise exception 'Changed receipt accepted';exception when check_violation then null;end;
+ job:=public.claim_sitefit_fulfilment();lease:=(job->>'token')::uuid;
+ if job is null or public.claim_sitefit_fulfilment() is not null then raise exception 'Confirmed lease absent or not exclusive';end if;
  if not public.authorise_sitefit_supply(jid,lease) then raise exception 'Approved confirmed fixture supply rejected';end if;
  perform public.bind_sitefit_fulfilment(jid,lease,fid);
  begin perform public.finish_sitefit_fulfilment(jid,lease,'ready',null);raise exception 'Draft published';exception when raise_exception then if sqlerrm='Draft published' then raise;end if;end;

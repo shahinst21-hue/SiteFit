@@ -1,5 +1,9 @@
 # Accepted decisions
 
+## Manual Zoho confirmation preparation — 16 October 2026
+
+Owner confirms Zoho Mail Free sends/receives for info@sitefit.co.uk and authorises checking the proposed manual contract-confirmation path and a narrow necessary correction. Prepare without buying or assuming SMTP availability. Fix pending-confirmation queue stranding through a forward protected-development change; retain all consent, approved policy/channel, payment, ownership, per-dispatch, cost and immutable-history controls. No real email, policy approval, support identity, receipt archive, hosted mutation, Production deployment or Live/AI activation is authorised. Actual operator export/channel/archive and delivery proof remain launch dependencies. [Bounded result](manual-contract-confirmation.md).
+
 ## D108 — Bounded non-commercial Production deployment (14 October 2026)
 
 Owner explicitly approves a new Production build/deployment of reviewed PR50 after exact-head CI and protected merge to the gated Development branch, without main merge. Use separately configured Production environment, never promote the Development-configured Preview artifact. Purpose is HTTPS/Google verification only. Checkout, Live payments, paid AI, collection, fulfilment scheduler, indexing, campaign measurement/advertising and purchases remain disabled/unapproved. This is not commercial launch authority or resolution of existing launch exceptions.
