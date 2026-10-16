@@ -1,5 +1,7 @@
 # Launch policy approval candidate — 16 October 2026
 
+Current reconciled implementation: [Stage1](../stage1-contract-readiness.md). `sitefit-sale-v1-20261016-review` text/consent/PDF snapshot in `lib/legal/policy-text.ts` supersedes inconsistent pending-wording statements below for current review. Operational approvals stay denied. Historical drafts/contracts unchanged; no Production policy update.
+
 Owner decision received after PR58: the specific `digital_content` treatment, formation after verified successful payment, prompt supply following frozen confirmation and continued full14-day cancellation right are now approved. No numerical delivery promise was added. This closes those business-wording decisions; do not ask for them again. It does not approve Production activation/spend or prove remaining operational/processor gates. The draft application/SQL flags are intentionally unchanged until the separately authorised matching policy release.
 
 Subsequent owner decisions: public seller/controller is Shahin Shahmir trading as SiteFit, Dower House, Manorgate Rd, Kingston upon Thames, KT2 7UA. Refund provisions and retention criteria below are approved. First Zoho attachment received/opened; branded replacement sent. These replace the earlier personal-name prohibition/address/criteria unknowns in this historical candidate. Classification/formation/acknowledgement, actual delivery commitment and operational checks remain unresolved; the overall sale policy is still unapproved. See [current implementation record](../launch-progress-confirmation.md).

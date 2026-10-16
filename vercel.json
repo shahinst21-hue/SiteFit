@@ -4,6 +4,6 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "git": {
-    "deploymentEnabled": { "main": false }
+    "deploymentEnabled": { "main": false, "codex/stage1-contract-readiness": false }
   }
 }
