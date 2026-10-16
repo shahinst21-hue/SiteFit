@@ -1,5 +1,7 @@
 # Stage 1 — contractual readiness and synthetic Zoho delivery
 
+Owner continuation after PR60: proceed with all independent Stage1 work and protected development delivery without repeated approval questions. This supersedes the earlier review-only merge pause below; it does not waive missing evidence, authorise spending, commercial execution or a Production deployment with unresolved processor/legal facts. An offline received-file verifier is now prepared: `node scripts/payments/verify-confirmation-rehearsal.ts`. It requires the exact original/received PDF bytes and complete received MIME attachment, rejects the original-view placeholder and wrong message bindings, writes a private hash receipt and never calls the delivery RPC. Real received files remain absent, so the real proof remains open; no browser-download bypass.
+
 16 October 2026. Development/Preview only. Production remains on `9259ef9dfde6463a868efe4cc5de0d45d185844f`, deployment `dpl_8niC6UYtWrC2LPBuKL3cwoaquKR1`. No deployment, policy activation, customer email, receipt marking, Checkout, worker, source/AI request or payment is authorised here.
 
 ## Reconciled version and decisions
@@ -61,3 +63,23 @@ Reviewed rights procedure in `phase15-recovery-rights-runbook.md`: proportionate
 Hobby remains unchanged at owner direction; internal provider commercial-use restriction remains recorded, without another upgrade proposal or public hosting-risk banner. Phases15/16 stay closed.
 
 Review references: [CCR2013 Schedule2/regulation16](https://www.legislation.gov.uk/uksi/2013/3134/pdfs/uksi_20133134_en.pdf), [ICO right to be informed](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/right-to-be-informed/). These do not certify account-specific compliance or unperformed checks.
+
+## Independent continuation after owner instruction
+
+The owner instructs continuing all possible work without further confirmation requests. Previous specific formation/refund/access/retention decisions remain accepted; no additional contractual commitments are selected. Protected Development delivery may proceed after checks. Main, Production settings, sale approvals, execution/spending and real customer records remain untouched. This does not certify gaps or reopen Phase15.
+
+- Exact full new-policy release candidate prepared privately at `supabase/.temp/stage1-contract-rehearsal/policy-release-candidate.json`,10,274 bytes, file SHA-256 `b19d7df6b0600cac2e988a7f06bff78d208e1f5d6632b3396c1e38be28d90101`. It contains the matching versions, all full texts/labels, seller/price/access criteria and proposed `manual_zoho_pdf` channel, with **approved:false**. This is an export, not a database insert/migration or activation. Keep the reviewed bytes when preparing a later release; derive any database content digest using the existing canonical convention, not this JSON-file formatting hash.
+- The offline received-file verifier requires exact PDF hash identity, expected sender/recipient/reference and actual complete MIME attachment content. A screenshot, wrong message or placeholder original cannot pass. It writes a private receipt once and never calls a delivery RPC. Real verification currently fails closed because `received.pdf`/`received.eml` are absent; no request for another approval or resend.
+- Retention/rights operating sequence stays owner-scoped and manual, with no invented erasure capability or deleted records. Existing local access/expiry/immutable/archive/queue fixtures remain mandatory. The accepted independent-backup exception is unchanged.
+
+### Processor/transfer review limits
+
+| Provider | Established evidence | Remaining account-specific evidence |
+|---|---|---|
+| Supabase | Production project pinned to London/eu-west-2; private/RLS boundary read verified. [Published DPA](https://supabase.com/legal/customer-resources/data-processing-addendum) includes its agreement and regional-processing/subprocessor framework. | Confirm actual applicable account agreement/subprocessors and any relevant onward transfers; London storage alone is not all-processing UK-only proof. |
+| Vercel | Existing Hobby/Fluid account retained; [published DPA](https://vercel.com/legal/dpa) includes UK transfer provisions. | Actual applicable account coverage, processing/log regions and subprocessor review are not proved solely by this document. Hosting contractual restriction remains internal. |
+| OpenAI | Application sends bounded evidence, `store:false`, not payment/account tokens; no new request made. [Published DPA](https://openai.com/policies/data-processing-addendum/) includes a UK addendum mechanism. | Actual organisation DPA applicability/data controls/transfer arrangements remain unverified. `store:false` is not a zero-provider-retention guarantee. |
+| Zoho | EU mailbox route; actual rehearsal receipt and SPF/DKIM/DMARC pass. [Official account procedure](https://help.zoho.com/portal/en/kb/accounts/manage-your-zoho-account/articles/privacy) explains account DPA handling. | Direct account Privacy/DPA read redirects to sensitive-operation password re-verification. No password entered, DPA signed/requested, external legal email sent or claim of signed coverage made. Mailbox receipt does not prove this account DPA. |
+| Stripe and address/evidence sources | Existing product/payment and internal provider admission boundaries preserved; public/provider evidence is not automatically customer account data. | Account-specific controller/processor roles and any personal-data transfers depend on actual service/contract. Existing readiness documents do not constitute full processor certification. No provider/API request made for this review. |
+
+The lawful-basis mapping is documented in the review text; acknowledgement is not blanket privacy consent. Public standard documents narrow the review but cannot establish missing account facts or authorise signing agreements. No further broad owner questionnaire or new subscription is introduced. These specific evidence/access limitations remain visible until genuinely resolved.
