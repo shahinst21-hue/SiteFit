@@ -34,7 +34,7 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
       try {
         response = await fetcher("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal: bounded,
           headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ model: analysisAI.model, store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
+          body: JSON.stringify({ model: analysisAI.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
             instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
             text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } }) });
       } catch { throw new AnalysisAIError(bounded.aborted ? "timeout" : "provider_unavailable"); }
