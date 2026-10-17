@@ -2,6 +2,14 @@
 
 ## Current free-only authorisation
 
+### First real attempt: stopped, not Ready
+
+Production release `f74c8587d96c670dafc411d818db32f5e016fbd6` / `dpl_4g9qKyvYdd56SkJcMyyFttzZ3cFE` is Ready; migration81 applied with recovery and unchanged prior data/RLS/ACL checks. The one authorised attempt stopped in collection: nine source snapshots persisted; the ledger records PropertyData4, Geoapify1, FSA2 and TfL2 received dispatches, in addition to the two prior Postio calls. No AI request/reservation, payment or Ready report exists. Authority is disabled in `intervention`; it must not be reset or redispatched automatically.
+
+Authenticated PostgreSQL and API gateway log inspection found no corresponding PostgreSQL exception at the original failure time. The later `column result does not exist` error belongs to the operator's diagnostic query and is not the generation cause. Gateway logs include ownership RPC responses after the intervention timestamp. The initial application exception was discarded by generic error handling, so its exact retrospective cause remains unconfirmed. A new frozen-data, network-disabled replay validates the stored-release BRES jobs envelope successfully; this does not reproduce the whole original request or prove all external responses were valid.
+
+The bounded correction adds only safe collection phase/error codes and missing-source diagnostics, preserving original thrown errors and making no retry. Upstream messages, addresses, headers and raw responses are excluded; logger failure cannot affect execution. Owned context reads adopt the existing eight-second snapshot read/write allowance instead of two seconds, within caller cancellation and the unchanged overall generation deadline. A delayed valid-response fixture reproduces rejection under a two-second caller deadline and success under the bounded read allowance; cancellation still stops before the next request. This corrects a demonstrated deadline incompatibility but **does not establish it as the confirmed cause of the original live failure**. No evidence admission, schema, AI validation, source/call budget, sale approval or Ready requirement is relaxed. No further paid proof is authorised by these offline corrections.
+
 The owner approved one real Production Free Snapshot for 67 Broadway Market, London E8 4PH, independent café (`coffee-shop`): maximum US$0.65 AI, no automatic AI retry, approved existing source credits only, no new purchase/top-up. This does not authorise £29, Full Report, public generation or campaigns. Provider permission/credit/billing status is owner-attested, not independently dashboard-verified.
 
 Two bounded Postio requests captured the real canonical postal identity with usable postcode-centroid coordinates; the recorded occupier name is identity evidence, not proof of current trading. Private request intents and response digests are retained; no repeated lookup is needed.

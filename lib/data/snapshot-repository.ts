@@ -9,7 +9,10 @@ import { validateEnrichmentInput, type EnrichmentInput } from "./enrichment-inpu
 
 type Preparation = Pick<CollectionContext, "region" | "geography" | "releases">;
 function json(value: unknown): Json { return value as Json; }
-function limited(signal?: AbortSignal) { return AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(2000)]); }
+// Owned collection reads share the same bounded network allowance as snapshot
+// reads/writes. Two seconds left too little room for valid large local-release
+// envelopes being validated concurrently; caller cancellation still wins.
+function limited(signal?: AbortSignal) { return AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(8000)]); }
 function checkAbort(signal: AbortSignal) { if (signal.aborted) throw new SourceError(signal.reason?.name === "TimeoutError" ? "timeout" : "cancelled"); }
 function decode(value: unknown): StoredSnapshot {
   const row = object(value);
@@ -59,7 +62,7 @@ export function snapshotRepository(ownerId: string): PreparedRepository {
     async context(analysisId, inputId, signal) {
       if (!uuid(analysisId) || !uuid(inputId)) throw new SourceError("invalid_request");
       const checked = await owned(analysisId, signal);
-      const { data, error } = await client.from("analysis_inputs").select("resolved_context").eq("analysis_id", analysisId).eq("id", inputId).abortSignal(AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(2000)])).single();
+      const { data, error } = await client.from("analysis_inputs").select("resolved_context").eq("analysis_id", analysisId).eq("id", inputId).abortSignal(limited(signal)).single();
       if (error || !data?.resolved_context) throw new SourceError("invalid_request");
       const context = validateContext(data.resolved_context);
       if (context.analysisId !== analysisId || context.inputId !== inputId || context.selectedProperty.id !== checked.property_id || context.category !== checked.business_category || context.businessType !== checked.business_type) throw new SourceError("invalid_request");
