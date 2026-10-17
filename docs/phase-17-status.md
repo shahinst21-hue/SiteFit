@@ -54,6 +54,16 @@ Owner's new project/ref and domain replace the missing-target dependency. [Actua
 
 ## Completion boundary
 
+### Pre-purchase presentation checkpoint — 17 October
+
+Owner authorised an independent zero-spend polish before the next owner UI review. The candidate preserves the integrated homepage and changes only the pre-purchase presentation: one active wizard stage, bounded locally filtered address selection, compact property context, accessible business choices, keyboard focus, reduced-motion-aware transitions and isolated milestone-based progress. Interruption keeps the original request and offers no automatic resubmission. Snapshot evidence, score rules, report generation, budgets, contracts, database and launch approvals are unchanged.
+
+The existing `/dev/snapshot?state=journey` route provides a clearly labelled synthetic transport/progress rehearsal in Development and protected Preview only; it never falls through to provider fetch. It is unavailable in Production. Illustrative coffee-shop findings remain explicitly separate from rehearsal business selections. This is interface evidence, not a successful production-generation proof.
+
+Local checks passed 375 tests, lint, types and production build; production HTTP checks passed public/security metadata boundaries and confirmed all Snapshot rehearsal states are denied. Browser inspection covered the revised address → business → progress/interruption journey and mobile homepage/menu/pricing/Snapshot. Current owner review, protected CI and Preview receipts remain delivery checks until actually completed. Real-device and actual 200% browser-zoom acceptance are not inferred from viewport checks.
+
+Production readiness is not declared complete by this presentation work: the controlled purchaser/property, approved operational activation and spend, account-specific provider/processor permissions and genuine payment → durable confirmation → Ready/replay/dashboard/PDF still require their recorded checks. Production, Checkout, AI, sources, runner, indexing and campaigns remain disabled. No commercial policy is approved by this checkpoint.
+
 Implementation preparation can be delivered through protected Development/Preview with activation disabled. Phase17 remains **OPEN** until launch dependencies, a genuine authorised operational purchase → confirmed supply → Ready → immutable replay → dashboard → PDF, and the first 2–3 campaigns are completed. Offline fixtures, prior D102 success and a production build do not satisfy that proof.
 
 See [launch register](launch-gate-register.md) and [activation runbook](phase17-activation-runbook.md). No later phase starts.
