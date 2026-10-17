@@ -5,6 +5,7 @@ import {runProofScope,runProcessingScope,type ProofScope} from './context.ts';
 import type {Submission} from '../analysis/http.ts';
 import {uuid} from '../data/validation.ts';
 import {proofLimits} from './limits.ts';
+import {controlledSnapshotConfigured} from './authority.ts';
 
 // Explicitly separate from the ordinary release authority. Requires a later reviewed activation.
 export const proofPolicy=Object.freeze({activationApproved:false,totalAiMicros:proofLimits.totalAiMicros});
@@ -14,11 +15,15 @@ async function rpc(name:string,args:Record<string,Json|null>){
  if(result.error)throw Error('proof_or_rights_authority_denied');return result.data;
 }
 export async function checkProcessing(owner:string){await rpc('assert_sitefit_processing_allowed',{p_owner:owner});}
+export async function readSnapshotProof(owner:string){
+ if(!uuid(owner)||!controlledSnapshotConfigured(process.env,'sitefit.co.uk'))return null;
+ return rpc('read_sitefit_snapshot_proof',{p_owner:owner,p_case:process.env.SITEFIT_CONTROLLED_PROOF_ID??null});
+}
 type Permit={id:string;token:string;inputRate:number;outputRate:number;reportId?:string};
 async function execution<T>(owner:string,args:Record<string,Json|null>,stage:'snapshot'|'full',run:()=>Promise<T>,report:(v:T)=>string){
  const configured=process.env.SITEFIT_CONTROLLED_PROOF_ENABLED==='1';
  const raw=await rpc('claim_sitefit_controlled_proof',{p_owner:owner,p_stage:stage,p_case:configured?process.env.SITEFIT_CONTROLLED_PROOF_ID??null:null,
-  p_approved:configured&&proofPolicy.activationApproved&&process.env.VERCEL_ENV==='production',...args});
+  p_approved:configured&&process.env.VERCEL_ENV==='production'&&(stage==='snapshot'?controlledSnapshotConfigured(process.env,'sitefit.co.uk'):proofPolicy.activationApproved),...args});
  if(raw===null){if(configured)throw Error('proof_not_approved');return runProcessingScope(()=>checkProcessing(owner),run);}
  const permit=raw as Permit;
  if(!uuid(permit.id)||!uuid(permit.token)||!Number.isFinite(permit.inputRate)||permit.inputRate<2.5||!Number.isFinite(permit.outputRate)||permit.outputRate<10)throw Error('invalid_proof_permit');

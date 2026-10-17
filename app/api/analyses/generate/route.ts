@@ -5,12 +5,14 @@ import { observeCampaign } from "@/lib/marketing/repository";
 import { sourceCollectionAllowed, commercialExecution } from "@/lib/release/policy";
 import {snapshotStream} from '@/lib/analysis/progress-stream';
 import type {SnapshotObserver} from '@/lib/analysis/progress';
+import {controlledSnapshotConfigured} from '@/lib/proof/authority';
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
 export async function POST(request: Request) {
-  if(!sourceCollectionAllowed(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
-  if(process.env.VERCEL_ENV==="production"&&!commercialExecution(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
+  const proof=controlledSnapshotConfigured(process.env,new URL(request.url).hostname);
+  if(!proof&&!sourceCollectionAllowed(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
+  if(!proof&&process.env.VERCEL_ENV==="production"&&!commercialExecution(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
   if (!sameOrigin(request)) return reply({ error: "Reload this page and try again." }, 403);
   let input;
   try { input = await submissionBody(request); } catch { return reply({ error: "Choose a resolved address and business type." }, 400); }
@@ -19,6 +21,7 @@ export async function POST(request: Request) {
   try {
     const verified = await client.auth.getUser();
     let user = verified.error ? null : verified.data.user;
+    if(proof&&(!user||user.is_anonymous))return reply({error:"Sign in to the authorised account for this controlled check."},403);
     if (!user) {
       if (verified.error && verified.error.name !== "AuthSessionMissingError") return reply({ error: "Your session could not be verified. Reload and try again." }, 503);
       const guest = await client.auth.signInAnonymously();
