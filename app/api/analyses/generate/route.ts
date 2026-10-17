@@ -41,6 +41,7 @@ export async function POST(request: Request) {
 }
 function generationFailure(error:unknown){
     const code = error instanceof Error ? error.message : "unavailable";
+    if(code==='proof_manual_reconciliation_required'||code==='proof_or_rights_authority_denied')return reply({error:"Preparation is paused for authorised review. Saved records are retained. Do not resubmit this proof."},503);
     const safeCodes = new Set(["submission_unavailable", "report_read_unavailable", "analysis_configuration_missing", "property_unavailable",
       "outside_analysis_coverage", "location_precision_unavailable", "source_persistence_incomplete", "stored_section_packet_mismatch",
       "section_analysis_incomplete", "synthesis_incomplete", "partial_report_persistence_failed", "report_persistence_failed", "stored_input_read_unavailable", "stored_report_read_unavailable", "generation_busy", "generation_limit"]);

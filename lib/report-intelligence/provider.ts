@@ -1,4 +1,5 @@
 import "server-only";
+import {proofFetch} from '../proof/context.ts';
 import { packetDigest } from "../analysis/canonical.ts";
 import { intelligencePolicy, usageMicros, type Dispatch, type Group } from "./execution.ts";
 
@@ -35,7 +36,7 @@ export function fullProvider(options: { fetch?: typeof fetch; key?: string; now?
     const signal = AbortSignal.timeout(question ? 25_000 : promptVersion.startsWith("consultant-narrative-") ? 120_000 : dispatch.group === "synthesis" ? 30_000 : 45_000);
     let receipt: FullReceipt | null = null;
     try {
-      const response = await (options.fetch ?? fetch)("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal,
+      const response = await (options.fetch ?? proofFetch)("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal,
         headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" }, body: encoded });
       if (!response.ok) { await response.body?.cancel(); return { state: "ambiguous", code: "provider_unavailable", receipt }; }
       if (!response.headers.get("content-type")?.includes("application/json")) { await response.body?.cancel(); return { state: "ambiguous", code: "invalid_response", receipt }; }

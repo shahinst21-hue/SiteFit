@@ -1,4 +1,5 @@
 import "server-only";
+import {inControlledProof} from '../proof/context.ts';
 import { packetDigest } from "./canonical.ts";
 import { analysisAIProvider, type AIReceipt } from "./ai-provider.ts";
 import { interpretationInstructions, selectionSchema, validateSelection, type InterpretationPacket, type Selection } from "./interpretation.ts";
@@ -26,7 +27,7 @@ export async function interpretSections(packets: readonly InterpretationPacket[]
     }
     if (packet.strength === "insufficient") return confirmed({ ...validateSelection(deterministicSelection(packet), packet, index), section: packet.section, receipt: null, packetDigest: digest });
     let repairCode: string | null = null;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < (inControlledProof()?1:2); attempt++) {
       try {
         const response = await provider.interpret({ ...packet, ...(repairCode ? { validationFailure: repairCode } : {}) }, interpretationInstructions, selectionSchema, signal);
         try {
@@ -52,7 +53,7 @@ export async function synthesiseSections(sections: readonly ValidatedSection[], 
   ], sections: sections.map(section => ({ id: section.section, conclusion: section.conclusion, support: section.support,
     opposition: section.opposition, unknowns: section.unknowns, alternatives: section.alternatives, strength: section.strength,
     score: section.score, scoreSuppression: section.scoreSuppression })) };
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < (inControlledProof()?1:2); attempt++) {
     const response = await provider.interpret({ ...packet, ...(attempt ? { validationFailure: "retain_all_unresolved_section_gaps_and_valid_section_references" } : {}) },
       "Synthesise the validated SiteFit dimension results. Select one scoped headline; never calculate an overall score or clear premises. supportingSectionIds names the validated sections forming the reasoning basis, including negative findings and unresolved conditions; it does not mean every named section favours commitment. A customer-conclusion headline must reference customer-base. Retain every section with unresolved questions in unknownSectionIds. A customer hypothesis does not establish current demand or permitted use. Return only approved IDs.", synthesisSchema, signal);
     const row = response.output as Record<string, unknown> | null;

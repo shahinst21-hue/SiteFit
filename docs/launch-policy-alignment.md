@@ -14,7 +14,7 @@ Recovery: the insert and history record were atomic; transaction failure would r
 
 Private ignored receipts: `supabase/.temp/policy-{Development,Production}-{preflight,postflight}.json`, `policy-{Development,Production}-applied.json`, and `policy-alignment-hosted-verification.json`. No credentials, customer data or raw private receipts are committed.
 
-The subsequent read-only Vercel metadata recheck returned403. Its previously saved assignment result is historical evidence, **not** a fresh successful check. No credential, environment variable, deployment or gate was changed in response. Authenticated Vercel access is required before another deployment/environment verification; public HTTP availability cannot prove private environment values.
+The subsequent read-only Vercel metadata recheck returned403 at this staging checkpoint. It was later resolved through the existing authorised CLI session refresh: [current readiness evidence](launch-readiness-2026-10-17.md). New management reads verify Ready9259, provider assignments and disabled flags; no role, API key, environment variable, deployment or gate was changed. Public HTTP availability alone was not used to prove private environment values.
 
 ## Implementation
 
@@ -36,7 +36,7 @@ The source is `launchPolicySnapshot()`. `node scripts/payments/check-sale-policy
 ## Remaining sequence
 
 1. Resolve actual-account processor/DPA/transfer evidence and existing scoped rights-operation limitations; never label missing checks passed.
-2. **Completed:** stage only the reviewed unapproved row following target/capacity/history preflight. Later final text/channel publication and commercial approval remain separate; no switch is bundled here. Restore authenticated Vercel metadata access before release verification.
+2. **Completed:** stage only the reviewed unapproved row following target/capacity/history preflight. Later final text/channel publication and commercial approval remain separate; no switch is bundled here. Authenticated Vercel metadata access is now restored; actual remaining release dependencies are recorded in the current readiness evidence.
 3. Retain confirmation-pending queue and actual purchaser PDF/email receipt before supply. Synthetic delivery proof is not a real purchaser receipt. Runner, AI and public collection remain off.
 4. Enumerate the selected case, exact source operations and separately bounded spending authority before one genuine£29 proof; no automatic retry.
 5. After the real end-to-end proof, complete the already requested detailed all-page UI/UX pass, then separately authorised limited launch/campaigns. No redesign begins now.

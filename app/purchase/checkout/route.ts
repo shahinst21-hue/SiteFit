@@ -1,4 +1,5 @@
 import { salePolicy, requireApprovedSale, validateSaleConsent } from "@/lib/legal/sale";
+import {checkProcessing} from '@/lib/proof/repository';
 import { recordSale } from "@/lib/legal/repository";
 import { randomUUID } from "node:crypto";
 import { verifiedUser } from "@/lib/supabase/server";
@@ -17,6 +18,7 @@ export async function POST(request:Request){
   const body=await boundedJson(request);if(Object.keys(body).length!==2||!purchaseUuid(body.reportId))throw Error("invalid_request");
   const consent=validateSaleConsent(body.saleConsent);requireApprovedSale();
   const {client,user}=await verifiedUser();if(!client||!permanentIdentity(user))return paymentReply({error:"Sign in to your verified account before Checkout."},403);
+  await checkProcessing(user.id);
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:body.reportId});
   if(error||!data||typeof data!=="object"||Array.isArray(data)||!purchaseUuid(data.analysisId))throw Error("snapshot_unavailable");
   validateFreeProjection(data);
@@ -31,7 +33,7 @@ export async function POST(request:Request){
   const binding={id:payment.id,analysis:payment.analysis_id,price:payment.price_reference,live:config.live};
   const url=await openCheckout({id:payment.id,key:payment.idempotency_key,expires:stored.expires_at!,session:payment.checkout_reference,parameters:stored},{
    retrieve:id=>verifiedSession(stripe,id,binding),
-   create:(params,key)=>stripe.checkout.sessions.create(params,{idempotencyKey:key}),
+   create:async(params,key)=>{await checkProcessing(user.id);return stripe.checkout.sessions.create(params,{idempotencyKey:key});},
    validate:async session=>{await verifiedSession(stripe,session.id,binding);},
   },session=>bindCheckout(payment.id,session,config.live));
   return paymentReply({url});

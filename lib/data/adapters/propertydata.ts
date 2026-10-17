@@ -1,3 +1,4 @@
+import {proofFetch} from '../../proof/context.ts';
 import "server-only";
 import { SourceError } from "../errors.ts";
 import { object, text, timestamp } from "../validation.ts";
@@ -28,7 +29,7 @@ export function propertyDataResolver(options: {
     try {
       const url = new URL(endpoint); url.searchParams.set("address", address);
       // Never query-string authentication, redirects, automatic retries or logging raw responses.
-      response = await (options.fetcher ?? fetch)(url, { redirect: "error", signal: combined, cache: "no-store",
+      response = await (options.fetcher ?? proofFetch)(url, { redirect: "error", signal: combined, cache: "no-store",
         headers: { "X-API-Key": options.key, Accept: "application/json" } });
       if (response.redirected || response.status >= 300 && response.status < 400) throw new SourceError("permission_denied", response.status);
       if (!response.ok) throw new SourceError(response.status === 401 ? "authentication_failed" : response.status === 403 ? "permission_denied" : response.status === 429 ? "rate_limited" : "provider_unavailable", response.status);

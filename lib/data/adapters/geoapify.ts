@@ -1,3 +1,4 @@
+import {proofFetch} from '../../proof/context.ts';
 import "server-only";
 import { SourceError } from "../errors.ts";
 import { object } from "../validation.ts";
@@ -14,7 +15,7 @@ export type WalkingCatchments = {
 };
 
 async function boundedJson(url: URL, options: { fetcher?: typeof fetch }, signal: AbortSignal, body?: unknown): Promise<unknown> {
-  const response = await (options.fetcher ?? fetch)(url, { signal, redirect: "error", cache: "no-store",
+  const response = await (options.fetcher ?? proofFetch)(url, { signal, redirect: "error", cache: "no-store",
     method: body === undefined ? "GET" : "POST", headers: { Accept: "application/json", ...(body === undefined ? {} : { "Content-Type": "application/json" }) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
   if (!response.ok) throw new SourceError(response.status === 401 ? "authentication_failed" : response.status === 403 ? "permission_denied" : response.status === 429 ? "rate_limited" : "provider_unavailable", response.status);
