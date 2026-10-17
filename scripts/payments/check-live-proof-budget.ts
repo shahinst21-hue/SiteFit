@@ -17,23 +17,23 @@ const fullInput=20_000+20_000+intelligencePolicy.maxRequestBytes+3*framingAllowa
 const snapshotMicros=Math.ceil(snapshotInput*inputMicrosPerToken+snapshotOutput*outputMicrosPerToken);
 const fullMicros=Math.ceil(fullInput*inputMicrosPerToken+fullOutput*outputMicrosPerToken);
 assert.ok(snapshotMicros+fullMicros<=proofLimits.totalAiMicros,'Proof estimate exceeds admission ceiling');
-assert.ok(fullMicros<=intelligencePolicy.reportReserveMicros,'Full estimate exceeds existing reservation');
+assert.ok(fullMicros<=proofLimits.fullReserveMicros,'Full estimate exceeds existing reservation');
 const combinedMicros=snapshotMicros+fullMicros, proposedMicros=proofLimits.totalAiMicros;
 const usd=(micros:number)=>micros/1e6;
 console.log(JSON.stringify({offline:true,authorisedSpend:0,model:analysisAI.model,serviceTier:'default',tariffReviewed:'2026-10-17',tariffSource:'https://developers.openai.com/api/docs/models/gpt-6.1-sol',
  snapshot:{calls:proofLimits.snapshotAiCalls,ordinaryCallCap:analysisAI.maxDispatches,inputAllowance:snapshotInput,outputCap:snapshotOutput,estimatedUpperUsd:usd(snapshotMicros),includesExistingSemanticRepairs:false,durableProofAdmissionCap:true},
- full:{calls:3,inputAllowance:fullInput,outputCap:fullOutput,estimatedUpperUsd:usd(fullMicros),existingReservationUsd:usd(intelligencePolicy.reportReserveMicros),headroomUsd:usd(intelligencePolicy.reportReserveMicros-fullMicros),workerSemanticRepair:false,reservationIsActualInvoiceCap:false},
+ full:{calls:3,inputAllowance:fullInput,outputCap:fullOutput,estimatedUpperUsd:usd(fullMicros),existingReservationUsd:usd(proofLimits.fullReserveMicros),headroomUsd:usd(proofLimits.fullReserveMicros-fullMicros),workerSemanticRepair:false,reservationIsActualInvoiceCap:false},
  combinedEstimateUsd:usd(combinedMicros),proposedAiAllowanceUsd:usd(proposedMicros),headroomUsd:usd(proposedMicros-combinedMicros),headroomPercentOfEstimate:Number(((proposedMicros-combinedMicros)/combinedMicros*100).toFixed(2)),
  reconciliation:{previousSnapshotCalls:8,previousSnapshotInput:168000,previousSnapshotOutput:14400,previousSnapshotUsd:0.564,previousFullUsd:0.2975,previousCombinedUsd:0.8615,
   inputReductionUsd:0.0325,outputReductionUsd:0.054,totalReductionUsd:0.0865,
-  explanation:'Proof disables repairs: five calls with31000 conservative input tokens each instead of eight with21000; Full unchanged. Full US$0.30 is included, not additional.',
-  snapshotAdmissionEnvelopeUsd:0.65,fullAdmissionEnvelopeUsd:0.30,aggregateEnvelopeUsd:0.95,commercialFullReservationOverlapsFullDispatches:true},
+  explanation:'Proof disables repairs: five calls with31000 conservative input tokens each instead of eight with21000; Full unchanged. Full US$1.00 is included, not additional. Historical ordinary Full reservations stay unchanged.',
+  snapshotAdmissionEnvelopeUsd:0.65,fullAdmissionEnvelopeUsd:1.00,aggregateEnvelopeUsd:1.65,commercialFullReservationOverlapsFullDispatches:true},
  sensitivity:[{assumption:'10% regional premium, only if applicable',percent:110},
  {assumption:'20% tax example, not a determination of actual tax',percent:120}].map(({assumption,percent})=>({assumption,
  combinedUsd:usd(Math.ceil(combinedMicros*percent/100)),fullUsd:usd(Math.ceil(fullMicros*percent/100)),
  fitsProposedAllowance:Math.ceil(combinedMicros*percent/100)<=proposedMicros,
- fitsFullReservation:Math.ceil(fullMicros*percent/100)<=intelligencePolicy.reportReserveMicros})),
+ fitsFullReservation:Math.ceil(fullMicros*percent/100)<=proofLimits.fullReserveMicros})),
  actualAccountBillingVerified:false,onePurchaserPropertyConfinementImplemented:true,productionActivationApproved:false,
  assumptions:['one input token per bounded UTF-8 byte plus1000 framing tokens per call','standard global processing; no priority/ultrafast/regional premium','excludes tax, currency conversion, Stripe and source charges','does not prove provider tokenization, account billing profile or fleet-wide monetary enforcement'],
- executionBlockers:['account tariff/tax/credits/automatic billing unverified','new migration and protected application release not authorised for Production','proof activation and exact purchaser/property/nonce/policy/tariff approval absent','existing Full US$0.30 stage reserve remains stricter than aggregate US$0.95 ceiling'],
+ executionBlockers:['account tariff/tax/credits/automatic billing unverified','new migration and protected application release require successful safety gates','proof activation and exact purchaser/property/nonce/policy/tariff approval absent','Snapshot US$0.65 and Full US$1.00 are separate sub-limits inside aggregate US$1.65'],
  readyForPaidExecution:false},null,2));

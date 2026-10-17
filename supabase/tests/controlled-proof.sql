@@ -52,7 +52,7 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);raise exception 'duplicate run admitted';exception when others then if sqlerrm='duplicate run admitted' then raise;end if;end;
  begin perform public.reserve_sitefit_proof_dispatch(c,gen_random_uuid(),'snapshot',repeat('1',64),'ai',repeat('1',64),100);raise exception 'wrong token admitted';exception when insufficient_privilege then null;end;
  d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('1',64),'ai',repeat('1',64),600000);
- begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('2',64),'ai',repeat('2',64),50001);raise exception '950000 aggregate including Full exceeded';exception when others then if sqlerrm='950000 aggregate including Full exceeded' then raise;end if;end;
+ begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('2',64),'ai',repeat('2',64),50001);raise exception 'Snapshot 650000 component exceeded';exception when others then if sqlerrm='Snapshot 650000 component exceeded' then raise;end if;end;
  begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('1',64),'ai',repeat('1',64),100);raise exception 'duplicate dispatch admitted';exception when unique_violation then null;end;
  perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('c',64));
  perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('c',64));
@@ -80,16 +80,18 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  v:=public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);t:=(v->>'token')::uuid;
  d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('4',64),'ai',repeat('4',64),50000);
  perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('a',64));
+ d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('7',64),'ai',repeat('7',64),600000);
+ perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('a',64));
  perform public.finish_sitefit_controlled_proof(c,t,'snapshot',r);
  v:=public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);
- if (v->>'reportId')::uuid<>r or (select count(*) from public.proof_dispatches)<>1 then raise exception 'Snapshot replay changed dispatch';end if;
- update public.commercial_release_control set mode='live',checkout_enabled=true,execution_enabled=true,production_origin='https://example.invalid',stripe_account_id='acct_synthetic',policy_version='sitefit-sale-v1-20261016-review',total_ai_limit_micros=300000;
+ if (v->>'reportId')::uuid<>r or (select count(*) from public.proof_dispatches)<>2 then raise exception 'Snapshot replay changed dispatch';end if;
+ update public.commercial_release_control set mode='live',checkout_enabled=true,execution_enabled=true,production_origin='https://example.invalid',stripe_account_id='acct_synthetic',policy_version='sitefit-sale-v1-20261016-review',total_ai_limit_micros=1000000;
  params:=jsonb_build_object('mode','payment','customer_email','proof-success@example.invalid','success_url','https://example.invalid/purchase/return?purchase='||payment::text,
  'cancel_url','https://example.invalid/purchase/return?purchase='||payment::text||'&cancel=1','metadata',jsonb_build_object('purchase_id',payment,'analysis_id',a,'version','2'));
  begin perform public.prepare_sitefit_live_payment(other,r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');raise exception 'foreign case checkout admitted';exception when insufficient_privilege then null;end;
  row:=public.prepare_sitefit_live_payment(o,r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
- if (select reserved_micros from public.commercial_payment_reservations where payment_id=payment)<>300000
- or (select reserved_micros from public.controlled_proof)<>50000 then raise exception 'Full envelope counted as extra allowance or dispatch';end if;
+ if (select reserved_micros from public.commercial_payment_reservations where payment_id=payment)<>1000000
+ or (select reserved_micros from public.controlled_proof)<>650000 then raise exception 'Full envelope counted as extra allowance or dispatch';end if;
  begin insert into public.commercial_payment_reservations(payment_id,owner_id) values(gen_random_uuid(),o);
  raise exception 'separate budget path admitted';exception when insufficient_privilege then null;end;
  if (select payment_id from public.controlled_proof)<>payment then raise exception 'proof payment binding lost';end if;
@@ -106,12 +108,26 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  values(a,i,2,3,'full','draft',repeat('b',64),0,'{"checkpoint":{"dispatches":[]}}') returning id into f;
  perform public.bind_sitefit_fulfilment((job->>'id')::uuid,(job->>'token')::uuid,f);
  v:=public.claim_sitefit_controlled_proof(o,'full',c,true,null,null,null,f);t:=(v->>'token')::uuid;
- d:=public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('5',64),'ai',repeat('5',64),100000);
+ d:=public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('5',64),'ai',repeat('5',64),400000);
  perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('a',64));
- begin perform public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('6',64),'ai',repeat('6',64),200001);raise exception 'Full stage reserve exceeded';exception when others then if sqlerrm='Full stage reserve exceeded' then raise;end if;end;
+ begin perform public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('6',64),'ai',repeat('6',64),600001);raise exception 'Full stage reserve exceeded';exception when others then if sqlerrm='Full stage reserve exceeded' then raise;end if;end;
+ d:=public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('8',64),'ai',repeat('8',64),300000);
+ perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('a',64));
+ d:=public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('9',64),'ai',repeat('9',64),300000);
+ perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('a',64));
+ begin perform public.reserve_sitefit_proof_dispatch(c,t,'full',repeat('0',64),'ai',repeat('0',64),1);raise exception 'aggregate overrun';exception when others then if sqlerrm='aggregate overrun' then raise;end if;end;
  begin perform public.claim_sitefit_controlled_proof(o,'full',c,true,null,null,null,f);raise exception 'Full run restarted';exception when insufficient_privilege then null;end;
  begin perform public.finish_sitefit_controlled_proof(c,t,'full',f);raise exception 'Draft declared Ready';exception when others then if sqlerrm='Draft declared Ready' then raise;end if;end;
  perform public.interrupt_sitefit_controlled_proof(c,t);
- if (select reserved_micros from public.controlled_proof)<>150000 or (select state from public.controlled_proof)<>'intervention' then raise exception 'proof interrupted holds lost';end if;
+ if (select reserved_micros from public.controlled_proof)<>1650000 or (select state from public.controlled_proof)<>'intervention' then raise exception 'proof interrupted holds lost';end if;
+end$$;
+rollback;
+
+-- No proof must not enlarge ordinary commercial envelopes. No historical row rewrite.
+begin;
+do $$begin
+ begin insert into public.commercial_payment_reservations(payment_id,owner_id,reserved_micros) values(gen_random_uuid(),gen_random_uuid(),1000000);
+ raise exception 'ordinary path enlarged';exception when insufficient_privilege then null;end;
+ if (select column_default from information_schema.columns where table_schema='public' and table_name='controlled_proof' and column_name='ai_limit_micros')<>'1650000' then raise exception 'new proof default wrong';end if;
 end$$;
 rollback;

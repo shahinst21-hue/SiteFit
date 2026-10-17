@@ -3,6 +3,7 @@ import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
+import {seller} from '@/lib/legal/seller';
 import {publicSeller} from '@/lib/legal/publication';
 export const metadata = pageMetadata("/contact");
 export default function Contact() {
@@ -46,7 +47,7 @@ export default function Contact() {
         ))}
       </div>
       <section className="simple-panel"><h2>Contact SiteFit</h2><p>Support and privacy requests: <a href="mailto:info@sitefit.co.uk">info@sitefit.co.uk</a>. Please do not send passwords, payment-card details or authentication tokens.</p></section>
-      <p className="quiet-note">{publicSeller.name}, trading as {publicSeller.tradingName}.</p>
+      <p className="quiet-note">{publicSeller.name}, trading as {publicSeller.tradingName}. Geographical and correspondence address: {seller.address}.</p>
       <p className="quiet-note">
         For lease, planning or financial advice, consult an appropriately
         qualified professional. Email is the contact channel; this page has no document upload.

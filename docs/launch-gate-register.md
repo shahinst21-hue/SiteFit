@@ -38,3 +38,10 @@ Updated16 October 2026. Phase15 development is Owner-Accepted / Closed with Exce
 | Genuine operational Live proof | Not performed. Offline v2 fixtures are not Live proof. | One authorised real payment → receipt → browser-independent Ready → replay → dashboard/PDF. Failure stops without retry. |
 
 Historical Ready report evidence and Phase12 successful technical gate remain preserved. Do not reopen completed phases or infer new paid execution authority from this register.
+
+
+## Current superseding owner decision — 17 October 2026
+
+Seller-address publication is now explicitly approved for the exact existing address and intended disclosures. Full legal publication/sale-policy approval, actual processor/transfer agreements, provider rights/credits/quotas/automatic billing, Stripe fees, exact purchaser/property/tariff, real-purchaser durable confirmation and final scoped runner/spend authority remain outstanding. No address omission is currently identified on owner-confirmed establishment facts; no general compliance certification is implied.
+
+One-case budget configuration: Snapshot650000 + Full1000000 within aggregate1650000 microdollars; not spending authority. Old95c/30c values elsewhere describe prior configuration. Legacy/ordinary/historical reservations stay unchanged. Forward migration80 is hosted Development verified; Production migration/deployment/Preview/CI completion must be evidenced separately in PR64. All existing commercial/execution/measurement/indexing gates stay disabled. [Detailed current checks and historical distinction](public-legal-publication.md).

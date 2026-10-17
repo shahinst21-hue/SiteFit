@@ -38,7 +38,8 @@ for (const path of paths) {
   assert.equal(response.status, 200, `${path}: expected HTTP 200`);
   const html = await response.text();
   if(!legalPublicationReady()){
-    assert.ok(!html.includes(seller.address)&&!html.includes(seller.address.split(',')[0]),path+': private seller address exposed');
+    if(['/terms','/privacy','/contact'].includes(path))assert.ok(html.includes(seller.address),path+': approved seller address missing');
+    else assert.ok(!html.includes(seller.address.split(',')[0]),path+': seller address outside intended legal/contact locations');
     if(['/terms','/privacy'].includes(path)){
       assert.ok(html.includes(publicSeller.name)&&html.includes(publicSeller.tradingName),path+': public seller identity missing');
       assert.match(html,/Purchases are currently unavailable/);
