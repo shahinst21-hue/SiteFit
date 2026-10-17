@@ -17,3 +17,13 @@ test("FSA salon requires zero calls; duplicate cross-page IDs are never silently
   let calls=0;const a=fsaAdapter(()=>{calls++;throw new Error("must not construct");});const c=context();c.category="hair-beauty-salon";c.businessType="beauty-salon";assert.equal((await a.retrieve({context:c,collectionKey:"proof",radiusMetres:500},exec())).outcome,"not_applicable");assert.equal(calls,0);
   const duplicate=fsaAdapter(()=>transport([page(1,2,[item()],2),page(2,2,[item()],2)]));const r=await duplicate.retrieve({context:context(),collectionKey:"proof",radiusMetres:500},exec());assert.equal(r.outcome,"partial");assert.equal(r.error?.code,"invalid_response");
 });
+
+test("only dated FHRS hygiene survives, separately from customer reputation and private fields",()=>{
+  const retained=normaliseFsa(page(1,1,[{...item(),SchemeType:"FHRS"}]),1).items[0];
+  assert.deepEqual(retained.hygiene,{scheme:"FHRS",value:5,inspectedAt:new Date(date).toISOString()});
+  assert.equal("RatingValue" in retained,false);assert.equal("Phone" in retained,false);
+  for(const change of [{SchemeType:"FHIS"},{RatingValue:"AwaitingInspection"},{RatingDate:"unknown"}]) {
+    const record=normaliseFsa(page(1,1,[{...item(),SchemeType:"FHRS",...change}]),1).items[0];
+    assert.equal(record.hygiene,undefined);
+  }
+});

@@ -1,4 +1,18 @@
+16 October owner decision: keep all existing plans/configurations unchanged; defer infrastructure upgrades until review after campaign01. No new public hosting/risk/upgrade copy. [Fresh no-spend readiness](launch-no-spend-readiness.md) supersedes historical missing-domain/source statements below: Production HTTPS/Google and14 stored London releases are prepared; SMTP/Live/source-budget/backup/delivery gates remain open. No Production configuration or execution is authorised by this internal update.
+
+D106 historical setup: Production Supabase ref vsfkkroxgntoumoqcfcy, Free/London. Production-only keys/flags staged in Vercel and sitefit.co.uk added without deployment promotion. DNS/OAuth/SMTP/source readiness then pending; commercial controls off. Later D108 receipts supersede the domain/Google/source findings. See phase17-production-setup.md.
+
+Phase17 owner continuation: retain existing Vercel Hobby and Fluid Compute; no upgrades, migrations or subscriptions and no repeated hosting selection. Read-only Vercel account/project API confirms Hobby and Fluid=true; the compiled runner declares 300 seconds. Production variables/domain remain incomplete; offline release preflight is available without service calls. Preserve separate Production database/sale/budget gates. Hobby's contractual non-commercial restriction remains documented, not commercial approval. See phase17-activation-runbook.md and phase-17-status.md.
+
+Phase15 D103: retain existing Hobby Development/Preview subject to terms. Commercial hosting upgrade or compliant alternative is a mandatory Phase17 prelaunch dependency, not authorised now. New Checkout/supply defaults denied pending approved policy/classification/confirmation. Support and operational paid execution remain off. Current Phase12 Ready gate is closed; US$2.44 held.
+
+12 October Phase 14 verified plans: Vercel Hobby with Fluid Compute enabled; Supabase organisation Free. Use existing pg_cron/pg_net/Vault for a fixed protected Preview runner, not daily-only Hobby Cron. No upgrade/subscription. Application maxDuration 200 seconds is beneath Fluid Hobby maximum 300 seconds. Paid dispatch disabled; [operating plan](phase14_plan.md), [runbook](fulfilment-runbook.md). Current reservations US$2.14; failed D100 proof remains a separate release blocker.
+
 # Phase 1 infrastructure and environments
+
+## Current capacity policy — D99, 12 October 2026
+
+Owner-approved internal checkpoint **450,000,000 bytes** supersedes the historical policies below. Supabase Free's documented 500 MB database quota supports this without upgrade; actual plan/provider limits are unchanged. No disk/compute expansion or purchase. Before DDL: 375,830,195 bytes; margin 74,169,805. Maintain 50 MB beneath conservative provider allowance and remeasure PostgreSQL before/after hosted writes. [Implementation/receipts](phase-12-d99-corrections.md).
 
 ## Current capacity policy — 10 October 2026
 
@@ -154,3 +168,10 @@ Protected Preview requires an exact stable branch URL, Preview-only test keys/en
 ## Development history verification
 
 `DATA_SOURCE_PROBES_ENABLED=true node --conditions=react-server scripts/data/verify-premises-history.ts <analysis-id> <input-id>` is an explicit Local development operator probe using existing server credentials. It reads the authorised owner internally, checks immutable stored replay first, and reports counts/outcomes only. A missing bundle may spend one Planning trial credit plus bounded EPC calls; check the remaining Phase 9 budget before dispatch. Do not run in CI/Production or expose it as a customer route. Proof IDs and private normalised diagnostics stay ignored. Reopening a stored bundle needs no configured provider key. The CLI does not generate a report or change purchase entitlement.
+# Phase 12 private verification runtime
+
+`SITEFIT_REPORT_INTELLIGENCE_VERIFICATION=1` is a non-secret server-only Local/protected Preview flag. Unset it outside controlled verification. Production is refused even if configured, and unknown non-Vercel hosts are refused. Reuse existing privately configured development OpenAI/Supabase keys; no new service or provider is introduced. Both routes are private/no-store/noindex/no-referrer, validate body/origin/session and rely on owner-bound paid SQL RPCs. Browser receives no source packets, credentials or payment parameters.
+
+Intelligence route requests `maxDuration=200`; groups time out at 45 seconds, historical atom synthesis at 30 seconds and consultant-narrative-v1 synthesis at 120 seconds. This updates the concrete timeout failure; it does not prove actual background execution or permit retry of ambiguous calls. Effective Preview duration must still be verified; a source declaration alone is not proof. Dispatch timestamps permit truthful interrupted status after the bounded invocation window. No GET schedules work and no ambiguous external execution is retried. Global US$1 development reservations are persisted before calls, including known semantic repairs/unknown losses; no Production budget or customer Q&A launch is authorised. Consult [current Phase 12 status](phase-12-status.md) before any paid probe.
+
+12 October launch dependency: verified [Vercel Hobby terms](https://vercel.com/docs/plans/hobby) restrict use to non-commercial personal projects. Commercial launch eligibility is not established by free execution capacity. No upgrade, trial or purchase is authorised or activated; owner must resolve this before public sales.

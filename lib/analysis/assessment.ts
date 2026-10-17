@@ -6,6 +6,7 @@ import { contextIndex,contextPolicy,validateDensityRank,type DensityRank } from 
 import { decisionAssessment } from "./decision-assessment.ts";
 import { validateHistory,type HistoryBundle } from "../premises-history/model.ts";
 import { validateEconomicBundle,type EconomicBundle } from "../economics/bundle.ts";
+import { privateReportData } from "../data/private-text.ts";
 
 export type AssessmentSupplement={kind:"history";bundle:HistoryBundle}|{kind:"rental";bundle:EconomicBundle};
 export type AssessmentEvidenceReference={id:string;snapshotId:string|null;digest:string;source:Evidence["source"];kind:Evidence["kind"];scope:string;value:Evidence["value"];units:string|null;effectiveAt:string|null;statistical:unknown;parents:string[];licence:{policyId:string;version:number;expiresAt:string|null}};
@@ -18,7 +19,7 @@ const keys=(v:Record<string,unknown>,expected:string[])=>{if(Object.keys(v).leng
 export function validateAssessment(value:unknown):AssessmentBundle {
   const b=object(value);keys(b,"schemaVersion analysisId inputId propertyId business contextDigest generatedAt methodVersion configDigest sourceBindings evidence index decision supplements".split(" "));
   const json=JSON.stringify(b);
-  if(Buffer.byteLength(json)>65536||/(sb_secret_|sk-(proj-)?|sk_(live|test)_|Bearer\s|rawResponse|authorization|guestClaim)/i.test(json)||b.schemaVersion!==1||
+  if(Buffer.byteLength(json)>65536||privateReportData(b)||b.schemaVersion!==1||
     ![b.analysisId,b.inputId,b.propertyId].every(uuid)||!timestamp(b.generatedAt)||!sha(b.contextDigest)||!sha(b.configDigest)||b.methodVersion!==contextPolicy.methodVersion||
     !["coffee-shop","restaurant","hair-beauty-salon"].includes(String(b.business))||!Array.isArray(b.sourceBindings)||b.sourceBindings.length>32||!Array.isArray(b.evidence)||b.evidence.length>64||!Array.isArray(b.supplements)||b.supplements.length>4)throw Error("invalid_assessment");
   const sourceIds=new Set<string>();for(const item of b.sourceBindings){const s=object(item);keys(s,["snapshotId","checksum"]);if(!uuid(s.snapshotId)||!sha(s.checksum)||sourceIds.has(s.snapshotId as string))throw Error("invalid_assessment_source");sourceIds.add(s.snapshotId as string);}

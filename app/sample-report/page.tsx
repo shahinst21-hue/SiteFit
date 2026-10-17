@@ -2,81 +2,26 @@ import Link from "next/link";
 import { ButtonLink, Wordmark } from "@/components/ui";
 import { Icon } from "@/components/icon";
 import { LocationVisual } from "@/components/location-visual";
-import { reportAreas } from "@/components/report-outline";
+import { fullReportAreas } from "@/components/report-outline";
 import { formatPrice, site } from "@/lib/site-config";
 import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata("/sample-report");
+// Illustrative teaching scenario, never a customer result or a source record.
 const sections = [
-  [
-    "A daytime-led proposition",
-    "For this fictional coffee shop, repeat weekday visits matter more than general activity across the whole day. Test the intended customer occasions before treating the street as suitable.",
-  ],
-  [
-    "Who can realistically reach you?",
-    "Consider actual walking routes, barriers and the people present during trading hours. A circular catchment alone does not establish a reachable customer base.",
-  ],
-  [
-    "Separate activity from intent",
-    "The sample scenario assumes lunchtime trips to neighbouring workplaces. That is an indicator to investigate, not proof that people will buy coffee.",
-  ],
-  [
-    "Compare the offering",
-    "An illustrative nearby café serves seated lunches. A takeaway-led shop could have a different role, but price, opening hours and queue patterns need comparison.",
-  ],
-  [
-    "A cluster can be useful",
-    "Complementary uses may create repeat trips. Investigate whether those visits happen at the hours your business needs; proximity alone is not enough.",
-  ],
-  [
-    "Check the route, not just distance",
-    "In the fictional scenario, a crossing interrupts the direct route. Walk it, check accessible entry and observe how people approach the shopfront.",
-  ],
-  [
-    "Activity is not measured footfall",
-    "Transport and nearby-use indicators can provide context. They do not establish how many pedestrians pass the premises or become customers.",
-  ],
-  [
-    "History needs dated evidence",
-    "No occupancy finding is asserted in this sample. Ask for dated records and distinguish an observed change from an inferred reason for closure.",
-  ],
-  [
-    "Avoid a survival narrative without evidence",
-    "Business listings or company records cannot establish why a site changed occupier. Verified dates and identity matching are necessary before drawing a conclusion.",
-  ],
-  [
-    "Distinguish a benchmark from the premises rent",
-    "A local asking-rent benchmark is market context, not the selected unit’s agreed rent. A property estimate needs compatible area and its stated uncertainty. This fictional sample contains no measured rental evidence.",
-  ],
-  [
-    "Check the commercial terms",
-    "Headline rent can exclude rates, service charges, VAT and lease incentives. Confirm which terms apply to the selected unit; unknown terms remain unknown. Financial calculations belong to a separate experience, not this report.",
-  ],
-  [
-    "What would support the proposition?",
-    "In the fictional scenario, complementary daytime uses and a visible shopfront are positive indicators. Both need dated verification and a link to the intended customer.",
-  ],
-  [
-    "What could change the decision?",
-    "The fictional crossing and limited evening activity challenge the proposition. Their importance depends on your trading hours and the routes customers use.",
-  ],
-  [
-    "The critical gap",
-    "Actual purchase intent, premises constraints and lease obligations remain unverified. Do not convert missing evidence into reassuring assumptions.",
-  ],
-  [
-    "Verify the important few",
-    "Visit during morning and lunchtime trading periods. Observe actual approach routes and competitors' offering. Check access and fit-out constraints with qualified advisers.",
-  ],
-  [
-    "Ask for documents, not reassurance",
-    "What is the lawful use? Which repairs and service charges fall to the tenant? Are extraction, signage and fit-out works permitted? Ask for written evidence before commitment.",
-  ],
+  ["Explore weekday visits; do not choose a format yet", "Nearby workplaces are part of this fictional scenario, so morning coffee and lunch could be worth testing. Neither customer demand nor a preferred operating format is established. A plan and permitted-use documents are still needed."],
+  ["Match the occasion to the people nearby", "Workplace trips could matter at lunchtime, while local residents may visit at other times. Visit during the hours you intend to trade; general activity does not show that people want your particular offer."],
+  ["Compare offers, not just names", "The fictional neighbouring café serves seated lunches. Compare its menu, hours, prices and queues with the offer you have in mind. This example contains no verified competitor count, customer ratings or brand affiliations."],
+  ["Check which side of the crossing people use", "The fictional crossing interrupts the direct approach to the shop. Walk the route at morning and lunchtime trading periods. A station nearby does not establish that its passengers pass your door."],
+  ["The layout and lawful use could change the concept", "Ask for a measured plan and written confirmation of permitted use. Check space for preparation, storage, customer access and any required works. This example cannot establish seating capacity or recommend takeaway rather than seated service."],
+  ["Ask for the full lease costs", "There are no rental figures in this fictional example. Ask for rent, rates, service charges, repair obligations and break terms in writing. Real reports show rental benchmarks or estimates only where qualified evidence is available; these are not agreed lease terms."],
+  ["Resolve the constraints before committing", "First obtain the plan and use documents: an incompatible layout or restriction could rule out your intended concept. Then compare nearby offers, observe the approach route and obtain the full proposed lease terms."],
+  ["Know what this example can tell you", "All findings here are illustrative. The map is schematic and no real property, source retrieval, trading performance or financial forecast is represented. In a real report, this section records the sources, dates, areas covered and important limitations."],
 ];
 const links = [
   ["Overview", "report-overview"],
   ["Evidence notes", "sample-evidence"],
   ["Next checks", "report-next"],
-  ...reportAreas.map((label, i) => [label, "report-section-" + i]),
+  ...fullReportAreas.map((label, i) => [label, "report-section-" + i]),
 ];
 function ReportLinks() {
   return (
@@ -95,7 +40,7 @@ export default function SampleReport() {
       <aside className="report-sidebar">
         <Wordmark />
         <Link className="text-link" href="/">
-          ← Back to SiteFit
+          <Icon name="back"/> Back to SiteFit
         </Link>
         <div className="sidebar-property">
           <span className="icon-disc amber">
@@ -169,18 +114,18 @@ export default function SampleReport() {
             <span className="icon-disc green">
               <Icon name="coffee" />
             </span>
-            <h2>Test the daytime opportunity. Resolve the access question.</h2>
+            <h2>Explore weekday visits. Check the premises first.</h2>
             <p>
-              The fictional proposition centres on repeat weekday visits. Before
-              committing, check whether nearby activity translates into
-              customers who can reach the shop conveniently.
+              Nearby workplaces could support weekday coffee visits in this fictional scenario; actual buying intent is unknown.
             </p>
+            <p>No operating format can be selected without a usable plan and confirmation of permitted use.</p>
+            <p>Obtain those documents first: a constraint could change the concept or your decision to proceed.</p>
             <div className="summary-priority">
               <Icon name="check" />
               <div>
-                <strong>A conditional proposition</strong>
+                <strong>Priority action: get the plan and use documents</strong>
                 <span>
-                  Customer intent and premises constraints need verification.
+                  Confirm whether your intended coffee service can work here before assessing the opportunity further.
                 </span>
               </div>
             </div>
@@ -219,14 +164,14 @@ export default function SampleReport() {
             <h2>Resolve the assumptions that matter.</h2>
           </div>
           <ol>
-            <li>Observe the approach route at the intended opening times.</li>
+            <li>Obtain the plan and written use confirmation; an incompatible constraint could rule out your concept.</li>
             <li>
-              Compare businesses by offering, price and customer occasion.
+              Compare menus, prices and trading hours to test how your offer would differ.
             </li>
             <li>
-              Confirm lawful use, fit-out permissions and lease responsibilities
-              in writing.
+              Observe the approach route at your intended hours; check whether people pass the entrance.
             </li>
+            <li>Obtain full lease costs and obligations before deciding what you can commit to.</li>
           </ol>
         </section>
         <section id="sample-evidence" className="sample-evidence">
@@ -236,7 +181,7 @@ export default function SampleReport() {
               <h2>Observation. Interpretation. Next check.</h2>
             </div>
             <Link className="text-link" href="/methodology">
-              Read the methodology ↗
+              Read the methodology <Icon name="external"/>
             </Link>
           </div>
           <div className="two-columns">
@@ -265,9 +210,9 @@ export default function SampleReport() {
               </span>
               <h3>Repeat visits may fit the proposition</h3>
               <p>
-                The sample interpretation connects daytime uses to a takeaway
-                coffee occasion. It depends on verified customer behaviour and
-                accessible routes.
+                The sample connects workplace activity to a possible morning
+                or lunchtime visit. It does not choose a takeaway or seated
+                format; that requires premises evidence as well as customer checks.
               </p>
               <dl>
                 <div>
@@ -286,14 +231,14 @@ export default function SampleReport() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">THE DETAIL BEHIND THE SUMMARY</p>
-              <h2>Explore the sixteen sections.</h2>
+              <h2>Explore the eight sections.</h2>
             </div>
             <p>
               Open the question that matters to you. Coverage and evidence
               quality determine what an assessment can support.
             </p>
           </div>
-          {reportAreas.map((area, i) => (
+          {fullReportAreas.map((area, i) => (
             <details key={area} id={"report-section-" + i}>
               <summary>
                 <span className="report-number">
@@ -312,7 +257,7 @@ export default function SampleReport() {
         <section id="sample-next-step" className="closing-cta">
           <div>
             <p className="eyebrow">YOUR OWN LOCATION</p>
-            <h2>Start with a focused brief.</h2>
+            <h2>Check the property you are considering.</h2>
             <p>
               Free Snapshot {formatPrice(site.pricing.snapshot)} · Full Report{" "}
               {formatPrice(site.pricing.fullReport)}, one-off. No subscription.

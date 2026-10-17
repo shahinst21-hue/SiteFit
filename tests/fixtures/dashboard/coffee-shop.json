@@ -1,0 +1,5450 @@
+{
+  "version": "report-dashboard-v1",
+  "reportId": null,
+  "digest": "8acde7038990340ad82eb27e2f4cddb5b23ca536506617f7a43690bc173dc928",
+  "generatedAt": "2026-10-11T11:48:22.015Z",
+  "address": "Climpson & Sons, 67 Broadway Market, LONDON, E8 4PH",
+  "business": "coffee-shop",
+  "businessLabel": "Coffee shop",
+  "precision": "building",
+  "analysisTimestamp": "2026-10-08T18:46:54.352409+00:00",
+  "editionLabel": "Frozen real-source development draft",
+  "pages": [
+    {
+      "key": "overview",
+      "conclusion": "Investigate the repeat neighbourhood coffee visits proposition, with premises feasibility and competitive differentiation as decision gates.",
+      "analysis": [
+        {
+          "text": "The closer resident base makes repeat neighbourhood coffee visits a more directly evidence-linked starting point than assuming this is a destination location. Workplace context and walking access add occasions to investigate, but none resolves the actual competing offer, unit's operating constraints or lease obligations.",
+          "factIds": [
+            "f22",
+            "f29",
+            "f26",
+            "f8"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        },
+        {
+          "text": "The commercial question is whether a distinctive offer can operate lawfully and practically in this unit on acceptable lease terms. If any of those conditions fails, favourable neighbourhood context is insufficient. The recommendation is to investigate that specific case, not assume the site is ready to lease.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "unknown"
+        }
+      ],
+      "test": {
+        "text": "Get the exact-unit permission and measured usable plan for the proposed coffee operation.",
+        "factIds": [],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "unknown"
+      },
+      "cautions": [],
+      "factIds": [
+        "f22",
+        "f8",
+        "f29",
+        "f26",
+        "f14",
+        "f1",
+        "f21"
+      ],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "stored",
+      "direction": "conditional"
+    },
+    {
+      "key": "customer-context",
+      "conclusion": "The nearer resident base and workplace context support different occasions; they are not a demand forecast.",
+      "analysis": [
+        {
+          "text": "The closest resident base is a stronger starting point for repeat neighbourhood coffee visits than relying on a destination audience: about 3,300 usual residents and about 1,400 households fall within the modelled short walking contour. The wider contour expands the potential audience, but its residents are not an additive second customer pool.",
+          "factIds": [
+            "f22",
+            "f4"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        },
+        {
+          "text": "Modelled household income after housing costs is about £45,000 per year in the broader source area. This can inform a price-positioning test, but it cannot establish that nearby customers will pay a premium for speciality coffee. Compare a clear offer at a defensible price before committing to a premium-only proposition.",
+          "factIds": [
+            "f32"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        },
+        {
+          "text": "The thirty-to-thirty-four age band contains about 2,100 usual residents in the wider walking estimate. Include this audience in coffee and food-occasion interviews; its size does not establish preferences. Prioritise the occasion you can substantiate over an assumed demographic taste.",
+          "factIds": [
+            "profile-8c7cdd9a22d46342"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        }
+      ],
+      "test": {
+        "text": "Test whether nearby residents would substitute your coffee and food offer for their present choice, and whether workplace-related visits occur at your intended trading times.",
+        "factIds": [
+          "f22",
+          "f29"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      "cautions": [
+        {
+          "text": "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population. Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable. Uniform population within each native area is an estimation assumption; cumulative contours must not be summed.",
+          "factIds": [
+            "f3",
+            "f4",
+            "f6",
+            "f10",
+            "f12",
+            "f17",
+            "f19",
+            "f22",
+            "f28",
+            "f34",
+            "f35",
+            "f36"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Census usual residents, not footfall, customers, spend or present-day population. Disclosure uses targeted swapping and cell-key perturbation. An OA total is not a radius/catchment estimate. Pinned boundary release includes recorded area-preserving topology normalisation.",
+          "factIds": [
+            "f15"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "All-London native-area distribution, target excluded; not comparable commercial sites or walking catchments. Employee jobs are rounded native counts, not footfall, customers or an admitted density ranking.",
+          "factIds": [
+            "f29"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population. Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+          "factIds": [
+            "f31"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "All-London native-area distribution, target excluded; not comparable commercial sites or walking catchments. Modelled annual household income is not customer spending.",
+          "factIds": [
+            "f32"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Modelled walking accessibility from an OS building/address point, not a verified entrance or measured pedestrian footfall. Provider routing version and snapped isoline origin are unavailable; echoed origin is the request coordinate. PostGIS checks topology, origin and nesting; this does not independently prove every mapped bridge, barrier or path. Outside-London coverage is retained in geometry and coverage operands; it is not missing-as-zero. Six expected API credits are an estimate; provider-observed account billing is unavailable.",
+          "factIds": [
+            "f33"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        }
+      ],
+      "factIds": [
+        "f15",
+        "f22",
+        "f28",
+        "f36",
+        "f3",
+        "f29",
+        "profile-8c7cdd9a22d46342",
+        "f4",
+        "f6",
+        "f10",
+        "f12",
+        "f17",
+        "f19",
+        "f34",
+        "f35",
+        "f31",
+        "f32",
+        "f33"
+      ],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "partial",
+      "direction": "conditional"
+    },
+    {
+      "key": "competition",
+      "conclusion": "The named register leads Saray Cafe, Route Broadway Ltd, Levain Bakery are more useful than an aggregate record count because they define a concrete offer audit. The cafe/restaurant categories deserve a coffee-and-food comparison; the bakery lead is registered as a mobile caterer, so its permanent trading unit and occasion overlap need separate verification.",
+      "analysis": [
+        {
+          "text": "Compare the reason for the visit: coffee alone, a bakery purchase, breakfast, a quick meal or time spent seated. A food-led alternative can substitute for one occasion and complement another. Until the exact offers are verified, the evidence supports a targeted comparison rather than a claim that competition is weak or the market has room.",
+          "factIds": [
+            "f21"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        },
+        {
+          "text": "Customer ratings, review volumes, offer strength and exact-branch brand affiliation are not verified in this frozen case. No competitive score can be justified. Food-hygiene inspection ratings, when available, describe a different issue and must never replace customer reputation.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "unknown"
+        }
+      ],
+      "test": {
+        "text": "Find which named operators genuinely overlap with the intended occasion before judging competitive pressure; compare a specific offer rather than use an incomplete total.",
+        "factIds": [
+          "f21"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      "cautions": [
+        {
+          "text": "Native place records are not a deduplicated business census or a calibrated competition score. Classification, duplicates and missing source dates require review; failed ranges remain unavailable. Native taxonomy records are not a complete deduplicated competitor inventory or evidence of saturation.",
+          "factIds": [
+            "f7",
+            "f24",
+            "f38"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Food register only; not exhaustive competition, business occupancy, demand or survival evidence. FHRS identifiers may be recycled; these are dated historical records, not current ratings. Private contact/address/rating fields are discarded; withheld locations remain unknown. Source point accuracy is unspecified; property postcode-centroid input does not identify the premises. Provider query radius may be capped/cross London; no exact catchment or geodesic proximity claim. Page/attempt limit or source failure leaves an incomplete register result. Provider extract timestamp 2026-10-08T19:47:00.2556406+01:00; not a registration, observation or publication date.",
+          "factIds": [
+            "f21"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Native place records are not a deduplicated business census or a calibrated competition score. Classification, duplicates and missing source dates require review; failed ranges remain unavailable.",
+          "factIds": [
+            "f37"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        }
+      ],
+      "factIds": [
+        "f7",
+        "f21",
+        "f24",
+        "f37",
+        "f38"
+      ],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "partial",
+      "direction": "conditional"
+    },
+    {
+      "key": "access",
+      "conclusion": "The reviewed model gives a shorter approach to London Fields (about 9 minutes) and a longer approach to Cambridge Heath (about 14 minutes). This helps frame arrival options, but neither station point is a confirmed entrance and neither route proves passing trade.",
+      "analysis": [
+        {
+          "text": "Morning convenience only becomes a useful proposition if the actual station approach passes the entrance and the counter can serve it efficiently. Repeat local visits are a different hypothesis and can remain relevant even if commuters take another street.",
+          "factIds": [
+            "f26",
+            "f14"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        }
+      ],
+      "test": {
+        "text": "If the station approach bypasses the frontage, the morning-convenience proposition loses support even though the neighbourhood-repeat hypothesis remains open.",
+        "factIds": [
+          "f26",
+          "f14"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      "cautions": [
+        {
+          "text": "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory. The property point and station register points do not establish confirmed entrances. Modelled walking time and distance use provider snapping; they are not observed journeys or accessibility guarantees.",
+          "factIds": [
+            "f9",
+            "f13",
+            "f14",
+            "f20",
+            "f26"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory. The property point and station register points do not establish confirmed entrances. NUMBAT TWT profiles model typical-day gateline passenger movements, not pedestrian footfall, unique customers or current trading demand.",
+          "factIds": [
+            "f11"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        }
+      ],
+      "factIds": [
+        "f14",
+        "f26",
+        "f9",
+        "f11",
+        "f13",
+        "f20"
+      ],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "partial",
+      "direction": "conditional"
+    },
+    {
+      "key": "premises",
+      "conclusion": "The selected-property record and retained non-domestic certificate provide premises context, not an inspected operating layout. The exact-unit evidence must show counter, queue, preparation, washing and any seating. Neither building area nor a historical certificate establishes usable capacity.",
+      "analysis": [
+        {
+          "text": "The retained conservation-area and Article Four records make the scope of any proposed alterations a material question. A returned record does not establish that the intended activity is prohibited, but it is not a clearance either. Ask for the applicable conditions rather than assume a general use-class label settles them.",
+          "factIds": [
+            "f18",
+            "f27"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        },
+        {
+          "text": "The retained river-and-sea point result is Very Low. That supports a narrowly qualified favourable signal; it does not establish that the interior, surface-water exposure or every physical hazard is satisfactory.",
+          "factIds": [
+            "f23"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        }
+      ],
+      "test": {
+        "text": "If permission or the usable plan cannot support counter, queue, preparation, washing and any seating, change the operation or stop this lease enquiry. Positive neighbourhood context cannot resolve a physical or binding-use constraint.",
+        "factIds": [],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "unknown"
+      },
+      "cautions": [
+        {
+          "text": "UPRN-matched historical non-domestic certificate evidence does not establish selected trading-unit extent, latest certification or lease NIA; ambiguous/incomplete discovery is not substituted.",
+          "factIds": [
+            "f1"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Provider classification is not authoritative planning consent; commercial rates, non-domestic certificate and area remain unavailable.",
+          "factIds": [
+            "f8"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Published designation profiles at an OS address/building point; not premises extent or an entrance. No matching profile is not clearance: publisher coverage is unconfirmed. Legal scope, dates and applicability require review; these records do not confirm permitted use.",
+          "factIds": [
+            "f18",
+            "f27"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Point rivers/sea context does not cover surface water, premises extent or overall premises risk.",
+          "factIds": [
+            "f23"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "A bounded source search is not a complete premises history.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "Building-matched records and UPRN-matched certificates do not establish selected trading-unit suitability.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        },
+        {
+          "text": "FSA and Overture frozen observations are context, not evidence of opening or closure dates.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "interpretation"
+        }
+      ],
+      "factIds": [
+        "f1",
+        "f8",
+        "f18",
+        "f23",
+        "f27"
+      ],
+      "referenceIds": [],
+      "unknowns": [
+        "Verify the selected unit's permitted use and any concept-specific approvals.",
+        "Verify physical suitability, lease terms and premises condition.",
+        "Inventory coverage and unique competitor counts are not admitted.",
+        "Customer conversion and concept fit are not measured.",
+        "Jobs are not visitors, footfall or customers; trading-hour fit is unverified."
+      ],
+      "availability": "partial",
+      "direction": "conditional"
+    },
+    {
+      "key": "rental-context",
+      "conclusion": "The available evidence does not establish this unit's actual rent or a reliable comparable rental figure. The terms could change the lease decision materially. A market estimate cannot be presented as the selected premises' rent, and a valuation for another property cannot answer this question.",
+      "analysis": [
+        {
+          "text": "Get the dated asking rent, area basis, service charge, insurance, repair obligations and proposed lease restrictions for the exact unit. For this coffee shop, the terms may restrict the operation or make the proposition unattractive even if the local context is promising. This report makes no break-even or profit forecast; the Financial Engine is a separate experience.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "unknown"
+        }
+      ],
+      "test": {
+        "text": "Obtain compatible, dated exact-unit terms; without them no conclusion about rent attractiveness or overall occupancy burden is supportable.",
+        "factIds": [],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "unknown"
+      },
+      "cautions": [],
+      "factIds": [],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "unavailable",
+      "direction": "unavailable"
+    },
+    {
+      "key": "actions",
+      "conclusion": "Resolve the operation's feasibility first, then differentiation, arrival and lease obligations; each answer can change the decision.",
+      "analysis": [
+        {
+          "text": "The sequence avoids committing to an attractive neighbourhood before learning that the intended business cannot work in the unit. The ranked actions below state what would change, rather than repeat a general request for more research.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "unknown"
+        }
+      ],
+      "test": {
+        "text": "If permission or the usable plan cannot support counter, queue, preparation, washing and any seating, change the operation or stop this lease enquiry. Positive neighbourhood context cannot resolve a physical or binding-use constraint.",
+        "factIds": [],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "unknown"
+      },
+      "cautions": [],
+      "factIds": [
+        "f21",
+        "f26",
+        "f14"
+      ],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "stored",
+      "direction": "conditional"
+    },
+    {
+      "key": "appendix",
+      "conclusion": "This is a frozen evidence-backed investigation of a particular property and concept, with explicit boundaries on what the sources establish.",
+      "analysis": [
+        {
+          "text": "The all-resident and adult-resident Census measures have different universes. Walking contours are cumulative and must not be added; jobs and income retain their native source geography. Rounded prose does not change the underlying exact operands.",
+          "factIds": [
+            "f22",
+            "f6",
+            "f28",
+            "f10",
+            "f29",
+            "f32"
+          ],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "hypothesis"
+        },
+        {
+          "text": "Register records are not verified active competitors; routes are not frontage footfall; past building observations are not inspected usable space. The Resident & Workplace Context Index is not an overall commercial suitability or success score. Financial calculations are excluded.",
+          "factIds": [],
+          "referenceIds": [],
+          "operatorIds": [],
+          "kind": "unknown"
+        }
+      ],
+      "test": {
+        "text": "Inspect the attached source directory and resolve the material unknowns for this operation; reopening the historical purchased report must not refresh or rewrite its evidence.",
+        "factIds": [],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "unknown"
+      },
+      "cautions": [],
+      "factIds": [
+        "f22",
+        "f29",
+        "f6",
+        "f28",
+        "f10",
+        "f32"
+      ],
+      "referenceIds": [],
+      "unknowns": [],
+      "availability": "assessed",
+      "direction": "conditional"
+    }
+  ],
+  "sources": [
+    {
+      "id": "f1",
+      "section": "premises",
+      "label": "non-domestic-CEPC8",
+      "value": "Retained non-domestic-CEPC8 observations",
+      "units": null,
+      "scope": "Retained non-domestic-CEPC8 source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:19.786Z",
+      "reference": "https://get-energy-performance-data.communities.gov.uk/",
+      "provider": "govuk-energy-data",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "UPRN-matched historical non-domestic certificate evidence does not establish selected trading-unit extent, latest certification or lease NIA; ambiguous/incomplete discovery is not substituted."
+      ],
+      "licence": "govuk-non-domestic-epc",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: GOV.UK non-domestic energy performance data."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_register_point\",\"estimated\":false,\"releaseId\":null}"
+    },
+    {
+      "id": "f3",
+      "section": "customer-context",
+      "label": "TS066 total, 15 minute walking estimate",
+      "value": 29395.0059650744,
+      "units": "persons, area-allocated estimate",
+      "scope": "15 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "f5d5f231-61d1-4f15-9bd0-5ebcefc6dcf3",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f4",
+      "section": "customer-context",
+      "label": "TS003 total, 5 minute walking estimate",
+      "value": 1424.96711946507,
+      "units": "households, area-allocated estimate",
+      "scope": "5 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "b046c1dd-d84f-4b9f-b452-8fc526b6d078",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f6",
+      "section": "customer-context",
+      "label": "TS066 total, 5 minute walking estimate",
+      "value": 2740.26417694205,
+      "units": "persons, area-allocated estimate",
+      "scope": "5 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "f5d5f231-61d1-4f15-9bd0-5ebcefc6dcf3",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f7",
+      "section": "competition",
+      "label": "Native primary-family records, 5 minute walk",
+      "value": 16,
+      "units": "native mapped records, not unique businesses",
+      "scope": "5 minute cumulative routing polygon; incomplete community inventory",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:04.436Z",
+      "reference": "https://docs.overturemaps.org/attribution/",
+      "provider": "overture",
+      "release": "e9749c2d-7eba-4657-99c2-84c690c646f8",
+      "adapter": "1",
+      "limitations": [
+        "Native place records are not a deduplicated business census or a calibrated competition score.",
+        "Classification, duplicates and missing source dates require review; failed ranges remain unavailable.",
+        "Native taxonomy records are not a complete deduplicated competitor inventory or evidence of saturation."
+      ],
+      "licence": "overture-catchments",
+      "notices": [
+        "Overture Maps Foundation — CDLA-Permissive-2.0; required release notices retained.",
+        "Foursquare Open Source Places — Apache-2.0.",
+        "All The Places — CC0-1.0; native per-record sources/licences retained."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"native-point-closed-polygon\",\"estimated\":false,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f8",
+      "section": "premises",
+      "label": "selected-property-facts",
+      "value": "Retained selected-property-facts observations",
+      "units": null,
+      "scope": "Retained selected-property-facts source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:46:59.749Z",
+      "reference": "https://propertydata.co.uk/api/documentation/uprn",
+      "provider": "propertydata",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Provider classification is not authoritative planning consent; commercial rates, non-domestic certificate and area remain unavailable."
+      ],
+      "licence": "propertydata-premises",
+      "notices": [
+        "Source: PropertyData; dated per-analysis historical observation, not current property verification."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"property\",\"method\":\"os_address_building_point_not_premises_extent\",\"estimated\":false,\"releaseId\":\"f9cfff94-6f19-4e97-9a4f-3841decb2e0f\"}"
+    },
+    {
+      "id": "f9",
+      "section": "access",
+      "label": "Modelled station route 910GCAMHTH, metres",
+      "value": 906,
+      "units": "metres",
+      "scope": "Input building point to reviewed station register point; neither endpoint is a confirmed entrance",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:02.379Z",
+      "reference": "https://apidocs.geoapify.com/docs/route-matrix/",
+      "provider": "geoapify",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory.",
+        "The property point and station register points do not establish confirmed entrances.",
+        "Modelled walking time and distance use provider snapping; they are not observed journeys or accessibility guarantees."
+      ],
+      "licence": "geoapify-access",
+      "notices": [
+        "Powered by Geoapify: https://www.geoapify.com/",
+        "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_walk_network\",\"estimated\":true,\"releaseId\":null}"
+    },
+    {
+      "id": "f10",
+      "section": "customer-context",
+      "label": "TS066 total, 10 minute walking estimate",
+      "value": 12356.5125847521,
+      "units": "persons, area-allocated estimate",
+      "scope": "10 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "f5d5f231-61d1-4f15-9bd0-5ebcefc6dcf3",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f11",
+      "section": "access",
+      "label": "NUMBAT2025",
+      "value": "Retained NUMBAT2025 observations",
+      "units": null,
+      "scope": "Retained NUMBAT2025 source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "modelled",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:02.344Z",
+      "reference": "https://tfl.gov.uk/corporate/publications-and-reports/underground-services-performance",
+      "provider": "tfl",
+      "release": "4f0ccc73-3f4c-4300-82f9-f53e21d3d4a7",
+      "adapter": "1",
+      "limitations": [
+        "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory.",
+        "The property point and station register points do not establish confirmed entrances.",
+        "NUMBAT TWT profiles model typical-day gateline passenger movements, not pedestrian footfall, unique customers or current trading demand."
+      ],
+      "licence": "tfl-station-activity",
+      "notices": [
+        "Powered by TfL Open Data",
+        "Contains OS data © Crown copyright and database rights 2016",
+        "Geomni UK Map data © and database rights [2019]"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_register_point\",\"estimated\":true,\"releaseId\":null}"
+    },
+    {
+      "id": "f12",
+      "section": "customer-context",
+      "label": "TS045 total, 15 minute walking estimate",
+      "value": 14815.3277484315,
+      "units": "households, area-allocated estimate",
+      "scope": "15 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "ac73e7eb-6cdb-4c34-b9f1-69e76761f05a",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f13",
+      "section": "access",
+      "label": "walking-matrix",
+      "value": "Retained walking-matrix observations",
+      "units": null,
+      "scope": "Retained walking-matrix source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "modelled",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:02.379Z",
+      "reference": "https://apidocs.geoapify.com/docs/route-matrix/",
+      "provider": "geoapify",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory.",
+        "The property point and station register points do not establish confirmed entrances.",
+        "Modelled walking time and distance use provider snapping; they are not observed journeys or accessibility guarantees."
+      ],
+      "licence": "geoapify-access",
+      "notices": [
+        "Powered by Geoapify: https://www.geoapify.com/",
+        "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_register_point\",\"estimated\":true,\"releaseId\":null}"
+    },
+    {
+      "id": "f14",
+      "section": "access",
+      "label": "Modelled station route 910GCAMHTH, seconds",
+      "value": 820,
+      "units": "seconds",
+      "scope": "Input building point to reviewed station register point; neither endpoint is a confirmed entrance",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:02.379Z",
+      "reference": "https://apidocs.geoapify.com/docs/route-matrix/",
+      "provider": "geoapify",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory.",
+        "The property point and station register points do not establish confirmed entrances.",
+        "Modelled walking time and distance use provider snapping; they are not observed journeys or accessibility guarantees."
+      ],
+      "licence": "geoapify-access",
+      "notices": [
+        "Powered by Geoapify: https://www.geoapify.com/",
+        "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_walk_network\",\"estimated\":true,\"releaseId\":null}"
+    },
+    {
+      "id": "f15",
+      "section": "customer-context",
+      "label": "TS001",
+      "value": 445,
+      "units": "usual residents",
+      "scope": "Retained TS001 source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21T00:00:00+00:00",
+      "retrievedAt": "2026-10-05T09:29:05.125+01:00",
+      "reference": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts001.zip",
+      "provider": "ons",
+      "release": "c28f310e-81f9-4384-9f78-71570a308e50",
+      "adapter": "1",
+      "limitations": [
+        "Census usual residents, not footfall, customers, spend or present-day population.",
+        "Disclosure uses targeted swapping and cell-key perturbation.",
+        "An OA total is not a radius/catchment estimate.",
+        "Pinned boundary release includes recorded area-preserving topology normalisation."
+      ],
+      "licence": "ons-london",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
+        "Contains OS data © Crown copyright and database right 2021"
+      ],
+      "statistical": "{\"code\":\"E00009076\",\"unit\":\"OA2021\",\"method\":\"point_in_polygon\",\"estimated\":false,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f17",
+      "section": "customer-context",
+      "label": "TS045 total, 10 minute walking estimate",
+      "value": 6285.78823181759,
+      "units": "households, area-allocated estimate",
+      "scope": "10 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "ac73e7eb-6cdb-4c34-b9f1-69e76761f05a",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f18",
+      "section": "premises",
+      "label": "conservation-area",
+      "value": 1,
+      "units": "returned records, not complete entities or clearance",
+      "scope": "Retained conservation-area source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:00.522Z",
+      "reference": "https://www.planning.data.gov.uk/dataset/conservation-area",
+      "provider": "planning-data",
+      "release": "ed950fc6-6989-4bb5-958b-98cddc131089",
+      "adapter": "1",
+      "limitations": [
+        "Published designation profiles at an OS address/building point; not premises extent or an entrance.",
+        "No matching profile is not clearance: publisher coverage is unconfirmed.",
+        "Legal scope, dates and applicability require review; these records do not confirm permitted use."
+      ],
+      "licence": "planning-conservation",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0.",
+        "Source: Planning Data and named local authority publishers.",
+        "Contains OS data © Crown copyright and database rights; Historic England data where supplied."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"property\",\"method\":\"provider_register_point\",\"estimated\":false,\"releaseId\":null}"
+    },
+    {
+      "id": "f19",
+      "section": "customer-context",
+      "label": "TS045 total, 5 minute walking estimate",
+      "value": 1424.27833096387,
+      "units": "households, area-allocated estimate",
+      "scope": "5 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "ac73e7eb-6cdb-4c34-b9f1-69e76761f05a",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f20",
+      "section": "access",
+      "label": "Modelled station route 910GLONFLDS, metres",
+      "value": 579,
+      "units": "metres",
+      "scope": "Input building point to reviewed station register point; neither endpoint is a confirmed entrance",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:02.379Z",
+      "reference": "https://apidocs.geoapify.com/docs/route-matrix/",
+      "provider": "geoapify",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory.",
+        "The property point and station register points do not establish confirmed entrances.",
+        "Modelled walking time and distance use provider snapping; they are not observed journeys or accessibility guarantees."
+      ],
+      "licence": "geoapify-access",
+      "notices": [
+        "Powered by Geoapify: https://www.geoapify.com/",
+        "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_walk_network\",\"estimated\":true,\"releaseId\":null}"
+    },
+    {
+      "id": "f21",
+      "section": "competition",
+      "label": "FHRS",
+      "value": 200,
+      "units": "returned records, not complete entities or clearance",
+      "scope": "Retained FHRS source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:00.455Z",
+      "reference": "https://ratings.food.gov.uk/business/469850",
+      "provider": "fsa",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Food register only; not exhaustive competition, business occupancy, demand or survival evidence.",
+        "FHRS identifiers may be recycled; these are dated historical records, not current ratings.",
+        "Private contact/address/rating fields are discarded; withheld locations remain unknown.",
+        "Source point accuracy is unspecified; property postcode-centroid input does not identify the premises.",
+        "Provider query radius may be capped/cross London; no exact catchment or geodesic proximity claim.",
+        "Page/attempt limit or source failure leaves an incomplete register result.",
+        "Provider extract timestamp 2026-10-08T19:47:00.2556406+01:00; not a registration, observation or publication date."
+      ],
+      "licence": "fsa-establishments",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_register_point\",\"estimated\":false,\"releaseId\":null}"
+    },
+    {
+      "id": "f22",
+      "section": "customer-context",
+      "label": "TS007A total, 5 minute walking estimate",
+      "value": 3275.00281199371,
+      "units": "persons, area-allocated estimate",
+      "scope": "5 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "3738fcbc-486a-4abf-99b7-2a89dbd56fc9",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f23",
+      "section": "premises",
+      "label": "point-rivers-sea",
+      "value": "Very Low",
+      "units": null,
+      "scope": "Retained point-rivers-sea source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "modelled",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:46:59.987Z",
+      "reference": "https://propertydata.co.uk/api/documentation/flood-risk",
+      "provider": "propertydata",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Point rivers/sea context does not cover surface water, premises extent or overall premises risk."
+      ],
+      "licence": "propertydata-flood",
+      "notices": [
+        "Source: PropertyData; dated per-analysis historical observation, not current property verification."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"property\",\"method\":\"os_address_building_point_not_premises_extent\",\"estimated\":true,\"releaseId\":\"f9cfff94-6f19-4e97-9a4f-3841decb2e0f\"}"
+    },
+    {
+      "id": "f24",
+      "section": "competition",
+      "label": "Native primary-family records, 10 minute walk",
+      "value": 36,
+      "units": "native mapped records, not unique businesses",
+      "scope": "10 minute cumulative routing polygon; incomplete community inventory",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:04.436Z",
+      "reference": "https://docs.overturemaps.org/attribution/",
+      "provider": "overture",
+      "release": "e9749c2d-7eba-4657-99c2-84c690c646f8",
+      "adapter": "1",
+      "limitations": [
+        "Native place records are not a deduplicated business census or a calibrated competition score.",
+        "Classification, duplicates and missing source dates require review; failed ranges remain unavailable.",
+        "Native taxonomy records are not a complete deduplicated competitor inventory or evidence of saturation."
+      ],
+      "licence": "overture-catchments",
+      "notices": [
+        "Overture Maps Foundation — CDLA-Permissive-2.0; required release notices retained.",
+        "Foursquare Open Source Places — Apache-2.0.",
+        "All The Places — CC0-1.0; native per-record sources/licences retained."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"native-point-closed-polygon\",\"estimated\":false,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f26",
+      "section": "access",
+      "label": "Modelled station route 910GLONFLDS, seconds",
+      "value": 525,
+      "units": "seconds",
+      "scope": "Input building point to reviewed station register point; neither endpoint is a confirmed entrance",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:02.379Z",
+      "reference": "https://apidocs.geoapify.com/docs/route-matrix/",
+      "provider": "geoapify",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Only explicitly reviewed station identities are included; this is not a complete nearby-station inventory.",
+        "The property point and station register points do not establish confirmed entrances.",
+        "Modelled walking time and distance use provider snapping; they are not observed journeys or accessibility guarantees."
+      ],
+      "licence": "geoapify-access",
+      "notices": [
+        "Powered by Geoapify: https://www.geoapify.com/",
+        "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"provider_point\",\"method\":\"provider_walk_network\",\"estimated\":true,\"releaseId\":null}"
+    },
+    {
+      "id": "f27",
+      "section": "premises",
+      "label": "article-4-direction-area",
+      "value": 7,
+      "units": "returned records, not complete entities or clearance",
+      "scope": "Retained article-4-direction-area source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:00.374Z",
+      "reference": "https://www.planning.data.gov.uk/dataset/article-4-direction-area",
+      "provider": "planning-data",
+      "release": "39e554ae-4e4f-4392-bd6e-1b4e425afd37",
+      "adapter": "1",
+      "limitations": [
+        "Published designation profiles at an OS address/building point; not premises extent or an entrance.",
+        "No matching profile is not clearance: publisher coverage is unconfirmed.",
+        "Legal scope, dates and applicability require review; these records do not confirm permitted use."
+      ],
+      "licence": "planning-article4",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0.",
+        "Source: Planning Data and named local authority publishers.",
+        "Contains OS data © Crown copyright and database rights; Historic England data where supplied."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"property\",\"method\":\"provider_register_point\",\"estimated\":false,\"releaseId\":null}"
+    },
+    {
+      "id": "f28",
+      "section": "customer-context",
+      "label": "TS007A total, 10 minute walking estimate",
+      "value": 14766.9806172336,
+      "units": "persons, area-allocated estimate",
+      "scope": "10 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "3738fcbc-486a-4abf-99b7-2a89dbd56fc9",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f29",
+      "section": "customer-context",
+      "label": "BRES2024",
+      "value": 2000,
+      "units": "employee_jobs",
+      "scope": "Retained BRES2024 source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-07T14:49:25.389237+01:00",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "06b2aa71-0d30-4ce2-b730-f8367a559b0b",
+      "adapter": "1",
+      "limitations": [
+        "All-London native-area distribution, target excluded; not comparable commercial sites or walking catchments.",
+        "Employee jobs are rounded native counts, not footfall, customers or an admitted density ranking."
+      ],
+      "licence": "ons-jobs-context",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":\"E01033712\",\"unit\":\"LSOA2021\",\"method\":\"native-london-distribution-1\",\"estimated\":false,\"releaseId\":\"5eeabd3c-d9d7-46c1-8c41-4b443d4218fe\"}"
+    },
+    {
+      "id": "f31",
+      "section": "customer-context",
+      "label": "census-income-bres",
+      "value": "Retained census-income-bres observations",
+      "units": null,
+      "scope": "Retained census-income-bres source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "modelled",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f32",
+      "section": "customer-context",
+      "label": "income-AHC-FYE2023",
+      "value": 44858,
+      "units": "GBP_household_year",
+      "scope": "Retained income-AHC-FYE2023 source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "modelled",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-07T14:40:25.096851+01:00",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "36f28679-a52f-4929-8784-5147fe4b6b64",
+      "adapter": "1",
+      "limitations": [
+        "All-London native-area distribution, target excluded; not comparable commercial sites or walking catchments.",
+        "Modelled annual household income is not customer spending."
+      ],
+      "licence": "ons-income-context",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":\"E02000367\",\"unit\":\"MSOA2021\",\"method\":\"native-london-distribution-1\",\"estimated\":true,\"releaseId\":\"5eeabd3c-d9d7-46c1-8c41-4b443d4218fe\"}"
+    },
+    {
+      "id": "f33",
+      "section": "customer-context",
+      "label": "walking-isolines",
+      "value": "Retained walking-isolines observations",
+      "units": null,
+      "scope": "Retained walking-isolines source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "modelled",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:00.44Z",
+      "reference": "https://apidocs.geoapify.com/docs/isolines",
+      "provider": "geoapify",
+      "release": null,
+      "adapter": "1",
+      "limitations": [
+        "Modelled walking accessibility from an OS building/address point, not a verified entrance or measured pedestrian footfall.",
+        "Provider routing version and snapped isoline origin are unavailable; echoed origin is the request coordinate.",
+        "PostGIS checks topology, origin and nesting; this does not independently prove every mapped bridge, barrier or path.",
+        "Outside-London coverage is retained in geometry and coverage operands; it is not missing-as-zero.",
+        "Six expected API credits are an estimate; provider-observed account billing is unavailable."
+      ],
+      "licence": "geoapify-walking",
+      "notices": [
+        "Powered by Geoapify: https://www.geoapify.com/",
+        "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"provider_walk_network\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f34",
+      "section": "customer-context",
+      "label": "TS003 total, 15 minute walking estimate",
+      "value": 14825.1671404691,
+      "units": "households, area-allocated estimate",
+      "scope": "15 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "b046c1dd-d84f-4b9f-b452-8fc526b6d078",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f35",
+      "section": "customer-context",
+      "label": "TS003 total, 10 minute walking estimate",
+      "value": 6288.98069202042,
+      "units": "households, area-allocated estimate",
+      "scope": "10 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "b046c1dd-d84f-4b9f-b452-8fc526b6d078",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f36",
+      "section": "customer-context",
+      "label": "TS007A total, 15 minute walking estimate",
+      "value": 35210.6730379984,
+      "units": "persons, area-allocated estimate",
+      "scope": "15 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "3738fcbc-486a-4abf-99b7-2a89dbd56fc9",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"area-uniform-bng1\",\"estimated\":true,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f37",
+      "section": "competition",
+      "label": "places",
+      "value": "Retained places observations",
+      "units": null,
+      "scope": "Retained places source outcome; origin precision is not statistical accuracy or premises extent",
+      "kind": "direct_register",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:04.436Z",
+      "reference": "https://docs.overturemaps.org/attribution/",
+      "provider": "overture",
+      "release": "e9749c2d-7eba-4657-99c2-84c690c646f8",
+      "adapter": "1",
+      "limitations": [
+        "Native place records are not a deduplicated business census or a calibrated competition score.",
+        "Classification, duplicates and missing source dates require review; failed ranges remain unavailable."
+      ],
+      "licence": "overture-catchments",
+      "notices": [
+        "Overture Maps Foundation — CDLA-Permissive-2.0; required release notices retained.",
+        "Foursquare Open Source Places — Apache-2.0.",
+        "All The Places — CC0-1.0; native per-record sources/licences retained."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"native-point-closed-polygon\",\"estimated\":false,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "f38",
+      "section": "competition",
+      "label": "Native primary-family records, 15 minute walk",
+      "value": 65,
+      "units": "native mapped records, not unique businesses",
+      "scope": "15 minute cumulative routing polygon; incomplete community inventory",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": null,
+      "retrievedAt": "2026-10-08T18:47:04.436Z",
+      "reference": "https://docs.overturemaps.org/attribution/",
+      "provider": "overture",
+      "release": "e9749c2d-7eba-4657-99c2-84c690c646f8",
+      "adapter": "1",
+      "limitations": [
+        "Native place records are not a deduplicated business census or a calibrated competition score.",
+        "Classification, duplicates and missing source dates require review; failed ranges remain unavailable.",
+        "Native taxonomy records are not a complete deduplicated competitor inventory or evidence of saturation."
+      ],
+      "licence": "overture-catchments",
+      "notices": [
+        "Overture Maps Foundation — CDLA-Permissive-2.0; required release notices retained.",
+        "Foursquare Open Source Places — Apache-2.0.",
+        "All The Places — CC0-1.0; native per-record sources/licences retained."
+      ],
+      "statistical": "{\"code\":null,\"unit\":\"network_catchment\",\"method\":\"native-point-closed-polygon\",\"estimated\":false,\"releaseId\":\"248a9600-59cb-4fbe-9791-d64f9cb28aa1\"}"
+    },
+    {
+      "id": "profile-8c7cdd9a22d46342",
+      "section": "customer-context",
+      "label": "TS007A Age: Aged 30 to 34 years, 10 minute walking estimate",
+      "value": 2083.7944803872765,
+      "units": "estimated residents; Age: Aged 30 to 34 years",
+      "scope": "10 minute cumulative walking scope; not current customers or a measured catchment",
+      "kind": "derived",
+      "strength": "limited",
+      "precision": "building",
+      "effectiveAt": "2021-03-21",
+      "retrievedAt": "2026-10-08T18:47:04.403Z",
+      "reference": "https://www.ons.gov.uk/methodology/geography/licences",
+      "provider": "ons",
+      "release": "3738fcbc-486a-4abf-99b7-2a89dbd56fc9",
+      "adapter": "1",
+      "limitations": [
+        "Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
+        "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable.",
+        "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."
+      ],
+      "licence": "ons-catchments",
+      "notices": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v3.0.",
+        "Contains OS data © Crown copyright and database rights."
+      ],
+      "statistical": "{\"profileOrdinal\":8,\"profileDataset\":\"TS007A\",\"referencePeriod\":\"2021-03-21\",\"seconds\":600,\"method\":\"area-uniform-bng2\",\"sourceSnapshotId\":\"dc60001b-0fc0-4ff1-bd36-ec5bd50fdb95\",\"parentEvidenceId\":\"c4ca96a4-1260-40b3-a766-0a27db56396d\"}"
+    }
+  ],
+  "references": [],
+  "summary": {
+    "verdict": [
+      "This location merits a focused coffee shop investigation: its closer resident base supports a repeat neighbourhood coffee visits hypothesis, and workplace and arrival evidence suggest other occasions to test. The evidence does not yet justify a lease commitment.",
+      "Repeat local coffee and weekday convenience deserve separate tests. The evidence does not establish a premium offer, an underserved market or a leading counter-versus-seating format; usable layout and real alternatives still matter.",
+      "Get the exact-unit permission and measured usable plan for the proposed coffee operation. This can rule out the intended operation. Then test the genuine competing offers and obtain the actual lease terms before treating the opportunity as actionable."
+    ],
+    "strengths": [
+      {
+        "text": "A closer base of about 3,300 dated residents gives a concrete starting audience for testing repeat neighbourhood coffee visits.",
+        "factIds": [
+          "f22"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      {
+        "text": "The native neighbourhood's about 2,000 dated employee jobs justify testing a distinct weekday-coffee occasion.",
+        "factIds": [
+          "f29"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      {
+        "text": "Reviewed walking approaches to London Fields and Cambridge Heath provide arrival options to test, independently of any claim about passing trade.",
+        "factIds": [
+          "f26",
+          "f14"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      }
+    ],
+    "risks": [
+      {
+        "text": "The selected-property record and retained non-domestic certificate provide premises context, not an inspected operating layout. The exact-unit evidence must show counter, queue, preparation, washing and any seating. Neither building area nor a historical certificate establishes usable capacity.",
+        "factIds": [
+          "f8",
+          "f1"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      {
+        "text": "Named food-business leads may substitute for the intended visit occasion. Their actual offers and reputation are not yet verified, so a differentiated proposition or weak-competition claim cannot be established.",
+        "factIds": [
+          "f21"
+        ],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "hypothesis"
+      },
+      {
+        "text": "The available evidence does not establish this unit's actual rent or a reliable comparable rental figure. The terms could change the lease decision materially. A market estimate cannot be presented as the selected premises' rent, and a valuation for another property cannot answer this question.",
+        "factIds": [],
+        "referenceIds": [],
+        "operatorIds": [],
+        "kind": "unknown"
+      }
+    ],
+    "priority": "Get the exact-unit permission and measured usable plan for the proposed coffee operation."
+  },
+  "readiness": "material condition to resolve",
+  "index": {
+    "label": "Resident & Workplace Context Index",
+    "value": 70,
+    "scope": "Dated resident and employee-job density context only",
+    "method": "resident-workplace-context-v1",
+    "components": [
+      {
+        "label": "resident",
+        "weight": 45,
+        "density": 9032.452176,
+        "period": "2021",
+        "code": "E00009076"
+      },
+      {
+        "label": "workplace",
+        "weight": 55,
+        "density": 12318.204571,
+        "period": "2024",
+        "code": "E01033712"
+      }
+    ]
+  },
+  "scenarios": {
+    "version": "scenario-fit-v1",
+    "registryVersion": "operating-formats-v1",
+    "businessType": "coffee-shop",
+    "subtype": null,
+    "scenarios": [
+      {
+        "id": "coffee-takeaway",
+        "label": "takeaway-led coffee",
+        "requirements": [
+          "counter and queue",
+          "preparation and washing",
+          "storage and circulation"
+        ],
+        "occasions": [
+          "morning",
+          "weekday"
+        ],
+        "physical": {
+          "state": "unresolved",
+          "evidenceIds": [],
+          "capacity": null,
+          "capacityWithheldReason": "usable_layout_or_measurement_basis_unverified",
+          "blocker": null
+        },
+        "commercial": {
+          "state": "conditional-context",
+          "supportingIds": [
+            "f15",
+            "profile-8c7cdd9a22d46342",
+            "f29",
+            "f14",
+            "f26"
+          ],
+          "inventoryIds": [
+            "f7",
+            "f21",
+            "f24",
+            "f37",
+            "f38"
+          ],
+          "limitations": [
+            "Context is not measured demand.",
+            "Inventory does not establish unique competitors, offer overlap or saturation.",
+            "Routes do not establish shopfront footfall or trading-period flow."
+          ],
+          "tradingPeriods": [
+            {
+              "period": "morning",
+              "status": "hypothesis-only",
+              "evidenceIds": [
+                "f14",
+                "f26"
+              ]
+            },
+            {
+              "period": "weekday",
+              "status": "hypothesis-only",
+              "evidenceIds": [
+                "f29"
+              ]
+            }
+          ],
+          "competitorOverlap": "unverified",
+          "complementaryClustering": "unverified",
+          "competitorReputation": "unavailable",
+          "competitorTradingHistory": "unavailable"
+        },
+        "decision": "requires-verification"
+      },
+      {
+        "id": "coffee-balanced",
+        "label": "balanced coffee",
+        "requirements": [
+          "counter and queue",
+          "preparation and washing",
+          "seating and circulation"
+        ],
+        "occasions": [
+          "weekday",
+          "weekend"
+        ],
+        "physical": {
+          "state": "unresolved",
+          "evidenceIds": [],
+          "capacity": null,
+          "capacityWithheldReason": "usable_layout_or_measurement_basis_unverified",
+          "blocker": null
+        },
+        "commercial": {
+          "state": "conditional-context",
+          "supportingIds": [
+            "f15",
+            "profile-8c7cdd9a22d46342",
+            "f29",
+            "f14",
+            "f26"
+          ],
+          "inventoryIds": [
+            "f7",
+            "f21",
+            "f24",
+            "f37",
+            "f38"
+          ],
+          "limitations": [
+            "Context is not measured demand.",
+            "Inventory does not establish unique competitors, offer overlap or saturation.",
+            "Routes do not establish shopfront footfall or trading-period flow."
+          ],
+          "tradingPeriods": [
+            {
+              "period": "weekday",
+              "status": "hypothesis-only",
+              "evidenceIds": [
+                "f29"
+              ]
+            },
+            {
+              "period": "weekend",
+              "status": "hypothesis-only",
+              "evidenceIds": [
+                "f15",
+                "profile-8c7cdd9a22d46342"
+              ]
+            }
+          ],
+          "competitorOverlap": "unverified",
+          "complementaryClustering": "unverified",
+          "competitorReputation": "unavailable",
+          "competitorTradingHistory": "unavailable"
+        },
+        "decision": "requires-verification"
+      },
+      {
+        "id": "coffee-sit-in",
+        "label": "sit-in-led coffee",
+        "requirements": [
+          "preparation and washing",
+          "seating and circulation",
+          "customer facilities"
+        ],
+        "occasions": [
+          "daytime",
+          "weekend"
+        ],
+        "physical": {
+          "state": "unresolved",
+          "evidenceIds": [],
+          "capacity": null,
+          "capacityWithheldReason": "usable_layout_or_measurement_basis_unverified",
+          "blocker": null
+        },
+        "commercial": {
+          "state": "conditional-context",
+          "supportingIds": [
+            "f15",
+            "profile-8c7cdd9a22d46342",
+            "f29",
+            "f14",
+            "f26"
+          ],
+          "inventoryIds": [
+            "f7",
+            "f21",
+            "f24",
+            "f37",
+            "f38"
+          ],
+          "limitations": [
+            "Context is not measured demand.",
+            "Inventory does not establish unique competitors, offer overlap or saturation.",
+            "Routes do not establish shopfront footfall or trading-period flow."
+          ],
+          "tradingPeriods": [
+            {
+              "period": "daytime",
+              "status": "hypothesis-only",
+              "evidenceIds": [
+                "f29"
+              ]
+            },
+            {
+              "period": "weekend",
+              "status": "hypothesis-only",
+              "evidenceIds": [
+                "f15",
+                "profile-8c7cdd9a22d46342"
+              ]
+            }
+          ],
+          "competitorOverlap": "unverified",
+          "complementaryClustering": "unverified",
+          "competitorReputation": "unavailable",
+          "competitorTradingHistory": "unavailable"
+        },
+        "decision": "requires-verification"
+      }
+    ],
+    "leadingFormatId": null,
+    "status": "format-unresolved",
+    "numericalScore": null,
+    "evidence": {
+      "residentIds": [
+        "f15",
+        "profile-8c7cdd9a22d46342"
+      ],
+      "workplaceIds": [
+        "f29"
+      ],
+      "routeIds": [
+        "f14",
+        "f26"
+      ],
+      "inventoryIds": [
+        "f7",
+        "f21",
+        "f24",
+        "f37",
+        "f38"
+      ],
+      "historyReferences": [],
+      "rentalReferences": []
+    },
+    "priorityAction": "Verify the selected unit's usable layout, permitted activities and format-specific requirements before committing."
+  },
+  "operators": {
+    "version": "register-shortlist-v2",
+    "selection": "First six frozen provider leads plus six registered cafe/restaurant/pub-first leads; selected-name matches excluded. Not ranked by strength or verified walking distance. Full records remain immutable.",
+    "returnedRecords": 200,
+    "excludedSelectedRecordIds": [
+      "469850"
+    ],
+    "omittedFromShortlist": 187,
+    "complete": false,
+    "sources": [
+      {
+        "sourceFactId": "f21",
+        "snapshotId": "b1d51111-47f5-4827-bcc0-73ac1a0a43f8",
+        "checksum": "0f54953404f41e445c42def1ab240d0df76a416f67b248920f17bbab27eb4bcc"
+      }
+    ],
+    "items": [
+      {
+        "recordId": "1903953",
+        "name": "Indonesian Coconut Curry",
+        "businessType": "Mobile caterer",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5375151,
+          "longitude": -0.0612697,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/1903953"
+      },
+      {
+        "recordId": "468738",
+        "name": "Off Broadway",
+        "businessType": "Pub/bar/nightclub",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5373825,
+          "longitude": -0.0614051,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/468738"
+      },
+      {
+        "recordId": "470205",
+        "name": "Fin And Flounder",
+        "businessType": "Retailers - other",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5375603,
+          "longitude": -0.0612822,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/470205"
+      },
+      {
+        "recordId": "536815",
+        "name": "Levain Bakery",
+        "businessType": "Mobile caterer",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5373697,
+          "longitude": -0.0611749,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/536815"
+      },
+      {
+        "recordId": "1422606",
+        "name": "Route Broadway Ltd",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5373233,
+          "longitude": -0.0610904,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/1422606"
+      },
+      {
+        "recordId": "469993",
+        "name": "Saray Cafe",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5371193,
+          "longitude": -0.0612577,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/469993"
+      },
+      {
+        "recordId": "470342",
+        "name": "Bella Vita Limited",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5371366,
+          "longitude": -0.0615948,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/470342"
+      },
+      {
+        "recordId": "1937861",
+        "name": "East2west",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5370654,
+          "longitude": -0.06126,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/1937861"
+      },
+      {
+        "recordId": "681483",
+        "name": "El Ganso Cafe",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5370988,
+          "longitude": -0.0616479,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/681483"
+      },
+      {
+        "recordId": "469508",
+        "name": "Buen Ayre",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5369599,
+          "longitude": -0.0614087,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/469508"
+      },
+      {
+        "recordId": "469851",
+        "name": "Franco Manca",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5369599,
+          "longitude": -0.0614087,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/469851"
+      },
+      {
+        "recordId": "1703085",
+        "name": "Chakana Restaurant (Ldn)",
+        "businessType": "Restaurant/Cafe/Canteen",
+        "authorityId": "512",
+        "point": {
+          "crs": "EPSG:4326",
+          "source": "fsa-register",
+          "latitude": 51.5368675,
+          "longitude": -0.0618019,
+          "precision": "unknown"
+        },
+        "observedAt": null,
+        "sourceIndex": 0,
+        "reference": "https://ratings.food.gov.uk/business/1703085"
+      }
+    ]
+  },
+  "profiles": [
+    {
+      "dataset": "TS007A",
+      "seconds": 300,
+      "period": "2021-03-21",
+      "universe": "usual_residents",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Age: Total",
+          "state": "available",
+          "value": 3275.00281199371,
+          "share": null
+        },
+        {
+          "label": "Age: Aged 4 years and under",
+          "state": "available",
+          "value": 169.44109943022107,
+          "share": 0.051737695860807856
+        },
+        {
+          "label": "Age: Aged 5 to 9 years",
+          "state": "available",
+          "value": 169.20987107762306,
+          "share": 0.051667091844301
+        },
+        {
+          "label": "Age: Aged 10 to 14 years",
+          "state": "available",
+          "value": 158.30001077049118,
+          "share": 0.04833583964898141
+        },
+        {
+          "label": "Age: Aged 15 to 19 years",
+          "state": "available",
+          "value": 145.87991323096236,
+          "share": 0.04454344670994516
+        },
+        {
+          "label": "Age: Aged 20 to 24 years",
+          "state": "available",
+          "value": 201.42710775957144,
+          "share": 0.06150440757543945
+        },
+        {
+          "label": "Age: Aged 25 to 29 years",
+          "state": "available",
+          "value": 459.23827261929233,
+          "share": 0.14022530635316424
+        },
+        {
+          "label": "Age: Aged 30 to 34 years",
+          "state": "available",
+          "value": 450.2464035341206,
+          "share": 0.1374796998296395
+        },
+        {
+          "label": "Age: Aged 35 to 39 years",
+          "state": "available",
+          "value": 310.90422150828925,
+          "share": 0.09493250520875778
+        },
+        {
+          "label": "Age: Aged 40 to 44 years",
+          "state": "available",
+          "value": 234.8863482571549,
+          "share": 0.07172096078725627
+        },
+        {
+          "label": "Age: Aged 45 to 49 years",
+          "state": "available",
+          "value": 179.28012459568978,
+          "share": 0.05474197577453381
+        },
+        {
+          "label": "Age: Aged 50 to 54 years",
+          "state": "available",
+          "value": 198.47316909797513,
+          "share": 0.06060244234634762
+        },
+        {
+          "label": "Age: Aged 55 to 59 years",
+          "state": "available",
+          "value": 175.30192476501205,
+          "share": 0.053527259311968105
+        },
+        {
+          "label": "Age: Aged 60 to 64 years",
+          "state": "available",
+          "value": 143.48367272473152,
+          "share": 0.04381177084772747
+        },
+        {
+          "label": "Age: Aged 65 to 69 years",
+          "state": "available",
+          "value": 85.99298118596047,
+          "share": 0.026257376290193434
+        },
+        {
+          "label": "Age: Aged 70 to 74 years",
+          "state": "available",
+          "value": 70.30865217889813,
+          "share": 0.02146827230847372
+        },
+        {
+          "label": "Age: Aged 75 to 79 years",
+          "state": "available",
+          "value": 61.23228980326122,
+          "share": 0.0186968663290964
+        },
+        {
+          "label": "Age: Aged 80 to 84 years",
+          "state": "available",
+          "value": 27.950145023875283,
+          "share": 0.008534388099306756
+        },
+        {
+          "label": "Age: Aged 85 years and over",
+          "state": "available",
+          "value": 33.44660443058037,
+          "share": 0.010212694874060037
+        }
+      ]
+    },
+    {
+      "dataset": "TS003",
+      "seconds": 300,
+      "period": "2021-03-21",
+      "universe": "households",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Household composition: Total; measures: Value",
+          "state": "available",
+          "value": 1424.9671194650657,
+          "share": null
+        },
+        {
+          "label": "Household composition: One person household; measures: Value",
+          "state": "available",
+          "value": 501.6914042055357,
+          "share": 0.35207226703860456
+        },
+        {
+          "label": "Household composition: One person household: Aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 112.40862490103774,
+          "share": 0.07888506574329664
+        },
+        {
+          "label": "Household composition: One person household: Other; measures: Value",
+          "state": "available",
+          "value": 389.282779304498,
+          "share": 0.27318720129530794
+        },
+        {
+          "label": "Household composition: Single family household; measures: Value",
+          "state": "available",
+          "value": 714.7255904635358,
+          "share": 0.5015733912034719
+        },
+        {
+          "label": "Household composition: Single family household: All aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 25.140850694470995,
+          "share": 0.017643109339890523
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple; measures: Value",
+          "state": "available",
+          "value": 242.72431477673447,
+          "share": 0.17033678283598114
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: No children; measures: Value",
+          "state": "available",
+          "value": 79.8707689559225,
+          "share": 0.05605095574830252
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: Dependent children; measures: Value",
+          "state": "available",
+          "value": 132.46271810145055,
+          "share": 0.0929584383330734
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 30.390827719361397,
+          "share": 0.021327388754605194
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family; measures: Value",
+          "state": "available",
+          "value": 193.23772029557264,
+          "share": 0.13560854679097037
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: No children; measures: Value",
+          "state": "available",
+          "value": 143.30297811479485,
+          "share": 0.10056581387547452
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: With dependent children; measures: Value",
+          "state": "available",
+          "value": 41.57235959194598,
+          "share": 0.029174258847146098
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 8.362382588831785,
+          "share": 0.005868474068349755
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family; measures: Value",
+          "state": "available",
+          "value": 222.9842922301602,
+          "share": 0.1564838157906891
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family: With dependent children; measures: Value",
+          "state": "available",
+          "value": 119.83643452385532,
+          "share": 0.0840976840004856
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 103.14785770630492,
+          "share": 0.0723861317902035
+        },
+        {
+          "label": "Household composition: Single family household: Other single family household; measures: Value",
+          "state": "available",
+          "value": 30.638412466597536,
+          "share": 0.021501136445940754
+        },
+        {
+          "label": "Household composition: Single family household: Other single family household: Other family composition; measures: Value",
+          "state": "available",
+          "value": 30.638412466597536,
+          "share": 0.021501136445940754
+        },
+        {
+          "label": "Household composition: Other household types; measures: Value",
+          "state": "available",
+          "value": 208.55012479599438,
+          "share": 0.14635434175792375
+        },
+        {
+          "label": "Household composition: Other household types: With dependent children; measures: Value",
+          "state": "available",
+          "value": 40.18985047472739,
+          "share": 0.0282040546239514
+        },
+        {
+          "label": "Household composition: Other household types: Other, including all full-time students and all aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 168.36027432126696,
+          "share": 0.11815028713397233
+        }
+      ]
+    },
+    {
+      "dataset": "TS045",
+      "seconds": 300,
+      "period": "2021-03-21",
+      "universe": "households",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Number of cars or vans: Total: All households",
+          "state": "available",
+          "value": 1424.2783309638723,
+          "share": null
+        },
+        {
+          "label": "Number of cars or vans: No cars or vans in household",
+          "state": "available",
+          "value": 972.9959517685694,
+          "share": 0.6831501474224493
+        },
+        {
+          "label": "Number of cars or vans: 1 car or van in household",
+          "state": "available",
+          "value": 392.23872357856874,
+          "share": 0.2753947139763921
+        },
+        {
+          "label": "Number of cars or vans: 2 cars or vans in household",
+          "state": "available",
+          "value": 43.49292851624777,
+          "share": 0.030536818240304322
+        },
+        {
+          "label": "Number of cars or vans: 3 or more cars or vans in household",
+          "state": "available",
+          "value": 15.550727100486501,
+          "share": 0.010918320360854352
+        }
+      ]
+    },
+    {
+      "dataset": "TS066",
+      "seconds": 300,
+      "period": "2021-03-21",
+      "universe": "usual_residents_16_plus",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Economic activity status: Total: All usual residents aged 16 years and over",
+          "state": "available",
+          "value": 2740.264176942052,
+          "share": null
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students)",
+          "state": "available",
+          "value": 1877.4093945013688,
+          "share": 0.685119854610671
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment",
+          "state": "available",
+          "value": 1746.7153154082782,
+          "share": 0.6374258840100203
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Employee",
+          "state": "available",
+          "value": 1372.9309338953037,
+          "share": 0.5010213779561213
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Part-time",
+          "state": "available",
+          "value": 264.1063601267104,
+          "share": 0.09637989006645158
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Full-time",
+          "state": "available",
+          "value": 1108.8245737685934,
+          "share": 0.4046414878896698
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed with employees",
+          "state": "available",
+          "value": 54.95835694800428,
+          "share": 0.020055860821905885
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Part-time",
+          "state": "available",
+          "value": 17.22983961158945,
+          "share": 0.006287656407936835
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Full-time",
+          "state": "available",
+          "value": 37.72851733641483,
+          "share": 0.013768204413969053
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed without employees",
+          "state": "available",
+          "value": 318.82602456497057,
+          "share": 0.11634864523199318
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Part-time",
+          "state": "available",
+          "value": 149.0098206323378,
+          "share": 0.054377903373762526
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Full-time",
+          "state": "available",
+          "value": 169.81620393263273,
+          "share": 0.06197074185823063
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): Unemployed",
+          "state": "available",
+          "value": 130.6940790930903,
+          "share": 0.04769397060065062
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student",
+          "state": "available",
+          "value": 53.13068784669428,
+          "share": 0.01938889260888142
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment",
+          "state": "available",
+          "value": 37.92696621901341,
+          "share": 0.01384062403112437
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Employee",
+          "state": "available",
+          "value": 27.243641093468437,
+          "share": 0.009941976150587964
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Employee: Part-time",
+          "state": "available",
+          "value": 16.32598227419464,
+          "share": 0.0059578132690890125
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Employee: Full-time",
+          "state": "available",
+          "value": 10.917658819273791,
+          "share": 0.003984162881498949
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Self-employed with employees",
+          "state": "available",
+          "value": 0.135385999496906,
+          "share": 0.00004940618522699791
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Part-time",
+          "state": "available",
+          "value": 0.135385999496906,
+          "share": 0.00004940618522699791
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Full-time",
+          "state": "available",
+          "value": 0,
+          "share": 0
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Self-employed without employees",
+          "state": "available",
+          "value": 10.547939126048083,
+          "share": 0.0038492416953094153
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Part-time",
+          "state": "available",
+          "value": 6.865598899936725,
+          "share": 0.002505451466215299
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Full-time",
+          "state": "available",
+          "value": 3.6823402261113585,
+          "share": 0.0013437902290941157
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: Unemployed",
+          "state": "available",
+          "value": 15.203721627680858,
+          "share": 0.005548268577757045
+        },
+        {
+          "label": "Economic activity status: Economically inactive",
+          "state": "available",
+          "value": 809.7240945939888,
+          "share": 0.29549125278044747
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Retired",
+          "state": "available",
+          "value": 212.24708226923093,
+          "share": 0.0774549709678299
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Student",
+          "state": "available",
+          "value": 167.46205339935534,
+          "share": 0.061111645661197374
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Looking after home or family",
+          "state": "available",
+          "value": 137.43168061601338,
+          "share": 0.05015271219922225
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Long-term sick or disabled",
+          "state": "available",
+          "value": 159.86128634860972,
+          "share": 0.058337910517446544
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Other",
+          "state": "available",
+          "value": 132.72199196077943,
+          "share": 0.048434013434751434
+        }
+      ]
+    },
+    {
+      "dataset": "TS007A",
+      "seconds": 600,
+      "period": "2021-03-21",
+      "universe": "usual_residents",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Age: Total",
+          "state": "available",
+          "value": 14766.980617233608,
+          "share": null
+        },
+        {
+          "label": "Age: Aged 4 years and under",
+          "state": "available",
+          "value": 728.1126399714534,
+          "share": 0.0493068054224788
+        },
+        {
+          "label": "Age: Aged 5 to 9 years",
+          "state": "available",
+          "value": 729.6061557427183,
+          "share": 0.04940794429507418
+        },
+        {
+          "label": "Age: Aged 10 to 14 years",
+          "state": "available",
+          "value": 806.7482978667337,
+          "share": 0.05463190605974175
+        },
+        {
+          "label": "Age: Aged 15 to 19 years",
+          "state": "available",
+          "value": 739.1236579492627,
+          "share": 0.05005245670104545
+        },
+        {
+          "label": "Age: Aged 20 to 24 years",
+          "state": "available",
+          "value": 994.0796017083594,
+          "share": 0.06731772916043731
+        },
+        {
+          "label": "Age: Aged 25 to 29 years",
+          "state": "available",
+          "value": 1939.4486655443554,
+          "share": 0.1313368464289137
+        },
+        {
+          "label": "Age: Aged 30 to 34 years",
+          "state": "available",
+          "value": 2083.7944803872765,
+          "share": 0.14111175022166764
+        },
+        {
+          "label": "Age: Aged 35 to 39 years",
+          "state": "available",
+          "value": 1392.717452913004,
+          "share": 0.09431294649954722
+        },
+        {
+          "label": "Age: Aged 40 to 44 years",
+          "state": "available",
+          "value": 1040.1090342363677,
+          "share": 0.07043478021651375
+        },
+        {
+          "label": "Age: Aged 45 to 49 years",
+          "state": "available",
+          "value": 863.5349950210779,
+          "share": 0.05847742455985219
+        },
+        {
+          "label": "Age: Aged 50 to 54 years",
+          "state": "available",
+          "value": 902.5229870713358,
+          "share": 0.06111763876889351
+        },
+        {
+          "label": "Age: Aged 55 to 59 years",
+          "state": "available",
+          "value": 764.1871124729323,
+          "share": 0.05174972001934491
+        },
+        {
+          "label": "Age: Aged 60 to 64 years",
+          "state": "available",
+          "value": 573.1901782234002,
+          "share": 0.03881566537403497
+        },
+        {
+          "label": "Age: Aged 65 to 69 years",
+          "state": "available",
+          "value": 383.76923797369597,
+          "share": 0.025988334915657923
+        },
+        {
+          "label": "Age: Aged 70 to 74 years",
+          "state": "available",
+          "value": 342.3607208671119,
+          "share": 0.023184206016195648
+        },
+        {
+          "label": "Age: Aged 75 to 79 years",
+          "state": "available",
+          "value": 214.31631921427783,
+          "share": 0.014513211926625191
+        },
+        {
+          "label": "Age: Aged 80 to 84 years",
+          "state": "available",
+          "value": 134.72021695964193,
+          "share": 0.009123071293424635
+        },
+        {
+          "label": "Age: Aged 85 years and over",
+          "state": "available",
+          "value": 134.63886311060023,
+          "share": 0.009117562120551016
+        }
+      ]
+    },
+    {
+      "dataset": "TS003",
+      "seconds": 600,
+      "period": "2021-03-21",
+      "universe": "households",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Household composition: Total; measures: Value",
+          "state": "available",
+          "value": 6288.980692020423,
+          "share": null
+        },
+        {
+          "label": "Household composition: One person household; measures: Value",
+          "state": "available",
+          "value": 2120.231822786145,
+          "share": 0.33713441440142045
+        },
+        {
+          "label": "Household composition: One person household: Aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 477.84708148782903,
+          "share": 0.07598164231830612
+        },
+        {
+          "label": "Household composition: One person household: Other; measures: Value",
+          "state": "available",
+          "value": 1642.3847412983162,
+          "share": 0.2611527720831143
+        },
+        {
+          "label": "Household composition: Single family household; measures: Value",
+          "state": "available",
+          "value": 3150.7241176689586,
+          "share": 0.5009912213066032
+        },
+        {
+          "label": "Household composition: Single family household: All aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 105.52907407262067,
+          "share": 0.01677999651144071
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple; measures: Value",
+          "state": "available",
+          "value": 1085.5430111331266,
+          "share": 0.17261032658447878
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: No children; measures: Value",
+          "state": "available",
+          "value": 340.914237691002,
+          "share": 0.0542081864114419
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: Dependent children; measures: Value",
+          "state": "available",
+          "value": 604.7954596584243,
+          "share": 0.09616748552365571
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 139.8333137837003,
+          "share": 0.02223465464938117
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family; measures: Value",
+          "state": "available",
+          "value": 878.746837998888,
+          "share": 0.13972802287560823
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: No children; measures: Value",
+          "state": "available",
+          "value": 660.9951873466957,
+          "share": 0.10510370753489176
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: With dependent children; measures: Value",
+          "state": "available",
+          "value": 193.0951872331045,
+          "share": 0.030703733512508206
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 24.65646341908784,
+          "share": 0.003920581828208254
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family; measures: Value",
+          "state": "available",
+          "value": 960.3663678384612,
+          "share": 0.15270620389358042
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family: With dependent children; measures: Value",
+          "state": "available",
+          "value": 539.0595690889359,
+          "share": 0.08571493465911015
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 421.3067987495253,
+          "share": 0.06699126923447027
+        },
+        {
+          "label": "Household composition: Single family household: Other single family household; measures: Value",
+          "state": "available",
+          "value": 120.53882662586135,
+          "share": 0.019166671441495007
+        },
+        {
+          "label": "Household composition: Single family household: Other single family household: Other family composition; measures: Value",
+          "state": "available",
+          "value": 120.53882662586135,
+          "share": 0.019166671441495007
+        },
+        {
+          "label": "Household composition: Other household types; measures: Value",
+          "state": "available",
+          "value": 1018.0247515653197,
+          "share": 0.16187436429197638
+        },
+        {
+          "label": "Household composition: Other household types: With dependent children; measures: Value",
+          "state": "available",
+          "value": 188.49627459079394,
+          "share": 0.029972468325425387
+        },
+        {
+          "label": "Household composition: Other household types: Other, including all full-time students and all aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 829.5284769745257,
+          "share": 0.131901895966551
+        }
+      ]
+    },
+    {
+      "dataset": "TS045",
+      "seconds": 600,
+      "period": "2021-03-21",
+      "universe": "households",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Number of cars or vans: Total: All households",
+          "state": "available",
+          "value": 6285.788231817588,
+          "share": null
+        },
+        {
+          "label": "Number of cars or vans: No cars or vans in household",
+          "state": "available",
+          "value": 4172.414687370914,
+          "share": 0.6637854368447957
+        },
+        {
+          "label": "Number of cars or vans: 1 car or van in household",
+          "state": "available",
+          "value": 1820.4339148758706,
+          "share": 0.2896110794285345
+        },
+        {
+          "label": "Number of cars or vans: 2 cars or vans in household",
+          "state": "available",
+          "value": 245.2683967035372,
+          "share": 0.03901951317132041
+        },
+        {
+          "label": "Number of cars or vans: 3 or more cars or vans in household",
+          "state": "available",
+          "value": 47.67123286726737,
+          "share": 0.007583970555349561
+        }
+      ]
+    },
+    {
+      "dataset": "TS066",
+      "seconds": 600,
+      "period": "2021-03-21",
+      "universe": "usual_residents_16_plus",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Economic activity status: Total: All usual residents aged 16 years and over",
+          "state": "available",
+          "value": 12356.512584752127,
+          "share": null
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students)",
+          "state": "available",
+          "value": 8427.54740387811,
+          "share": 0.682032842687156
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment",
+          "state": "available",
+          "value": 7850.242480051843,
+          "share": 0.635312142176669
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Employee",
+          "state": "available",
+          "value": 6113.833483132617,
+          "share": 0.49478632754981827
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Part-time",
+          "state": "available",
+          "value": 1171.7421758743474,
+          "share": 0.09482790292467078
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Full-time",
+          "state": "available",
+          "value": 4942.091307258269,
+          "share": 0.3999584246251474
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed with employees",
+          "state": "available",
+          "value": 211.9882951739666,
+          "share": 0.017155997189333104
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Part-time",
+          "state": "available",
+          "value": 65.05775779835446,
+          "share": 0.005265058191146537
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Full-time",
+          "state": "available",
+          "value": 146.93053737561218,
+          "share": 0.011890938998186568
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed without employees",
+          "state": "available",
+          "value": 1524.420701745258,
+          "share": 0.12336981743751754
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Part-time",
+          "state": "available",
+          "value": 659.9670761507183,
+          "share": 0.05341046445136262
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Full-time",
+          "state": "available",
+          "value": 864.4536255945397,
+          "share": 0.06995935298615494
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): Unemployed",
+          "state": "available",
+          "value": 577.3049238262677,
+          "share": 0.046720700510487
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student",
+          "state": "available",
+          "value": 317.81234101639785,
+          "share": 0.025720229622764004
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment",
+          "state": "available",
+          "value": 204.42040780064187,
+          "share": 0.016543535758859307
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Employee",
+          "state": "available",
+          "value": 156.12180046716762,
+          "share": 0.012634778574969537
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Employee: Part-time",
+          "state": "available",
+          "value": 112.26784428403758,
+          "share": 0.009085722489578129
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Employee: Full-time",
+          "state": "available",
+          "value": 43.85395618313004,
+          "share": 0.0035490560853914067
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Self-employed with employees",
+          "state": "available",
+          "value": 6.675105431910374,
+          "share": 0.0005402094956911565
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Part-time",
+          "state": "available",
+          "value": 4.8025440640273285,
+          "share": 0.0003886650081151249
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Full-time",
+          "state": "available",
+          "value": 1.872561367883046,
+          "share": 0.00015154448757603154
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Self-employed without employees",
+          "state": "available",
+          "value": 41.623501901563834,
+          "share": 0.003368547688198612
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Part-time",
+          "state": "available",
+          "value": 31.22457332415156,
+          "share": 0.002526972971539116
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Full-time",
+          "state": "available",
+          "value": 10.398928577412265,
+          "share": 0.0008415747166594958
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: Unemployed",
+          "state": "available",
+          "value": 113.39193321575604,
+          "share": 0.0091766938639047
+        },
+        {
+          "label": "Economic activity status: Economically inactive",
+          "state": "available",
+          "value": 3611.152839857618,
+          "share": 0.29224692769008
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Retired",
+          "state": "available",
+          "value": 955.2404650338065,
+          "share": 0.07730663959445712
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Student",
+          "state": "available",
+          "value": 824.1900625046526,
+          "share": 0.06670086376326755
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Looking after home or family",
+          "state": "available",
+          "value": 621.6799676233759,
+          "share": 0.05031192768666183
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Long-term sick or disabled",
+          "state": "available",
+          "value": 647.3254444119044,
+          "share": 0.0523873900481193
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Other",
+          "state": "available",
+          "value": 562.7169002838783,
+          "share": 0.04554010659757415
+        }
+      ]
+    },
+    {
+      "dataset": "TS007A",
+      "seconds": 900,
+      "period": "2021-03-21",
+      "universe": "usual_residents",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Age: Total",
+          "state": "available",
+          "value": 35210.67303799842,
+          "share": null
+        },
+        {
+          "label": "Age: Aged 4 years and under",
+          "state": "available",
+          "value": 1787.600719833614,
+          "share": 0.05076871770966953
+        },
+        {
+          "label": "Age: Aged 5 to 9 years",
+          "state": "available",
+          "value": 1731.66036650893,
+          "share": 0.049179984848348915
+        },
+        {
+          "label": "Age: Aged 10 to 14 years",
+          "state": "available",
+          "value": 1908.835775466822,
+          "share": 0.05421185142944746
+        },
+        {
+          "label": "Age: Aged 15 to 19 years",
+          "state": "available",
+          "value": 1816.18659970798,
+          "share": 0.051580570406819536
+        },
+        {
+          "label": "Age: Aged 20 to 24 years",
+          "state": "available",
+          "value": 2462.2653796232976,
+          "share": 0.06992951759161452
+        },
+        {
+          "label": "Age: Aged 25 to 29 years",
+          "state": "available",
+          "value": 4715.9418332199,
+          "share": 0.1339350096526295
+        },
+        {
+          "label": "Age: Aged 30 to 34 years",
+          "state": "available",
+          "value": 4840.639977095163,
+          "share": 0.1374764967392493
+        },
+        {
+          "label": "Age: Aged 35 to 39 years",
+          "state": "available",
+          "value": 3340.6153002196675,
+          "share": 0.09487507656029648
+        },
+        {
+          "label": "Age: Aged 40 to 44 years",
+          "state": "available",
+          "value": 2489.2684718235964,
+          "share": 0.07069641835977529
+        },
+        {
+          "label": "Age: Aged 45 to 49 years",
+          "state": "available",
+          "value": 2120.6953895945676,
+          "share": 0.06022876607061642
+        },
+        {
+          "label": "Age: Aged 50 to 54 years",
+          "state": "available",
+          "value": 2062.4370915078143,
+          "share": 0.058574202466453486
+        },
+        {
+          "label": "Age: Aged 55 to 59 years",
+          "state": "available",
+          "value": 1808.9830632581698,
+          "share": 0.051375986517098474
+        },
+        {
+          "label": "Age: Aged 60 to 64 years",
+          "state": "available",
+          "value": 1316.2892322525465,
+          "share": 0.03738324543901908
+        },
+        {
+          "label": "Age: Aged 65 to 69 years",
+          "state": "available",
+          "value": 914.1565181293744,
+          "share": 0.025962483510123223
+        },
+        {
+          "label": "Age: Aged 70 to 74 years",
+          "state": "available",
+          "value": 760.3976933922934,
+          "share": 0.021595659150613008
+        },
+        {
+          "label": "Age: Aged 75 to 79 years",
+          "state": "available",
+          "value": 492.23819908352266,
+          "share": 0.013979800912987726
+        },
+        {
+          "label": "Age: Aged 80 to 84 years",
+          "state": "available",
+          "value": 324.97554092983796,
+          "share": 0.009229461208512913
+        },
+        {
+          "label": "Age: Aged 85 years and over",
+          "state": "available",
+          "value": 317.48588635132313,
+          "share": 0.009016751426725096
+        }
+      ]
+    },
+    {
+      "dataset": "TS003",
+      "seconds": 900,
+      "period": "2021-03-21",
+      "universe": "households",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Household composition: Total; measures: Value",
+          "state": "available",
+          "value": 14825.167140469106,
+          "share": null
+        },
+        {
+          "label": "Household composition: One person household; measures: Value",
+          "state": "available",
+          "value": 5040.036774216328,
+          "share": 0.33996492089848024
+        },
+        {
+          "label": "Household composition: One person household: Aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 1108.0946053956466,
+          "share": 0.07474415599476227
+        },
+        {
+          "label": "Household composition: One person household: Other; measures: Value",
+          "state": "available",
+          "value": 3931.942168820683,
+          "share": 0.26522076490371804
+        },
+        {
+          "label": "Household composition: Single family household; measures: Value",
+          "state": "available",
+          "value": 7402.323338978776,
+          "share": 0.4993079180046632
+        },
+        {
+          "label": "Household composition: Single family household: All aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 242.65690943595047,
+          "share": 0.016367903790680108
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple; measures: Value",
+          "state": "available",
+          "value": 2593.501895562248,
+          "share": 0.1749391336359789
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: No children; measures: Value",
+          "state": "available",
+          "value": 773.9792441157284,
+          "share": 0.05220711758472881
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: Dependent children; measures: Value",
+          "state": "available",
+          "value": 1456.1860737062846,
+          "share": 0.09822392286770584
+        },
+        {
+          "label": "Household composition: Single family household: Married or civil partnership couple: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 363.3365777402355,
+          "share": 0.02450809318354428
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family; measures: Value",
+          "state": "available",
+          "value": 2099.878462672217,
+          "share": 0.14164281878077847
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: No children; measures: Value",
+          "state": "available",
+          "value": 1593.55645988313,
+          "share": 0.10748994900253825
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: With dependent children; measures: Value",
+          "state": "available",
+          "value": 445.2232386226939,
+          "share": 0.030031583077896138
+        },
+        {
+          "label": "Household composition: Single family household: Cohabiting couple family: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 61.09876416639274,
+          "share": 0.004121286700344035
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family; measures: Value",
+          "state": "available",
+          "value": 2161.004860239032,
+          "share": 0.1457659694331549
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family: With dependent children; measures: Value",
+          "state": "available",
+          "value": 1229.209589656268,
+          "share": 0.08291370869612824
+        },
+        {
+          "label": "Household composition: Single family household: Lone parent family: All children non-dependent; measures: Value",
+          "state": "available",
+          "value": 931.7952705827643,
+          "share": 0.06285226073702667
+        },
+        {
+          "label": "Household composition: Single family household: Other single family household; measures: Value",
+          "state": "available",
+          "value": 305.2812110693275,
+          "share": 0.02059209236407082
+        },
+        {
+          "label": "Household composition: Single family household: Other single family household: Other family composition; measures: Value",
+          "state": "available",
+          "value": 305.2812110693275,
+          "share": 0.02059209236407082
+        },
+        {
+          "label": "Household composition: Other household types; measures: Value",
+          "state": "available",
+          "value": 2382.8070272740033,
+          "share": 0.1607271610968566
+        },
+        {
+          "label": "Household composition: Other household types: With dependent children; measures: Value",
+          "state": "available",
+          "value": 467.49751609208386,
+          "share": 0.03153404691242429
+        },
+        {
+          "label": "Household composition: Other household types: Other, including all full-time students and all aged 66 years and over; measures: Value",
+          "state": "available",
+          "value": 1915.3095111819193,
+          "share": 0.12919311418443233
+        }
+      ]
+    },
+    {
+      "dataset": "TS045",
+      "seconds": 900,
+      "period": "2021-03-21",
+      "universe": "households",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Number of cars or vans: Total: All households",
+          "state": "available",
+          "value": 14815.32774843155,
+          "share": null
+        },
+        {
+          "label": "Number of cars or vans: No cars or vans in household",
+          "state": "available",
+          "value": 9834.582633664264,
+          "share": 0.6638113446194546
+        },
+        {
+          "label": "Number of cars or vans: 1 car or van in household",
+          "state": "available",
+          "value": 4280.93977296116,
+          "share": 0.28895343023473574
+        },
+        {
+          "label": "Number of cars or vans: 2 cars or vans in household",
+          "state": "available",
+          "value": 593.7683082829953,
+          "share": 0.0400779731886698
+        },
+        {
+          "label": "Number of cars or vans: 3 or more cars or vans in household",
+          "state": "available",
+          "value": 106.0370335231269,
+          "share": 0.007157251957139638
+        }
+      ]
+    },
+    {
+      "dataset": "TS066",
+      "seconds": 900,
+      "period": "2021-03-21",
+      "universe": "usual_residents_16_plus",
+      "method": "area-uniform-bng2",
+      "limitations": [
+        "Uniform area allocation is an estimate, not a measured walking population.",
+        "Fully included and partially allocated counts are sensitivity diagnostics, not a statistical confidence interval.",
+        "The upper envelope excludes missing and outside-London data; absence is not zero.",
+        "Coverage describes the frozen source footprint; omitted water or other footprint gaps are not automatically outside-London locations."
+      ],
+      "columns": [
+        {
+          "label": "Economic activity status: Total: All usual residents aged 16 years and over",
+          "state": "available",
+          "value": 29395.005965074437,
+          "share": null
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students)",
+          "state": "available",
+          "value": 19786.171056680847,
+          "share": 0.6731133540231191
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment",
+          "state": "available",
+          "value": 18419.023817626432,
+          "share": 0.6266038469089248
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Employee",
+          "state": "available",
+          "value": 14523.908975919167,
+          "share": 0.49409443880282566
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Part-time",
+          "state": "available",
+          "value": 2809.5212282577654,
+          "share": 0.09557818194001685
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Employee: Full-time",
+          "state": "available",
+          "value": 11714.387747661403,
+          "share": 0.3985162568628089
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed with employees",
+          "state": "available",
+          "value": 488.64430273937256,
+          "share": 0.01662337824731022
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Part-time",
+          "state": "available",
+          "value": 136.21436782541502,
+          "share": 0.004633928905721523
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed with employees: Full-time",
+          "state": "available",
+          "value": 352.4299349139573,
+          "share": 0.011989449341588689
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students):In employment:Self-employed without employees",
+          "state": "available",
+          "value": 3406.4705389678898,
+          "share": 0.11588602985878875
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Part-time",
+          "state": "available",
+          "value": 1493.616491018996,
+          "share": 0.05081191317986568
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): In employment: Self-employed without employees: Full-time",
+          "state": "available",
+          "value": 1912.854047948894,
+          "share": 0.06507411667892309
+        },
+        {
+          "label": "Economic activity status: Economically active (excluding full-time students): Unemployed",
+          "state": "available",
+          "value": 1367.1472390544245,
+          "share": 0.04650950711419468
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student",
+          "state": "available",
+          "value": 796.430232688623,
+          "share": 0.027094066034036482
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment",
+          "state": "available",
+          "value": 511.6790086054042,
+          "share": 0.017407004754935368
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Employee",
+          "state": "available",
+          "value": 404.1025850428463,
+          "share": 0.013747321076341308
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Employee: Part-time",
+          "state": "available",
+          "value": 293.1815037949298,
+          "share": 0.009973854203100768
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Employee: Full-time",
+          "state": "available",
+          "value": 110.92108124791625,
+          "share": 0.003773466873240533
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Self-employed with employees",
+          "state": "available",
+          "value": 9.164553563214918,
+          "share": 0.00031177246822483204
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Part-time",
+          "state": "available",
+          "value": 6.970469004023962,
+          "share": 0.0002371310627494309
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed with employees: Full-time",
+          "state": "available",
+          "value": 2.194084559190956,
+          "share": 0.00007464140547540113
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student:In employment:Self-employed without employees",
+          "state": "available",
+          "value": 98.41186999934308,
+          "share": 0.0033479112103692297
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Part-time",
+          "state": "available",
+          "value": 76.93707579672378,
+          "share": 0.0026173519368608484
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: In employment: Self-employed without employees: Full-time",
+          "state": "available",
+          "value": 21.474794202619307,
+          "share": 0.0007305592735083811
+        },
+        {
+          "label": "Economic activity status: Economically active and a full-time student: Unemployed",
+          "state": "available",
+          "value": 284.75122408321863,
+          "share": 0.009687061279101107
+        },
+        {
+          "label": "Economic activity status: Economically inactive",
+          "state": "available",
+          "value": 8812.404675704964,
+          "share": 0.2997925799428443
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Retired",
+          "state": "available",
+          "value": 2249.6577436817847,
+          "share": 0.07653197098700054
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Student",
+          "state": "available",
+          "value": 2077.4710419525873,
+          "share": 0.07067428543545548
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Looking after home or family",
+          "state": "available",
+          "value": 1556.042200406885,
+          "share": 0.05293559736833157
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Long-term sick or disabled",
+          "state": "available",
+          "value": 1485.3126571584658,
+          "share": 0.05052942186585144
+        },
+        {
+          "label": "Economic activity status: Economically inactive: Other",
+          "state": "available",
+          "value": 1443.9210325052381,
+          "share": 0.049121304286205196
+        }
+      ]
+    }
+  ],
+  "timeline": [],
+  "rental": [],
+  "actions": [
+    {
+      "rank": 1,
+      "action": "Get the exact-unit permission and measured usable plan for the proposed coffee operation.",
+      "consequence": "If permission or the usable plan cannot support counter, queue, preparation, washing and any seating, change the operation or stop this lease enquiry. Positive neighbourhood context cannot resolve a physical or binding-use constraint.",
+      "factIds": []
+    },
+    {
+      "rank": 2,
+      "action": "Audit the exact offers of the named cafe and bakery leads against your intended visit occasion, including price, speed, brand and dated customer reviews.",
+      "consequence": "If close substitutes already serve the same occasion more convincingly, change the proposition or reject the site for that concept; a larger resident base alone does not resolve this.",
+      "factIds": [
+        "f21"
+      ]
+    },
+    {
+      "rank": 3,
+      "action": "Walk the station approaches at the intended morning and weekday trading times and observe whether they reach the frontage.",
+      "consequence": "If commuters bypass the door, remove passing-commuter convenience from the case and reassess the offer around substantiated local visits.",
+      "factIds": [
+        "f26",
+        "f14"
+      ]
+    },
+    {
+      "rank": 4,
+      "action": "Obtain the exact-unit rent and complete proposed lease and alteration terms in writing.",
+      "consequence": "Unacceptable recurring obligations, repair exposure or restrictions can change the decision even if permission and the local proposition are satisfactory. No financial viability is established by this report.",
+      "factIds": []
+    }
+  ],
+  "map": {
+    "status": "available",
+    "description": "Stored provider-modelled walking geometry; routing vintage is unknown. Building and station register points are not confirmed entrances; routes do not establish step-free access. No street basemap or measured pedestrian footfall is supplied.",
+    "bounds": [
+      -0.07429300000000001,
+      51.528779,
+      -0.04746,
+      51.546561
+    ],
+    "layers": [
+      {
+        "id": "property",
+        "label": "OS building point · entrance unconfirmed",
+        "kind": "property",
+        "status": "available",
+        "colour": "#cf3540",
+        "points": [
+          [
+            -0.0613296,
+            51.5374622
+          ]
+        ],
+        "polygons": []
+      },
+      {
+        "id": "walk-300",
+        "label": "5 minute modelled walk",
+        "kind": "catchment",
+        "status": "available",
+        "colour": "#cf3540",
+        "points": [],
+        "polygons": [],
+        "polygonParts": [
+          [
+            [
+              [
+                -0.059329,
+                51.540264
+              ],
+              [
+                -0.059497,
+                51.540293
+              ],
+              [
+                -0.06002,
+                51.540152
+              ],
+              [
+                -0.060329,
+                51.540177
+              ],
+              [
+                -0.060599,
+                51.540192
+              ],
+              [
+                -0.061119,
+                51.540252
+              ],
+              [
+                -0.061329,
+                51.540264
+              ],
+              [
+                -0.061551,
+                51.54024
+              ],
+              [
+                -0.062042,
+                51.540175
+              ],
+              [
+                -0.062329,
+                51.540144
+              ],
+              [
+                -0.062824,
+                51.539967
+              ],
+              [
+                -0.062834,
+                51.539967
+              ],
+              [
+                -0.062868,
+                51.539923
+              ],
+              [
+                -0.063278,
+                51.539462
+              ],
+              [
+                -0.063301,
+                51.539434
+              ],
+              [
+                -0.063329,
+                51.539409
+              ],
+              [
+                -0.063532,
+                51.539259
+              ],
+              [
+                -0.063888,
+                51.539021
+              ],
+              [
+                -0.064329,
+                51.538463
+              ],
+              [
+                -0.06433,
+                51.538462
+              ],
+              [
+                -0.06433,
+                51.53846
+              ],
+              [
+                -0.064485,
+                51.537617
+              ],
+              [
+                -0.064528,
+                51.537462
+              ],
+              [
+                -0.064699,
+                51.537092
+              ],
+              [
+                -0.06477,
+                51.536903
+              ],
+              [
+                -0.065053,
+                51.536462
+              ],
+              [
+                -0.064665,
+                51.536125
+              ],
+              [
+                -0.064329,
+                51.535832
+              ],
+              [
+                -0.064174,
+                51.535617
+              ],
+              [
+                -0.064055,
+                51.535462
+              ],
+              [
+                -0.0638,
+                51.534991
+              ],
+              [
+                -0.063635,
+                51.534768
+              ],
+              [
+                -0.06342,
+                51.534462
+              ],
+              [
+                -0.063365,
+                51.534426
+              ],
+              [
+                -0.063329,
+                51.534415
+              ],
+              [
+                -0.063281,
+                51.534414
+              ],
+              [
+                -0.062422,
+                51.534369
+              ],
+              [
+                -0.062329,
+                51.534366
+              ],
+              [
+                -0.06226,
+                51.534393
+              ],
+              [
+                -0.061924,
+                51.534462
+              ],
+              [
+                -0.061442,
+                51.534574
+              ],
+              [
+                -0.061329,
+                51.534595
+              ],
+              [
+                -0.06111,
+                51.534681
+              ],
+              [
+                -0.060656,
+                51.534789
+              ],
+              [
+                -0.060329,
+                51.535001
+              ],
+              [
+                -0.059972,
+                51.535105
+              ],
+              [
+                -0.059575,
+                51.535215
+              ],
+              [
+                -0.059329,
+                51.535286
+              ],
+              [
+                -0.059259,
+                51.535391
+              ],
+              [
+                -0.059218,
+                51.535462
+              ],
+              [
+                -0.058779,
+                51.535912
+              ],
+              [
+                -0.058329,
+                51.536206
+              ],
+              [
+                -0.058137,
+                51.53627
+              ],
+              [
+                -0.05779,
+                51.536462
+              ],
+              [
+                -0.057537,
+                51.536669
+              ],
+              [
+                -0.057329,
+                51.536865
+              ],
+              [
+                -0.05701,
+                51.537142
+              ],
+              [
+                -0.056554,
+                51.537462
+              ],
+              [
+                -0.056586,
+                51.537718
+              ],
+              [
+                -0.056613,
+                51.538177
+              ],
+              [
+                -0.056653,
+                51.538462
+              ],
+              [
+                -0.057041,
+                51.538749
+              ],
+              [
+                -0.057329,
+                51.538876
+              ],
+              [
+                -0.057734,
+                51.539057
+              ],
+              [
+                -0.057966,
+                51.539099
+              ],
+              [
+                -0.058329,
+                51.53921
+              ],
+              [
+                -0.058486,
+                51.539304
+              ],
+              [
+                -0.058716,
+                51.539462
+              ],
+              [
+                -0.058932,
+                51.539859
+              ],
+              [
+                -0.059329,
+                51.540264
+              ]
+            ]
+          ]
+        ]
+      },
+      {
+        "id": "walk-600",
+        "label": "10 minute modelled walk",
+        "kind": "catchment",
+        "status": "available",
+        "colour": "#5681c5",
+        "points": [],
+        "polygons": [],
+        "polygonParts": [
+          [
+            [
+              [
+                -0.057329,
+                51.543142
+              ],
+              [
+                -0.057568,
+                51.543223
+              ],
+              [
+                -0.058218,
+                51.543351
+              ],
+              [
+                -0.058329,
+                51.543381
+              ],
+              [
+                -0.058419,
+                51.543372
+              ],
+              [
+                -0.059086,
+                51.543218
+              ],
+              [
+                -0.059329,
+                51.543201
+              ],
+              [
+                -0.059675,
+                51.543115
+              ],
+              [
+                -0.059939,
+                51.543071
+              ],
+              [
+                -0.060329,
+                51.542952
+              ],
+              [
+                -0.06082,
+                51.542971
+              ],
+              [
+                -0.060836,
+                51.542969
+              ],
+              [
+                -0.061329,
+                51.542982
+              ],
+              [
+                -0.061726,
+                51.543064
+              ],
+              [
+                -0.062085,
+                51.543218
+              ],
+              [
+                -0.062329,
+                51.543291
+              ],
+              [
+                -0.062737,
+                51.543053
+              ],
+              [
+                -0.062854,
+                51.542986
+              ],
+              [
+                -0.063329,
+                51.542704
+              ],
+              [
+                -0.063763,
+                51.542896
+              ],
+              [
+                -0.063853,
+                51.542938
+              ],
+              [
+                -0.064329,
+                51.543128
+              ],
+              [
+                -0.064713,
+                51.542846
+              ],
+              [
+                -0.06521,
+                51.542462
+              ],
+              [
+                -0.065272,
+                51.542405
+              ],
+              [
+                -0.065329,
+                51.542352
+              ],
+              [
+                -0.065794,
+                51.541926
+              ],
+              [
+                -0.065928,
+                51.541863
+              ],
+              [
+                -0.066329,
+                51.541633
+              ],
+              [
+                -0.066446,
+                51.541579
+              ],
+              [
+                -0.066627,
+                51.541462
+              ],
+              [
+                -0.0669,
+                51.541033
+              ],
+              [
+                -0.067329,
+                51.540598
+              ],
+              [
+                -0.067395,
+                51.540528
+              ],
+              [
+                -0.067485,
+                51.540462
+              ],
+              [
+                -0.067843,
+                51.539976
+              ],
+              [
+                -0.067923,
+                51.539868
+              ],
+              [
+                -0.068223,
+                51.539462
+              ],
+              [
+                -0.068271,
+                51.539404
+              ],
+              [
+                -0.068329,
+                51.539345
+              ],
+              [
+                -0.068645,
+                51.538778
+              ],
+              [
+                -0.068817,
+                51.538462
+              ],
+              [
+                -0.068848,
+                51.53798
+              ],
+              [
+                -0.068857,
+                51.537933
+              ],
+              [
+                -0.068896,
+                51.537462
+              ],
+              [
+                -0.069091,
+                51.537224
+              ],
+              [
+                -0.069329,
+                51.536906
+              ],
+              [
+                -0.069526,
+                51.536659
+              ],
+              [
+                -0.069647,
+                51.536462
+              ],
+              [
+                -0.069519,
+                51.536271
+              ],
+              [
+                -0.069329,
+                51.536016
+              ],
+              [
+                -0.069092,
+                51.535699
+              ],
+              [
+                -0.068898,
+                51.535462
+              ],
+              [
+                -0.068566,
+                51.535225
+              ],
+              [
+                -0.068329,
+                51.535038
+              ],
+              [
+                -0.067991,
+                51.5348
+              ],
+              [
+                -0.06759,
+                51.534462
+              ],
+              [
+                -0.067448,
+                51.534342
+              ],
+              [
+                -0.067329,
+                51.534251
+              ],
+              [
+                -0.066938,
+                51.533853
+              ],
+              [
+                -0.066535,
+                51.533462
+              ],
+              [
+                -0.066502,
+                51.533288
+              ],
+              [
+                -0.066381,
+                51.532514
+              ],
+              [
+                -0.066372,
+                51.532462
+              ],
+              [
+                -0.066351,
+                51.532439
+              ],
+              [
+                -0.066329,
+                51.532403
+              ],
+              [
+                -0.06625,
+                51.532383
+              ],
+              [
+                -0.065696,
+                51.532095
+              ],
+              [
+                -0.065329,
+                51.532051
+              ],
+              [
+                -0.064909,
+                51.532042
+              ],
+              [
+                -0.064709,
+                51.532082
+              ],
+              [
+                -0.064329,
+                51.532069
+              ],
+              [
+                -0.063961,
+                51.532094
+              ],
+              [
+                -0.063734,
+                51.532057
+              ],
+              [
+                -0.063329,
+                51.532074
+              ],
+              [
+                -0.062838,
+                51.531971
+              ],
+              [
+                -0.062823,
+                51.531968
+              ],
+              [
+                -0.062329,
+                51.531853
+              ],
+              [
+                -0.061994,
+                51.531797
+              ],
+              [
+                -0.06144,
+                51.531573
+              ],
+              [
+                -0.061329,
+                51.531545
+              ],
+              [
+                -0.060882,
+                51.532015
+              ],
+              [
+                -0.060529,
+                51.532462
+              ],
+              [
+                -0.060476,
+                51.532608
+              ],
+              [
+                -0.060329,
+                51.533324
+              ],
+              [
+                -0.060298,
+                51.53343
+              ],
+              [
+                -0.060298,
+                51.533462
+              ],
+              [
+                -0.059573,
+                51.533706
+              ],
+              [
+                -0.059329,
+                51.533751
+              ],
+              [
+                -0.059008,
+                51.533783
+              ],
+              [
+                -0.058578,
+                51.533711
+              ],
+              [
+                -0.058329,
+                51.533757
+              ],
+              [
+                -0.058015,
+                51.533776
+              ],
+              [
+                -0.05753,
+                51.533663
+              ],
+              [
+                -0.057329,
+                51.533685
+              ],
+              [
+                -0.056934,
+                51.533857
+              ],
+              [
+                -0.056785,
+                51.533918
+              ],
+              [
+                -0.056329,
+                51.534136
+              ],
+              [
+                -0.056195,
+                51.534328
+              ],
+              [
+                -0.056115,
+                51.534462
+              ],
+              [
+                -0.055791,
+                51.534924
+              ],
+              [
+                -0.055329,
+                51.53542
+              ],
+              [
+                -0.055305,
+                51.535437
+              ],
+              [
+                -0.055266,
+                51.535462
+              ],
+              [
+                -0.054673,
+                51.535805
+              ],
+              [
+                -0.054329,
+                51.535927
+              ],
+              [
+                -0.05391,
+                51.536043
+              ],
+              [
+                -0.053517,
+                51.536274
+              ],
+              [
+                -0.053329,
+                51.536359
+              ],
+              [
+                -0.05329,
+                51.536423
+              ],
+              [
+                -0.053188,
+                51.536462
+              ],
+              [
+                -0.05274,
+                51.536873
+              ],
+              [
+                -0.052329,
+                51.537436
+              ],
+              [
+                -0.052318,
+                51.537451
+              ],
+              [
+                -0.052312,
+                51.537462
+              ],
+              [
+                -0.0523,
+                51.537491
+              ],
+              [
+                -0.052028,
+                51.538161
+              ],
+              [
+                -0.051896,
+                51.538462
+              ],
+              [
+                -0.052173,
+                51.538618
+              ],
+              [
+                -0.052329,
+                51.53863
+              ],
+              [
+                -0.052668,
+                51.538801
+              ],
+              [
+                -0.052897,
+                51.538894
+              ],
+              [
+                -0.053329,
+                51.539216
+              ],
+              [
+                -0.05353,
+                51.539261
+              ],
+              [
+                -0.053867,
+                51.539462
+              ],
+              [
+                -0.053754,
+                51.539887
+              ],
+              [
+                -0.053724,
+                51.540067
+              ],
+              [
+                -0.053634,
+                51.540462
+              ],
+              [
+                -0.054098,
+                51.540693
+              ],
+              [
+                -0.054329,
+                51.540784
+              ],
+              [
+                -0.054779,
+                51.541011
+              ],
+              [
+                -0.055282,
+                51.541415
+              ],
+              [
+                -0.055329,
+                51.54145
+              ],
+              [
+                -0.055338,
+                51.541452
+              ],
+              [
+                -0.055355,
+                51.541462
+              ],
+              [
+                -0.055943,
+                51.541848
+              ],
+              [
+                -0.056329,
+                51.542052
+              ],
+              [
+                -0.056545,
+                51.542246
+              ],
+              [
+                -0.056714,
+                51.542462
+              ],
+              [
+                -0.056987,
+                51.542804
+              ],
+              [
+                -0.057329,
+                51.543142
+              ]
+            ]
+          ]
+        ]
+      },
+      {
+        "id": "walk-900",
+        "label": "15 minute modelled walk",
+        "kind": "catchment",
+        "status": "available",
+        "colour": "#9166c4",
+        "points": [],
+        "polygons": [],
+        "polygonParts": [
+          [
+            [
+              [
+                -0.055329,
+                51.54596
+              ],
+              [
+                -0.055791,
+                51.545924
+              ],
+              [
+                -0.05587,
+                51.545921
+              ],
+              [
+                -0.056329,
+                51.545887
+              ],
+              [
+                -0.056617,
+                51.54575
+              ],
+              [
+                -0.057177,
+                51.545614
+              ],
+              [
+                -0.057329,
+                51.545561
+              ],
+              [
+                -0.057424,
+                51.545556
+              ],
+              [
+                -0.057684,
+                51.545462
+              ],
+              [
+                -0.058128,
+                51.54526
+              ],
+              [
+                -0.058329,
+                51.545262
+              ],
+              [
+                -0.058448,
+                51.545342
+              ],
+              [
+                -0.058572,
+                51.545462
+              ],
+              [
+                -0.059007,
+                51.545784
+              ],
+              [
+                -0.059329,
+                51.545846
+              ],
+              [
+                -0.05975,
+                51.545883
+              ],
+              [
+                -0.059956,
+                51.545835
+              ],
+              [
+                -0.060329,
+                51.545902
+              ],
+              [
+                -0.060662,
+                51.545794
+              ],
+              [
+                -0.061064,
+                51.545727
+              ],
+              [
+                -0.061329,
+                51.545659
+              ],
+              [
+                -0.06155,
+                51.545683
+              ],
+              [
+                -0.062259,
+                51.545531
+              ],
+              [
+                -0.062329,
+                51.545548
+              ],
+              [
+                -0.06278,
+                51.546011
+              ],
+              [
+                -0.063025,
+                51.546157
+              ],
+              [
+                -0.063329,
+                51.546361
+              ],
+              [
+                -0.063471,
+                51.54632
+              ],
+              [
+                -0.064023,
+                51.546155
+              ],
+              [
+                -0.064329,
+                51.546071
+              ],
+              [
+                -0.064727,
+                51.54586
+              ],
+              [
+                -0.065188,
+                51.545602
+              ],
+              [
+                -0.065329,
+                51.545525
+              ],
+              [
+                -0.065375,
+                51.545508
+              ],
+              [
+                -0.065462,
+                51.545462
+              ],
+              [
+                -0.066065,
+                51.545198
+              ],
+              [
+                -0.066329,
+                51.545021
+              ],
+              [
+                -0.066685,
+                51.544818
+              ],
+              [
+                -0.067192,
+                51.544599
+              ],
+              [
+                -0.067329,
+                51.544533
+              ],
+              [
+                -0.067375,
+                51.544508
+              ],
+              [
+                -0.067439,
+                51.544462
+              ],
+              [
+                -0.06789,
+                51.544022
+              ],
+              [
+                -0.068329,
+                51.543505
+              ],
+              [
+                -0.068355,
+                51.543488
+              ],
+              [
+                -0.068396,
+                51.543462
+              ],
+              [
+                -0.068663,
+                51.543128
+              ],
+              [
+                -0.068813,
+                51.542946
+              ],
+              [
+                -0.069115,
+                51.542462
+              ],
+              [
+                -0.069262,
+                51.542394
+              ],
+              [
+                -0.069329,
+                51.542366
+              ],
+              [
+                -0.069488,
+                51.542303
+              ],
+              [
+                -0.069977,
+                51.542109
+              ],
+              [
+                -0.070329,
+                51.54197
+              ],
+              [
+                -0.070656,
+                51.541789
+              ],
+              [
+                -0.071248,
+                51.541543
+              ],
+              [
+                -0.071329,
+                51.541505
+              ],
+              [
+                -0.071358,
+                51.54149
+              ],
+              [
+                -0.071388,
+                51.541462
+              ],
+              [
+                -0.071427,
+                51.541364
+              ],
+              [
+                -0.071548,
+                51.54068
+              ],
+              [
+                -0.071737,
+                51.540462
+              ],
+              [
+                -0.07208,
+                51.540213
+              ],
+              [
+                -0.072329,
+                51.539954
+              ],
+              [
+                -0.072597,
+                51.539729
+              ],
+              [
+                -0.072866,
+                51.539462
+              ],
+              [
+                -0.07307,
+                51.539203
+              ],
+              [
+                -0.073329,
+                51.538782
+              ],
+              [
+                -0.073446,
+                51.538579
+              ],
+              [
+                -0.073499,
+                51.538462
+              ],
+              [
+                -0.073435,
+                51.538356
+              ],
+              [
+                -0.073329,
+                51.538004
+              ],
+              [
+                -0.073187,
+                51.537604
+              ],
+              [
+                -0.073153,
+                51.537462
+              ],
+              [
+                -0.073221,
+                51.537353
+              ],
+              [
+                -0.073329,
+                51.537229
+              ],
+              [
+                -0.073654,
+                51.536787
+              ],
+              [
+                -0.074093,
+                51.536462
+              ],
+              [
+                -0.073742,
+                51.536048
+              ],
+              [
+                -0.073329,
+                51.535649
+              ],
+              [
+                -0.073249,
+                51.535542
+              ],
+              [
+                -0.073215,
+                51.535462
+              ],
+              [
+                -0.073123,
+                51.535256
+              ],
+              [
+                -0.072973,
+                51.534817
+              ],
+              [
+                -0.072741,
+                51.534462
+              ],
+              [
+                -0.072461,
+                51.53433
+              ],
+              [
+                -0.072329,
+                51.534268
+              ],
+              [
+                -0.071987,
+                51.53412
+              ],
+              [
+                -0.071768,
+                51.534023
+              ],
+              [
+                -0.071329,
+                51.533838
+              ],
+              [
+                -0.071077,
+                51.533714
+              ],
+              [
+                -0.070711,
+                51.533462
+              ],
+              [
+                -0.07051,
+                51.53328
+              ],
+              [
+                -0.070329,
+                51.53312
+              ],
+              [
+                -0.069993,
+                51.532797
+              ],
+              [
+                -0.069829,
+                51.532462
+              ],
+              [
+                -0.069853,
+                51.531986
+              ],
+              [
+                -0.069887,
+                51.531903
+              ],
+              [
+                -0.069934,
+                51.531462
+              ],
+              [
+                -0.069549,
+                51.531242
+              ],
+              [
+                -0.069329,
+                51.531166
+              ],
+              [
+                -0.068951,
+                51.531084
+              ],
+              [
+                -0.068753,
+                51.531038
+              ],
+              [
+                -0.068329,
+                51.53095
+              ],
+              [
+                -0.067983,
+                51.530808
+              ],
+              [
+                -0.067379,
+                51.530462
+              ],
+              [
+                -0.067353,
+                51.530437
+              ],
+              [
+                -0.067329,
+                51.530418
+              ],
+              [
+                -0.06723,
+                51.530363
+              ],
+              [
+                -0.066744,
+                51.530047
+              ],
+              [
+                -0.066329,
+                51.529893
+              ],
+              [
+                -0.065862,
+                51.529929
+              ],
+              [
+                -0.065793,
+                51.529926
+              ],
+              [
+                -0.065329,
+                51.529971
+              ],
+              [
+                -0.064933,
+                51.530066
+              ],
+              [
+                -0.064712,
+                51.530078
+              ],
+              [
+                -0.064329,
+                51.530147
+              ],
+              [
+                -0.063837,
+                51.52997
+              ],
+              [
+                -0.063825,
+                51.529966
+              ],
+              [
+                -0.063329,
+                51.529781
+              ],
+              [
+                -0.063082,
+                51.529709
+              ],
+              [
+                -0.062474,
+                51.529607
+              ],
+              [
+                -0.062329,
+                51.529572
+              ],
+              [
+                -0.062236,
+                51.529555
+              ],
+              [
+                -0.061945,
+                51.529462
+              ],
+              [
+                -0.061511,
+                51.52928
+              ],
+              [
+                -0.061329,
+                51.529226
+              ],
+              [
+                -0.061017,
+                51.52915
+              ],
+              [
+                -0.060726,
+                51.529065
+              ],
+              [
+                -0.060329,
+                51.528979
+              ],
+              [
+                -0.059892,
+                51.529024
+              ],
+              [
+                -0.059736,
+                51.529055
+              ],
+              [
+                -0.059329,
+                51.529104
+              ],
+              [
+                -0.059104,
+                51.529237
+              ],
+              [
+                -0.05896,
+                51.529462
+              ],
+              [
+                -0.058825,
+                51.529958
+              ],
+              [
+                -0.058822,
+                51.529969
+              ],
+              [
+                -0.058678,
+                51.530462
+              ],
+              [
+                -0.058479,
+                51.530612
+              ],
+              [
+                -0.058329,
+                51.53068
+              ],
+              [
+                -0.058071,
+                51.530719
+              ],
+              [
+                -0.057564,
+                51.530696
+              ],
+              [
+                -0.057329,
+                51.530753
+              ],
+              [
+                -0.057028,
+                51.530763
+              ],
+              [
+                -0.056635,
+                51.530768
+              ],
+              [
+                -0.056329,
+                51.530778
+              ],
+              [
+                -0.056055,
+                51.531188
+              ],
+              [
+                -0.056015,
+                51.531462
+              ],
+              [
+                -0.055758,
+                51.531891
+              ],
+              [
+                -0.055329,
+                51.532182
+              ],
+              [
+                -0.055057,
+                51.53219
+              ],
+              [
+                -0.054526,
+                51.532462
+              ],
+              [
+                -0.054462,
+                51.532594
+              ],
+              [
+                -0.054526,
+                51.533265
+              ],
+              [
+                -0.054485,
+                51.533462
+              ],
+              [
+                -0.054421,
+                51.533553
+              ],
+              [
+                -0.054329,
+                51.533628
+              ],
+              [
+                -0.054142,
+                51.533649
+              ],
+              [
+                -0.053378,
+                51.533511
+              ],
+              [
+                -0.053329,
+                51.533522
+              ],
+              [
+                -0.052938,
+                51.53407
+              ],
+              [
+                -0.052363,
+                51.534462
+              ],
+              [
+                -0.052345,
+                51.534477
+              ],
+              [
+                -0.052329,
+                51.534659
+              ],
+              [
+                -0.052209,
+                51.534582
+              ],
+              [
+                -0.05175,
+                51.534883
+              ],
+              [
+                -0.051329,
+                51.534851
+              ],
+              [
+                -0.05083,
+                51.534963
+              ],
+              [
+                -0.050828,
+                51.534963
+              ],
+              [
+                -0.050329,
+                51.535065
+              ],
+              [
+                -0.050092,
+                51.535225
+              ],
+              [
+                -0.049698,
+                51.535462
+              ],
+              [
+                -0.049557,
+                51.535689
+              ],
+              [
+                -0.049329,
+                51.536057
+              ],
+              [
+                -0.049138,
+                51.53627
+              ],
+              [
+                -0.049029,
+                51.536462
+              ],
+              [
+                -0.048702,
+                51.536835
+              ],
+              [
+                -0.048329,
+                51.537351
+              ],
+              [
+                -0.048288,
+                51.53742
+              ],
+              [
+                -0.048248,
+                51.537462
+              ],
+              [
+                -0.048264,
+                51.537527
+              ],
+              [
+                -0.048301,
+                51.538434
+              ],
+              [
+                -0.048306,
+                51.538462
+              ],
+              [
+                -0.048257,
+                51.538534
+              ],
+              [
+                -0.047902,
+                51.539035
+              ],
+              [
+                -0.04766,
+                51.539462
+              ],
+              [
+                -0.048019,
+                51.539771
+              ],
+              [
+                -0.048329,
+                51.539948
+              ],
+              [
+                -0.048734,
+                51.540057
+              ],
+              [
+                -0.049282,
+                51.540462
+              ],
+              [
+                -0.049278,
+                51.540513
+              ],
+              [
+                -0.049242,
+                51.541375
+              ],
+              [
+                -0.049234,
+                51.541462
+              ],
+              [
+                -0.049289,
+                51.541502
+              ],
+              [
+                -0.049329,
+                51.54152
+              ],
+              [
+                -0.049398,
+                51.541531
+              ],
+              [
+                -0.05016,
+                51.541631
+              ],
+              [
+                -0.050329,
+                51.54166
+              ],
+              [
+                -0.050689,
+                51.541821
+              ],
+              [
+                -0.050891,
+                51.5419
+              ],
+              [
+                -0.051329,
+                51.542145
+              ],
+              [
+                -0.051554,
+                51.542237
+              ],
+              [
+                -0.052306,
+                51.542462
+              ],
+              [
+                -0.052318,
+                51.542473
+              ],
+              [
+                -0.052329,
+                51.542553
+              ],
+              [
+                -0.05243,
+                51.543361
+              ],
+              [
+                -0.052643,
+                51.543462
+              ],
+              [
+                -0.05311,
+                51.543681
+              ],
+              [
+                -0.053329,
+                51.544307
+              ],
+              [
+                -0.053361,
+                51.54443
+              ],
+              [
+                -0.053381,
+                51.544462
+              ],
+              [
+                -0.054017,
+                51.544773
+              ],
+              [
+                -0.054329,
+                51.544943
+              ],
+              [
+                -0.054613,
+                51.545178
+              ],
+              [
+                -0.054817,
+                51.545462
+              ],
+              [
+                -0.05504,
+                51.54575
+              ],
+              [
+                -0.055329,
+                51.54596
+              ]
+            ]
+          ]
+        ]
+      },
+      {
+        "id": "stations",
+        "label": "Reviewed station register points · entrances unconfirmed",
+        "kind": "transport",
+        "status": "available",
+        "colour": "#287eaa",
+        "points": [
+          [
+            -0.057279,
+            51.531973
+          ],
+          [
+            -0.057753,
+            51.541153
+          ]
+        ],
+        "polygons": []
+      }
+    ]
+  },
+  "transport": [
+    {
+      "id": "910GCAMHTH",
+      "name": "Cambridge Heath (London) Rail Station",
+      "mode": "other",
+      "distanceMetres": 906,
+      "walkingMinutes": 13.666666666666666,
+      "information": "Modelled walking route to station register point; entrance and usable services unconfirmed.",
+      "status": "available"
+    },
+    {
+      "id": "910GLONFLDS",
+      "name": "London Fields Rail Station",
+      "mode": "other",
+      "distanceMetres": 579,
+      "walkingMinutes": 8.75,
+      "information": "Modelled walking route to station register point; entrance and usable services unconfirmed.",
+      "status": "available"
+    }
+  ],
+  "spatialNotices": [
+    "Powered by Geoapify: https://www.geoapify.com/",
+    "© OpenStreetMap contributors: https://www.openstreetmap.org/copyright"
+  ],
+  "demo": true
+}

@@ -1,15 +1,19 @@
+
+import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { PageIntro } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
+import {seller} from '@/lib/legal/seller';
+import {publicSeller} from '@/lib/legal/publication';
 export const metadata = pageMetadata("/contact");
 export default function Contact() {
   return (
     <div className="page-wrap">
       <PageIntro
         eyebrow="HELP AND CONTACT"
-        title="Find the right answer before you start."
+        title="How can we help?"
       >
-        <p>Guidance on your location check, report evidence and account.</p>
+        <p>Questions about a location check, your report or a purchase? Contact SiteFit at info@sitefit.co.uk.</p>
       </PageIntro>
       <div className="three-columns contact-cards">
         {[
@@ -27,24 +31,26 @@ export default function Contact() {
           ],
           [
             "Your account",
-            "Sign in using a one-time email link. Open it in the same browser and request a new link if it has expired.",
+            "Sign in with Google or a one-time email link. Open email links in the same browser and request a new link if needed.",
             "/login",
             "Account sign-in",
           ],
-        ].map(([title, text, href, label]) => (
+        ].map(([title, text, href, label], index) => (
           <section className="simple-panel" key={title}>
+            <span className={`icon-disc ${index === 0 ? "green" : index === 1 ? "blue" : "amber"}`}><Icon name={index === 0 ? "pin" : index === 1 ? "document" : "account"}/></span>
             <h2>{title}</h2>
             <p>{text}</p>
             <Link className="text-link" href={href}>
-              {label} ↗
+              {label} <Icon name="external"/>
             </Link>
           </section>
         ))}
       </div>
+      <section className="simple-panel"><h2>Contact SiteFit</h2><p>Support and privacy requests: <a href="mailto:info@sitefit.co.uk">info@sitefit.co.uk</a>. Please do not send passwords, payment-card details or authentication tokens.</p></section>
+      <p className="quiet-note">{publicSeller.name}, trading as {publicSeller.tradingName}. Geographical and correspondence address: {seller.address}.</p>
       <p className="quiet-note">
         For lease, planning or financial advice, consult an appropriately
-        qualified professional. This page does not accept messages or document
-        uploads.
+        qualified professional. Email is the contact channel; this page has no document upload.
       </p>
     </div>
   );

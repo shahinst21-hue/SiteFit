@@ -7,6 +7,7 @@ import { CLAIM_COOKIE,RESUME_COOKIE,claimCookie,newProof,permanentIdentity } fro
 import { prepareClaim,readClaim } from "@/lib/auth/claim-repository";
 import { purchaseUuid as uuid } from "@/lib/auth/purchase-flow";
 import { validateFreeProjection } from "@/lib/analysis/projection";
+import { observeCampaign } from "@/lib/marketing/repository";
 export async function POST(request: Request){
  if(!purchaseSameOrigin(request,process.env))return paymentReply({error:"Purchasing is not available here."},403);
  try{
@@ -14,6 +15,7 @@ export async function POST(request: Request){
   const {client,user}=await verifiedUser();if(!client||!user)return paymentReply({error:"Your Snapshot session is unavailable."},401);
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:body.reportId});if(error||!data)return paymentReply({error:"Snapshot not found."},404);
   validateFreeProjection(data);
+  await observeCampaign(user.id,body.reportId,true);
   if(permanentIdentity(user)){
    (await cookies()).set(RESUME_COOKIE,body.reportId,{httpOnly:true,secure:request.url.startsWith("https:"),sameSite:"strict",path:"/purchase",maxAge:600});
    return paymentReply({url:`/purchase/resume?report=${body.reportId}`});

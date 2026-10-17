@@ -1,3 +1,5 @@
+
+import { Icon } from "@/components/icon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -26,7 +28,7 @@ export default async function Article({ params }: ArticleProps) {
   return (
     <div className="page-wrap article-page">
       <Link href="/blog" className="text-link back-link">
-        ← Back to Resources
+        <Icon name="back"/> Back to Resources
       </Link>
       <header className="article-header">
         <p className="eyebrow">{post.category}</p>

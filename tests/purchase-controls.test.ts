@@ -41,3 +41,11 @@ test("verified checkout uses its separate POST and rejects page anchors, non-Str
     await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})));
   await assert.rejects(()=>purchaseNavigation(report,false,origin,async()=>Response.json({url:"/purchase/auth"},{status:503})));
 });
+
+test("verified Stripe Checkout preserves provider fragment while internal anchors and credential URLs remain rejected",async()=>{
+  const destination="https://checkout.stripe.com/c/pay/synthetic_test_only#synthetic-provider-state";
+  assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),destination);
+  for(const url of ["https://user:password@checkout.stripe.com/c/pay/synthetic_test_only#state","https://checkout.stripe.com.evil.example/c/pay/test#state"])
+    await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
+  await assert.rejects(()=>purchaseNavigation(report,false,origin,async()=>Response.json({url:"/purchase/resume#state"})));
+});

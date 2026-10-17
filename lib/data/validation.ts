@@ -161,9 +161,12 @@ export function validateResult(value: unknown): ProviderResult {
       demand(r.outcome !== "success" || p.complete === true); demand(!q.truncated || r.outcome === "partial");
       const ids = new Set<string>();
       for (const item of p.items) { const i = object(item); demand(text(i.id, 120) && !ids.has(i.id) && text(i.name, 300) && (i.point === null || validPoint(i.point))); ids.add(i.id);
-        keys(i, transport ? "id name mode originalMode point" : "id authorityId name businessType point observedAt");
+        keys(i, transport ? "id name mode originalMode point" : "id authorityId name businessType point observedAt hygiene");
         if (transport) demand(["bus", "rail", "tube", "tram", "water", "other"].includes(String(i.mode)) && text(i.originalMode, 100));
-        else { demand(text(i.authorityId, 120) && text(i.businessType, 120)); nullableDate(i.observedAt); }
+        else { demand(text(i.authorityId, 120) && text(i.businessType, 120)); nullableDate(i.observedAt);
+          if (i.hygiene !== undefined) { const h = object(i.hygiene); keys(h, "scheme value inspectedAt");
+            demand(h.scheme === "FHRS" && Number.isInteger(h.value) && Number(h.value) >= 0 && Number(h.value) <= 5 && timestamp(h.inspectedAt)); }
+        }
       }
       demand(r.observations.length === p.items.length);
       for (let index = 0; index < p.items.length; index++) demand(object(r.observations[index]).path === `items/${index}` && object(r.observations[index]).recordId === object(p.items[index]).id);

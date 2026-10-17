@@ -19,8 +19,8 @@ export function LocationVisual({ compact = false }: { compact?: boolean }) {
           role="img"
           aria-label="Original schematic of streets, an illustrative location and surrounding context. Not a real map or measured catchment."
         >
-          <rect width="640" height="500" fill="#f1f4f2" />
-          <g fill="#e1e7e2" stroke="#fff" strokeWidth="2">
+          <rect width="640" height="500" fill="#eaeaea" />
+          <g fill="#e0e1e6" stroke="#fff" strokeWidth="2">
             {Array.from({ length: 6 }, (_, row) =>
               Array.from({ length: 8 }, (_, col) => {
                 const x = col * 88 - 25 + (row % 2) * 12,
@@ -33,7 +33,7 @@ export function LocationVisual({ compact = false }: { compact?: boolean }) {
                     <rect width="66" height="60" rx="3" />
                     <path
                       d="M20 0v60M0 27h66"
-                      stroke="#f7f9f7"
+                      stroke="#ffffff"
                       strokeWidth="3"
                     />
                   </g>
@@ -41,14 +41,14 @@ export function LocationVisual({ compact = false }: { compact?: boolean }) {
               }),
             )}
           </g>
-          <g fill="#d8eed6">
+          <g fill="#caf3aa">
             <path d="m22 60 140-30 19 70-138 40Z" />
             <path d="m432 72 137-31 21 79-137 37Z" />
             <path d="m142 334 89-22 16 66-95 20Z" />
           </g>
           <path
             d="M-30 395C80 348 153 440 279 406S393 325 492 348 626 462 680 400"
-            stroke="#bfdfeb"
+            stroke="#cbedff"
             strokeWidth="42"
             fill="none"
           />
@@ -56,20 +56,20 @@ export function LocationVisual({ compact = false }: { compact?: boolean }) {
             <path d="M-30 240 680 68M-20 78 620 498M170-20 330 520M515-20 383 520" />
             <path d="M-20 320 680 250M45 520 630-20" strokeWidth="8" />
           </g>
-          <g stroke="#d0d8d1" fill="none" strokeWidth="1">
+          <g stroke="#e0e1e6" fill="none" strokeWidth="1">
             <path d="M-30 240 680 68M-20 78 620 498M170-20 330 520M515-20 383 520" />
           </g>
           <g
-            fill="#70d954"
+            fill="#b2f34c"
             fillOpacity=".08"
-            stroke="#79ce65"
+            stroke="#0d1400"
             strokeOpacity=".55"
           >
             <circle cx="329" cy="246" r="149" />
             <circle cx="329" cy="246" r="105" />
             <circle cx="329" cy="246" r="59" fillOpacity=".14" />
           </g>
-          <g fill="#a9c4ac" stroke="#fff" strokeWidth="3">
+          <g fill="#7c7c7c" stroke="#fff" strokeWidth="3">
             <circle cx="203" cy="192" r="6" />
             <circle cx="403" cy="299" r="6" />
             <circle cx="439" cy="189" r="6" />
@@ -77,11 +77,11 @@ export function LocationVisual({ compact = false }: { compact?: boolean }) {
           </g>
           <path
             d="M329 206c-19 0-34 14-34 33 0 24 34 54 34 54s34-30 34-54c0-19-15-33-34-33Z"
-            fill="#16872b"
+            fill="#0d1400"
             stroke="white"
             strokeWidth="3"
           />
-          <circle cx="329" cy="238" r="10" fill="white" />
+          <circle cx="329" cy="238" r="10" fill="#b2f34c" />
         </svg>
         <span className="map-label">Illustrative location</span>
         {signals.map(([icon, label, text, tone], i) => (

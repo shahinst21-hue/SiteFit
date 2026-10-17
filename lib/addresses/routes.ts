@@ -2,6 +2,7 @@ import "server-only";
 import { handleAddressOperation, type AddressOperation } from "./http";
 import { addressProvider } from "./server-provider";
 import { propertyRepository } from "./repository";
+import { sourceCollectionAllowed } from "../release/policy";
 const windows = new Map<string, { count: number; until: number }>();
 let total = { count: 0, until: 0 };
 function allow(request: Request, operation: AddressOperation) {
@@ -31,6 +32,9 @@ function allow(request: Request, operation: AddressOperation) {
   return true;
 }
 export function addressRoute(request: Request, operation: AddressOperation) {
+  // Proof uses a pre-approved canonical property, never a public address-spending switch.
+  if(process.env.VERCEL_ENV==='production'&&process.env.SITEFIT_CONTROLLED_PROOF_ENABLED==='1')return Promise.resolve(Response.json({error:"Address capture is unavailable during the controlled proof."},{status:503,headers:{"Cache-Control":"private, no-store"}}));
+  if(!sourceCollectionAllowed(process.env,new URL(request.url).hostname))return Promise.resolve(Response.json({error:"Address lookup is not activated here."},{status:503,headers:{"Cache-Control":"private, no-store"}}));
   return handleAddressOperation(request, operation, {
     provider: addressProvider,
     repository: propertyRepository,

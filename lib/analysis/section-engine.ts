@@ -1,4 +1,5 @@
 import "server-only";
+import {inControlledProof} from '../proof/context.ts';
 import { packetDigest } from "./canonical.ts";
 import { analysisAIProvider, type AIReceipt } from "./ai-provider.ts";
 import { interpretationInstructions, selectionSchema, validateSelection, type InterpretationPacket, type Selection } from "./interpretation.ts";
@@ -11,9 +12,10 @@ function deterministicSelection(packet: InterpretationPacket): Selection {
     alternativeIds: packet.propositions.filter(p => p.role === "alternative").slice(0, 1).map(p => p.id), unknownIds: [...packet.mandatoryUnknowns],
     questionId: pick("question"), implicationId: pick("implication") };
 }
-export async function interpretSections(packets: readonly InterpretationPacket[], index: ReadonlyMap<string, Evidence>, provider: Provider, signal?: AbortSignal, previous: readonly ValidatedSection[] = []) {
+export async function interpretSections(packets: readonly InterpretationPacket[], index: ReadonlyMap<string, Evidence>, provider: Provider, signal?: AbortSignal, previous: readonly ValidatedSection[] = [], onSection?:(id:InterpretationPacket['section'])=>void) {
   if (packets.length !== 4 || new Set(packets.map(p => p.section)).size !== 4) throw new Error("invalid_section_set");
   const results = await Promise.all(packets.map(async packet => {
+    const confirmed=(section:ValidatedSection)=>{try{onSection?.(section.section);}catch{/* UI observers cannot invalidate analysis */}return {section,error:null};};
     const digest = packetDigest(packet);
     const stored = previous.find(section => section.section === packet.section);
     if (stored) {
@@ -21,15 +23,15 @@ export async function interpretSections(packets: readonly InterpretationPacket[]
       const selection: Selection = { conclusionId: stored.conclusion.id, reasonIds: stored.reasons.map(p => p.id),
         supportIds: stored.support.map(p => p.id), oppositionIds: stored.opposition.map(p => p.id), alternativeIds: stored.alternatives.map(p => p.id),
         unknownIds: stored.unknowns.map(p => p.id), implicationId: stored.implication.id, questionId: stored.question.id };
-      return { section: { ...validateSelection(selection, packet, index), section: packet.section, receipt: stored.receipt, packetDigest: digest }, error: null };
+      return confirmed({ ...validateSelection(selection, packet, index), section: packet.section, receipt: stored.receipt, packetDigest: digest });
     }
-    if (packet.strength === "insufficient") return { section: { ...validateSelection(deterministicSelection(packet), packet, index), section: packet.section, receipt: null, packetDigest: digest } as ValidatedSection, error: null };
+    if (packet.strength === "insufficient") return confirmed({ ...validateSelection(deterministicSelection(packet), packet, index), section: packet.section, receipt: null, packetDigest: digest });
     let repairCode: string | null = null;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < (inControlledProof()?1:2); attempt++) {
       try {
         const response = await provider.interpret({ ...packet, ...(repairCode ? { validationFailure: repairCode } : {}) }, interpretationInstructions, selectionSchema, signal);
         try {
-          return { section: { ...validateSelection(response.output, packet, index), section: packet.section, receipt: response.receipt, packetDigest: digest } as ValidatedSection, error: null };
+          return confirmed({ ...validateSelection(response.output, packet, index), section: packet.section, receipt: response.receipt, packetDigest: digest });
         } catch { repairCode = "invalid_selection_or_omitted_material_evidence"; }
       } catch { return { section: null, error: { section: packet.section, code: "section_analysis_unavailable" } }; }
     }
@@ -51,7 +53,7 @@ export async function synthesiseSections(sections: readonly ValidatedSection[], 
   ], sections: sections.map(section => ({ id: section.section, conclusion: section.conclusion, support: section.support,
     opposition: section.opposition, unknowns: section.unknowns, alternatives: section.alternatives, strength: section.strength,
     score: section.score, scoreSuppression: section.scoreSuppression })) };
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < (inControlledProof()?1:2); attempt++) {
     const response = await provider.interpret({ ...packet, ...(attempt ? { validationFailure: "retain_all_unresolved_section_gaps_and_valid_section_references" } : {}) },
       "Synthesise the validated SiteFit dimension results. Select one scoped headline; never calculate an overall score or clear premises. supportingSectionIds names the validated sections forming the reasoning basis, including negative findings and unresolved conditions; it does not mean every named section favours commitment. A customer-conclusion headline must reference customer-base. Retain every section with unresolved questions in unknownSectionIds. A customer hypothesis does not establish current demand or permitted use. Return only approved IDs.", synthesisSchema, signal);
     const row = response.output as Record<string, unknown> | null;

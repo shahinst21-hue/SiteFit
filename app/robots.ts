@@ -1,23 +1,8 @@
 import type { MetadataRoute } from "next";
-import { absoluteUrl, publicIndexingEnabled } from "@/lib/seo";
+import { absoluteUrl, publicRobotsRules } from "@/lib/seo";
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: publicIndexingEnabled()
-      ? {
-          userAgent: "*",
-          allow: "/",
-          disallow: [
-            "/login",
-            "/account",
-            "/snapshots/",
-            "/auth/",
-            "/check-location",
-            "/preview/",
-            "/admin/",
-            "/api/",
-          ],
-        }
-      : { userAgent: "*", disallow: "/" },
+    rules: publicRobotsRules(),
     sitemap: absoluteUrl("/sitemap.xml"),
   };
 }

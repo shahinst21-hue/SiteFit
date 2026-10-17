@@ -1,3 +1,4 @@
+import {proofFetch} from '../proof/context.ts';
 import "server-only";
 import { setTimeout as delay } from "node:timers/promises";
 import type { ExecutionContext, SourceDefinition } from "./contracts.ts";
@@ -32,7 +33,7 @@ export function createTransport(source: SourceDefinition, execution: ExecutionCo
         attempts++; const timeout = AbortSignal.timeout(source.timeoutMs); const signal = AbortSignal.any([execution.signal, timeout]);
         let response: Response | undefined; let failure: SourceError; let retryMs = 100;
         try {
-          response = await (options.fetcher ?? fetch)(url, { redirect: "error", signal, headers: id === "fsa-establishments" ? { Accept: "application/json", "x-api-version": "2", "Accept-Language": "en-GB" } : { Accept: "application/json" } });
+          response = await (options.fetcher ?? proofFetch)(url, { redirect: "error", signal, headers: id === "fsa-establishments" ? { Accept: "application/json", "x-api-version": "2", "Accept-Language": "en-GB" } : { Accept: "application/json" } });
           status = response.status;
           if (response.redirected || status >= 300 && status < 400) throw new SourceError("permission_denied", status);
           if (!response.ok) {

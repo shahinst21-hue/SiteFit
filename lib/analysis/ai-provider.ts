@@ -1,4 +1,5 @@
 import "server-only";
+import {proofFetch} from '../proof/context.ts';
 import { createHash } from "node:crypto";
 
 // Owner-mandated model. No automatic model fallback or provider substitution.
@@ -13,7 +14,7 @@ export class AnalysisAIError extends Error {
 }
 type Fetch = typeof fetch;
 export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?: () => Date; priorDispatches?: number } = {}) {
-  const fetcher = options.fetch ?? fetch; const now = options.now ?? (() => new Date());
+  const fetcher = options.fetch ?? proofFetch; const now = options.now ?? (() => new Date());
   let dispatches = options.priorDispatches ?? 0;
   const receipts: AIReceipt[] = [];
   if (!Number.isInteger(dispatches) || dispatches < 0 || dispatches > analysisAI.maxDispatches) throw new AnalysisAIError("dispatch_limit");
@@ -34,7 +35,7 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
       try {
         response = await fetcher("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal: bounded,
           headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ model: analysisAI.model, store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
+          body: JSON.stringify({ model: analysisAI.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
             instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
             text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } }) });
       } catch { throw new AnalysisAIError(bounded.aborted ? "timeout" : "provider_unavailable"); }

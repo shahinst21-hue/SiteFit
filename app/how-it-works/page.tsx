@@ -1,21 +1,22 @@
 import { PageIntro, ClosingCTA } from "@/components/ui";
 import { ReportOutline } from "@/components/report-outline";
 import { pageMetadata } from "@/lib/seo";
+import { formatPrice, site } from "@/lib/site-config";
 export const metadata = pageMetadata("/how-it-works");
 export default function HowItWorks() {
   return (
     <div className="page-wrap">
       <PageIntro
         eyebrow="HOW SITEFIT WORKS"
-        title="Two details to start. Better questions to follow."
+        title="From a property address to a clearer lease decision."
       >
-        <p>Bring the location into focus before adding the financial detail.</p>
+        <p>Start with a free first look. Choose a Full Report when you need a closer assessment.</p>
       </PageIntro>
       <ol className="journey-list">
         {[
           [
             "Enter the property address",
-            "Use the commercial address and postcode, anywhere in the UK.",
+            "Enter a UK commercial address and postcode. Location analysis currently covers London.",
           ],
           [
             "Choose your business",
@@ -23,11 +24,11 @@ export default function HowItWorks() {
           ],
           [
             "Review your Free Snapshot",
-            "Start with your location brief, key questions and evidence limitations. No account or financial inputs required.",
+            "See an initial assessment of local customer context, competition, access and premises questions. No account or financial inputs required.",
           ],
           [
-            "Go deeper when it helps",
-            "Add optional costs after the Snapshot. Explore the Sample Report to see how supporting evidence, risks and next checks fit together.",
+            "Get the Full Report",
+            `Sign in before Checkout for the ${formatPrice(site.pricing.fullReport)} one-off Full Report. Read the findings, risks and priority actions in your account, then download a PDF. Rental estimates appear only where supported. Financial calculations are not included.`,
           ],
         ].map(([title, text], i) => (
           <li key={title}>

@@ -6,9 +6,10 @@ import { verifiedUser } from "@/lib/supabase/server";
 import { CLAIM_COOKIE,AUTH_RECEIPT_COOKIE,claimCookie,permanentIdentity,purchaseUuid,validAuthReceipt } from "@/lib/auth/purchase-flow";
 import { readClaim } from "@/lib/auth/claim-repository";
 import { purchaseOrigin } from "@/lib/payments/config";
-import { activeTestPurchaseId } from "@/lib/payments/purchase-projection";
+import { activePurchaseId } from "@/lib/payments/purchase-projection";
 import { PurchaseClaim } from "@/components/purchase-claim";
-import { PurchaseButton } from "@/components/purchase-button";
+import { PurchaseTerms } from "@/components/purchase-terms";
+import { formatPrice,site } from "@/lib/site-config";
 export const dynamic="force-dynamic";
 export const metadata: Metadata={title:"Continue your purchase",robots:{index:false,follow:false},referrer:"no-referrer"};
 export default async function Resume({searchParams}:{searchParams:Promise<{report?:string}>}){
@@ -19,9 +20,9 @@ export default async function Resume({searchParams}:{searchParams:Promise<{repor
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:report});if(error||!data)notFound();
   const purchase=await client.rpc("read_sitefit_purchase",{p_report:report});
   if(purchase.error)notFound();
-  const active=activeTestPurchaseId(purchase.data);
+  const active=activePurchaseId(purchase.data,process.env.VERCEL_ENV!=="production");
   if(active)redirect(`/purchase/return?purchase=${active}`);
-  return <div className="page-wrap narrow-page"><p className="eyebrow">READY FOR CHECKOUT</p><h1>Your account is verified. Your Snapshot is saved.</h1><section className="simple-panel"><p>Your sign-in is complete. Continue below to open Stripe for the one-off £29 Test Checkout.</p><p className="field-help">No real payment is taken. Full Report generation is not enabled. Your original Snapshot stays unchanged.</p><PurchaseButton report={report} checkout/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
+  return <div className="page-wrap narrow-page"><p className="eyebrow">REVIEW YOUR PURCHASE</p><h1>Your Snapshot is saved. Review the Full Report purchase.</h1><section className="simple-panel"><p>One Full Report for this location: {formatPrice(site.pricing.fullReport)}, paid once. {process.env.VERCEL_ENV!=="production"&&"This is Test Checkout; no real payment is taken."}</p><p className="field-help">Review the terms below before continuing to Stripe. Preparation starts only when the purchase and confirmation requirements are met. Your Free Snapshot stays unchanged.</p><PurchaseTerms report={report}/><Link className="text-link" href={`/snapshots/${report}`}>Return to your Snapshot</Link></section></div>;
  }
  const proof=claimCookie((await cookies()).get(CLAIM_COOKIE)?.value);if(!proof)notFound();
  let claim;try{claim=await readClaim(proof);}catch{notFound();}

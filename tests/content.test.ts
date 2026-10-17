@@ -160,7 +160,8 @@ test("indexing requires explicit production origin; Preview stays noindex even w
     publicIndexingEnabled({
       SITE_URL: "https://example.invalid",
       VERCEL_ENV: "production",
-    }),
+      SITEFIT_PUBLIC_INDEXING_ENABLED:"1",
+    },{productionApproved:true,paidExecutionApproved:false,measurementApproved:false}),
     true,
   );
   assert.equal(publicIndexingEnabled({ VERCEL_ENV: "production" }), false);

@@ -1,4 +1,8 @@
 export type PublicSupabaseConfig = { url: string; key: string };
+export const PRODUCTION_SUPABASE_REF='vsfkkroxgntoumoqcfcy';
+export function productionSupabaseTarget(env:Record<string,string|undefined>,url:URL){
+ return env.VERCEL_ENV!=='production'||url.hostname===`${PRODUCTION_SUPABASE_REF}.supabase.co`;
+}
 // Deliberately public Auth configuration. Privileged keys are never accepted.
 export function readPublicSupabaseConfig(
   env: Record<string, string | undefined>,
@@ -10,6 +14,7 @@ export function readPublicSupabaseConfig(
     const url = new URL(value);
     const local = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
     if (
+      !productionSupabaseTarget(env,url) ||
       (url.protocol !== "https:" && !(local && url.protocol === "http:")) ||
       url.username ||
       url.password ||
