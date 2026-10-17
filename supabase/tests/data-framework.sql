@@ -12,7 +12,7 @@ insert into auth.users(id,email,aud,role) values
  ('00000000-0000-4000-8000-000000000051','phase5-a@example.invalid','authenticated','authenticated'),
  ('00000000-0000-4000-8000-000000000052','phase5-b@example.invalid','authenticated','authenticated');
 create temporary table framework_fixture(a uuid,b uuid,p uuid,i uuid,s uuid);
-do $$ declare a uuid; b uuid; p uuid; i public.analysis_inputs; s public.data_snapshots; replay public.data_snapshots; newer public.analysis_inputs; r jsonb; c jsonb;
+do $$ declare a uuid; b uuid; p uuid; i public.analysis_inputs; s public.data_snapshots; replay public.data_snapshots; newer public.analysis_inputs; r jsonb; c jsonb; fsa_old public.data_snapshots; fsa_new public.data_snapshots;
 begin
  insert into public.properties(formatted_address,postcode,post_town,address_resolution_state,resolved_at)
    values('Synthetic frozen property','KT2 7AU','Synthetic town','manual_unverified',now()) returning id into p;
@@ -35,6 +35,14 @@ begin
  s:=public.append_sitefit_snapshot(a,i.id,'proof',repeat('a',64),r);
  replay:=public.append_sitefit_snapshot(a,i.id,'proof',repeat('a',64),jsonb_set(r,'{meta,retrievedAt}',to_jsonb(now()+interval '1 day')));
  perform pg_temp.framework_assert(s.id=replay.id and s.retrieved_at=replay.retrieved_at,'stored first outcome replay preserves acquisition');
+ -- Registry repair needs no migration: both historical and current FSA
+ -- normalisation versions persist independently without rewriting prior rows.
+ r:=jsonb_set(r,'{meta,source}','"fsa-establishments"');
+ fsa_old:=public.append_sitefit_snapshot(a,i.id,'fsa-old',repeat('1',64),r);
+ r:=jsonb_set(r,'{meta,normalisationVersion}','"fsa-register-with-hygiene-v2"');
+ fsa_new:=public.append_sitefit_snapshot(a,i.id,'fsa-new',repeat('2',64),r);
+ perform pg_temp.framework_assert(fsa_new.normalisation_version='fsa-register-with-hygiene-v2'
+ and (select to_jsonb(x) from public.data_snapshots x where id=fsa_old.id)=to_jsonb(fsa_old),'new FSA version accepted; historical envelope unchanged');
  begin update public.data_snapshots set normalised_data='{}' where id=s.id; raise exception 'Snapshot UPDATE accepted'; exception when check_violation then null; end;
  begin delete from public.data_snapshots where id=s.id; raise exception 'Snapshot DELETE accepted'; exception when check_violation then null; end;
  begin perform public.append_sitefit_snapshot(b,i.id,'forged',repeat('b',64),r); raise exception 'Cross-analysis input accepted'; exception when check_violation or foreign_key_violation then null; end;

@@ -1,0 +1,13 @@
+{
+  "provenance": "Synthetic valid FHRS pages, not captured Production response bodies. Production evidence retains response digests and the fsa-establishments / invalid_response collection diagnostic only.",
+  "pages": [
+    {
+      "establishments": [{"FHRSID": 1001, "BusinessName": "Synthetic café A", "BusinessType": "Restaurant/Cafe/Canteen", "LocalAuthorityCode": "999", "geocode": {"latitude": "51.5", "longitude": "-0.1"}, "SchemeType": "FHRS", "RatingValue": "5", "RatingDate": "2026-10-05T00:00:00.000Z", "Phone": "PRIVATE-FIXTURE", "AddressLine1": "PRIVATE-FIXTURE"}],
+      "meta": {"pageNumber": 1, "pageSize": 100, "totalPages": 3, "totalCount": 3, "extractDate": "2026-10-05T00:00:00.000Z"}
+    },
+    {
+      "establishments": [{"FHRSID": 1002, "BusinessName": "Synthetic café B", "BusinessType": "Restaurant/Cafe/Canteen", "LocalAuthorityCode": "999", "geocode": null}],
+      "meta": {"pageNumber": 2, "pageSize": 100, "totalPages": 3, "totalCount": 3, "extractDate": "2026-10-05T00:00:00.000Z"}
+    }
+  ]
+}

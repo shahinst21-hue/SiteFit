@@ -54,7 +54,6 @@ export function fsaAdapter(factory:(execution:ExecutionContext)=>JsonTransport=e
     }catch(error){result.error=safeError(error);result.outcome=items.length?"partial":"unavailable";complete=false;}
     result.payload=items.length?{schemaVersion:1,kind:"food_establishments",complete,items}:null;
     result.meta.sourceVersion="FHRS-api-v2";
-    result.meta.normalisationVersion="fsa-register-with-hygiene-v2";
     result.meta.quality.truncated=!complete;result.meta.quality.missing=["record_observation_date","source_publication_date","dataset_release_version","cross_border_coverage_unassessed","exact_radius_selection_unverified"];
     if(items.some(i=>!i.point))result.meta.quality.missing.push("withheld_or_missing_coordinates");
     result.limitations=["Food register only; not exhaustive competition, business occupancy, demand or survival evidence.","FHRS identifiers may be recycled; these are dated historical records, not current trading evidence.","Private contact/address fields are discarded; withheld locations remain unknown. Retained dated FHRS hygiene inspection scores are not customer reviews, commercial quality or competitor strength.","Source point accuracy is unspecified; property postcode-centroid input does not identify the premises.","Provider query radius may be capped/cross London; no exact catchment or geodesic proximity claim."];

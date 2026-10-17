@@ -1,5 +1,11 @@
 # Controlled one-case proof safety — 17 October 2026
 
+Current67B attempt: stopped before AI, disabled in intervention. A deterministic
+FSA adapter/registry version mismatch is corrected offline; [exact evidence,
+regression and frozen-source reuse boundary](fsa-67b-blocker.md). Production release
+and any explicitly scoped continuation remain separate approvals. Neither failed
+case is reset, replayed or reactivated by this correction.
+
 ## Superseding 67B successor correction — Development only
 
 The owner authorises the limited Development correction for a **new**, separately
