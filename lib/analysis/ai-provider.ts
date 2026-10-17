@@ -1,4 +1,5 @@
 import "server-only";
+import {proofFetch} from '../proof/context.ts';
 import { createHash } from "node:crypto";
 
 // Owner-mandated model. No automatic model fallback or provider substitution.
@@ -13,7 +14,7 @@ export class AnalysisAIError extends Error {
 }
 type Fetch = typeof fetch;
 export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?: () => Date; priorDispatches?: number } = {}) {
-  const fetcher = options.fetch ?? fetch; const now = options.now ?? (() => new Date());
+  const fetcher = options.fetch ?? proofFetch; const now = options.now ?? (() => new Date());
   let dispatches = options.priorDispatches ?? 0;
   const receipts: AIReceipt[] = [];
   if (!Number.isInteger(dispatches) || dispatches < 0 || dispatches > analysisAI.maxDispatches) throw new AnalysisAIError("dispatch_limit");

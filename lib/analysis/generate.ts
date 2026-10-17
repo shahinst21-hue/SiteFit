@@ -1,4 +1,5 @@
 import "server-only";
+import {snapshotExecution} from '../proof/repository.ts';
 import { createHash } from "node:crypto";
 import { frameworkClient } from "../data/server-client.ts";
 import { framework } from "../data/framework.ts";
@@ -24,6 +25,11 @@ import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
 const json = (value: unknown) => value as Json;
 const dimensions: Dimension[] = ["customer-base", "market-position", "customer-access", "premises"];
 export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal, observer?:SnapshotObserver) {
+  if (![ownerId,propertyId,nonce].every(uuid)||!["coffee-shop","restaurant","hair-salon","beauty-salon"].includes(businessType))throw Error('invalid_submission');
+  return snapshotExecution(ownerId,{propertyId,businessType:businessType as 'coffee-shop'|'restaurant'|'hair-salon'|'beauty-salon',nonce},
+    ()=>generateSnapshotOnce(ownerId,propertyId,businessType,nonce,signal,observer));
+}
+async function generateSnapshotOnce(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal, observer?:SnapshotObserver) {
   const progress=snapshotMilestones(observer);
   if (![ownerId, propertyId, nonce].every(uuid) || !["coffee-shop", "restaurant", "hair-salon", "beauty-salon"].includes(businessType)) throw new Error("invalid_submission");
   const bound = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(110_000)]);

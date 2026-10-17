@@ -1,3 +1,4 @@
+import {proofFetch} from '../../proof/context.ts';
 import "server-only";
 import { SourceError } from "../errors.ts";
 import { object, text, uuid } from "../validation.ts";
@@ -80,7 +81,7 @@ export function propertyDataFacts(options: { key: string | undefined; fetcher?: 
     try {
       const url = new URL(`https://api.propertydata.co.uk/${operation}`);
       for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-      response = await (options.fetcher ?? fetch)(url, { headers: { "X-API-Key": key, Accept: "application/json" }, redirect: "error", cache: "no-store", signal: bound });
+      response = await (options.fetcher ?? proofFetch)(url, { headers: { "X-API-Key": key, Accept: "application/json" }, redirect: "error", cache: "no-store", signal: bound });
       if (!response.ok) throw new SourceError(response.status === 401 ? "authentication_failed" : response.status === 403 ? "permission_denied" : response.status === 429 ? "rate_limited" : "provider_unavailable", response.status);
       if (response.redirected || !response.body || !/^(application|text)\/json(?:;|$)/i.test(response.headers.get("content-type") ?? "") || Number(response.headers.get("content-length")) > 1_000_000) throw new SourceError("invalid_response");
       const reader = response.body.getReader(), chunks: Uint8Array[] = []; let bytes = 0;

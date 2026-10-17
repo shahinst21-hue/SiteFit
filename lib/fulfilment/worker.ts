@@ -1,4 +1,5 @@
 import "server-only";
+import {fullExecution} from '../proof/repository.ts';
 import { fulfilmentRepository, type Job } from "./repository.ts";
 import { completion } from "./policy.ts";
 import { fullRepository } from "../report-intelligence/repository.ts";
@@ -37,8 +38,10 @@ export async function fulfilOne(options: { queue?: Queue; reports?: (owner: stri
         // Re-check lease, exact report binding and current entitlement before EACH external dispatch.
         await queue.bind(job, edition!.id); return provider.interpret(...args);
       } };
-      edition = await (options.generate ?? generateFullIntelligence)(job.ownerId, edition.id,
-        { repository: repo, provider: fenced, resume: edition.revision > 0, allowSemanticRepair: false });
+      const run=()=> (options.generate ?? generateFullIntelligence)(job.ownerId, edition!.id,
+        { repository: repo, provider: fenced, resume: edition!.revision > 0, allowSemanticRepair: false });
+      // Dependency-injected offline workers have no hosted operator connection.
+      edition = options.queue ? await run() : await fullExecution(job.ownerId,edition.id,run);
     }
     const result = completion(edition.status, edition.checkpoint.dispatches);
     await queue.finish(job, result); return result.state;

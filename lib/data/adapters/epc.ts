@@ -1,3 +1,4 @@
+import {proofFetch} from '../../proof/context.ts';
 import "server-only";
 import type { DataAdapter, StoredSnapshot } from "../contracts.ts";
 import { definitions } from "../registry.ts";
@@ -31,7 +32,7 @@ export function epcAdapter(parent: StoredSnapshot | undefined, options: {key?: s
     const url=new URL(path,"https://api.get-energy-performance-data.communities.gov.uk");
     for(const [k,v] of Object.entries(params))url.searchParams.set(k,v);
     r.meta.execution.attempts++;r.meta.execution.pages++;
-    const response=await (options.fetcher??fetch)(url,{headers:{Authorization:`Bearer ${key}`,Accept:"application/json"},redirect:"error",cache:"no-store",signal:execution.signal});
+    const response=await (options.fetcher??proofFetch)(url,{headers:{Authorization:`Bearer ${key}`,Accept:"application/json"},redirect:"error",cache:"no-store",signal:execution.signal});
     r.meta.execution.httpStatus=response.status;
     if(response.status===404){await response.body?.cancel();return null;}
     if(!response.ok){await response.body?.cancel();throw new SourceError(response.status===401?"authentication_failed":response.status===429?"rate_limited":"provider_unavailable",response.status);}
