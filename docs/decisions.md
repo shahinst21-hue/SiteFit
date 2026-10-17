@@ -1,5 +1,9 @@
 # Accepted decisions
 
+## Public/private legal separation — 17 October 2026
+
+Owner authorises the smallest Development correction retaining the public name Shahin Shahmir trading as SiteFit, withholding the personal address and unapproved public legal wording, and preserving complete private contracts/policy snapshots/history. Test the publication and client-asset boundaries, run CI and repeat full corrected-target Production preflight. No deployment (including automatic Preview), Production migration, policy approval, paid request, commercial activation or infrastructure change follows. Commercial mandatory seller disclosures remain unresolved independently of the non-commercial correction. [Actual scope and evidence](public-legal-publication.md).
+
 ## Controlled proof protected integration — 17 October 2026
 
 Owner authorises exact PR63 review, targeted recovery rehearsal, migration20261017120000 to verified Development only, hosted synthetic concurrency/restart/rights checks, normal protected merge and exact-head/post-merge CI. US$0.95 is the aggregate reservation for one Snapshot plus corresponding Full; Full's US$0.30 is included, never additional. Preserve existing histories/unknown holds, no real-user deletion or paid requests. Production migration/application release, case activation, real payment, provider/AI spending, subscriptions and upgrades remain unauthorised. [Actual Development evidence and Production recommendation](controlled-proof-development-verification.md).

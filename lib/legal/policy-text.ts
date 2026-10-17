@@ -1,8 +1,9 @@
 import {seller} from './seller.ts';
 import {site,formatPrice} from '../site-config.ts';
+import {policyVersions} from './policy-versions.ts';
+export {policyVersions} from './policy-versions.ts';
 
 /** Stage 1 review version, NOT commercial release authority. Never substitute for a stored contract. */
-export const policyVersions=Object.freeze({sale:'sitefit-sale-v1-20261016-review',terms:'terms-v1-20261016-review',privacy:'privacy-v1-20261016-review',retention:'retention-v1-20261016-review'});
 export const consentLabels=Object.freeze({
  termsAccepted:'I have read and accept the Terms of Sale and have received the privacy information.',
  immediateRequested:'I expressly request preparation and supply of my report before the cancellation period ends.',

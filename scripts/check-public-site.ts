@@ -3,6 +3,11 @@ import { publicPages } from "../lib/site-config.ts";
 import { localPosts } from "../lib/content/posts.ts";
 import { isPublished } from "../lib/content/safety.ts";
 import { reportPages } from "../lib/report-dashboard/display.ts";
+import {readdir,readFile} from 'node:fs/promises';
+import path from 'node:path';
+import {seller} from '../lib/legal/seller.ts';
+import {legalPublicationReady,publicSeller} from '../lib/legal/publication.ts';
+import {formationRule,deliveryCommitment} from '../lib/legal/policy-text.ts';
 
 const base = new URL(process.argv[2] ?? "http://127.0.0.1:3000");
 if (
@@ -32,6 +37,15 @@ for (const path of paths) {
   const response = await get(path);
   assert.equal(response.status, 200, `${path}: expected HTTP 200`);
   const html = await response.text();
+  if(!legalPublicationReady()){
+    assert.ok(!html.includes(seller.address)&&!html.includes(seller.address.split(',')[0]),path+': private seller address exposed');
+    if(['/terms','/privacy'].includes(path)){
+      assert.ok(html.includes(publicSeller.name)&&html.includes(publicSeller.tradingName),path+': public seller identity missing');
+      assert.match(html,/Purchases are currently unavailable/);
+      assert.ok(!html.includes(formationRule)&&!html.includes(deliveryCommitment),path+': unpublished contract wording exposed');
+      assert.doesNotMatch(html,/Prelaunch review version|sitefit-sale-v1-20261016-review/);
+    }
+  }
   assert.doesNotMatch(
     html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]*>/g, " "),
     /early preview|development preview|London first|reports are not available yet|coming soon|prototype|feature unavailable/i,
@@ -174,6 +188,12 @@ for (const operation of ["lookup", "search", "resolve", "manual"]) {
   });
   assert.equal(crossOrigin.status, 403);
 }
+if(!legalPublicationReady()&&['localhost','127.0.0.1','[::1]'].includes(base.hostname)){
+  const root=path.resolve('.next/static');
+  const assets=(await readdir(root,{recursive:true})).filter(name=>/\.(?:js|map)$/.test(name));
+  assert.ok(assets.length,'Built client assets missing for publication boundary verification');
+  for(const file of assets){const text=await readFile(path.join(root,file),'utf8');assert.ok(!text.includes(seller.address)&&!text.includes(seller.address.split(',')[0]),'Private seller address in a public client asset');assert.ok(!text.includes(formationRule)&&!text.includes(deliveryCommitment),'Unpublished contract wording in a public client asset');}
+}
 console.log(
-  `PASS: ${paths.length} public pages/articles, ${links.size} internal paths, metadata, JSON-LD, sitemap, robots, social image, 404s and four safe address-route boundaries.`,
+  `PASS: ${paths.length} public pages/articles, ${links.size} internal paths, metadata, JSON-LD, sitemap, robots, social image, 404s, public legal/client-asset privacy and four safe address-route boundaries.`,
 );
