@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ButtonLink, ClosingCTA, Wordmark } from "@/components/ui";
 import { PricingCards } from "@/components/pricing-cards";
 import { LocationVisual } from "@/components/location-visual";
+import { HeroLocationVisual } from "@/components/hero-location-visual";
 import { LocationEntry } from "@/components/location-entry";
 import { Icon, type IconName } from "@/components/icon";
 import { pageMetadata } from "@/lib/seo";
@@ -75,7 +76,7 @@ export default function Home() {
             </span>
           </div>
         </div>
-        <LocationVisual />
+        <HeroLocationVisual />
       </section>
       <section className="trust-strip" aria-label="Evidence standards">
         <p className="eyebrow">EVIDENCE WITH CONTEXT</p>
