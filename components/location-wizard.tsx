@@ -28,7 +28,10 @@ export function LocationWizard({rehearsal}:{rehearsal?:WizardRehearsal}) {
  const nonce=useRef<string|null>(null),heading=useRef<HTMLHeadingElement>(null),keyboard=useRef(false);
  const transition=useRef<ViewTransition|null>(null),previousStep=useRef(0);
  useEffect(()=>entry.clear(),[entry.clear]);
- useEffect(()=>{if(previousStep.current!==step)heading.current?.focus({preventScroll:false});previousStep.current=step;},[step]);
+ useEffect(()=>{
+  if(previousStep.current!==step){heading.current?.focus({preventScroll:true});heading.current?.scrollIntoView({block:'start',behavior:'instant'});}
+  previousStep.current=step;
+ },[step]);
  function moveTo(next:number){
   transition.current?.skipTransition();
   const update=()=>setStep(next);
