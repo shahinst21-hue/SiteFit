@@ -1,4 +1,9 @@
 /* Shared pre-purchase presentation. No request, evidence or access policy changes. */
+.journey-list > li { display:flex; align-items:flex-start; gap:20px; }
+.journey-list > li > span { display:grid; place-items:center; flex:0 0 36px; width:36px; height:36px; border-radius:12px; background:var(--action); color:var(--ink); font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; }
+.journey-list > li > div { min-width:0; }
+.journey-list h2 { margin-bottom:12px; }
+@media(max-width:580px) { .journey-list > li { flex-direction:column; gap:16px; } }
 .sf-property-context dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; }
 .sf-property-context dl > div + div { margin-top:0; }
 .sf-property-context dt { font-size:12px; margin-bottom:4px; }
