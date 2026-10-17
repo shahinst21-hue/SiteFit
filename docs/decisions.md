@@ -459,3 +459,16 @@ Owner approves digital-content treatment, formation on verified successful payme
 ## Owner seller-address publication and revised controlled-proof configuration — 17 October 2026
 
 Owner explicitly approves exact existing seller geographical address and Shahin Shahmir trading as SiteFit in appropriate public legal/contact/purchase disclosures. This supersedes the earlier address suppression; it does not approve the staged sale policy or private review text. Owner approves component reservation ceilings SnapshotUS$0.65 / FullUS$1.00 within aggregateUS$1.65, not spending. Preserve legacy holds and migrate forward from already-applied20261017120000. Authorised protected PR/CI, hosted Development checks, required related migrations and non-commercial Production deployment are conditional on exact-target/recovery/security/gate verification. No payment, Checkout Session, provider/AI dispatch, retry, commercial activation, subscription or campaign. [Evidence and current delivery state](public-legal-publication.md).
+
+## Owner-authorised distinct 67B proof correction — 17 October 2026
+
+The owner separately approves exactly one real Free Snapshot for provider-verified
+67B Broadway Market, London E8 4PH, independent café: AI at mostUS$0.65, existing
+verified source credits only, no automatic retry or new purchase/top-up. Exact
+identity was verified through two Postio requests; no AI dispatched. The old67
+authority is disabled in intervention and cannot be reused for67B. Owner subsequently
+authorises only the limited Development correction that retains terminal proof
+history while allowing one current authority slot. Production migration/release
+and successor provisioning require the next explicit approval after Development
+verification. Preserve all other launch gates and accepted phases.
+[Exact migration, tests and remaining approval](controlled-proof-safety.md).

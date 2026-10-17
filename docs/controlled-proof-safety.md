@@ -1,5 +1,60 @@
 # Controlled one-case proof safety — 17 October 2026
 
+## Superseding 67B successor correction — Development only
+
+The owner authorises the limited Development correction for a **new**, separately
+approved 67B Broadway Market case. The existing 67 case must remain disabled in
+intervention, with its original identity, token, holds and dispatch history retained.
+Two already-authorised Postio calls verified the distinct 67B postal identity; no
+repeat lookup or AI execution is required for this correction.
+
+Forward migration `20261017150000_controlled_proof_successor.sql` replaces the
+boolean primary key with an ID primary key, retaining the existing unique ID/FK
+constraint, and enforces **one current authority slot** through a partial unique
+index. It does not retire, create or enable any case. Only a disabled terminal
+(`intervention`/`complete`) case with no outstanding `intent` can leave the slot;
+that transaction may change only its slot marker. Every other historical value and
+dispatch remains untouched. Retired rows reject updates, deletion, truncation and
+reactivation. A deferred constraint requires a current slot whenever history exists,
+so retirement and replacement must commit atomically. There is no browser/service
+case-creation or retirement grant.
+
+All affected authority, subject, payment, contract, reservation and queue readers
+select the current slot; dispatch/settlement/completion target the exact locked case
+and reject retired authority. Missing-slot races fail closed, never fall through to
+ordinary execution. Existing owner/property/nonce/policy checks, RLS, tariff,
+Snapshot US$0.65 / Full US$1 / aggregate US$1.65 admission limits, retained holds,
+request caps and no-retry rules remain. Full, Checkout and public activation remain
+separately disabled. This supersedes the historical single-row limitation below,
+not any earlier unknown-cost reservation or intervention record.
+
+Verified in `sitefit-dev` only: migration82/hash
+`18189222e0a799c112bb5674992b63b81474a1de4e4f3ec75cac94487817fb36`;
+transactional recovery, unchanged protected fingerprints/RLS/ACLs, actual public
+rollback fixtures and installed-function multi-connection tests passed. Eight
+concurrent replacement attempts admitted one successor; eight claims admitted one;
+eight duplicate dispatches admitted one. Concurrent admission retained exactly
+US$0.65 for the new synthetic case, while the predecessor's US$0.017 hold and full
+historical values remained unchanged. Restart and ambiguous redispatch were denied.
+The isolated harness was removed; no public case/dispatch was committed.
+
+Local `npm run check` passed lint/types/379 tests/build; the final fresh PostgreSQL/
+PostGIS rebuild, including successor and historical Full-flow fixtures, passed.
+Hosted Live-mode fixture execution was correctly refused by Development's existing
+`commercial_database_not_isolated` protection; it was not bypassed. The hosted
+actual-public tests use rollback-only free-proof/rights/successor fixtures. Full
+payment/confirmation/queue behaviour with a retained predecessor is verified by
+the local PostgreSQL fixture, not claimed as a hosted Live transaction.
+
+Private receipts: `successor-development-recovery.json`,
+`successor-development-receipt.json`, `successor-development-hosted-tests.json`,
+`successor-hosted-concurrency.json` and before/after fingerprint captures under
+ignored `supabase/.temp/`. Final Development bytes379,696,819;16 source releases
+retained. No Production write/deployment, AI/provider call, payment, policy approval
+or execution activation occurred. Production migration, exact-case provisioning,
+environment case-ID switch and any release require the next explicit approval;
+the existing real Snapshot spending permission does not authorise public generation.
+
 ## Current free-only authorisation
 
 ### First real attempt: stopped, not Ready
