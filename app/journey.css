@@ -101,7 +101,7 @@
 .wizard-paused > p:first-child { color:var(--muted); }
 .wizard-paused .button { justify-self:start; }
 .wizard-paused a:not(.button) { text-decoration:underline; text-underline-offset:4px; }
-.journey-review-notice { max-width:800px; margin:24px auto; padding:16px 20px; border:1px dashed var(--muted); border-radius:12px; background:var(--paper); font-size:13px; }
+.journey-review-notice { width:calc(100% - 40px); max-width:800px; margin:24px auto; padding:16px 20px; border:1px dashed var(--muted); border-radius:12px; background:var(--paper); font-size:13px; }
 .journey-review-notice p { color:var(--muted); margin-top:4px; }
 .journey-review-controls { margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
 .journey-review-controls button { min-height:44px; font-size:13px; }

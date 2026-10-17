@@ -9,7 +9,7 @@ export default async function SnapshotDemo({ searchParams }: { searchParams: Pro
   const { state } = await searchParams;
   if (state === 'journey' && (process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview')) {
     const fixture = (await import("@/fixtures/free_snapshot/kingston_coffee_shop.json")).default;
-    return <div className="page-wrap check-page"><JourneyReview><FreeSnapshotView snapshot={snapshotDemo(fixture, 'development', undefined)} /></JourneyReview></div>;
+    return <JourneyReview><FreeSnapshotView snapshot={snapshotDemo(fixture, 'development', undefined)} /></JourneyReview>;
   }
   if (!demoAllowed(process.env.NODE_ENV)) notFound();
   const fixture = (await import("@/fixtures/free_snapshot/kingston_coffee_shop.json")).default;
