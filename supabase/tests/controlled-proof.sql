@@ -70,7 +70,7 @@ rollback;
 
 -- Separate successful Snapshot -> sole Live attempt -> confirmed queue -> Full claim.
 begin;
-do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;r uuid;f uuid;c uuid;n uuid:=gen_random_uuid();t uuid;v jsonb;d uuid;payment uuid:=gen_random_uuid();row public.payments;params jsonb;job jsonb;begin
+do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;r uuid;f uuid;c uuid;n uuid:=gen_random_uuid();t uuid;v jsonb;d uuid;payment uuid:=gen_random_uuid();row public.payments;params jsonb;job jsonb;prior uuid;prior_history jsonb;begin
  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(o,'proof-success@example.invalid',now(),false),(other,'proof-foreign@example.invalid',now(),false);
  insert into public.properties(formatted_address,postcode,post_town,address_resolution_state,address_provider,provider_address_id,udprn,resolved_at)
  values('Synthetic proof success','E8 4PH','London','provider_verified','postio','87654321','87654321',now()) returning id into p;
@@ -78,6 +78,15 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  insert into public.analysis_inputs(analysis_id,version,user_supplied) values(a,1,'{}') returning id into i;
  insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,free_projection) values(a,i,1,2,'free','ready',jsonb_build_object('schemaVersion',2,'analysisId',a)) returning id into r;
  update public.sale_policies set approved=true where version='sitefit-sale-v1-20261016-review';
+ -- Exercise the complete existing payment/contract/queue/Full flow with a
+ -- terminal predecessor still present; no reader may select that old row.
+ insert into public.controlled_proof(owner_id,property_id,business_type,nonce,policy_version,policy_snapshot,policy_digest,expires_at,enabled,tariff_verified,tariff_digest)
+ select o,p,'coffee-shop',gen_random_uuid(),version,snapshot,encode(sha256(convert_to(snapshot::text,'UTF8')),'hex'),now()+interval '1 hour',true,true,repeat('d',64)
+ from public.sale_policies where version='sitefit-sale-v1-20261016-review' returning id into prior;
+ update public.controlled_proof set state='snapshot_running',token=gen_random_uuid() where id=prior;
+ update public.controlled_proof set state='intervention',enabled=false where id=prior;
+ update public.controlled_proof set singleton=false where id=prior;
+ select to_jsonb(x) into prior_history from public.controlled_proof x where id=prior;
  insert into public.controlled_proof(owner_id,property_id,business_type,nonce,policy_version,policy_snapshot,policy_digest,expires_at,enabled,tariff_verified,tariff_digest)
  select o,p,'coffee-shop',n,version,snapshot,encode(sha256(convert_to(snapshot::text,'UTF8')),'hex'),now()+interval '1 hour',true,true,repeat('d',64) from public.sale_policies where version='sitefit-sale-v1-20261016-review' returning id into c;
  v:=public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);t:=(v->>'token')::uuid;
@@ -94,10 +103,10 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  begin perform public.prepare_sitefit_live_payment(other,r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');raise exception 'foreign case checkout admitted';exception when insufficient_privilege then null;end;
  row:=public.prepare_sitefit_live_payment(o,r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
  if (select reserved_micros from public.commercial_payment_reservations where payment_id=payment)<>1000000
- or (select reserved_micros from public.controlled_proof)<>650000 then raise exception 'Full envelope counted as extra allowance or dispatch';end if;
+ or (select reserved_micros from public.controlled_proof where singleton)<>650000 then raise exception 'Full envelope counted as extra allowance or dispatch';end if;
  begin insert into public.commercial_payment_reservations(payment_id,owner_id) values(gen_random_uuid(),o);
  raise exception 'separate budget path admitted';exception when insufficient_privilege then null;end;
- if (select payment_id from public.controlled_proof)<>payment then raise exception 'proof payment binding lost';end if;
+ if (select payment_id from public.controlled_proof where singleton)<>payment then raise exception 'proof payment binding lost';end if;
  perform public.bind_sitefit_live_checkout(payment,'cs_live_proof');
  perform public.record_sitefit_sale(o,payment,'sitefit-sale-v1-20261016-review',jsonb_build_object('version','sitefit-sale-v1-20261016-review','buyerKind','consumer','termsAccepted',true,'immediateRequested',true,'acknowledgement',true));
  select * into row from public.payments where id=payment;
@@ -122,7 +131,8 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  begin perform public.claim_sitefit_controlled_proof(o,'full',c,true,null,null,null,f);raise exception 'Full run restarted';exception when insufficient_privilege then null;end;
  begin perform public.finish_sitefit_controlled_proof(c,t,'full',f);raise exception 'Draft declared Ready';exception when others then if sqlerrm='Draft declared Ready' then raise;end if;end;
  perform public.interrupt_sitefit_controlled_proof(c,t);
- if (select reserved_micros from public.controlled_proof)<>1650000 or (select state from public.controlled_proof)<>'intervention' then raise exception 'proof interrupted holds lost';end if;
+ if (select reserved_micros from public.controlled_proof where singleton)<>1650000 or (select state from public.controlled_proof where singleton)<>'intervention' then raise exception 'proof interrupted holds lost';end if;
+ if (select to_jsonb(x) from public.controlled_proof x where id=prior) is distinct from prior_history then raise exception 'paid successor changed predecessor';end if;
 end$$;
 rollback;
 
