@@ -15,3 +15,14 @@ for (const state of states) {
   if (!state) assert.ok(html.includes("12,400") && html.includes("Kingston Station") && html.includes("sf-score-ready"));
 }
 console.log(`PASS: six Snapshot rendering states${production ? " blocked in production" : " served explicitly in development"}.`);
+const rehearsal = await fetch(`${origin}/dev/snapshot?state=journey`);
+assert.equal(rehearsal.status, production ? 404 : 200);
+const rehearsalHtml = await rehearsal.text();
+if (production) assert.ok(!rehearsalHtml.includes('Interface rehearsal'));
+else {
+  assert.ok(rehearsalHtml.includes('Interface rehearsal'));
+  assert.ok(rehearsalHtml.includes('Start with your property.'));
+  assert.ok(!rehearsalHtml.includes('What would you open here?'));
+  assert.ok(!rehearsalHtml.includes('Get my Free Snapshot'));
+}
+console.log('PASS: synthetic journey is labelled, starts with one active stage, and is denied in Production.');
