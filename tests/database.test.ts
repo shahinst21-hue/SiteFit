@@ -39,6 +39,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     assert.equal((await db.query<{disabled:boolean}>("select not exists(select 1 from public.commercial_release_control where mode<>'test' or checkout_enabled or execution_enabled) as disabled")).rows[0].disabled,true);
     await db.exec(await readFile(new URL('../supabase/tests/controlled-proof.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/proof-successor.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/snapshot-continuation.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL("../supabase/tests/source-reuse.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/commercial-release.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/verification/contract-confirmation-queue.sql", import.meta.url), "utf8"));
