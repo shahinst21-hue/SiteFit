@@ -16,16 +16,17 @@ import type {SnapshotTick} from '../lib/analysis/progress';
 
 /** Dependencies come only from the explicitly labelled, server-gated UI rehearsal. */
 export type WizardRehearsal={transport:typeof fetch;generate:(observe:(tick:SnapshotTick|{stage:'ready';completed:8})=>void,business:BusinessType)=>Promise<void>};
-export function LocationWizard({rehearsal}:{rehearsal?:WizardRehearsal}) {
+export type SnapshotProofStart={property:PropertySelection;business:BusinessType;nonce:string};
+export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsal;proofStart?:SnapshotProofStart}) {
  const entry=useLocationEntry(),router=useRouter();
- const [property,setProperty]=useState<PropertySelection|null>(null);
+ const [property,setProperty]=useState<PropertySelection|null>(proofStart?.property??null);
  const [lookupState,setLookupState]=useState(()=>initialAddressLookup(entry.address));
  const [initialSearch,setInitialSearch]=useState(entry.address);
  const consumeInitialSearch=useCallback(()=>setInitialSearch(''),[]);
- const [step,setStep]=useState(0),[business,setBusiness]=useState<BusinessType|null>(null);
+ const [step,setStep]=useState(proofStart?1:0),[business,setBusiness]=useState<BusinessType|null>(proofStart?.business??null);
  const [error,setError]=useState(''),[busy,setBusy]=useState(false);
  const [progress,setProgress]=useState<SnapshotTick|{stage:'ready';completed:8}>({stage:'identity',completed:0});
- const nonce=useRef<string|null>(null),heading=useRef<HTMLHeadingElement>(null),keyboard=useRef(false);
+ const nonce=useRef<string|null>(proofStart?.nonce??null),heading=useRef<HTMLHeadingElement>(null),keyboard=useRef(false);
  const transition=useRef<ViewTransition|null>(null),previousStep=useRef(0);
  useEffect(()=>entry.clear(),[entry.clear]);
  useEffect(()=>{
@@ -66,11 +67,11 @@ export function LocationWizard({rehearsal}:{rehearsal?:WizardRehearsal}) {
    {step===0?<AddressLookup state={lookupState} setState={setLookupState} selected={property} initialSearch={initialSearch} onInitialSearch={consumeInitialSearch} transport={rehearsal?.transport}
     onSelect={selected=>{setProperty(selected);nonce.current=null;setError('');moveTo(1);}}/>:
     step===1?<form onSubmit={generate}>
-     <div className="wizard-property"><span className="wizard-property-icon"><Icon name="pin"/></span><div><small>YOUR PROPERTY</small><p>{property?.formattedAddress}</p></div><button type="button" className="wizard-edit" onClick={()=>{setError('');moveTo(0);}}>Change<span className="sr-only"> property</span></button></div>
+     <div className="wizard-property"><span className="wizard-property-icon"><Icon name="pin"/></span><div><small>YOUR PROPERTY</small><p>{property?.formattedAddress}</p></div>{!proofStart&&<button type="button" className="wizard-edit" onClick={()=>{setError('');moveTo(0);}}>Change<span className="sr-only"> property</span></button>}</div>
      {error&&<p className="error-summary" role="alert">{error}</p>}
      <fieldset><legend className="sr-only">Choose the business you want to open here</legend><div className="business-options" id="businessType" tabIndex={-1}>
       {businessTypes.map((t,index)=><label key={t.id} className={`business-option ${business===t.id?'selected':''}`}>
-       <input type="radio" name="businessType" value={t.id} checked={business===t.id} required onChange={()=>{setBusiness(t.id);nonce.current=null;setError('');}}/>
+       <input type="radio" name="businessType" value={t.id} checked={business===t.id} required disabled={!!proofStart&&t.id!==proofStart.business} onChange={()=>{setBusiness(t.id);nonce.current=proofStart?.nonce??null;setError('');}}/>
        <span className="business-icon" aria-hidden="true"><Icon name={(['coffee','restaurant','hair','beauty'] as IconName[])[index]}/></span>
        <span className="business-option-copy"><strong>{t.label}</strong><span>{t.description}</span></span><span className="business-choice-mark" aria-hidden="true"><Icon name="check"/></span>
       </label>)}

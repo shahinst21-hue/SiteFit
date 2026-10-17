@@ -1,5 +1,15 @@
 # Controlled one-case proof safety — 17 October 2026
 
+## Current free-only authorisation
+
+The owner approved one real Production Free Snapshot for 67 Broadway Market, London E8 4PH, independent café (`coffee-shop`): maximum US$0.65 AI, no automatic AI retry, approved existing source credits only, no new purchase/top-up. This does not authorise £29, Full Report, public generation or campaigns. Provider permission/credit/billing status is owner-attested, not independently dashboard-verified.
+
+Two bounded Postio requests captured the real canonical postal identity with usable postcode-centroid coordinates; the recorded occupier name is identity evidence, not proof of current trading. Private request intents and response digests are retained; no repeated lookup is needed.
+
+The candidate forward migration `20261017140000` removes the sale-policy **approval** dependency only from the free proof's claim/dispatch. The exact frozen policy identity/digest, verified owner/property/nonce/concept, expiry, processing holds, durable intents and budget guards remain. Full claim/dispatch still require an approved sale policy. The additional service-only reader returns the issued context only for the verified owner; no row or approval is seeded by migration. Old migration bytes and stored policies are untouched.
+
+Application authority is separate for this free-only proof. Public source/commercial flags and Full authority remain false. The existing check page may load the exact issued case only after server identity verification; wrong/anonymous accounts cannot start it, and changing its property/concept is disabled. Database admission remains authoritative. Actual hosted migration, protected delivery, case provisioning, Production activation and live Ready/replay evidence remain pending until recorded; local tests are not live success.
+
 Status: implemented and hosted Development verified; migration79 applied only to `sitefit-dev`. No Production migration/release, activation or paid request performed. [Development verification and protected-delivery receipt](controlled-proof-development-verification.md). This work does not reopen closed phases. The owner-selected US$0.95 is a cost-control basis, not authorisation to spend.
 
 ## Execution authority

@@ -39,15 +39,18 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  select o,p,'coffee-shop',n,version,snapshot,encode(sha256(convert_to(snapshot::text,'UTF8')),'hex'),now()+interval '1 hour'
  from public.sale_policies where version='sitefit-sale-v1-20261016-review' returning id into c;
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);raise exception 'disabled proof admitted';exception when insufficient_privilege then null;end;
- -- Fake tariff/policy approval exists only within this rollback.
- update public.sale_policies set approved=true where version='sitefit-sale-v1-20261016-review';
+ -- A free proof is not a sale: keep this policy unapproved. Tariff is synthetic only.
  update public.controlled_proof set tariff_verified=true,tariff_digest=repeat('b',64),enabled=true;
  update public.controlled_proof set expires_at=now()-interval '1 second';
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);raise exception 'expired proof admitted';exception when insufficient_privilege then null;end;
  update public.controlled_proof set expires_at=now()+interval '1 hour';
+ if public.read_sitefit_snapshot_proof(o,c)->>'nonce' is distinct from n::text then raise exception 'owned proof context missing';end if;
+ begin perform public.read_sitefit_snapshot_proof(other,c);raise exception 'foreign proof context exposed';exception when insufficient_privilege then null;end;
+ if has_function_privilege('anon','public.read_sitefit_snapshot_proof(uuid,uuid)','EXECUTE') or has_function_privilege('authenticated','public.read_sitefit_snapshot_proof(uuid,uuid)','EXECUTE') then raise exception 'proof context grant exposed';end if;
  begin perform public.claim_sitefit_controlled_proof(other,'snapshot',c,true,p,n,'coffee-shop',null);raise exception 'wrong owner admitted';exception when insufficient_privilege then null;end;
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,true,gen_random_uuid(),n,'coffee-shop',null);raise exception 'wrong property admitted';exception when insufficient_privilege then null;end;
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,false,p,n,'coffee-shop',null);raise exception 'missing application authority';exception when insufficient_privilege then null;end;
+ begin perform public.claim_sitefit_controlled_proof(o,'full',c,true,null,null,null,null);raise exception 'unapproved paid policy admitted';exception when insufficient_privilege then null;end;
  v:=public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);t:=(v->>'token')::uuid;
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);raise exception 'duplicate run admitted';exception when others then if sqlerrm='duplicate run admitted' then raise;end if;end;
  begin perform public.reserve_sitefit_proof_dispatch(c,gen_random_uuid(),'snapshot',repeat('1',64),'ai',repeat('1',64),100);raise exception 'wrong token admitted';exception when insufficient_privilege then null;end;
