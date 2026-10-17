@@ -21,7 +21,7 @@ test("failed frozen-input or unfinished-report reads stop before collection and 
         const ok = (value: unknown) => Response.json(value);
         const unavailable = () => Response.json({ code: "XX000", message: "synthetic private diagnostic" }, { status: 400 });
         if (url.pathname.endsWith("/rpc/claim_sitefit_controlled_proof")) return failure === "authority" ? unavailable() : ok(null);
-        if (url.pathname.endsWith("/rpc/submit_sitefit_analysis")) return ok({ id: ids.analysis, owner_id: owner });
+        if (url.pathname.endsWith("/rpc/submit_sitefit_analysis")) return ok({ id: ids.analysis, owner_id: owner,property_id:ids.property,business_type:'coffee-shop',submission_nonce:ids.correlation });
         if (url.pathname.endsWith("/analysis_inputs")) return failure === "input" ? unavailable() : ok([{ resolved_context: context() }]);
         if (url.pathname.endsWith("/reports")) return url.searchParams.get("status") === "eq.ready" ? ok([]) : unavailable();
         assert.fail("Generation retried a provider or changed frozen context after a read failure");

@@ -1,5 +1,6 @@
 import "server-only";
 import {snapshotExecution} from '../proof/repository.ts';
+import {proofFrozenInput} from '../proof/context.ts';
 import { createHash } from "node:crypto";
 import { frameworkClient } from "../data/server-client.ts";
 import { framework } from "../data/framework.ts";
@@ -36,10 +37,13 @@ async function generateSnapshotOnce(ownerId: string, propertyId: string, busines
   const databaseBound = (milliseconds: number) => AbortSignal.any([bound, AbortSignal.timeout(milliseconds)]);
   const client = frameworkClient();
   const sha = createHash("sha256").update(JSON.stringify({ propertyId, businessType })).digest("hex");
-  const { data: analysis, error: submissionError } = await client.rpc("submit_sitefit_analysis", {
+  const recovery=proofFrozenInput();
+  const { data: analysis, error: submissionError } = recovery
+   ?await client.from('analyses').select('*').eq('id',recovery.analysisId).eq('owner_id',ownerId).abortSignal(databaseBound(8000)).single()
+   :await client.rpc("submit_sitefit_analysis", {
     p_owner: ownerId, p_property: propertyId, p_business: businessType, p_nonce: nonce, p_sha256: sha,
   }).abortSignal(databaseBound(2000));
-  if (submissionError || !analysis || analysis.owner_id !== ownerId) throw new Error("submission_unavailable");
+  if (submissionError || !analysis || analysis.owner_id !== ownerId||analysis.property_id!==propertyId||analysis.business_type!==businessType||analysis.submission_nonce!==nonce) throw new Error("submission_unavailable");
   const analysisId = analysis.id;
   const { data: ready, error: readError } = await client.from("reports").select("id,free_projection").eq("analysis_id", analysis.id).eq("tier", "free").eq("status", "ready").eq("schema_version", 2).abortSignal(databaseBound(8000)).maybeSingle();
   if (readError) throw new Error("report_read_unavailable");
@@ -75,6 +79,7 @@ async function generateSnapshotOnce(ownerId: string, propertyId: string, busines
     const precise = enrichment.identity.point ? await spatial.geography(releases.geography, enrichment.identity.point) : geography;
     context = await data.repository.prepareEnriched(analysis.id, {}, {region: precise.region, geography: precise.geography, releases}, enrichment);
   }
+  if(recovery&&(context.analysisId!==recovery.analysisId||context.inputId!==recovery.inputId))throw Error('stored_input_read_unavailable');
   const { data: unfinished, error: unfinishedReadError } = await client.from("reports").select("provenance").eq("analysis_id", analysis.id).eq("version", 1).neq("status", "ready").abortSignal(databaseBound(8000)).maybeSingle();
   if (unfinishedReadError) throw new Error("stored_report_read_unavailable");
   progress.context();
