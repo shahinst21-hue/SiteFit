@@ -11,7 +11,7 @@ function harness(options:{fail?:boolean;settlementFails?:boolean}={}){
  const journal=new Map<string,{id:string;state:string;reserve:number}>();let calls=0,total=0;
  const scope:ProofScope={stage:'snapshot',inputRate:2.5,outputRate:10,
   store:{async reserve(key,_kind,_digest,micros){
-   if(journal.has(key)||total+micros>950000||[...journal.values()].some(d=>d.state==='ambiguous'))throw Error('denied');
+   if(journal.has(key)||total+micros>1650000||[...journal.values()].some(d=>d.state==='ambiguous'))throw Error('denied');
    total+=micros;const id=String(journal.size+1);journal.set(key,{id,state:'intent',reserve:micros});return id;
   },async settle(id,state){if(options.settlementFails)throw Error('lost_ack');const row=[...journal.values()].find(r=>r.id===id)!;if(row.state!=='intent')throw Error('settled');row.state=state;}},
   fetcher:async()=>{calls++;assert.ok([...journal.values()].some(r=>r.state==='intent'));if(options.fail)throw Error('timeout');return Response.json({status:'completed'});},
@@ -20,7 +20,7 @@ function harness(options:{fail?:boolean;settlementFails?:boolean}={}){
 }
 const request={method:'POST',body:JSON.stringify({model:'gpt-6.1-sol',service_tier:'default',store:false,max_output_tokens:1800})};
 test('proof authority stays off; concurrent identical dispatches have one committed intent and one external call',async()=>{
- assert.equal(proofPolicy.activationApproved,false);assert.equal(proofPolicy.totalAiMicros,950000);
+ assert.equal(proofPolicy.activationApproved,false);assert.equal(proofPolicy.totalAiMicros,1650000);
  const h=harness();const results=await runProofScope(h.scope,()=>Promise.allSettled([
   proofFetch('https://api.openai.com/v1/responses',request),proofFetch('https://api.openai.com/v1/responses',request)]));
  assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(h.calls(),1);assert.equal(h.journal.size,1);

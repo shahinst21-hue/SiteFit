@@ -1,5 +1,9 @@
 # Accepted decisions
 
+## Public/private legal separation — 17 October 2026
+
+Owner authorises the smallest Development correction retaining the public name Shahin Shahmir trading as SiteFit, withholding the personal address and unapproved public legal wording, and preserving complete private contracts/policy snapshots/history. Test the publication and client-asset boundaries, run CI and repeat full corrected-target Production preflight. No deployment (including automatic Preview), Production migration, policy approval, paid request, commercial activation or infrastructure change follows. Commercial mandatory seller disclosures remain unresolved independently of the non-commercial correction. [Actual scope and evidence](public-legal-publication.md).
+
 ## Controlled proof protected integration — 17 October 2026
 
 Owner authorises exact PR63 review, targeted recovery rehearsal, migration20261017120000 to verified Development only, hosted synthetic concurrency/restart/rights checks, normal protected merge and exact-head/post-merge CI. US$0.95 is the aggregate reservation for one Snapshot plus corresponding Full; Full's US$0.30 is included, never additional. Preserve existing histories/unknown holds, no real-user deletion or paid requests. Production migration/application release, case activation, real payment, provider/AI spending, subscriptions and upgrades remain unauthorised. [Actual Development evidence and Production recommendation](controlled-proof-development-verification.md).
@@ -450,3 +454,8 @@ The owner subsequently accepts the corrected email/PDF and directs continuation 
 ## Final narrow contract approval and provider audit — 16 October 2026
 
 Owner approves digital-content treatment, formation on verified successful payment, supply without undue delay following the required contract confirmation, full14-day cancellation retained, and no invented minutes guarantee. This is contract-wording approval only, not Production, payment or spending authority. Owner requests a read-only audit of the actual Postio/PropertyData/Geoapify/TfL integrations, necessity, keys, dispatch bounds and stored-data alternatives; do not call providers or enable gates. See [provider audit](production-provider-audit.md). PR58/default-tier preflight merged atf2d14ee with both post-merge CIs passed. Source account entitlements/credits remain unverified.
+
+
+## Owner seller-address publication and revised controlled-proof configuration — 17 October 2026
+
+Owner explicitly approves exact existing seller geographical address and Shahin Shahmir trading as SiteFit in appropriate public legal/contact/purchase disclosures. This supersedes the earlier address suppression; it does not approve the staged sale policy or private review text. Owner approves component reservation ceilings SnapshotUS$0.65 / FullUS$1.00 within aggregateUS$1.65, not spending. Preserve legacy holds and migrate forward from already-applied20261017120000. Authorised protected PR/CI, hosted Development checks, required related migrations and non-commercial Production deployment are conditional on exact-target/recovery/security/gate verification. No payment, Checkout Session, provider/AI dispatch, retry, commercial activation, subscription or campaign. [Evidence and current delivery state](public-legal-publication.md).

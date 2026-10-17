@@ -23,8 +23,8 @@ test("contract PDF requires complete frozen policy text; prepared PDF is not leg
  assert.ok((await PDFDocument.load(bytes)).getPageCount()>0);
 });
 
-test("actual checkout UI starts unchecked and cannot enable draft supply",()=>{
- const r=spawnSync(process.execPath,["tests/fixtures/render-sale.mjs"],{encoding:"utf8"});assert.equal(r.status,0,r.stderr);
+test("preserved gated consent form starts unchecked and cannot enable draft supply",()=>{
+ const r=spawnSync(process.execPath,["tests/fixtures/render-sale.mjs","consent"],{encoding:"utf8"});assert.equal(r.status,0,r.stderr);
  assert.equal((r.stdout.match(/type="checkbox"/g)||[]).length,3);assert.doesNotMatch(r.stdout,/checked=""/);
  assert.match(r.stdout,/disabled=""/);assert.match(r.stdout,/contractual 14-day cancellation/);assert.match(r.stdout,/not itself remove/);
 });

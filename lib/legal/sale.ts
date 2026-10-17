@@ -1,5 +1,6 @@
 import {site,formatPrice} from "../site-config.ts";
-import {policyVersions} from './policy-text.ts';
+import {policyVersions} from './policy-versions.ts';
+import {legalPublicationReady} from './publication.ts';
 /** Versioned draft. Approval requires a reviewed replacement, never an env override. */
 export const salePolicy = Object.freeze({ version: policyVersions.sale, approved: false,
   classification: 'digital_content', priceMinor: site.pricing.fullReport, currency: site.currency, consumerCancellationDays: 14,
@@ -14,7 +15,7 @@ export function validateSaleConsent(value: unknown): SaleConsent {
     v.termsAccepted !== true || v.immediateRequested !== true || v.acknowledgement !== true) throw Error("sale_consent_required");
   return structuredClone(v) as SaleConsent;
 }
-export function requireApprovedSale() { if (!salePolicy.approved) throw Error("sale_policy_not_approved"); }
+export function requireApprovedSale() { if (!salePolicy.approved||!legalPublicationReady()) throw Error("sale_policy_not_approved"); }
 export const cancellationReasons = ["change_of_mind", "failed_delivery", "report_problem", "other"] as const;
 export function cancellationReason(value: unknown) {
   if (!cancellationReasons.includes(value as never)) throw Error("invalid_cancellation_reason");
