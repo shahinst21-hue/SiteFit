@@ -51,8 +51,8 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  v:=public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);t:=(v->>'token')::uuid;
  begin perform public.claim_sitefit_controlled_proof(o,'snapshot',c,true,p,n,'coffee-shop',null);raise exception 'duplicate run admitted';exception when others then if sqlerrm='duplicate run admitted' then raise;end if;end;
  begin perform public.reserve_sitefit_proof_dispatch(c,gen_random_uuid(),'snapshot',repeat('1',64),'ai',repeat('1',64),100);raise exception 'wrong token admitted';exception when insufficient_privilege then null;end;
- d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('1',64),'ai',repeat('1',64),900000);
- begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('2',64),'ai',repeat('2',64),50001);raise exception '950000 cap exceeded';exception when others then if sqlerrm='950000 cap exceeded' then raise;end if;end;
+ d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('1',64),'ai',repeat('1',64),600000);
+ begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('2',64),'ai',repeat('2',64),50001);raise exception '950000 aggregate including Full exceeded';exception when others then if sqlerrm='950000 aggregate including Full exceeded' then raise;end if;end;
  begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('1',64),'ai',repeat('1',64),100);raise exception 'duplicate dispatch admitted';exception when unique_violation then null;end;
  perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('c',64));
  perform public.settle_sitefit_proof_dispatch(c,t,d,'received',repeat('c',64));
@@ -88,6 +88,10 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  'cancel_url','https://example.invalid/purchase/return?purchase='||payment::text||'&cancel=1','metadata',jsonb_build_object('purchase_id',payment,'analysis_id',a,'version','2'));
  begin perform public.prepare_sitefit_live_payment(other,r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');raise exception 'foreign case checkout admitted';exception when insufficient_privilege then null;end;
  row:=public.prepare_sitefit_live_payment(o,r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
+ if (select reserved_micros from public.commercial_payment_reservations where payment_id=payment)<>300000
+ or (select reserved_micros from public.controlled_proof)<>50000 then raise exception 'Full envelope counted as extra allowance or dispatch';end if;
+ begin insert into public.commercial_payment_reservations(payment_id,owner_id) values(gen_random_uuid(),o);
+ raise exception 'separate budget path admitted';exception when insufficient_privilege then null;end;
  if (select payment_id from public.controlled_proof)<>payment then raise exception 'proof payment binding lost';end if;
  perform public.bind_sitefit_live_checkout(payment,'cs_live_proof');
  perform public.record_sitefit_sale(o,payment,'sitefit-sale-v1-20261016-review',jsonb_build_object('version','sitefit-sale-v1-20261016-review','buyerKind','consumer','termsAccepted',true,'immediateRequested',true,'acknowledgement',true));

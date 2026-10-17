@@ -1,6 +1,6 @@
 # Controlled one-case proof safety — 17 October 2026
 
-Status: implemented locally; no hosted migration, Production release, activation or paid request performed. This work does not reopen closed phases. The owner-selected US$0.95 is a cost-control basis, not authorisation to spend.
+Status: implemented and hosted Development verified; migration79 applied only to `sitefit-dev`. No Production migration/release, activation or paid request performed. [Development verification and protected-delivery receipt](controlled-proof-development-verification.md). This work does not reopen closed phases. The owner-selected US$0.95 is a cost-control basis, not authorisation to spend.
 
 ## Execution authority
 
@@ -18,7 +18,11 @@ Proof-only Snapshot semantic repair is disabled: at most four section requests a
 
 Atomic aggregate AI admission ceiling: **950,000 microdollars (US$0.95)**, max5 Snapshot and3 Full calls, max30,000 encoded AI request bytes, bounded output, verified default tariff and retained reservations. Existing Full-stage ceiling remains **US$0.30**, independently enforced; this change does not enlarge it. No tools, search, background responses, premium tier or redirects are permitted.
 
+Snapshot admission preserves US$0.30 inside the aggregate for Full, so Snapshot intents cannot exceed US$0.65. The existing commercial US$0.30 reservation is the same Full envelope, not another allowance: effective combined reservation is Snapshot intents + max(Full intents, the commercial Full envelope). A locked trigger independently rejects an unrelated or excessive commercial reservation. Full intents still accumulate in the same proof counter, with their own US$0.30 ceiling. Development/test verification and question routes are denied unconditionally in Production; rent-search execution is also Production-disabled. Those paths must stay closed for this proof.
+
 `node --conditions=react-server scripts/payments/check-live-proof-budget.ts` is offline. At the documented base tariff, conservative estimate is Snapshot US$0.4775 + Full US$0.2975 = US$0.775, leaving US$0.175 aggregate headroom. Full headroom is only US$0.0025. A 10% premium or20% tax sensitivity would exceed the Full-stage limit even if it fits the aggregate ceiling. Actual tariff, tax, credits and billing exposure must therefore be verified before activation. Byte/framing admission assumptions are not a guaranteed provider invoice cap. Stripe fees, source tariffs/credits, currency conversion and account-level automatic billing are separate and unverified; host request caps are not monetary provider caps. Historical unknown reservations are unchanged.
+
+Reconciliation with the earlier US$0.8615: the earlier Snapshot allowance included eight possible calls (168,000 conservative input tokens and14,400 output tokens), estimated at US$0.564. The proof now allows five calls (155,000 input allowance and9,000 output), estimated at US$0.4775. The reduction is US$0.0325 input + US$0.054 output = US$0.0865. Full remains US$0.2975. This is a change in bounded request assumptions after removing repair calls, not a tariff reduction or a measured provider bill.
 
 ## Selective data rights: operator procedure
 

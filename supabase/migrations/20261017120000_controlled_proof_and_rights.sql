@@ -146,6 +146,8 @@ language plpgsql security definer set search_path='' as $$declare c public.contr
  if p_kind='ai' then
  cap:=case when p_stage='snapshot' then 5 else 3 end;
  if p_micros is null or p_micros<=0 or c.reserved_micros+p_micros>c.ai_limit_micros then raise exception 'proof_budget_exhausted';end if;
+ -- Keep the Full envelope inside, rather than on top of, the aggregate allowance.
+ if p_stage='snapshot' and c.reserved_micros+p_micros+300000>c.ai_limit_micros then raise exception 'proof_full_envelope_unavailable';end if;
  if p_stage='full' and (select coalesce(sum(reserved_micros),0) from public.proof_dispatches where case_id=p_case and stage='full')+p_micros>300000 then raise exception 'proof_full_reservation_exhausted';end if;
  else
  if p_stage<>'snapshot' or p_micros is distinct from 0 then raise exception 'proof_source_denied';end if;
@@ -222,6 +224,16 @@ create function public.guard_sitefit_proof_contract() returns trigger language p
 end$$;
 create trigger proof_contract_binding before insert on public.sale_contracts for each row execute function public.guard_sitefit_proof_contract();
 revoke all on function public.guard_sitefit_proof_contract() from public,anon,authenticated,service_role;
+create function public.guard_sitefit_proof_reservation() returns trigger language plpgsql security definer set search_path='' as $$declare c public.controlled_proof;used bigint;begin
+ select * into c from public.controlled_proof for update;
+ if found then
+ select coalesce(sum(reserved_micros),0) into used from public.proof_dispatches where case_id=c.id and stage='snapshot';
+ if not c.enabled or c.payment_id is distinct from new.payment_id or c.owner_id is distinct from new.owner_id
+ or used+new.reserved_micros>c.ai_limit_micros then raise exception 'proof_commercial_reservation_denied' using errcode='42501';end if;
+ end if;return new;
+end$$;
+create trigger proof_commercial_envelope before insert on public.commercial_payment_reservations for each row execute function public.guard_sitefit_proof_reservation();
+revoke all on function public.guard_sitefit_proof_reservation() from public,anon,authenticated,service_role;
 create trigger subject_report_guard before insert or update on public.reports for each row execute function public.guard_sitefit_subject_work();
 create trigger subject_campaign_guard before insert or update on public.campaign_attribution for each row execute function public.guard_sitefit_subject_work();
 create function public.sitefit_own_profile_unrestricted() returns boolean language sql stable security definer set search_path='' as $$
