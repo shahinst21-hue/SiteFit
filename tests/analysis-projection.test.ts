@@ -18,7 +18,8 @@ test("customer read route contains only stored projection access, never analytic
   assert.ok(code.includes('rpc("read_sitefit_free"'));
   for (const importName of ["generateSnapshot", "framework(", "residentialMetric(", "analysisAIProvider(", "synthesiseSections("]) assert.ok(!code.includes(importName));
   const ui = await readFile(new URL("../components/free-snapshot.tsx", import.meta.url), "utf8");
-  assert.ok(ui.includes("Explore the evidence")); assert.ok(!ui.includes("SnapshotFinancePreview")); assert.ok(ui.includes("Rent benchmarks depend on available qualified evidence")); assert.ok(!ui.includes("Financial scenarios and daily transactions")); assert.ok(ui.includes("Full Report purchasing is not open yet"));
+  const evidenceDialog=await readFile(new URL("../components/snapshot-evidence-dialog.tsx",import.meta.url),"utf8");
+  assert.ok(evidenceDialog.includes("Explore the evidence")); assert.ok(!ui.includes("SnapshotFinancePreview")); assert.ok(ui.includes("Rent benchmarks depend on available qualified evidence")); assert.ok(!ui.includes("Financial scenarios and daily transactions")); assert.ok(ui.includes("Full Report purchasing is not open yet"));
   assert.ok(!ui.includes("Economics optional"));
 });
 
