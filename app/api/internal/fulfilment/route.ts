@@ -20,12 +20,21 @@ export async function GET(request:Request){
     const config=stripeConfig(process.env),stripe=stripeClient();
     stage='account';await verifiedStripeAccount(stripe,config.accountId!);stage='price';await verifiedPrice(stripe,config.priceId,true);
     stage='webhook';
-    const endpoints=await stripe.webhookEndpoints.list({limit:100});
-    const matching=endpoints.data.filter(e=>e.url===config.origin+'/api/stripe/webhook'&&e.status==='enabled');
-    const webhook=matching.length===1&&matching[0].api_version===STRIPE_WEBHOOK_API_VERSION&&[...PAYMENT_EVENTS].every(e=>matching[0].enabled_events.includes(e));
+    let webhook:boolean|null=null,webhookInspection='verified';
+    try{
+      const endpoints=await stripe.webhookEndpoints.list({limit:100});
+      const matching=endpoints.data.filter(e=>e.url===config.origin+'/api/stripe/webhook'&&e.status==='enabled');
+      webhook=matching.length===1&&matching[0].api_version===STRIPE_WEBHOOK_API_VERSION&&[...PAYMENT_EVENTS].every(e=>matching[0].enabled_events.includes(e));
+    }catch(error){
+      // Endpoint administration is not needed for Checkout/webhook fulfilment.
+      // Keep the earlier owner-verified configuration explicitly uninspected;
+      // never call this a successful verification or expand the Live key.
+      if((error as {statusCode?:number})?.statusCode!==403)throw error;
+      webhookInspection='management_permission_unavailable';
+    }
     const providers=['POSTIO_API_KEY','PROPERTYDATA_API_KEY','GEOAPIFY_API_KEY','TFL_APP_KEY','OPENAI_API_KEY'].every(k=>!!process.env[k]?.trim());
     const project=process.env.SUPABASE_URL==='https://vsfkkroxgntoumoqcfcy.supabase.co';
-    return Response.json({price29:true,accountReady:true,accountId:config.accountId,webhook,signingSecretPresent:!!process.env.STRIPE_WEBHOOK_SECRET?.startsWith('whsec_'),providersConfigured:providers,productionProject:project,paidDispatches:0},{headers});
+    return Response.json({price29:true,accountReady:true,accountId:config.accountId,webhook,webhookInspection,signingSecretPresent:!!process.env.STRIPE_WEBHOOK_SECRET?.startsWith('whsec_'),providersConfigured:providers,productionProject:project,paidDispatches:0},{headers});
   }catch(error){const status=(error as {statusCode?:number})?.statusCode;return Response.json({ready:false,stage,upstreamStatus:status&&[401,403,404,429].includes(status)?status:null,paidDispatches:0},{status:503,headers});}
 }
 export async function POST(request: Request) {
