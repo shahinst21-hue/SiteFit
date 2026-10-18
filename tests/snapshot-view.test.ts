@@ -50,6 +50,9 @@ test("invalid finite metrics and map geometry are rejected at the normalised bou
 });
 test("client map/finance props strip arbitrary provider metadata", () => {
   const injected = structuredClone(example); injected.map.rawResponse = "synthetic-private"; injected.map.layers[0].apiCredential = "synthetic-private"; injected.financialPreview.session = "synthetic-private";
+  injected.map.layers[0].points=[[-.1,51.5]]; injected.map.layers[0].features=[{id:"record",label:"Native combined type",position:[-.1,51.5],category:"food-service",apiCredential:"synthetic-private"}];
   const safe = validateSnapshotView(injected, "demo");
+  assert.equal(safe.map.layers[0].features?.[0].category,"food-service");
+  const invalid=structuredClone(injected); invalid.map.layers[0].features[0].category="fabricated-verified-premises"; assert.throws(()=>validateSnapshotView(invalid,"demo"));
   assert.ok(!JSON.stringify(safe.map).includes("synthetic-private")); assert.ok(!JSON.stringify(safe.financialPreview).includes("synthetic-private"));
 });

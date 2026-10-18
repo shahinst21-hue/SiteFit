@@ -2,6 +2,7 @@ import type {SnapshotMap} from './model.ts';
 import {validateContext,validateResult,object} from '../data/validation.ts';
 import {permitted} from '../data/policy.ts';
 import {packetDigest} from '../analysis/canonical.ts';
+import {recordCategory} from './visuals.ts';
 
 export type SnapshotContext={map:SnapshotMap;precision:string;foodGroups:{label:string;count:number}[];foodTotal:number|null;foodDate:string|null;stopGroups:{label:string;count:number}[];notices:string[]};
 /** Read-only presentation of already retained, qualified operands. No collection or inference. */
@@ -30,7 +31,7 @@ export function storedSnapshotContext(context:unknown,rows:unknown[],now=new Dat
    const features=payload.items.flatMap(item=>{
     const label='businessType' in item?item.businessType:item.originalMode;
     groups.set(label,(groups.get(label)??0)+1);
-    return item.point?[{id:item.id,label:item.name,position:[item.point.longitude,item.point.latitude] as [number,number]}]:[];
+    return item.point?[{id:item.id,label:item.name,position:[item.point.longitude,item.point.latitude] as [number,number],category:recordCategory(label,food)}]:[];
    });
    const grouped=[...groups].map(([label,count])=>({label,count})).sort((a,b)=>b.count-a.count||a.label.localeCompare(b.label));
    if(food){foodTotal=payload.items.length;foodDate=result.meta.retrievedAt;foodGroups.push(...grouped);}else stopGroups.push(...grouped);
