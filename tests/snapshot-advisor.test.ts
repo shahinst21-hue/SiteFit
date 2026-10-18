@@ -4,6 +4,14 @@ import {decisionFixture} from './fixtures/snapshot-decision.ts';
 import {validateSnapshotAdvice,advisorInstructions,advisorSchema} from '../lib/analysis/advisor.ts';
 import {validateFreeProjection} from '../lib/analysis/projection.ts';
 import {generateAdvisorEdition} from '../lib/analysis/advisor-edition.ts';
+import {recommendationHeadline} from '../lib/snapshot/decision.ts';
+
+test('long genuine recommendations keep a compact heading without cutting a sentence or losing the full saved text',()=>{
+ const text='Resolve the use documents before making an offer. Weekend activity supports a viewing, not a demand forecast.';
+ assert.equal(recommendationHeadline(text,'conditional'),'Resolve the use documents before making an offer.');
+ assert.equal(recommendationHeadline('A '.repeat(100),'conditional'),'Resolve the priority issue first.');
+ assert.equal(recommendationHeadline('Look elsewhere.','not_recommended'),'Look elsewhere.');
+});
 
 test('advisor permits positive, qualified and negative judgement, rejects broken contracts rather than ordinary advice',()=>{
  for(const stance of ['recommended','conditional','not_recommended'] as const)assert.equal(validateSnapshotAdvice(advisorFixture(stance)).stance,stance);
