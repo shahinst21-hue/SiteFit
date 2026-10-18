@@ -1,4 +1,5 @@
 import { commercialExecution } from "../release/policy.ts";
+import {controlledTrialConfigured} from '../proof/trial-policy.ts';
 export const fulfilmentPolicy = Object.freeze({ version: "fulfilment-v1", leaseSeconds: 300,
   maxJobsPerInvocation: 1, maxOwnerStartsPerTenMinutes: 5, databaseCheckpointBytes: 450_000_000 });
 
@@ -8,7 +9,7 @@ export function developmentFulfilment(env: Record<string, string | undefined>, h
   return ["localhost", "127.0.0.1", "[::1]"].includes(hostname);
 }
 export function runnerEnabled(env:Record<string,string|undefined>,hostname:string){
- return developmentFulfilment(env,hostname)||commercialExecution(env,hostname);
+ return developmentFulfilment(env,hostname)||commercialExecution(env,hostname)||controlledTrialConfigured(env,hostname);
 }
 
 export type Completion = { state: "ready" | "intervention" | "awaiting_authorisation";

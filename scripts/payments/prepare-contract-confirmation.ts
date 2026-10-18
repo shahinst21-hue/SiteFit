@@ -6,6 +6,8 @@ import {paymentById} from '../../lib/payments/repository.ts';
 import {packetDigest} from '../../lib/analysis/canonical.ts';
 import {uuid} from '../../lib/data/validation.ts';
 import {releasePolicy} from '../../lib/release/policy.ts';
+import {controlledTrialConfigured} from '../../lib/proof/trial-policy.ts';
+import {trialRpc} from '../../lib/proof/trial.ts';
 
 // Existing owner-admin CLI only, never an HTTP endpoint or staff support grant.
 // Explicit private environment file; do not auto-load Development or print customer data.
@@ -17,7 +19,9 @@ async function prepare(){
  if(!['development','preview','production'].includes(environment??''))throw Error('explicit_environment_required');
  const production=environment==='production';
  if(process.env.SUPABASE_URL!==`https://${production?'vsfkkroxgntoumoqcfcy':'idlsjusbrmyucccostxt'}.supabase.co`)throw Error('project_target_mismatch');
- if(production&&!releasePolicy.productionApproved)throw Error('production_not_authorised');
+ if(production&&!releasePolicy.productionApproved){
+  if(!controlledTrialConfigured(process.env)||await trialRpc('authorise_sitefit_trial_owner',{p_trial:process.env.SITEFIT_CONTROLLED_TRIAL_ID!,p_owner:owner!})!==true)throw Error('production_not_authorised');
+ }
  const payment=await paymentById(purchase!);
  if(!payment||payment.owner_id!==owner||payment.status!=='succeeded'||payment.access_state!=='active'||!payment.verified_at)throw Error('payment_not_authorised');
  const sale=await readSale(owner!,purchase!);

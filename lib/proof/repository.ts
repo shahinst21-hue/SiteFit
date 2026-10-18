@@ -6,6 +6,7 @@ import type {Submission} from '../analysis/http.ts';
 import {uuid} from '../data/validation.ts';
 import {proofLimits} from './limits.ts';
 import {controlledSnapshotConfigured} from './authority.ts';
+import {controlledTrialConfigured} from './trial-policy.ts';
 
 // Explicitly separate from the ordinary release authority. Requires a later reviewed activation.
 export const proofPolicy=Object.freeze({activationApproved:false,totalAiMicros:proofLimits.totalAiMicros});
@@ -21,11 +22,13 @@ export async function readSnapshotProof(owner:string){
 }
 type Permit={id:string;token:string;inputRate:number;outputRate:number;reportId?:string;recoveryId?:string;analysisId?:string;inputId?:string};
 async function execution<T>(owner:string,args:Record<string,Json|null>,stage:'snapshot'|'full',run:()=>Promise<T>,report:(v:T)=>string){
- const configured=process.env.SITEFIT_CONTROLLED_PROOF_ENABLED==='1';
- const continuation=configured&&stage==='snapshot'&&controlledSnapshotConfigured(process.env,'sitefit.co.uk')
+ const trial=controlledTrialConfigured(process.env);
+ const configured=trial||process.env.SITEFIT_CONTROLLED_PROOF_ENABLED==='1';
+ const continuation=!trial&&configured&&stage==='snapshot'&&controlledSnapshotConfigured(process.env,'sitefit.co.uk')
   ?await rpc('claim_sitefit_snapshot_continuation',{p_owner:owner,p_case:process.env.SITEFIT_CONTROLLED_PROOF_ID??null,...Object.fromEntries(Object.entries(args).filter(([k])=>k!=='p_report'))}):null;
- const raw=continuation??await rpc('claim_sitefit_controlled_proof',{p_owner:owner,p_stage:stage,p_case:configured?process.env.SITEFIT_CONTROLLED_PROOF_ID??null:null,
-  p_approved:configured&&process.env.VERCEL_ENV==='production'&&(stage==='snapshot'?controlledSnapshotConfigured(process.env,'sitefit.co.uk'):proofPolicy.activationApproved),...args});
+ const raw=trial?await rpc('claim_sitefit_trial',{p_trial:process.env.SITEFIT_CONTROLLED_TRIAL_ID!,p_owner:owner,p_stage:stage,...args})
+  :continuation??await rpc('claim_sitefit_controlled_proof',{p_owner:owner,p_stage:stage,p_case:configured?process.env.SITEFIT_CONTROLLED_PROOF_ID??null:null,
+   p_approved:configured&&process.env.VERCEL_ENV==='production'&&(stage==='snapshot'?controlledSnapshotConfigured(process.env,'sitefit.co.uk'):proofPolicy.activationApproved),...args});
  if(raw===null){if(configured)throw Error('proof_not_approved');return runProcessingScope(()=>checkProcessing(owner),run);}
  const permit=raw as Permit;
  if(!uuid(permit.id)||!uuid(permit.token)||!Number.isFinite(permit.inputRate)||permit.inputRate<2.5||!Number.isFinite(permit.outputRate)||permit.outputRate<10)throw Error('invalid_proof_permit');

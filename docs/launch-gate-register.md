@@ -2,6 +2,14 @@ Current Development verification,17 October: [controlled proof migration/recover
 
 # Launch gate register
 
+18 October owner-authorised continuation: [bounded owner-only trial](controlled-owner-trial.md).
+Approved ceilings: five US$0.65 Snapshots and one US$1.00 Full, US$4.25 total.
+Development migration86, rollback recovery and installed-function concurrency pass;
+PR80 and Production delivery remain pending their actual receipts. Existing seller,
+policy and design decisions are accepted; historical entries below are not a request
+to repeat those approvals. Public activation and campaigns remain separate. The
+owner submits the real £29 payment; genuine receipt/Ready/PDF verification follows it.
+
 Public publication correction,17 October: [narrow public/private legal boundary](public-legal-publication.md). Current9259 Production still displays the personal address on Terms/Privacy/Contact. The owner authorises a Development correction only: public seller name retained, private address/review wording withheld from public HTML/client assets, full private snapshots/PDFs unchanged. Publication/disclosure and sale approval remain false. No new migration, Production apply, deployment or spend. Final commercial seller disclosures and privacy/publication approval remain separate launch blockers; suppressing an address does not satisfy them.
 
 Current readiness,17 October: [actual account, rights and one-case budget review](launch-readiness-2026-10-17.md). Vercel403 resolved through existing authorised CLI session refresh; Production9259 remains Ready, provider assignments/private gates verified and unchanged. Actual Supabase organisation confirms automatically incorporated DPA; no separate signature required. Zoho re-verification/OpenAI billing login, Vercel Hobby processor-term applicability, remaining source-account facts, scoped rights operations and persistent one-case Snapshot/payment fencing remain unresolved. No paid test, activation, signature, deployment or Production mutation follows. Historical checkpoints below remain as evidence, not current unresolved403 status.

@@ -11,6 +11,8 @@ import { checkoutParameters } from "@/lib/payments/parameters";
 import { preparePayment,storedParameters,bindCheckout } from "@/lib/payments/repository";
 import { openCheckout } from "@/lib/payments/checkout";
 import { validateFreeProjection } from "@/lib/analysis/projection";
+import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
+import {assertTrialOwner} from '@/lib/proof/trial';
 export async function POST(request:Request){
  if(!purchaseSameOrigin(request,process.env))return paymentReply({error:"Purchasing is unavailable."},403);
  if(!salePolicy.approved)return paymentReply({error:"New Checkout is unavailable while the sale policy and immediate-supply requirements await approval."},503);
@@ -18,6 +20,7 @@ export async function POST(request:Request){
   const body=await boundedJson(request);if(Object.keys(body).length!==2||!purchaseUuid(body.reportId))throw Error("invalid_request");
   const consent=validateSaleConsent(body.saleConsent);requireApprovedSale();
   const {client,user}=await verifiedUser();if(!client||!permanentIdentity(user))return paymentReply({error:"Sign in to your verified account before Checkout."},403);
+  if(controlledTrialConfigured(process.env))await assertTrialOwner(user,new URL(request.url).hostname);
   await checkProcessing(user.id);
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:body.reportId});
   if(error||!data||typeof data!=="object"||Array.isArray(data)||!purchaseUuid(data.analysisId))throw Error("snapshot_unavailable");

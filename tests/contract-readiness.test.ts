@@ -8,7 +8,7 @@ import {salePolicy,requireApprovedSale,validateSaleConsent} from '../lib/legal/s
 import {seller} from '../lib/legal/seller.ts';
 import {publicSeller,legalPublication} from '../lib/legal/publication.ts';
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;'}[c]!));
-test('public legal and purchase output publishes approved seller address but withholds unapproved wording while private snapshots stay complete',()=>{
+test('owner-approved public wording and frozen private contracts match; consent starts unchecked',()=>{
  const run=spawnSync(process.execPath,['tests/fixtures/render-sale.mjs','policies'],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
  const pages=JSON.parse(run.stdout) as {terms:string;privacy:string;contact:string};
  const snapshot=launchPolicySnapshot();
@@ -17,15 +17,14 @@ test('public legal and purchase output publishes approved seller address but wit
   assert.ok(page.includes(escape(seller.address)));
  }
  for(const page of [pages.terms,pages.privacy]){
-  assert.match(page,/Purchases are currently unavailable/);
-  for(const section of [...termsSections,...privacySections,...retentionSections])assert.ok(!page.includes(escape(section.body)),section.title);
+  assert.doesNotMatch(page,/Final wording awaits/);
  }
  assert.equal(snapshot.termsText,policyText(termsSections));assert.equal(snapshot.privacyText,policyText(privacySections));assert.equal(snapshot.retentionText,policyText(retentionSections));
  const withheld=spawnSync(process.execPath,['tests/fixtures/render-sale.mjs'],{encoding:'utf8'});assert.equal(withheld.status,0,withheld.stderr);
- assert.match(withheld.stdout,/Purchases are currently unavailable/);assert.doesNotMatch(withheld.stdout,/checkbox|Continue to Checkout/);
- assert.ok(!withheld.stdout.includes(escape(formationRule)));assert.ok(!withheld.stdout.includes(escape(deliveryCommitment)));
- for(const label of Object.values(snapshot.consentLabels))assert.ok(!withheld.stdout.includes(escape(label)));
- assert.equal(legalPublication.approved,false);assert.equal(legalPublication.sellerDisclosuresApproved,true);
+ assert.match(withheld.stdout,/checkbox/);assert.doesNotMatch(withheld.stdout,/checked=""/);
+ assert.ok(withheld.stdout.includes(escape(formationRule)));assert.ok(withheld.stdout.includes(escape(deliveryCommitment)));
+ for(const label of Object.values(snapshot.consentLabels))assert.ok(withheld.stdout.includes(escape(label)));
+ assert.equal(legalPublication.approved,true);assert.equal(legalPublication.sellerDisclosuresApproved,true);
  assert.equal(publicSeller.name,seller.name);assert.equal(publicSeller.tradingName,seller.tradingName);assert.equal(publicSeller.email,seller.email);
  assert.equal(snapshot.sellerAddress,seller.address);
  // The future gated form is preserved: supplied wording remains exact and choices initially unchecked.
@@ -33,7 +32,7 @@ test('public legal and purchase output publishes approved seller address but wit
  for(const label of Object.values(snapshot.consentLabels))assert.ok(ui.stdout.includes(escape(label)));
  assert.ok(ui.stdout.includes(escape(formationRule)));assert.ok(ui.stdout.includes(escape(deliveryCommitment)));
  assert.match(ui.stdout,/disabled=""/);assert.doesNotMatch(ui.stdout,/checked=""|Final wording awaits|Legal entity.*awaiting/);
- assert.equal(salePolicy.version,policyVersions.sale);assert.equal(salePolicy.classification,'digital_content');assert.equal(salePolicy.approved,false);assert.throws(requireApprovedSale);
+ assert.equal(salePolicy.version,policyVersions.sale);assert.equal(salePolicy.classification,'digital_content');assert.equal(salePolicy.approved,true);assert.doesNotThrow(requireApprovedSale);
  assert.throws(()=>validateSaleConsent({version:'sitefit-sale-v1-launch-draft',buyerKind:'consumer',termsAccepted:true,immediateRequested:true,acknowledgement:true}));
 });
 test('PDF renders the frozen wording, never current labels for historical contracts; review PDF contains every section',async()=>{

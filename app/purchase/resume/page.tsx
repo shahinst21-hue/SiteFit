@@ -10,11 +10,14 @@ import { activePurchaseId } from "@/lib/payments/purchase-projection";
 import { PurchaseClaim } from "@/components/purchase-claim";
 import { PurchaseTerms } from "@/components/purchase-terms";
 import { formatPrice,site } from "@/lib/site-config";
+import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
+import {assertTrialOwner} from '@/lib/proof/trial';
 export const dynamic="force-dynamic";
 export const metadata: Metadata={title:"Continue your purchase",robots:{index:false,follow:false},referrer:"no-referrer"};
 export default async function Resume({searchParams}:{searchParams:Promise<{report?:string}>}){
  if(!purchaseOrigin(process.env))notFound();
  const {client,user}=await verifiedUser();if(!client||!permanentIdentity(user))notFound();
+ if(controlledTrialConfigured(process.env))try{await assertTrialOwner(user);}catch{notFound();}
  const {report}=await searchParams;
  if(report&&purchaseUuid(report)){
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:report});if(error||!data)notFound();

@@ -1,9 +1,10 @@
 import { site } from "../site-config.ts";
 import { productionOrigin, releasePolicy, type ReleaseAuthority } from "../release/policy.ts";
+import {controlledTrialConfigured} from '../proof/trial-policy.ts';
 export const PRODUCT="full_location_due_diligence_report";
 export const PAYMENT_VERSION=1;
 export function purchaseOrigin(env: Readonly<Record<string,string|undefined>>,authority:ReleaseAuthority=releasePolicy): string | null {
- if(env.VERCEL_ENV==="production")return env.SITEFIT_COMMERCIAL_ENABLED==="1"?productionOrigin(env,authority):null;
+ if(env.VERCEL_ENV==="production")return env.SITEFIT_COMMERCIAL_ENABLED==="1"||controlledTrialConfigured(env)?productionOrigin(env,authority):null;
  if(env.SITEFIT_TEST_PURCHASES_ENABLED!=="true"||env.VERCEL_ENV==="production"||env.VERCEL==="1"&&env.VERCEL_ENV!=="preview")return null;
  try {
   const url=new URL(env.SITEFIT_PURCHASE_ORIGIN??"");
