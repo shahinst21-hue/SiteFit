@@ -25,7 +25,7 @@ export async function GET(request:Request){
     const webhook=matching.length===1&&matching[0].api_version===STRIPE_WEBHOOK_API_VERSION&&[...PAYMENT_EVENTS].every(e=>matching[0].enabled_events.includes(e));
     const providers=['POSTIO_API_KEY','PROPERTYDATA_API_KEY','GEOAPIFY_API_KEY','TFL_APP_KEY','OPENAI_API_KEY'].every(k=>!!process.env[k]?.trim());
     const project=process.env.SUPABASE_URL==='https://vsfkkroxgntoumoqcfcy.supabase.co';
-    return Response.json({price29:true,accountReady:true,webhook,signingSecretPresent:!!process.env.STRIPE_WEBHOOK_SECRET?.startsWith('whsec_'),providersConfigured:providers,productionProject:project,paidDispatches:0},{headers});
+    return Response.json({price29:true,accountReady:true,accountId:config.accountId,webhook,signingSecretPresent:!!process.env.STRIPE_WEBHOOK_SECRET?.startsWith('whsec_'),providersConfigured:providers,productionProject:project,paidDispatches:0},{headers});
   }catch(error){const status=(error as {statusCode?:number})?.statusCode;return Response.json({ready:false,stage,upstreamStatus:status&&[401,403,404,429].includes(status)?status:null,paidDispatches:0},{status:503,headers});}
 }
 export async function POST(request: Request) {
