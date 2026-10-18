@@ -27,7 +27,9 @@ let view;
 if(name==='snapshot-stored'){
  const {FreeSnapshot}=await import('../../components/free-snapshot.tsx');
  const {decisionFixture}=await import('./snapshot-decision.ts');
- view=createElement(FreeSnapshot,{report:decisionFixture(process.argv[3]||'coffee-shop')});
+ const report=decisionFixture(process.argv[3]||'coffee-shop');
+ if(process.argv[4]==='advisor'){const {advisorFixture}=await import('./snapshot-advisor.ts');report.earlyView.advisor=advisorFixture();}
+ view=createElement(FreeSnapshot,{report});
 }else if(name==='snapshot'){
  const {FreeSnapshotView}=await import('../../components/free-snapshot.tsx');
  const {snapshotDemo}=await import('../../lib/snapshot/demo.ts');

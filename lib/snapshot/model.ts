@@ -1,4 +1,5 @@
 import type { FreeProjection } from "../analysis/projection.ts";
+import type {SnapshotAdvice,AdvisorResearch} from '../analysis/advisor.ts';
 
 export type DataState = "available" | "unknown" | "unavailable" | "loading" | "locked" | "not_applicable";
 export type EvidenceQuality = "good" | "moderate" | "limited" | "insufficient";
@@ -29,6 +30,8 @@ export type SnapshotMap = {
 };
 export type SnapshotTransport = { id: string; name: string; mode: string | null; distanceMetres: number | null; walkingMinutes: number | null; information: string | null; status: DataState };
 export type SnapshotView = {
+  advisor?:SnapshotAdvice;
+  advisorResearch?:AdvisorResearch[];
   schemaVersion: 1; mode: "production" | "demo"; generatedAt: string | null; analysisStatus: DataState;
   property: { address: string; confirmation: string; context: { label: string; value: string | null }[]; image: { src: string; alt: string } | null };
   businessType: string;
@@ -65,6 +68,7 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
   const bounds: SnapshotMap["bounds"] = coordinates.length ? [Math.min(...coordinates.map(p => p[0]))-.0002, Math.min(...coordinates.map(p => p[1]))-.0002,
     Math.max(...coordinates.map(p => p[0]))+.0002, Math.max(...coordinates.map(p => p[1]))+.0002] : null;
   return {
+    ...(report.earlyView.advisor?{advisor:structuredClone(report.earlyView.advisor)}:{}),
     schemaVersion: 1, mode: "production", generatedAt: report.generatedAt, analysisStatus: "available",
     property: { address: report.property.address, confirmation: report.property.resolution === "provider_verified" ? "Postal address confirmed" : "Manually entered address",
       context: [{ label: "Location precision", value: report.property.precision === "postcode_centroid" ? "Postcode area" : report.property.precision.replaceAll("_", " ") }, { label: "Property use", value: null }], image: null },

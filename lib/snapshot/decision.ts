@@ -1,4 +1,5 @@
 import type {FactorId, SnapshotFactor, SnapshotMetric, SnapshotView} from './model.ts';
+export const recommendationLabels={recommended:'Recommended · Pursue this location',conditional:'Conditional · Resolve the priority issue first',not_recommended:'Not recommended · Look elsewhere'} as const;
 
 // Presentation only. Never re-score, strengthen or replace the frozen findings.
 export const readinessLabels = {
@@ -39,6 +40,11 @@ export function snapshotQuestions(snapshot:SnapshotView){
  const concept=snapshot.businessType==='coffee-shop'?'a café':snapshot.businessType==='restaurant'?'a restaurant':'a salon';
  const demand=snapshot.factors.find(f=>f.id==='customer-base');
  const checks=decisionChecks(snapshot);
+ if(snapshot.advisor){const a=snapshot.advisor;return [
+  {id:'demand',question:'Why do you recommend this next step?',answer:[a.recommendation.text,a.why.text],limit:'A recommendation about pursuing the opportunity, not a guarantee of demand or viability.',factor:a.why.sectionIds[0]},
+  {id:'risks',question:'What is the strongest case against your recommendation?',answer:[a.counterargument.text,a.change.text],limit:'This is what could change our view.',factor:a.counterargument.sectionIds[0]},
+  {id:'lease',question:'What should I do before making an offer?',answer:[a.action.text],limit:'Do not commit to a lease before permitted use, physical fit and lease terms have been checked.',factor:a.action.sectionIds[0]},
+ ];}
  return [
   {id:'demand',question:`Is there enough evidence of demand for ${concept} here?`,answer:[demand?.reason,...(demand?.details?.opposition??[])].filter((v):v is string=>!!v),limit:demand?.question??'Current customer demand has not been established.',factor:'customer-base' as FactorId},
   {id:'risks',question:'What could make this location a poor choice?',answer:[...checks.map(c=>snapshot.factors.find(f=>f.id===c.id)),...snapshot.factors].flatMap(f=>f?.details?.opposition??[]).filter((v,i,a)=>a.indexOf(v)===i).slice(0,3),limit:'These are the saved qualifications, not a forecast that the business will fail.',factor:checks[0]?.id??'premises' as FactorId},

@@ -17,7 +17,7 @@ test('decision presentation preserves the frozen conclusions, unknowns and numer
 test('actual customer rendering removes empty score/map and keeps gated purchases, notices and all concepts',()=>{
  for(const concept of ['coffee-shop','restaurant','hair-salon','beauty-salon']){
   const result=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored',concept],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);const html=result.stdout;
-  for(const text of ['Stored conditional finding','AI DECISION BRIEF','Ask SiteFit','What could change the decision?','Full Report purchasing is not open yet','Original mandatory source notice.','Original observations and scope','Fictional sample'])assert.ok(html.includes(text),text);
+  for(const text of ['Stored conditional finding','01 · RECOMMENDATION','Ask SiteFit','What could change the decision?','Full Report purchasing is not open yet','Original mandatory source notice.','Original observations and scope','Fictional sample'])assert.ok(html.includes(text),text);
   assert.doesNotMatch(html,/sf-score-ring|LOCATION SCORE|Not scored|Map layers not available|\[object Object\]|Purchasing is unavailable in this environment/);
   assert.equal((html.match(/id="factor-/g)??[]).length,4);assert.equal((html.match(/data-snapshot-event="question_open"/g)??[]).length,3);
   assert.equal((html.match(/data-testid="snapshot-purchase-/g)??[]).length,3);assert.equal((html.match(/<button[^>]*data-testid="snapshot-purchase-[^>]*disabled/g)??[]).length,3);

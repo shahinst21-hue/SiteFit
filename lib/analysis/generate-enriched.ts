@@ -19,7 +19,7 @@ import { weightManifest, scoringVersions } from "./scoring.ts";
 import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
 import {traceCollection,reportMissingSources} from './collection-diagnostics.ts';
 
-type Early = Awaited<ReturnType<typeof synthesiseSections>>;
+type Early = ReturnType<typeof restoreSynthesis>;
 type Partial = {enrichmentVersion: "phase8-observations-1"; evidence: Evidence[]; packets: InterpretationPacket[];
   sections: ValidatedSection[]; dispatches: number; receipts: AIReceipt[]; early?: Early; earlyPacketDigest?: string};
 const json = (v: unknown) => v as Json;
@@ -63,7 +63,7 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
   }
   if(interpreted.errors.length){await preserve(interpreted.errors);throw new Error("section_analysis_incomplete");}
   let early: Early;
-  try {early=prior?.early ? restoreSynthesis(prior.early,prior.earlyPacketDigest,interpreted.sections,prepared.index) : await synthesiseSections(interpreted.sections,ai,signal);}
+  try {early=prior?.early ? restoreSynthesis(prior.early,prior.earlyPacketDigest,interpreted.sections,prepared.index) : await synthesiseSections(interpreted.sections,ai,signal,context.businessType,prepared.evidence);}
   catch {await preserve([{section:"early-view",code:"synthesis_unavailable"}]);throw new Error("synthesis_incomplete");}
   progress.synthesis();
   const generatedAt=new Date().toISOString(), projection=enrichedProjection(context,interpreted.sections,early,prepared.evidence,snapshots,null,generatedAt);
