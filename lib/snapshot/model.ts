@@ -26,6 +26,7 @@ export type SnapshotMap = {
   status: DataState; description: string; bounds: [number, number, number, number] | null;
   layers: { id: string; label: string; kind: "property" | "catchment" | "competitor" | "complementary" | "transport";
     status: DataState; colour: string; points: [number, number][]; polygons: [number, number][][];
+    features?: {id:string;label:string;position:[number,number]}[];
     polygonParts?: [number, number][][][] }[];
 };
 export type SnapshotTransport = { id: string; name: string; mode: string | null; distanceMetres: number | null; walkingMinutes: number | null; information: string | null; status: DataState };
@@ -142,7 +143,8 @@ export function validateSnapshotView(value: unknown, expectedMode: SnapshotView[
   }
   if (!row.map || !states.includes(row.map.status) || !Array.isArray(row.map.layers) || row.map.layers.length > 12 || !row.transport || !states.includes(row.transport.status) || !Array.isArray(row.transport.places) || row.transport.places.length > 30) throw new Error("invalid_snapshot_context");
   if (row.map.bounds !== null && (row.map.bounds.length !== 4 || !row.map.bounds.every(Number.isFinite) || row.map.bounds[0] >= row.map.bounds[2] || row.map.bounds[1] >= row.map.bounds[3])) throw new Error("invalid_map_bounds");
-  for (const l of row.map.layers) if (!text(l.id) || !text(l.label) || !states.includes(l.status) || !/^#[0-9a-f]{6}$/i.test(l.colour) || !Array.isArray(l.points) || !Array.isArray(l.polygons) ||
+  for (const l of row.map.layers) if (!text(l.id) || !text(l.label) || !['property','catchment','competitor','complementary','transport'].includes(l.kind) || !states.includes(l.status) || !/^#[0-9a-f]{6}$/i.test(l.colour) || !Array.isArray(l.points) || !Array.isArray(l.polygons) ||
+    l.features!==undefined&&(!Array.isArray(l.features)||l.features.length>200||l.features.some((f,i)=>!text(f.id)||!text(f.label)||f.position.length!==2||f.position.some((n,j)=>!Number.isFinite(n)||n!==l.points[i]?.[j]))) ||
     l.polygonParts !== undefined && (!Array.isArray(l.polygonParts) || l.polygonParts.length > 100 || l.polygonParts.some(p => !Array.isArray(p) || !p.length || p.some(r => !Array.isArray(r) || r.length < 4))) ||
     [...l.points, ...l.polygons.flat(), ...(l.polygonParts?.flat(2) ?? [])].some(p => p.length !== 2 || !p.every(Number.isFinite))) throw new Error("invalid_map_layer");
   for (const p of row.transport.places) if (!text(p.name) || !states.includes(p.status) || !number(p.distanceMetres) || !number(p.walkingMinutes) || p.status !== "available" && (p.distanceMetres !== null || p.walkingMinutes !== null)) throw new Error("invalid_transport");
@@ -152,7 +154,7 @@ export function validateSnapshotView(value: unknown, expectedMode: SnapshotView[
   return structuredClone({ ...row,
     map: { status: row.map.status, description: row.map.description, bounds: row.map.bounds,
       layers: row.map.layers.map(l => ({ id: l.id, label: l.label, kind: l.kind, status: l.status, colour: l.colour, points: l.points, polygons: l.polygons,
-        ...(l.polygonParts ? {polygonParts: l.polygonParts} : {}) })) },
+        ...(l.polygonParts ? {polygonParts: l.polygonParts} : {}), ...(l.features?{features:l.features.map(f=>({id:f.id,label:f.label,position:f.position}))}:{}) })) },
     financialPreview: { status: row.financialPreview.status, inputs: { annualRent: row.financialPreview.inputs.annualRent, averageSpend: row.financialPreview.inputs.averageSpend, tradingDays: row.financialPreview.inputs.tradingDays } },
   });
 }

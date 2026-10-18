@@ -2,6 +2,8 @@ import type {FactorId, SnapshotFactor, SnapshotMetric, SnapshotView} from './mod
 export const recommendationLabels={recommended:'Recommended · Pursue this location',conditional:'Conditional · Resolve the priority issue first',not_recommended:'Not recommended · Look elsewhere'} as const;
 export function recommendationHeadline(text:string,stance:keyof typeof recommendationLabels){
  const first=text.match(/^.*?[.!?](?:\s|$)/u)?.[0].trim()??text;
+ const lead=first.split(/, but /i)[0];
+ if(lead!==first&&lead.length<=80)return lead+'.';
  return first.length<=140?first:recommendationLabels[stance].split(' · ')[1]+'.';
 }
 

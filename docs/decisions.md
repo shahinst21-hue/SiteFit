@@ -484,3 +484,11 @@ history while allowing one current authority slot. Production migration/release
 and successor provisioning require the next explicit approval after Development
 verification. Preserve all other launch gates and accepted phases.
 [Exact migration, tests and remaining approval](controlled-proof-safety.md).
+# Free Snapshot approved final composition — 18 October 2026
+
+Owner's attached final brief replaces the Snapshot Ask SiteFit presentation with
+Key Unknowns and approves recommendation/summary, four compact cards, geographic
+context and contextual £29 locks. Reuse qualified stored evidence; no invented
+weekly demand, direct-competitor counts or precise property pin. Development and
+protected Preview only; no Full Report/PDF redesign or commercial activation.
+[Implementation boundary and verification](free-snapshot-final-design.md).

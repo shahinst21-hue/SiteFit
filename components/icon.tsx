@@ -4,7 +4,7 @@ import {
   LeafIcon, MenuIcon, CloseIcon, ArrowRightIcon, ArrowUpRightIcon,
   ArrowDownIcon, ArrowLeftIcon, Login2Icon, Logout2Icon, EmailIcon,
   MessageQuestionIcon, HouseIcon,
-  ArrowUpIcon, AddIcon, MinusIcon, RotateArrowIcon,
+  ArrowUpIcon, AddIcon, MinusIcon, RotateArrowIcon, LockIcon,
 } from "@astraicons/react/linear";
 
 // Shared SiteFit roles. The installed set has no dining, rail or scissors glyph;
@@ -19,7 +19,7 @@ const icons = {
   external: ArrowUpRightIcon, down: ArrowDownIcon, back: ArrowLeftIcon,
   account: Profile2Icon, login: Login2Icon, logout: Logout2Icon,
   email: EmailIcon, help: MessageQuestionIcon, home: HouseIcon,
-  up: ArrowUpIcon, add: AddIcon, minus: MinusIcon, reset: RotateArrowIcon,
+  up: ArrowUpIcon, add: AddIcon, minus: MinusIcon, reset: RotateArrowIcon, lock:LockIcon,
 };
 export type IconName = keyof typeof icons;
 export function Icon({name, className = ""}: {name: IconName; className?: string}) {
