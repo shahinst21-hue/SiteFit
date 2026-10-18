@@ -1,4 +1,5 @@
-/** Implementation approval is not commercial activation or spending authority. */
+import {controlledTrialConfigured} from '../proof/trial-policy.ts';
+/** Public commercial activation remains separate from the owner-only trial. */
 export const releasePolicy = Object.freeze({
   version: "commercial-release-v1-draft",
   productionApproved: false,
@@ -8,7 +9,7 @@ export const releasePolicy = Object.freeze({
 });
 export type ReleaseAuthority = { productionApproved: boolean; paidExecutionApproved: boolean; measurementApproved: boolean; sourceCollectionApproved?: boolean };
 export function productionOrigin(env: Readonly<Record<string, string | undefined>>, authority: ReleaseAuthority = releasePolicy): string | null {
-  if (!authority.productionApproved || env.VERCEL_ENV !== "production") return null;
+  if ((!authority.productionApproved && !(authority===releasePolicy&&controlledTrialConfigured(env))) || env.VERCEL_ENV !== "production") return null;
   try {
     const origin = new URL(env.SITE_URL ?? "");
     if (origin.protocol !== "https:" || origin.username || origin.password || origin.pathname !== "/" || origin.search || origin.hash ||

@@ -5,8 +5,8 @@ import {salePolicy,validateSaleConsent,requireApprovedSale,cancellationReason} f
 import {confirmationPDF} from "../lib/legal/confirmation.ts";
 import {PDFDocument} from "pdf-lib";
 const consent={version:salePolicy.version,buyerKind:"consumer",termsAccepted:true,immediateRequested:true,acknowledgement:true};
-test("draft sale cannot be activated through submitted consent; all independent unchecked fields reject",()=>{
- assert.throws(requireApprovedSale,/not_approved/);assert.deepEqual(validateSaleConsent(consent),consent);
+test("owner-approved sale still requires all independent unchecked consent fields",()=>{
+ assert.doesNotThrow(requireApprovedSale);assert.deepEqual(validateSaleConsent(consent),consent);
  for(const key of ["termsAccepted","immediateRequested","acknowledgement"])assert.throws(()=>validateSaleConsent({...consent,[key]:false}));
  assert.throws(()=>validateSaleConsent({...consent,version:"invented"}));assert.throws(()=>validateSaleConsent({...consent,waiver:true}));
  assert.equal(validateSaleConsent({...consent,buyerKind:"business"}).acknowledgement,true);

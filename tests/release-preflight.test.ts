@@ -10,7 +10,7 @@ test('restricted Live preflight accepts only server Live keys and never grants a
  assert.ok(!JSON.stringify(result).includes('rk_live_synthetic'));
 });
 test('candidate configuration inspection cannot enable Production or certify unverified delivery',()=>{
- const result=releasePreflight(env);assert.equal(result.configurationComplete,true);assert.equal(result.approvals.production,false);assert.equal(result.approvals.paidExecution,false);assert.equal(result.approvals.salePolicy,false);assert.ok(result.unverified.length>0);
+ const result=releasePreflight(env);assert.equal(result.configurationComplete,true);assert.equal(result.approvals.production,false);assert.equal(result.approvals.paidExecution,false);assert.equal(result.approvals.salePolicy,true);assert.ok(result.unverified.length>0);
  for(const key of ['SUPABASE_SECRET_KEY','STRIPE_SECRET_KEY','STRIPE_WEBHOOK_SECRET','SITEFIT_FULFILMENT_RUNNER_SECRET','OPENAI_API_KEY'])assert.ok(!JSON.stringify(result).includes(env[key as keyof typeof env]));
 });
 test('missing, Test, privileged public-key and foreign/Local origin configuration stays incomplete',()=>{

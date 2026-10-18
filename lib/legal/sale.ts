@@ -1,8 +1,8 @@
 import {site,formatPrice} from "../site-config.ts";
 import {policyVersions} from './policy-versions.ts';
 import {legalPublicationReady} from './publication.ts';
-/** Versioned draft. Approval requires a reviewed replacement, never an env override. */
-export const salePolicy = Object.freeze({ version: policyVersions.sale, approved: false,
+/** Owner-approved frozen wording; purchasing still requires separate account and execution authority. */
+export const salePolicy = Object.freeze({ version: policyVersions.sale, approved: true,
   classification: 'digital_content', priceMinor: site.pricing.fullReport, currency: site.currency, consumerCancellationDays: 14,
   reportAccessDays: 30, additionalCheckoutFeeMinor: 0,
   termsVersion: policyVersions.terms, privacyVersion: policyVersions.privacy, retentionVersion: policyVersions.retention });
