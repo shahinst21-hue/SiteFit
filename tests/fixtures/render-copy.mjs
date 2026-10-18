@@ -28,7 +28,8 @@ if(name==='snapshot-stored'){
  const {FreeSnapshot}=await import('../../components/free-snapshot.tsx');
  const {decisionFixture}=await import('./snapshot-decision.ts');
  const report=decisionFixture(process.argv[3]||'coffee-shop');
- if(process.argv[4]==='advisor'){const {advisorFixture}=await import('./snapshot-advisor.ts');report.earlyView.advisor=advisorFixture();}
+ if(process.argv[4]==='advisor'){const {advisorFixture}=await import('./snapshot-advisor.ts');const stance=process.argv[5]||'conditional';if(!['recommended','conditional','not_recommended'].includes(stance))throw Error('Invalid fixture stance');report.earlyView.advisor=advisorFixture(stance);}
+ if(process.argv[4]==='comparison')report.dimensions[0].why.comparison={description:'Whole Census output areas in the same local authority; not commercial peers.',density:80,units:'residents per hectare',percentile:72,peers:200,limitations:['Synthetic test comparison only.']};
  view=createElement(FreeSnapshot,{report});
 }else if(name==='snapshot'){
  const {FreeSnapshotView}=await import('../../components/free-snapshot.tsx');

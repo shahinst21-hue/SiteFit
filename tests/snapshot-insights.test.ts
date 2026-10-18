@@ -1,0 +1,14 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+import {recommendationPosition,densityComparison} from '../lib/snapshot/visuals.ts';
+test('qualitative recommendation positions use only the stored stance and never a numerical suitability score',()=>{
+ assert.deepEqual(recommendationPosition('not_recommended'),{position:0,label:'Look elsewhere'});assert.equal(recommendationPosition('conditional')?.position,50);assert.equal(recommendationPosition('recommended')?.position,100);assert.equal(recommendationPosition(undefined),null);
+ for(const stance of ['not_recommended','conditional','recommended']){const r=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored','coffee-shop','advisor',stance],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);const scale=r.stdout.match(/<figure class="sf-recommendation-scale"[\s\S]*?<\/figure>/)?.[0]??'';assert.ok(scale.includes(`data-stance="${stance}"`));assert.match(scale,/Qualitative recommendation/);assert.doesNotMatch(scale,/<button|type="range"|role="slider"|aria-valuenow/);for(const label of ['Look elsewhere','Check first','Pursue'])assert.ok(scale.includes(label));assert.ok(r.stdout.includes('Our next recommendation'));}
+});
+test('density comparison requires an actual complete peer cohort and takes precedence over a count-only graphic',()=>{
+ const c={description:'Same authority Census areas',density:80,units:'residents per hectare',percentile:72,peers:200,limitations:['Whole areas, not customers.']};assert.deepEqual(densityComparison(c),c);
+ for(const v of [null,{...c,peers:null},{...c,peers:0},{...c,percentile:null},{...c,percentile:101},{...c,density:NaN},{...c,density:null}])assert.equal(densityComparison(v),null);
+ const r=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored','coffee-shop','comparison'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/72nd percentile/);assert.match(r.stdout,/200 other Census areas/);assert.doesNotMatch(r.stdout,/class="sf-population-chart"/);assert.match(r.stdout,/Not customer demand/);
+});
+test('factor evidence is a separate labelled modal with complete source text, never an expanding factor disclosure',()=>{
+ const r=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored','coffee-shop'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.equal((r.stdout.match(/class="sf-evidence-dialog"/g)??[]).length,4);assert.equal((r.stdout.match(/aria-haspopup="dialog"/g)??[]).length,4);assert.doesNotMatch(r.stdout,/<details class="sf-evidence-details"/);assert.match(r.stdout,/Original mandatory source notice/);assert.match(r.stdout,/No qualified peer comparison is retained/);for(const title of ['Customer Demand','Competition','Access','Premises Risk'])assert.ok(r.stdout.includes(`Close ${title} evidence`));
+});

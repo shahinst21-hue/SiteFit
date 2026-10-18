@@ -1,4 +1,13 @@
-import type {SnapshotMap} from './model.ts';
+import type {SnapshotMap,SnapshotFactor} from './model.ts';
+import type {SnapshotAdvice} from '../analysis/advisor.ts';
+/** Three qualitative states only. Positions are layout anchors, never scores. */
+export function recommendationPosition(stance:SnapshotAdvice['stance']|undefined){
+ if(!stance)return null;
+ return {not_recommended:{position:0,label:'Look elsewhere'},conditional:{position:50,label:'Conditional shortlist'},recommended:{position:100,label:'Pursue this location'}}[stance];
+}
+export function densityComparison(value:NonNullable<SnapshotFactor['details']>['comparison']){
+ return value&&value.density!==null&&Number.isFinite(value.density)&&value.density>=0&&value.percentile!==null&&Number.isFinite(value.percentile)&&value.percentile>=0&&value.percentile<=100&&value.peers!==null&&Number.isInteger(value.peers)&&value.peers>0&&value.units.trim()?value:null;
+}
 export const mapCategories={
  'food-service':{label:'Cafés / restaurants / canteens',detail:'Restaurant / Cafe / Canteen',icon:'coffee',colour:'#ffe4c3'},
  takeaway:{label:'Takeaways',detail:'Takeaway / sandwich shop',icon:'shop',colour:'#caf3aa'},
