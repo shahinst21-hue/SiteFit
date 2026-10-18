@@ -1,3 +1,4 @@
+import {advisorFixture} from './fixtures/snapshot-advisor.ts';
 import assert from "node:assert/strict";
 import test from "node:test";
 import { context, result, ids } from "./fixtures/data/framework.ts";
@@ -10,7 +11,7 @@ function provider(invalid = false) {
   return analysisAIProvider({ key: "sk-fixture", fetch: async (_url, init) => {
     const input = JSON.parse(String(init?.body)); const packet = JSON.parse(input.input[0].content[0].text);
     let selection: unknown;
-    if (packet.version === "validated-synthesis-v1") selection = { headlineId: "case-open", supportingSectionIds: packet.sections.map((s: { id: string }) => s.id), unknownSectionIds: packet.sections.map((s: { id: string }) => s.id) };
+    if (packet.version === "snapshot-advisor-v1") selection = advisorFixture();
     else {
       const p = packet as InterpretationPacket;
       const pick = (role: string) => p.propositions.find(prop => prop.role === role)!.id;
@@ -28,7 +29,7 @@ test("missing sources preserve four useful explicit gaps with no wasted dimensio
   assert.equal(ai.dispatches(), 0); assert.equal(output.sections.length, 4); assert.equal(output.errors.length, 0);
   assert.ok(output.sections.every(s => s.score === null && s.strength === "insufficient"));
   const early = await synthesiseSections(output.sections, ai);
-  assert.equal(ai.dispatches(), 1); assert.equal(early.headline, "Local evidence does not yet establish the customer case.");
+  assert.equal(ai.dispatches(), 1); assert.equal(early.headline, advisorFixture().recommendation.text);
   assert.equal(early.unknownSections.length, 4);
   assert.ok(early.supportingSections.includes("premises"), "Unverified premises can support an open case without becoming favourable evidence");
   const stored = restoreSynthesis(early, packetDigest(output.sections), output.sections, prepared.index);

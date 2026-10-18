@@ -90,7 +90,7 @@ async function generateSnapshotOnce(ownerId: string, propertyId: string, busines
   progress.sources();
   const provenance = unfinished?.provenance as { partial?: { sections: ValidatedSection[]; evidence: Evidence[]; packets: InterpretationPacket[];
     residential: ReturnType<typeof residentialMetric>; comparison: unknown; dispatches: number; receipts?: AIReceipt[];
-    early?: Awaited<ReturnType<typeof synthesiseSections>>; earlyPacketDigest?: string } } | undefined;
+    early?: ReturnType<typeof restoreSynthesis>; earlyPacketDigest?: string } } | undefined;
   const prior = provenance?.partial;
   const ons = snapshots.find(snapshot => snapshot.result.meta.source === "ons-population")!;
   let comparison: Awaited<ReturnType<ReturnType<typeof comparisonRepository>["residential"]>> = null;
@@ -103,7 +103,7 @@ async function generateSnapshotOnce(ownerId: string, propertyId: string, busines
   for (const packet of prepared.packets) validatePacket(packet, prepared.index);
   const ai = analysisAIProvider({ priorDispatches: prior?.dispatches ?? 0 });
   const interpreted = await interpretSections(prepared.packets, prepared.index, ai, bound, prior?.sections ?? [],progress.section);
-  async function preserveIncomplete(errors: unknown, early?: Awaited<ReturnType<typeof synthesiseSections>>) {
+  async function preserveIncomplete(errors: unknown, early?: ReturnType<typeof restoreSynthesis>) {
     // Analytical content belongs to a private unfinished report, never operational logs.
     const { error } = await client.from("reports").upsert({ analysis_id: analysisId, input_id: context.inputId, version: 1, schema_version: 2,
       tier: "free", status: "failed", provenance: json({ partial: { sections: interpreted.sections, errors,
@@ -120,7 +120,7 @@ async function generateSnapshotOnce(ownerId: string, propertyId: string, busines
   try {
     if (prior?.early) {
       early = restoreSynthesis(prior.early, prior.earlyPacketDigest, interpreted.sections, prepared.index);
-    } else early = await synthesiseSections(interpreted.sections, ai, bound);
+    } else early = await synthesiseSections(interpreted.sections, ai, bound, businessType, prepared.evidence);
   }
   catch { await preserveIncomplete([{ section: "early-view", code: "synthesis_unavailable" }]); throw new Error("synthesis_incomplete"); }
   progress.synthesis();

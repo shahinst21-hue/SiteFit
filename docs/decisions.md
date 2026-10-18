@@ -1,3 +1,5 @@
+18 October owner amendment: Snapshot is a decision adviser. New synthesis must provide a clear pursuit recommendation, integrated rationale, counterargument, decision-changing condition and concrete action. Targeted research is allowed inside the existing US$0.65 Snapshot ceiling including prior holds; no invented facts, automatic retry, historical rewrite or commercial activation. [Implementation and boundaries](snapshot-advisor.md).
+
 # Accepted decisions
 
 ## Owner Snapshot decision-experience feedback — 18 October 2026

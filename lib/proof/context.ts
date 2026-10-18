@@ -37,7 +37,7 @@ export const proofFetch:typeof fetch=async(input,init)=>{
     !Number.isSafeInteger(r.max_output_tokens)||r.max_output_tokens<1||r.max_output_tokens>cap||Buffer.byteLength(String(body))>proofLimits.maxEncodedAiBytes)throw Error('proof_ai_request_denied');
   // Deliberately conservative byte + framing admission reserve, not a provider invoice guarantee.
   micros=Math.ceil((Buffer.byteLength(String(body))+proofLimits.framingTokens)*scope.inputRate+r.max_output_tokens*scope.outputRate);
-  if(scope.store.received){const packet=JSON.parse(r.input?.[0]?.content?.[0]?.text??'null');slot=packet?.version==='validated-synthesis-v1'?'synthesis':packet?.section;if(!['customer-base','market-position','customer-access','premises','synthesis'].includes(slot??''))throw Error('proof_ai_slot_denied');}
+  if(scope.store.received){const packet=JSON.parse(r.input?.[0]?.content?.[0]?.text??'null');slot=['validated-synthesis-v1','snapshot-advisor-v1'].includes(packet?.version)?'synthesis':packet?.section;if(!['customer-base','market-position','customer-access','premises','synthesis'].includes(slot??''))throw Error('proof_ai_slot_denied');}
  }
  const identityUrl=new URL(url);
  for(const key of [...identityUrl.searchParams.keys()])if(/^(?:api_?key|key|token|app_?key)$/i.test(key))identityUrl.searchParams.delete(key);
