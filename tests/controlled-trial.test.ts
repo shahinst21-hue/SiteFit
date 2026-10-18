@@ -22,21 +22,21 @@ function addressHarness(fail=false){
   }
   const row=[...entries.values()].find(r=>r.id===args.p_id)!;if(row.state!=='intent')throw Error('conflict');row.body=args.p_body as string|null;row.state=row.body===null?'ambiguous':'received';return null;
  };
- const fetcher:typeof fetch=async()=>{calls++;if(fail)throw Error('timeout');return Response.json({data:{synthetic:true}});};
+ const fetcher:typeof fetch=async()=>{calls++;if(fail)throw Error('timeout');return Response.json({success:true,results:[{udprn:'12345678',suggestion:'Synthetic',debug:'excluded'}],meta:{countResults:1,debug:'excluded'},debug:'excluded'});};
  return {entries,invoke,fetcher,calls:()=>calls};
 }
 test('Postio intent precedes fetch, concurrency sends once and successful refresh reads the saved response',async()=>{
  const h=addressHarness(),request=trialAddressFetch('synthetic',h.fetcher,h.invoke);
- const results=await Promise.allSettled([request('https://api.postio.co.uk/v1/postcodes/E84PH'),request('https://api.postio.co.uk/v1/postcodes/E84PH')]);
+ const results=await Promise.allSettled([request('https://api.postio.co.uk/v1/address/search?q=synthetic'),request('https://api.postio.co.uk/v1/address/search?q=synthetic')]);
  assert.equal(results.filter(r=>r.status==='fulfilled').length,1);assert.equal(h.calls(),1);
  const afterRestart=trialAddressFetch('synthetic',h.fetcher,h.invoke);
- assert.deepEqual(await(await afterRestart('https://api.postio.co.uk/v1/postcodes/E84PH')).json(),{data:{synthetic:true}});assert.equal(h.calls(),1);
+ assert.deepEqual(await(await afterRestart('https://api.postio.co.uk/v1/address/search?q=synthetic')).json(),{success:true,results:[{udprn:'12345678',suggestion:'Synthetic'}],meta:{countResults:1}});assert.equal(h.calls(),1);
 });
 test('Postio ambiguous outcomes stop redispatch and arbitrary external URLs are rejected before spending',async()=>{
  const h=addressHarness(true),request=trialAddressFetch('synthetic',h.fetcher,h.invoke);
  await assert.rejects(request('https://foreign.invalid/v1/address'));assert.equal(h.calls(),0);assert.equal(h.entries.size,0);
- await assert.rejects(request('https://api.postio.co.uk/v1/postcodes/E84PH'),/reconciliation/);
- await assert.rejects(request('https://api.postio.co.uk/v1/postcodes/E84PH'),/reconciliation/);
+ await assert.rejects(request('https://api.postio.co.uk/v1/address/search?q=synthetic'),/reconciliation/);
+ await assert.rejects(request('https://api.postio.co.uk/v1/address/search?q=synthetic'),/reconciliation/);
  assert.equal(h.calls(),1);assert.equal([...h.entries.values()][0].state,'ambiguous');
 });
 test('trial identity rejects anonymous, unverified and different accounts before provider allocation',()=>{
