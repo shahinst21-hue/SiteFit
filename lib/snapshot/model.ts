@@ -78,7 +78,7 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
       quality: qualities[report.earlyView.strength], score: { status: "unavailable", value: null, label: "Overall location assessment", explanation: "An overall score needs complete demand, competition, access and premises evidence. Available findings are shown below.", method: null } },
     supportiveSignals: [...new Set(report.dimensions.flatMap(d => d.why.support))].slice(0, 3),
     openQuestions: report.earlyView.keyQuestions, coverage: report.earlyView.coverage,
-    map: spatial ? {status: bounds ? "available" : "unavailable", description: spatial.limitations.join(" "), bounds, layers} : { status: "unavailable", description: "Verified walking catchments, business locations and transport routes are not available in this saved analysis.", bounds: null, layers: [] },
+    map: spatial ? {status: bounds && spatial.catchments.length ? "available" : "unavailable", description: spatial.limitations.join(" "), bounds, layers} : { status: "unavailable", description: "Verified walking catchments, business locations and transport routes are not available in this saved analysis.", bounds: null, layers: [] },
     transport: spatial ? {status: spatial.stations.length ? "available" : "unavailable", places: spatial.stations.map(s => ({id: s.id, name: s.name, mode: s.mode,
       distanceMetres: s.metres, walkingMinutes: s.seconds === null ? null : s.seconds / 60,
       information: "Modelled walking route to station register point; entrance and usable services unconfirmed.", status: s.outcome === "success" ? "available" : "unavailable"})),

@@ -61,7 +61,10 @@ function FactorCard({factor,demo,context,onUnlock}:{factor:SnapshotFactor;demo:b
  </article>;
 }
 function LocationContext({snapshot,context,reportId}:{snapshot:SnapshotView;context?:SnapshotContext|null;reportId?:string}){
- const map=context?.map.status==='available'?context.map:snapshot.map;
+ const base=context?.map.status==='available'?context.map:snapshot.map;
+ // Free presentation may show recorded points without a walking catchment.
+ // Keep the shared stored adapter's Full Report behaviour unchanged.
+ const map={...base,status:base.bounds&&base.layers.some(l=>l.status==='available'&&l.points.length)?'available' as const:base.status};
  return <section className="sf-location-intelligence" aria-labelledby="snapshot-map-title"><div className="sf-module-heading"><Icon name="pin"/><h2 id="snapshot-map-title">Location Intelligence</h2><span className="sf-tag">{context?.precision??snapshot.property.context.find(c=>c.label==='Location precision')?.value??'Precision unknown'}</span></div>
   <div className="sf-location-layout"><div className="sf-location-facts"><div><Icon name="pin"/><p><strong>{snapshot.property.address}</strong><span>{snapshot.property.confirmation}</span></p></div><div><Icon name="evidence"/><p><strong>Source context, in place</strong><span>Toggle saved register layers. Select a point to inspect its name.</span></p></div><div><Icon name="help"/><p><strong>Precision matters</strong><span>{context?.precision.includes('Postcode')?'The centre marker represents the postcode, not the unit or entrance.':'A recorded location does not establish a usable entrance.'} Register points do not confirm current trading, services or walking routes.</span></p></div></div><SnapshotMapPanel map={map} demo={snapshot.mode==='demo'} reportId={reportId}/></div>
   {context&&<details className="sf-map-source-notices"><summary>Map sources, dates & scope</summary><p>{map.description}</p>{context.foodDate&&<p>FSA retrieved {date(context.foodDate)}. Source observation date and coordinate accuracy unspecified.</p>}{context.foodGroups.length>0&&<p>FSA native categories: {context.foodGroups.map(g=>`${g.label}: ${g.count}`).join('; ')}. These are register classifications, not a direct-competitor assessment.</p>}{context.notices.map(n=><p key={n}>{n}</p>)}</details>}
