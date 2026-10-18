@@ -23,14 +23,14 @@ export function CampaignPreference() {
       const result = await fetch("/api/campaign", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(accept ? { action: "accept", campaign: offered } : { action: "clear" }), signal: AbortSignal.timeout(3000) });
       if (!result.ok) throw Error();
-      setActive(accept ? offered : null); setOffered(null);
+      setActive(accept ? offered : null); setOffered(null);window.dispatchEvent(new Event('sitefit-measurement-change'));
     } catch { setError("Preference could not be saved. You can continue without measurement."); }
     finally { setBusy(false); }
   }
   if (!enabled || !offered && !active) return null;
   return <section className="campaign-preference" aria-label="Optional campaign measurement">
     <div><strong>{active ? "Campaign measurement is on" : "Help us measure this campaign?"}</strong>
-      <p>Optional session cookie links this campaign to your Snapshot and purchase outcomes. No property details go into campaign exports. <Link href="/privacy">Privacy</Link></p>
+      <p>Optional session cookie links this campaign to Snapshot views, evidence and question opens, Full Report clicks and purchase outcomes. No question text, café preferences or property details go into campaign exports. <Link href="/privacy">Privacy</Link></p>
       {error && <p role="status">{error}</p>}</div>
     <div className="campaign-preference-actions">
       {offered && !active && <button type="button" className="button" disabled={busy} onClick={() => choose(true)}>Allow measurement</button>}

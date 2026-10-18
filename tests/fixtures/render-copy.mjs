@@ -22,9 +22,13 @@ registerHooks({resolve(s,c,next){
 },load(url,c,next){if(url.endsWith('.tsx'))return {format:'module',shortCircuit:true,source:ts.transpileModule(fs.readFileSync(fileURLToPath(url),'utf8'),{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.ESNext}}).outputText};return next(url,c)}});
 globalThis.fetch=()=>{throw Error('Static copy verification must not request data');};
 const name=process.argv[2];
-if(!['home','pricing','how-it-works','sample-report','snapshot','purchase','checkout'].includes(name))throw Error('Unknown fixture');
+if(!['home','pricing','how-it-works','sample-report','snapshot','snapshot-stored','purchase','checkout'].includes(name))throw Error('Unknown fixture');
 let view;
-if(name==='snapshot'){
+if(name==='snapshot-stored'){
+ const {FreeSnapshot}=await import('../../components/free-snapshot.tsx');
+ const {decisionFixture}=await import('./snapshot-decision.ts');
+ view=createElement(FreeSnapshot,{report:decisionFixture(process.argv[3]||'coffee-shop')});
+}else if(name==='snapshot'){
  const {FreeSnapshotView}=await import('../../components/free-snapshot.tsx');
  const {snapshotDemo}=await import('../../lib/snapshot/demo.ts');
  const data=JSON.parse(fs.readFileSync('fixtures/free_snapshot/kingston_coffee_shop.json','utf8'));

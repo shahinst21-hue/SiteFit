@@ -1,5 +1,10 @@
 # Phase16 campaign measurement — v1
 
+18 October owner Snapshot feedback adds a separately gated, bounded
+[first-occurrence interaction mechanism](snapshot-decision-experience.md#minimal-measurement).
+Conversion definitions and activation controls remain unchanged. No analytics
+dashboard, event stream or Production measurement activation is introduced.
+
 ## Operator procedure
 
 1. Choose an approved campaign code: campaign-01, campaign-02 or campaign-03. Prepare a link to the existing approved public origin with only `?sf_campaign=campaign-01`. No property/person/click identifiers in URLs. Production links and actual advertising are Phase17 work.

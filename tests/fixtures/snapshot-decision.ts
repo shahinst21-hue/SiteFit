@@ -1,0 +1,8 @@
+import type {FreeProjection} from '../../lib/analysis/projection.ts';
+// Synthetic frozen-contract fixture; not a captured report or provider response.
+export function decisionFixture(businessType='coffee-shop'):FreeProjection{
+ const ids=['customer-base','market-position','customer-access','premises'] as const;
+ return {schemaVersion:2,analysisId:'00000000-0000-4000-8000-000000000001',generatedAt:'2026-10-17T12:00:00Z',property:{address:'Synthetic Test Unit, London',resolution:'provider_verified',precision:'postcode_centroid'},businessType,
+ earlyView:{headline:'Stored conditional finding',reason:'Stored reason, with demand unverified.',meaning:'conditional',strength:'limited',keyQuestions:['Current customer demand is unverified.'],coverage:'Stored coverage limitation.'},
+ dimensions:ids.map((id,i)=>({id,title:id,conclusion:`Stored ${id} conclusion`,reason:`Stored ${id} business implication`,meaning:i===3?'no_basis':'conditional',strength:i===3?'insufficient':'limited',score:null,scoreNote:'No numerical assessment is available.',question:`Stored ${id} question`,implication:`Stored ${id} interpretation`,why:{support:[`Stored ${id} support`],opposition:[`Stored ${id} qualification`],alternatives:[`Stored ${id} alternative`],unknowns:[`Stored ${id} unknown`],comparison:null,observations:i<3?[{label:['TS001','FHRS','StopPoint'][i],value:[445,100,26][i],units:['usual residents','returned records','returned records'][i],scope:'The original scoped source observation.',effectiveAt:'2021-03-21'}]:[],sources:[{provider:'Synthetic source',dataset:id,url:'https://example.invalid/source',retrievedAt:'2026-10-17',notices:['Original mandatory source notice.']}]} }))};
+}

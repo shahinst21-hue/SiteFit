@@ -19,13 +19,14 @@ test("Snapshot desktop and mobile purchase controls share report-bound purchase 
     if(ts.isJsxSelfClosingElement(node)&&node.tagName.getText(source)==="PurchaseButton"){
       const attributes=node.attributes.properties.filter(ts.isJsxAttribute);
       const id=attributes.find(a=>a.name.getText(source)==="controlId")?.initializer;
-      if(id&&ts.isStringLiteral(id))controls.push(id.text);
-      assert.equal(attributes.find(a=>a.name.getText(source)==="report")?.initializer?.getText(source),"{!demo ? purchaseReport : undefined}");
+      assert.ok(id?.getText(source).includes('snapshot-purchase-'));
+      assert.equal(attributes.find(a=>a.name.getText(source)==="report")?.initializer?.getText(source).replace(/\s/g,''),"{!demo?purchaseReport:undefined}");
     }
+    if(ts.isCallExpression(node)&&node.expression.getText(source)==='purchase'&&node.arguments[0]&&ts.isStringLiteral(node.arguments[0]))controls.push(`snapshot-purchase-${node.arguments[0].text}`);
     if(ts.isJsxElement(node)&&node.openingElement.tagName.getText(source)==="a"&&node.getText(source).includes("Check the Full Case"))priceAnchors++;
     ts.forEachChild(node,visit);
   }
-  visit(source);assert.deepEqual(controls.sort(),["snapshot-purchase-mobile","snapshot-purchase-primary"]);assert.equal(priceAnchors,0);
+  visit(source);assert.deepEqual(controls.sort(),["snapshot-purchase-brief","snapshot-purchase-mobile","snapshot-purchase-primary"]);assert.equal(priceAnchors,0);
 });
 test("purchase start preserves report identity and only accepts real authentication/resume destinations",async()=>{
   for(const destination of ["/purchase/auth",`/purchase/resume?report=${report}`]){

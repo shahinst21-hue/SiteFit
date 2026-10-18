@@ -1,5 +1,15 @@
 # Accepted decisions
 
+## Owner Snapshot decision-experience feedback — 18 October 2026
+
+The owner requests the 15-point redesign of the real 67B Free Snapshot: decision
+brief, no empty score/map, scoped business implications, saved-answer exploration,
+prioritised verification, optional café planning lens, honest Full Report value and
+sample, consistent monochrome/lime identity and minimal consent-based conversion
+observations. Preserve frozen findings, source limitations, ownership and all paid
+execution/launch gates. No fresh AI, provider calls or public sales activation.
+Implementation/measurement boundaries: [decision experience](snapshot-decision-experience.md).
+
 ## Public/private legal separation — 17 October 2026
 
 Owner authorises the smallest Development correction retaining the public name Shahin Shahmir trading as SiteFit, withholding the personal address and unapproved public legal wording, and preserving complete private contracts/policy snapshots/history. Test the publication and client-asset boundaries, run CI and repeat full corrected-target Production preflight. No deployment (including automatic Preview), Production migration, policy approval, paid request, commercial activation or infrastructure change follows. Commercial mandatory seller disclosures remain unresolved independently of the non-commercial correction. [Actual scope and evidence](public-legal-publication.md).

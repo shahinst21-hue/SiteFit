@@ -16,7 +16,7 @@ test('actual Snapshot states preserve demo/missingness disclosures and no longer
  for(const state of ['', 'unknown','missing-section','loading','locked']){
   const html=render('snapshot',state);assert.match(html,/Development demo/);assert.match(html,/business financial calculations are not included/i);
   assert.doesNotMatch(html,/Full Report generation.*not enabled|PDF are not enabled|planned investigation|\[object Object\]/);
-  assert.match(html,/Purchasing is unavailable/);
+  assert.match(html,/Full Report purchasing is not open yet/);
  }
 });
 test('actual price controls use configuration and do not turn unavailable checkout into an active purchase',()=>{
