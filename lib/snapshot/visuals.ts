@@ -1,6 +1,6 @@
 import type {SnapshotMap} from './model.ts';
 export const mapCategories={
- 'food-service':{label:'Cafés / restaurants',detail:'Restaurant / Cafe / Canteen',icon:'coffee',colour:'#ffe4c3'},
+ 'food-service':{label:'Cafés / restaurants / canteens',detail:'Restaurant / Cafe / Canteen',icon:'coffee',colour:'#ffe4c3'},
  takeaway:{label:'Takeaways',detail:'Takeaway / sandwich shop',icon:'shop',colour:'#caf3aa'},
  retail:{label:'Food retail',detail:'Registered food retailers',icon:'shop',colour:'#ffffff'},
  'other-food':{label:'Other food records',detail:'Other FSA types',icon:'evidence',colour:'#e0e1e6'},
