@@ -83,8 +83,8 @@ final hosted Preview remain separately verified delivery steps.
 The approved reference governs composition, comfortable spacing and brand type
 scale. Equal desktop factor cards use 54px observations, 16px headings, visible
 status chips and shared footer alignment. Mint, Peach and Sky brand washes
-distinguish signals without adding a new colour scheme. Expanded evidence may
-naturally increase a card's height; no evidence is clipped to force equal heights.
+distinguish signals without adding a new colour scheme. Evidence opens in a separate labelled native dialog; card height stays unchanged
+while all saved evidence remains available inside its independently scrolling body.
 
 Demand uses a unit chart: 445 dated Census residents = seventeen complete units
 of 25 plus one partial unit of 20. No temporal trend, visit estimate or success
@@ -115,3 +115,45 @@ record selection with postcode-centre distance, and dialog Escape/focus return.
 These are browser viewport checks, not physical-device or actual 200% zoom proof.
 Protected CI, hosted Preview and the final release identity are delivery receipts,
 not inferred from the local checks.
+
+## Owner component correction — 18 October 2026
+
+The three-option recommendation rail is replaced with a read-only grey-to-neutral-
+to-brand-lime gradient. Only the existing saved advisor stance supplies its marker:
+not_recommended, conditional and recommended occupy the three qualitative anchors
+(left, centre, right). No score, interpolated confidence, address-specific rule,
+slider semantics or interactive control is added. An absent stance has no marker.
+The saved recommendation, rationale and next action are unchanged.
+
+Access uses a compact geographic view of retained transport coordinates, the
+recorded postcode/context origin and an explicitly labelled 250 m straight-line
+guide. There are no fictional roads, stop names, routes or new source requests.
+Street tiles reuse the same bounded owned-report Geoapify proxy/cache and existing
+Preview opt-in; attribution remains visible. The mini-map links to the existing
+location map for names and distances. Missing coordinates never generate pins.
+
+Where the saved whole-Census-area comparison contains finite density, a percentile
+and a nonempty peer cohort, that density comparison takes priority over the unit
+chart. It describes residential density, not commercial peers, demand or the raw
+headcount's rank. The actual saved 67B projection has a null comparison; its 445
+residents remain an observed dated count with no invented high/low ranking.
+No AI/web search or immutable-report rewrite is needed for these UI changes.
+
+Explore the evidence opens a 780px native modal with a darkened, lightly blurred
+backdrop. Its header/close control stay outside the scroll body. Escape, the close
+button or a genuine outside click dismiss it; native focus returns to the opener.
+The page behind is inert and scroll-locked. Mobile uses the viewport minus 8px
+on each edge. Existing evidence cross-links open the same modal without jumping
+the page to a card. Measurement retains the existing fixed factor_open contract.
+
+Verification for this correction follows after actual execution. Physical-phone
+and actual 200% zoom checks remain unperformed, not claimed as passed.
+
+Targeted correction tests passed: dynamic positive/conditional/negative rendering,
+no slider/score semantics, missing/invalid peer-cohort rejection and priority of a
+qualified density comparison, separate evidence modals and retained source text.
+Local browser checks confirmed 26 retained TfL points, a 780px desktop modal,
+fixed header during internal scrolling, background scroll lock, outside-click/
+Escape/close dismissal and focus return. At 390px the modal is viewport-height
+minus 16px and the cards remain one column. Full exact-head checks and protected
+hosted delivery are recorded in the PR receipt after completion.
