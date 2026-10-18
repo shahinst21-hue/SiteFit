@@ -19,6 +19,16 @@ begin
  perform public.record_sitefit_campaign(owner,report,'campaign-01',true);
  if public.record_sitefit_campaign(owner,report,'campaign-02',true) then raise exception 'First attribution replaced';end if;
  if (select count(*) from public.campaign_attribution)<>1 or (select count(purchase_started_at) from public.campaign_attribution)<>1 then raise exception 'Duplicate event counting';end if;
+ perform public.record_sitefit_snapshot_interaction(owner,report,'campaign-01','snapshot_view:page');
+ perform public.record_sitefit_snapshot_interaction(owner,report,'campaign-01','snapshot_view:page');
+ perform public.record_sitefit_snapshot_interaction(owner,report,'campaign-01','question_open:demand');
+ perform public.record_sitefit_snapshot_interaction(owner,report,'campaign-02','full_click:primary');
+ if (select count(*) from public.campaign_attribution c cross join lateral jsonb_object_keys(c.interactions) k)<>2 then raise exception 'Interaction duplicates or campaign reassignment';end if;
+ begin perform public.record_sitefit_snapshot_interaction(other,report,'campaign-01','full_click:primary');raise exception 'Foreign interaction accepted';exception when insufficient_privilege then null;end;
+ begin perform public.record_sitefit_snapshot_interaction(owner,report,'campaign-01','question_open:email@example.invalid');raise exception 'Free text interaction accepted';exception when check_violation then null;end;
+ if has_function_privilege('authenticated','public.record_sitefit_snapshot_interaction(uuid,uuid,text,text)','EXECUTE') or has_function_privilege('anon','public.sitefit_snapshot_interaction_results(timestamptz,timestamptz)','EXECUTE') then raise exception 'Interaction grants exposed';end if;
+ result:=public.sitefit_snapshot_interaction_results(now()-interval '1 day',now());
+ if jsonb_array_length(result->'rows')<>2 or result::text~'(owner_id|analysis_id|report_id|formatted_address|example.invalid)' or not exists(select 1 from jsonb_array_elements(result->'rows') x where x->>'key'='snapshot_view:page' and x->>'analyses'='1') then raise exception 'Interaction aggregate invalid';end if;
  result:=public.sitefit_campaign_results(now()-interval '1 day',now());
  if result->>'testOnly'<>'true' then raise exception 'Test receipts presented as live';end if;
  select v into row from jsonb_array_elements(result->'rows') v where v->>'campaign'='campaign-01';
