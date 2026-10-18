@@ -8,6 +8,7 @@ import { purchaseAvailableOnHost } from "@/lib/payments/config";
 import {measurementEnabled} from '@/lib/marketing/campaign';
 import {validateSnapshotAdvice,validateAdvisorResearch} from '@/lib/analysis/advisor';
 import type {Json} from '@/lib/supabase/database.types';
+import {readSnapshotContext} from '@/lib/snapshot/read-context';
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your Free Snapshot", robots: { index: false, follow: false }, referrer: "no-referrer" };
 export default async function Snapshot({ params }: { params: Promise<{ id: string }> }) {
@@ -27,5 +28,6 @@ export default async function Snapshot({ params }: { params: Promise<{ id: strin
   }
   // Stored projection only: no source, metric, comparison or AI engine import on the read path.
   const requestHeaders=await headers();
-  return <FreeSnapshot report={report} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAvailableOnHost(process.env,requestHeaders.get("host"))?id:undefined} />;
+  const context=await readSnapshotContext(client,id);
+  return <FreeSnapshot report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAvailableOnHost(process.env,requestHeaders.get("host"))?id:undefined} />;
 }

@@ -25,7 +25,7 @@ test('historical projections roundtrip unchanged; new recommendation is frozen i
 });
 test('actual advisor UI renders the recommendation, counterargument, decision action and stored format judgements',()=>{
  const result=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored','coffee-shop','advisor'],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);
- for(const text of ['Keep this location on your shortlist','Strongest reason against','What would change our view','Why SiteFit reached this view','Conditional · Resolve the priority issue first','Challenge our recommendation','Your statutory rights are unaffected'])assert.ok(result.stdout.includes(text),text);
+ for(const text of ['Keep this location on your shortlist','Strongest reason against','What would change our view','Why SiteFit reached this view','Conditional · Resolve the priority issue first','Key unknowns','Your statutory rights are unaffected'])assert.ok(result.stdout.includes(text),text);
  assert.doesNotMatch(result.stdout,/\[object Object\]|sf-score-ring|lease approved/i);
 });
 test('edition reserves before its only dispatch, checkpoints received output and never retries ambiguous failures',async()=>{
