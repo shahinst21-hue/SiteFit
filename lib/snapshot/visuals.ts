@@ -16,6 +16,13 @@ export const mapCategories={
  transport:{label:'Transport stops',detail:'TfL registered stops',icon:'access',colour:'#cbedff'},
 } as const;
 export type MapCategory=keyof typeof mapCategories;
+/** Two-times closer context around the retained origin, without changing points. */
+export function focusedMapBounds(map:SnapshotMap):SnapshotMap['bounds']{
+ if(!map.bounds)return null;
+ const [w,s,e,n]=map.bounds,origin=map.layers.find(l=>l.kind==='property'&&l.status==='available')?.points[0];
+ const [x,y]=origin??[(w+e)/2,(s+n)/2];
+ return [x-(e-w)/4,y-(n-s)/4,x+(e-w)/4,y+(n-s)/4];
+}
 export function recordCategory(type:string,food:boolean):MapCategory{
  if(!food)return 'transport';
  if(type==='Restaurant/Cafe/Canteen')return 'food-service';

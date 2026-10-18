@@ -157,3 +157,28 @@ fixed header during internal scrolling, background scroll lock, outside-click/
 Escape/close dismissal and focus return. At 390px the modal is viewport-height
 minus 16px and the cards remain one column. Full exact-head checks and protected
 hosted delivery are recorded in the PR receipt after completion.
+
+## Follow-up owner polish — 18 October 2026
+
+The record picker uses explicit label/select grid columns and stacks on narrow
+screens; neither control can shrink underneath the label. The recommendation
+rationale now uses the same reusable native evidence dialog as the four factors,
+with preserved saved reasoning and no expanding hero.
+
+The transport mini-map is centred on the retained origin at twice the previous
+scale. Source coordinates are unchanged. It states visible versus saved counts
+(21 of 26 for this saved case) and links to the complete location map. Dark
+presentation applies a colour filter to the existing authorised raster tiles only;
+no alternate provider, style API, route or new source request is introduced.
+
+The central premises visual is blurred and covered by a keyboard-accessible lock
+opening the existing contextual £29 purchase dialog. This is a teaser for deeper
+assessment, not evidence that permission or layout has been established. The
+Unresolved state, warning against commitment, explicit use/layout uncertainty and
+complete free evidence popup remain readable. Existing purchase authority is
+unchanged; the Preview cannot create Checkout or perform a payment.
+
+Local browser checks at 1440/390px confirmed the picker has a real gap, the
+rationale opens as a 780px/near-fullscreen dialog, and the risk lock reaches the
+existing closed purchase flow. Final full checks and protected hosted delivery
+are recorded on the PR after execution.
