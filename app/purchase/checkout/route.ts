@@ -25,7 +25,7 @@ export async function POST(request:Request){
   const consent=validateSaleConsent(body.saleConsent);requireApprovedSale();
   stage='identity';
   const {client,user}=await verifiedUser();if(!client||!permanentIdentity(user)){
-    (await cookies()).set(CHECKOUT_INTENT_COOKIE,signCheckoutIntent(body.reportId,consent,process.env.SUPABASE_SECRET_KEY??''),{httpOnly:true,secure:new URL(request.url).protocol==='https:',sameSite:'lax',path:'/purchase',maxAge:600});
+    (await cookies()).set(CHECKOUT_INTENT_COOKIE,signCheckoutIntent(body.reportId,consent,process.env.SUPABASE_SECRET_KEY??''),{httpOnly:true,secure:process.env.VERCEL_ENV==='production'||new URL(request.url).protocol==='https:',sameSite:'lax',path:'/purchase',maxAge:600});
     if(client&&user?.is_anonymous&&!controlledTrialConfigured(process.env)){
      const owned=await client.rpc('read_sitefit_free',{p_report:body.reportId});if(owned.error||!owned.data)throw Error('snapshot_unavailable');
      await prepareGuestPurchase(user,body.reportId,new URL(request.url).protocol==='https:');
@@ -58,7 +58,7 @@ export async function POST(request:Request){
    create:async(params,key)=>{await checkProcessing(user.id);return stripe.checkout.sessions.create(params,{idempotencyKey:key});},
    validate:async session=>{await verifiedSession(stripe,session.id,binding);},
   },session=>bindCheckout(payment.id,session,config.live));
-  (await cookies()).set(CHECKOUT_INTENT_COOKIE,'',{httpOnly:true,secure:new URL(request.url).protocol==='https:',sameSite:'lax',path:'/purchase',maxAge:0});
+  (await cookies()).set(CHECKOUT_INTENT_COOKIE,'',{httpOnly:true,secure:process.env.VERCEL_ENV==='production'||new URL(request.url).protocol==='https:',sameSite:'lax',path:'/purchase',maxAge:0});
   return paymentReply({url});
  }catch{console.warn('sitefit_checkout_failure',{stage});return paymentReply({error:"Checkout could not continue. Your saved Snapshot is unchanged. Retry shortly; an unresolved attempt may need verification."},409);}
 }

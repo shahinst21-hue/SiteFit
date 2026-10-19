@@ -26,6 +26,13 @@ const mocks={
 };
 registerHooks({resolve(s,c,next){if(mocks[s])return {url:'data:text/javascript,'+encodeURIComponent(mocks[s]),shortCircuit:true};if(s.startsWith('@/')||s.startsWith('.')){const base=s.startsWith('@/')?path.resolve(s.slice(2)):path.resolve(path.dirname(fileURLToPath(c.parentURL)),s);if(!path.extname(base))for(const ext of ['.ts','.tsx'])if(fs.existsSync(base+ext))return next(pathToFileURL(base+ext).href,c);}return next(s,c);}});
 globalThis.fetch=async()=>{throw Error('External calls forbidden in synthetic test');};
+if(mode.startsWith('return-')){
+ const {POST}=await import('../../app/auth/continuation/route.ts');
+ const response=await POST(new Request('http://internal.example/auth/continuation',{method:'POST',headers:{host:'sitefit.co.uk','x-forwarded-proto':'https',origin:mode==='return-cross'?'https://evil.example':'https://sitefit.co.uk','content-type':'application/json'},body:JSON.stringify({next:mode==='return-invalid'?'https://evil.example':'/purchase/continue'})}));
+ assert.equal(response.status,mode==='return-proxy'?200:mode==='return-cross'?403:400);assert.equal(creates,0);
+ if(mode==='return-proxy'){const saved=jar.get('sitefit_auth_return');assert.equal(saved.value,'/purchase/continue');assert.equal(saved.options.path,'/auth');assert.equal(saved.options.httpOnly,true);assert.equal(saved.options.secure,true);}
+ console.log(JSON.stringify({mode,status:response.status,externalRequests:0}));
+}else{
 const {POST}=await import('../../app/purchase/checkout/route.ts');
 const r=await POST(new Request('https://sitefit.co.uk/purchase/checkout',{method:'POST',headers:{origin:mode==='cross-origin'?'https://evil.example':'https://sitefit.co.uk','content-type':'application/json'},body:JSON.stringify({reportId:report,saleConsent:consent})}));
 const body=await r.json();
@@ -33,3 +40,5 @@ if(mode==='signed-out'){assert.equal(r.status,200);assert.equal(body.url,'/login
 else if(mode==='owner'){assert.equal(r.status,200);assert.equal(body.url,'https://checkout.stripe.com/c/pay/synthetic');assert.equal(creates,1);assert.equal(sales,1);assert.equal(jar.get('sitefit_checkout_intent').value,'');assert.equal(jar.get('sitefit_checkout_intent').options.maxAge,0);assert.equal(jar.get('sitefit_checkout_intent').options.path,'/purchase');}
 else{assert.ok(r.status>=400);assert.equal(creates,0);assert.equal(sales,0);assert.equal(stripeCalls,0);}
 console.log(JSON.stringify({mode,status:r.status,syntheticSessionCreates:creates,externalRequests:0}));
+
+}

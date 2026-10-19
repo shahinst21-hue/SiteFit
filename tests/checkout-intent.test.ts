@@ -29,3 +29,7 @@ test('actual Checkout route sends signed-out users to login, sends the verified 
  const r=spawnSync(process.execPath,['--conditions=react-server','tests/fixtures/checkout-route.mjs',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/"externalRequests":0/);
  }
 });
+
+test('authentication return respects canonical HTTPS behind the proxy and rejects cross-origin or arbitrary destinations',()=>{
+ for(const mode of ['return-proxy','return-cross','return-invalid']){const r=spawnSync(process.execPath,['--conditions=react-server','tests/fixtures/checkout-route.mjs',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);}
+});
