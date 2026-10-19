@@ -13,7 +13,7 @@ export function residentialScore(populations:readonly unknown[],metadata:Residen
 }
 /** Only admitted ONS totals with walking-network lineage qualify. No new provider requests. */
 export function residentialFromEvidence(evidence:readonly Evidence[],business:string,point:{longitude:number;latitude:number}|null,at:Date):ResidentialScore|null{
- if(business!=='coffee-shop'||!point||!Number.isFinite(point.longitude)||!Number.isFinite(point.latitude)||Math.abs(point.longitude)>180||Math.abs(point.latitude)>90)return null;
+ if(!['coffee-shop','restaurant','hair-salon','beauty-salon','hair-beauty-salon'].includes(business)||!point||!Number.isFinite(point.longitude)||!Number.isFinite(point.latitude)||Math.abs(point.longitude)>180||Math.abs(point.latitude)>90)return null;
  const rows=[5,10,15].map(minutes=>evidence.filter(e=>e.schemaVersion===2&&e.source.provider==='ons'&&e.source.dataset===`TS007A total, ${minutes} minute walking estimate`&&e.geography.statistical.unit==='network_catchment'&&e.kind==='derived'&&e.quality.available&&e.licence.representationAllowed&&(!e.licence.expiresAt||Date.parse(e.licence.expiresAt)>at.getTime())&&e.parents.length>0&&e.lineage.parentSnapshots.length>0));
  if(rows.some(r=>r.length!==1))return null;
  const selected=rows.map(r=>r[0]);
@@ -30,4 +30,4 @@ export function validateResidentialScore(value:unknown):ResidentialScore{
  if(!expected||v.rawScore!==expected.rawScore||v.score!==expected.score||v.rating!==expected.rating||JSON.stringify(v.bands)!==JSON.stringify(expected.bands)||JSON.stringify(v.components)!==JSON.stringify(expected.components))throw Error('invalid_residential_score');
  return expected;
 }
-export function residentialInterpretation(score:ResidentialScore){return `${score.rating} residential base within the modelled walking area. Test café trading hours, competition and visitor activity before committing.`;}
+export function residentialInterpretation(score:ResidentialScore){return `${score.rating} residential base within the modelled walking area. Test trading hours, competition and visitor activity before committing.`;}
