@@ -12,9 +12,11 @@ export function PurchaseConsent({report}:PurchaseConsentProps){
  const [immediate,setImmediate]=useState(false);
  return <section className="sf-purchase-consent" aria-label="Purchase terms">
  <label className="sf-buyer-purpose">Buying for<select value={buyerKind} onChange={e=>setBuyer(e.target.value as SaleConsent['buyerKind'])}><option value="consumer">Personal use</option><option value="business">A business</option></select></label>
- <label className="sf-immediate-request"><input type="checkbox" checked={immediate} onChange={e=>setImmediate(e.target.checked)}/><span>I request preparation and supply before the cancellation period ends.<small>Starts after payment and contract confirmation. My 14-day consumer cancellation right remains protected.</small></span></label>
- <PurchaseButton report={report} checkout label="Continue to secure payment" consent={{version:salePolicy.version,buyerKind,termsAccepted:true,immediateRequested:immediate,acknowledgement:true}}/>
  <p className="sf-purchase-legal">By purchasing, you agree to the <Link href="/terms" target="_blank" rel="noopener noreferrer">Terms of Sale</Link>. <Link href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Notice</Link> · <Link href="/terms#consumer-cancellation" target="_blank" rel="noopener noreferrer">Cancellation & refunds</Link>.</p>
  <p className="sf-purchase-rights">Your 14-day contractual consumer cancellation right remains protected, including after delivery. Statutory rights remain unaffected.</p>
+ <button type="button" className="sf-supply-action" aria-pressed={immediate} onClick={()=>setImmediate(true)}><span>{immediate?'✓ ':''}I agree to immediate delivery and understand that my statutory cancellation right ends when it begins.</span></button>
+ <p className="sf-supply-explanation">{immediate?'Immediate delivery agreed. Your separate contractual 14-day full-refund right remains available.':'This separate action authorises early digital delivery. Accepting the Terms alone does not authorise it.'}</p>
+ <PurchaseButton report={report} checkout label="Continue to secure payment" consent={{version:salePolicy.version,buyerKind,termsAccepted:true,immediateRequested:immediate,acknowledgement:immediate}}/>
+
  </section>;
 }

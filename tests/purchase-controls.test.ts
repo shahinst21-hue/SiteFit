@@ -61,3 +61,10 @@ test('client accepts the verified f/pay Stripe format and keeps provider fragmen
  assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),destination);
  for(const url of ['https://checkout.stripe.com:8443/f/pay/example','https://checkout.stripe.com.evil.example/f/pay/example','https://user@checkout.stripe.com/f/pay/example','https://checkout.stripe.com/f/pay/','https://checkout.stripe.com/f/other/example'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
 });
+
+test('bounded Checkout recovery errors explain the saved state without forwarding provider details',async()=>{
+ const fetcher=(code:string)=>async()=>new Response(JSON.stringify({error:'private provider details must not surface',code}),{status:409});
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('checkout_reconciliation_required') as typeof fetch),/previous payment attempt needs verification/);
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_budget_exhausted') as typeof fetch),/Full Report purchase allocated/);
+ try{await purchaseNavigation(report,true,origin,fetcher('secret-provider-code') as typeof fetch);assert.fail();}catch(e){assert.ok(e instanceof Error);assert.doesNotMatch(e.message,/private provider|secret-provider/);}
+});

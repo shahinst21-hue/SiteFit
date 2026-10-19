@@ -1,3 +1,4 @@
+import {PurchaseTerms} from '@/components/purchase-terms';
 import {residentialScore} from "@/lib/analysis/residential-catchment";
 import { notFound } from "next/navigation";
 import { FreeSnapshot,FreeSnapshotView } from "@/components/free-snapshot";
@@ -9,6 +10,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Snapshot UI demo", robots: { index: false, follow: false } };
 export default async function SnapshotDemo({ searchParams }: { searchParams: Promise<{ state?: string }> }) {
   const { state } = await searchParams;
+  if(state==='supply'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview'))return <section className="section container"><aside role="note">Synthetic consent UI verification only. No purchase or contract is created. This invalid report reference cannot reach provider execution.</aside><PurchaseTerms report="synthetic-consent-preview"/></section>;
   if(state==='stored'){
     const saved=savedSnapshotReview(process.env);if(!saved)notFound();
     return <><aside className="sf-review-origin" role="note">Saved Production Snapshot · presentation review. No new analysis or purchase is executed.</aside><FreeSnapshot {...saved} reportId="review"/></>;

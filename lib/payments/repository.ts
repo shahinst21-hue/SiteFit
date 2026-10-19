@@ -17,7 +17,7 @@ export async function preparePayment(input:{owner:string;report:string;id:string
  if(input.live){
   type Rpc={rpc(name:string,args:Record<string,Json>):PromiseLike<{data:Payment|null;error:unknown}>};
   const {data,error}=await (frameworkClient() as unknown as Rpc).rpc("prepare_sitefit_live_payment",{p_owner:input.owner,p_report:input.report,p_id:input.id,p_price:input.price,p_account:input.accountId??"",p_parameters:JSON.parse(JSON.stringify(input.parameters)) as Json,p_expiry:new Date(input.expires*1000).toISOString()});
-  if(error||!data)throw Error("purchase_unavailable");return data;
+  if(error||!data){const message=error&&typeof error==="object"&&"message" in error?String(error.message):"";throw Error(["checkout_reconciliation_required","proof_payment_denied","trial_full_budget_exhausted"].includes(message)?message:"purchase_unavailable");}return data;
  }
  const {data,error}=await frameworkClient().rpc("prepare_sitefit_payment",{p_owner:input.owner,p_report:input.report,p_id:input.id,p_price:input.price,p_parameters:JSON.parse(JSON.stringify(input.parameters)) as Json,p_expiry:new Date(input.expires*1000).toISOString()});
  if(error||!data)throw Error("purchase_unavailable");return data;

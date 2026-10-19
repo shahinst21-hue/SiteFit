@@ -33,15 +33,16 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       await db.exec(await readFile(new URL(file, dir), "utf8"));
     const review=(await db.query<{approved:boolean;classification:string;confirmation_channel:string;snapshot:unknown}>(
       'select approved,classification,confirmation_channel,snapshot from public.sale_policies where version=$1',[policyVersions.sale])).rows[0];
-    assert.equal(review.approved,false);assert.equal(review.classification,'digital_content');assert.equal(review.confirmation_channel,'manual_zoho_pdf');
+    assert.equal(review.approved,true);assert.equal(review.classification,'digital_content');assert.equal(review.confirmation_channel,'manual_zoho_pdf');
     assert.deepEqual(review.snapshot,launchPolicySnapshot());
-    assert.equal((await db.query<{count:number}>('select count(*)::int as count from public.sale_policies where approved')).rows[0].count,0);
+    assert.equal((await db.query<{count:number}>('select count(*)::int as count from public.sale_policies where approved')).rows[0].count,1);
     assert.equal((await db.query<{disabled:boolean}>("select not exists(select 1 from public.commercial_release_control where mode<>'test' or checkout_enabled or execution_enabled) as disabled")).rows[0].disabled,true);
     await db.exec(await readFile(new URL('../supabase/tests/controlled-proof.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/proof-successor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-continuation.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-advisor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/controlled-trial.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/checkout-successors.sql',import.meta.url),'utf8'));
       await db.exec(await readFile(new URL('../supabase/tests/trial-snapshot-pause.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/trial-synthesis-recovery.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/census-unavailable-evidence.sql',import.meta.url),'utf8'));

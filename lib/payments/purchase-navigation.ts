@@ -2,12 +2,16 @@ import {stripeCheckoutUrl} from './checkout-url.ts';
 import type { SaleConsent } from "../legal/sale.ts";
 /** Both Snapshot purchase controls use this POST journey. Page anchors and
  * report-reading URLs cannot masquerade as a successful purchase destination. */
+export class PurchaseNavigationError extends Error {}
 export async function purchaseNavigation(report: string, checkout: boolean, origin: string, fetcher: typeof fetch = fetch, consent?: SaleConsent) {
   const response = await fetcher(checkout ? "/purchase/checkout" : "/purchase/start", {
     method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({reportId: report,...(checkout&&consent?{saleConsent:consent}:{})}),
   });
   const data = await response.json();
-  if (!response.ok || typeof data.url !== "string") throw Error("purchase_unavailable");
+  if (!response.ok || typeof data.url !== "string") {
+    const messages:Record<string,string>={checkout_reconciliation_required:'Your previous payment attempt needs verification before another Checkout can open. Your Snapshot is saved; do not buy again.',proof_payment_denied:'Your existing purchase needs review before another Checkout can open. Your Snapshot is saved.',trial_full_budget_exhausted:'The controlled test already has a Full Report purchase allocated. Return to that saved purchase.',payment_confirmation_required:'The previous Checkout has expired or changed. Check your saved purchase status before continuing.',sale_changed_replay:'Your saved purchase choices differ from this request. Return to the original purchase.'};
+    throw new PurchaseNavigationError(typeof data.code==='string'&&messages[data.code]?messages[data.code]:'Checkout could not be opened. Your Snapshot is still saved. Return to it and try again shortly.');
+  }
   const url = new URL(data.url, origin);
   // Stripe's server-validated Checkout URL includes provider-owned fragment
   // state. Preserve it; only internal purchase anchors represent the circular
