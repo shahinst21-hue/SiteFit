@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 const mode=process.argv[2],report='00000000-0000-4000-8000-000000000001',owner='00000000-0000-4000-8000-000000000002';
 process.env.VERCEL_ENV='production';process.env.SITE_URL='https://sitefit.co.uk';process.env.SITEFIT_CONTROLLED_TRIAL_ENABLED='1';process.env.SITEFIT_CONTROLLED_TRIAL_ID=report;process.env.SUPABASE_SECRET_KEY='synthetic-signing-secret';
 process.env.STRIPE_SECRET_KEY='rk_live_synthetic';process.env.STRIPE_FULL_REPORT_PRICE_ID='price_synthetic';process.env.STRIPE_ACCOUNT_ID='acct_synthetic';
-const consent={version:'sitefit-sale-v1-20261016-review',buyerKind:'consumer',termsAccepted:true,immediateRequested:true,acknowledgement:true};
+const consent={version:'sitefit-sale-v1-20261019-affirmative',buyerKind:'consumer',termsAccepted:true,immediateRequested:true,acknowledgement:true};
 const {salePolicy}=await import('../../lib/legal/sale.ts');consent.version=salePolicy.version;
 const jar=new Map();let stripeCalls=0,creates=0,sales=0;
 const user=mode==='signed-out'?null:{id:owner,is_anonymous:false,email_confirmed_at:'2026-10-19',email:'shahinst21@gmail.com',identities:[{provider:'google'}]};

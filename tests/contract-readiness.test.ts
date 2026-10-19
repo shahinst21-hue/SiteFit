@@ -8,7 +8,7 @@ import {salePolicy,requireApprovedSale,validateSaleConsent} from '../lib/legal/s
 import {seller} from '../lib/legal/seller.ts';
 import {publicSeller,legalPublication} from '../lib/legal/publication.ts';
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;'}[c]!));
-test('owner-approved public wording and frozen private contracts match; immediate supply starts unchecked',()=>{
+test('owner-approved public wording and frozen private contracts match; immediate supply requires a separate affirmative action',()=>{
  const run=spawnSync(process.execPath,['tests/fixtures/render-sale.mjs','policies'],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
  const pages=JSON.parse(run.stdout) as {terms:string;privacy:string;contact:string};
  const snapshot=launchPolicySnapshot();
@@ -21,16 +21,16 @@ test('owner-approved public wording and frozen private contracts match; immediat
  }
  assert.equal(snapshot.termsText,policyText(termsSections));assert.equal(snapshot.privacyText,policyText(privacySections));assert.equal(snapshot.retentionText,policyText(retentionSections));
  const withheld=spawnSync(process.execPath,['tests/fixtures/render-sale.mjs'],{encoding:'utf8'});assert.equal(withheld.status,0,withheld.stderr);
- assert.match(withheld.stdout,/checkbox/);assert.doesNotMatch(withheld.stdout,/checked=""/);
- assert.match(withheld.stdout,/request preparation and supply before the cancellation period ends/);
+ assert.doesNotMatch(withheld.stdout,/type="checkbox"/);assert.match(withheld.stdout,/aria-pressed="false"/);assert.doesNotMatch(withheld.stdout,/checked=""/);
+ assert.match(withheld.stdout,/I agree to immediate delivery and understand that my statutory cancellation right ends when it begins/);
  assert.match(withheld.stdout,/target="_blank"/);assert.match(withheld.stdout,/By purchasing/);
  assert.equal(legalPublication.approved,true);assert.equal(legalPublication.sellerDisclosuresApproved,true);
  assert.equal(publicSeller.name,seller.name);assert.equal(publicSeller.tradingName,seller.tradingName);assert.equal(publicSeller.email,seller.email);
  assert.equal(snapshot.sellerAddress,seller.address);
  // The future gated form is preserved: supplied wording remains exact and choices initially unchecked.
  const ui=spawnSync(process.execPath,['tests/fixtures/render-sale.mjs','consent'],{encoding:'utf8'});assert.equal(ui.status,0,ui.stderr);
- assert.equal((ui.stdout.match(/type="checkbox"/g)||[]).length,1);assert.doesNotMatch(ui.stdout,/checked=""/);
- assert.match(ui.stdout,/Starts after payment and contract confirmation/);assert.match(ui.stdout,/14-day/);
+ assert.equal((ui.stdout.match(/type="checkbox"/g)||[]).length,0);assert.match(ui.stdout,/aria-pressed="false"/);assert.doesNotMatch(ui.stdout,/checked=""/);
+ assert.match(ui.stdout,/Accepting the Terms alone does not authorise it/);assert.match(ui.stdout,/14-day/);
  assert.match(ui.stdout,/disabled=""/);assert.doesNotMatch(ui.stdout,/checked=""|Final wording awaits|Legal entity.*awaiting/);
  assert.equal(salePolicy.version,policyVersions.sale);assert.equal(salePolicy.classification,'digital_content');assert.equal(salePolicy.approved,true);assert.doesNotThrow(requireApprovedSale);
  assert.throws(()=>validateSaleConsent({version:'sitefit-sale-v1-launch-draft',buyerKind:'consumer',termsAccepted:true,immediateRequested:true,acknowledgement:true}));
