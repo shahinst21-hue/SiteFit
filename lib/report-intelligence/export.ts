@@ -1,3 +1,4 @@
+import {validateResidentialScore} from '../analysis/residential-catchment.ts';
 import { object } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
 import { sectionKeys, type SectionKey, type Fact, type Catalog } from "./catalog.ts";
@@ -66,6 +67,8 @@ export function validateFullProjection(value: unknown) {
     !/^[a-f0-9]{64}$/.test(p.bindingDigest) || contentDigest !== packetDigest(content) || !Array.isArray(p.sections) ||
     p.sections.length !== 8 || !Array.isArray(p.sourceDirectory) || !Array.isArray(p.supplementReferences) ||
     Buffer.byteLength(JSON.stringify(value)) > 131072) throw Error("invalid_full_projection");
+  const residential=object(p.presentation??{}).residentialCatchment;
+  if(residential!==undefined&&residential!==null)validateResidentialScore(residential);
   for (const [i, s] of p.sections.entries()) {
     if (object(s).key !== sectionKeys[i]) throw Error("invalid_full_section_order");
     const section = expandedSection(p,s);

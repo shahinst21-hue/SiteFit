@@ -1,3 +1,4 @@
+import {residentialScore} from "@/lib/analysis/residential-catchment";
 import { notFound } from "next/navigation";
 import { FreeSnapshot,FreeSnapshotView } from "@/components/free-snapshot";
 import { demoAllowed } from "@/lib/snapshot/model";
@@ -15,6 +16,13 @@ export default async function SnapshotDemo({ searchParams }: { searchParams: Pro
   if (state === 'journey' && (process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview')) {
     const fixture = (await import("@/fixtures/free_snapshot/kingston_coffee_shop.json")).default;
     return <JourneyReview><FreeSnapshotView snapshot={snapshotDemo(fixture, 'development', undefined)} /></JourneyReview>;
+  }
+  if(state==='catchment'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
+    const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;
+    const view=snapshotDemo(fixture,'development',undefined);
+    view.property.address='Approved numerical example — synthetic UI verification';
+    view.factors[0].residentialCatchment=residentialScore([3500,9000,25000],{evidenceIds:['synthetic-example'],snapshotIds:[],releaseIds:[],precision:'postcode_centroid',referencePeriod:'2021-03-21',retrievedAt:[],point:{longitude:-.05,latitude:51.53}});
+    return <><aside className="sf-review-origin" role="note">Synthetic numerical example only · not a property assessment · no execution or purchasing</aside><FreeSnapshotView snapshot={view}/></>;
   }
   if (!demoAllowed(process.env.NODE_ENV)) notFound();
   const fixture = (await import("@/fixtures/free_snapshot/kingston_coffee_shop.json")).default;
