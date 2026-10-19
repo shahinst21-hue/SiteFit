@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import type Stripe from 'stripe';
-import {processPaymentEvent,type PaymentEventDependencies} from '../lib/payments/webhook.ts';
+import {processPaymentEvent,reconcileCheckoutPayment,type PaymentEventDependencies} from '../lib/payments/webhook.ts';
 import {STRIPE_WEBHOOK_API_VERSION} from '../lib/payments/event-context.ts';
 import {PRODUCT} from '../lib/payments/config.ts';
 const purchase='00000000-0000-4000-8000-000000000001',analysis='00000000-0000-4000-8000-000000000002';
@@ -113,4 +113,26 @@ test('reversal provider outage commits no receipt and redelivery reads the recov
  unavailable=false;
  await processPaymentEvent(f.event,f.stripe,f.dependencies);
  assert.equal(f.state.commits.length,1);assert.equal(f.state.commits[0].p_reversal,'partial_refund');
+});
+
+
+test('direct cancellation observations reuse an open unpaid Session and never manufacture a failed event',async()=>{
+ const f=setup();f.payment.checkout_reference=f.state.session.id;f.state.session={...f.state.session,status:'open',payment_status:'unpaid',payment_intent:null};
+ for(let n=0;n<2;n++)assert.equal(await reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),'unpaid');
+ assert.equal(f.state.commits.length,0);
+ f.state.session.payment_intent=f.state.intent.id;f.state.intent.status='requires_payment_method';
+ assert.equal(await reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),'failed');assert.equal(f.state.commits.length,0);
+ f.state.intent.status='processing';assert.equal(await reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),'pending');
+});
+test('direct expired/paid observations use labelled audit IDs and stale or contradictory facts cannot unlock retry',async()=>{
+ const f=setup();f.payment.checkout_reference=f.state.session.id;f.state.session.status='expired';f.state.session.payment_status='unpaid';f.state.intent.status='requires_payment_method';
+ assert.equal(await reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),'expired');assert.match(f.state.commits[0].p_event,/^obs_[a-f0-9]{64}$/);assert.equal(f.state.commits[0].p_type,'checkout.session.reconciled');assert.equal(f.state.commits[0].p_outcome,'expired');
+ f.state.commits.length=0;f.state.intent.status='succeeded';assert.equal(await reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),'pending');assert.equal(f.state.commits.length,0);
+ f.state.session.status='complete';f.state.session.payment_status='paid';assert.equal(await reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),'paid');assert.equal(f.state.commits[0].p_outcome,'paid');
+ f.state.commits.length=0;await assert.rejects(()=>reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies,Date.now()-1),/timeout/);assert.equal(f.state.commits.length,0);
+});
+test('a concurrent webhook revision conflict leaves reconciliation uncertain, never creates a Checkout',async()=>{
+ const f=setup();f.payment.checkout_reference=f.state.session.id;f.dependencies.confirm=async()=>{throw Error('retry_current_provider_state');};
+ await assert.rejects(()=>reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),/retry_current_provider_state/);
+ f.payment.test_mode=false;await assert.rejects(()=>reconcileCheckoutPayment(purchase,f.stripe,false,null,f.dependencies),/unavailable/);
 });

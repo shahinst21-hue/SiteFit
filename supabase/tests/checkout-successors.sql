@@ -50,14 +50,12 @@ payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uui
  perform public.bind_sitefit_live_checkout(payment,'cs_live_trial');
  perform public.record_sitefit_sale(o,payment,'sitefit-sale-v1-20261016-review',jsonb_build_object('version','sitefit-sale-v1-20261016-review','buyerKind','consumer','termsAccepted',true,'immediateRequested',true,'acknowledgement',true));
  select * into pay from public.payments where id=payment;
- begin
  perform public.confirm_sitefit_live_payment(payment,'evt_trialfailed','payment_intent.payment_failed',pay.revision,'cs_live_trial',null,'failed','none');
- perform public.prepare_sitefit_live_payment(o,first_r,gen_random_uuid(),'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
- raise exception 'unverified failure replaced';
- exception when check_violation then null;end;
+ if (public.prepare_sitefit_live_payment(o,first_r,gen_random_uuid(),'price_synthetic',params,now()+interval '1 hour','acct_synthetic')).id<>payment then raise exception 'failed open attempt replaced';end if;
+ if (select count(*) from public.checkout_successors)<>0 then raise exception 'ambiguous attempt got successor';end if;
  -- An authenticated terminal expiry permits a single successor without new Full allocation.
  select * into pay from public.payments where id=payment;
- perform public.confirm_sitefit_live_payment(payment,'evt_trialexpired','checkout.session.expired',pay.revision,'cs_live_trial',null,'expired','none');
+ perform public.confirm_sitefit_live_payment(payment,'obs_'||repeat('d',64),'checkout.session.reconciled',pay.revision,'cs_live_trial',null,'expired','none');
  before_hold:=(select reserved_micros from public.controlled_trials where id=t);
  n:=gen_random_uuid();
  params:=jsonb_set(jsonb_set(jsonb_set(params,'{metadata,purchase_id}',to_jsonb(n::text)),'{success_url}',to_jsonb('https://sitefit.co.uk/purchase/return?purchase='||n::text)),'{cancel_url}',to_jsonb('https://sitefit.co.uk/purchase/return?purchase='||n::text||'&cancel=1'));
@@ -68,6 +66,15 @@ payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uui
  if (select reserved_micros from public.controlled_trials where id=t)<>before_hold or (select full_reports from public.controlled_trials where id=t)<>1 then raise exception 'successor counted twice';end if;
  if (select sum(reserved_micros) from public.commercial_payment_reservations where released_at is null)<>1000000 then raise exception 'active hold doubled';end if;
  if (select count(*) from public.commercial_payment_reservations)<>2 then raise exception 'reservation history lost';end if;
+ -- Repeated terminal expiry retains the same Full entitlement and active hold.
+ perform public.bind_sitefit_live_checkout(n,'cs_live_middle');
+ select * into pay from public.payments where id=n;
+ perform public.confirm_sitefit_live_payment(n,'obs_'||repeat('e',64),'checkout.session.reconciled',pay.revision,'cs_live_middle',null,'expired','none');
+ p:=gen_random_uuid();
+ params:=jsonb_set(jsonb_set(jsonb_set(params,'{metadata,purchase_id}',to_jsonb(p::text)),'{success_url}',to_jsonb('https://sitefit.co.uk/purchase/return?purchase='||p::text)),'{cancel_url}',to_jsonb('https://sitefit.co.uk/purchase/return?purchase='||p::text||'&cancel=1'));
+ pay:=public.prepare_sitefit_live_payment(o,first_r,p,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');n:=pay.id;
+ if (select count(*) from public.checkout_successors)<>2 or (select count(*) from public.commercial_payment_reservations where released_at is null)<>1
+ or (select full_reports from public.controlled_trials where id=t)<>1 or (select reserved_micros from public.controlled_trials where id=t)<>before_hold then raise exception 'second recovery consumed another envelope';end if;
  -- Concurrent/repeated calls return the same pending successor regardless of proposed ID.
  p:=gen_random_uuid();
  params:=jsonb_set(jsonb_set(jsonb_set(params,'{metadata,purchase_id}',to_jsonb(p::text)),'{success_url}',to_jsonb('https://sitefit.co.uk/purchase/return?purchase='||p::text)),'{cancel_url}',to_jsonb('https://sitefit.co.uk/purchase/return?purchase='||p::text||'&cancel=1'));
