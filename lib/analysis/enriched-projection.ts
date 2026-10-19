@@ -20,7 +20,7 @@ export function enrichedProjection(context: CollectionContext, sections: Paramet
     d.why.sources = sources.map(e => ({provider: e.source.provider, dataset: e.source.dataset,
       url: /^https:\/\//.test(e.source.reference) ? e.source.reference : null, retrievedAt: e.retrievedAt, notices: e.licence.notices}));
   }
-  return validateFreeProjection({...projection, schemaVersion: 3, ...(context.businessType==="coffee-shop"?{residentialCatchment:residentialFromEvidence(evidence,context.businessType,context.enrichment?.identity.point??null,new Date(generatedAt))}:{}),
+  return validateFreeProjection({...projection, schemaVersion: 3, residentialCatchment:residentialFromEvidence(evidence,context.businessType,context.enrichment?.identity.point??null,new Date(generatedAt)),
     property: {...projection.property, precision: context.enrichment?.identity.point?.precision ?? projection.property.precision},
     spatial: enrichedSpatialProjection(context,snapshots)});
 }

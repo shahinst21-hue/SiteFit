@@ -32,7 +32,8 @@ function evidence():EnrichedEvidence[]{return [5,10,15].map((n,i)=>({schemaVersi
 test('only qualified cumulative ONS walking evidence is reused; missing, ambiguous, expired and non-network inputs fail closed',()=>{
  const at=new Date('2026-10-19'),rows=evidence();
  assert.equal(residentialFromEvidence(rows,'coffee-shop',metadata.point,at)!.score,65);
- assert.equal(residentialFromEvidence(rows,'restaurant',metadata.point,at),null);
+ for(const category of ['coffee-shop','restaurant','hair-salon','beauty-salon','hair-beauty-salon'])assert.deepEqual(residentialFromEvidence(rows,category,metadata.point,at),residentialFromEvidence(rows,'coffee-shop',metadata.point,at));
+ assert.equal(residentialFromEvidence(rows,'unsupported',metadata.point,at),null);
  assert.equal(residentialFromEvidence(rows,'coffee-shop',null,at),null);
  for(const changed of [rows.slice(0,2),[...rows,rows[0]],rows.map(e=>({...e,source:{...e.source,dataset:'TS001'}})),rows.map(e=>({...e,parents:[]})),rows.map(e=>({...e,licence:{...e.licence,expiresAt:'2026-10-18'}})),rows.map(e=>({...e,geography:{...e.geography,statistical:{...e.geography.statistical,unit:'OA2021' as const}}}))])assert.equal(residentialFromEvidence(changed,'coffee-shop',metadata.point,at),null);
  const frozen=structuredClone(rows);residentialFromEvidence(rows,'coffee-shop',metadata.point,at);assert.deepEqual(rows,frozen);
