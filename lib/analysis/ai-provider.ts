@@ -1,5 +1,6 @@
 import "server-only";
-import {proofFetch} from '../proof/context.ts';
+import {proofFetch,inControlledProof} from '../proof/context.ts';
+import {proofLimits} from '../proof/limits.ts';
 import { createHash } from "node:crypto";
 
 // Owner-mandated model. No automatic model fallback or provider substitution.
@@ -29,15 +30,17 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
         Buffer.byteLength(JSON.stringify(schema)) > analysisAI.maxSchemaBytes || /"(?:formattedAddress|postcode|uprn|ownerId|email|providerAddressId|latitude|longitude|secret|apiKey)"\s*:/i.test(input)) throw new AnalysisAIError("invalid_packet");
       if (dispatches >= analysisAI.maxDispatches) throw new AnalysisAIError("dispatch_limit");
       if (signal?.aborted) throw new AnalysisAIError("timeout");
+      const requestBody=JSON.stringify({ model: analysisAI.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
+        instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
+        text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } });
+      if(inControlledProof()&&Buffer.byteLength(requestBody)>proofLimits.maxEncodedAiBytes)throw new AnalysisAIError('invalid_packet');
       const dispatch = ++dispatches; const started = now().getTime();
       const bounded = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(packet.version === "snapshot-advisor-v1" ? 60_000 : analysisAI.timeoutMs)]);
       let response: Response;
       try {
         response = await fetcher("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal: bounded,
           headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ model: analysisAI.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
-            instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
-            text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } }) });
+          body:requestBody });
       } catch { throw new AnalysisAIError(bounded.aborted ? "timeout" : "provider_unavailable"); }
       if (!response.ok) { await response.body?.cancel(); throw new AnalysisAIError("provider_unavailable"); }
       if (!response.headers.get("content-type")?.includes("application/json") || Number(response.headers.get("content-length")) > 128_000) { await response.body?.cancel(); throw new AnalysisAIError("invalid_response"); }

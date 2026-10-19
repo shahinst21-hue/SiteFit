@@ -11,7 +11,7 @@ import type { Json } from "../supabase/database.types.ts";
 import { enrichedPackets } from "./enriched-packets.ts";
 import { enrichedProjection } from "./enriched-projection.ts";
 import { evidenceIndex, type Evidence } from "./evidence.ts";
-import { analysisAIProvider, type AIReceipt } from "./ai-provider.ts";
+import { analysisAIProvider, AnalysisAIError, type AIReceipt } from "./ai-provider.ts";
 import { interpretSections, synthesiseSections, restoreSynthesis, type ValidatedSection } from "./section-engine.ts";
 import { validatePacket, type InterpretationPacket } from "./interpretation.ts";
 import { packetDigest } from "./canonical.ts";
@@ -64,7 +64,7 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
   if(interpreted.errors.length){await preserve(interpreted.errors);throw new Error("section_analysis_incomplete");}
   let early: Early;
   try {early=prior?.early ? restoreSynthesis(prior.early,prior.earlyPacketDigest,interpreted.sections,prepared.index) : await synthesiseSections(interpreted.sections,ai,signal,context.businessType,prepared.evidence);}
-  catch {await preserve([{section:"early-view",code:"synthesis_unavailable"}]);throw new Error("synthesis_incomplete");}
+  catch(error) {await preserve([{section:"early-view",code:"synthesis_unavailable",cause:error instanceof AnalysisAIError?error.code:'output_validation_failed'}]);throw new Error("synthesis_incomplete",{cause:error});}
   progress.synthesis();
   const generatedAt=new Date().toISOString(), projection=enrichedProjection(context,interpreted.sections,early,prepared.evidence,snapshots,null,generatedAt);
   const audit={inputId:context.inputId,generatedAt,scoringVersions,

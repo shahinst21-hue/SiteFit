@@ -2,7 +2,7 @@ import type {SnapshotTick} from './analysis/progress.ts';
 export type ProgressView={label:string;title:string;detail:string;completed:number;total:number;state:'working'|'waiting'|'paused'|'ready'|'error'};
 export function snapshotView(tick:SnapshotTick|{stage:'ready';completed:8},error=false):ProgressView{
  const titles={identity:'Preparing your location check',sources:'Checking the available evidence',analysis:'Finding what matters for your business',synthesis:'Bringing your findings together',saving:'Saving your Snapshot',ready:'Your Snapshot is ready'};
- return {label:'Free Snapshot',title:error?'Your check has paused':titles[tick.stage],detail:error?'Keep your original request. Check your account before starting again.':tick.stage==='ready'?'Your evidence and findings have been saved.':'Progress follows completed steps, not a countdown. Keep this tab open while your check runs.',completed:tick.completed,total:8,state:error?'error':tick.stage==='ready'?'ready':'working'};
+ return {label:'Free Snapshot',title:error?'Your check has paused':titles[tick.stage],detail:error?'Saved progress retained. Do not start again.':tick.stage==='ready'?'Your Snapshot is saved.':'Showing completed steps.',completed:tick.completed,total:8,state:error?'error':tick.stage==='ready'?'ready':'working'};
 }
 type PurchaseProgress={status:string;access:string;confirmationDelivered?:boolean|null;fulfilment?:{state:string;reportId:string|null;stage?:string}|null};
 export function fullView(p:PurchaseProgress,lastCompleted=0):ProgressView{

@@ -44,9 +44,13 @@ export async function interpretSections(packets: readonly InterpretationPacket[]
 export async function synthesiseSections(sections: readonly ValidatedSection[], provider: Provider, signal?: AbortSignal, businessType='coffee-shop', evidence:readonly Evidence[]=[]) {
   if (sections.length !== 4 || new Set(sections.map(section => section.section)).size !== 4) throw new Error("incomplete_synthesis_sections");
   if (!['coffee-shop','restaurant','hair-salon','beauty-salon'].includes(businessType)) throw Error('invalid_advisor_business');
+  // Selection-only IDs/roles/kinds are redundant after section validation. Keep
+  // every statement, its meaning and evidence links, plus all qualified observations.
+  // This also avoids wasting the bounded request budget on repeated metadata.
+  const statement=(p:ValidatedSection['conclusion'])=>({text:p.text,meaning:p.meaning,evidenceIds:p.evidenceIds});
   const packet = {version:advisorVersion,businessType,observations:evidence.filter(e=>e.quality.available&&e.licence.representationAllowed).map(e=>({sectionIds:e.sections,dataset:e.source.dataset,value:e.value,units:e.units,scope:e.scope,effectiveAt:e.effectiveAt,limitations:e.quality.limitations})),sections:sections.map(section=>({id:section.section,
-    conclusion:section.conclusion,support:section.support,opposition:section.opposition,unknowns:section.unknowns,
-    alternatives:section.alternatives,implication:section.implication,question:section.question,strength:section.strength}))};
+    conclusion:statement(section.conclusion),support:section.support.map(statement),opposition:section.opposition.map(statement),unknowns:section.unknowns.map(statement),
+    alternatives:section.alternatives.map(statement),implication:statement(section.implication),question:statement(section.question),strength:section.strength}))};
   // One synthesis dispatch. Invalid or ambiguous output is never an automatic paid retry.
   const response=await provider.interpret(packet,advisorInstructions,advisorSchema,signal);
   const advisor=validateSnapshotAdvice(response.output);

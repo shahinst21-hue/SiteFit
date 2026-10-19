@@ -2,7 +2,7 @@ import type {SnapshotTick} from './analysis/progress.ts';
 const uuid=/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i;
 export async function readSnapshotProgress(response:Response,observe:(tick:SnapshotTick|{stage:'ready';completed:8})=>void):Promise<string>{
  const acceptReady=(id:unknown)=>{if(typeof id!=='string'||!uuid.test(id))throw Error('Your saved Snapshot could not be confirmed.');observe({stage:'ready',completed:8});return id;};
- if(!response.headers.get('content-type')?.includes('application/x-ndjson')){const result=await response.json();if(!response.ok)throw Error(typeof result.error==='string'?result.error:'Your check could not be completed.');return acceptReady(result.reportId);}
+ if(!response.headers.get('content-type')?.includes('application/x-ndjson')){const result=await response.json();if(!response.ok){const p=result.progress;if(p?.stage==='analysis'&&Number.isInteger(p.completed)&&p.completed>=2&&p.completed<=6)observe({stage:'analysis',completed:p.completed});throw Error(typeof result.error==='string'?result.error:'Your check could not be completed.');}return acceptReady(result.reportId);}
  if(!response.ok||!response.body)throw Error('Progress is temporarily unavailable.');
  const reader=response.body.getReader(),decoder=new TextDecoder();let pending='',bytes=0,previous=0;
  try{while(true){const part=await reader.read();if(part.done)break;bytes+=part.value.byteLength;if(bytes>16384)throw Error('Progress could not be read safely.');pending+=decoder.decode(part.value,{stream:true});

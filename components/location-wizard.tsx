@@ -55,14 +55,13 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
  }
  const type=businessTypes.find(t=>t.id===business);
  return <div className="wizard-flow" onKeyDownCapture={()=>{keyboard.current=true;}} onPointerDownCapture={()=>{keyboard.current=false;}}>
-  <div className="wizard-topline"><Link href="/" className="wizard-home-link"><Icon name="back"/>Back to SiteFit</Link><span><Icon name="shield"/>Free to start. No card needed.</span></div>
+  <div className="wizard-topline"><Link href="/" className="wizard-home-link"><Icon name="back"/>Back to SiteFit</Link></div>
   <nav className="wizard-steps" aria-label="Location check progress"><ol>{['Property','Business','Snapshot'].map((label,index)=><li key={label} className={index===step?'current':index<step?'complete':''} aria-current={index===step?'step':undefined}>
    <span className="wizard-step-dot">{index<step?<Icon name="check"/>:index+1}</span><span>{label}</span>
   </li>)}</ol></nav>
   <div className="wizard-layout"><section className={`wizard-panel wizard-stage wizard-stage-${step}`}>
-   <header className="wizard-heading"><p className="eyebrow">{step===2?'YOUR LOCATION CHECK':`STEP ${step+1} OF 3`}</p>
-    <h1 ref={heading} tabIndex={-1}>{step===0?'Start with your property.':step===1?'What would you open here?':error?'Your check needs a moment.':'A clearer view is on its way.'}</h1>
-    <p>{step===0?'Find the exact premises you’re considering.':step===1?'We’ll focus the evidence on your kind of business.':error?'Keep this request. Check your saved status before starting again.':'We’re bringing together the available evidence for your location.'}</p>
+   <header className="wizard-heading">
+    <h1 ref={heading} tabIndex={-1}>{step===0?'Find your property':step===1?'Choose your business':error?'Snapshot paused':'Preparing your Snapshot'}</h1>
    </header>
    {step===0?<AddressLookup state={lookupState} setState={setLookupState} selected={property} initialSearch={initialSearch} onInitialSearch={consumeInitialSearch} transport={rehearsal?.transport}
     onSelect={selected=>{setProperty(selected);nonce.current=null;setError('');moveTo(1);}}/>:
@@ -73,15 +72,14 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
       {businessTypes.map((t,index)=><label key={t.id} className={`business-option ${business===t.id?'selected':''}`}>
        <input type="radio" name="businessType" value={t.id} checked={business===t.id} required disabled={!!proofStart&&t.id!==proofStart.business} onChange={()=>{setBusiness(t.id);nonce.current=proofStart?.nonce??null;setError('');}}/>
        <span className="business-icon" aria-hidden="true"><Icon name={(['coffee','restaurant','hair','beauty'] as IconName[])[index]}/></span>
-       <span className="business-option-copy"><strong>{t.label}</strong><span>{t.description}</span></span><span className="business-choice-mark" aria-hidden="true"><Icon name="check"/></span>
+       <span className="business-option-copy"><strong>{t.label}</strong></span><span className="business-choice-mark" aria-hidden="true"><Icon name="check"/></span>
       </label>)}
      </div></fieldset>
-     <p className="wizard-session-note"><Icon name="shield"/>No account or card needed. Guest access stays with this browser session.</p>
      <div className="wizard-submit"><button className="button button-primary" type="submit" disabled={!business||busy}>Get my Free Snapshot<Arrow/></button></div>
     </form>:<div className="wizard-processing">
      <div className="wizard-check-context"><Icon name="pin"/><p>{property?.formattedAddress}<small>{type?.label}</small></p></div>
      <div role="status" aria-live="polite" aria-atomic="true"><GenerationProgress view={snapshotView(progress,!!error)}/></div>
-     {error?<div className="wizard-paused"><p role="alert">{error}</p><Link href="/account" className="button button-secondary">Check saved status<Arrow/></Link><p>Need a hand? <a href="mailto:info@sitefit.co.uk">Contact SiteFit</a>. Please don’t start another request.</p></div>:<p className="wizard-session-note"><Icon name="clock"/>{busy?'Keep this tab open while your Snapshot is prepared.':'Your Snapshot has been saved.'}</p>}
+     {error?<div className="wizard-paused"><p role="alert">{error}</p><Link href="/account" className="button button-secondary">Check saved status<Arrow/></Link></div>:<p className="wizard-session-note">{busy?'Keep this tab open.':'Snapshot saved.'}</p>}
     </div>}
   </section></div>
  </div>;
