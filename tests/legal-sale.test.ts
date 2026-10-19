@@ -23,17 +23,10 @@ test("contract PDF requires complete frozen policy text; prepared PDF is not leg
  assert.ok((await PDFDocument.load(bytes)).getPageCount()>0);
 });
 
-test("separate affirmative action starts unselected and cannot be inferred from Terms",()=>{
- const r=spawnSync(process.execPath,["tests/fixtures/render-sale.mjs","consent"],{encoding:"utf8"});assert.equal(r.status,0,r.stderr);
- assert.equal((r.stdout.match(/type="checkbox"/g)||[]).length,0);assert.match(r.stdout,/aria-pressed="false"/);assert.match(r.stdout,/I agree to immediate delivery and understand that my statutory cancellation right ends when it begins/);assert.doesNotMatch(r.stdout,/checked=""/);
- assert.match(r.stdout,/disabled=""/);assert.match(r.stdout,/14-day contractual consumer cancellation/);assert.match(r.stdout,/target="_blank"/);assert.match(r.stdout,/By purchasing/);
-});
-
-test('Regulation 37 acknowledgement is a separate action below retained contractual rights, before Checkout',()=>{
+test('checkout has no consent selector; payment precedes linked terms and delivery notice',()=>{
  const r=spawnSync(process.execPath,['tests/fixtures/render-sale.mjs','consent'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);
- const rights=r.stdout.indexOf('Your 14-day contractual consumer cancellation right remains protected, including after delivery. Statutory rights remain unaffected.');
- const action=r.stdout.indexOf('I agree to immediate delivery and understand that my statutory cancellation right ends when it begins.');
- const checkout=r.stdout.indexOf('Continue to secure payment');
- assert.ok(rights>=0&&action>rights&&checkout>action);assert.match(r.stdout,/aria-pressed="false"/);assert.match(r.stdout,/disabled=""/);assert.doesNotMatch(r.stdout,/type="checkbox"|checked=""/);
+ assert.doesNotMatch(r.stdout,/type="checkbox"|aria-pressed|sf-supply-action|Your 14-day contractual consumer cancellation/);
+ const checkout=r.stdout.indexOf('Continue to secure payment'),terms=r.stdout.indexOf('By purchasing'),notice=r.stdout.indexOf('By continuing, you agree to receive your report right away');
+ assert.ok(checkout>=0&&terms>checkout&&notice>terms);assert.match(r.stdout,/target="_blank"/);assert.match(r.stdout,/aria-describedby="sf-immediate-delivery-notice"/);assert.doesNotMatch(r.stdout,/disabled=""/);
  assert.throws(()=>validateSaleConsent({...consent,immediateRequested:false,acknowledgement:false}));
 });
