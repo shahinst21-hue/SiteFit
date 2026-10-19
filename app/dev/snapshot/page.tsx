@@ -1,3 +1,4 @@
+import {OpeningProgress} from '@/components/generation-progress';
 import {PurchaseTerms} from '@/components/purchase-terms';
 import {residentialScore} from "@/lib/analysis/residential-catchment";
 import { notFound } from "next/navigation";
@@ -10,6 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Snapshot UI demo", robots: { index: false, follow: false } };
 export default async function SnapshotDemo({ searchParams }: { searchParams: Promise<{ state?: string }> }) {
   const { state } = await searchParams;
+  if(state==='opening'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview'))return <OpeningProgress kind="saved Snapshot"/>;
   if(state==='supply'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
     const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;
     return <><aside role="note">Synthetic consent UI verification only. Invalid report reference; no purchase or contract.</aside><FreeSnapshotView snapshot={snapshotDemo(fixture,'development',undefined)} openPurchase purchaseReport="synthetic-consent-preview" purchaseTerms={<PurchaseTerms report="synthetic-consent-preview"/>}/></>;
