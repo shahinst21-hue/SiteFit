@@ -26,7 +26,7 @@ export async function retryPurchaseNavigation(purchase:string,report:string,orig
  const r=await fetcher('/purchase/retry',{signal:AbortSignal.timeout(30000),method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({purchaseId:purchase})});
  const value=await r.json();if(!r.ok||typeof value.url!=='string')throw Error('retry_unavailable');
  const url=new URL(value.url,origin);
- const internal=url.origin===origin&&!url.hash&&((url.pathname==='/purchase/return'&&url.search===`?purchase=${encodeURIComponent(purchase)}`)||(url.pathname===`/snapshots/${report}`&&url.search==='?purchase=1'));
+ const internal=url.origin===origin&&!url.hash&&((url.pathname==='/purchase/return'&&url.searchParams.size===1&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(url.searchParams.get('purchase')??''))||(url.pathname===`/snapshots/${report}`&&url.search==='?purchase=1'));
  if(url.username||url.password||!internal&&!stripeCheckoutUrl(url))throw Error('invalid_retry_destination');
  return url.href;
 }

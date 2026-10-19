@@ -9,3 +9,6 @@ Return and status reads now perform bounded, owner-scoped Stripe reconciliation:
 Additive migration 20261019180000 only extends the private audit ID/type contract and the narrowly scoped failed-open reuse path. Existing RLS/grants, immutable records, expiry successor rules, budgets and owner-only restrictions remain. Application rollback is compatible; do not remove observation rows or reverse historical attempts. Synthetic route /dev/purchase is Development/Preview only.
 
 Validation and deployment receipts are recorded privately; actual charge and purchased-report proof remain owner actions. No real payment or provider AI/source execution is used in verification.
+
+
+Stale cancellation URLs follow the existing owner-scoped latest-purchase projection for the same Snapshot, so a newer successful attempt wins over an older cancelled one. Historical confirmation downloads remain pinned to the explicitly requested paid attempt. Already-verified paid fulfilment polls do not repeatedly call Stripe. The explicit retry request also has a 30-second browser deadline; an ambiguous response leads to checking saved status, never an automatic new charge.

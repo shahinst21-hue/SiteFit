@@ -14,16 +14,25 @@ export async function ownedPurchase(id:string,reconcile=false){
  let payment=await paymentById(id);if(!payment||payment.owner_id!==user.id||!payment.report_id||payment.test_mode!==(process.env.VERCEL_ENV!=="production"))throw Error("purchase_unavailable");
  const {data,error}=await client.rpc("read_sitefit_free",{p_report:payment.report_id});if(error||!data)throw Error("purchase_unavailable");
  const report=payment.report_id;
+ if(reconcile){
+  const latest=await client.rpc('read_sitefit_purchase',{p_report:report});
+  const candidate=latest.data&&typeof latest.data==='object'&&!Array.isArray(latest.data)?latest.data as {id?:unknown}:null;
+  if(!latest.error&&candidate&&purchaseUuid(candidate.id)&&candidate.id!==payment.id){
+   const current=await paymentById(candidate.id);
+   if(current&&current.owner_id===user.id&&current.report_id===report&&current.test_mode===payment.test_mode&&current.payment_version===payment.payment_version)payment=current;
+  }
+ }
+
  let paymentState:CheckoutObservation=payment.status==='succeeded'&&payment.access_state==='active'?'paid':'unknown';
  if(reconcile&&payment.checkout_reference&&!payment.verified_at){
   let timer:ReturnType<typeof setTimeout>|undefined;
-  const deadline=Date.now()+12000;
+  const deadline=Date.now()+12000,purchaseId=payment.id;
   try{
    const config=stripeConfig(process.env),stripe=stripeClient();
-   const verify=async()=>{if(config.live)await verifiedStripeAccount(stripe,config.accountId!);return reconcileCheckoutPayment(id,stripe,config.live,config.accountId,undefined,deadline);};
+   const verify=async()=>{if(config.live)await verifiedStripeAccount(stripe,config.accountId!);return reconcileCheckoutPayment(purchaseId,stripe,config.live,config.accountId,undefined,deadline);};
    paymentState=await Promise.race([verify(),new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(Error('verification_timeout')),12000);})]);
-   payment=await paymentById(id)??payment;
-  }catch{payment=await paymentById(id)??payment;paymentState=payment.status==='succeeded'&&payment.access_state==='active'?'paid':'unknown';}
+   payment=await paymentById(payment.id)??payment;
+  }catch{payment=await paymentById(payment.id)??payment;paymentState=payment.status==='succeeded'&&payment.access_state==='active'?'paid':'unknown';}
   finally{clearTimeout(timer);}
  }
  let fulfilment: Progress | null = null;

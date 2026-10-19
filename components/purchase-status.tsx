@@ -28,10 +28,10 @@ function PurchaseStatusSession({initial,cancelled}:{initial:State;cancelled:bool
    try{
     const response=await fetch(`/purchase/status?purchase=${encodeURIComponent(initial.id)}`,{cache:'no-store',signal:controller.signal});
     const value:unknown=await response.json();
-    if(!response.ok||!value||typeof value!=='object'||!('id' in value)||value.id!==initial.id||!('status' in value)||!['pending','succeeded','failed','expired','refunded'].includes(String(value.status))||!('access' in value)||!['none','active','suspended','revoked'].includes(String(value.access)))throw Error('unavailable');
+    if(!response.ok||!value||typeof value!=='object'||!('id' in value)||typeof value.id!=='string'||!('report' in value)||value.report!==initial.report||!('status' in value)||!['pending','succeeded','failed','expired','refunded'].includes(String(value.status))||!('access' in value)||!['none','active','suspended','revoked'].includes(String(value.access)))throw Error('unavailable');
     const fulfilment=parseProgress('fulfilment' in value?value.fulfilment:null);
     const paymentState='paymentState' in value&&['unpaid','expired','failed','paid','pending','unknown'].includes(String(value.paymentState))?value.paymentState as CheckoutObservation:'unknown';
-    const next:State={...initial,paymentState,status:String(value.status),access:String(value.access),fulfilment,
+    const next:State={...initial,id:value.id,paymentState,status:String(value.status),access:String(value.access),fulfilment,
       confirmationAvailable:'confirmationAvailable' in value&&typeof value.confirmationAvailable==='boolean'?value.confirmationAvailable:initial.confirmationAvailable,
       confirmationDelivered:'confirmationDelivered' in value&&typeof value.confirmationDelivered==='boolean'?value.confirmationDelivered:null};
     if(!paid&&next.status==='succeeded'&&next.access==='active'){paid=true;clearTimeout(deadline);deadline=setTimeout(()=>{controller.abort();clearTimeout(timer);setStale(true);},300000);}

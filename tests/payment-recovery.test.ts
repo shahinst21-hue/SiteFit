@@ -44,3 +44,7 @@ test('actual retry route checks owner, origin, uncertainty and delegates repeate
  const r=spawnSync(process.execPath,['tests/fixtures/payment-retry-route.mjs',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/"externalRequests":0/);
  }
 });
+
+test('a stale cancellation return follows the newer paid attempt while historical contract reads stay bound',()=>{
+ const r=spawnSync(process.execPath,['tests/fixtures/stale-purchase-return.mjs'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);
+});
