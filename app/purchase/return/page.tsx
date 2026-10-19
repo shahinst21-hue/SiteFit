@@ -7,6 +7,6 @@ export const dynamic="force-dynamic";
 export const metadata:Metadata={title:"Your purchase status",robots:{index:false,follow:false},referrer:"no-referrer"};
 export default async function PurchaseReturn({searchParams}:{searchParams:Promise<{purchase?:string;cancel?:string}>}){
  if(!purchaseReadOrigin(process.env))notFound();
- const params=await searchParams;let purchase;try{purchase=await ownedPurchase(params.purchase??"");}catch{notFound();}
+ const params=await searchParams;let purchase;try{purchase=await ownedPurchase(params.purchase??"",true);}catch{notFound();}
  return <div className="page-wrap narrow-page"><PurchaseStatus initial={purchase} cancelled={params.cancel==="1"}/></div>;
 }

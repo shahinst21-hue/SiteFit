@@ -1,4 +1,5 @@
 import "server-only";
+import {createHash} from "node:crypto";
 import type Stripe from "stripe";
 import { frameworkClient } from "../data/server-client.ts";
 import { uuid } from "../data/validation.ts";
@@ -53,10 +54,16 @@ export async function processPaymentEvent(event:Stripe.Event,stripe:Stripe,depen
   if(payment.checkout_reference)session=await stripe.checkout.sessions.retrieve(payment.checkout_reference);
   else{const sessions=await stripe.checkout.sessions.list({payment_intent:intent!.id,limit:2});if(sessions.has_more||sessions.data.length!==1)throw Error('session_lookup_unavailable');session=sessions.data[0];}
  }
+ const observed=await verifyPaymentObservation(payment,session,stripe,dependencies,live);
+ await dependencies.confirm({p_id:payment.id,p_event:event.id,p_type:event.type,p_revision:payment.revision,p_session:observed.session.id,p_intent:observed.intentId as string,p_outcome:observed.outcome,p_reversal:observed.reversal,...(live?{p_live:true}:{})});
+}
+async function verifyPaymentObservation(payment:NonNullable<Awaited<ReturnType<typeof paymentById>>>,session:Stripe.Checkout.Session,stripe:Stripe,dependencies:PaymentEventDependencies,live:boolean){
+ let intent:Stripe.PaymentIntent|null=null;
  // Read revision before external verification. Concurrent newer facts invalidate
  // this observation in the atomic reducer, causing provider re-read on redelivery.
  await dependencies.price(stripe,payment.price_reference,live);
- session=await dependencies.session(stripe,session.id,{id:payment.id,analysis:payment.analysis_id,price:payment.price_reference,...(live?{live:true}:{})});
+ const verified=await dependencies.session(stripe,session.id,{id:payment.id,analysis:payment.analysis_id,price:payment.price_reference,...(live?{live:true}:{})});
+ session=verified;
  let outcome='pending',reversal='none'; const intentId=objectId(session.payment_intent);
  if(intentId){
   intent=await stripe.paymentIntents.retrieve(intentId);
@@ -68,7 +75,24 @@ export async function processPaymentEvent(event:Stripe.Event,stripe:Stripe,depen
    reversal=reversalDisposition(refunds.data,disputes.data,2900,live);
   }
  }
- if(outcome!=='paid'&&session.status==='expired'&&session.payment_status==='unpaid')outcome='expired';
- // Failed card attempts leave an open Session retryable and never unlock.
- await dependencies.confirm({p_id:payment.id,p_event:event.id,p_type:event.type,p_revision:payment.revision,p_session:session.id,p_intent:intentId as string,p_outcome:outcome,p_reversal:reversal,...(live?{p_live:true}:{})});
+ if(outcome!=='paid'&&session.status==='expired'&&session.payment_status==='unpaid'&&(!intent||!['succeeded','processing','requires_capture'].includes(intent.status)))outcome='expired';
+ return {session:verified,intentId,outcome,reversal,intentStatus:intent?.status??null};
+}
+
+export type CheckoutObservation='unpaid'|'expired'|'failed'|'pending'|'paid'|'unknown';
+/** Direct server observation, not a fabricated webhook or a cancel-query verdict. */
+export async function reconcileCheckoutPayment(id:string,stripe:Stripe,live:boolean,accountId?:string|null,dependencies:PaymentEventDependencies=paymentEventDependencies,deadline=Date.now()+12000):Promise<CheckoutObservation>{
+ const payment=await dependencies.read(id);
+ if(!payment||!payment.checkout_reference||payment.test_mode!==!live||payment.payment_version!==(live?2:1)||live&&payment.stripe_account_id!==accountId)throw Error('payment_reconciliation_unavailable');
+ const observed=await verifyPaymentObservation(payment,{id:payment.checkout_reference} as Stripe.Checkout.Session,stripe,dependencies,live);
+ if(Date.now()>deadline)throw Error('payment_verification_timeout');
+ if(payment.verified_at&&observed.outcome!=='paid')return 'unknown';
+ if(observed.outcome==='paid'&&(!payment.verified_at||payment.reversal_state!==observed.reversal)||observed.outcome==='expired'&&!payment.verified_at&&!payment.expired_at){
+  // Prefix distinguishes a direct observation from a Stripe webhook; revision fences stale facts.
+  await dependencies.confirm({p_id:payment.id,p_event:'obs_'+createHash('sha256').update(JSON.stringify([payment.id,payment.revision,observed.session.id,observed.outcome,observed.reversal])).digest('hex'),p_type:'checkout.session.reconciled',p_revision:payment.revision,p_session:observed.session.id,p_intent:observed.intentId as string,p_outcome:observed.outcome,p_reversal:observed.reversal,...(live?{p_live:true}:{})});
+ }
+ if(observed.outcome==='paid')return 'paid';
+ if(observed.outcome==='expired')return 'expired';
+ if(observed.session.status==='open'&&observed.session.payment_status==='unpaid'&&(!observed.intentStatus||['requires_payment_method','requires_confirmation','requires_action'].includes(observed.intentStatus)))return observed.intentStatus==='requires_payment_method'?'failed':'unpaid';
+ return 'pending';
 }

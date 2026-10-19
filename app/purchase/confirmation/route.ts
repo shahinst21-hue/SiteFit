@@ -1,3 +1,4 @@
+import {ownedPurchase} from '@/lib/payments/access';
 import {verifiedUser} from "@/lib/supabase/server";
 import {permanentIdentity,purchaseUuid} from "@/lib/auth/purchase-flow";
 import {purchaseReadOrigin} from "@/lib/payments/config";
@@ -9,6 +10,7 @@ export async function GET(request:Request){
  if(!purchaseReadOrigin(process.env))return new Response(null,{status:404});
  try{const {user}=await verifiedUser(),payment=new URL(request.url).searchParams.get("purchase");
  if(!permanentIdentity(user)||!purchaseUuid(payment))throw Error();
+ if(!(await ownedPurchase(payment)).confirmationAvailable)throw Error('purchase_not_confirmed');
  const sale=await readSale(user.id,payment);
  const record=sale as {version?:unknown;acceptedAt?:unknown;consent?:unknown;policy?:{reportAccessDays?:unknown}}|null;
  const render=()=>confirmationPDF(sale);

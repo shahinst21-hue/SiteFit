@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import ts from "typescript";
-import { purchaseNavigation } from "../lib/payments/purchase-navigation.ts";
+import { retryPurchaseNavigation,purchaseNavigation } from "../lib/payments/purchase-navigation.ts";
 import { purchaseAvailableOnHost } from "../lib/payments/config.ts";
 const origin="https://preview.example.org", report="00000000-0000-4000-8000-000000000001";
 test("purchase presentation is unavailable for missing Test credentials, wrong Preview host and Production",()=>{
@@ -67,4 +67,10 @@ test('bounded Checkout recovery errors explain the saved state without forwardin
  await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('checkout_reconciliation_required') as typeof fetch),/previous payment attempt needs verification/);
  await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_budget_exhausted') as typeof fetch),/Full Report purchase allocated/);
  try{await purchaseNavigation(report,true,origin,fetcher('secret-provider-code') as typeof fetch);assert.fail();}catch(e){assert.ok(e instanceof Error);assert.doesNotMatch(e.message,/private provider|secret-provider/);}
+});
+
+test('payment retry uses owner-scoped POST and validates secure recovery destinations',async()=>{
+ for(const url of ['https://checkout.stripe.com/c/pay/synthetic',`/purchase/return?purchase=${report}`,`/snapshots/${report}?purchase=1`])assert.equal(await retryPurchaseNavigation(report,report,origin,async(path,init)=>{assert.equal(path,'/purchase/retry');assert.equal(init?.method,'POST');assert.deepEqual(JSON.parse(String(init?.body)),{purchaseId:report});return Response.json({url});}),new URL(url,origin).href);
+ for(const url of ['https://evil.example/','/account','javascript:alert(1)',`/snapshots/${report}?purchase=1#unsafe`])await assert.rejects(()=>retryPurchaseNavigation(report,report,origin,async()=>Response.json({url})));
+ await assert.rejects(()=>retryPurchaseNavigation(report,report,origin,async()=>Response.json({error:'uncertain'},{status:409})));
 });
