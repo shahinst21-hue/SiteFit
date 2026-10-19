@@ -12,5 +12,6 @@ test("Checkout contact and full creation parameters remain identical across retr
 });
 test("only official hosted Checkout redirect is accepted",()=>{
  assert.equal(checkoutRedirect("https://checkout.stripe.com/c/pay/cs_test_example"),"https://checkout.stripe.com/c/pay/cs_test_example");
- for(const url of [null,"https://evil.invalid/c/pay/example","http://checkout.stripe.com/c/pay/example","https://checkout.stripe.com.evil.invalid/c/pay/example","https://user@checkout.stripe.com/c/pay/example","https://checkout.stripe.com/other"])assert.throws(()=>checkoutRedirect(url));
+ assert.equal(checkoutRedirect("https://checkout.stripe.com/f/pay/cs_live_synthetic#state"),"https://checkout.stripe.com/f/pay/cs_live_synthetic#state");
+ for(const url of [null,"https://checkout.stripe.com:8443/f/pay/example","https://evil.invalid/c/pay/example","http://checkout.stripe.com/c/pay/example","https://checkout.stripe.com.evil.invalid/c/pay/example","https://user@checkout.stripe.com/c/pay/example","https://checkout.stripe.com/other"])assert.throws(()=>checkoutRedirect(url));
 });

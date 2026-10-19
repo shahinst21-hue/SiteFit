@@ -1,3 +1,4 @@
+import {stripeCheckoutUrl} from './checkout-url.ts';
 import type Stripe from "stripe";
 import { PRODUCT,PAYMENT_VERSION } from "./config.ts";
 import { uuid } from "../data/validation.ts";
@@ -14,6 +15,6 @@ export function checkoutParameters(input:{id:string;analysis:string;email:string
 export function checkoutRedirect(value:string|null): string {
  if(!value)throw Error("checkout_unavailable");
  const url=new URL(value);
- if(url.protocol!=="https:"||url.hostname!=="checkout.stripe.com"||url.username||url.password||!url.pathname.startsWith("/c/pay/"))throw Error("checkout_unavailable");
+ if(!stripeCheckoutUrl(url))throw Error("checkout_unavailable");
  return url.href;
 }

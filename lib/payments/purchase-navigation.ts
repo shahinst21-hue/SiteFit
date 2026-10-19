@@ -1,3 +1,4 @@
+import {stripeCheckoutUrl} from './checkout-url.ts';
 import type { SaleConsent } from "../legal/sale.ts";
 /** Both Snapshot purchase controls use this POST journey. Page anchors and
  * report-reading URLs cannot masquerade as a successful purchase destination. */
@@ -12,7 +13,7 @@ export async function purchaseNavigation(report: string, checkout: boolean, orig
   // state. Preserve it; only internal purchase anchors represent the circular
   // Snapshot navigation defect. Never allow credentials or a foreign host.
   const login=checkout&&url.origin===origin&&!url.hash&&(url.pathname==='/login'&&url.search==='?next=%2Fpurchase%2Fcontinue'||url.pathname==='/purchase/auth'&&!url.search);
-  if (url.username || url.password || (checkout ? !login&&( url.origin !== "https://checkout.stripe.com" || !url.pathname.startsWith("/c/pay/")) :
+  if (url.username || url.password || (checkout ? !login&&!stripeCheckoutUrl(url) :
     !!url.hash || url.origin !== origin || !["/purchase/auth", "/purchase/resume"].includes(url.pathname))) throw Error("invalid_purchase_redirect");
   return url.href;
 }

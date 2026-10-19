@@ -55,3 +55,9 @@ test('checkout permits only the fixed login continuation and preserved guest cla
  for(const destination of ['/login?next=%2Fpurchase%2Fcontinue','/purchase/auth'])assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),origin+destination);
  for(const destination of ['/login?next=https://evil.example','/login?next=%2Fpurchase%2Fcontinue&extra=1','/login?next=%2Fpurchase%2Fcontinue#fragment','/purchase/auth#fragment','https://evil.example/login?next=%2Fpurchase%2Fcontinue'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})));
 });
+
+test('client accepts the verified f/pay Stripe format and keeps provider fragment state',async()=>{
+ const destination='https://checkout.stripe.com/f/pay/cs_live_synthetic#synthetic-provider-state';
+ assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),destination);
+ for(const url of ['https://checkout.stripe.com:8443/f/pay/example','https://checkout.stripe.com.evil.example/f/pay/example','https://user@checkout.stripe.com/f/pay/example','https://checkout.stripe.com/f/pay/','https://checkout.stripe.com/f/other/example'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
+});

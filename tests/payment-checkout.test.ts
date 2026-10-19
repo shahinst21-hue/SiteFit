@@ -58,3 +58,9 @@ test("concurrent workers submit identical provider parameters and key",async()=>
  assert.deepEqual(calls,Array.from({length:8},()=>({params:attempt.parameters,key:attempt.key})));
  assert.deepEqual(bindings,Array.from({length:8},()=>session.id));
 });
+
+test('verified existing f/pay Session resumes with its provider fragment and never creates a second Session',async()=>{
+ const stored={...session,url:'https://checkout.stripe.com/f/pay/cs_live_synthetic#synthetic-provider-state'};let creates=0,retrieves=0;
+ const url=await openCheckout({...attempt,session:stored.id},{retrieve:async()=>{retrieves++;return stored;},create:async()=>{creates++;throw Error('must reuse existing Session');},validate:async()=>{}},async()=>{},1000);
+ assert.equal(url,stored.url);assert.equal(retrieves,1);assert.equal(creates,0);
+});
