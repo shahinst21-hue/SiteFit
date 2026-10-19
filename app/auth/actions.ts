@@ -1,10 +1,11 @@
 "use server";
+import {cookies} from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase/server";
 import {
   callbackCredentials,
   completeAuthCallback,
-  authDestination,
+  authDestination,AUTH_RETURN_COOKIE,
 } from "@/lib/auth/flow";
 export async function confirmSignIn(form: FormData) {
   const token = form.get("token_hash");
@@ -18,7 +19,8 @@ export async function confirmSignIn(form: FormData) {
   if (!client) redirect("/login?error=unavailable");
   if (!credentials || !(await completeAuthCallback(credentials, client.auth)))
     redirect("/login?error=invalid-link");
-  redirect(authDestination(form.get("next")));
+  const jar=await cookies();const destination=authDestination(jar.get(AUTH_RETURN_COOKIE)?.value??form.get('next'));jar.set(AUTH_RETURN_COOKIE,'',{httpOnly:true,secure:process.env.VERCEL_ENV==='production',sameSite:'lax',path:'/auth',maxAge:0});
+  redirect(destination);
 }
 export async function signOut() {
   const client = await createServerSupabase();

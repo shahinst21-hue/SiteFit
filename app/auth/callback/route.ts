@@ -1,7 +1,8 @@
+import {cookies} from 'next/headers';
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import {
-  authDestination,
+  authDestination,AUTH_RETURN_COOKIE,
   callbackCredentials,
   completeAuthCallback,
 } from "@/lib/auth/flow";
@@ -12,8 +13,11 @@ export async function GET(request: NextRequest) {
   if (credentials?.kind === "code") {
     const client = await createServerSupabase();
     if (!client) destination = "/login?error=unavailable";
-    else if (await completeAuthCallback(credentials, client.auth))
-      destination = authDestination(request.nextUrl.searchParams.get("next"));
+    else if (await completeAuthCallback(credentials, client.auth)){
+      const jar=await cookies();
+      destination = authDestination(jar.get(AUTH_RETURN_COOKIE)?.value??request.nextUrl.searchParams.get("next"));
+      jar.set(AUTH_RETURN_COOKIE,'',{httpOnly:true,secure:request.nextUrl.protocol==='https:',sameSite:'lax',path:'/auth',maxAge:0});
+    }
   }
   const response = NextResponse.redirect(
     new URL(destination, request.url),

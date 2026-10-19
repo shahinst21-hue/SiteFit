@@ -38,7 +38,7 @@ test("purchase start preserves report identity and only accepts real authenticat
 });
 test("verified checkout uses its separate POST and rejects page anchors, non-Stripe redirects and failed responses",async()=>{
   assert.equal(await purchaseNavigation(report,true,origin,async(url,init)=>{assert.equal(url,"/purchase/checkout");assert.deepEqual(JSON.parse(String(init?.body)),{reportId:report});return Response.json({url:"https://checkout.stripe.com/c/pay/synthetic_test_only"});}),"https://checkout.stripe.com/c/pay/synthetic_test_only");
-  for(const destination of ["#full-case","/purchase/auth","https://checkout.stripe.com/not-checkout"])
+  for(const destination of ["#full-case","/purchase/auth?next=https://evil.example","https://checkout.stripe.com/not-checkout"])
     await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})));
   await assert.rejects(()=>purchaseNavigation(report,false,origin,async()=>Response.json({url:"/purchase/auth"},{status:503})));
 });
@@ -49,4 +49,9 @@ test("verified Stripe Checkout preserves provider fragment while internal anchor
   for(const url of ["https://user:password@checkout.stripe.com/c/pay/synthetic_test_only#state","https://checkout.stripe.com.evil.example/c/pay/test#state"])
     await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
   await assert.rejects(()=>purchaseNavigation(report,false,origin,async()=>Response.json({url:"/purchase/resume#state"})));
+});
+
+test('checkout permits only the fixed login continuation and preserved guest claim, never an arbitrary internal redirect',async()=>{
+ for(const destination of ['/login?next=%2Fpurchase%2Fcontinue','/purchase/auth'])assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),origin+destination);
+ for(const destination of ['/login?next=https://evil.example','/login?next=%2Fpurchase%2Fcontinue&extra=1','/login?next=%2Fpurchase%2Fcontinue#fragment','/purchase/auth#fragment','https://evil.example/login?next=%2Fpurchase%2Fcontinue'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})));
 });

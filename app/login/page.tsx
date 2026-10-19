@@ -1,3 +1,5 @@
+import {redirect} from 'next/navigation';
+import {permanentIdentity} from '@/lib/auth/purchase-flow';
 
 import { Icon } from "@/components/icon";
 import Link from "next/link";
@@ -6,7 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 import { LoginForm } from "@/components/login-form";
 import { readPublicSupabaseConfig } from "@/lib/supabase/config";
 import { verifiedUser } from "@/lib/supabase/server";
-import { authFailure, authMessages } from "@/lib/auth/flow";
+import { authDestination,authFailure, authMessages } from "@/lib/auth/flow";
 import { signOut } from "@/app/auth/actions";
 export const metadata = pageMetadata("/login");
 export const dynamic = "force-dynamic";
@@ -17,6 +19,8 @@ export default async function Login({
 }) {
   const { user, unavailable } = await verifiedUser();
   const params = await searchParams;
+  const destination=authDestination(params.next);
+  if(permanentIdentity(user)&&destination.startsWith('/purchase/'))redirect(destination);
   const failure = authFailure(params.error);
   const signedIn=!!user&&!user.is_anonymous;
   // Account sign-in is independent of purchase/report execution authority.
@@ -59,6 +63,7 @@ export default async function Login({
         <LoginForm
           config={config}
           google={!!config}
+          next={authDestination(params.next)}
         />
       )}
       <Link href="/check-location" className="text-link">

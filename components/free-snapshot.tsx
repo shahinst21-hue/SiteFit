@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
-import {useRef,useState} from "react";
+import {useEffect,useRef,useState,type ReactNode} from "react";
 import {readableNumber} from "@/lib/report-dashboard/display";
-import {PurchaseButton} from "./purchase-button";
 import {Arrow} from "./ui";
 import {Icon,type IconName} from "./icon";
 import {SnapshotEvidenceDialog} from './snapshot-evidence-dialog';
@@ -74,13 +73,14 @@ function LocationContext({snapshot,context,reportId}:{snapshot:SnapshotView;cont
   {context&&<details className="sf-map-source-notices"><summary>Map sources, dates & scope</summary><p>{map.description}</p>{context.foodDate&&<p>FSA retrieved {date(context.foodDate)}. Source observation date and coordinate accuracy unspecified.</p>}{context.foodGroups.length>0&&<p>FSA native categories: {context.foodGroups.map(g=>`${g.label}: ${g.count}`).join('; ')}. These are register classifications, not a direct-competitor assessment.</p>}{context.notices.map(n=><p key={n}>{n}</p>)}</details>}
  </section>;
 }
-export function FreeSnapshot({report,research,context,purchaseReport,reportId,measurement=false}:{report:FreeProjection;research?:AdvisorResearch[];context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){return <FreeSnapshotView snapshot={{...snapshotFromStored(report),advisorResearch:research}} context={context} purchaseReport={purchaseReport} reportId={reportId} measurement={measurement}/>;}
-export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measurement=false}:{snapshot:SnapshotView;context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){
+export function FreeSnapshot({report,research,context,purchaseReport,reportId,measurement=false,purchaseTerms,openPurchase=false}:{purchaseTerms?:ReactNode;openPurchase?:boolean;report:FreeProjection;research?:AdvisorResearch[];context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){return <FreeSnapshotView snapshot={{...snapshotFromStored(report),advisorResearch:research}} context={context} purchaseReport={purchaseReport} reportId={reportId} measurement={measurement} purchaseTerms={purchaseTerms} openPurchase={openPurchase}/>;}
+export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measurement=false,purchaseTerms,openPurchase=false}:{purchaseTerms?:ReactNode;openPurchase?:boolean;snapshot:SnapshotView;context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){
  const [selected,setSelected]=useState<FactorId>('premises');
  const dialog=useRef<HTMLDialogElement>(null);
  const price=formatPrice(site.pricing.fullReport),demo=snapshot.mode==='demo',checks=decisionChecks(snapshot),advice=snapshot.advisor;
  const factors=(Object.keys(factorTitles) as FactorId[]).map(id=>snapshot.factors.find(f=>f.id===id)??{id,title:factorTitles[id],status:'unavailable',meaning:'no_basis',quality:'insufficient',finding:null,reason:null,question:null,metrics:[],score:null,details:null,implication:null,scoreNote:null} as SnapshotFactor);
- const purchase=(position:'brief'|'primary'|'mobile')=><PurchaseButton report={!demo?purchaseReport:undefined} label={`Get the Full Report · ${price}`} unavailableMessage="Full Report purchasing is not open yet." controlId={`snapshot-purchase-${position}`}/>;
+ const purchase=(position:'brief'|'primary'|'mobile')=>position==='brief'&&purchaseTerms?purchaseTerms:<><button type="button" className="button button-primary" data-testid={`snapshot-purchase-${position}`} data-snapshot-event="full_click" data-snapshot-detail={position} disabled={demo||!purchaseReport} onClick={()=>unlock('premises')}>Get the Full Report · {price}</button>{!purchaseReport&&<p role="status">Full Report purchasing is not open yet.</p>}</>;
+ useEffect(()=>{if(openPurchase&&purchaseReport&&!dialog.current?.open)dialog.current?.showModal();},[openPurchase,purchaseReport]);
  function unlock(id:FactorId){setSelected(id);dialog.current?.showModal();}
  return <div className="page-wrap sf-snapshot sf-decision-page" data-snapshot-root>
   {measurement&&reportId&&!demo&&<SnapshotMeasurement reportId={reportId}/>}
