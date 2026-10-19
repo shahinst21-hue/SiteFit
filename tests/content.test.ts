@@ -18,7 +18,7 @@ import {
 } from "../lib/seo.ts";
 import { publicPages } from "../lib/site-config.ts";
 const post = () => structuredClone(localPosts[0]!);
-const now = () => new Date("2026-10-04T12:00:00Z");
+const now = () => new Date("2026-10-19T12:00:00Z");
 
 test("repository handles zero, one and multiple posts and filters unpublished and future dates", async () => {
   assert.deepEqual(
@@ -48,7 +48,7 @@ test("repository handles zero, one and multiple posts and filters unpublished an
     [...localPosts, ...hidden, future],
     now,
   );
-  assert.equal((await repository.listPublished()).total, 2);
+  assert.equal((await repository.listPublished()).total, 5);
   for (const item of [...hidden, future])
     assert.equal(await repository.getPublished(item.slug), null);
   assert.equal(await repository.getPublished("not-a-post"), null);
@@ -58,7 +58,7 @@ test("repository supports category, tags, pagination and related content without
   assert.equal(
     (
       await repository.listPublished({
-        tag: "due-diligence",
+        tag: "location",
         pageSize: 1,
         page: 2,
       })
@@ -68,10 +68,10 @@ test("repository supports category, tags, pagination and related content without
   assert.equal(
     (await repository.listPublished({ category: "Research notes" })).posts[0]
       ?.id,
-    "unknowns",
+    "high-footfall-location-business",
   );
   assert.equal((await repository.listPublished({ page: 100 })).posts.length, 0);
-  assert.equal((await repository.related(localPosts[0]!))[0]?.id, "unknowns");
+  assert.equal((await repository.related(localPosts[0]!))[0]?.id, "assess-cafe-competition");
 });
 test("duplicate slugs and incomplete SEO or image metadata fail content validation", () => {
   assert.throws(
