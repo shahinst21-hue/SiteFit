@@ -4,6 +4,7 @@ import "./globals.css";
 import "./brand.css";
 import "./journey.css";
 import "./snapshot-decision.css";
+import {readPublicSupabaseConfig} from "@/lib/supabase/config";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { websiteOrigin } from "@/lib/seo";
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
-        <SiteHeader />
+        <SiteHeader authConfig={readPublicSupabaseConfig(process.env)} />
         <main id="main-content" tabIndex={-1}>
           <LocationEntryProvider>{children}</LocationEntryProvider>
         </main>

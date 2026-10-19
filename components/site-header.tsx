@@ -6,6 +6,9 @@ import { Dialog } from "@base-ui/react/dialog";
 import { Popover } from "@base-ui/react/popover";
 import { Wordmark, Arrow } from "./ui";
 import { Icon, type IconName } from "./icon";
+import {createBrowserSupabase} from "@/lib/supabase/browser";
+import type {PublicSupabaseConfig} from "@/lib/supabase/config";
+import {observeAccountIdentity} from "@/lib/auth/navigation";
 import { formatPrice, site } from "@/lib/site-config";
 
 const links: {href: string; label: string; icon: IconName; detail: string}[] = [
@@ -19,10 +22,19 @@ const resources: {href: string; label: string; icon: IconName; detail: string}[]
   {href: "/contact", label: "Help & contact", icon: "help", detail: "Find the right next step"},
 ];
 
-export function SiteHeader() {
+export function SiteHeader({authConfig=null}:{authConfig?:PublicSupabaseConfig|null}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false), [resourceOpen, setResourceOpen] = useState(false);
   const [instant, setInstant] = useState(false);
+  const [signedIn,setSignedIn]=useState(false);
+  useEffect(()=>{
+    if(!authConfig)return;
+    const client=createBrowserSupabase(authConfig);
+    return observeAccountIdentity(client.auth,setSignedIn);
+  },[authConfig]);
+  const accountHref=signedIn?'/account':'/login';
+  const accountLabel=signedIn?'Account':'Sign in';
+  const accountIcon:IconName=signedIn?'demand':'login';
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 1100px)");
     const resize = () => { if (desktop.matches) setOpen(false); else setResourceOpen(false); };
@@ -44,7 +56,7 @@ export function SiteHeader() {
           </Popover.Popup>
         </Popover.Positioner></Popover.Portal>
       </Popover.Root>
-      <Link href="/login" className="login-link" aria-current={current("/login")}><Icon name="login"/> Sign in</Link>
+      <Link href={accountHref} className="login-link" aria-current={current(accountHref)}><Icon name={accountIcon}/> {accountLabel}</Link>
       <Link href="/check-location" className="nav-cta">Check a Location <Arrow /></Link>
     </nav>
     <Dialog.Root open={open} onOpenChange={(next, details) => { setInstant(details.event instanceof KeyboardEvent || (details.event instanceof MouseEvent && details.event.detail === 0)); setOpen(next); }}>
@@ -59,7 +71,7 @@ export function SiteHeader() {
             <span className="brand-menu-label">EXPLORE SITEFIT</span>
             {resources.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><span className="brand-nav-icon"><Icon name={l.icon}/></span><span><b>{l.label}</b></span><Icon name="external"/></Link>)}
           </nav>
-          <div className="brand-menu-actions"><Link href="/login" className="button button-secondary" onClick={close}><Icon name="login"/> Sign in</Link><Link href="/check-location" className="button button-primary" onClick={close}>Check a Location <Arrow/></Link></div>
+          <div className="brand-menu-actions"><Link href={accountHref} className="button button-secondary" aria-current={current(accountHref)} onClick={close}><Icon name={accountIcon}/> {accountLabel}</Link><Link href="/check-location" className="button button-primary" onClick={close}>Check a Location <Arrow/></Link></div>
           <div className="brand-menu-legal"><Link href="/privacy" onClick={close}>Privacy</Link><Link href="/terms" onClick={close}>Terms</Link></div>
         </Dialog.Popup>
       </Dialog.Portal>
