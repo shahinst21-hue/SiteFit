@@ -14,7 +14,7 @@ function json(value: unknown): Json { return value as Json; }
 // envelopes being validated concurrently; caller cancellation still wins.
 function limited(signal?: AbortSignal) { return AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(8000)]); }
 function checkAbort(signal: AbortSignal) { if (signal.aborted) throw new SourceError(signal.reason?.name === "TimeoutError" ? "timeout" : "cancelled"); }
-function decode(value: unknown): StoredSnapshot {
+export function decodeSnapshot(value: unknown): StoredSnapshot {
   const row = object(value);
   if (!uuid(row.id) || !uuid(row.analysis_id) || !uuid(row.input_id) || typeof row.collection_key !== "string" || typeof row.request_sha256 !== "string") throw new SourceError("persistence_failed");
   const result = validateResult({ ...object(row.provider_metadata), payload: row.normalised_data });
@@ -75,7 +75,7 @@ export function snapshotRepository(ownerId: string): PreparedRepository {
       const { data, error } = await client.from("data_snapshots").select("*").eq("analysis_id", context.analysisId).eq("input_id", context.inputId).eq("collection_key", key).eq("source", source).eq("request_sha256", hash).abortSignal(readSignal).maybeSingle();
       checkAbort(readSignal);
       if (error) throw new SourceError("persistence_failed");
-      return data ? decode(data) : null;
+      return data ? decodeSnapshot(data) : null;
     },
     async append(context: CollectionContext, key: string, hash: string, value: ProviderResult, signal) {
       await owned(context.analysisId, signal);
@@ -87,7 +87,7 @@ export function snapshotRepository(ownerId: string): PreparedRepository {
       const { data, error } = await client.rpc("append_sitefit_snapshot", { p_analysis_id: context.analysisId, p_input_id: context.inputId, p_collection_key: key, p_request_sha256: hash, p_result: json(result) }).abortSignal(writeSignal);
       checkAbort(writeSignal);
       if (error || !data) throw new SourceError("persistence_failed");
-      return decode(data);
+      return decodeSnapshot(data);
     },
   };
   return repository;
