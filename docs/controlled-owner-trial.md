@@ -68,3 +68,10 @@ cover source qualification, immutable replay, PDF, ownership and payment reversa
 Hosted recovery/concurrency, exact-head CI, Production migration/deployment and
 actual generation/payment results require separate observed receipts. This
 implementation document does not claim those operations passed.
+
+
+## 19 October count/budget amendment
+
+Owner approved removing the five-Snapshot/one-Full count caps for the existing verified account, with **US$10 aggregate from the start of this trial**, not US$10 additional. Existing US$4.25 envelopes remain reserved; initial extra headroom is US$5.75. Each Snapshot remains capped at US$0.65, Full at US$1.00, combined per case US$1.65. No automatic retry, charge/top-up, history reset or public authority is introduced. New private optional count limits default to 5/1 for other trial rows. Only the exact existing Production trial receives null count limits and the US$10 budget via a forward migration; its expiry and flags are untouched. The commercial Full-only fence becomes US$10, subordinate to the same trial aggregate, not an extra budget. Historical holds and paid/ambiguous outcomes remain immutable. Every case still has one bound purchase; repeated requests reuse it rather than producing repeat payments. The owner submits each genuine payment personally.
+
+Recovery: application rollback is compatible with the additive schema. Disable the existing owner trial to stop new admissions without deleting/releasing any hold. Do not reverse the migration or reset a paused execution. A previously ambiguous/intervention case still requires reconciliation; increasing quota is not replay approval.

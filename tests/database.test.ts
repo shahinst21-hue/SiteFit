@@ -29,8 +29,20 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       new Set(files.map((file) => file.split("_")[0])).size,
       files.length,
     );
-    for (const file of files)
-      await db.exec(await readFile(new URL(file, dir), "utf8"));
+    for (const file of files) {
+      const sql=await readFile(new URL(file,dir),'utf8');
+      if(file.startsWith('20261019170000')){
+        await db.exec(`begin;
+          insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(gen_random_uuid(),'shahinst21@gmail.com',now(),false);
+          insert into public.controlled_trials(id,owner_id,expires_at,total_limit_micros,reserved_micros,snapshots,full_reports,policy_version,tariff_verified,tariff_digest,input_rate,output_rate)
+          select 'cf931ac6-558b-456c-921f-8f8436512098',id,now()+interval '1 hour',4250000,4250000,5,1,'sitefit-sale-v1-20261019-affirmative',true,repeat('a',64),2.5,10 from auth.users where email='shahinst21@gmail.com';`);
+        await db.exec(sql);
+        const amended=(await db.query<{total:number;held:number;snapshots:number;full_reports:number;snapshot_count_limit:number|null;full_count_limit:number|null}>(`select total_limit_micros::int as total,reserved_micros::int as held,snapshots,full_reports,snapshot_count_limit,full_count_limit from public.controlled_trials`)).rows;
+        assert.deepEqual(amended,[{total:10000000,held:4250000,snapshots:5,full_reports:1,snapshot_count_limit:null,full_count_limit:null}]);
+        await db.exec('rollback;');
+      }
+      await db.exec(sql);
+    }
     const review=(await db.query<{approved:boolean;classification:string;confirmation_channel:string;snapshot:unknown}>(
       'select approved,classification,confirmation_channel,snapshot from public.sale_policies where version=$1',[policyVersions.sale])).rows[0];
     assert.equal(review.approved,true);assert.equal(review.classification,'digital_content');assert.equal(review.confirmation_channel,'manual_zoho_pdf');
@@ -43,6 +55,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-advisor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/controlled-trial.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/checkout-successors.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/owner-trial-count-amendment.sql',import.meta.url),'utf8'));
       await db.exec(await readFile(new URL('../supabase/tests/trial-snapshot-pause.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/trial-synthesis-recovery.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/census-unavailable-evidence.sql',import.meta.url),'utf8'));
