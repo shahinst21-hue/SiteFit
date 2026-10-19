@@ -1,3 +1,4 @@
+import {validateResidentialScore,type ResidentialScore} from './residential-catchment.ts';
 import { validateEnrichedSpatialProjection, type EnrichedSpatialProjection } from "./enriched-spatial-projection.ts";
 import type { CollectionContext } from "../data/contracts.ts";
 import type { interpretSections, synthesiseSections } from "./section-engine.ts";
@@ -7,7 +8,7 @@ import type { residentialMetric } from "./metrics.ts";
 import {validateSnapshotAdvice,type SnapshotAdvice} from './advisor.ts';
 type Sections = Awaited<ReturnType<typeof interpretSections>>["sections"];
 type EarlyView = Omit<Awaited<ReturnType<typeof synthesiseSections>>, 'advisor'> & {advisor?:SnapshotAdvice};
-export type LegacyFreeProjection = { schemaVersion: 2; analysisId: string; generatedAt: string;
+export type LegacyFreeProjection = { schemaVersion: 2; residentialCatchment?:ResidentialScore|null; analysisId: string; generatedAt: string;
   property: { address: string; resolution: string; precision: string }; businessType: string;
   earlyView: { headline: string; reason: string; meaning: string; strength: EvidenceStrength; keyQuestions: string[]; coverage: string; advisor?:SnapshotAdvice };
   dimensions: { id: Dimension; title: string; conclusion: string; reason: string; strength: EvidenceStrength; meaning: string;
@@ -79,6 +80,7 @@ export function validateFreeProjection(value: unknown): FreeProjection {
           sources: d.why.sources.map(source => ({ provider: text(source.provider), dataset: text(source.dataset), url: source.url === null ? null : sourceUrl(text(source.url)), retrievedAt: source.retrievedAt === null ? null : text(source.retrievedAt), notices: list(source.notices) })),
         } };
     }) };
+  if(row.residentialCatchment!==undefined)reconstructed.residentialCatchment=row.residentialCatchment===null?null:validateResidentialScore(row.residentialCatchment);
   if(row.earlyView.advisor!==undefined) reconstructed.earlyView.advisor=validateSnapshotAdvice(row.earlyView.advisor);
   return row.schemaVersion === 3 ? {...reconstructed, schemaVersion: 3, spatial: validateEnrichedSpatialProjection(row.spatial)} : reconstructed;
 }

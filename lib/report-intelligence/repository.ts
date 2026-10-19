@@ -1,4 +1,5 @@
 import "server-only";
+import {residentialFromEvidence,type ResidentialScore} from "../analysis/residential-catchment.ts";
 import { frameworkClient } from "../data/server-client.ts";
 import { canonicalJSON, packetDigest } from "../analysis/canonical.ts";
 import { validateAssessment } from "../analysis/assessment.ts";
@@ -32,7 +33,7 @@ export type Preparation = { version: "full-preparation-v1"; configuration: "full
   rentalPreparation?: { version: "rental-preparation-v1"; supplementDigests: string[]; sourceBindings: { snapshotId: string; checksum: string }[];
     fallback: { state: RentalFallback["state"]; receipt: RentalFallback["receipt"]; findingDigests: string[]; findings: RentalFallback["findings"] } };
   identityOmissions?: string[];
-  presentation?: { freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
+  presentation?: { residentialCatchment?:ResidentialScore|null; freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
     spatial: { reportId: string; digest: string | null; state: "available" | "unavailable" }; photo: { state: "unavailable" } };
   packetDigests: { context: string; premises: string } };
 export type StoredEdition = { id: string; analysisId: string; inputId: string; revision: number; status: "draft" | "ready";
@@ -52,7 +53,7 @@ export function validateStoredEdition(value: unknown): StoredEdition {
   }
   if (row.status === "ready") {
     const projection = validateFullProjection(row.projection);
-    if (projection.bindingDigest !== checkpoint.bindingDigest || packetDigest(projection.index) !== packetDigest(object(p.catalog).index) ||
+    if (packetDigest(projection.presentation??null)!==packetDigest(p.presentation??null) || projection.bindingDigest !== checkpoint.bindingDigest || packetDigest(projection.index) !== packetDigest(object(p.catalog).index) ||
       packetDigest(projection.readiness) !== packetDigest(object(p.catalog).readiness) ||
       p.scenarioFit && packetDigest(projection.scenarioFit) !== packetDigest(p.scenarioFit)) throw Error("invalid_full_replay");
   }
@@ -156,7 +157,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
         sourceBindings: rentalSupplements.flatMap(s => s.sourceBindings),
         fallback: { state: fallback.state, receipt: fallback.receipt, findingDigests: fallback.findings.map(f => f.id), findings: fallback.findings } },
       profiles, identityOmissions,
-      presentation: { freeReportId, analysisTimestamp: context.analysisTimestamp,
+      presentation: { ...(context.businessType==="coffee-shop"?{residentialCatchment:residentialFromEvidence(evidence,context.businessType,context.enrichment?.identity.point??null,preparedAt)}:{}), freeReportId, analysisTimestamp: context.analysisTimestamp,
         property: { id: context.selectedProperty.id, label: context.selectedProperty.formattedAddress,
           precision: context.enrichment?.identity.point?.precision ?? context.selectedProperty.point?.precision ?? "unknown" },
         spatial: { reportId: freeReportId, digest: material.spatial === null ? null : packetDigest(material.spatial), state: material.spatial === null ? "unavailable" : "available" },

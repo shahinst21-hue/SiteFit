@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import {ResidentialCatchment,ResidentialDetails} from "./residential-catchment";
 import {useEffect,useRef,useState,type ReactNode} from "react";
 import {readableNumber} from "@/lib/report-dashboard/display";
 import {Arrow} from "./ui";
@@ -27,7 +28,7 @@ export function SnapshotMetricRow({metric,factor}:{metric:SnapshotMetric;factor?
 function Reasoning({factor,demo}:{factor:SnapshotFactor;demo:boolean}){
  const why=factor.details;
  return <SnapshotEvidenceDialog id={`evidence-${factor.id}`} title={factor.title} detail={factor.id}>
-  <h4>Saved AI assessment</h4><p>{factor.finding}</p><p>{factor.reason}</p>
+  {factor.residentialCatchment&&<ResidentialDetails value={factor.residentialCatchment}/>}<h4>Saved AI assessment</h4><p>{factor.finding}</p><p>{factor.reason}</p>
   <p><strong>Evidence sufficiency: {qualityLabels[factor.quality]}.</strong> {factor.scoreNote}</p>
   {factor.implication&&<p>{factor.implication}</p>}
   {why?<><Lines label="What supports this" lines={why.support}/><Lines label="What limits this" lines={why.opposition}/><Lines label="Other explanations" lines={why.alternatives}/><Lines label="Still unknown" lines={why.unknowns}/>
@@ -46,6 +47,7 @@ const deeper:Record<FactorId,{title:string;copy:string}>= {
 };
 function status(f:SnapshotFactor){return f.status!=='available'?'Not established':f.meaning==='favourable'?'Supportive':f.meaning==='trade_off'?'Trade-off':f.meaning==='conditional'?'Conditional':'Unresolved';}
 function EvidenceVisual({factor,context,map,reportId,demo}:{factor:SnapshotFactor;context?:SnapshotContext|null;map?:SnapshotMap;reportId?:string;demo:boolean}){
+ if(factor.id==='customer-base'&&factor.residentialCatchment!==undefined)return <ResidentialCatchment value={factor.residentialCatchment}/>;
  const metric=meaningfulMetrics(factor)[0],comparison=factor.details?.comparison;
  if(factor.id==='premises')return <div className="sf-premises-checks">{[{title:'Permitted use',note:'Confirm the intended operation',icon:'shield'},{title:'Layout suitability',note:'Check the measured floor plan',icon:'home'}].map(c=><div key={c.title}><span className="sf-risk-icon"><Icon name={c.icon as IconName}/></span><span><strong>{c.title}</strong><small>Unverified</small></span></div>)}<span className="sf-visual-caption">Resolve these before committing.</span></div>;
  if(factor.id==='market-position'&&context?.foodGroups.length)return <div className="sf-register-chart"><p className="sf-stat"><strong>{context.foodTotal}</strong><span>Food-register records<small>FSA · bounded search</small></span></p><ul aria-label="Recorded FSA business types">{competitionBars(context.foodGroups).map((g,i)=><li key={g.label}><span>{g.label==='Restaurant/Cafe/Canteen'?'Restaurant / café / canteen':g.label==='Retailers - other'?'Other food retailers':g.label==='Takeaway/sandwich shop'?'Takeaway / sandwich':g.label}</span><span className="sf-native-bar" aria-hidden="true"><i style={{width:(g.count/context.foodTotal!*100)+'%',background:['#0d1400','#60646c','#7c7c7c','#b2f34c'][i]}}/></span><strong>{g.count}</strong></li>)}</ul><span className="sf-visual-caption">Register types, not confirmed direct rivals.</span></div>;
@@ -56,8 +58,7 @@ function EvidenceVisual({factor,context,map,reportId,demo}:{factor:SnapshotFacto
 }
 function FactorCard({factor,demo,context,map,reportId,onUnlock}:{factor:SnapshotFactor;demo:boolean;context?:SnapshotContext|null;map?:SnapshotMap;reportId?:string;onUnlock:(id:FactorId)=>void}){
  return <article id={`factor-${factor.id}`} className="sf-factor" data-factor={factor.id} data-meaning={factor.meaning} aria-busy={factor.status==='loading'}>
-  <div className="sf-factor-heading"><Icon name={icons[factor.id]}/><h3>{factor.title}</h3><span className="sf-tag">{status(factor)}</span></div>
-  <p className="sf-card-judgement">{excerpt(factor.finding,125)}</p>
+  {!(factor.id==='customer-base'&&factor.residentialCatchment!==undefined)&&<><div className="sf-factor-heading"><Icon name={icons[factor.id]}/><h3>{factor.title}</h3><span className="sf-tag">{status(factor)}</span></div><p className="sf-card-judgement">{excerpt(factor.finding,125)}</p></>}
   {factor.id==='premises'?<div className="sf-risk-preview"><div className="sf-risk-blur" aria-hidden="true"><EvidenceVisual factor={factor} context={context} map={map} reportId={reportId} demo={demo}/></div><button type="button" className="sf-risk-unlock" onClick={()=>onUnlock('premises')} aria-label="Explore Full Report premises analysis for £29"><span><Icon name="lock"/></span><strong>Full premises review</strong><small>Explore the £29 assessment <Icon name="arrow"/></small></button><p className="sf-risk-essential">Use and layout remain unverified.</p></div>:<EvidenceVisual factor={factor} context={context} map={map} reportId={reportId} demo={demo}/>}
   <Reasoning factor={factor} demo={demo}/>
   <button type="button" className="sf-content-lock" onClick={()=>onUnlock(factor.id)}><Icon name="lock"/><span>View full {factor.id==='premises'?'risk':factor.id==='customer-base'?'demand':factor.id==='market-position'?'competition':'access'} analysis<small>Included in the £29 assessment</small></span><Icon name="arrow"/></button>
