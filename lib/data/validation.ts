@@ -130,7 +130,7 @@ export function validateResult(value: unknown): ProviderResult {
       const statistics = m.source === "ons-catchments";
       const checked = statistics ? validateCatchmentSources(p) : validateCatchmentPlaces(p);
       const outcomes = checked.kind === "catchment_statistics" ? checked.ranges.flatMap(range => range.statistics) : checked.ranges;
-      demand(outcomes.some(item => item.outcome === "success") && q.precision === "building" &&
+      demand(outcomes.some(item => item.outcome === "success") && ["building","postcode_centroid"].includes(String(q.precision)) &&
         m.provider === (statistics ? "ons" : "overture") && m.dataset === (statistics ? "census-income-bres" : "places") &&
         m.datasetReleaseId === (checked.kind === "catchment_statistics" ? null : checked.releaseId) &&
         r.outcome === (outcomes.every(item => item.outcome === "success") ? "success" : "partial") &&
@@ -138,7 +138,7 @@ export function validateResult(value: unknown): ProviderResult {
         object(r.observations[0]).recordId === checked.parent.snapshotId &&
         object(r.observations[0]).units === (statistics ? "native_statistical_operands" : "native_place_records"));
     } else if (m.source === "geoapify-walking") {
-      keys(p, "schemaVersion kind walking topology"); demand(p.kind === "walking_geometry" && q.precision === "building");
+      keys(p, "schemaVersion kind walking topology"); demand(p.kind === "walking_geometry" && ["building","postcode_centroid"].includes(String(q.precision)));
       validateWalkingCatchments(p.walking);
       const topology = object(p.topology); demand(uuid(topology.geographyReleaseId));
       const checkedTopology = validateWalkingTopology(topology, topology.geographyReleaseId);

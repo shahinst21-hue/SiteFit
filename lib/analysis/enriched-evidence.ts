@@ -52,7 +52,7 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
       parents.push({id: parent.id, checksum: p.parent.checksum});
     }
     if (p?.kind === "walking_geometry" && (p.topology.geographyReleaseId !== context.enrichment.releases.geographyReleaseId ||
-      packetDigest(p.walking.origin) !== packetDigest(context.enrichment.identity.point))) throw new Error("enriched_evidence_walking_origin");
+      packetDigest(p.walking.origin) !== packetDigest(queryPoint(context)))) throw new Error("enriched_evidence_walking_origin");
     if ((p?.kind === "property_fact" || p?.kind === "non_domestic_certificate") && (p.binding.uprn !== context.enrichment.identity.uprn || p.binding.osReleaseId !== context.enrichment.releases.osReleaseId ||
       packetDigest(p.binding.point) !== packetDigest(context.enrichment.identity.point))) throw new Error("enriched_evidence_property_binding");
     if (p?.kind === "planning_constraints" && p.lookup.releaseId !== context.enrichment.releases[r.meta.source === "planning-conservation" ? "conservationReleaseId" : "article4ReleaseId"])
