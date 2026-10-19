@@ -43,6 +43,7 @@ test('trial identity rejects anonymous, unverified and different accounts before
  const owner={id:'00000000-0000-4000-8000-000000000001',email:'shahinst21@gmail.com',email_confirmed_at:'2026-10-18T00:00:00Z',is_anonymous:false};
  assert.equal(verifiedTrialIdentity(owner),true);
  for(const user of [null,{...owner,is_anonymous:true},{...owner,email_confirmed_at:undefined},{...owner,email:'another@example.invalid'}])assert.equal(verifiedTrialIdentity(user),false);
- assert.equal(trialLimits.snapshotMicros*trialLimits.snapshots+trialLimits.fullMicros*trialLimits.fullReports,trialLimits.totalMicros);
- assert.equal(trialLimits.totalMicros,4250000);
+ assert.equal(trialLimits.snapshots,null);assert.equal(trialLimits.fullReports,null);
+ assert.equal(trialLimits.snapshotMicros,650000);assert.equal(trialLimits.fullMicros,1000000);
+ assert.equal(trialLimits.totalMicros,10000000);
 });
