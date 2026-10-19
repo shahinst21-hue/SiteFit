@@ -1,7 +1,17 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { analysisAIProvider, analysisAI } from "../lib/analysis/ai-provider.ts";
+import {runProofScope} from '../lib/proof/context.ts';
 function response() { return Response.json({ status: "completed", model: "gpt-6.1-sol", output: [{ type: "message", content: [{ type: "output_text", text: '{"result":"fixture"}' }] }], usage: { input_tokens: 100, output_tokens: 20 } }); }
+test('encoded request expansion is checked before counting or sending a controlled AI dispatch',async()=>{
+ let sends=0;const ai=analysisAIProvider({key:'sk-fixture',fetch:async()=>{sends++;return response();}});
+ const packet={version:'snapshot-advisor-v1',text:'"'.repeat(11000)};
+ assert.ok(Buffer.byteLength(JSON.stringify(packet))<24000);
+ await runProofScope({stage:'snapshot',inputRate:2.5,outputRate:10,store:{async reserve(){throw Error('must not reserve');},async settle(){}}},async()=>{
+  await assert.rejects(ai.interpret(packet,'fixture',{type:'object'}),/invalid_packet/);
+ });
+ assert.equal(sends,0);assert.equal(ai.dispatches(),0);
+});
 test("AI transport uses owner model, bounded structured output, no storage/tools/retries and safe usage receipt", async () => {
   let calls = 0;
   const provider = analysisAIProvider({ key: "sk-synthetic-fixture", fetch: async (url, init) => {

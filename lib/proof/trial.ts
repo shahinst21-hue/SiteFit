@@ -12,3 +12,17 @@ export async function assertTrialOwner(user: Parameters<typeof verifiedTrialIden
   if (!controlledTrialConfigured(process.env, hostname) || !verifiedTrialIdentity(user)) throw Error('controlled_trial_denied');
   if (await trialRpc('authorise_sitefit_trial_owner', { p_trial: process.env.SITEFIT_CONTROLLED_TRIAL_ID!, p_owner: user!.id }) !== true) throw Error('controlled_trial_denied');
 }
+
+/** Read-only preflight after verified trial-owner admission. Never reclaims a failed case. */
+export async function trialSnapshotPause(owner:string,property:string,business:string){
+ const client=frameworkClient();
+ const {data:analyses,error}=await client.from('analyses').select('id').eq('owner_id',owner).eq('property_id',property).eq('business_type',business).order('created_at',{ascending:false}).limit(1).abortSignal(AbortSignal.timeout(8000));
+ if(error)throw Error('controlled_trial_denied');
+ if(!analyses?.length)return null;
+ const {data:report,error:readError}=await client.from('reports').select('status,provenance').eq('analysis_id',analyses[0].id).eq('tier','free').order('version',{ascending:false}).limit(1).abortSignal(AbortSignal.timeout(8000));
+ if(readError)throw Error('controlled_trial_denied');
+ if(report?.[0]?.status!=='failed')return null;
+ const partial=(report[0].provenance as {partial?:{sections?:{section?:string}[]}}|null)?.partial;
+ const sections=new Set((partial?.sections??[]).map(s=>s.section).filter(s=>['customer-base','market-position','customer-access','premises'].includes(s??'')));
+ return {error:'This saved check needs recovery. No new execution has started.',progress:{stage:'analysis' as const,completed:2+sections.size}};
+}

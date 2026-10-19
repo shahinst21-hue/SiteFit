@@ -23,6 +23,23 @@ function provider(invalid = false) {
     return Response.json({ status: "completed", model: "gpt-6.1-sol", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(selection) }] }], usage: { input_tokens: 500, output_tokens: 100 } });
   } });
 }
+test('synthesis removes redundant selection metadata while preserving every finding and evidence link',async()=>{
+ const prepared=sectionPackets(context(),[],null,new Date());
+ const {sections}=await interpretSections(prepared.packets,prepared.index,provider());
+ let sends=0;
+ const ai=analysisAIProvider({key:'sk-fixture',fetch:async(_url,init)=>{
+  sends++;const request=JSON.parse(String(init?.body)),packet=JSON.parse(request.input[0].content[0].text);
+  assert.ok(Buffer.byteLength(String(init?.body))<30000);
+  for(const [i,s] of sections.entries()){
+   assert.deepEqual(packet.sections[i].conclusion,{text:s.conclusion.text,meaning:s.conclusion.meaning,evidenceIds:s.conclusion.evidenceIds});
+   assert.equal(packet.sections[i].unknowns.length,s.unknowns.length);
+   assert.deepEqual(packet.sections[i].unknowns.map((p:{text:string})=>p.text),s.unknowns.map(p=>p.text));
+   assert.equal(packet.sections[i].conclusion.role,undefined);assert.equal(packet.sections[i].conclusion.kind,undefined);
+  }
+  return Response.json({status:'completed',model:'gpt-6.1-sol',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(advisorFixture())}]}],usage:{input_tokens:500,output_tokens:100}});
+ }});
+ await synthesiseSections(sections,ai);assert.equal(sends,1);
+});
 test("missing sources preserve four useful explicit gaps with no wasted dimension AI call", async () => {
   const c = context(); const prepared = sectionPackets(c, [], null, new Date()); const ai = provider();
   const output = await interpretSections(prepared.packets, prepared.index, ai);

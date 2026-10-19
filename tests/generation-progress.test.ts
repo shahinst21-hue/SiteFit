@@ -15,6 +15,12 @@ test('failed generation sends safe error without Ready or automatic retry',async
  let calls=0;const ticks:number[]=[];const response=snapshotStream(async observer=>{calls++;observer({stage:'saving',completed:7});throw Error('private detail');},()=>Response.json({error:'Your check has paused.'},{status:503}));
  await assert.rejects(readSnapshotProgress(response,t=>ticks.push(t.completed)),/Your check has paused/);assert.deepEqual(ticks,[0,7]);assert.equal(calls,1);
 });
+test('a saved failed check restores confirmed progress without a second dispatch or invented Ready',async()=>{
+ const ticks:number[]=[];
+ await assert.rejects(readSnapshotProgress(Response.json({error:'Saved check needs recovery',progress:{stage:'analysis',completed:6}},{status:409}),t=>ticks.push(t.completed)),/needs recovery/);
+ assert.deepEqual(ticks,[6]);
+ for(const completed of [-1,7,8,6.5]){const seen:number[]=[];await assert.rejects(readSnapshotProgress(Response.json({error:'paused',progress:{stage:'analysis',completed}},{status:409}),t=>seen.push(t.completed)));assert.deepEqual(seen,[]);}
+});
 test('progress parser rejects forged, regressed, oversized and interrupted streams',async()=>{
  for(const body of ['{"type":"progress","stage":"saving","completed":8}\n','{"type":"ready","reportId":"invalid"}\n','x'.repeat(16385),'{"type":"progress","stage":"saving","completed":7}\n','{"type":"progress","stage":"analysis","completed":3}\n{"type":"progress","stage":"sources","completed":1}\n']){
  const ticks:number[]=[];await assert.rejects(readSnapshotProgress(new Response(body,{headers:{'Content-Type':'application/x-ndjson'}}),t=>ticks.push(t.completed)));assert.ok(!ticks.includes(8));}

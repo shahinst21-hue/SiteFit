@@ -7,7 +7,7 @@ import {snapshotStream} from '@/lib/analysis/progress-stream';
 import type {SnapshotObserver} from '@/lib/analysis/progress';
 import {controlledSnapshotConfigured} from '@/lib/proof/authority';
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
-import {assertTrialOwner} from '@/lib/proof/trial';
+import {assertTrialOwner,trialSnapshotPause} from '@/lib/proof/trial';
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
@@ -36,6 +36,7 @@ export async function POST(request: Request) {
     const active = await client.rpc("sitefit_session_available");
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const owner=user.id;
+    if(trial){const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);if(paused)return reply(paused,409);}
     const produce=async(observer?:SnapshotObserver)=>{
       const result=await ownedGeneration(owner,input,()=>generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer));
       await observeCampaign(owner,result.reportId);return {reportId:result.reportId};
