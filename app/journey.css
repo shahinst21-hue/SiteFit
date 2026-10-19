@@ -171,9 +171,13 @@ body:has(.check-page .wizard-flow) > footer { display:none; }
  .wizard-panel .address-result { padding:14px 16px; }
  .wizard-panel .address-result > span { font-size:13px; }
  .wizard-processing .generation-progress { padding:16px; }
- .wizard-processing .gp-body { grid-template-columns:1fr; gap:12px; }
- .wizard-processing .gp-dial { width:112px; }
- .wizard-processing .gp-message h2 { font-size:20px; }
+ .wizard-processing .gp-body { grid-template-columns:88px minmax(0,1fr); gap:12px; }
+ .wizard-processing .gp-dial { width:88px; }
+ .wizard-processing .gp-value { font-size:32px; }
+ .wizard-processing .gp-message { text-align:left; }
+ .wizard-processing .gp-state { justify-content:flex-start; font-size:11px; }
+ .wizard-processing .gp-message h2 { font-size:17px; }
+ .wizard-processing .gp-message p { font-size:12px; }
 }
 @media(max-width:359px) {
  .wizard-topline > span { max-width:110px; text-align:right; }
