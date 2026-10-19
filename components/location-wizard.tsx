@@ -30,7 +30,7 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
  const transition=useRef<ViewTransition|null>(null),previousStep=useRef(0);
  useEffect(()=>entry.clear(),[entry.clear]);
  useEffect(()=>{
-  if(previousStep.current!==step){heading.current?.focus({preventScroll:true});heading.current?.scrollIntoView({block:'start',behavior:'instant'});}
+  if(previousStep.current!==step){heading.current?.focus({preventScroll:true});(heading.current?.closest('.wizard-flow')?.querySelector('.wizard-steps')??heading.current)?.scrollIntoView({block:'start',behavior:'instant'});}
   previousStep.current=step;
  },[step]);
  function moveTo(next:number){
@@ -76,14 +76,13 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
        <span className="business-option-copy"><strong>{t.label}</strong><span>{t.description}</span></span><span className="business-choice-mark" aria-hidden="true"><Icon name="check"/></span>
       </label>)}
      </div></fieldset>
-     <div className="wizard-submit"><p><Icon name="evidence"/>Four perspectives. One initial view.</p><button className="button button-primary" type="submit" disabled={!business}>Get my Free Snapshot<Arrow/></button></div>
      <p className="wizard-session-note"><Icon name="shield"/>No account or card needed. Guest access stays with this browser session.</p>
+     <div className="wizard-submit"><button className="button button-primary" type="submit" disabled={!business||busy}>Get my Free Snapshot<Arrow/></button></div>
     </form>:<div className="wizard-processing">
      <div className="wizard-check-context"><Icon name="pin"/><p>{property?.formattedAddress}<small>{type?.label}</small></p></div>
      <div role="status" aria-live="polite" aria-atomic="true"><GenerationProgress view={snapshotView(progress,!!error)}/></div>
      {error?<div className="wizard-paused"><p role="alert">{error}</p><Link href="/account" className="button button-secondary">Check saved status<Arrow/></Link><p>Need a hand? <a href="mailto:info@sitefit.co.uk">Contact SiteFit</a>. Please don’t start another request.</p></div>:<p className="wizard-session-note"><Icon name="clock"/>{busy?'Keep this tab open while your Snapshot is prepared.':'Your Snapshot has been saved.'}</p>}
     </div>}
   </section></div>
-  {step<2&&<div className="wizard-assurance"><span><Icon name="demand"/>Customer context</span><span><Icon name="shop"/>Competition</span><span><Icon name="access"/>Access</span><span><Icon name="shield"/>Premises</span></div>}
  </div>;
 }
