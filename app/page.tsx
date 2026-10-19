@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ButtonLink, ClosingCTA, Wordmark } from "@/components/ui";
+import { ButtonLink, ClosingCTA } from "@/components/ui";
 import { PricingCards } from "@/components/pricing-cards";
-import { LocationVisual } from "@/components/location-visual";
+import { HomeReportPreview } from "@/components/home-report-preview";
 import { HeroLocationVisual } from "@/components/hero-location-visual";
 import { LocationEntry } from "@/components/location-entry";
 import { Icon, type IconName } from "@/components/icon";
@@ -131,54 +131,14 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <section className="sample-teaser">
+      <section className="sample-teaser home-report-showcase" aria-labelledby="report-preview-heading">
         <div className="teaser-copy">
-          <p className="eyebrow">SEE THE REASONING</p>
-          <h2>
-            See the findings.
-            <br />Know your next move.
-          </h2>
-          <p>
-            See how findings become strengths, risks and a priority action.
-            This fictional example shows the reasoning, not an assessment of
-            a real property.
-          </p>
-          <ButtonLink href="/sample-report">
-            Explore the Sample Report
-          </ButtonLink>
-          <p className="fine-print">
-            Fictional scenario · illustrative evidence
-          </p>
+          <p className="eyebrow">YOUR LOCATION. A CLEARER DECISION.</p>
+          <h2 id="report-preview-heading">See the potential.<br />Know what to check.</h2>
+          <p>Bring local population, access and premises questions into one clear view. Start with a Free Snapshot of your property.</p>
+          <ButtonLink href="/check-location">Check your location</ButtonLink>
         </div>
-        <div className="teaser-report">
-          <div className="teaser-toolbar">
-            <Wordmark />
-            <span className="badge">Sample Report</span>
-          </div>
-          <div className="teaser-title">
-            <span className="icon-disc amber">
-              <Icon name="coffee" />
-            </span>
-            <div>
-              <h3>Coffee Shop · Market Quarter</h3>
-              <p>A fictional daytime-led proposition</p>
-            </div>
-          </div>
-          <div className="teaser-report-grid">
-            <LocationVisual compact />
-            <div className="teaser-reasoning">
-              <span className="badge positive">Opportunity</span>
-              <h3>Repeat weekday visits</h3>
-              <p>Nearby workplaces could support lunchtime visits; buying intent remains untested.</p>
-              <span className="badge caution">Check first</span>
-              <h3>The approach route</h3>
-              <p>Walk the crossing to see whether customers actually pass the door.</p>
-              <Link href="/sample-report" className="text-link">
-                Read the sample reasoning <Icon name="external"/>
-              </Link>
-            </div>
-          </div>
-        </div>
+        <HomeReportPreview />
       </section>
       <section className="how-strip">
         <div>
