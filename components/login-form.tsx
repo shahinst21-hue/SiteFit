@@ -2,9 +2,12 @@
 import { useRef, useState, type FormEvent } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import type { PublicSupabaseConfig } from "@/lib/supabase/config";
-import { emailInput } from "@/lib/auth/flow";
+import { authDestination,emailInput } from "@/lib/auth/flow";
 import { Icon } from "./icon";
-export function LoginForm({ config,google=false }: { config: PublicSupabaseConfig | null;google?:boolean }) {
+export function LoginForm({ config,google=false,next }: { config: PublicSupabaseConfig | null;google?:boolean;next?:string }) {
+  const destination=authDestination(next);
+  const callback=()=>`${window.location.origin}/auth/callback`;
+  const prepareReturn=async()=>{const response=await fetch('/auth/continuation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({next:destination})});if(!response.ok)throw Error('sign_in_continuation_unavailable');};
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -12,8 +15,9 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
   async function googleSignIn(){
     if(!config||state==='sending')return;setState('sending');setError(null);
     try{
+      await prepareReturn();
       const client=createBrowserSupabase(config);
-      const {error:failure}=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${window.location.origin}/auth/callback`,queryParams:{prompt:'select_account'}}});
+      const {error:failure}=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:callback(),queryParams:{prompt:'select_account'}}});
       if(failure)throw Error('unavailable');
     }catch{setError('Google sign-in is unavailable. Please try again.');setState('idle');}
   }
@@ -29,11 +33,12 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
     setError(null);
     setState("sending");
     try {
+      await prepareReturn();
       const client = createBrowserSupabase(config);
       const { error: failure } = await client.auth.signInWithOtp({
         email: checked,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: callback(),
           shouldCreateUser: true,
         },
       });

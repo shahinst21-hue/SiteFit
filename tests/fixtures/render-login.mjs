@@ -6,6 +6,8 @@ import ts from 'typescript';
 import {renderToStaticMarkup} from 'react-dom/server';
 const root=new URL('../../',import.meta.url);
 const mocks={
+ 'server-only':'export {};',
+ 'next/navigation':'export function redirect(path){throw Error("Unexpected fixture redirect: "+path)}',
  'next/link':'import {createElement} from "react";export default function Link(p){return createElement("a",p,p.children)}',
  '@/lib/supabase/server':'export async function verifiedUser(){return {user:null,unavailable:false}}',
  '@/lib/seo':'export function pageMetadata(){return {}}',

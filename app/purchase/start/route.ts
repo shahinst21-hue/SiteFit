@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
-import { randomUUID } from "node:crypto";
 import { verifiedUser } from "@/lib/supabase/server";
 import { purchaseSameOrigin } from "@/lib/payments/config";
 import { boundedJson,paymentReply } from "@/lib/payments/http";
-import { CLAIM_COOKIE,RESUME_COOKIE,claimCookie,newProof,permanentIdentity } from "@/lib/auth/purchase-flow";
-import { prepareClaim,readClaim } from "@/lib/auth/claim-repository";
+import { RESUME_COOKIE,permanentIdentity } from "@/lib/auth/purchase-flow";
+import {prepareGuestPurchase} from "@/lib/auth/guest-purchase";
 import { purchaseUuid as uuid } from "@/lib/auth/purchase-flow";
 import { validateFreeProjection } from "@/lib/analysis/projection";
 import { observeCampaign } from "@/lib/marketing/repository";
@@ -24,15 +23,7 @@ export async function POST(request: Request){
    return paymentReply({url:`/purchase/resume?report=${body.reportId}`});
   }
   if(!user.is_anonymous)return paymentReply({error:"Verify your account before purchasing."},403);
-  const jar=await cookies();const existing=claimCookie(jar.get(CLAIM_COOKIE)?.value);
-  let reusable=existing;
-  if(existing){
-   try{const pending=await readClaim(existing);if(pending.guest_id!==user.id||pending.state!=="pending"||Date.parse(pending.expires_at)<=Date.now())reusable=null;}
-   catch{reusable=null;}
-  }
-  const proof=reusable??{id:randomUUID(),capability:newProof(),browser:newProof()};
-  const claim=await prepareClaim(user.id,body.reportId,proof);
-  jar.set(CLAIM_COOKIE,`${claim.id}.${proof.capability}.${proof.browser}`,{httpOnly:true,secure:request.url.startsWith("https:"),sameSite:"lax",path:"/purchase",maxAge:3600});
+  await prepareGuestPurchase(user,body.reportId,request.url.startsWith('https:'));
   return paymentReply({url:"/purchase/auth"});
  }catch{return paymentReply({error:"A purchase sign-in may already be open. Finish it or return to your Snapshot and retry."},409);}
 }

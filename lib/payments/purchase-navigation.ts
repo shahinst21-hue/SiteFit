@@ -11,7 +11,8 @@ export async function purchaseNavigation(report: string, checkout: boolean, orig
   // Stripe's server-validated Checkout URL includes provider-owned fragment
   // state. Preserve it; only internal purchase anchors represent the circular
   // Snapshot navigation defect. Never allow credentials or a foreign host.
-  if (url.username || url.password || (checkout ? url.origin !== "https://checkout.stripe.com" || !url.pathname.startsWith("/c/pay/") :
+  const login=checkout&&url.origin===origin&&!url.hash&&(url.pathname==='/login'&&url.search==='?next=%2Fpurchase%2Fcontinue'||url.pathname==='/purchase/auth'&&!url.search);
+  if (url.username || url.password || (checkout ? !login&&( url.origin !== "https://checkout.stripe.com" || !url.pathname.startsWith("/c/pay/")) :
     !!url.hash || url.origin !== origin || !["/purchase/auth", "/purchase/resume"].includes(url.pathname))) throw Error("invalid_purchase_redirect");
   return url.href;
 }

@@ -64,3 +64,17 @@
 /* Owner review: unambiguous picker columns, shared rationale modal and locked teaser. */
 .sf-map-record-picker label{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:12px;align-items:center;min-width:0}.sf-map-record-picker label>span{white-space:nowrap}.sf-map-record-picker select{min-width:0;width:100%}.sf-advisor-rationale.sf-evidence-details{margin:4px 0 0;border-top:0}.sf-advisor-rationale>.sf-evidence-trigger{font-size:13px}.sf-mini-dark-tile{filter:grayscale(1) invert(1) brightness(.8) contrast(1.15)}.sf-transport-mini>a{background:#141914}.sf-transport-mini figcaption>span:first-child{width:100%;margin-bottom:3px}.sf-mini-stop-key{background:#cbedff;border-color:#60646c}.sf-risk-preview{position:relative;flex:1;min-height:240px;display:flex;flex-direction:column;overflow:hidden;border-radius:12px}.sf-risk-blur{filter:blur(5px);opacity:.65;pointer-events:none;user-select:none;padding:4px;flex:1}.sf-risk-unlock{position:absolute;left:12px;right:12px;top:40px;display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 12px;border:1px solid #e0e1e6;border-radius:16px;background:#fffffff2;box-shadow:0 8px 24px #0d140015;color:#0d1400;cursor:pointer;min-height:156px;text-align:center}.sf-risk-unlock>span{display:grid;place-items:center;width:44px;height:44px;background:#b2f34c;border-radius:50%}.sf-risk-unlock strong{font-size:15px}.sf-risk-unlock small{display:flex;align-items:center;gap:8px;font-size:12px;color:#60646c}.sf-risk-unlock small svg{width:16px;height:16px}.sf-risk-essential{font-size:11px;line-height:1.5;color:#60646c;margin:12px 0 16px;position:relative;background:white}
 @media(max-width:760px){.sf-map-record-picker label{grid-template-columns:minmax(0,1fr);gap:8px;white-space:normal}.sf-map-record-picker>span{max-width:none}}
+
+/* One report-bound checkout, with readable consent and no duplicate review page. */
+.sf-unlock-dialog{max-width:560px}
+.sf-purchase-consent{display:grid;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line);text-align:left}
+.sf-purchase-consent .sf-buyer-purpose{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;font-weight:600}
+.sf-buyer-purpose select{max-width:65%;min-height:40px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);font-size:16px}
+.sf-purchase-consent .sf-immediate-request{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#f8faf5;font-size:13px;line-height:1.5;cursor:pointer}
+.sf-immediate-request input{flex:0 0 20px;width:20px;height:20px;margin-top:2px;accent-color:#507d13}
+.sf-immediate-request small{display:block;margin-top:4px;font-size:11px;color:var(--muted);line-height:1.5}
+.sf-purchase-consent .sf-purchase-legal,.sf-purchase-consent .sf-purchase-rights{margin:0;font-size:11px;line-height:1.6;color:var(--muted)}
+.sf-purchase-legal a{text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+.sf-purchase-consent>p[role=status]:empty{display:none}
+.sf-purchase-consent .button{min-height:48px;font-size:14px;white-space:normal}
+@media(max-width:520px){.sf-unlock-dialog{padding:20px 18px}.sf-unlock-dialog h2{font-size:25px}.sf-purchase-consent{gap:10px}.sf-unlock-dialog .sf-unlock-context{padding:12px}}

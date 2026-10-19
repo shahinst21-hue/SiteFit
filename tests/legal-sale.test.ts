@@ -5,7 +5,7 @@ import {salePolicy,validateSaleConsent,requireApprovedSale,cancellationReason} f
 import {confirmationPDF} from "../lib/legal/confirmation.ts";
 import {PDFDocument} from "pdf-lib";
 const consent={version:salePolicy.version,buyerKind:"consumer",termsAccepted:true,immediateRequested:true,acknowledgement:true};
-test("owner-approved sale still requires all independent unchecked consent fields",()=>{
+test("owner-approved sale still requires all independent consent fields",()=>{
  assert.doesNotThrow(requireApprovedSale);assert.deepEqual(validateSaleConsent(consent),consent);
  for(const key of ["termsAccepted","immediateRequested","acknowledgement"])assert.throws(()=>validateSaleConsent({...consent,[key]:false}));
  assert.throws(()=>validateSaleConsent({...consent,version:"invented"}));assert.throws(()=>validateSaleConsent({...consent,waiver:true}));
@@ -23,8 +23,8 @@ test("contract PDF requires complete frozen policy text; prepared PDF is not leg
  assert.ok((await PDFDocument.load(bytes)).getPageCount()>0);
 });
 
-test("preserved gated consent form starts unchecked and cannot enable draft supply",()=>{
+test("compact consent preserves one unchecked immediate request and never silently waives rights",()=>{
  const r=spawnSync(process.execPath,["tests/fixtures/render-sale.mjs","consent"],{encoding:"utf8"});assert.equal(r.status,0,r.stderr);
- assert.equal((r.stdout.match(/type="checkbox"/g)||[]).length,3);assert.doesNotMatch(r.stdout,/checked=""/);
- assert.match(r.stdout,/disabled=""/);assert.match(r.stdout,/contractual 14-day cancellation/);assert.match(r.stdout,/not itself remove/);
+ assert.equal((r.stdout.match(/type="checkbox"/g)||[]).length,1);assert.doesNotMatch(r.stdout,/checked=""/);
+ assert.match(r.stdout,/disabled=""/);assert.match(r.stdout,/14-day contractual consumer cancellation/);assert.match(r.stdout,/target="_blank"/);assert.match(r.stdout,/By purchasing/);
 });

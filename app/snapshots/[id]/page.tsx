@@ -1,3 +1,4 @@
+import {PurchaseTerms} from '@/components/purchase-terms';
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -13,7 +14,7 @@ import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner} from '@/lib/proof/trial';
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your Free Snapshot", robots: { index: false, follow: false }, referrer: "no-referrer" };
-export default async function Snapshot({ params }: { params: Promise<{ id: string }> }) {
+export default async function Snapshot({ params,searchParams }: { params: Promise<{ id: string }>;searchParams:Promise<{purchase?:string}> }) {
   const { id } = await params; if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) notFound();
   const { client, user } = await verifiedUser(); if (!client || !user) notFound();
   const { data, error } = await client.rpc("read_sitefit_free", { p_report: id });
@@ -33,5 +34,6 @@ export default async function Snapshot({ params }: { params: Promise<{ id: strin
   const context=await readSnapshotContext(client,id);
   let purchaseAllowed=purchaseAvailableOnHost(process.env,requestHeaders.get('host'));
   if(purchaseAllowed&&controlledTrialConfigured(process.env))try{await assertTrialOwner(user);}catch{purchaseAllowed=false;}
-  return <FreeSnapshot report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} />;
+  const purchase=(await searchParams).purchase==='1';
+  return <FreeSnapshot openPurchase={purchase} purchaseTerms={purchaseAllowed?<PurchaseTerms report={id}/>:undefined} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} />;
 }
