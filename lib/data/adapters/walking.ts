@@ -1,3 +1,4 @@
+import { queryPoint } from "../query-point.ts";
 import "server-only";
 import type { DataAdapter } from "../contracts.ts";
 import { coverage } from "../coverage.ts";
@@ -28,17 +29,17 @@ export function walkingAdapter(options: WalkingOptions = {}): DataAdapter {
     const context = validateContext(request.context), result = initialResult(source, request, execution);
     const eligible = coverage(source.id, context);
     if (!eligible.eligible) { result.outcome = eligible.outcome; result.error = { code: eligible.code, status: null, retryable: false }; return validateResult(result); }
-    const point = context.enrichment?.identity.point, release = context.enrichment?.releases.geographyReleaseId;
+    const point = queryPoint(context), release = context.enrichment?.releases.geographyReleaseId;
     if (!point || !release) throw new SourceError("insufficient_precision");
     const started = performance.now(), walking = validateWalkingCatchments(await retrieve(point, execution.signal), point);
     const validation = validateWalkingTopology(await topology(release, walking, execution.signal), release);
     result.outcome = validation.parts[2].londonCoverageFraction === 1 ? "success" : "partial";
     result.payload = { schemaVersion: 1, kind: "walking_geometry", walking, topology: validation };
-    result.meta.quality.precision = "building"; result.meta.quality.missing = ["routing_version", "provider_observed_credits", "snapped_isoline_origin", "premises_entrance"];
+    result.meta.quality.precision = queryPoint(context)!.precision; result.meta.quality.missing = ["routing_version", "provider_observed_credits", "snapped_isoline_origin", "premises_entrance"];
     result.meta.sourceRetrievedAt = walking.retrievedAt; result.meta.retrievedAt = execution.now().toISOString();
     result.meta.cost = { units: 6, money: "0", currency: "GBP", category: "estimated", priceReference: result.meta.licence.termsUrl };
     result.meta.execution = { durationMs: Math.round(performance.now() - started), attempts: 1, pages: 1, httpStatus: null, providerRequestId: null };
-    result.limitations = ["Modelled walking accessibility from an OS building/address point, not a verified entrance or measured pedestrian footfall.",
+    result.limitations = ["Modelled walking accessibility from the recorded building point or postcode centre, as labelled; not a verified entrance or measured pedestrian footfall.",
       "Provider routing version and snapped isoline origin are unavailable; echoed origin is the request coordinate.",
       "PostGIS checks topology, origin and nesting; this does not independently prove every mapped bridge, barrier or path.",
       "Outside-London coverage is retained in geometry and coverage operands; it is not missing-as-zero.",

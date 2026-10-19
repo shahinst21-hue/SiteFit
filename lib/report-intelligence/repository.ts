@@ -1,3 +1,4 @@
+import { queryPoint } from "../data/query-point.ts";
 import "server-only";
 import {residentialFromEvidence,type ResidentialScore} from "../analysis/residential-catchment.ts";
 import { frameworkClient } from "../data/server-client.ts";
@@ -157,7 +158,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
         sourceBindings: rentalSupplements.flatMap(s => s.sourceBindings),
         fallback: { state: fallback.state, receipt: fallback.receipt, findingDigests: fallback.findings.map(f => f.id), findings: fallback.findings } },
       profiles, identityOmissions,
-      presentation: { residentialCatchment:residentialFromEvidence(evidence,context.businessType,context.enrichment?.identity.point??null,preparedAt), freeReportId, analysisTimestamp: context.analysisTimestamp,
+      presentation: { residentialCatchment:residentialFromEvidence(evidence,context.businessType,queryPoint(context)??null,preparedAt), freeReportId, analysisTimestamp: context.analysisTimestamp,
         property: { id: context.selectedProperty.id, label: context.selectedProperty.formattedAddress,
           precision: context.enrichment?.identity.point?.precision ?? context.selectedProperty.point?.precision ?? "unknown" },
         spatial: { reportId: freeReportId, digest: material.spatial === null ? null : packetDigest(material.spatial), state: material.spatial === null ? "unavailable" : "available" },

@@ -1,3 +1,4 @@
+import { coverage } from "../lib/data/coverage.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { validateEnrichmentInput, enrichmentReleaseKeys, type EnrichmentInput } from "../lib/data/enrichment-input.ts";
@@ -32,4 +33,13 @@ test("qualified identity requires bounded selected components and exact point ba
   }
   assert.throws(() => validateEnrichmentInput({ ...e, identity: { ...e.identity, selectedParts: { ...e.identity.selectedParts, rawResponse: {} } } }));
   assert.throws(() => validateEnrichmentInput({ ...e, releases: { ...e.releases, osReleaseId: null } }));
+});
+
+test("postcode contextual coverage never authorises property or station entrance checks",()=>{
+ const c=validateContext({...context(),schemaVersion:2,enrichment:input()});
+ c.selectedProperty.resolution="provider_verified";c.selectedProperty.point!.source="postio";
+ for(const id of ["geoapify-walking","ons-catchments","overture-catchments"] as const)assert.equal(coverage(id,c).eligible,true);
+ for(const id of ["propertydata-premises","planning-conservation","geoapify-access","tfl-stations"] as const)assert.equal(coverage(id,c).eligible,false);
+ c.selectedProperty.resolution="manual_unverified";assert.equal(coverage("geoapify-walking",c).eligible,false);
+ c.selectedProperty.resolution="provider_verified";c.selectedProperty.point!.source="synthetic";assert.equal(coverage("geoapify-walking",c).eligible,false);
 });

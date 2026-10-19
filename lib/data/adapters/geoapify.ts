@@ -33,7 +33,7 @@ async function boundedJson(url: URL, options: { fetcher?: typeof fetch }, signal
  */
 export function geoapifyWalking(options: { key: string | undefined; fetcher?: typeof fetch; now?: () => Date }) {
   return async (origin: Point, signal?: AbortSignal): Promise<WalkingCatchments> => {
-    if (!validPoint(origin) || origin.precision === "unknown" || origin.precision === "postcode_centroid") throw new SourceError("invalid_request");
+    if (!validPoint(origin) || origin.precision === "unknown" || origin.precision === "postcode_centroid" && origin.source !== "postio") throw new SourceError("invalid_request");
     if (!options.key || options.key.length > 256 || /\s/.test(options.key)) throw new SourceError("configuration_missing");
     const timeout = AbortSignal.timeout(8_000), combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
     if (combined.aborted) throw new SourceError("cancelled");

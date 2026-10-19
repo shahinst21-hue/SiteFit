@@ -1,3 +1,4 @@
+import { queryPoint } from "../data/query-point.ts";
 import type { CollectionContext, StoredSnapshot } from "../data/contracts.ts";
 import { validatePolygonGeometry, type PolygonGeometry } from "../spatial/polygon.ts";
 import { validPoint, type Point } from "../spatial/model.ts";
@@ -32,7 +33,7 @@ export function enrichedSpatialProjection(context: CollectionContext, snapshots:
   const walking = snapshots.find(s => s.result.payload?.kind === "walking_geometry"), matrix = snapshots.find(s => s.result.payload?.kind === "station_walking");
   const w = walking?.result.payload, m = matrix?.result.payload;
   const parent = m?.kind === "station_walking" ? snapshots.find(s => s.id === m.parent.snapshotId)?.result.payload : null;
-  return validateEnrichedSpatialProjection({schemaVersion: 1, origin: context.enrichment?.identity.point ?? null,
+  return validateEnrichedSpatialProjection({schemaVersion: 1, origin: queryPoint(context) ?? null,
     catchments: w?.kind === "walking_geometry" ? w.walking.polygons : [],
     stations: m?.kind === "station_walking" && parent?.kind === "transport_access_points" ? m.matrix.targets.map(t => {
       const station = parent.items.find(s => s.id === t.id);
@@ -41,5 +42,5 @@ export function enrichedSpatialProjection(context: CollectionContext, snapshots:
     }) : [],
     notices: [...new Set([walking,matrix].flatMap(s => s?.result.meta.licence.attribution ?? []))],
     references: [...new Set([walking,matrix].flatMap(s => s?.result.observations.map(o => o.reference) ?? []))],
-    limitations: ["Stored provider-modelled walking geometry; routing vintage is unknown.", "Building and station register points are not confirmed entrances; routes do not establish step-free access.", "No street basemap or measured pedestrian footfall is supplied."]});
+    limitations: ["Stored provider-modelled walking geometry; routing vintage is unknown.", queryPoint(context)?.precision === "postcode_centroid" ? "Walking geometry starts at the postcode centre, not the selected premises or its entrance." : "Building and station register points are not confirmed entrances; routes do not establish step-free access.", "No street basemap or measured pedestrian footfall is supplied."]});
 }

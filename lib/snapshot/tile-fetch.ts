@@ -16,5 +16,9 @@ export async function geoapifyTile(key:string,z:number,x:number,y:number,fetcher
   const bytes=new Uint8Array(size);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
   return bytes.buffer;
  }catch{return null;}})();
- cache.set(id,{until:now+3600000,promise});return promise;
+ cache.set(id,{until:now+3600000,promise});
+ // A transient failure must not blank every reopening for an hour. Coalesce
+ // failed reads briefly; only a new explicit display request can try again.
+ void promise.then(bytes=>{const row=cache.get(id);if(!bytes&&row?.promise===promise)row.until=Date.now()+10000;});
+ return promise;
 }
