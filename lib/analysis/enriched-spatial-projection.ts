@@ -33,7 +33,7 @@ export function enrichedSpatialProjection(context: CollectionContext, snapshots:
   const walking = snapshots.find(s => s.result.payload?.kind === "walking_geometry"), matrix = snapshots.find(s => s.result.payload?.kind === "station_walking");
   const w = walking?.result.payload, m = matrix?.result.payload;
   const parent = m?.kind === "station_walking" ? snapshots.find(s => s.id === m.parent.snapshotId)?.result.payload : null;
-  return validateEnrichedSpatialProjection({schemaVersion: 1, origin: queryPoint(context) ?? null,
+  return validateEnrichedSpatialProjection({schemaVersion: 1, origin: w?.kind === "walking_geometry" ? queryPoint(context) ?? null : context.enrichment?.identity.point ?? null,
     catchments: w?.kind === "walking_geometry" ? w.walking.polygons : [],
     stations: m?.kind === "station_walking" && parent?.kind === "transport_access_points" ? m.matrix.targets.map(t => {
       const station = parent.items.find(s => s.id === t.id);

@@ -95,6 +95,11 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL("../supabase/tests/enriched-input.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/planning-snapshots.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/walking-snapshots.sql", import.meta.url), "utf8"));
+    assert.equal((await db.query<{allowed:boolean}>(`select
+     has_function_privilege('authenticated','source_data.complete_saved_trial_free(uuid,uuid,text,jsonb,jsonb)','EXECUTE')
+     or has_function_privilege('service_role','source_data.complete_saved_trial_free(uuid,uuid,text,jsonb,jsonb)','EXECUTE')
+     or has_table_privilege('authenticated','public.saved_trial_finalisations','SELECT') as allowed`)).rows[0].allowed,false);
+
     await db.exec(await readFile(new URL("../supabase/tests/catchment-snapshots.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/enrichment-releases.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/required-evidence-parent.sql", import.meta.url), "utf8"));
