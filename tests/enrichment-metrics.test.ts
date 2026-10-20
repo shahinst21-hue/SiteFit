@@ -1,3 +1,6 @@
+import {enrichedEvidence} from '../lib/analysis/enriched-evidence.ts';
+import {residentialMaterial} from '../lib/analysis/residential-material.ts';
+import {packetDigest} from '../lib/analysis/canonical.ts';
 import test from "node:test";
 import assert from "node:assert/strict";
 import columns from "../lib/data/census-columns.json" with {type:"json"};
@@ -55,4 +58,33 @@ test("Full profile projection retains frozen Census ordinals and rejects foreign
  assert.throws(()=>storedProfiles(c,{...a,sourceBindings:[{snapshotId:s.id,checksum:"a".repeat(64)}]},[row]),/profile_source_not_admitted/);
  const denied=structuredClone(row);denied.provider_metadata.meta.licence.derived.allowed=false;
  assert.throws(()=>storedProfiles(c,a,[denied]),/profile_source_not_admitted/);
+});
+
+function populationPair(){
+ const f=fixture();
+ const r=initialResult(definitions['geoapify-walking'],{context:f.c,collectionKey:'proof',radiusMetres:500},{now:()=>new Date('2026-10-08T10:00:00Z'),signal:new AbortController().signal,correlationId:randomUUID()});
+ r.outcome='success';r.meta.quality.precision='building';
+ r.payload={schemaVersion:1,kind:'walking_geometry',walking:{schemaVersion:1,provider:'geoapify',mode:'walk',type:'time',origin:f.c.enrichment!.identity.point!,retrievedAt:'2026-10-08T10:00:00Z',routingVersion:null,snappedOrigin:null,credits:{expected:6,observed:null},polygons:([300,600,900] as const).map(seconds=>({seconds,geometry:{type:'Polygon',coordinates:[[[-.11,51.49],[-.09,51.49],[-.09,51.51],[-.11,51.49]]]}}))},topology:{schemaVersion:1,method:'postgis-bng-topology-1',geographyReleaseId:f.c.region.boundaryReleaseId,parts:([300,600,900] as const).map((seconds,i)=>({seconds,areaM2:10,londonAreaM2:10,londonCoverageFraction:1,originCovered:true,outsideNextFraction:i===2?null:0,vertices:4,polygons:1}))}};
+ r.observations=[{id:'walking',path:'walking',recordId:'walking',reference:r.meta.licence.termsUrl,observedAt:null,units:'seconds_metres_geometry',geography:null,sourceClass:'commercial_data',kind:'modelled',limitations:[]}];
+ r.meta.checksum=packetDigest({payload:r.payload,observations:r.observations});
+ const parent:StoredSnapshot={...f.s,id:f.p.parent.snapshotId,result:r};
+ f.p.parent.checksum=r.meta.checksum;
+ const seal=()=>{f.s.result.meta.checksum=packetDigest({payload:f.s.result.payload,observations:f.s.result.observations});};seal();
+ return {...f,parent,seal};
+}
+test('population contract recovers the frozen pair deterministically for all categories, with no writes or dispatches',()=>{
+ const f=populationPair(),at=new Date('2026-10-08T10:01:00Z'),before=JSON.stringify(f);
+ enrichedEvidence(f.c,[f.parent,f.s],at);
+ const first=residentialMaterial(f.c,[f.parent,f.s],at);assert.equal(first.state,'ready');assert.ok(first.score);
+ assert.deepEqual(residentialMaterial(f.c,[f.parent,f.s],at),first);assert.equal(JSON.stringify(f),before);
+ for(const businessType of ['coffee-shop','restaurant','hair-salon','beauty-salon'] as const)assert.equal(residentialMaterial({...f.c,businessType,category:businessType.includes('salon')?'hair-beauty-salon':businessType as 'coffee-shop'|'restaurant'},[f.parent,f.s],at).state,'ready');
+ assert.equal(residentialMaterial(f.c,[f.parent],at).state,'source_unavailable');
+ assert.equal(residentialMaterial(f.c,[f.parent,{...f.s,inputId:randomUUID()}],at).state,'invalid_evidence');
+ f.s.result.meta.checksum='a'.repeat(64);assert.equal(residentialMaterial(f.c,[f.parent,f.s],at).state,'invalid_evidence');
+});
+test('population contract distinguishes real incomplete cells from received source outcomes',()=>{
+ const f=populationPair(),at=new Date('2026-10-08T10:01:00Z');
+ const raw=f.p.ranges[0].statistics[0].operands as {oaOperands:{values:(number|null)[];missingReasons:(string|null)[]}[];censusEstimates:{knownContribution:number;missingAreaM2:number;state:string}[]};
+ raw.oaOperands[0].values[0]=null;raw.oaOperands[0].missingReasons[0]='source_blank';raw.censusEstimates[0]={...raw.censusEstimates[0],knownContribution:0,missingAreaM2:10,state:'partial'};f.seal();
+ const result=residentialMaterial(f.c,[f.parent,f.s],at);assert.equal(result.state,'partial_coverage');assert.equal(result.score,null);
 });
