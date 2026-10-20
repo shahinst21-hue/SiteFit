@@ -90,3 +90,17 @@ test("stored validated sections replay without another AI dispatch and reject ch
   const changed = structuredClone(prepared.packets); changed[0].businessType = "restaurant";
   await assert.rejects(interpretSections(changed, prepared.index, replayProvider, undefined, initial.sections), /stored_section_packet_mismatch/);
 });
+
+test('dense postcode synthesis retains each observation and limitation without duplicating boilerplate beyond the budget',async()=>{
+ const prepared=sectionPackets(context(),[],null,new Date()),{sections}=await interpretSections(prepared.packets,prepared.index,provider());
+ const limitations=Array.from({length:8},(_,i)=>`Source qualification ${i}: `+'Dated native evidence and estimation limitations. '.repeat(3));
+ const evidence=Array.from({length:24},(_,i)=>({sections:['customer-base'],source:{dataset:`Native walking observation ${i}`},value:i,units:'estimated residents',scope:'Modelled walking catchment',effectiveAt:'2021-03-21',quality:{available:true,limitations:[...limitations]},licence:{representationAllowed:true}})) as unknown as Parameters<typeof synthesiseSections>[4];
+ let sends=0;const ai=analysisAIProvider({key:'sk-fixture',fetch:async(_url,init)=>{
+  sends++;assert.ok(Buffer.byteLength(String(init?.body))<30000);
+  const packet=JSON.parse(JSON.parse(String(init?.body)).input[0].content[0].text);
+  assert.equal(packet.observations.length,24);assert.deepEqual(packet.limitationNotes,limitations);
+  for(const observation of packet.observations)assert.deepEqual(observation.limitationIds.map((id:number)=>packet.limitationNotes[id]),limitations);
+  return Response.json({status:'completed',model:'gpt-6.1-sol',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(advisorFixture())}]}],usage:{input_tokens:500,output_tokens:100}});
+ }});
+ await synthesiseSections(sections,ai,undefined,'coffee-shop',evidence);assert.equal(sends,1);
+});
