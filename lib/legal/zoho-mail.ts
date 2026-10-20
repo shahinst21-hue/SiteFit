@@ -21,8 +21,9 @@ export function zohoMailTransport(env:Record<string,string|undefined>=process.en
    const auth=await boundedJson(await fetcher('https://accounts.zoho.eu/oauth/v2/token',{method:'POST',redirect:'error',signal:AbortSignal.timeout(8000),headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',client_id:config.clientId,client_secret:config.clientSecret,refresh_token:config.refreshToken})}));
    if(typeof auth.access_token!=='string'||auth.access_token.length>4096||!/^[A-Za-z0-9._-]+$/.test(auth.access_token))throw Error('provider_auth');
    const authorization=`Zoho-oauthtoken ${auth.access_token}`;
-   const upload=await boundedJson(await fetcher(`${base}/attachments?fileName=sitefit-contract.pdf&isInline=false`,{method:'POST',redirect:'error',signal:AbortSignal.timeout(10000),headers:{Authorization:authorization,'Content-Type':'application/pdf'},body:Buffer.from(pdf)}));
-   const status=upload.status as {code?:number}|undefined;const attachment=upload.data as ZohoAttachment|undefined;
+   const form=new FormData();form.append('attach',new Blob([Buffer.from(pdf)],{type:'application/pdf'}),'sitefit-contract.pdf');
+   const upload=await boundedJson(await fetcher(`${base}/attachments?uploadType=multipart&isInline=false`,{method:'POST',redirect:'error',signal:AbortSignal.timeout(10000),headers:{Authorization:authorization},body:form}));
+   const status=upload.status as {code?:number}|undefined;const attachment=(Array.isArray(upload.data)&&upload.data.length===1?upload.data[0]:undefined) as ZohoAttachment|undefined;
    if(status?.code!==200||!attachment||!['storeName','attachmentName','attachmentPath'].every(k=>typeof attachment[k as keyof ZohoAttachment]==='string'&&attachment[k as keyof ZohoAttachment].length>0&&attachment[k as keyof ZohoAttachment].length<=1000))throw Error('provider_attachment');
    return {async send(to:string,message:{subject:string;html:string}){
     // Caller MUST persist its single dispatch intent before calling this method.
