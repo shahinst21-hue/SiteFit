@@ -1,3 +1,4 @@
+import {mapViewport} from "../lib/report-dashboard/geography.ts";
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {context,result} from './fixtures/data/framework.ts';
@@ -33,4 +34,15 @@ test('foreign/anonymous read denial precedes any privileged context lookup; revi
  const denied={rpc:async()=>({data:null,error:{message:'unavailable'}})} as unknown as SupabaseClient<Database>;
  assert.equal(await readSnapshotContext(denied,'foreign'),null);
  for(const env of [{VERCEL_ENV:'production',NODE_ENV:'production',SITEFIT_SNAPSHOT_REVIEW_ACCESS:'vercel-authenticated',SITEFIT_SNAPSHOT_REVIEW:'fake'},{VERCEL_ENV:'preview',SITEFIT_SNAPSHOT_REVIEW:'fake'}])assert.equal(savedSnapshotReview(env as NodeJS.ProcessEnv),null);
+});
+
+test("responsive viewport edge tiles remain admitted while distant tiles remain forbidden",()=>{
+ const map=storedSnapshotContext(context(),[]).map;
+ map.bounds=[-.11109794,51.40421,-.09301,51.41621];
+ for(const width of [280,390,855,1280])for(const pan of [-.5,0,.5])for(const zoom of [0,1,2,3]){
+  const b=map.bounds,dx=b[2]-b[0],dy=b[3]-b[1],cx=(b[0]+b[2])/2+pan*dx,cy=(b[1]+b[3])/2;
+  const view=mapViewport([cx-dx/2**(zoom+1),cy-dy/2**(zoom+1),cx+dx/2**(zoom+1),cy+dy/2**(zoom+1)],width,320);
+  for(const tile of view.tiles){const match=tile.url.match(/(\d+)\/(\d+)\/(\d+)\.png$/)!;assert.ok(admittedTile(map,Number(match[1]),Number(match[2]),Number(match[3])),width+"/"+pan+"/"+zoom+"/"+tile.url);}
+ }
+ assert.equal(admittedTile(map,14,0,0),false);
 });

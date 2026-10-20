@@ -1,3 +1,4 @@
+import {enrichedSpatialProjection} from "../lib/analysis/enriched-spatial-projection.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { enrichedEvidence } from "../lib/analysis/enriched-evidence.ts";
@@ -109,7 +110,7 @@ test("postcode-centre walking and inventory retain source precision without inve
     groups:[{taxonomy:{primary:"coffee_shop",hierarchy:["coffee_shop"],alternates:null},operatingStatus:null,count:2}]})})) as unknown as typeof enrichmentRepository;
   const places=stored(await catchmentAdapter("overture-catchments",parent,repository).retrieve(request,execution));
   const derived=enrichedEvidence(c,[parent,places],new Date(date)).evidence.filter(e=>e.kind==="derived");
-  assert.equal(derived.length,3); assert.equal(walked.meta.quality.precision,"postcode_centroid"); assert.ok(derived.every(e=>e.geography.precision==="postcode_centroid"));
+  assert.equal(derived.length,3); assert.equal(walked.meta.quality.precision,"postcode_centroid"); assert.equal(enrichedSpatialProjection(c,[parent,places]).origin?.precision,"postcode_centroid"); assert.equal(enrichedSpatialProjection(c,[]).origin,null); assert.ok(derived.every(e=>e.geography.precision==="postcode_centroid"));
   for(const [i,e] of derived.entries()) {
     assert.deepEqual(e.lineage.operandPaths,[`ranges/${i}/inventory/groups`]);
     assert.equal(e.value,2); assert.equal(e.quality.partial,true);
