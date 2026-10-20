@@ -49,6 +49,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     assert.deepEqual(review.snapshot,launchPolicySnapshot());
     assert.equal((await db.query<{count:number}>('select count(*)::int as count from public.sale_policies where approved')).rows[0].count,1);
     assert.equal((await db.query<{disabled:boolean}>("select not exists(select 1 from public.commercial_release_control where mode<>'test' or checkout_enabled or execution_enabled) as disabled")).rows[0].disabled,true);
+    await db.exec(await readFile(new URL('../supabase/tests/automated-contract-email.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/controlled-proof.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/proof-successor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-continuation.sql',import.meta.url),'utf8'));

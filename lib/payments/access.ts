@@ -1,3 +1,4 @@
+import {frameworkClient} from '../data/server-client.ts';
 import "server-only";
 import {reconcileCheckoutPayment,type CheckoutObservation} from './webhook.ts';
 import {stripeClient,verifiedStripeAccount} from './stripe.ts';
@@ -41,5 +42,12 @@ export async function ownedPurchase(id:string,reconcile=false){
   fulfilment=parseProgress(row);
  }catch{/* Payment confirmation remains independently readable during a queue outage. */}
  let confirmationAvailable=false,confirmationDelivered:boolean|null=null;try{const sale=await readSale(user.id,payment.id);confirmationAvailable=!!payment.verified_at&&!!sale&&typeof sale==="object"&&"policy" in sale&&!!sale.policy&&typeof sale.policy==="object"&&"termsText" in sale.policy;if(sale&&typeof sale==='object'&&'confirmationDelivered' in sale&&typeof sale.confirmationDelivered==='boolean')confirmationDelivered=sale.confirmationDelivered;}catch{/* Existing payment/history reads remain available. */}
- return {paymentState,confirmationAvailable,confirmationDelivered,id:payment.id,report,status:payment.status,access:payment.access_state,test:payment.test_mode===true,reportGenerated:fulfilment?.state==='ready',fulfilment};
+ let confirmationEmailState:string|null=null;
+ if(process.env.SITEFIT_ZOHO_EMAIL_ENABLED==='1')try{
+  const c=frameworkClient() as unknown as {rpc(name:string,args:Record<string,string>):PromiseLike<{data:unknown;error:unknown}>};
+  const delivery=await c.rpc('read_sitefit_contract_email',{p_owner:user.id,p_payment:payment.id});
+  const state=(delivery.data as {state?:unknown}|null)?.state;
+  if(!delivery.error&&typeof state==='string'&&['queued','preparing','intent','sent','uncertain','failed'].includes(state))confirmationEmailState=state;
+ }catch{/* Payment, saved confirmation and historical manual receipts remain readable. */}
+ return {paymentState,confirmationAvailable,confirmationDelivered,confirmationEmailState,id:payment.id,report,status:payment.status,access:payment.access_state,test:payment.test_mode===true,reportGenerated:fulfilment?.state==='ready',fulfilment};
 }

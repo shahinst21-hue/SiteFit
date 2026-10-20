@@ -7,7 +7,7 @@ import {PurchaseRequest} from './purchase-request';
 import {GenerationProgress} from './generation-progress';
 import {fullView} from '../lib/generation-progress';
 import {parseProgress,type Progress} from '../lib/fulfilment/policy';
-type State={paymentState?:CheckoutObservation;test?:boolean;id:string;report:string;status:string;access:string;confirmationAvailable?:boolean;confirmationDelivered?:boolean|null;fulfilment?:Progress|null};
+type State={paymentState?:CheckoutObservation;test?:boolean;id:string;report:string;status:string;access:string;confirmationAvailable?:boolean;confirmationDelivered?:boolean|null;confirmationEmailState?:string|null;fulfilment?:Progress|null};
 export function PurchaseStatus({initial,cancelled}:{initial:State;cancelled:boolean}){
  return <PurchaseStatusSession key={initial.id} initial={initial} cancelled={cancelled}/>;
 }
@@ -33,6 +33,7 @@ function PurchaseStatusSession({initial,cancelled}:{initial:State;cancelled:bool
     const paymentState='paymentState' in value&&['unpaid','expired','failed','paid','pending','unknown'].includes(String(value.paymentState))?value.paymentState as CheckoutObservation:'unknown';
     const next:State={...initial,id:value.id,paymentState,status:String(value.status),access:String(value.access),fulfilment,
       confirmationAvailable:'confirmationAvailable' in value&&typeof value.confirmationAvailable==='boolean'?value.confirmationAvailable:initial.confirmationAvailable,
+      confirmationEmailState:'confirmationEmailState' in value&&typeof value.confirmationEmailState==='string'?value.confirmationEmailState:null,
       confirmationDelivered:'confirmationDelivered' in value&&typeof value.confirmationDelivered==='boolean'?value.confirmationDelivered:null};
     if(!paid&&next.status==='succeeded'&&next.access==='active'){paid=true;clearTimeout(deadline);deadline=setTimeout(()=>{controller.abort();clearTimeout(timer);setStale(true);},300000);}
     setState(next);setStale(false);setLastCompleted(n=>Math.max(n,Math.min(4,fullView(next).completed)));

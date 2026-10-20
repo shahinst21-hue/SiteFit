@@ -1,3 +1,4 @@
+import {deliverOneConfirmation} from '@/lib/legal/automatic-confirmation';
 import { runnerEnabled } from "@/lib/fulfilment/policy";
 import { commercialExecution } from "@/lib/release/policy";
 import { runnerAuthorised } from "@/lib/fulfilment/auth";
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
       if (bytes > 2) { await reader.cancel(); return new Response(null, { status: 400 }); } chunks.push(part.value); }
     if (bytes && Buffer.concat(chunks).toString("utf8") !== "{}") return new Response(null, { status: 400 });
   }
+  await deliverOneConfirmation();
   const result = await fulfilOne({ paidExecutionApproved: commercialExecution(process.env,new URL(request.url).hostname)||controlledTrialConfigured(process.env,new URL(request.url).hostname) });
   return Response.json({ state: result }, { headers: { "Cache-Control": "private, no-store", "X-Robots-Tag": "noindex, nofollow" } });
 }
