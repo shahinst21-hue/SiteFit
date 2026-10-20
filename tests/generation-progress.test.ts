@@ -37,3 +37,10 @@ test('Full Report milestones preserve parallelism, pauses, confirmation and Read
  assert.equal(parseProgress({state:'ready',reportId:null}),null);assert.equal(progressPercent(fullView({...p,fulfilment:parseProgress({state:'ready',reportId:id})})),100);
  assert.equal(fullView({status:'refunded',access:'revoked',fulfilment:{state:'ready',reportId:id}}).state,'paused');
 });
+
+test('automatic confirmation distinguishes sent, preparing and held unknown outcomes without manual waiting',()=>{
+ const p={status:'succeeded',access:'active',confirmationDelivered:false,fulfilment:{state:'queued',reportId:null}};
+ assert.equal(fullView({...p,confirmationEmailState:'preparing'}).title,'Preparing your purchase confirmation');
+ assert.equal(fullView({...p,confirmationEmailState:'sent'}).title,'Your report is in the queue');
+ for(const state of ['uncertain','failed']){const view=fullView({...p,confirmationEmailState:state});assert.equal(view.state,'paused');assert.match(view.detail,/Do not pay again/);}
+});
