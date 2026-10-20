@@ -54,3 +54,18 @@ test("versioned boundary residual remains explicit and partial without redistrib
   assert.throws(() => catchmentAllocationOperands({...value, allocationCoveredAreaM2: 19}, releases, 2));
   assert.throws(() => catchmentAllocationOperands({...value, schemaVersion: 1, methodVersion: "area-uniform-bng1"}, releases, 2));
 });
+
+
+test("sub-decimetre BNG overlay noise does not suppress complete population, while material gaps and missing cells do",()=>{
+ const base=fixture();
+ for(const [covered,residual,expected] of [[242444.410431723,.0112428472784813,'available'],[954102.285225519,.00517529656644911,'available'],[2256188.87049143,.00314183952286839,'available'],[242444.410431723,.2,'partial'],[20,.001,'partial']] as const){
+  const area=covered+residual;
+  const v={...structuredClone(base),schemaVersion:2,methodVersion:'area-uniform-bng2',catchmentAreaM2:covered,londonCoveredAreaM2:covered,allocationCoveredAreaM2:area,boundaryResidualAreaM2:residual};
+  v.oaOperands[0].intersectionAreaM2=area/2;v.oaOperands[0].nativeAreaM2=area/2;
+  v.oaOperands[1].intersectionAreaM2=area/2;v.oaOperands[1].nativeAreaM2=area;
+  v.censusEstimates[1].missingAreaM2=area/2;
+  const result=catchmentAllocationOperands(v,releases,2);
+  assert.equal(result.metrics[0].state,expected);assert.equal(result.metrics[1].state,'partial');
+  assert.equal(result.metrics[0].knownContribution,20);assert.equal(result.boundaryResidualAreaM2,residual);
+ }
+});

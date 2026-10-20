@@ -1,6 +1,7 @@
-import { queryPoint } from "../data/query-point.ts";
 import "server-only";
 import {residentialFromEvidence} from "./residential-catchment.ts";
+import {queryPoint} from "../data/query-point.ts";
+import {residentialMaterial} from "./residential-material.ts";
 import type { CollectionContext, StoredSnapshot } from "../data/contracts.ts";
 import type { Evidence } from "./evidence.ts";
 import { enrichedEvidence } from "./enriched-evidence.ts";
@@ -21,7 +22,9 @@ export function enrichedProjection(context: CollectionContext, sections: Paramet
     d.why.sources = sources.map(e => ({provider: e.source.provider, dataset: e.source.dataset,
       url: /^https:\/\//.test(e.source.reference) ? e.source.reference : null, retrievedAt: e.retrievedAt, notices: e.licence.notices}));
   }
-  return validateFreeProjection({...projection, schemaVersion: 3, residentialCatchment:residentialFromEvidence(evidence,context.businessType,queryPoint(context)??null,new Date(generatedAt)),
+  const score=residentialFromEvidence(evidence,context.businessType,queryPoint(context),new Date(generatedAt));
+  const populationState=score?"ready":residentialMaterial(context,snapshots,new Date(generatedAt)).state;
+  return validateFreeProjection({...projection, schemaVersion: 3, residentialCatchment:score, residentialState:populationState,
     property: {...projection.property, precision: context.enrichment?.identity.point?.precision ?? projection.property.precision},
     spatial: enrichedSpatialProjection(context,snapshots)});
 }

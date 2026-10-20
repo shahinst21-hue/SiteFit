@@ -9,6 +9,7 @@ import { purchaseAvailableOnHost } from "@/lib/payments/config";
 import {measurementEnabled} from '@/lib/marketing/campaign';
 import {validateSnapshotAdvice,validateAdvisorResearch} from '@/lib/analysis/advisor';
 import type {Json} from '@/lib/supabase/database.types';
+import {readResidential} from '@/lib/snapshot/read-residential';
 import {readSnapshotContext} from '@/lib/snapshot/read-context';
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner} from '@/lib/proof/trial';
@@ -29,7 +30,9 @@ export default async function Snapshot({ params,searchParams }: { params: Promis
   if(!advice.error&&advice.data){
     try{const edition=advice.data as {advice:unknown;research:unknown};report={...report,earlyView:{...report.earlyView,advisor:validateSnapshotAdvice(edition.advice)}};research=validateAdvisorResearch(edition.research);}catch{/* Original immutable report remains readable. */}
   }
-  // Stored projection only: no source, metric, comparison or AI engine import on the read path.
+  // A withheld population display may be reconstructed from its frozen sources.
+  // This read never dispatches providers/AI or mutates the historical report.
+  report=await readResidential(client,id,report);
   const requestHeaders=await headers();
   const context=await readSnapshotContext(client,id);
   let purchaseAllowed=purchaseAvailableOnHost(process.env,requestHeaders.get('host'));

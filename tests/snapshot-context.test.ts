@@ -1,3 +1,5 @@
+import {readResidential} from '../lib/snapshot/read-residential.ts';
+import type {FreeProjection} from '../lib/analysis/projection.ts';
 import {mapViewport} from "../lib/report-dashboard/geography.ts";
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -45,4 +47,10 @@ test("responsive viewport edge tiles remain admitted while distant tiles remain 
   for(const tile of view.tiles){const match=tile.url.match(/(\d+)\/(\d+)\/(\d+)\.png$/)!;assert.ok(admittedTile(map,Number(match[1]),Number(match[2]),Number(match[3])),width+"/"+pan+"/"+zoom+"/"+tile.url);}
  }
  assert.equal(admittedTile(map,14,0,0),false);
+});
+
+test('population recovery rejects unowned reports before any privileged read or external execution',async()=>{
+ let calls=0;const denied={rpc:()=>({abortSignal:async()=>{calls++;return {data:null,error:{message:'denied'}};}})} as unknown as SupabaseClient<Database>;
+ const projection={schemaVersion:3,analysisId:context().analysisId,residentialCatchment:null} as FreeProjection;
+ assert.equal(await readResidential(denied,'foreign',projection),projection);assert.equal(calls,1);
 });

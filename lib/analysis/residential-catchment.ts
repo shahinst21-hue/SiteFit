@@ -31,3 +31,18 @@ export function validateResidentialScore(value:unknown):ResidentialScore{
  return expected;
 }
 export function residentialInterpretation(score:ResidentialScore){return `${score.rating} residential base within the modelled walking area. Test trading hours, competition and visitor activity before committing.`;}
+
+export const residentialStates = ['ready','partial_coverage','source_unavailable','unsupported','invalid_evidence','read_unavailable'] as const;
+export type ResidentialState = typeof residentialStates[number];
+export const residentialMessages: Record<ResidentialState,string> = {
+ ready: 'Population estimates are available for all three walking areas.',
+ partial_coverage: 'Some walking areas have incomplete Census coverage. A full catchment score cannot be established.',
+ source_unavailable: 'The walking or population source could not be completed for this saved check. Available evidence is retained; no population is invented.',
+ unsupported: 'A supported London location and verified map position are needed for walking population estimates.',
+ invalid_evidence: 'The saved walking and population evidence could not be validated together. No score is published.',
+ read_unavailable: 'Saved population data could not be opened just now. Reload this Snapshot to check again; this does not start a new analysis.',
+};
+export function validateResidentialState(value:unknown):ResidentialState {
+ if(!residentialStates.includes(value as ResidentialState))throw Error('invalid_residential_state');
+ return value as ResidentialState;
+}

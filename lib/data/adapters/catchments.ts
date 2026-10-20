@@ -1,3 +1,4 @@
+import { nativeRead } from "../native-read.ts";
 import { queryPoint } from "../query-point.ts";
 import "server-only";
 import columns from "../census-columns.json" with { type: "json" };
@@ -35,7 +36,7 @@ export function catchmentAdapter(id: "ons-catchments" | "overture-catchments", s
         for (let index = 0; index < catchmentDatasets.length; index++) {
           const dataset = catchmentDatasets[index], releaseId = releases[catchmentReleaseKeys[index]];
           try {
-            const measured = await repository({ ...releases, censusReleaseId: releaseId }).catchment(polygon.geometry, columns[dataset].columns.length, execution.signal);
+            const measured = await nativeRead(() => repository({ ...releases, censusReleaseId: releaseId }).catchment(polygon.geometry, columns[dataset].columns.length, execution.signal), execution.signal);
             statistics.push({ dataset, releaseId, referencePeriod: "2021-03-21", outcome: "success", operands: measured.operands, error: null }); successes++;
           } catch (error) { statistics.push({ dataset, releaseId, referencePeriod: "2021-03-21", outcome: "unavailable", operands: null, error: safeError(error) }); }
         }

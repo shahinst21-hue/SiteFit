@@ -1,0 +1,11 @@
+# Population contract and saved display recovery — 20 October 2026
+
+Implemented: a shared deterministic population result has ready, partial_coverage, source_unavailable, unsupported, invalid_evidence and read_unavailable states. New Snapshot projections retain that state. A transient saved-data read has a safe reload link, without starting another analysis. Actual missing source cells, material allocation gaps, foreign lineage and unsupported origins continue to withhold scores.
+
+Root cause reproduced on HA4 8HR: all sources succeeded, but the 5-minute BNG intersection/union residual was 0.011242847 m² in 242,444.410432 m². The old generic binary64 comparison classified this complete estimate as partial. Overlay completeness now requires BOTH an absolute residual <=0.1 m² and relative residual <=1e-7 (minimum arithmetic floor 1e-7 m²). This is separate from strict operand/value reproduction, which is unchanged. Raw signed residuals, native populations and missingness are retained. No population is redistributed, gap filled, score formula changed or London coverage expanded.
+
+Idempotent private Census reads may retry once for timeout/provider_unavailable while the existing caller deadline remains live. Invalid data, cancellation, paid provider calls, AI and database writes are not retried by this helper. Collection remains bounded by the existing coordinator and immutable source replay.
+
+For a previously withheld Ready display, the server reauthorises the exact report through read_sitefit_free, then reads only the two frozen source IDs from its provenance and exact frozen input. Existing source validators recheck checksums, origin, releases, parent/collection lineage, native operands and licensing. A deterministic v1.0 read projection may then display the score. Historical report, evidence, recommendation, payments, reservations and sources are not rewritten; no provider, AI or background financial operation is executed. Stable snapshot/path IDs identify this read materialisation, not new persisted AI evidence rows. Existing non-null scores replay unchanged. Absent historical walking geometry is not reconstructed from a whole-area population.
+
+Validation and Production results are recorded after execution in the protected delivery record. This document does not claim unrun live tests passed.
