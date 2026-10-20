@@ -24,3 +24,15 @@ test("cross-owner read failure cannot fall through to privileged preparation",as
  const client={rpc(){return Promise.resolve({data:null,error:{message:"private_details_withheld"}});},from(){throw Error("Unowned context accessed");}};
  await assert.rejects(assessmentRepository(ids.analysis,client as unknown as Parameters<typeof assessmentRepository>[1]).prepare(ids.analysis,ids.input),/^Error: permission_denied$/);
 });
+
+test("unavailable capability keeps its exact source reference without inventing a payload checksum",()=>{
+ const b=fixture();
+ const reference={id:ids.input,snapshotId:ids.property,digest:"a".repeat(64),source:{dataset:"unavailable",provider:"tfl",reference:"https://tfl.gov.uk/",releaseId:null,adapterVersion:"1"},kind:"capability" as const,scope:"Source unavailable",value:null,units:null,effectiveAt:null,statistical:null,parents:[],licence:{policyId:"tfl",version:1,expiresAt:null}};
+ b.evidence=[reference];
+ b.decision.admissions=[{evidenceId:reference.id,disposition:"blocked",axes:{identity:"limited",permission:"adequate",date:"limited",measurement:"fails",parents:"adequate",conflict:"adequate"},reasons:["Source unavailable"]}];
+ assert.doesNotThrow(()=>validateAssessment(b));
+ assert.equal(validateAssessment(b).evidence[0]!.snapshotId,ids.property);
+ for(const changed of [{kind:"measured"},{value:1},{effectiveAt:date},{parents:[ids.analysis]},{snapshotId:"foreign"}])
+  assert.throws(()=>validateAssessment({...b,evidence:[{...reference,...changed}]}),/foreign_assessment_evidence/);
+ assert.throws(()=>validateAssessment({...b,evidence:[reference,reference]}),/foreign_assessment_evidence/);
+});
