@@ -65,7 +65,8 @@ test('client accepts the verified f/pay Stripe format and keeps provider fragmen
 test('bounded Checkout recovery errors explain the saved state without forwarding provider details',async()=>{
  const fetcher=(code:string)=>async()=>new Response(JSON.stringify({error:'private provider details must not surface',code}),{status:409});
  await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('checkout_reconciliation_required') as typeof fetch),/previous payment attempt needs verification/);
- await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_budget_exhausted') as typeof fetch),/Full Report purchase allocated/);
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_budget_exhausted') as typeof fetch),/AI test budget has no capacity/);
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_slots_committed') as typeof fetch),/All three controlled Full Report purchases/);
  try{await purchaseNavigation(report,true,origin,fetcher('secret-provider-code') as typeof fetch);assert.fail();}catch(e){assert.ok(e instanceof Error);assert.doesNotMatch(e.message,/private provider|secret-provider/);}
 });
 
