@@ -48,7 +48,12 @@ export async function synthesiseSections(sections: readonly ValidatedSection[], 
   // every statement, its meaning and evidence links, plus all qualified observations.
   // This also avoids wasting the bounded request budget on repeated metadata.
   const statement=(p:ValidatedSection['conclusion'])=>({text:p.text,meaning:p.meaning,evidenceIds:p.evidenceIds});
-  const packet = {version:advisorVersion,businessType,observations:evidence.filter(e=>e.quality.available&&e.licence.representationAllowed).map(e=>({sectionIds:e.sections,dataset:e.source.dataset,value:e.value,units:e.units,scope:e.scope,effectiveAt:e.effectiveAt,limitations:e.quality.limitations})),sections:sections.map(section=>({id:section.section,
+  // Intern repeated limitations once, retaining every qualification and its
+  // per-observation binding. Source-presence placeholders are not findings.
+  const observations=evidence.filter(e=>e.quality.available&&e.licence.representationAllowed&&
+    !(typeof e.value==='string'&&e.value.startsWith('Retained ')&&e.value.endsWith(' observations')));
+  const limitationNotes=[...new Set(observations.flatMap(e=>e.quality.limitations))];
+  const packet = {version:advisorVersion,businessType,limitationNotes,observations:observations.map(e=>({sectionIds:e.sections,dataset:e.source.dataset,value:e.value,units:e.units,scope:e.scope,effectiveAt:e.effectiveAt,limitationIds:e.quality.limitations.map(note=>limitationNotes.indexOf(note))})),sections:sections.map(section=>({id:section.section,
     conclusion:statement(section.conclusion),support:section.support.map(statement),opposition:section.opposition.map(statement),unknowns:section.unknowns.map(statement),
     alternatives:section.alternatives.map(statement),implication:statement(section.implication),question:statement(section.question),strength:section.strength}))};
   // One synthesis dispatch. Invalid or ambiguous output is never an automatic paid retry.
