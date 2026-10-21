@@ -1,0 +1,32 @@
+begin;
+do $$declare o uuid:=gen_random_uuid();t uuid;p uuid;n uuid:=gen_random_uuid();c uuid;tok uuid;v jsonb;a uuid;i uuid;w uuid;q uuid;j public.competition_collections;page1 jsonb;page2 jsonb;r jsonb;d uuid;begin
+ if has_table_privilege('authenticated','public.competition_pages','SELECT') or has_table_privilege('service_role','public.competition_collections','UPDATE') or has_function_privilege('authenticated','public.reserve_sitefit_competition_page(uuid,uuid,uuid,integer)','EXECUTE') or has_function_privilege('service_role','public.reserve_sitefit_proof_dispatch_pre_competition(uuid,uuid,text,text,text,text,bigint)','EXECUTE') then raise exception 'competition_private_boundary';end if;
+ insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(o,'shahinst21@gmail.com',now(),false);
+ insert into public.controlled_trials(owner_id,expires_at,total_limit_micros,policy_version,tariff_verified,tariff_digest,input_rate,output_rate) values(o,now()+interval '1 hour',4250000,'sitefit-sale-v1-20261016-review',true,repeat('a',64),2.5,10) returning id into t;
+ update public.controlled_trials set enabled=true,execution_enabled=true where id=t;
+ insert into public.properties(formatted_address,postcode,post_town,address_resolution_state,address_provider,provider_address_id,udprn,resolved_at) values('Synthetic Competition fixture','E8 4PH','London','provider_verified','postio','89999999','89999999',now()) returning id into p;
+ v:=public.claim_sitefit_trial(t,o,'snapshot',p,n,'coffee-shop',null);c:=(v->>'id')::uuid;tok:=(v->>'token')::uuid;
+ insert into public.analyses(owner_id,property_id,business_type,business_category,status,submission_nonce,submission_sha256) values(o,p,'coffee-shop','coffee-shop','free_ready',n,repeat('a',64)) returning id into a;
+ insert into public.analysis_inputs(analysis_id,version,user_supplied) values(a,1,'{}') returning id into i;
+ -- Private quota harness: minimal FK anchors, not asserted real source/geometry evidence.
+ insert into public.data_snapshots(analysis_id,source,retrieved_at,availability) values(a,'synthetic-competition-quota',now(),'unavailable') returning id into w;
+ insert into public.data_snapshots(analysis_id,source,retrieved_at,availability) values(a,'synthetic-competition-population',now(),'unavailable') returning id into q;
+ insert into public.competition_collections(owner_id,analysis_id,input_id,walking_id,population_id,walking_checksum,category) values(o,a,i,w,q,repeat('a',64),'coffee-shop') returning * into j;
+ begin perform public.reserve_sitefit_competition_page(o,j.id,gen_random_uuid(),0);raise exception 'foreign_token_admitted';exception when others then if sqlerrm='foreign_token_admitted' then raise;end if;end;
+ page1:=public.reserve_sitefit_competition_page(o,j.id,j.token,0);
+ begin perform public.reserve_sitefit_competition_page(o,j.id,j.token,0);raise exception 'intent_repeated';exception when others then if sqlerrm='intent_repeated' then raise;end if;end;
+ perform public.settle_sitefit_competition_page(o,j.id,j.token,(page1->>'id')::uuid,'received',jsonb_build_object('size',500,'items',(select jsonb_agg(jsonb_build_object('synthetic',x)) from generate_series(1,500) x)),null);
+ if public.reserve_sitefit_competition_page(o,j.id,j.token,0)->>'id' is distinct from page1->>'id' then raise exception 'cached_page_not_reused';end if;
+ page2:=public.reserve_sitefit_competition_page(o,j.id,j.token,500);
+ perform public.settle_sitefit_competition_page(o,j.id,j.token,(page2->>'id')::uuid,'ambiguous',null,'send_unconfirmed');
+ if (select state from public.controlled_proof where id=c)<>'snapshot_running' then raise exception 'optional_failure_blocked_report';end if;
+ begin perform public.reserve_sitefit_proof_dispatch(c,tok,'snapshot',repeat('d',64),'api.geoapify.com',repeat('d',64),0);raise exception 'existing_provider_cap_bypassed';exception when others then if sqlerrm='existing_provider_cap_bypassed' then raise;end if;end;
+ d:=public.reserve_sitefit_proof_dispatch(c,tok,'snapshot',repeat('b',64),'ai',repeat('b',64),60000);perform public.settle_sitefit_proof_dispatch(c,tok,d,'received',repeat('e',64));
+ if (select sum(reserved_credits) from public.competition_pages where collection_id=j.id)<>50 then raise exception 'optional_hold_lost';end if;
+ r:=jsonb_build_object('version','competition_headroom_v1','category','coffee-shop','state','collection_unconfirmed','score',null,'provenance',jsonb_build_object('collectionId',j.id,'walkingSnapshotId',w,'walkingChecksum',repeat('a',64),'reservedCredits',50,'pages',1));
+ perform public.finish_sitefit_competition(o,j.id,j.token,r);
+ perform public.finish_sitefit_competition(o,j.id,j.token,r);
+ insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,free_projection) values(a,i,1,2,'free','ready',jsonb_build_object('schemaVersion',2,'analysisId',a,'competition',r));
+ begin update public.competition_collections set result='{}' where id=j.id;raise exception 'finished_collection_changed';exception when others then if sqlerrm='finished_collection_changed' then raise;end if;end;
+end$$;
+rollback;

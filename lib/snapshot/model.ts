@@ -17,7 +17,7 @@ export type ScoreMethod = {
 };
 export type SnapshotScore = { status: DataState; value: number | null; label: string; explanation: string; method: ScoreMethod | null };
 export type SnapshotFactor = {
-  residentialCatchment?:FreeProjection["residentialCatchment"]; residentialState?:FreeProjection["residentialState"];
+  competition?:FreeProjection["competition"]; residentialCatchment?:FreeProjection["residentialCatchment"]; residentialState?:FreeProjection["residentialState"];
   id: FactorId; title: string; status: DataState; meaning: ResultMeaning; quality: EvidenceQuality;
   finding: string | null; reason: string | null; question: string | null; metrics: SnapshotMetric[];
   score: number | null; details: FreeProjection["dimensions"][number]["why"] | null;
@@ -93,7 +93,7 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
           status: "available", evidenceQuality: qualities[d.strength], sourceType: "official", description: "Whole Census output area; not a walking catchment or current customer count." });
       }
       if (!metrics.length) metrics.push(emptyMetric(`${d.id}-gap`, d.why.unknowns[0] ?? "Verified local evidence"));
-      return { ...(d.id==="customer-base"&&report.residentialCatchment!==undefined?{residentialCatchment:report.residentialCatchment,residentialState:report.residentialState}:{}), id: d.id, title: factorTitles[d.id], status: "available", finding: d.conclusion, reason: d.reason, question: d.why.unknowns[0] ?? d.question,
+      return { ...(d.id==="market-position"&&report.competition?{competition:report.competition}:{}), ...(d.id==="customer-base"&&report.residentialCatchment!==undefined?{residentialCatchment:report.residentialCatchment,residentialState:report.residentialState}:{}), id: d.id, title: factorTitles[d.id], status: "available", finding: d.conclusion, reason: d.reason, question: d.why.unknowns[0] ?? d.question,
         quality: qualities[d.strength], meaning: d.meaning as ResultMeaning, metrics, score: d.score, details: d.why, implication: d.implication, scoreNote: d.scoreNote };
     }),
     financialPreview: { status: "locked", inputs: { annualRent: null, averageSpend: null, tradingDays: null } },

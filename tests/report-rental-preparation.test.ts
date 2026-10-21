@@ -1,3 +1,5 @@
+import {competitionFixture} from './fixtures/competition.ts';
+import {competitionUnavailable} from '../lib/competition/model.ts';
 import test from "node:test";
 import assert from "node:assert/strict";
 import { context, ids, date } from "./fixtures/data/framework.ts";
@@ -76,13 +78,14 @@ test("coffee keeps independently bound restaurant and retail cohorts; other conc
 });
 
 test("actual Full preparation includes qualified rental cohorts and source digests before reservation",async()=>{
+  for(const competition of [competitionFixture(),competitionUnavailable('coffee-shop','provider_unavailable','Temporary provider failure.')]){
   const {c,row,assessment}=await fixture();let preparation:Record<string,unknown>|null=null;
   const calls:string[]=[];
   const client={rpc:async(name:string,args:Record<string,string>)=>{
     calls.push(name);
     if(name==='find_sitefit_full')return {data:null,error:null};
     if(name==='read_sitefit_full_material')return {data:{context:c,assessment,assessmentId:ids.property,assessmentDigest:packetDigest(assessment),
-      databaseBytes:300000000,reservedMicros:0,evidence:[],discovery:null,spatial:null,operatorSnapshots:[],profileSnapshots:[],rentalSnapshots:[row]},error:null};
+      competition,databaseBytes:300000000,reservedMicros:0,evidence:[],discovery:null,spatial:null,operatorSnapshots:[],profileSnapshots:[],rentalSnapshots:[row]},error:null};
     if(name==='start_sitefit_full'){
       preparation=JSON.parse(args.p_preparation);
       return {data:{id:ids.property,analysisId:c.analysisId,inputId:c.inputId,status:'draft',revision:0,
@@ -95,6 +98,7 @@ test("actual Full preparation includes qualified rental cohorts and source diges
   assert.equal(edition.preparation.rentalPreparation?.fallback.state,'structured_present');
   assert.equal(edition.preparation.rentalPreparation?.sourceBindings[0].snapshotId,row.id);
   assert.deepEqual(calls,['find_sitefit_full','read_sitefit_full_material','start_sitefit_full']);
+  assert.deepEqual(edition.preparation.presentation?.competition,competition);
   assert.ok(preparation);
   const material={context:c,assessment,assessmentDigest:packetDigest(assessment),evidence:[],rentalSnapshots:[row]};
   const preview=structuredRentalPreview(edition,material,'validation_failed',new Date(date));
@@ -107,6 +111,7 @@ test("actual Full preparation includes qualified rental cohorts and source diges
   assert.match(paragraphs,/not a Ready Full Report/);assert.match(paragraphs,/About £35/);assert.match(paragraphs,/NIA/);
   await assert.rejects(()=>renderReportPDF(preview),/full_report_not_ready/);
   assert.ok((await renderReportPDF(preview,'rental-context')).length>10000);
+  }
 });
 test("rent source admission enforces lineage, native fields, rights, concept and explicit missingness", async () => {
   const { c, row, assessment } = await fixture();
