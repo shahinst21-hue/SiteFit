@@ -31,7 +31,8 @@ three. No search tool is silently enabled. Source scopes, units, provenance and
 Ready validation remain. New synthesis uses the selected concept and its own
 qualified evidence; saved 67B advice is never a new property's fallback.
 
-Address dispatches are private, bounded to twenty distinct Postio requests. Their
+Address dispatches are private, bounded to forty distinct Postio requests under
+the 21 October 2026 owner-approved amendment (the original allowance was twenty). Their
 successful bounded response checkpoints permit same-trial replay without another
 request. Intent/ambiguity denies resend. Candidate data stays private behind RLS
 and owner authority, never a public cache, log or URL. It belongs to the existing
@@ -68,6 +69,17 @@ cover source qualification, immutable replay, PDF, ownership and payment reversa
 Hosted recovery/concurrency, exact-head CI, Production migration/deployment and
 actual generation/payment results require separate observed receipts. This
 implementation document does not claim those operations passed.
+
+## 21 October address-search amendment
+
+The verified owner authorised increasing the controlled Production trial's
+unique Postio address-dispatch maximum from 20 to 40. Forward migration
+`20261021120000_trial_address_cap_40.sql` changes only that threshold in the
+existing row-locked reservation function; owner/expiry checks, response replay,
+ambiguous-outcome blocking, the 450 MB database guard, immutable dispatch
+history and service-only grants remain in force. Application policy mirrors the
+40-request cap. No case, Snapshot, AI report, payment or provider request is
+created by the migration. The deterministic boundary test uses synthetic rows.
 
 
 ## 19 October count/budget amendment
