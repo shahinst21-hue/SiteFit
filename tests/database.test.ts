@@ -12,11 +12,21 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
         is_anonymous boolean not null default false,email_confirmed_at timestamptz,last_sign_in_at timestamptz);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
+    // The recovered Production migrations reference Supabase Storage metadata;
+    // this fresh-database fixture stands in for that platform-owned schema.
+    await db.exec(`create schema storage;
+      create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
+      create table storage.objects(bucket_id text,name text);
+      alter table storage.objects enable row level security;
+      grant usage on schema storage to anon,authenticated;grant select,insert,update,delete on storage.objects to anon,authenticated;
+      create policy synthetic_broad_access on storage.objects for all to anon,authenticated using(true) with check(true);`);
     const dir = new URL("../supabase/migrations/", import.meta.url);
     const files = (await readdir(dir))
       .filter((file) => file.endsWith(".sql"))
       .sort();
     assert.ok(files.length);
+    assert.equal(files.filter((file) => /^202610(10|11|12|13|16|17|18|19|20)/.test(file)).length,39,
+      "all 39 historically applied Production migration sources must be present before additive migrations");
     assert.equal(
       new Set(files.map((file) => file.split("_")[0])).size,
       files.length,
@@ -44,6 +54,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL("../supabase/tests/account-claims.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/payments.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/purchase-history.sql", import.meta.url), "utf8"));
+    await db.exec(await readFile(new URL("../supabase/tests/controlled-trial.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/enrichment-polygon.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/census-profiles.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/compact-os.sql", import.meta.url), "utf8"));
