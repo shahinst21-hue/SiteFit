@@ -73,13 +73,22 @@ implementation document does not claim those operations passed.
 ## 21 October address-search amendment
 
 The verified owner authorised increasing the controlled Production trial's
-unique Postio address-dispatch maximum from 20 to 40. Forward migration
-`20261021120000_trial_address_cap_40.sql` changes only that threshold in the
-existing row-locked reservation function; owner/expiry checks, response replay,
-ambiguous-outcome blocking, the 450 MB database guard, immutable dispatch
-history and service-only grants remain in force. Application policy mirrors the
-40-request cap. No case, Snapshot, AI report, payment or provider request is
-created by the migration. The deterministic boundary test uses synthetic rows.
+unique Postio address-dispatch maximum from 20 to 40. A read-only Production
+check on 21 October showed that migration versions `20261021120000` and
+`20261021130000` were already applied, but the live address-reservation function
+still enforced 20. The authoritative source branch established that `20261021120000`
+is the audited budget reconciliation migration and `20261021130000` binds Ready
+Snapshot usage. The cap migration in PR #121 reused the first version number, so
+Supabase skipped its SQL because that version already existed. The original
+migration files are restored from their recorded source; no applied history is
+rewritten. New forward migration `20261021140000_trial_address_cap_40_reconciliation.sql`
+changes only the threshold in the existing row-locked reservation function;
+owner/expiry checks, response replay, ambiguous-outcome blocking, the 450 MB
+database guard, immutable dispatch history and service-only grants remain in
+force. Application policy mirrors the 40-request cap. Deployment and a real
+address search remain pending until the correction passes protected CI and is
+applied to Production. No case, Snapshot, AI report or payment is created by the
+migration.
 
 
 ## 19 October count/budget amendment
