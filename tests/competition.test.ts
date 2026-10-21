@@ -29,6 +29,8 @@ test('all four category rules use explicit categories/tags, never names; special
  assert.equal(categoryMatch(base,'coffee-shop'),'match');
  assert.equal(categoryMatch({...base,categories:['catering.restaurant.italian']},'restaurant'),'match');
  assert.equal(categoryMatch({...base,categories:['catering.fast_food']},'restaurant'),'excluded');
+ assert.equal(categoryMatch({...base,categories:['catering.restaurant','catering.fast_food'],tags:{takeaway:'only'}},'restaurant'),'match');
+ assert.equal(categoryMatch({...base,categories:['catering.cafe','catering.cafe.cake']},'coffee-shop'),'excluded');
  assert.equal(categoryMatch({...base,categories:['service.beauty.hairdresser']},'hair-salon'),'match');
  assert.equal(categoryMatch({...base,name:'Best Beauty Salon',categories:['service.beauty']},'beauty-salon'),'ambiguous');
  assert.equal(categoryMatch({...base,categories:['service.beauty'],tags:{shop:'beauty',beauty:'nails'}},'beauty-salon'),'match');

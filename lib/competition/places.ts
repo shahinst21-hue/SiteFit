@@ -31,7 +31,7 @@ export function normalizePlaces(value:unknown):PlacePage{
 }
 export function categoryMatch(p:Place,category:CompetitionCategory):'match'|'excluded'|'ambiguous'{
  if(p.closed)return 'excluded';const c=p.categories,t=p.tags,has=(prefix:string)=>c.some(v=>v===prefix||v.startsWith(prefix+'.'));
- if(category==='restaurant')return has('catering.restaurant')&&t.takeaway!=='only'?'match':'excluded';
+ if(category==='restaurant')return has('catering.restaurant')?'match':'excluded';
  if(category==='hair-salon')return has('service.beauty.hairdresser')||t.shop==='hairdresser'?'match':'ambiguous';
  if(category==='beauty-salon'){
   const treatments=(t.beauty??'').split(/[;,]/).map(s=>s.trim());
@@ -40,7 +40,7 @@ export function categoryMatch(p:Place,category:CompetitionCategory):'match'|'exc
   if(['massage','spa','tanning_salon','tattoo','hairdresser'].some(v=>has('service.beauty.'+v))||t.shop==='cosmetics'||treatments.some(v=>['massage','spa','tattoo','tanning'].includes(v)))return 'excluded';
   return 'ambiguous';
  }
- const specialist=c.some(v=>/^catering\.cafe\.(ice_cream|frozen_yogurt|donut|dessert|bubble_tea)(\.|$)/.test(v))||/^(ice_cream|frozen_yogurt|donut|dessert|bubble_tea)$/.test(t.cuisine??'');
+ const specialist=c.some(v=>/^catering\.cafe\.(ice_cream|frozen_yogurt|donut|dessert|bubble_tea|cake|crepe|waffle)(\.|$)/.test(v))||/^(ice_cream|frozen_yogurt|donut|dessert|bubble_tea|cake|crepe|waffle)$/.test(t.cuisine??'');
  const independent=c.some(v=>['catering.cafe.coffee_shop','catering.cafe.coffee','catering.cafe.tea'].includes(v))||t.amenity==='cafe'&&/^(coffee_shop|coffee|tea)$/.test(t.cuisine??'');
  return has('catering.cafe')&&(!specialist||independent)?'match':'excluded';
 }
