@@ -1,3 +1,4 @@
+import {validateCompetition,type CompetitionResult} from '../competition/model.ts';
 import 'server-only';
 import {validateResidentialScore,type ResidentialScore} from '../analysis/residential-catchment.ts';
 import {reportPages,sourceURL} from './display.ts';
@@ -18,7 +19,7 @@ export type Profile = {dataset:string; seconds:number; period:string; universe:s
 export type Page = {key:SectionKey; conclusion:string; analysis:Statement[]; test:Statement|null; cautions:Statement[];
   factIds:string[]; referenceIds:string[]; unknowns:string[]; availability:string; direction:string};
 export type Dashboard = {version:'report-dashboard-v1'; reportId:string|null; digest:string; generatedAt:string;
-  residentialCatchment?:ResidentialScore|null; structuredPreview?:{stage:string};
+  competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; structuredPreview?:{stage:string};
   address:string; business:string; businessLabel:string; precision:string; analysisTimestamp:string|null; editionLabel:string;
   pages:Page[]; sources:Source[]; references:Reference[]; summary:{verdict:string[]; strengths:Statement[]; risks:Statement[]; priority:string}|null;
   readiness:string; index:{label:string; value:number|null; scope:string; method:string; components:{label:string; weight:number; density:number|null; period:string; code:string}[]};
@@ -40,6 +41,7 @@ const statements=(v:unknown)=>array(v).map(statement).filter((x):x is Statement=
 export function dashboardFromStored(value:unknown, options:{reportId?:string; editionLabel?:string; demo?:boolean}={}):Dashboard {
   const p=validateFullProjection(value), exports=reportPages.map(({key})=>sectionExport(value,key));
   const presentation=record(p.presentation), property=record(presentation.property);
+  const competition=presentation.competition===undefined?undefined:validateCompetition(presentation.competition);
   const residentialCatchment=presentation.residentialCatchment===undefined?undefined:presentation.residentialCatchment===null?null:validateResidentialScore(presentation.residentialCatchment);
   const facts=exports[7].sources as Fact[], supplements=exports[7].supplementReferences as unknown[];
   // Expired/unlicensed representations cannot be exported with their dependent claims.
@@ -71,7 +73,7 @@ export function dashboardFromStored(value:unknown, options:{reportId?:string; ed
     address:str(property.label,'Property identity not stored in this historical edition'),business:str(p.business),
     businessLabel:p.business==='coffee-shop'?'Coffee shop':p.business==='restaurant'?'Restaurant':'Hair & beauty salon',
     precision:str(property.precision,'unknown'),analysisTimestamp:typeof presentation.analysisTimestamp==='string'?presentation.analysisTimestamp:null,
-    editionLabel:options.editionLabel??'Full Report V1',pages,sources,references,residentialCatchment,
+    editionLabel:options.editionLabel??'Full Report V1',pages,sources,references,residentialCatchment,competition,
     summary:strings(summary.consultantVerdict).length?{verdict:strings(summary.consultantVerdict),strengths:statements(summary.strengths),risks:statements(summary.weaknesses),priority:str(summary.priorityNextAction)}:null,
     readiness:str(p.readiness,'not assessed').replaceAll('_',' '),index:{label:'Resident & Workplace Context Index',
       value:index.state==='available'&&index.methodValidated===true&&index.hypotheticalPolicy===true&&typeof index.display==='number'?index.display:null,

@@ -1,3 +1,4 @@
+import {competitionInterpretation,competitionMethod,competitionLimit} from '../competition/model.ts';
 import 'server-only';
 import {residentialModel,residentialInterpretation} from '../analysis/residential-catchment.ts';
 import fs from 'node:fs/promises';
@@ -20,12 +21,22 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
     add(`Stored generation stage: ${report.structuredPreview.stage}. No incomplete AI narrative is published.`);
   }
   const emptyPricing=key==='rental-context'&&!report.rental.length;
-  add(reportPages.find(x=>x.key===key)!.label,true);if(!emptyPricing)add(p.conclusion);
+  add(reportPages.find(x=>x.key===key)!.label,true);if(!emptyPricing)add(key==='competition'&&report.competition?competitionInterpretation(report.competition):p.conclusion);
   if(key==='overview'&&report.summary){add('Consultant Verdict',true);report.summary.verdict.forEach(t=>add(t));add('Key strengths',true);report.summary.strengths.forEach(s=>add(s.text));add('Key risks & unknowns',true);report.summary.risks.forEach(s=>add(s.text));add('Priority action',true);add(report.summary.priority);add(`${report.index.label}: ${report.index.value??'withheld'}. ${report.index.scope}. Hypothetical context policy only; not demand, profitability or suitability.`);add(`Decision readiness: ${report.readiness}`);}
-  if(!emptyPricing)p.analysis.forEach(s=>add(`${s.kind.replaceAll('_',' ')}: ${s.text}`));
+  if(!emptyPricing&&!(key==='competition'&&report.competition))p.analysis.forEach(s=>add(`${s.kind.replaceAll('_',' ')}: ${s.text}`));
   if(p.test&&!emptyPricing){add('What could change the decision?',true);add(p.test.text);}
   if(key==='customer-context'&&report.residentialCatchment!==undefined){const r=report.residentialCatchment;add('Residential Catchment Strength',true);if(!r)add('Score unavailable: verified walking populations are incomplete.');else{add(`${r.score}/100 — ${r.rating}`);add(residentialInterpretation(r));r.populations.forEach((n,i)=>add(`${[5,10,15][i]} min walk: ${Math.round(n).toLocaleString('en-GB')} estimated residents.`));r.bands.forEach((n,i)=>add(`${['0–5','5–10','10–15'][i]} min band: ${readableNumber(n)}; reference ${residentialModel.benchmarks[i]}; score ${r.components[i].toFixed(1)}/100; weight ${residentialModel.weights[i]*100}%.`));add(`SiteFit ${r.version}; weighted result ${r.rawScore.toFixed(4)}. ONS Census 2021 and Geoapify walking network. ${r.metadata.precision}. Reference thresholds, not measured demand or business success.`);}}
-  if(key==='competition'){
+  if(key==='competition'&&report.competition){
+    const r=report.competition;add('Competition Headroom Score',true);add(r.score===null?'Score unavailable':`${r.score}/100 — ${r.rating}`);add(competitionInterpretation(r));add(r.reason);
+    r.counts?.forEach((n,i)=>add(`${[5,10,15][i]} min walking area: ${r.provenance.complete?'':'at least '}${n} identified similar businesses.`));
+    if(r.score!==null)add(`Effective competitors ${r.effectiveCompetitors}; effective residential population ${r.effectivePopulation}; density per 1,000 effective residents ${r.density}. Model ${r.version}.`);
+    if(r.populations)add(`Cumulative residential populations: ${r.populations.join(' / ')}. Same frozen walking origin and evidence as the Snapshot.`);
+    add(competitionMethod);add(competitionLimit);add(`Source: Geoapify Places / OpenStreetMap. Retrieved ${r.provenance.retrievedAt??'not established'}. ${r.provenance.pages} validated pages; category rules ${r.provenance.categoryVersion}. ${r.provenance.correction}`);
+    add(`${r.records.length} displayed of ${r.recordTotal} identified matches. A complete zero-match search does not prove that no competitors exist.`);
+    for(const p of r.records)add(`${p.name} · ${p.band} min walking area · ${p.categories.join(', ')} · recorded position ${p.latitude}, ${p.longitude} · Geoapify ${p.id}`);
+    add('Compare current offers, prices and operating hours on a local visit. Current activity and commercial performance remain unverified. © OpenStreetMap contributors; powered by Geoapify.');
+  }
+  if(key==='competition'&&!report.competition){
     add('Qualified register shortlist — not unique or verified direct competitors',true);
     for(const o of report.operators?.items??[])add(`${o.name} · ${o.businessType}. Observed ${displayDate(o.observedAt)}. Offer, current activity, customer rating and chain affiliation unverified. ${o.reference}`);
     if(!report.operators)add('No named business shortlist is available in this report.');
@@ -103,7 +114,14 @@ export async function renderReportPDF(report:Dashboard,key?:SectionKey){
   for(const [i,k] of keys.entries()){
     if(i)fresh();paragraph('SITEFIT',20,green);paragraph(report.address,14);paragraph(`${report.businessLabel} · ${report.editionLabel} · Generated ${displayDate(report.generatedAt)}`,9,muted);
     paragraph(report.structuredPreview?'Structured rental evidence export · Preview only':key?'Section PDF · Full Report V1':'Full Report V1 · saved report',9,muted);
-    if(k==='overview'||k==='access'||k==='competition')map(k==='competition');
+    if(k==='overview'||k==='access'||k==='competition'&&!report.competition)map(k==='competition');
+    if(k==='competition'&&report.competition?.score!==null&&report.competition?.score!==undefined){
+      const r=report.competition;if(y<230)fresh();paragraph('Competition Headroom Score',16,ink);paragraph(`${r.score}/100 — ${r.rating}`,24,ink);
+      const barY=y-8;for(let i=0;i<100;i++)page.drawRectangle({x:42+i*5.08,y:barY,width:5.1,height:13,color:rgb(.87-(i/100)*.18,.88+(i/100)*.07,.87-(i/100)*.61)});
+      for(const edge of [40,60,80])page.drawRectangle({x:42+edge*5.08-1,y:barY,width:2,height:13,color:rgb(1,1,1)});
+      page.drawCircle({x:42+r.score!*5.08,y:barY+6.5,size:8,color:ink,borderColor:rgb(1,1,1),borderWidth:3});y=barY-24;
+      for(const [label,position] of [['Limited',.2],['Moderate',.5],['Supportive',.7],['Strong',.9]] as const)page.drawText(label,{x:42+508*position-font.widthOfTextAtSize(label,9)/2,y,size:9,font,color:muted});y-=27;
+    }
     if(k==='customer-context'&&report.residentialCatchment){
       const r=report.residentialCatchment;if(y<270)fresh();
       paragraph('Residential Catchment Strength',16,ink);paragraph(`${r.score}/100 — ${r.rating}`,24,ink);
@@ -113,7 +131,7 @@ export async function renderReportPDF(report:Dashboard,key?:SectionKey){
       r.populations.forEach((n,i)=>{paragraph(`${[5,10,15][i]} min walking catchment: ${Math.round(n).toLocaleString('en-GB')} estimated residents`,11,ink);});
     }
 
-    for(const r of exportParagraphs(report,k)){if(r.heading&&y<110)fresh();paragraph(r.text,r.heading?13:10,r.heading?green:ink);}
+    for(const r of exportParagraphs(report,k)){if(k==='competition'&&report.competition?.score!==null&&report.competition?.score!==undefined&&(r.text==='Competition Headroom Score'||r.text===`${report.competition.score}/100 — ${report.competition.rating}`))continue;if(r.heading&&y<110)fresh();paragraph(r.text,r.heading?13:10,r.heading?green:ink);}
   }
   const pages=pdf.getPages();pages.forEach((p,i)=>{p.drawLine({start:{x:42,y:46},end:{x:550,y:46},thickness:.5,color:rgb(.8,.85,.83)});p.drawText(`SiteFit · ${report.digest.slice(0,16)} · Page ${i+1} / ${pages.length}`,{x:42,y:29,size:8,font,color:muted});});
   if(pages.length>150)throw Error('pdf_bounds');return pdf.save();

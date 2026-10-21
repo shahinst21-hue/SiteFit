@@ -1,3 +1,4 @@
+import {validateCompetition,type CompetitionResult} from '../competition/model.ts';
 import { queryPoint } from "../data/query-point.ts";
 import "server-only";
 import {residentialFromEvidence,type ResidentialScore} from "../analysis/residential-catchment.ts";
@@ -34,7 +35,7 @@ export type Preparation = { version: "full-preparation-v1"; configuration: "full
   rentalPreparation?: { version: "rental-preparation-v1"; supplementDigests: string[]; sourceBindings: { snapshotId: string; checksum: string }[];
     fallback: { state: RentalFallback["state"]; receipt: RentalFallback["receipt"]; findingDigests: string[]; findings: RentalFallback["findings"] } };
   identityOmissions?: string[];
-  presentation?: { residentialCatchment?:ResidentialScore|null; freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
+  presentation?: { competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; freeReportId: string; analysisTimestamp: string; property: { id: string; label: string; precision: string };
     spatial: { reportId: string; digest: string | null; state: "available" | "unavailable" }; photo: { state: "unavailable" } };
   packetDigests: { context: string; premises: string } };
 export type StoredEdition = { id: string; analysisId: string; inputId: string; revision: number; status: "draft" | "ready";
@@ -103,6 +104,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       assessment.inputId !== context.inputId || assessment.propertyId !== context.selectedProperty.id ||
       packetDigest(assessment) !== material.assessmentDigest || !uuid(material.assessmentId) || !Array.isArray(material.evidence)) throw Error("full_source_binding_invalid");
     const evidence: Evidence[] = material.evidence.map(e => { validateEvidence(e); return e; });
+    const competition=material.competition===undefined?undefined:validateCompetition(material.competition);
     const preparedAt = new Date();
     const rentalSupplements = storedRentalSupplements(context, assessment, Array.isArray(material.rentalSnapshots) ? material.rentalSnapshots : [], preparedAt);
     const catalog = buildCatalog(assessment, evidence, preparedAt, material.discovery === null ? null : validateDiscovery(material.discovery), rentalSupplements);
@@ -158,7 +160,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
         sourceBindings: rentalSupplements.flatMap(s => s.sourceBindings),
         fallback: { state: fallback.state, receipt: fallback.receipt, findingDigests: fallback.findings.map(f => f.id), findings: fallback.findings } },
       profiles, identityOmissions,
-      presentation: { residentialCatchment:residentialFromEvidence(evidence,context.businessType,queryPoint(context)??null,preparedAt), freeReportId, analysisTimestamp: context.analysisTimestamp,
+      presentation: { ...(competition?{competition}:{}), residentialCatchment:residentialFromEvidence(evidence,context.businessType,queryPoint(context)??null,preparedAt), freeReportId, analysisTimestamp: context.analysisTimestamp,
         property: { id: context.selectedProperty.id, label: context.selectedProperty.formattedAddress,
           precision: context.enrichment?.identity.point?.precision ?? context.selectedProperty.point?.precision ?? "unknown" },
         spatial: { reportId: freeReportId, digest: material.spatial === null ? null : packetDigest(material.spatial), state: material.spatial === null ? "unavailable" : "available" },
