@@ -1,13 +1,18 @@
 -- Synthetic identities and transactions only. No external calls, real deletion or authority retained.
 begin;
 do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();t uuid;p uuid;n uuid;c uuid;v jsonb;d uuid;tok uuid;a uuid;i uuid;r uuid;first_r uuid;first_a uuid;first_i uuid;first_c uuid;
-payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uuid;before_hold bigint;begin
+payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uuid;before_hold bigint;budget jsonb;begin
  if exists(select 1 from public.controlled_trials) then raise exception 'trial authority seeded';end if;
  if has_table_privilege('service_role','public.controlled_trials','UPDATE') or has_table_privilege('authenticated','public.trial_address_dispatches','SELECT')
  or has_function_privilege('authenticated','public.claim_sitefit_trial(uuid,uuid,text,uuid,uuid,text,uuid)','EXECUTE') then raise exception 'trial exposed';end if;
  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(o,'shahinst21@gmail.com',now(),false),(other,'trial-other@example.invalid',now(),false);
  insert into public.controlled_trials(owner_id,expires_at,total_limit_micros,policy_version,tariff_verified,tariff_digest,input_rate,output_rate)
  values(o,now()+interval '1 hour',4250000,'sitefit-sale-v1-20261016-review',true,repeat('a',64),2.5,10) returning id into t;
+ budget:=public.record_sitefit_trial_budget_adjustment(t,4250000,1000000,'synthetic-budget-adjustment-v1','synthetic_budget_test');
+ if (budget->>'effectiveLimitMicros')::bigint<>5250000 then raise exception 'adjustment was not applied';end if;
+ budget:=public.record_sitefit_trial_budget_adjustment(t,4250000,1000000,'synthetic-budget-adjustment-v1','synthetic_budget_test');
+ if (budget->>'effectiveLimitMicros')::bigint<>5250000 or
+  (select count(*) from public.controlled_trial_budget_events where trial_id=t and event_kind='adjustment')<>1 then raise exception 'adjustment replay was not idempotent';end if;
  if public.authorise_sitefit_trial_owner(t,o) then raise exception 'disabled trial admitted';end if;
  update public.controlled_trials set enabled=true,checkout_enabled=true,execution_enabled=true where id=t;
  if not public.authorise_sitefit_trial_owner(t,o) or public.authorise_sitefit_trial_owner(t,other) then raise exception 'owner boundary failed';end if;
@@ -45,6 +50,13 @@ payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uui
  pay:=public.prepare_sitefit_live_payment(o,first_r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
  perform public.prepare_sitefit_live_payment(o,first_r,payment,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
  if (select reserved_micros from public.controlled_trials where id=t)<>4250000 or (select full_reports from public.controlled_trials where id=t)<>1 then raise exception 'Full counted twice or outside aggregate';end if;
+ begin
+  perform public.reserve_sitefit_trial_budget(t,null,'full',payment,1000000,'capacity-probe-full-reserve-v1');
+  perform public.reserve_sitefit_trial_budget(t,null,'full',payment,1000000,'capacity-probe-over-limit-v1');
+  raise exception 'budget allowed reservations beyond its effective ceiling';
+ exception when check_violation then null;
+ when others then if sqlerrm='budget allowed reservations beyond its effective ceiling' then raise;end if;raise;
+ end;
  begin perform public.prepare_sitefit_live_payment(o,r,gen_random_uuid(),'price_synthetic',params,now()+interval '1 hour','acct_synthetic');raise exception 'second Full purchase admitted';exception when others then if sqlerrm='second Full purchase admitted' then raise;end if;end;
  perform public.bind_sitefit_live_checkout(payment,'cs_live_trial');
  perform public.record_sitefit_sale(o,payment,'sitefit-sale-v1-20261016-review',jsonb_build_object('version','sitefit-sale-v1-20261016-review','buyerKind','consumer','termsAccepted',true,'immediateRequested',true,'acknowledgement',true));
