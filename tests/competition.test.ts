@@ -75,3 +75,9 @@ test('actual Snapshot card shows dynamic score and counts; unavailable retains e
  for(const mode of ['competition','competition-unavailable']){const r=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored','coffee-shop',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);const card=r.stdout.split('id="factor-market-position"')[1].split('</article>')[0];assert.match(card,/Competition/);assert.match(card,/Explore the evidence/);assert.match(card,/View full competition analysis/);assert.doesNotMatch(card,/sf-register-chart|sf-observed-signal/);
  if(mode==='competition'){assert.match(card,/left:47%/);assert.match(card,/Moderate/);assert.match(card,/>13</);}else{assert.match(card,/Score unavailable/);assert.doesNotMatch(card,/left:100%/);}}
 });
+
+test('Competition evidence presents readable provenance without exposing internal IDs',()=>{
+ const r=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','competition-details'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);
+ assert.match(r.stdout,/Source: Geoapify Places and OpenStreetMap/);assert.match(r.stdout,/Postcode-centre coordinates/);assert.match(r.stdout,/provider classifications and supported tags/);
+ assert.doesNotMatch(r.stdout,/00000000-0000-4000-8000-/);assert.doesNotMatch(r.stdout,/f00d0000-0000-4000-8000-/);assert.doesNotMatch(r.stdout,/geoapify-category-match-v1|Walking evidence:|Population evidence:/);assert.doesNotMatch(r.stdout,/Geoapify place ID/);
+});
