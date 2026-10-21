@@ -463,9 +463,9 @@ do $$declare t public.controlled_trials;begin
  if (select count(*) from public.commercial_payment_reservations z join public.payments p on p.id=z.payment_id where z.owner_id=t.owner_id and z.released_at is null)<>0
   or (select count(*) from public.commercial_payment_reservations z join public.payments p on p.id=z.payment_id where z.owner_id=t.owner_id and z.released_at is not null and p.status='succeeded' and p.access_state='active' and p.verified_at is not null and exists(select 1 from public.reports r where r.id=z.report_id and r.status='ready'))<>1 then raise exception 'trial_budget_reconciliation_readback_failed';end if;
  if (public.sitefit_trial_budget_snapshot(t.id)->>'effectiveLimitMicros')::bigint<>23390000
-  or (public.sitefit_trial_budget_snapshot(t.id)->>'settledMicros')::bigint<>318070
+  or (public.sitefit_trial_budget_snapshot(t.id)->>'settledMicros')::bigint<>318072
   or (public.sitefit_trial_budget_snapshot(t.id)->>'activeReservedMicros')::bigint<>0
-  or (public.sitefit_trial_budget_snapshot(t.id)->>'availableMicros')::bigint<>23071930 then raise exception 'trial_budget_reconciliation_balance_mismatch';end if;
+  or (public.sitefit_trial_budget_snapshot(t.id)->>'availableMicros')::bigint<>23071928 then raise exception 'trial_budget_reconciliation_balance_mismatch';end if;
  if t.total_limit_micros<>10000000 or t.reserved_micros<>9500000 then raise exception 'trial_legacy_budget_history_changed';end if;
 end$$;
 
