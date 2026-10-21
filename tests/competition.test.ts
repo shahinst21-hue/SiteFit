@@ -19,7 +19,7 @@ const inputs=()=>({category:'coffee-shop' as const,populations:[3500,9000,25000]
 test('approved exact formula examples, zero and unavailable operands',()=>{
  assert.deepEqual(competitionScore([3500,9000,25000],[1,4,9]),{effectivePopulation:10250,effectiveCompetitors:3.75,density:0.36585365853658536,score:73,rating:'Supportive'});
  assert.deepEqual(competitionScore([3500,9000,25000],[5,13,24]),{effectivePopulation:10250,effectiveCompetitors:11.75,density:1.146341463414634,score:47,rating:'Moderate'});
- assert.equal(competitionScore([1,2,3],[0,0,0])?.score,100);
+ assert.equal(competitionScore([1,2,3],[0,0,0])?.score,100);assert.equal(competitionScore([Number.MIN_VALUE,Number.MIN_VALUE,Number.MIN_VALUE],[1,2,3]),null);
  for(const [p,n] of [[[0,0,0],[0,0,0]],[[1,null,3],[0,0,0]],[[2,1,3],[0,0,0]],[[1,2,3],[2,1,3]],[[1,2,Infinity],[1,2,3]]] as unknown[][][])assert.equal(competitionScore(p,n),null);
  const unavailable=competitionUnavailable('beauty-salon','classification_ambiguous','Unreliable tags.');assert.equal(validateCompetition(unavailable).score,null);
  assert.throws(()=>validateCompetition({...unavailable,score:100}));assert.throws(()=>validateCompetition({...competitionFixture(),score:48}));
