@@ -46,4 +46,5 @@ test('trial identity rejects anonymous, unverified and different accounts before
  assert.equal(trialLimits.snapshots,null);assert.equal(trialLimits.fullReports,null);
  assert.equal(trialLimits.snapshotMicros,650000);assert.equal(trialLimits.fullMicros,1000000);
  assert.equal(trialLimits.totalMicros,10000000);
+ assert.equal(trialLimits.addressRequests,40);
 });
