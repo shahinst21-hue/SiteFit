@@ -1,3 +1,5 @@
+import {competitionFixture} from '@/tests/fixtures/competition';
+import {competitionUnavailable} from '@/lib/competition/model';
 import {OpeningProgress} from '@/components/generation-progress';
 import {PurchaseTerms} from '@/components/purchase-terms';
 import {residentialScore} from "@/lib/analysis/residential-catchment";
@@ -23,6 +25,12 @@ export default async function SnapshotDemo({ searchParams }: { searchParams: Pro
   if (state === 'journey' && (process.env.NODE_ENV === 'development' || process.env.VERCEL_ENV === 'preview')) {
     const fixture = (await import("@/fixtures/free_snapshot/kingston_coffee_shop.json")).default;
     return <JourneyReview><FreeSnapshotView snapshot={snapshotDemo(fixture, 'development', undefined)} /></JourneyReview>;
+  }
+  if(['competition','competition-a','competition-unavailable'].includes(state??'')&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
+    const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;
+    const view=snapshotDemo(fixture,'development',undefined);view.property.address='Synthetic Competition UI fixture — not a property assessment';
+    view.factors[1].competition=state==='competition-unavailable'?competitionUnavailable('beauty-salon','classification_ambiguous','The source taxonomy does not reliably distinguish beauty services.'):competitionFixture(state==='competition-a'?[1,4,9]:[5,13,24]);
+    return <><aside role="note">Synthetic contract fixture · no provider, AI or purchase execution</aside><FreeSnapshotView snapshot={view}/></>;
   }
   if(state==='catchment'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
     const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;

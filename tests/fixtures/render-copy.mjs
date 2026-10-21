@@ -22,13 +22,20 @@ registerHooks({resolve(s,c,next){
 },load(url,c,next){if(url.endsWith('.tsx'))return {format:'module',shortCircuit:true,source:ts.transpileModule(fs.readFileSync(fileURLToPath(url),'utf8'),{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.ESNext}}).outputText};return next(url,c)}});
 globalThis.fetch=()=>{throw Error('Static copy verification must not request data');};
 const name=process.argv[2];
-if(!['home','pricing','how-it-works','sample-report','snapshot','snapshot-stored','purchase','checkout'].includes(name))throw Error('Unknown fixture');
+if(!['home','pricing','how-it-works','sample-report','snapshot','snapshot-stored','competition-details','purchase','checkout'].includes(name))throw Error('Unknown fixture');
 let view;
-if(name==='snapshot-stored'){
+if(name==='competition-details'){
+ const {CompetitionDetails}=await import('../../components/competition-headroom.tsx');
+ const {competitionFixture}=await import('./competition.ts');
+ const value=competitionFixture();value.records=[{id:'f00d0000-0000-4000-8000-000000000001',name:'Example Coffee',categories:['Coffee shop'],longitude:-0.1,latitude:51.5,band:5}];
+ view=createElement(CompetitionDetails,{value});
+}else if(name==='snapshot-stored'){
  const {FreeSnapshot}=await import('../../components/free-snapshot.tsx');
  const {decisionFixture}=await import('./snapshot-decision.ts');
  const report=decisionFixture(process.argv[3]||'coffee-shop');
  if(process.argv[4]==='advisor'){const {advisorFixture}=await import('./snapshot-advisor.ts');const stance=process.argv[5]||'conditional';if(!['recommended','conditional','not_recommended'].includes(stance))throw Error('Invalid fixture stance');report.earlyView.advisor=advisorFixture(stance);}
+ if(process.argv[4]==='competition'){const {competitionFixture}=await import('./competition.ts');report.competition=competitionFixture();}
+ if(process.argv[4]==='competition-unavailable'){const {competitionUnavailable}=await import('../../lib/competition/model.ts');report.competition=competitionUnavailable('coffee-shop','provider_unavailable','Provider search incomplete.');}
  if(process.argv[4]==='comparison')report.dimensions[0].why.comparison={description:'Whole Census output areas in the same local authority; not commercial peers.',density:80,units:'residents per hectare',percentile:72,peers:200,limitations:['Synthetic test comparison only.']};
  view=createElement(FreeSnapshot,{report});
 }else if(name==='snapshot'){
