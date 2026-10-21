@@ -169,9 +169,34 @@ end$$;
 revoke all on function public.settle_sitefit_trial_budget(uuid,text,uuid,bigint,text) from public,anon,authenticated;
 grant execute on function public.settle_sitefit_trial_budget(uuid,text,uuid,bigint,text) to service_role;
 
+-- The report's immutable AI receipts are the source of truth for billable AI
+-- calls. proof_dispatches also records provider collection and may not contain
+-- one row for every AI receipt, so validate the receipt sequence itself rather
+-- than requiring those two independently scoped ledgers to have equal counts.
+create function public.sitefit_trial_snapshot_receipts_valid(p_provenance jsonb) returns boolean
+language sql immutable set search_path='' as $$
+ with receipts as (
+  select x from jsonb_array_elements(case when jsonb_typeof(p_provenance#>'{ai,receipts}')='array'
+   then p_provenance#>'{ai,receipts}' else '[]'::jsonb end) x
+ ), summary as (
+  select count(*) n,count(distinct case when coalesce(x->>'dispatch','') ~ '^[1-9][0-9]*$'
+    then (x->>'dispatch')::numeric end) distinct_dispatches,
+   bool_and(jsonb_typeof(x)='object' and jsonb_typeof(x->'dispatch')='number'
+    and coalesce(x->>'dispatch','') ~ '^[1-9][0-9]*$'
+    and coalesce(x->>'inputTokens','') ~ '^[0-9]+$' and coalesce(x->>'outputTokens','') ~ '^[0-9]+$') valid
+  from receipts
+ )
+ select jsonb_typeof(p_provenance#>'{ai,receipts}')='array' and
+  jsonb_typeof(p_provenance#>'{ai,dispatches}')='number' and
+  coalesce(p_provenance#>>'{ai,dispatches}','') ~ '^[1-9][0-9]*$' and
+  (p_provenance#>>'{ai,dispatches}')::numeric=s.n and s.n=s.distinct_dispatches and coalesce(s.valid,false)
+ from summary s
+$$;
+revoke all on function public.sitefit_trial_snapshot_receipts_valid(jsonb) from public,anon,authenticated,service_role;
+
 create function public.sitefit_record_ready_report_usage(p_report uuid) returns void
 language plpgsql security definer set search_path='' as $$
-declare r public.reports;c public.controlled_proof;t public.controlled_trials;p public.payments;dispatch_count integer;actual bigint;digest text;receipt_count integer;
+declare r public.reports;c public.controlled_proof;t public.controlled_trials;p public.payments;actual bigint;digest text;receipt_count integer;
 begin
  select * into r from public.reports where id=p_report and status='ready';
  if not found then return;end if;
@@ -181,9 +206,9 @@ begin
   select * into strict t from public.controlled_trials where id=c.trial_id;
   digest:=encode(sha256(convert_to(r.provenance::text,'UTF8')),'hex');
   if r.tier='free' then
-   select count(*) into dispatch_count from public.proof_dispatches where case_id=c.id and stage='snapshot' and kind='ai' and state='received';
-   select count(*) into receipt_count from jsonb_array_elements(coalesce(r.provenance#>'{ai,receipts}','[]'::jsonb));
-   if receipt_count<1 or receipt_count<>dispatch_count or exists(select 1 from public.proof_dispatches where case_id=c.id and stage='snapshot' and state<>'received') then raise exception 'snapshot_usage_receipt_incomplete';end if;
+   select jsonb_array_length(coalesce(r.provenance#>'{ai,receipts}','[]'::jsonb)) into receipt_count;
+   if receipt_count<1 or not public.sitefit_trial_snapshot_receipts_valid(r.provenance)
+    or exists(select 1 from public.proof_dispatches where case_id=c.id and stage='snapshot' and state<>'received') then raise exception 'snapshot_usage_receipt_incomplete';end if;
    select round(sum((x->>'inputTokens')::numeric*t.input_rate+(x->>'outputTokens')::numeric*t.output_rate))::bigint into actual
     from jsonb_array_elements(r.provenance#>'{ai,receipts}') x;
    perform public.settle_sitefit_trial_budget(t.id,'snapshot:'||c.id::text,p_report,actual,digest);
@@ -386,13 +411,13 @@ create trigger sitefit_ready_usage after update of status on public.reports for 
 
 -- Backfill settled Snapshot usage from immutable token receipts at the trial's
 -- recorded tariff; leave the unexecuted intervention refundable/retry-safe.
-do $$declare c public.controlled_proof;r public.reports;t public.controlled_trials;dispatch_count integer;receipt_count integer;actual bigint;digest text;z public.commercial_payment_reservations;p public.payments;begin
+do $$declare c public.controlled_proof;r public.reports;t public.controlled_trials;receipt_count integer;actual bigint;digest text;z public.commercial_payment_reservations;p public.payments;begin
  select * into t from public.controlled_trials where id='cf931ac6-558b-456c-921f-8f8436512098';if not found then return;end if;
  for c in select * from public.controlled_proof where trial_id=t.id and free_report_id is not null loop
   select * into strict r from public.reports where id=c.free_report_id and status='ready' and tier='free';
-  select count(*) into dispatch_count from public.proof_dispatches where case_id=c.id and stage='snapshot' and kind='ai' and state='received';
-  select count(*) into receipt_count from jsonb_array_elements(coalesce(r.provenance#>'{ai,receipts}','[]'::jsonb));
-  if receipt_count<1 or receipt_count<>dispatch_count or exists(select 1 from public.proof_dispatches where case_id=c.id and stage='snapshot' and state<>'received') then raise exception 'snapshot_receipt_reconciliation_incomplete';end if;
+  select jsonb_array_length(coalesce(r.provenance#>'{ai,receipts}','[]'::jsonb)) into receipt_count;
+  if receipt_count<1 or not public.sitefit_trial_snapshot_receipts_valid(r.provenance)
+   or exists(select 1 from public.proof_dispatches where case_id=c.id and stage='snapshot' and state<>'received') then raise exception 'snapshot_receipt_reconciliation_incomplete';end if;
   select round(sum((x->>'inputTokens')::numeric*t.input_rate+(x->>'outputTokens')::numeric*t.output_rate))::bigint into actual from jsonb_array_elements(r.provenance#>'{ai,receipts}') x;
   digest:=encode(sha256(convert_to(r.provenance::text,'UTF8')),'hex');
   perform public.settle_sitefit_trial_budget(t.id,'legacy:snapshot:'||c.id::text,r.id,actual,digest);

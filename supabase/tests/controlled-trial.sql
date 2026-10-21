@@ -3,6 +3,13 @@ begin;
 do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();t uuid;p uuid;n uuid;c uuid;v jsonb;d uuid;tok uuid;a uuid;i uuid;r uuid;first_r uuid;first_a uuid;first_i uuid;first_c uuid;
 payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uuid;before_hold bigint;budget jsonb;begin
  if exists(select 1 from public.controlled_trials) then raise exception 'trial authority seeded';end if;
+ -- AI billable receipt cardinality follows immutable report provenance; it is
+ -- intentionally independent of the smaller provider-dispatch ledger count.
+ if not public.sitefit_trial_snapshot_receipts_valid('{"ai":{"dispatches":2,"receipts":[{"dispatch":1,"inputTokens":10,"outputTokens":2},{"dispatch":2,"inputTokens":20,"outputTokens":3}]}}'::jsonb)
+  then raise exception 'valid AI receipt sequence rejected';end if;
+ if public.sitefit_trial_snapshot_receipts_valid('{"ai":{"dispatches":2,"receipts":[{"dispatch":1,"inputTokens":10,"outputTokens":2},{"dispatch":1,"inputTokens":20,"outputTokens":3}]}}'::jsonb)
+  or public.sitefit_trial_snapshot_receipts_valid('{"ai":{"dispatches":3,"receipts":[{"dispatch":1,"inputTokens":10,"outputTokens":2},{"dispatch":2,"inputTokens":20,"outputTokens":3}]}}'::jsonb)
+  then raise exception 'invalid AI receipt sequence accepted';end if;
  if has_table_privilege('service_role','public.controlled_trials','UPDATE') or has_table_privilege('authenticated','public.trial_address_dispatches','SELECT')
  or has_function_privilege('authenticated','public.claim_sitefit_trial(uuid,uuid,text,uuid,uuid,text,uuid)','EXECUTE') then raise exception 'trial exposed';end if;
  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(o,'shahinst21@gmail.com',now(),false),(other,'trial-other@example.invalid',now(),false);
