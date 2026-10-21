@@ -17,7 +17,8 @@ export function competitionScore(populations:readonly unknown[],counts:readonly 
  if(p5>p10||p10>p15||n5>n10||n10>n15)return null;
  const effectivePopulation=p5+.5*(p10-p5)+.25*(p15-p10),effectiveCompetitors=n5+.5*(n10-n5)+.25*(n15-n10);
  if(effectivePopulation<=0)return null;
- const density=1000*effectiveCompetitors/effectivePopulation,score=Math.round(100/(1+density)),rating:CompetitionRating=score<40?'Limited':score<60?'Moderate':score<80?'Supportive':'Strong';
+ const density=1000*effectiveCompetitors/effectivePopulation;if(!Number.isFinite(density))return null;
+ const score=Math.round(100/(1+density)),rating:CompetitionRating=score<40?'Limited':score<60?'Moderate':score<80?'Supportive':'Strong';
  return {effectivePopulation,effectiveCompetitors,density,score,rating};
 }
 export function validateCompetition(value:unknown):CompetitionResult{
