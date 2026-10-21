@@ -1,4 +1,4 @@
--- Raise the controlled owner's unique Postio address lookup allowance from 20 to 40.
+-- Reassert the approved 40-request Postio allowance after a verified Production schema drift.
 -- Preserve the row lock, owner/expiry checks, ambiguous-outcome stop, replay,
 -- database-capacity guard, immutable dispatch history and service-only grants.
 create or replace function public.reserve_sitefit_trial_address(p_trial uuid,p_owner uuid,p_key text) returns jsonb

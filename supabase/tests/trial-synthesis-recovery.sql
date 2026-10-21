@@ -65,8 +65,8 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();t uuid;p uu
  or (select reserved_micros from public.controlled_proof where id=c)<>130000 then raise exception 'history or budget changed incorrectly';end if;
  begin update public.controlled_proof set state='snapshot_ready' where id=c;raise exception 'unverified recovery advanced';exception when others then if sqlerrm<>'proof_transition_denied' then raise;end if;end;
  -- Completion binding reuses normal trial replay/purchase identity without resetting the failed run.
- insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,free_projection)
- values(a,i.id,2,2,'free','ready',jsonb_build_object('schemaVersion',2,'analysisId',a)) returning id into d;
+ insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,provenance,free_projection)
+ values(a,i.id,2,2,'free','ready',jsonb_build_object('ai',jsonb_build_object('dispatches',1,'receipts',jsonb_build_array(jsonb_build_object('dispatch',1,'inputTokens',10,'outputTokens',2)))),jsonb_build_object('schemaVersion',2,'analysisId',a)) returning id into d;
  update public.trial_synthesis_recoveries set state='ready',report_id=d where id=rec;
  update public.controlled_proof set state='snapshot_ready',free_report_id=d where id=c;
  v:=public.claim_sitefit_trial(t,o,'snapshot',p,gen_random_uuid(),'coffee-shop',null);

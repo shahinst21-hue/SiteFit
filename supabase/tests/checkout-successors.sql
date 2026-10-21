@@ -26,7 +26,7 @@ payment uuid:=gen_random_uuid();params jsonb;pay public.payments;job jsonb;f uui
  if (select snapshots from public.controlled_trials where id=t)<>k then raise exception 'duplicate reserved another envelope';end if;
  insert into public.analyses(owner_id,property_id,business_type,business_category,status,submission_nonce,submission_sha256) values(o,p,'coffee-shop','coffee-shop','free_ready',n,repeat('a',64)) returning id into a;
  insert into public.analysis_inputs(analysis_id,version,user_supplied) values(a,1,'{}') returning id into i;
- insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,free_projection) values(a,i,1,2,'free','ready',jsonb_build_object('schemaVersion',2,'analysisId',a)) returning id into r;
+ insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,provenance,free_projection) values(a,i,1,2,'free','ready',jsonb_build_object('ai',jsonb_build_object('dispatches',1,'receipts',jsonb_build_array(jsonb_build_object('dispatch',1,'inputTokens',10,'outputTokens',2)))),jsonb_build_object('schemaVersion',2,'analysisId',a)) returning id into r;
  d:=public.reserve_sitefit_proof_dispatch(c,tok,'snapshot',lpad(k::text,64,'0'),'ai',repeat('a',64),650000);
  begin perform public.reserve_sitefit_proof_dispatch(c,tok,'snapshot',repeat('e',64),'ai',repeat('e',64),1);raise exception 'Snapshot ceiling exceeded';exception when others then if sqlerrm='Snapshot ceiling exceeded' then raise;end if;end;
  perform public.settle_sitefit_proof_dispatch(c,tok,d,'received',repeat('b',64));
