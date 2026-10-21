@@ -1,3 +1,4 @@
+import {validateCompetition} from '../competition/model.ts';
 import {validateResidentialScore} from '../analysis/residential-catchment.ts';
 import { object } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
@@ -67,6 +68,8 @@ export function validateFullProjection(value: unknown) {
     !/^[a-f0-9]{64}$/.test(p.bindingDigest) || contentDigest !== packetDigest(content) || !Array.isArray(p.sections) ||
     p.sections.length !== 8 || !Array.isArray(p.sourceDirectory) || !Array.isArray(p.supplementReferences) ||
     Buffer.byteLength(JSON.stringify(value)) > 131072) throw Error("invalid_full_projection");
+  const competition=object(p.presentation??{}).competition;
+  if(competition!==undefined)validateCompetition(competition);
   const residential=object(p.presentation??{}).residentialCatchment;
   if(residential!==undefined&&residential!==null)validateResidentialScore(residential);
   for (const [i, s] of p.sections.entries()) {

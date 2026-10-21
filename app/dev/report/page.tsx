@@ -1,3 +1,4 @@
+import {competitionFixture} from '@/tests/fixtures/competition';
 import type {Metadata} from 'next';
 import {headers} from 'next/headers';
 import {notFound} from 'next/navigation';
@@ -27,6 +28,7 @@ export default async function DevelopmentReport({searchParams}:{searchParams:Pro
   </div></main>;
   const selected=params.concept==='restaurant'?restaurant:params.concept==='salon'?salon:coffee;
   const report=structuredClone(selected) as unknown as Dashboard;
+  if(params.data==='competition'){report.competition=competitionFixture();report.editionLabel='Synthetic Competition fixture · no provider execution';}
   if(params.data==='worst'){
     report.address='طراحی آزمایشی — A very long address for stress testing only, Unit 12345, The Extremely Long Named Commercial Building with an adjoining frontage, London · 非ラテン文字';
     report.editionLabel='Synthetic presentation stress fixture — not real measurements';
