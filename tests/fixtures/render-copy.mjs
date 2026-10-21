@@ -22,9 +22,14 @@ registerHooks({resolve(s,c,next){
 },load(url,c,next){if(url.endsWith('.tsx'))return {format:'module',shortCircuit:true,source:ts.transpileModule(fs.readFileSync(fileURLToPath(url),'utf8'),{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.ESNext}}).outputText};return next(url,c)}});
 globalThis.fetch=()=>{throw Error('Static copy verification must not request data');};
 const name=process.argv[2];
-if(!['home','pricing','how-it-works','sample-report','snapshot','snapshot-stored','purchase','checkout'].includes(name))throw Error('Unknown fixture');
+if(!['home','pricing','how-it-works','sample-report','snapshot','snapshot-stored','competition-details','purchase','checkout'].includes(name))throw Error('Unknown fixture');
 let view;
-if(name==='snapshot-stored'){
+if(name==='competition-details'){
+ const {CompetitionDetails}=await import('../../components/competition-headroom.tsx');
+ const {competitionFixture}=await import('./competition.ts');
+ const value=competitionFixture();value.records=[{id:'f00d0000-0000-4000-8000-000000000001',name:'Example Coffee',categories:['Coffee shop'],longitude:-0.1,latitude:51.5,band:5}];
+ view=createElement(CompetitionDetails,{value});
+}else if(name==='snapshot-stored'){
  const {FreeSnapshot}=await import('../../components/free-snapshot.tsx');
  const {decisionFixture}=await import('./snapshot-decision.ts');
  const report=decisionFixture(process.argv[3]||'coffee-shop');
