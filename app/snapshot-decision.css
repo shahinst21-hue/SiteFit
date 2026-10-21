@@ -93,3 +93,11 @@
 /* Compact checkout disclosure; continuing is the affirmative action, never page load. */
 .sf-purchase-consent{gap:8px;margin-top:12px;padding-top:12px}.sf-purchase-consent .sf-purchase-legal{font-size:11px;line-height:1.45;color:#60646c}.sf-purchase-legal a{color:inherit}.sf-purchase-consent>p[role=status]:empty{display:none}
 @media(max-width:520px){.sf-unlock-dialog{padding:16px;max-height:calc(100dvh - 16px);width:calc(100% - 16px)}.sf-unlock-dialog h2{font-size:22px;margin:10px 0}.sf-unlock-dialog>p{font-size:12px;line-height:1.4;margin:8px 0}.sf-unlock-dialog>small{display:block;font-size:10px;line-height:1.35;margin-top:8px}.sf-unlock-dialog>.sf-unlock-context{padding:9px;font-size:12px}.sf-unlock-dialog>svg{display:none}.sf-unlock-dialog .sf-dialog-heading{margin-bottom:8px}.sf-purchase-consent{gap:7px;margin-top:8px;padding-top:8px}.sf-buyer-purpose select{min-height:36px;padding:5px 10px}}
+
+/* Six cards: three columns on desktop, two on tablet, one on phones. */
+.sf-decision-page .sf-factors{grid-template-columns:repeat(3,minmax(0,1fr))}
+.sf-paid-factor .sf-risk-preview{margin-bottom:20px;min-height:260px}
+.sf-paid-factor .sf-content-lock{margin-top:auto}
+.sf-risk-unlock{touch-action:manipulation}
+@media(max-width:1100px){.sf-decision-page .sf-factors{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.sf-decision-page .sf-factors{grid-template-columns:minmax(0,1fr)}}
