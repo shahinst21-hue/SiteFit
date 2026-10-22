@@ -1,3 +1,18 @@
+## 22 October purchase-clarity refinement
+
+Owner request: redesign Snapshot Summary, align analytical-card footers, make the three paid previews visibly locked, and use the same whole-report offer from every unlock entry point. This is presentation only; stored findings, scoring/recommendation rules, payment/consent, entitlements and commercial gates are unchanged.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Four uneven Summary rows; paid scope unclear | Three score/evidence rows plus named locked Premises Risk, Rent & lease and Actions | Distinguishes available findings from content available after purchase |
+| Analytical evidence/buttons at different heights | Shared footer anchored to the bottom of each grid card | Keeps evidence and continuation controls aligned across each row |
+| Subdued cards with section-specific offers | Explicit lock badge, concise benefits and a whole-report unlock action | Clarifies the access boundary without fabricated hidden findings |
+| Each modal sold one section | One consistent eight-section Full Report offer, total price, PDF and access duration | Makes clear that one £29 payment covers the complete report |
+
+Copy uses the concise plan/inclusion hierarchy seen on the official Notion and Linear pricing pages (reviewed 22 October 2026): https://www.notion.com/pricing and https://linear.app/pricing. It is adapted to SiteFit; no external claims, testimonials, discounts or conversion guarantees are imported. No paid evidence is added to the free payload. No extra analytics or provider/AI calls are introduced.
+
+Validation receipts and actual responsive screenshots are recorded with the protected PR. Browser emulation does not certify physical-device behaviour or an increase in conversion rate.
+
 # Snapshot decision experience — 18 October 2026
 
 Owner authority: the 15-point feedback on the real 67B Snapshot. This is the
