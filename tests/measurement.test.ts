@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {measurementConfig,googleDestinations} from '../lib/measurement/config.ts';
-import {consentChoice,parseConsent,canMeasure,googleConsent,consentForVisit} from '../lib/measurement/consent.ts';
+import {consentChoice,parseConsent,canMeasure,googleConsent,consentForVisit,optionalGoogleCookie} from '../lib/measurement/consent.ts';
 import {acquisitionFromSearch,acquisition,parseAcquisition} from '../lib/measurement/attribution.ts';
 import {safeJourney,safePage,ecommerce,admittedEcommerce} from '../lib/measurement/events.ts';
 import {GoogleMeasurement,type TagSink} from '../lib/measurement/runtime.ts';
@@ -27,6 +27,11 @@ test('live flag, exact production origin, cutover and sandbox destinations isola
 test('consent defaults denied, optional categories not inferred, expired/invalid choices rejected',()=>{
  assert.deepEqual(googleConsent(no()),{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
  assert.equal(parseConsent(undefined),null);assert.equal(parseConsent(JSON.stringify({...yes(),at:0})),null);assert.throws(()=>consentChoice({analytics:true,advertising:false,personalization:true}));assert.equal(canMeasure(consentChoice({analytics:true,advertising:false,personalization:false})),false);assert.equal(parseConsent(JSON.stringify(yes()))?.analytics,true);
+});
+
+test('withdrawal recognises ordinary and isolated Preview Google cookies without touching authentication',()=>{
+ for(const name of ['_ga','_ga_ZRCDT4R80E','_gcl_aw','sf_preview_ga','sf_preview_ga_ZRCDT4R80E','sf_preview_gcl_au'])assert.equal(optionalGoogleCookie(name),true);
+ for(const name of ['sitefit_consent_v1','sitefit_acquisition_v1','sb-project-auth-token','sf_preview_gateway','_gateway'])assert.equal(optionalGoogleCookie(name),false);
 });
 test('one shared loader after consent, one destination config only, manual route views deduplicate across remounts and refreshes',()=>{
  const calls:unknown[][]=[],store=new Map<string,string>();let loads=0;let onReady=()=>{};
@@ -70,5 +75,6 @@ test('existing-property debugging expires, stays on its approved Preview branch,
  assert.equal(update.analytics_storage,'granted');for(const k of ['ad_storage','ad_user_data','ad_personalization'])assert.equal(update[k],'denied');
  assert.doesNotMatch(JSON.stringify(calls),/Abc_1234|utm_source|purchase=private/);
  const tag=calls.find(c=>c[0]==='config')?.[2] as Record<string,unknown>;assert.equal(tag.cookie_prefix,'sf_preview');assert.equal(tag.campaign_source,'sitefit-preview-test');assert.equal(tag.debug_mode,true);
+ const settings=calls.find(c=>c[0]==='set')?.[1] as Record<string,unknown>;assert.equal(settings.cookie_prefix,'sf_preview');assert.equal(settings.cookie_domain,'none');assert.equal(settings.debug_mode,true);
  for(const c of calls.filter(c=>c[0]==='event'))assert.equal((c[2] as {send_to:string}).send_to,googleDestinations.analytics);
 });

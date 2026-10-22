@@ -18,3 +18,4 @@ export function googleConsent(c:Consent){return {analytics_storage:c.analytics?'
 export const canMeasure=(c:Consent|null)=>c?.analytics===true&&c.advertising===true;
 /** A failed withdrawal blocks tracking, but is not itself a persisted consent decision. */
 export const consentForVisit=(saved:Consent|null,blocked:boolean):Consent|null=>blocked&&canMeasure(saved)?null:saved;
+export const optionalGoogleCookie=(name:string)=>/^(_ga($|_)|_gcl_|sf_preview_(ga($|_)|gcl_))/.test(name);

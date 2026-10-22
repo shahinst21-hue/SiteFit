@@ -18,8 +18,8 @@ export class GoogleMeasurement {
   this.injected=true;
   const page=safePage(this.page);
   this.sink.command('js',new Date());
-  this.sink.command('set',{send_page_view:false,page_location:this.location(page.path),page_title:page.title,page_referrer:'',allow_google_signals:false,allow_ad_personalization_signals:this.config.sharedDebug?false:c!.personalization,ads_data_redaction:this.config.sharedDebug||!c!.advertising,url_passthrough:false});
-  this.sink.command('config',this.config.installation,{send_page_view:false,allow_enhanced_conversions:false,cookie_expires:15552000,...(this.config.environment==='test'?{debug_mode:true}:{}),...(this.config.sharedDebug?{cookie_prefix:'sf_preview',campaign_source:'sitefit-preview-test',campaign_medium:'debug',ignore_referrer:true}:{})});
+  this.sink.command('set',{send_page_view:false,page_location:this.location(page.path),page_title:page.title,page_referrer:'',allow_google_signals:false,allow_ad_personalization_signals:this.config.sharedDebug?false:c!.personalization,ads_data_redaction:this.config.sharedDebug||!c!.advertising,url_passthrough:false,...(this.config.environment==='test'?{debug_mode:true}:{}),...(this.config.sharedDebug?{cookie_prefix:'sf_preview',cookie_domain:'none'}:{})});
+  this.sink.command('config',this.config.installation,{send_page_view:false,allow_enhanced_conversions:false,cookie_expires:15552000,...(this.config.environment==='test'?{debug_mode:true}:{}),...(this.config.sharedDebug?{cookie_prefix:'sf_preview',cookie_domain:'none',campaign_source:'sitefit-preview-test',campaign_medium:'debug',ignore_referrer:true}:{})});
   this.sink.load(this.config.installation,()=>{this.ready=true;if(this.allowed())this.navigate(this.page);});
  }
  private location(path:string){const url=new URL(path,this.config.origin);for(const [k,v] of Object.entries(this.campaign))url.searchParams.set(k,v);return url.href;}
