@@ -1,5 +1,6 @@
 import "server-only";
-import {advisorVersion,advisorSchema,advisorInstructions,validateSnapshotAdvice} from "./advisor.ts";
+import {advisorContract,validateDecisionAdvice,validateSnapshotAdvice} from "./advisor.ts";
+import {recommendationPacket,recommendationFromScores,validateRecommendation,type RecommendationDecision} from './recommendation.ts';
 import {inControlledProof} from '../proof/context.ts';
 import { packetDigest } from "./canonical.ts";
 import { analysisAIProvider, type AIReceipt } from "./ai-provider.ts";
@@ -41,7 +42,7 @@ export async function interpretSections(packets: readonly InterpretationPacket[]
   return { sections: results.flatMap(result => result.section ? [result.section] : []), errors: results.flatMap(result => result.error ? [result.error] : []) };
 }
 
-export async function synthesiseSections(sections: readonly ValidatedSection[], provider: Provider, signal?: AbortSignal, businessType='coffee-shop', evidence:readonly Evidence[]=[]) {
+export async function synthesiseSections(sections: readonly ValidatedSection[], provider: Provider, signal?: AbortSignal, businessType='coffee-shop', evidence:readonly Evidence[]=[], policyDecision:RecommendationDecision=recommendationFromScores(null,undefined), walkingEvidence?:{populations:readonly number[]|null; similarBusinesses:readonly number[]|null; competitionState:string}) {
   if (sections.length !== 4 || new Set(sections.map(section => section.section)).size !== 4) throw new Error("incomplete_synthesis_sections");
   if (!['coffee-shop','restaurant','hair-salon','beauty-salon'].includes(businessType)) throw Error('invalid_advisor_business');
   // Selection-only IDs/roles/kinds are redundant after section validation. Keep
@@ -53,23 +54,24 @@ export async function synthesiseSections(sections: readonly ValidatedSection[], 
   const observations=evidence.filter(e=>e.quality.available&&e.licence.representationAllowed&&
     !(typeof e.value==='string'&&e.value.startsWith('Retained ')&&e.value.endsWith(' observations')));
   const limitationNotes=[...new Set(observations.flatMap(e=>e.quality.limitations))];
-  const packet = {version:advisorVersion,businessType,limitationNotes,observations:observations.map(e=>({sectionIds:e.sections,dataset:e.source.dataset,value:e.value,units:e.units,scope:e.scope,effectiveAt:e.effectiveAt,limitationIds:e.quality.limitations.map(note=>limitationNotes.indexOf(note))})),sections:sections.map(section=>({id:section.section,
+  const decision=validateRecommendation(policyDecision), contract=advisorContract(decision);
+  const packet = {version:'snapshot-advisor-v2',businessType,policyDecision:recommendationPacket(decision),...(walkingEvidence?{walkingEvidence:{...walkingEvidence,minutes:[5,10,15],scope:'Modelled cumulative walking catchments. Estimated Census residents and identified category-matched businesses, not observed customer demand or exhaustive competition.'}}:{}),limitationNotes,observations:observations.map(e=>({evidenceId:e.id,sectionIds:e.sections,dataset:e.source.dataset,value:e.value,units:e.units,scope:e.scope,effectiveAt:e.effectiveAt,limitationIds:e.quality.limitations.map(note=>limitationNotes.indexOf(note))})),sections:sections.map(section=>({id:section.section,
     conclusion:statement(section.conclusion),support:section.support.map(statement),opposition:section.opposition.map(statement),unknowns:section.unknowns.map(statement),
     alternatives:section.alternatives.map(statement),implication:statement(section.implication),question:statement(section.question),strength:section.strength}))};
   // One synthesis dispatch. Invalid or ambiguous output is never an automatic paid retry.
-  const response=await provider.interpret(packet,advisorInstructions,advisorSchema,signal);
-  const advisor=validateSnapshotAdvice(response.output);
+  const response=await provider.interpret(packet,contract.instructions,contract.schema,signal);
+  const advisor=validateDecisionAdvice(response.output,decision);
   if(businessType==='coffee-shop' ? advisor.formats.length!==3 : advisor.formats.length!==0)throw Error('invalid_advisor_formats');
   return {headline:advisor.recommendation.text,meaning:advisor.stance==='recommended'?'favourable':advisor.stance==='not_recommended'?'trade_off':'conditional',
     supportingSections:[...new Set([...advisor.recommendation.sectionIds,...advisor.why.sectionIds])],
     unknownSections:sections.filter(s=>s.unknowns.length).map(s=>s.section),
     evidenceIds:[...new Set(sections.flatMap(s=>[s.conclusion,...s.support,...s.opposition,...s.unknowns].flatMap(p=>p.evidenceIds)))],
     receipt:response.receipt,keyQuestions:sections.flatMap(s=>s.unknowns.slice(0,1).map(p=>p.text)),
-    coverage:'Recommendation about further pursuit, not verified demand, permitted use or lease readiness. Source scopes and limitations remain with each finding.',advisor};
+    coverage:'Recommendation about further pursuit, not verified demand, permitted use or lease readiness. Source scopes and limitations remain with each finding.',advisor,decision};
 }
 
 export function restoreSynthesis(stored: unknown, digest: string | undefined, sections: readonly ValidatedSection[], index: ReadonlyMap<string, Evidence>) {
-  const value = stored as (Omit<Awaited<ReturnType<typeof synthesiseSections>>, "advisor"> & {advisor?: ReturnType<typeof validateSnapshotAdvice>}) | null;
+  const value = stored as (Omit<Awaited<ReturnType<typeof synthesiseSections>>, "advisor"|"decision"> & {advisor?: ReturnType<typeof validateSnapshotAdvice>;decision?:RecommendationDecision}) | null;
   const known = new Set(sections.map(section => section.section));
   if (!value || digest !== packetDigest(sections) || typeof value.headline !== "string" || !value.headline || value.headline.length > 300 || /[<>]/.test(value.headline) ||
     !["favourable", "trade_off", "conditional", "no_basis"].includes(String(value.meaning)) ||
@@ -79,5 +81,7 @@ export function restoreSynthesis(stored: unknown, digest: string | undefined, se
     new Set(value.supportingSections).size !== value.supportingSections.length || new Set(value.unknownSections).size !== value.unknownSections.length ||
     sections.some(section => section.unknowns.length && !value.unknownSections.includes(section.section))) throw new Error("stored_synthesis_binding_mismatch");
   if (value.advisor !== undefined) validateSnapshotAdvice(value.advisor);
+  if(value.advisor?.version==='snapshot-advisor-v2'&&!value.decision)throw Error('stored_synthesis_binding_mismatch');
+  if (value.decision !== undefined) {validateRecommendation(value.decision);if(value.advisor)validateDecisionAdvice(value.advisor,value.decision);}
   return structuredClone(value);
 }

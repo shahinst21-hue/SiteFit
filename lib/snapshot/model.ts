@@ -1,5 +1,6 @@
 import type { FreeProjection } from "../analysis/projection.ts";
 import type {SnapshotAdvice,AdvisorResearch} from '../analysis/advisor.ts';
+import type {RecommendationDecision} from '../analysis/recommendation.ts';
 
 export type DataState = "available" | "unknown" | "unavailable" | "loading" | "locked" | "not_applicable";
 export type EvidenceQuality = "good" | "moderate" | "limited" | "insufficient";
@@ -32,6 +33,7 @@ export type SnapshotMap = {
 };
 export type SnapshotTransport = { id: string; name: string; mode: string | null; distanceMetres: number | null; walkingMinutes: number | null; information: string | null; status: DataState };
 export type SnapshotView = {
+  recommendation?:RecommendationDecision;
   advisor?:SnapshotAdvice;
   advisorResearch?:AdvisorResearch[];
   schemaVersion: 1; mode: "production" | "demo"; generatedAt: string | null; analysisStatus: DataState;
@@ -70,6 +72,7 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
   const bounds: SnapshotMap["bounds"] = coordinates.length ? [Math.min(...coordinates.map(p => p[0]))-.0002, Math.min(...coordinates.map(p => p[1]))-.0002,
     Math.max(...coordinates.map(p => p[0]))+.0002, Math.max(...coordinates.map(p => p[1]))+.0002] : null;
   return {
+    ...(report.recommendation?{recommendation:structuredClone(report.recommendation)}:{}),
     ...(report.earlyView.advisor?{advisor:structuredClone(report.earlyView.advisor)}:{}),
     schemaVersion: 1, mode: "production", generatedAt: report.generatedAt, analysisStatus: "available",
     property: { address: report.property.address, confirmation: report.property.resolution === "provider_verified" ? "Postal address confirmed" : "Manually entered address",

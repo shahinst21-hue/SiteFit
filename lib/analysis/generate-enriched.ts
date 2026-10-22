@@ -10,8 +10,6 @@ import { epcAdapter } from "../data/adapters/epc.ts";
 import type { CollectionContext } from "../data/contracts.ts";
 import type { Json } from "../supabase/database.types.ts";
 import { enrichedPackets } from "./enriched-packets.ts";
-import {validateFreeProjection} from "./projection.ts";
-import type {CompetitionResult} from "../competition/model.ts";
 import { enrichedProjection } from "./enriched-projection.ts";
 import { evidenceIndex, type Evidence } from "./evidence.ts";
 import { analysisAIProvider, AnalysisAIError, type AIReceipt } from "./ai-provider.ts";
@@ -21,8 +19,10 @@ import { packetDigest } from "./canonical.ts";
 import { weightManifest, scoringVersions } from "./scoring.ts";
 import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
 import {traceCollection,reportMissingSources} from './collection-diagnostics.ts';
+import {residentialFromEvidence} from './residential-catchment.ts';
+import {queryPoint} from '../data/query-point.ts';
+import {recommendationFromScores} from './recommendation.ts';
 
-const validateCompetitionProjection=(projection:ReturnType<typeof enrichedProjection>,competition:CompetitionResult)=>validateFreeProjection({...projection,competition});
 type Early = ReturnType<typeof restoreSynthesis>;
 type Partial = {enrichmentVersion: "phase8-observations-1"; evidence: Evidence[]; packets: InterpretationPacket[];
   sections: ValidatedSection[]; dispatches: number; receipts: AIReceipt[]; early?: Early; earlyPacketDigest?: string};
@@ -66,12 +66,17 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
     if(error)throw new Error("partial_report_persistence_failed");
   }
   if(interpreted.errors.length){await preserve(interpreted.errors);throw new Error("section_analysis_incomplete");}
+  const competition=await competitionForSnapshot(owner,context,snapshots,signal);
+  const residential=residentialFromEvidence(prepared.evidence,context.businessType,queryPoint(context),new Date());
+  // Source adapters do not currently establish exact-unit legal clearance or
+  // favourable usable journeys. Keep these unresolved/conditional, never infer them.
+  const access=interpreted.sections.find(s=>s.section==='customer-access')!;
+  const decision=recommendationFromScores(residential,competition,undefined,{state:access.strength==='insufficient'?'unresolved':'conditional',evidenceIds:[...access.conclusion.evidenceIds]});
   let early: Early;
-  try {early=prior?.early ? restoreSynthesis(prior.early,prior.earlyPacketDigest,interpreted.sections,prepared.index) : await synthesiseSections(interpreted.sections,ai,signal,context.businessType,prepared.evidence);}
+  try {early=prior?.early ? restoreSynthesis(prior.early,prior.earlyPacketDigest,interpreted.sections,prepared.index) : await synthesiseSections(interpreted.sections,ai,signal,context.businessType,prepared.evidence,decision,{populations:residential?.populations??null,similarBusinesses:competition.counts,competitionState:competition.state});}
   catch(error) {await preserve([{section:"early-view",code:"synthesis_unavailable",cause:error instanceof AnalysisAIError?error.code:'output_validation_failed'}]);throw new Error("synthesis_incomplete",{cause:error});}
   progress.synthesis();
-  const competition=await competitionForSnapshot(owner,context,snapshots,signal);
-  const generatedAt=new Date().toISOString(), projection=validateCompetitionProjection(enrichedProjection(context,interpreted.sections,early,prepared.evidence,snapshots,null,generatedAt),competition);
+  const generatedAt=new Date().toISOString(), projection=enrichedProjection(context,interpreted.sections,early,prepared.evidence,snapshots,null,generatedAt,competition);
   const audit={inputId:context.inputId,generatedAt,scoringVersions,
     weights:prepared.packets.map(p=>weightManifest(p.section,context.category)),
     metrics:built.metrics.map(m=>({id:m.id,version:m.version,sourceSnapshotId:m.sourceSnapshotId,score:null,direction:"unreviewed"})),comparison:null,

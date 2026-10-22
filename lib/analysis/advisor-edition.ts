@@ -8,6 +8,9 @@ import {runProofScope,type ProofStore} from '../proof/context.ts';
  * atomically against existing case holds before fetch. No customer read calls it. */
 export async function generateAdvisorEdition(options:{report:FreeProjection;research:AdvisorResearch[];store:ProofStore;fetch?:typeof fetch;key?:string;inputRate:number;outputRate:number}) {
  const report=validateFreeProjection(options.report);
+ // This legacy append-only v1 edition stores an independently chosen stance.
+ // Scored Snapshots must use the v2 generation contract, never this old path.
+ if(report.recommendation||report.residentialCatchment!==undefined||report.competition!==undefined)throw Error('score_bound_advisory_edition_required');
  if(!options.store.received||options.inputRate<2.5||options.outputRate<10)throw Error('advisor_execution_binding');
  const research=validateAdvisorResearch(options.research);
  const packet={version:advisorVersion,businessType:report.businessType,research,

@@ -6,10 +6,11 @@ import type { interpretSections, synthesiseSections } from "./section-engine.ts"
 import type { Evidence } from "./evidence.ts";
 import type { Dimension, EvidenceStrength } from "./scoring.ts";
 import type { residentialMetric } from "./metrics.ts";
-import {validateSnapshotAdvice,type SnapshotAdvice} from './advisor.ts';
+import {validateSnapshotAdvice,validateDecisionAdvice,type SnapshotAdvice} from './advisor.ts';
+import {bindRecommendation,type RecommendationDecision} from './recommendation.ts';
 type Sections = Awaited<ReturnType<typeof interpretSections>>["sections"];
-type EarlyView = Omit<Awaited<ReturnType<typeof synthesiseSections>>, 'advisor'> & {advisor?:SnapshotAdvice};
-export type LegacyFreeProjection = { schemaVersion: 2; competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; residentialState?:ResidentialState; analysisId: string; generatedAt: string;
+type EarlyView = Omit<Awaited<ReturnType<typeof synthesiseSections>>, 'advisor'|'decision'> & {advisor?:SnapshotAdvice;decision?:RecommendationDecision};
+export type LegacyFreeProjection = { schemaVersion: 2; recommendation?:RecommendationDecision; competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; residentialState?:ResidentialState; analysisId: string; generatedAt: string;
   property: { address: string; resolution: string; precision: string }; businessType: string;
   earlyView: { headline: string; reason: string; meaning: string; strength: EvidenceStrength; keyQuestions: string[]; coverage: string; advisor?:SnapshotAdvice };
   dimensions: { id: Dimension; title: string; conclusion: string; reason: string; strength: EvidenceStrength; meaning: string;
@@ -33,7 +34,7 @@ function sourceUrl(value: string): string | null {
 }
 export function freeProjection(context: CollectionContext, sections: Sections, early: EarlyView, evidence: readonly Evidence[], residential: ReturnType<typeof residentialMetric> | null, generatedAt: string): LegacyFreeProjection {
   if (sections.length !== 4) throw new Error("incomplete_projection");
-  return { schemaVersion: 2, analysisId: context.analysisId, generatedAt,
+  return { schemaVersion: 2, ...(early.decision?{recommendation:early.decision}:{}), analysisId: context.analysisId, generatedAt,
     property: { address: context.selectedProperty.formattedAddress, resolution: context.selectedProperty.resolution, precision: context.selectedProperty.point?.precision ?? "unknown" }, businessType: context.businessType,
     earlyView: { headline: early.headline, reason: early.advisor?.why.text ?? sections.find(section => section.section === "customer-base")!.reasons[0].text, meaning: early.meaning ?? "conditional", strength: sections.some(section => section.strength === "limited") ? "limited" : "insufficient", keyQuestions: early.keyQuestions, coverage: early.coverage, ...(early.advisor?{advisor:early.advisor}:{}) },
     dimensions: sections.map(section => {
@@ -85,5 +86,9 @@ export function validateFreeProjection(value: unknown): FreeProjection {
   if(row.residentialState!==undefined)reconstructed.residentialState=validateResidentialState(row.residentialState);
   if(row.residentialCatchment!==undefined)reconstructed.residentialCatchment=row.residentialCatchment===null?null:validateResidentialScore(row.residentialCatchment);
   if(row.earlyView.advisor!==undefined) reconstructed.earlyView.advisor=validateSnapshotAdvice(row.earlyView.advisor);
+  if(row.recommendation!==undefined){
+    reconstructed.recommendation=bindRecommendation(row.recommendation,reconstructed.residentialCatchment,reconstructed.competition);
+    if(reconstructed.earlyView.advisor?.version==='snapshot-advisor-v2')validateDecisionAdvice(reconstructed.earlyView.advisor,reconstructed.recommendation);
+  }else if(reconstructed.earlyView.advisor?.version==='snapshot-advisor-v2')throw Error('recommendation_missing');
   return row.schemaVersion === 3 ? {...reconstructed, schemaVersion: 3, spatial: validateEnrichedSpatialProjection(row.spatial)} : reconstructed;
 }

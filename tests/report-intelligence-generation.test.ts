@@ -15,6 +15,32 @@ import { dashboardFromStored } from "../lib/report-dashboard/model.ts";
 import { renderReportPDF, exportParagraphs } from "../lib/report-dashboard/pdf.ts";
 import { PDFDocument } from "pdf-lib";
 import { sectionExport, validateFullProjection } from "../lib/report-intelligence/export.ts";
+import {recommendationFixture} from './fixtures/recommendation.ts';
+
+test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected once and cannot fulfil or redispatch',async()=>{
+ for(const changeTitle of [false,true]){
+  const db=store(true),p=db.value().preparation,{residential,competition,decision}=recommendationFixture();
+  p.narrativeVersion='consultant-narrative-v2';p.scenarioFit=evaluateScenarioFit({businessType:'coffee-shop',facts:[]});
+  p.presentation={recommendation:decision,residentialCatchment:residential,competition,freeReportId:ids.correlation,analysisTimestamp:date,
+    property:{id:ids.property,label:'Synthetic policy regression unit',precision:'postcode_centroid'},spatial:{reportId:ids.correlation,digest:null,state:'unavailable'},photo:{state:'unavailable'}};
+  db.value().checkpoint=newCheckpoint(p);
+  const claim={text:'Daytime customer activity and exact-unit premises conditions remain unverified.',kind:'unknown',factIds:[],operatorIds:[],referenceIds:[]};
+  const lead={...claim,text:changeTitle?'Conditional shortlist':decision.title};
+  const narrative={version:'consultant-narrative-v2',verdict:[lead,claim,claim],strengths:[claim],risks:[claim],priorityAction:claim,
+    actions:Array.from({length:4},()=>({action:claim,consequence:claim})),sections:sectionKeys.map(key=>({key,conclusion:key==='overview'?lead:claim,analysis:[claim],decisionTest:claim}))};
+  let calls=0;
+  const provider={async interpret(d:{group:string},packet:ReturnType<typeof catalogPacket>&{policyDecision?:{title:string}}){
+   calls++;if(d.group==='synthesis')assert.equal(packet.policyDecision?.title,decision.title);
+   return {state:'received',output:d.group==='synthesis'?narrative:{sections:packet.sections.map(key=>({key,
+    lead:String(packet.atoms.find(a=>a[1]===key&&a[2]==='conclusion')?.[0]??'unavailable'),
+    reasons:packet.atoms.filter(a=>a[1]===key&&a[2]==='reason').map(a=>String(a[0])),implications:[],actions:[]}))},receipt:{}};
+  }} as unknown as ReturnType<typeof fullProvider>;
+  const result=await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider});assert.equal(calls,3);
+  if(changeTitle){assert.equal(result.status,'draft');assert.equal(result.checkpoint.dispatches[2].state,'invalid');assert.equal(result.checkpoint.dispatches[2].output,null);}
+  else{assert.equal(result.status,'ready');const dashboard=dashboardFromStored(result.projection);assert.deepEqual(dashboard.recommendation,decision);assert.equal(dashboard.summary?.verdict[0],decision.title);assert.ok(exportParagraphs(dashboard,'overview').some(r=>r.text===decision.title));}
+  await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true});assert.equal(calls,3);
+ }
+});
 
 function store(supported = false) {
   const a = buildAssessment(context(), [], [], [], null, null, false, [], new Date(date)), catalog = buildCatalog(a, [], new Date(date));

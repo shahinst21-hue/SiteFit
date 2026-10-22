@@ -1,4 +1,7 @@
 import {validateCompetition} from '../competition/model.ts';
+import {bindRecommendation} from '../analysis/recommendation.ts';
+import type {ResidentialScore} from '../analysis/residential-catchment.ts';
+import type {CompetitionResult} from '../competition/model.ts';
 import {validateResidentialScore} from '../analysis/residential-catchment.ts';
 import { object } from "../data/validation.ts";
 import { packetDigest } from "../analysis/canonical.ts";
@@ -6,7 +9,7 @@ import { sectionKeys, type SectionKey, type Fact, type Catalog } from "./catalog
 import { scenarioSummary } from "./scenario-fit.ts";
 import { decisionSummary } from "./decision-summary.ts";
 import { expandedProfiles } from "./profiles.ts";
-import { validateNarrative, renderCommentary } from "./narrative.ts";
+import { validateNarrative, renderCommentary, type ConsultantNarrative } from "./narrative.ts";
 import type { ScenarioFit } from "./scenario-fit.ts";
 import { operatingFormatTable } from "./operating-comparison.ts";
 
@@ -72,6 +75,9 @@ export function validateFullProjection(value: unknown) {
   if(competition!==undefined)validateCompetition(competition);
   const residential=object(p.presentation??{}).residentialCatchment;
   if(residential!==undefined&&residential!==null)validateResidentialScore(residential);
+  const decision=object(p.presentation??{}).recommendation;
+  if(decision!==undefined){const d=bindRecommendation(decision,residential as ResidentialScore|null|undefined,competition as CompetitionResult|undefined);
+    if(p.narrative){const n=p.narrative as ConsultantNarrative;if(n.verdict[0].text!==d.title||n.sections[0].conclusion.text!==d.title)throw Error('full_recommendation_mismatch');}}
   for (const [i, s] of p.sections.entries()) {
     if (object(s).key !== sectionKeys[i]) throw Error("invalid_full_section_order");
     const section = expandedSection(p,s);

@@ -1,3 +1,4 @@
+import {decisionFixture} from './fixtures/snapshot-decision.ts';
 import {competitionFixture} from './fixtures/competition.ts';
 import {competitionUnavailable} from '../lib/competition/model.ts';
 import test from "node:test";
@@ -81,7 +82,7 @@ test("actual Full preparation includes qualified rental cohorts and source diges
   for(const competition of [competitionFixture(),competitionUnavailable('coffee-shop','provider_unavailable','Temporary provider failure.')]){
   const {c,row,assessment}=await fixture();let preparation:Record<string,unknown>|null=null;
   const calls:string[]=[];
-  const client={rpc:async(name:string,args:Record<string,string>)=>{
+  const client={from:(table:string)=>{assert.equal(table,'reports');const query={select:()=>query,eq:()=>query,abortSignal:()=>query,single:async()=>({data:{free_projection:{...decisionFixture(),analysisId:c.analysisId,businessType:c.businessType},analysis_id:c.analysisId,input_id:c.inputId},error:null})};return query;},rpc:async(name:string,args:Record<string,string>)=>{
     calls.push(name);
     if(name==='find_sitefit_full')return {data:null,error:null};
     if(name==='read_sitefit_full_material')return {data:{context:c,assessment,assessmentId:ids.property,assessmentDigest:packetDigest(assessment),

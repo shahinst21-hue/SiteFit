@@ -1,6 +1,11 @@
 import type {Dashboard, Source, Statement} from './model.ts';
 import type {SectionKey} from '../report-intelligence/catalog.ts';
 import {readableNumber,displayDate} from './display.ts';
+import {bindRecommendation,recommendationFromScores} from '../analysis/recommendation.ts';
+export function dashboardRecommendation(report:Dashboard){
+ if(report.recommendation)return bindRecommendation(report.recommendation,report.residentialCatchment,report.competition);
+ return report.residentialCatchment!==undefined||report.competition!==undefined?recommendationFromScores(report.residentialCatchment,report.competition):null;
+}
 
 /** An exact opening sentence/clause, never a new analytical conclusion.
  * The complete statement and decision-changing qualifications remain in the detail view. */

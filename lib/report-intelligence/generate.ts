@@ -1,3 +1,4 @@
+import {recommendationPacket} from '../analysis/recommendation.ts';
 import "server-only";
 import { packetDigest } from "../analysis/canonical.ts";
 import { type Catalog, type SectionKey, sectionKeys, catalogPacket } from "./catalog.ts";
@@ -96,15 +97,16 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const deterministicAppendix=edition.preparation.appendixPolicy==="deterministic-appendix-v1";
   const essential=edition.preparation.narrativeVersion==="consultant-narrative-v2";
   const contract=narrativeContract(deterministicAppendix,essential);
+  const decision=edition.preparation.presentation?.recommendation;
   const packet = useNarrative ? { ...narrativePacket(edition.preparation.catalog, edition.preparation.scenarioFit!, edition.preparation.identityOmissions,deterministicAppendix,essential),
-    groupFocus: selections } :
+    groupFocus: selections, ...(decision?{policyDecision:recommendationPacket(decision),walkingEvidence:{minutes:[5,10,15],populations:edition.preparation.presentation?.residentialCatchment?.populations??null,similarBusinesses:edition.preparation.presentation?.competition?.counts??null,competitionState:edition.preparation.presentation?.competition?.state??'unavailable',scope:'Estimated Census residents and identified similar businesses in cumulative modelled walking areas; not measured demand or an exhaustive business census.'}}:{}) } :
     { ...catalogPacket(synthesis, groupKeys.synthesis, edition.preparation.identityOmissions), version: "full-decision-v1",
     readiness: synthesis.readiness,
     scenarioDecision: edition.preparation.scenarioFit ? { version: edition.preparation.scenarioFit.version,
       status: edition.preparation.scenarioFit.status, leadingFormatId: edition.preparation.scenarioFit.leadingFormatId,
       priorityAction: edition.preparation.scenarioFit.priorityAction } : null,
     scope: "Resident & Workplace Context Index is not a commercial suitability score. No finance or legal clearance." };
-  const instructions = useNarrative ? contract.instructions : groupInstructions, schema = useNarrative ? contract.schema : selectionSchema;
+  const instructions = (useNarrative ? contract.instructions : groupInstructions)+(decision?' The supplied policyDecision is binding. Copy policyDecision.title exactly into verdict[0].text and the overview conclusion. Explain the scores, contrary evidence, missing daytime demand and next action without changing the category, score, legal state or lease-withholding rule. Limited Competition means limited headroom relative to residents, not low competition.':''), schema = useNarrative ? contract.schema : selectionSchema;
   let dispatch = edition.checkpoint.dispatches.findLast(d => d.group === "synthesis");
   const repair = !useNarrative && dispatch?.state === "invalid" && options.resume === true && !edition.checkpoint.repairUsed &&
     (dispatch.receipt as { validation?: string } | null)?.validation === "selection_rejected";
@@ -120,7 +122,10 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     if (outcome.state === "received") try {
       if (useNarrative && (outcome.output as { version?: unknown })?.version !== edition.preparation.narrativeVersion) throw Error("invalid_narrative");
       accepted = useNarrative ? validateGeneratedNarrative(outcome.output, edition.preparation.catalog, edition.preparation.scenarioFit!,deterministicAppendix) :
-      validateSelection(outcome.output, synthesis, groupKeys.synthesis); } catch (error) {
+      validateSelection(outcome.output, synthesis, groupKeys.synthesis);
+      if(decision&&useNarrative){const n=accepted as ConsultantNarrative;if(n.verdict[0].text!==decision.title||n.sections[0].conclusion.text!==decision.title)throw Error('invalid_narrative');}
+      } catch (error) {
+        accepted=null;
         if (useNarrative) { validationReason = narrativeFailureCode(error); validationDiagnostic = narrativeFailureDiagnostic(error); }
         /* No partial publication or rejected prose persistence. */
       }

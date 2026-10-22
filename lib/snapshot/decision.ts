@@ -1,4 +1,17 @@
 import type {FactorId, SnapshotFactor, SnapshotMetric, SnapshotView} from './model.ts';
+import {bindRecommendation,recommendationFromScores} from '../analysis/recommendation.ts';
+export function snapshotRecommendation(snapshot:SnapshotView) {
+ const r=snapshot.factors.find(f=>f.id==='customer-base')?.residentialCatchment, c=snapshot.factors.find(f=>f.id==='market-position')?.competition;
+ if(snapshot.recommendation)return bindRecommendation(snapshot.recommendation,r,c);
+ // A labelled current-policy interpretation of saved operands; never rewrite a
+ // Ready projection, rerun AI or present the historical advice as newly generated.
+ return r!==undefined||c!==undefined?recommendationFromScores(r,c):null;
+}
+export function scoreSummary(factor:SnapshotFactor) {
+ if(factor.id==='customer-base'&&factor.residentialCatchment!==undefined){const r=factor.residentialCatchment;return {label:r?`${r.score}/100 ${r.rating}`:'Score unavailable',text:r?`Residential catchment is ${r.rating.toLowerCase()}.`:'Verified walking population evidence is incomplete.'};}
+ if(factor.id==='market-position'&&factor.competition){const c=factor.competition;return {label:c.score===null?'Score unavailable':`${c.score}/100 ${c.rating}`,text:c.score===null?'A complete category-matched competition search is needed.':`${c.rating} headroom relative to nearby residents.`};}
+ return null;
+}
 export const recommendationLabels={recommended:'Recommended · Pursue this location',conditional:'Conditional · Resolve the priority issue first',not_recommended:'Not recommended · Look elsewhere'} as const;
 export function recommendationHeadline(text:string,stance:keyof typeof recommendationLabels){
  const first=text.match(/^.*?[.!?](?:\s|$)/u)?.[0].trim()??text;

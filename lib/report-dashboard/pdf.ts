@@ -9,6 +9,7 @@ import type {Dashboard} from './model.ts';
 import {reportPages,readableNumber,displayDate} from './model.ts';
 import type {SectionKey} from '../report-intelligence/catalog.ts';
 import {rentalCards} from './rental.ts';
+import {dashboardRecommendation} from './presentation.ts';
 
 /** One display contract for immutable tab and full exports. No private preparation/checkpoints or external resources. */
 export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;heading?:boolean}[]{
@@ -21,6 +22,10 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
     add(`Stored generation stage: ${report.structuredPreview.stage}. No incomplete AI narrative is published.`);
   }
   const emptyPricing=key==='rental-context'&&!report.rental.length;
+  const decision=dashboardRecommendation(report);
+  if(key==='overview'&&decision){add('Our recommendation',true);add(decision.title,true);add(decision.why);add(`Your next move: ${decision.nextMove}`);
+    for(const [label,metric] of [['Residential Catchment',decision.inputs.demand],['Competition Headroom',decision.inputs.competition]] as const)add(`${label}: ${metric?`${metric.score}/100 — ${metric.rating}`:'Score unavailable'}`);
+    add(`Decision policy ${decision.version}. ${report.recommendation?'Saved with the assessment.':'Current policy applied to saved scores. Original stored advice follows unchanged.'}`);decision.limitations.forEach(t=>add(t));}
   add(reportPages.find(x=>x.key===key)!.label,true);if(!emptyPricing)add(key==='competition'&&report.competition?competitionInterpretation(report.competition):p.conclusion);
   if(key==='overview'&&report.summary){add('Consultant Verdict',true);report.summary.verdict.forEach(t=>add(t));add('Key strengths',true);report.summary.strengths.forEach(s=>add(s.text));add('Key risks & unknowns',true);report.summary.risks.forEach(s=>add(s.text));add('Priority action',true);add(report.summary.priority);add(`${report.index.label}: ${report.index.value??'withheld'}. ${report.index.scope}. Hypothetical context policy only; not demand, profitability or suitability.`);add(`Decision readiness: ${report.readiness}`);}
   if(!emptyPricing&&!(key==='competition'&&report.competition))p.analysis.forEach(s=>add(`${s.kind.replaceAll('_',' ')}: ${s.text}`));
