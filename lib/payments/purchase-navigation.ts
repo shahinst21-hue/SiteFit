@@ -1,3 +1,4 @@
+import {trackEcommerce} from '../measurement/client.ts';
 import {stripeCheckoutUrl} from './checkout-url.ts';
 import type { SaleConsent } from "../legal/sale.ts";
 /** Both Snapshot purchase controls use this POST journey. Page anchors and
@@ -19,6 +20,7 @@ export async function purchaseNavigation(report: string, checkout: boolean, orig
   const login=checkout&&url.origin===origin&&!url.hash&&(url.pathname==='/login'&&url.search==='?next=%2Fpurchase%2Fcontinue'||url.pathname==='/purchase/auth'&&!url.search);
   if (url.username || url.password || (checkout ? !login&&!stripeCheckoutUrl(url) :
     !!url.hash || url.origin !== origin || !["/purchase/auth", "/purchase/resume"].includes(url.pathname))) throw Error("invalid_purchase_redirect");
+  if(checkout&&stripeCheckoutUrl(url)&&data.measurement?.paymentId)await trackEcommerce(data.measurement.paymentId,'begin_checkout');
   return url.href;
 }
 
@@ -28,5 +30,6 @@ export async function retryPurchaseNavigation(purchase:string,report:string,orig
  const url=new URL(value.url,origin);
  const internal=url.origin===origin&&!url.hash&&((url.pathname==='/purchase/return'&&url.searchParams.size===1&&/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(url.searchParams.get('purchase')??''))||(url.pathname===`/snapshots/${report}`&&url.search==='?purchase=1'));
  if(url.username||url.password||!internal&&!stripeCheckoutUrl(url))throw Error('invalid_retry_destination');
+ if(stripeCheckoutUrl(url)&&value.measurement?.paymentId)await trackEcommerce(value.measurement.paymentId,'begin_checkout');
  return url.href;
 }

@@ -2,12 +2,11 @@ import Link from "next/link";
 import { Wordmark } from "./ui";
 import { site } from "@/lib/site-config";
 import { Icon } from "./icon";
-import { CampaignPreference } from "./campaign-preference";
+import { CookiePreferencesButton } from "./measurement-controls";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <CampaignPreference />
       <div className="footer-top">
         <div>
           <Link href="/" aria-label="SiteFit home">
@@ -25,6 +24,7 @@ export function SiteFooter() {
           <Link href="/contact"><Icon name="help"/>Contact</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/terms">Terms</Link>
+          <CookiePreferencesButton/>
         </nav>
       </div>
       <div className="footer-bottom">

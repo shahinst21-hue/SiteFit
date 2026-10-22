@@ -1,4 +1,5 @@
 "use client";
+import {MeasurementMilestone} from './measurement-milestone';
 import {CompetitionHeadroom,CompetitionDetails} from './competition-headroom';
 import Link from "next/link";
 import {ResidentialCatchment,ResidentialDetails} from "./residential-catchment";
@@ -102,6 +103,7 @@ export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measu
  useEffect(()=>{if(openPurchase&&purchaseReport&&!dialog.current?.open)dialog.current?.showModal();},[openPurchase,purchaseReport]);
  function unlock(id:UnlockId){setSelected(id);dialog.current?.showModal();}
  return <div className="page-wrap sf-snapshot sf-decision-page" data-snapshot-root>
+  {reportId&&!demo&&<MeasurementMilestone event="free_report_viewed" id={reportId} business={snapshot.businessType} at={snapshot.generatedAt??undefined}/>}
   {measurement&&reportId&&!demo&&<SnapshotMeasurement reportId={reportId}/>}
   {demo&&<aside className="sf-demo-notice" role="note"><strong>Development demo · illustrative data</strong><span>These example findings do not measure this property.</span></aside>}
   <header className="sf-property-header"><div><p className="eyebrow">YOUR FREE SNAPSHOT</p><h1>{snapshot.property.address}</h1><p className="sf-property-meta">{businessTypes.find(t=>t.id===snapshot.businessType)?.label??snapshot.businessType}{snapshot.generatedAt&&<span> · Analysed {date(snapshot.generatedAt)}</span>}</p></div><Link href="/check-location" className="sf-new-location"><Icon name="add"/>New location</Link></header>
