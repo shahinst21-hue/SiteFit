@@ -58,3 +58,17 @@ test('Stripe facts, actual discounted/tax amounts and verified refunds drive eco
 test('test tags debug every event; Production omits debug_mode rather than setting false',()=>{
  for(const environment of ['test','production'] as const){const calls:unknown[][]=[];const runtime=new GoogleMeasurement({...config,environment},{command:(...args)=>calls.push(args),load:(_id,ready)=>ready(),get:()=>null,set:()=>{},disable:()=>{}});runtime.update(yes());runtime.track('business_selected','selected','coffee-shop');const parameters=calls.filter(c=>c[0]==='config'||c[0]==='event').map(c=>c[2] as Record<string,unknown>);assert.ok(parameters.length>1);for(const p of parameters)if(environment==='test')assert.equal(p.debug_mode,true);else assert.equal(Object.hasOwn(p,'debug_mode'),false);}
 });
+
+test('existing-property debugging expires, stays on its approved Preview branch, and cannot export Ads identifiers or grants',()=>{
+ const now=Date.parse('2026-10-22T18:00:00Z');
+ const env={VERCEL_ENV:'preview',VERCEL_GIT_COMMIT_REF:'codex/google-launch-measurement',SITEFIT_PURCHASE_ORIGIN:'https://sitefit-git-codex-google-launch-58c7ae-shahinst21-hues-projects.vercel.app',SITEFIT_GOOGLE_MEASUREMENT:'1',SITEFIT_GOOGLE_TEST_MEASUREMENT_ID:googleDestinations.analytics,SITEFIT_GOOGLE_PREVIEW_DEBUG_FROM:'2026-10-22T17:00:00Z',SITEFIT_GOOGLE_PREVIEW_DEBUG_UNTIL:'2026-10-22T19:00:00Z'};
+ const debug=measurementConfig(env,now);assert.equal(debug.enabled,true);assert.equal(debug.sharedDebug,true);assert.equal(debug.installation,googleDestinations.analytics);
+ for(const change of [{VERCEL_ENV:'production'},{VERCEL_ENV:undefined},{VERCEL_GIT_COMMIT_REF:'main'},{SITEFIT_GOOGLE_PREVIEW_DEBUG_UNTIL:'2026-10-22T17:00:00Z'},{SITEFIT_GOOGLE_PREVIEW_DEBUG_UNTIL:'2026-10-24T17:00:00Z'},{SITEFIT_PURCHASE_ORIGIN:'https://sitefit.co.uk'},{SITEFIT_GOOGLE_MEASUREMENT:'0'}])assert.equal(measurementConfig({...env,...change},now).enabled,false);
+ const calls:unknown[][]=[];const runtime=new GoogleMeasurement(debug,{command:(...args)=>calls.push(args),load:(_id,ready)=>ready(),get:()=>null,set:()=>{},disable:()=>{}});
+ runtime.update(consentChoice({analytics:true,advertising:true,personalization:true}),{gclid:'Abc_1234',utm_source:'google'});runtime.navigate('/purchase/return?purchase=private');
+ const update=calls.find(c=>c[0]==='consent'&&c[1]==='update')?.[2] as Record<string,unknown>;
+ assert.equal(update.analytics_storage,'granted');for(const k of ['ad_storage','ad_user_data','ad_personalization'])assert.equal(update[k],'denied');
+ assert.doesNotMatch(JSON.stringify(calls),/Abc_1234|utm_source|purchase=private/);
+ const tag=calls.find(c=>c[0]==='config')?.[2] as Record<string,unknown>;assert.equal(tag.cookie_prefix,'sf_preview');assert.equal(tag.campaign_source,'sitefit-preview-test');assert.equal(tag.debug_mode,true);
+ for(const c of calls.filter(c=>c[0]==='event'))assert.equal((c[2] as {send_to:string}).send_to,googleDestinations.analytics);
+});

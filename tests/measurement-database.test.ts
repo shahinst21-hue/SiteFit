@@ -11,6 +11,7 @@ test('real additive SQL claims serialize duplicate/retry submissions and enforce
  create table public.data_rights_audit(owner_id uuid,case_reference uuid,action text,plan_digest text,affected integer);
  create function public.sitefit_access_owner(uuid) returns uuid language sql as $$select $1$$;`);
  await db.exec(await readFile(new URL('../supabase/migrations/20261022160000_google_measurement.sql',import.meta.url),'utf8'));
+ await db.exec(await readFile(new URL('../supabase/migrations/20261022180000_google_preview_debug.sql',import.meta.url),'utf8'));
  const owner='00000000-0000-4000-8000-000000000001',other='00000000-0000-4000-8000-000000000002',analysis='00000000-0000-4000-8000-000000000011',report='00000000-0000-4000-8000-000000000021',payment='00000000-0000-4000-8000-000000000031';
  await db.query('insert into profiles values($1),($2)',[owner,other]);await db.query('insert into analyses(id,owner_id) values($1,$2)',[analysis,owner]);await db.query("insert into reports(id,analysis_id,tier,status) values($1,$2,'free','ready')",[report,analysis]);
  await db.query("insert into payments(id,owner_id,report_id,analysis_id,currency,amount_minor,test_mode,payment_version,status,checkout_reference) values($1,$2,$3,$4,'GBP',2900,true,1,'pending','cs_test_one')",[payment,owner,report,analysis]);
@@ -31,5 +32,13 @@ test('real additive SQL claims serialize duplicate/retry submissions and enforce
  for(const role of ['anon','authenticated','service_role']){await db.exec('set role '+role);await assert.rejects(db.exec('select * from google_measurement_dispatches'),/permission denied/);if(role!=='service_role')await assert.rejects(claim('purchase','pi_test_one'),/permission denied/);await db.exec('reset role');}
  assert.equal((await db.query<{n:number}>('select count(*)::int n from google_measurement_attribution')).rows[0].n,1);
  await db.exec("update google_measurement_attribution set expires_at=now()-interval '1 second'");assert.equal(await claim('purchase','pi_test_one'),null);await db.exec('select public.purge_expired_sitefit_google_attribution()');assert.equal((await db.query<{n:number}>('select count(*)::int n from google_measurement_attribution')).rows[0].n,0);assert.equal((await db.query<{n:number}>('select count(*)::int n from google_measurement_dispatches')).rows[0].n,3,'Retention does not reset the financial conversion fence');
+ assert.equal(await claim('purchase','pi_test_one',owner,true,'G-ZRCDT4R80E'),null,'Shared-property sandbox dispatch remains denied without operator authorisation');
+ await db.exec("insert into google_preview_debug_authorisations values('expired','G-ZRCDT4R80E',now()-interval '2 hours',now()-interval '1 hour')");
+ assert.equal(await claim('purchase','pi_test_one',owner,true,'G-ZRCDT4R80E'),null,'Expired authorisation cannot permit a test purchase');
+ await db.query("insert into google_preview_debug_authorisations select 'approved','G-ZRCDT4R80E',created_at,now()+interval '1 hour' from payments where id=$1",[payment]);
+ const shared=await Promise.all([claim('purchase','pi_test_one',owner,true,'G-ZRCDT4R80E'),claim('purchase','pi_test_one',owner,true,'G-ZRCDT4R80E')]);assert.equal(shared.filter(Boolean).length,1,'Existing-property proof preserves persistent deduplication');
+ assert.equal(await claim('purchase','pi_test_one',owner,false,'G-ZRCDT4R80E'),null,'Debug authorisation cannot change payment mode');
+ await assert.rejects(db.exec("update google_preview_debug_authorisations set expires_at=now()+interval '2 hours'"),/measurement_dispatch_history_immutable/);
+ await db.exec('set role service_role');await assert.rejects(db.exec("insert into google_preview_debug_authorisations values('forged','G-ZRCDT4R80E',now(),now()+interval '1 hour')"),/permission denied/);await db.exec('reset role');
  }finally{await db.close();}
 });
