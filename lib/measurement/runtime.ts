@@ -5,13 +5,14 @@ import type {Acquisition} from './attribution.ts';
 export type TagSink={command:(...args:unknown[])=>void;load:(id:string,ready:()=>void)=>void;get:(key:string)=>string|null;set:(key:string,value:string)=>void;disable:(value:boolean)=>void};
 export class GoogleMeasurement {
  private consent:Consent|null=null;private injected=false;private ready=false;private seen=new Set<string>();private page='/';private campaign:Acquisition={};
- private config:MeasurementConfig;private sink:TagSink;
- constructor(config:MeasurementConfig,sink:TagSink){this.config=config;this.sink=sink;sink.command('consent','default',googleConsent(deniedConsent()));}
+ private config:MeasurementConfig;private sink:TagSink;private clock:()=>number;
+ constructor(config:MeasurementConfig,sink:TagSink,clock:()=>number=Date.now){this.config=config;this.sink=sink;this.clock=clock;sink.command('consent','default',googleConsent(deniedConsent()));}
  eligible(at?:string){return this.config.environment==='test'||!!at&&Date.parse(at)>=Date.parse(this.config.since);}
- allowed(){return this.config.enabled&&canMeasure(this.consent)&&this.ready;}
+ private enabled(){return this.config.enabled&&(!this.config.sharedDebug||this.clock()<Date.parse(this.config.debugUntil??''));}
+ allowed(){return this.enabled()&&canMeasure(this.consent)&&this.ready;}
  update(c:Consent|null,campaign:Acquisition={}){
-  this.consent=c;this.campaign=this.config.sharedDebug?{}:campaign;this.sink.disable(!this.config.enabled||!canMeasure(c));
-  if(!this.config.enabled)return;
+  this.consent=c;this.campaign=this.config.sharedDebug?{}:campaign;this.sink.disable(!this.enabled()||!canMeasure(c));
+  if(!this.enabled())return;
   // Defaults precede all config/event commands. A shared destination is never partially unblocked.
   this.sink.command('consent','update',{...googleConsent(c??deniedConsent()),...(this.config.sharedDebug?{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'}:{})});
   if(!canMeasure(c)||this.injected)return;

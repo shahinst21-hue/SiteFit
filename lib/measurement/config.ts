@@ -1,5 +1,5 @@
 export const googleDestinations=Object.freeze({tag:'GT-NBB5SVJ4',installation:'AW-18530541419',analytics:'G-ZRCDT4R80E',adsAccount:'855-719-5993'});
-export type MeasurementConfig={enabled:boolean;installation:string;analytics:string;environment:'production'|'test';origin:string;since:string;rehearsal?:boolean;sharedDebug?:boolean};
+export type MeasurementConfig={enabled:boolean;installation:string;analytics:string;environment:'production'|'test';origin:string;since:string;rehearsal?:boolean;sharedDebug?:boolean;debugUntil?:string};
 /** Explicit activation; existing-property debugging is bounded to the approved Preview branch and a 24-hour window. */
 export function measurementConfig(env:Record<string,string|undefined>,now=Date.now()):MeasurementConfig{
  const production=env.VERCEL_ENV==='production';
@@ -12,5 +12,5 @@ export function measurementConfig(env:Record<string,string|undefined>,now=Date.n
  const sharedDebug=env.VERCEL_ENV==='preview'&&env.VERCEL_GIT_COMMIT_REF==='codex/google-launch-measurement'&&env.SITEFIT_PURCHASE_ORIGIN===previewOrigin&&testAnalytics===googleDestinations.analytics&&testTag===testAnalytics&&Date.parse(debugFrom)<=now&&Date.parse(debugFrom)>=now-86400000&&debugUntil>now&&debugUntil-Date.parse(debugFrom)<=86400000;
  // Ordinary Preview requires an isolated G tag; the separately bounded sharedDebug path is owner-authorised.
  const isolated=/^G-[A-Z0-9]+$/.test(testAnalytics)&&testTag===testAnalytics&&testAnalytics!==googleDestinations.analytics;
- return {enabled:rehearsal||env.SITEFIT_GOOGLE_MEASUREMENT==='1'&&(production?dated&&env.SITE_URL==='https://sitefit.co.uk'&&!controlled:isolated||sharedDebug),installation:production?googleDestinations.installation:rehearsal?'AW-LOCALONLY':testTag,analytics:production?googleDestinations.analytics:rehearsal?'G-LOCALONLY':testAnalytics,environment:production?'production':'test',origin:sharedDebug?previewOrigin:'https://sitefit.co.uk',since:production?since:sharedDebug?debugFrom:'2000-01-01T00:00:00.000Z',rehearsal,sharedDebug};
+ return {enabled:rehearsal||env.SITEFIT_GOOGLE_MEASUREMENT==='1'&&(production?dated&&env.SITE_URL==='https://sitefit.co.uk'&&!controlled:isolated||sharedDebug),installation:production?googleDestinations.installation:rehearsal?'AW-LOCALONLY':testTag,analytics:production?googleDestinations.analytics:rehearsal?'G-LOCALONLY':testAnalytics,environment:production?'production':'test',origin:sharedDebug?previewOrigin:'https://sitefit.co.uk',since:production?since:sharedDebug?debugFrom:'2000-01-01T00:00:00.000Z',rehearsal,sharedDebug,...(sharedDebug?{debugUntil:env.SITEFIT_GOOGLE_PREVIEW_DEBUG_UNTIL}:{})};
 }
