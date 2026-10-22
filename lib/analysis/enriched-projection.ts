@@ -7,11 +7,16 @@ import type { Evidence } from "./evidence.ts";
 import { enrichedEvidence } from "./enriched-evidence.ts";
 import { enrichedSpatialProjection } from "./enriched-spatial-projection.ts";
 import { freeProjection, validateFreeProjection } from "./projection.ts";
+import type {CompetitionResult} from '../competition/model.ts';
 
 export function enrichedProjection(context: CollectionContext, sections: Parameters<typeof freeProjection>[1], early: Parameters<typeof freeProjection>[2],
-  evidence: readonly Evidence[], snapshots: readonly StoredSnapshot[], residential: Parameters<typeof freeProjection>[4], generatedAt: string) {
+  evidence: readonly Evidence[], snapshots: readonly StoredSnapshot[], residential: Parameters<typeof freeProjection>[4], generatedAt: string, competition?:CompetitionResult) {
   enrichedEvidence(context, snapshots, new Date(generatedAt));
-  const projection = freeProjection(context, sections, early, evidence.filter(e => e.schemaVersion === 1), residential, generatedAt);
+  // Scores and Competition are attached together by the generator. Do not validate
+  // the decision against an intermediate projection without Competition evidence.
+  const {decision,...withoutDecision}=early;
+  const projection = freeProjection(context, sections, {...withoutDecision,advisor:early.advisor?.version==='snapshot-advisor-v2'?undefined:early.advisor}, evidence.filter(e => e.schemaVersion === 1), residential, generatedAt);
+  void decision;
   for (const d of projection.dimensions) {
     const scoped = evidence.filter(e => e.schemaVersion === 2 && e.sections.includes(d.id));
     const observations = scoped.filter(e => e.quality.available && (typeof e.value === "number" || e.source.dataset === "point-rivers-sea"))
@@ -25,6 +30,7 @@ export function enrichedProjection(context: CollectionContext, sections: Paramet
   const score=residentialFromEvidence(evidence,context.businessType,queryPoint(context),new Date(generatedAt));
   const populationState=score?"ready":residentialMaterial(context,snapshots,new Date(generatedAt)).state;
   return validateFreeProjection({...projection, schemaVersion: 3, residentialCatchment:score, residentialState:populationState,
+    ...(competition?{competition}:{}),...(early.decision?{recommendation:early.decision}:{}),earlyView:{...projection.earlyView,...(early.advisor?{advisor:early.advisor}:{})},
     property: {...projection.property, precision: context.enrichment?.identity.point?.precision ?? projection.property.precision},
     spatial: enrichedSpatialProjection(context,snapshots)});
 }

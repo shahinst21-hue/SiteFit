@@ -26,7 +26,7 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
       const key = options.key ?? process.env.OPENAI_API_KEY;
       if (!key || !key.startsWith("sk-")) throw new AnalysisAIError("configuration_missing");
       const input = JSON.stringify(packet);
-      if (Buffer.byteLength(input) > (packet.version === "snapshot-advisor-v1" ? analysisAI.maxAdvisorPacketBytes : analysisAI.maxPacketBytes) || Buffer.byteLength(instructions) > analysisAI.maxInstructionsBytes ||
+      if (Buffer.byteLength(input) > (["snapshot-advisor-v1","snapshot-advisor-v2"].includes(String(packet.version)) ? analysisAI.maxAdvisorPacketBytes : analysisAI.maxPacketBytes) || Buffer.byteLength(instructions) > analysisAI.maxInstructionsBytes ||
         Buffer.byteLength(JSON.stringify(schema)) > analysisAI.maxSchemaBytes || /"(?:formattedAddress|postcode|uprn|ownerId|email|providerAddressId|latitude|longitude|secret|apiKey)"\s*:/i.test(input)) throw new AnalysisAIError("invalid_packet");
       if (dispatches >= analysisAI.maxDispatches) throw new AnalysisAIError("dispatch_limit");
       if (signal?.aborted) throw new AnalysisAIError("timeout");
@@ -35,7 +35,7 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
         text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } });
       if(inControlledProof()&&Buffer.byteLength(requestBody)>proofLimits.maxEncodedAiBytes)throw new AnalysisAIError('invalid_packet');
       const dispatch = ++dispatches; const started = now().getTime();
-      const bounded = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(packet.version === "snapshot-advisor-v1" ? 60_000 : analysisAI.timeoutMs)]);
+      const bounded = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(["snapshot-advisor-v1","snapshot-advisor-v2"].includes(String(packet.version)) ? 60_000 : analysisAI.timeoutMs)]);
       let response: Response;
       try {
         response = await fetcher("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal: bounded,
@@ -70,7 +70,7 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
       let output: unknown;
       try { output = JSON.parse(outputTexts[0]); } catch { throw new AnalysisAIError("invalid_response"); }
       const receipt: AIReceipt = { provider: analysisAI.provider, requestedModel: analysisAI.model, returnedModel: body.model,
-        promptVersion: packet.version === "snapshot-advisor-v1" ? "snapshot-advisor-v1" : packet.version === "validated-synthesis-v1" ? "synthesis-analyst-v3" : analysisAI.promptVersion,
+        promptVersion: ["snapshot-advisor-v1","snapshot-advisor-v2"].includes(String(packet.version)) ? String(packet.version) : packet.version === "validated-synthesis-v1" ? "synthesis-analyst-v3" : analysisAI.promptVersion,
         schemaVersion: 1, generatedAt: now().toISOString(), packetDigest: createHash("sha256").update(input).digest("hex"),
         inputTokens: Number(usage.input_tokens), outputTokens: Number(usage.output_tokens), durationMs: now().getTime() - started, dispatch, store: false };
       receipts.push(receipt);

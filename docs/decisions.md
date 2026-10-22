@@ -1,3 +1,5 @@
+22 October owner amendment: Recommendation and Summary must use the same validated Residential Catchment and Competition Headroom scores. The ordered [Recommendation Engine v1 policy](recommendation-engine-v1.md) fixes the outcome; AI explains it without changing category or scores. Historical Ready records remain immutable; current-policy renderings are labelled. Implementation candidate; verification and release receipts are recorded separately.
+
 18 October owner amendment: Snapshot is a decision adviser. New synthesis must provide a clear pursuit recommendation, integrated rationale, counterargument, decision-changing condition and concrete action. Targeted research is allowed inside the existing US$0.65 Snapshot ceiling including prior holds; no invented facts, automatic retry, historical rewrite or commercial activation. [Implementation and boundaries](snapshot-advisor.md).
 
 # Accepted decisions

@@ -1,4 +1,5 @@
 import {validateCompetition,type CompetitionResult} from '../competition/model.ts';
+import {bindRecommendation,type RecommendationDecision} from '../analysis/recommendation.ts';
 import 'server-only';
 import {validateResidentialScore,type ResidentialScore} from '../analysis/residential-catchment.ts';
 import {reportPages,sourceURL} from './display.ts';
@@ -19,7 +20,7 @@ export type Profile = {dataset:string; seconds:number; period:string; universe:s
 export type Page = {key:SectionKey; conclusion:string; analysis:Statement[]; test:Statement|null; cautions:Statement[];
   factIds:string[]; referenceIds:string[]; unknowns:string[]; availability:string; direction:string};
 export type Dashboard = {version:'report-dashboard-v1'; reportId:string|null; digest:string; generatedAt:string;
-  competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; structuredPreview?:{stage:string};
+  recommendation?:RecommendationDecision; competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; structuredPreview?:{stage:string};
   address:string; business:string; businessLabel:string; precision:string; analysisTimestamp:string|null; editionLabel:string;
   pages:Page[]; sources:Source[]; references:Reference[]; summary:{verdict:string[]; strengths:Statement[]; risks:Statement[]; priority:string}|null;
   readiness:string; index:{label:string; value:number|null; scope:string; method:string; components:{label:string; weight:number; density:number|null; period:string; code:string}[]};
@@ -74,6 +75,7 @@ export function dashboardFromStored(value:unknown, options:{reportId?:string; ed
     businessLabel:p.business==='coffee-shop'?'Coffee shop':p.business==='restaurant'?'Restaurant':'Hair & beauty salon',
     precision:str(property.precision,'unknown'),analysisTimestamp:typeof presentation.analysisTimestamp==='string'?presentation.analysisTimestamp:null,
     editionLabel:options.editionLabel??'Full Report V1',pages,sources,references,residentialCatchment,competition,
+    ...(presentation.recommendation?{recommendation:bindRecommendation(presentation.recommendation,residentialCatchment,competition)}:{}),
     summary:strings(summary.consultantVerdict).length?{verdict:strings(summary.consultantVerdict),strengths:statements(summary.strengths),risks:statements(summary.weaknesses),priority:str(summary.priorityNextAction)}:null,
     readiness:str(p.readiness,'not assessed').replaceAll('_',' '),index:{label:'Resident & Workplace Context Index',
       value:index.state==='available'&&index.methodValidated===true&&index.hypotheticalPolicy===true&&typeof index.display==='number'?index.display:null,

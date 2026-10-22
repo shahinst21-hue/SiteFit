@@ -34,6 +34,7 @@ if(name==='competition-details'){
  const {decisionFixture}=await import('./snapshot-decision.ts');
  const report=decisionFixture(process.argv[3]||'coffee-shop');
  if(process.argv[4]==='advisor'){const {advisorFixture}=await import('./snapshot-advisor.ts');const stance=process.argv[5]||'conditional';if(!['recommended','conditional','not_recommended'].includes(stance))throw Error('Invalid fixture stance');report.earlyView.advisor=advisorFixture(stance);}
+ if(process.argv[4]==='recommendation'){const {recommendationFixture}=await import('./recommendation.ts');const {residential,competition}=recommendationFixture();report.residentialCatchment=residential;report.competition=competition;}
  if(process.argv[4]==='competition'){const {competitionFixture}=await import('./competition.ts');report.competition=competitionFixture();}
  if(process.argv[4]==='competition-unavailable'){const {competitionUnavailable}=await import('../../lib/competition/model.ts');report.competition=competitionUnavailable('coffee-shop','provider_unavailable','Provider search incomplete.');}
  if(process.argv[4]==='comparison')report.dimensions[0].why.comparison={description:'Whole Census output areas in the same local authority; not commercial peers.',density:80,units:'residents per hectare',percentile:72,peers:200,limitations:['Synthetic test comparison only.']};

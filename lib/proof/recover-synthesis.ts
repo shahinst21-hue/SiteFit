@@ -7,6 +7,9 @@ import {analysisAIProvider,type AIReceipt} from '../analysis/ai-provider.ts';
 import {evidenceIndex,type Evidence} from '../analysis/evidence.ts';
 import {validatePacket,type InterpretationPacket} from '../analysis/interpretation.ts';
 import {interpretSections,synthesiseSections,type ValidatedSection} from '../analysis/section-engine.ts';
+import {recommendationFromScores} from '../analysis/recommendation.ts';
+import {residentialFromEvidence} from '../analysis/residential-catchment.ts';
+import {queryPoint} from '../data/query-point.ts';
 import {enrichedPackets} from '../analysis/enriched-packets.ts';
 import {enrichedProjection} from '../analysis/enriched-projection.ts';
 import {scoringVersions,weightManifest} from '../analysis/scoring.ts';
@@ -47,7 +50,8 @@ export async function recoverTrialSynthesis(id:string,owner:string){
   const ai=analysisAIProvider({priorDispatches:4});
   const interpreted=await interpretSections(prior.packets,index,ai,undefined,prior.sections);
   if(interpreted.errors.length||ai.dispatches()!==4)throw Error('recovery_section_replay_failed');
-  const early=await synthesiseSections(interpreted.sections,ai,undefined,context.businessType,prior.evidence);
+  const decision=recommendationFromScores(residentialFromEvidence(prior.evidence,context.businessType,queryPoint(context),new Date()),undefined);
+  const early=await synthesiseSections(interpreted.sections,ai,undefined,context.businessType,prior.evidence,decision);
   const generatedAt=new Date().toISOString(),built=enrichedPackets(context,snapshots,null,new Date());
   const projection=enrichedProjection(context,interpreted.sections,early,prior.evidence,snapshots,null,generatedAt);
   const audit={inputId:context.inputId,generatedAt,scoringVersions,weights:prior.packets.map(p=>weightManifest(p.section,context.category)),

@@ -13,6 +13,14 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Snapshot UI demo", robots: { index: false, follow: false } };
 export default async function SnapshotDemo({ searchParams }: { searchParams: Promise<{ state?: string }> }) {
   const { state } = await searchParams;
+  if(state==='recommendation'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
+    const {recommendationFixture}=await import('@/tests/fixtures/recommendation');
+    const {decisionFixture}=await import('@/tests/fixtures/snapshot-decision');
+    const {residential,competition,decision,advice}=recommendationFixture();
+    const report={...decisionFixture(),residentialCatchment:residential,competition,recommendation:decision};
+    report.earlyView.advisor=advice;
+    return <><aside role="note">Synthetic decision regression fixture · no provider, AI or payment execution</aside><FreeSnapshot report={report}/></>;
+  }
   if(state==='opening'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview'))return <OpeningProgress kind="saved Snapshot"/>;
   if(state==='supply'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
     const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;
