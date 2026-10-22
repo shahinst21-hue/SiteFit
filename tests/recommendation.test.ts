@@ -9,7 +9,7 @@ import {snapshotFromStored} from '../lib/snapshot/model.ts';
 import {snapshotRecommendation,scoreSummary} from '../lib/snapshot/decision.ts';
 import {exportParagraphs,renderReportPDF} from '../lib/report-dashboard/pdf.ts';
 import type {Dashboard} from '../lib/report-dashboard/model.ts';
-import {dashboardRecommendation} from '../lib/report-dashboard/presentation.ts';
+import {dashboardRecommendation,dashboardDecisionNarrative} from '../lib/report-dashboard/presentation.ts';
 import {analysisAIProvider} from '../lib/analysis/ai-provider.ts';
 import {generateAdvisorEdition} from '../lib/analysis/advisor-edition.ts';
 import {synthesiseSections} from '../lib/analysis/section-engine.ts';
@@ -74,4 +74,7 @@ test('Free Snapshot rendering and Full Report/PDF use the same policy; Ready inp
  const report=JSON.parse(readFileSync('tests/fixtures/dashboard/coffee-shop.json','utf8')) as Dashboard;Object.assign(report,{residentialCatchment:residential,competition,recommendation:decision});
  const before=JSON.stringify(report);assert.deepEqual(dashboardRecommendation(report),decision);const text=exportParagraphs(report,'overview').map(r=>r.text).join('\n');assert.match(text,/Hold before shortlisting/);assert.match(text,/28\/100/);assert.match(text,/39\/100/);
  const pdf=await renderReportPDF(report);assert.ok(pdf.length>5000);assert.equal(JSON.stringify(report),before);
+ report.summary={...report.summary!,verdict:[decision.title,'Daytime activity needs a direct observation before this location can be shortlisted.','Verify the unit before committing.'],priority:'Observe lunchtime approaches and request the permitted-use record.'};
+ assert.equal(dashboardDecisionNarrative(report)?.why,report.summary.verdict[1]);assert.equal(dashboardDecisionNarrative(report)?.nextMove,report.summary.priority);
+ const explained=exportParagraphs(report,'overview').map(r=>r.text).join('\n');assert.ok(explained.includes(report.summary.verdict[1]));assert.ok(explained.includes(report.summary.priority));
 });

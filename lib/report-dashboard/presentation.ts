@@ -6,6 +6,11 @@ export function dashboardRecommendation(report:Dashboard){
  if(report.recommendation)return bindRecommendation(report.recommendation,report.residentialCatchment,report.competition);
  return report.residentialCatchment!==undefined||report.competition!==undefined?recommendationFromScores(report.residentialCatchment,report.competition):null;
 }
+export function dashboardDecisionNarrative(report:Dashboard){
+ const decision=dashboardRecommendation(report);if(!decision)return null;
+ const matched=report.recommendation&&report.summary?.verdict[0]===decision.title;
+ return {why:matched?report.summary!.verdict[1]??decision.why:decision.why,nextMove:matched?report.summary!.priority||decision.nextMove:decision.nextMove};
+}
 
 /** An exact opening sentence/clause, never a new analytical conclusion.
  * The complete statement and decision-changing qualifications remain in the detail view. */
