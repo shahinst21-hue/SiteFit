@@ -6,18 +6,19 @@ import {safeJourney,safePage,ecommerce,admittedEcommerce} from '../lib/measureme
 import {GoogleMeasurement,type TagSink} from '../lib/measurement/runtime.ts';
 import {verifiedCommerce} from '../lib/measurement/commerce.ts';
 import type Stripe from 'stripe';
-const config={enabled:true,installation:'AW-123',analytics:'G-TESTONLY',environment:'test' as const,origin:'https://sitefit.co.uk',since:'2000-01-01T00:00:00Z'};
+const config={enabled:true,installation:'G-TESTONLY',analytics:'G-TESTONLY',environment:'test' as const,origin:'https://sitefit.co.uk',since:'2000-01-01T00:00:00Z'};
 const yes=()=>consentChoice({analytics:true,advertising:true,personalization:false});const no=()=>consentChoice({analytics:false,advertising:false,personalization:false});
 test('live flag, exact production origin, cutover and sandbox destinations isolate controlled tests',()=>{
  assert.equal(measurementConfig({}).enabled,false);assert.equal(measurementConfig({SITEFIT_GOOGLE_MEASUREMENT:'1'}).enabled,false);
  assert.equal(measurementConfig({VERCEL_ENV:'preview',SITEFIT_GOOGLE_MEASUREMENT:'1',SITEFIT_GOOGLE_TEST_INSTALLATION_ID:googleDestinations.installation,SITEFIT_GOOGLE_TEST_MEASUREMENT_ID:googleDestinations.analytics}).enabled,false);
+ const preview={VERCEL_ENV:'preview',SITEFIT_GOOGLE_MEASUREMENT:'1',SITEFIT_GOOGLE_TEST_MEASUREMENT_ID:'G-ISOLATEDTEST'};assert.equal(measurementConfig(preview).enabled,true);assert.equal(measurementConfig(preview).installation,'G-ISOLATEDTEST');assert.equal(measurementConfig({...preview,SITEFIT_GOOGLE_TEST_INSTALLATION_ID:'AW-123'}).enabled,false);assert.equal(measurementConfig({...preview,SITEFIT_GOOGLE_TEST_INSTALLATION_ID:googleDestinations.analytics}).enabled,false);assert.equal(measurementConfig({...preview,SITEFIT_GOOGLE_TEST_MEASUREMENT_ID:googleDestinations.analytics}).enabled,false);
  const env={VERCEL_ENV:'production',SITE_URL:'https://sitefit.co.uk',SITEFIT_GOOGLE_MEASUREMENT:'1',SITEFIT_GOOGLE_LIVE_FROM:'2026-10-25T00:00:00Z'};assert.equal(measurementConfig(env).enabled,true);assert.equal(measurementConfig({...env,SITEFIT_CONTROLLED_TRIAL_ENABLED:'1'}).enabled,false);assert.equal(measurementConfig({...env,SITEFIT_GOOGLE_UI_REHEARSAL:'1'}).rehearsal,false);assert.equal(measurementConfig({VERCEL_ENV:'preview',SITEFIT_GOOGLE_UI_REHEARSAL:'1'}).rehearsal,true);assert.equal(measurementConfig({...env,SITE_URL:'https://evil.invalid'}).enabled,false);
 });
 test('consent defaults denied, optional categories not inferred, expired/invalid choices rejected',()=>{
  assert.deepEqual(googleConsent(no()),{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
  assert.equal(parseConsent(undefined),null);assert.equal(parseConsent(JSON.stringify({...yes(),at:0})),null);assert.throws(()=>consentChoice({analytics:true,advertising:false,personalization:true}));assert.equal(canMeasure(consentChoice({analytics:true,advertising:false,personalization:false})),false);assert.equal(parseConsent(JSON.stringify(yes()))?.analytics,true);
 });
-test('one shared loader after consent, AW config only, manual route views deduplicate across remounts and refreshes',()=>{
+test('one shared loader after consent, one destination config only, manual route views deduplicate across remounts and refreshes',()=>{
  const calls:unknown[][]=[],store=new Map<string,string>();let loads=0;let onReady=()=>{};
  const sink:TagSink={command:(...args)=>calls.push(args),load:(id,ready)=>{assert.equal(id,config.installation);loads++;onReady=ready;},get:k=>store.get(k)??null,set:(k,v)=>{store.set(k,v);},disable:()=>{}};
  const runtime=new GoogleMeasurement(config,sink);runtime.navigate('/?email=private');runtime.track('landing_view','x');assert.equal(loads,0);assert.equal(calls.some(c=>c[0]==='event'),false);
@@ -42,4 +43,8 @@ test('Stripe facts, actual discounted/tax amounts and verified refunds drive eco
  assert.deepEqual(verifiedCommerce({...session,payment_status:'unpaid'},'purchase'),[]);assert.deepEqual(verifiedCommerce(session,'begin_checkout'),[]);assert.equal(verifiedCommerce({...session,status:'open',payment_status:'unpaid'},'begin_checkout').length,1);
  const refund={id:'re_test_1',payment_intent:'pi_test_1',currency:'gbp',amount:500,status:'succeeded'} as Stripe.Refund;
  assert.equal(verifiedCommerce({...session,total_details:{amount_tax:0,amount_shipping:0,amount_discount:0}},'purchase',[refund])[1].total,500);assert.equal(verifiedCommerce(session,'purchase',[refund]).length,1,'No invented tax allocation');assert.throws(()=>verifiedCommerce(session,'purchase',[{...refund,amount:2000}]));assert.throws(()=>verifiedCommerce(session,'purchase',[{...refund,payment_intent:'pi_foreign'}]));
+});
+
+test('test tags debug every event; Production omits debug_mode rather than setting false',()=>{
+ for(const environment of ['test','production'] as const){const calls:unknown[][]=[];const runtime=new GoogleMeasurement({...config,environment},{command:(...args)=>calls.push(args),load:(_id,ready)=>ready(),get:()=>null,set:()=>{},disable:()=>{}});runtime.update(yes());runtime.track('business_selected','selected','coffee-shop');const parameters=calls.filter(c=>c[0]==='config'||c[0]==='event').map(c=>c[2] as Record<string,unknown>);assert.ok(parameters.length>1);for(const p of parameters)if(environment==='test')assert.equal(p.debug_mode,true);else assert.equal(Object.hasOwn(p,'debug_mode'),false);}
 });

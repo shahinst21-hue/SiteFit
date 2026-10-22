@@ -19,13 +19,13 @@ export class GoogleMeasurement {
   const page=safePage(this.page);
   this.sink.command('js',new Date());
   this.sink.command('set',{send_page_view:false,page_location:this.location(page.path),page_title:page.title,page_referrer:'',allow_google_signals:false,allow_ad_personalization_signals:c!.personalization,ads_data_redaction:!c!.advertising,url_passthrough:false});
-  this.sink.command('config',this.config.installation,{send_page_view:false,allow_enhanced_conversions:false,cookie_expires:15552000});
+  this.sink.command('config',this.config.installation,{send_page_view:false,allow_enhanced_conversions:false,cookie_expires:15552000,...(this.config.environment==='test'?{debug_mode:true}:{})});
   this.sink.load(this.config.installation,()=>{this.ready=true;if(this.allowed())this.navigate(this.page);});
  }
  private location(path:string){const url=new URL(path,this.config.origin);for(const [k,v] of Object.entries(this.campaign))url.searchParams.set(k,v);return url.href;}
  private once(key:string){if(this.seen.has(key)||this.seen.size>=1000)return false;try{if(this.sink.get('sf-ga:'+key))return false;this.sink.set('sf-ga:'+key,'1');}catch{/* Storage denial still prevents duplicates in this document. */}this.seen.add(key);return true;}
  navigate(path:string){this.page=path;if(!this.allowed())return;const p=safePage(path);this.sink.command('set',{page_location:this.location(p.path),page_title:p.title,page_referrer:''});if(this.once('page:'+p.path))this.send('page_view',{page_location:this.location(p.path),page_title:p.title,page_referrer:''});this.track('landing_view','landing');if(path==='/check-location')this.track('check_started','check');}
- private send(name:string,params:object){if(this.allowed())this.sink.command('event',name,{...params,deployment_environment:this.config.environment,debug_mode:this.config.environment==='test',transport_type:'beacon',send_to:this.config.analytics});}
+ private send(name:string,params:object){if(this.allowed())this.sink.command('event',name,{...params,deployment_environment:this.config.environment,...(this.config.environment==='test'?{debug_mode:true}:{}),transport_type:'beacon',send_to:this.config.analytics});}
  track(name:JourneyEvent,key:string,business?:string,reason?:string){if(!this.allowed()||!/^[a-zA-Z0-9:_-]{1,180}$/.test(key))return;const event=safeJourney(name,business,reason);if(this.once(name+':'+key))this.send(event.event,event.params);}
  ecommerce(name:'purchase'|'begin_checkout'|'refund',payload:Ecommerce){if(this.allowed())this.send(name,admittedEcommerce(payload,name));}
 }

@@ -95,8 +95,8 @@ Acquisition rows expire at 90 days and are opportunistically purged on binding. 
 | --- | --- |
 | `SITEFIT_GOOGLE_MEASUREMENT=1` | Explicit separate measurement activation; unset by default |
 | `SITEFIT_GOOGLE_LIVE_FROM` | ISO UTC Production cutover; excludes prior owner tests. Required with exact `SITE_URL=https://sitefit.co.uk` |
-| `SITEFIT_GOOGLE_TEST_INSTALLATION_ID` | An existing isolated non-Production AW test installation; must differ from live |
-| `SITEFIT_GOOGLE_TEST_MEASUREMENT_ID` | Matching existing isolated test GA4 destination; must differ from live |
+| `SITEFIT_GOOGLE_TEST_INSTALLATION_ID` | Optional standalone test GA4 tag; must equal the test Measurement ID (defaults to it); no Preview AW tag |
+| `SITEFIT_GOOGLE_TEST_MEASUREMENT_ID` | Standalone test GA4 destination; must differ from live |
 | `SITEFIT_GOOGLE_UI_REHEARSAL=1` | Local/protected Preview synthetic UI + in-memory command queue; no Google/Stripe/measurement DB requests. Ignored in Production |
 
 Production IDs are the owner-supplied public IDs above, not secrets. No MP secret, Ads API token, new package, paid CMP or recurring infrastructure cost is required. Never use live IDs in Local/Preview; DebugView is **not** isolation. Production controlled-trial/proof flags disable Google measurement even if its flag is accidentally set. No environment values have been activated in Production.
@@ -155,3 +155,26 @@ The Definition of Done remains **incomplete** while any receiving/consent/purcha
 | N. Manual setup | Not implemented | Follow ten-step activation checklist, privacy review, retention cadence and hosted migration checks before enabling. |
 | O. Launch readiness | Blocked | External receiving/critical conversion proof and hosted release checks are required for launch; intentionally deferred to approval. |
 | P. Next action | Not implemented | Review protected PR/CI, then approve a separate hosted release and isolated external verification stage. Keep campaigns paused. |
+
+## Follow-up review — 22 October 2026 (PR126)
+
+Owner now authorises a bounded Stripe Test Mode / existing-GA4 DebugView verification, without creating another property, provided it cannot affect Ads bidding or attributed conversions. This supersedes the earlier preference to defer external tests/use a separate test property. It does not authorise Production deployment or advertising.
+
+Review corrections implemented:
+
+- Preview can use a standalone GA4 test tag; an AW installation is no longer required, and Preview AW/combined installation is rejected. This remains a fallback capability, not a request to create a property. Production's one shared AW installation is unchanged.
+- The verified paid return now mounts the measurement observer for sandbox payments as well as real ones. Server owner/mode/verified-state checks and SQL environment fences remain authoritative. Unpaid/uncertain screens still cannot claim purchase.
+- Test config and every manual test event set debug_mode=true; Production omits the parameter. Google explicitly notes that debug_mode=false does not disable debug mode. [Official DebugView instructions](https://support.google.com/analytics/answer/7201382).
+
+Live read-back: Vercel Production Branch is main; PR126 targets codex/phase-12-intelligence. vercel.json additionally disables automatic main deployments. No custom Production deployment action exists in the PR CI workflow. Merging this PR to its current base would create a Preview, not automatically publish Production, under these settings. No setting was changed.
+
+Only this PR branch's Preview variables were prepared: verified existing sandbox Stripe key/product (£29 GBP, no charge), exact stable branch origin, test purchases enabled; Google measurement/rehearsal, paid fulfilment, commercial execution, controlled trial/proof and Zoho sending are explicitly off. Separate Preview/Production Supabase endpoints are configured. Existing deployments do not pick up environment changes until rebuilt. Production variables are untouched.
+
+External blockers established:
+
+- The selected Google browser account (owner account) displays the Analytics provisioning welcome rather than the SiteFit property. The connected read-only Analytics account inventory is empty. No filter/property configuration or receiving proof is accessible. Do not create a replacement property or switch to an unrelated Google account.
+- Existing-property debug purchase is **not currently enabled**: the code/SQL intentionally reject the live GA4 destination for sandbox ecommerce. A narrowly reviewed, non-Production-only exception requires actual account proof first: Active Exclude Developer Traffic filter (not merely Testing), its effective operation, DebugView access, and Ads import/tag-linkage review. Google documents a possible 24–36-hour filter application window; do not send purchases before exclusion is effective. Debug mode alone is not an Ads isolation guarantee. [Developer filtering](https://support.google.com/analytics/answer/13296662).
+- Hosted Development measurement tables are absent (Data API PGRST205 on zero-row schema probes). The new additive migration has not been installed in Development or Production. Local SQL tests do not replace a hosted migration/role/contention check.
+- No Stripe checkout/payment, webhook replay or external Google event was initiated in this review. End-to-end purchase receiving and deduplication remain unverified.
+
+Safe next action: open the existing SiteFit property with an authorised Editor account, verify its Active developer filter and Ads isolation, then prepare the narrowly gated shared-property debug path plus additive Development migration and run the bounded sandbox journey. Do not merge or deploy while these acceptance checks remain outstanding.

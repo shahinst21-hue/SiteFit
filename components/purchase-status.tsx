@@ -53,7 +53,7 @@ function PurchaseStatusSession({initial,cancelled}:{initial:State;cancelled:bool
   return <section data-return={cancelled?"cancel":"return"} className="simple-panel payment-recovery" aria-labelledby="payment-recovery-title"><p className="eyebrow">YOUR PURCHASE</p><h1 id="payment-recovery-title">{incomplete?"Your payment wasn't completed":state.paymentState==='pending'?'Your payment is still processing':"We couldn't verify your payment yet"}</h1><p>{incomplete?"Your Full Report hasn't been purchased yet. Your Snapshot is saved, and you can try again whenever you're ready.":'Please check the saved payment status before trying another payment. Your Snapshot is safe; no new purchase is made by checking.'}</p><div className="purchase-progress-actions">{incomplete&&<PaymentRetry purchase={state.id} report={state.report}/>}<Link className="button button-secondary" href={`/snapshots/${state.report}`}>Return to Snapshot</Link></div><button type="button" className="button button-text" onClick={()=>setRefresh(n=>n+1)}>{stale?'Check payment status again':'Check payment status'}</button></section>;
  }
 
- return <section className="simple-panel">{state.test===false&&<PurchaseMeasurement id={state.id}/>}
+ return <section className="simple-panel"><PurchaseMeasurement id={state.id}/>
 <p className="eyebrow">YOUR PURCHASE</p><h1>{state.test===false?'Payment confirmed.':'Test payment confirmed.'}</h1>
   <p className="sr-only" role="status" aria-live="polite">{stale?'Status updates paused.':view.title} {view.completed} of {view.total} steps confirmed.</p>
   <GenerationProgress view={view} stale={stale}/>
