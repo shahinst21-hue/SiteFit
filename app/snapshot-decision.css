@@ -134,3 +134,14 @@
 .sf-decision-page .sf-evidence-dialog>header h2{font-size:26px;line-height:1.2;overflow-wrap:normal;word-break:normal;max-width:none;margin:0;text-wrap:initial}
 .sf-evidence-dialog .sf-disclosure-body p{margin:12px 0;font-size:15px;line-height:1.65}
 @media(max-width:520px){.sf-evidence-dialog>header{gap:12px}.sf-decision-page .sf-evidence-dialog>header h2{font-size:22px}.sf-evidence-dialog>header>button{flex-shrink:0}}
+
+/* Keep the odd free Access card out of the compact paid-preview row on tablets. */
+@media(min-width:521px) and (max-width:1100px){
+ .sf-decision-page .sf-factor[data-factor=customer-access]{grid-column:1/-1}
+ .sf-decision-page .sf-locked-compact{align-self:start}
+}
+@media(min-width:680px) and (max-width:1100px){
+ .sf-decision-page .sf-factors{grid-template-columns:repeat(6,minmax(0,1fr))}
+ .sf-decision-page .sf-factor{grid-column:span 3}
+ .sf-decision-page .sf-locked-compact{grid-column:span 2;padding:18px;align-self:stretch}
+}
