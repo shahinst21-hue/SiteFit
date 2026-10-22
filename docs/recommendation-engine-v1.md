@@ -79,8 +79,13 @@ mechanism remains its existing v1 contract; it is not used for new score-bound
 customer generation. For Ready editions with saved score objects but no saved
 policy decision, rendering labels a **current policy interpretation of saved scores**
 in the evidence details and retains the original saved advice. No read schedules AI,
-provider collection or report creation. Editions without either new score contract
-retain their historical presentation rather than inventing scores.
+provider collection or report creation. Existing paid editions without a saved
+policy decision retain their original verdict: their already archived PDFs are
+immutable and keyed by the original content digest. Only new Full preparations
+freeze the shared policy for both dashboard and PDF. No old paid edition is
+silently reinterpreted or re-exported under a different decision. Editions without
+either new score contract retain their historical presentation rather than
+inventing scores.
 
 Summary reads the same score/rating as the analytical cards. The recommendation
 shows both scores, a reason and next action rather than an unrelated qualitative

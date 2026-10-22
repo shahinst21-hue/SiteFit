@@ -1,10 +1,13 @@
 import type {Dashboard, Source, Statement} from './model.ts';
 import type {SectionKey} from '../report-intelligence/catalog.ts';
 import {readableNumber,displayDate} from './display.ts';
-import {bindRecommendation,recommendationFromScores} from '../analysis/recommendation.ts';
+import {bindRecommendation} from '../analysis/recommendation.ts';
 export function dashboardRecommendation(report:Dashboard){
  if(report.recommendation)return bindRecommendation(report.recommendation,report.residentialCatchment,report.competition);
- return report.residentialCatchment!==undefined||report.competition!==undefined?recommendationFromScores(report.residentialCatchment,report.competition):null;
+ // Legacy paid editions can already have immutable archived PDFs keyed by their
+ // original content digest. Do not add a new dashboard verdict to those editions.
+ // New Full preparations freeze the policy decision before their first export.
+ return null;
 }
 export function dashboardDecisionNarrative(report:Dashboard){
  const decision=dashboardRecommendation(report);if(!decision)return null;
