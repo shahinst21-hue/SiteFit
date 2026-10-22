@@ -72,6 +72,9 @@ test('Free Snapshot rendering and Full Report/PDF use the same policy; Ready inp
  const rendered=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-stored','coffee-shop','recommendation'],{encoding:'utf8'});assert.equal(rendered.status,0,rendered.stderr);
  assert.match(rendered.stdout,/Hold before shortlisting/);assert.match(rendered.stdout,/28\/100 Limited/);assert.match(rendered.stdout,/39\/100 Limited/);assert.doesNotMatch(rendered.stdout,/sf-risk-blur|sf-risk-unlock/);
  const report=JSON.parse(readFileSync('tests/fixtures/dashboard/coffee-shop.json','utf8')) as Dashboard;Object.assign(report,{residentialCatchment:residential,competition,recommendation:decision});
+ const legacy=structuredClone(report);delete legacy.recommendation;
+ assert.equal(dashboardRecommendation(legacy),null,'An existing archived paid edition must retain its original verdict');
+ assert.equal(dashboardDecisionNarrative(legacy),null);
  const before=JSON.stringify(report);assert.deepEqual(dashboardRecommendation(report),decision);const text=exportParagraphs(report,'overview').map(r=>r.text).join('\n');assert.match(text,/Hold before shortlisting/);assert.match(text,/28\/100/);assert.match(text,/39\/100/);
  const pdf=await renderReportPDF(report);assert.ok(pdf.length>5000);assert.equal(JSON.stringify(report),before);
  report.summary={...report.summary!,verdict:[decision.title,'Daytime activity needs a direct observation before this location can be shortlisted.','Verify the unit before committing.'],priority:'Observe lunchtime approaches and request the permitted-use record.'};
