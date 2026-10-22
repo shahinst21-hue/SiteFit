@@ -1,4 +1,19 @@
-# Launch execution checkpoint — 16 October 2026
+# Launch execution checkpoint
+
+## Active critical path — 22 October 2026
+
+Owner direction: finish the product and first paid Google Search campaign. Vercel plan changes and Zoho changes are excluded from this workstream. Keep accepted design, scoring and completed functionality frozen; fix only defects that block a trustworthy purchase or delivery. Historical receipts below are not the current task list.
+
+1. **Unblock one complete Preview test.** Exact-head PR126 CI and Preview passed at `28b267d`; 480 unit tests, lint/types/build, database security and built HTTP checks passed. Consent and actual GA4 page events passed. The independent Development Full Report guard is exhausted at USD 2.44; do not raise it or alter historical reservations without a bounded allowance. Production controlled budget is separate and unchanged.
+2. **Prove the purchase-to-delivery journey once.** Use one synthetic owner, one saved Snapshot and Stripe Test Mode. Enable only branch-scoped test fulfilment after capacity is available. Check verified GBP 29 payment, automatic report preparation, Ready access and full/section PDF. Reuse the Snapshot for cancelled/declined/retry checks; never duplicate an entitlement or invoke AI merely to test a payment cancellation.
+3. **Close measurement proof.** Within a fresh bounded debug window, observe begin_checkout and purchase in Tag Assistant and GA4 DebugView; compare actual GBP amount and transaction ID. Refresh/repeated signed webhook must not duplicate purchase/report. Both Google filters remain Testing. Keep debug advertising grants denied, direct Ads conversions off and no campaign running during test transactions.
+4. **Protected product release.** Fix only evidenced failures; rerun affected tests and required CI. Integrate PR126 through the documented branch path, apply only its pending additive Production migrations, and deploy the verified release. Read back payment/fulfilment/measurement settings and smoke-test public routes and ownership. Commercial hosting eligibility remains an external release prerequisite, not an upgrade task in this workstream. Never activate public sales while a mandatory gate fails.
+5. **Prepare the first campaign, paused.** Reuse Campaign01 coffee-shop lease intent and existing landing page. Finalise a small Search draft, London coverage, explicit GBP29 offer, negative keywords and purchase conversion definition. No additional landing-page redesign or campaign02/03 work is needed for launch. See `campaigns/phase16-first-campaigns.md`.
+6. **Launch only with a recorded spending envelope.** Verify real Production measurement, then configure one appropriate Primary purchase conversion without duplicates. Record owner-approved daily/lifetime cap, dates and stop rule before activating the first campaign. Pause advertising if checkout, report delivery or spending controls fail. No advertising budget is currently recorded; campaign activation is not yet authorised for any numeric spend.
+
+Exit criterion: an externally verified test purchase delivers the purchased report/PDF exactly once, the protected Production candidate passes its gates, and the first campaign has a separately approved bounded budget. Do not reopen cosmetic or already resolved investigations.
+
+## Historical receipt — 16 October 2026
 
 Owner asks to complete the existing launch sequence in order, continuing independent no-spend work. Keep closed phases/copy/design closed. No new subscriptions, paid AI/source requests, Live payment, campaign or commercial Production activation follows from this preparation.
 

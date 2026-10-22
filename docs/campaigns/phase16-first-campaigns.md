@@ -1,5 +1,27 @@
 # First 2–3 campaigns — prepared, not launched
 
+## Launch execution draft — 22 October 2026
+
+Only Campaign01 is on the launch critical path. Product/payment verification comes first. The owner requested the first paid campaign, but no numeric advertising spend ceiling or date range has been supplied; this is a local draft, not a created or activated Google Ads campaign.
+
+Existing approved direction: Google Search, London coffee-shop premises/lease intent, existing homepage and Free Snapshot to GBP29 Full Report. Retain accurate coverage and evidence limitations. Do not promise business success, measured footfall, permission or guaranteed instant report delivery.
+
+Candidate headlines (all within 30 characters):
+- Check Before You Sign
+- Check Your Cafe Location
+- Free Location Snapshot
+- Full Location Report £29
+
+Candidate descriptions (all within 90 characters):
+- Check a London location before you sign. Start with your Free Snapshot.
+- Explore local context, competition and premises questions. Full Report £29.
+
+Draft intent terms: cafe location analysis; coffee shop location analysis; coffee shop premises checks. Validate actual keyword eligibility and account settings before publishing; these are not researched volume or cost estimates. Exclude unrelated jobs, equipment, residential rent and consumer cafe-finder intent. Keep the initial campaign paused until the verified purchase conversion and owner spending envelope are recorded. Do not add other campaign types, paid tools or extra audiences to launch the first test.
+
+Required run-card fields: approved daily budget, total spend ceiling, start/end dates, target area, final URL, purchase conversion action, value GBP29, and pause rule for payment/delivery/cost-control failures. No bid price, forecast, CPA promise or budget is invented.
+
+## Historical campaign hypotheses
+
 No channel account, budget, audience targeting, advertisement or public commercial activation is authorised here. These are testable hypotheses, not claims of proven demand. Use existing brand and pages; £29 central product price, final commercial/tax disclosure still gated. Focus London analysis, retain UK address entry without promising nationwide results. Never promise footfall, competitor ratings, operating permission or successful trading.
 
 ## Campaign 01 — coffee-shop lease decision
