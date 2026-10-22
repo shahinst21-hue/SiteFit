@@ -16,3 +16,5 @@ export function parseConsent(raw:string|undefined,now=Date.now()):Consent|null{
 export function googleConsent(c:Consent){return {analytics_storage:c.analytics?'granted':'denied',ad_storage:c.advertising?'granted':'denied',ad_user_data:c.advertising?'granted':'denied',ad_personalization:c.advertising&&c.personalization?'granted':'denied'};}
 /** Strict Basic mode: the one shared Ads/GA tag cannot load until BOTH measurement purposes are allowed. No denied-purpose pings. */
 export const canMeasure=(c:Consent|null)=>c?.analytics===true&&c.advertising===true;
+/** A failed withdrawal blocks tracking, but is not itself a persisted consent decision. */
+export const consentForVisit=(saved:Consent|null,blocked:boolean):Consent|null=>blocked&&canMeasure(saved)?null:saved;

@@ -1,5 +1,11 @@
 # Google Ads / GA4 launch measurement — implementation candidate
 
+## Consent banner correction — 22 October 2026
+
+The initial banner was incorrectly conditional on Google measurement being enabled. A stale local withdrawal block also masqueraded as a saved rejection. The interface now prompts whenever no valid persisted decision can be restored, independently of the measurement flag. A withdrawal block cannot restore an older grant; missing, expired, invalid or unreadable consent remains ungranted. Failed consent reads show the banner without starting the tracking runtime. Saved rejection/acceptance and the preferences control remain available while measurement is disabled.
+
+Validation: lint, strict types, all 478 unit tests and the production build passed. Built-app HTTP public/measurement checks passed. Actual isolated Edge browser contexts at 390×900 and 1280×900 verified first-visit display, equally styled 44px-or-larger accept/reject controls, acceptance, rejection, granular choices, persistence through refresh and withdrawal. No horizontal overflow, Google network requests, page errors or console errors occurred with measurement explicitly disabled. An aborted initial consent request still displayed the banner. Mobile results are viewport emulation, not physical-device verification. Browser screenshots: consent-fixed-390.png and consent-fixed-1280.png. This correction does not enable Google measurement, change account filters, start a payment or publish Production. Preview/exact-head CI read-back is recorded separately.
+
 Owner authority: the attached **SITEFIT: GOOGLE ANALYTICS AND GOOGLE ADS LAUNCH READINESS** instruction, 22 October 2026. Implementation and isolated verification are authorised; Production deployment/configuration, paid services, advertising activation/spend and live-payment changes are not. Public commercial gates remain unchanged. Launch readiness is **incomplete** until the external and release gates below pass.
 
 ## Audit and architecture

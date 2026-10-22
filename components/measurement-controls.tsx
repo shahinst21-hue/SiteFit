@@ -4,7 +4,7 @@ import {usePathname} from 'next/navigation';
 import Link from 'next/link';
 import {GoogleMeasurement} from '@/lib/measurement/runtime';
 import type {MeasurementConfig} from '@/lib/measurement/config';
-import {deniedConsent,canMeasure,type Consent} from '@/lib/measurement/consent';
+import {deniedConsent,canMeasure,parseConsent,consentForVisit,type Consent} from '@/lib/measurement/consent';
 import {acquisitionFromSearch,type Acquisition} from '@/lib/measurement/attribution';
 import {installMeasurement} from '@/lib/measurement/client';
 import {Icon} from './icon';
@@ -31,7 +31,7 @@ export function MeasurementControls(){
  const [analytics,setAnalytics]=useState(false),[advertising,setAdvertising]=useState(false),[personalization,setPersonalization]=useState(false);
  useEffect(()=>{
   let alive=true;draft.current=acquisitionFromSearch(window.location.search);
-  fetch('/api/measurement/consent',{cache:'no-store',signal:AbortSignal.timeout(3000)}).then(r=>r.json()).then((v:{config:MeasurementConfig;consent:Consent|null;acquisition:Acquisition})=>{if(!alive)return;let effective=v.consent;try{if(localStorage.getItem('sitefit_measurement_block')==='1')effective=deniedConsent();}catch{effective=null;}setRehearsal(v.config.rehearsal===true);const instance=runtime(v.config);chosen.current=effective;setConsent(effective);instance.navigate(window.location.pathname);instance.update(effective,v.acquisition);setBanner(v.config.enabled&&!effective);setReady(true);}).catch(()=>setReady(true));
+  fetch('/api/measurement/consent',{cache:'no-store',signal:AbortSignal.timeout(3000)}).then(r=>{if(!r.ok)throw Error();return r.json();}).then((v:{config:MeasurementConfig;consent:Consent|null;acquisition:Acquisition})=>{if(!alive)return;let effective=parseConsent(JSON.stringify(v.consent));try{effective=consentForVisit(effective,localStorage.getItem('sitefit_measurement_block')==='1');}catch{effective=null;}setRehearsal(v.config.rehearsal===true);const instance=runtime(v.config);chosen.current=effective;setConsent(effective);instance.navigate(window.location.pathname);instance.update(effective,v.acquisition);setBanner(!effective);setReady(true);}).catch(()=>{if(!alive)return;setBanner(true);setReady(true);});
   const open=()=>{const c=chosen.current;setAnalytics(c?.analytics??false);setAdvertising(c?.advertising??false);setPersonalization(c?.personalization??false);dialog.current?.showModal();};
   window.addEventListener('sitefit-cookie-preferences',open);return()=>{alive=false;window.removeEventListener('sitefit-cookie-preferences',open);};
  },[]);

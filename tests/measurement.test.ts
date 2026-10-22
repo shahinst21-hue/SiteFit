@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {measurementConfig,googleDestinations} from '../lib/measurement/config.ts';
-import {consentChoice,parseConsent,canMeasure,googleConsent} from '../lib/measurement/consent.ts';
+import {consentChoice,parseConsent,canMeasure,googleConsent,consentForVisit} from '../lib/measurement/consent.ts';
 import {acquisitionFromSearch,acquisition,parseAcquisition} from '../lib/measurement/attribution.ts';
 import {safeJourney,safePage,ecommerce,admittedEcommerce} from '../lib/measurement/events.ts';
 import {GoogleMeasurement,type TagSink} from '../lib/measurement/runtime.ts';
@@ -8,6 +8,16 @@ import {verifiedCommerce} from '../lib/measurement/commerce.ts';
 import type Stripe from 'stripe';
 const config={enabled:true,installation:'G-TESTONLY',analytics:'G-TESTONLY',environment:'test' as const,origin:'https://sitefit.co.uk',since:'2000-01-01T00:00:00Z'};
 const yes=()=>consentChoice({analytics:true,advertising:true,personalization:false});const no=()=>consentChoice({analytics:false,advertising:false,personalization:false});
+test('new visits and failed withdrawals need a decision independently of measurement enablement',()=>{
+ for(const enabled of [false,true]){
+  const runtime=new GoogleMeasurement({...config,enabled},{command:()=>{},load:()=>assert.fail('No tag before consent'),get:()=>null,set:()=>{},disable:()=>{}});
+  for(const blocked of [false,true]){const decision=consentForVisit(parseConsent(undefined),blocked);assert.equal(decision,null);runtime.update(decision);assert.equal(runtime.allowed(),false);}
+ }
+ const rejected=no(),accepted=yes();
+ assert.equal(consentForVisit(rejected,true),rejected,'A saved rejection persists');
+ assert.equal(consentForVisit(accepted,false),accepted,'A saved acceptance persists');
+ assert.equal(consentForVisit(accepted,true),null,'Failed withdrawal cannot restore an older grant or masquerade as saved rejection');
+});
 test('live flag, exact production origin, cutover and sandbox destinations isolate controlled tests',()=>{
  assert.equal(measurementConfig({}).enabled,false);assert.equal(measurementConfig({SITEFIT_GOOGLE_MEASUREMENT:'1'}).enabled,false);
  assert.equal(measurementConfig({VERCEL_ENV:'preview',SITEFIT_GOOGLE_MEASUREMENT:'1',SITEFIT_GOOGLE_TEST_INSTALLATION_ID:googleDestinations.installation,SITEFIT_GOOGLE_TEST_MEASUREMENT_ID:googleDestinations.analytics}).enabled,false);
