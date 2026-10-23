@@ -44,3 +44,10 @@ test('automatic confirmation distinguishes sent, preparing and held unknown outc
  assert.equal(fullView({...p,confirmationEmailState:'sent'}).title,'Your report is in the queue');
  for(const state of ['uncertain','failed']){const view=fullView({...p,confirmationEmailState:state});assert.equal(view.state,'paused');assert.match(view.detail,/Do not pay again/);}
 });
+
+test('a 25-percent source-to-analysis failure reaches terminal error with no Ready or retry',async()=>{
+ const ticks:number[]=[];let calls=0;
+ const response=snapshotStream(async observer=>{calls++;observer({stage:'analysis',completed:2});throw Error('proof_manual_reconciliation_required');},()=>Response.json({error:'Check stopped. Contact support before retrying.'},{status:503}));
+ await assert.rejects(readSnapshotProgress(response,t=>ticks.push(t.completed)),/Check stopped/);
+ assert.deepEqual(ticks,[0,2]);assert.equal(calls,1);assert.equal(progressPercent({completed:2,total:8}),25);
+});

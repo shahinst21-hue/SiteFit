@@ -47,10 +47,12 @@ export const proofFetch:typeof fetch=async(input,init)=>{
  const id=await scope.store.reserve(digest,ai?'ai':url.hostname,digest,micros,slot);
  try{
   const response=await(scope.fetcher??fetch)(input,{...init,redirect:'error'});
-  if(!response.ok){await response.body?.cancel();throw Error('proof_external_outcome_unknown');}
+  // A completed source HTTP error is a known response, not an unknown AI execution.
+  // Let the adapter retain unavailable/404/rate-limit semantics; never retry here.
+  if(ai&&!response.ok){await response.body?.cancel();throw Error('proof_external_outcome_unknown');}
   const limit=ai?128000:2000000,reader=response.body?.getReader(),chunks:Uint8Array[]=[];let size=0;
-  if(!reader)throw Error('proof_empty_response');
-  for(;;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>limit){await reader.cancel();throw Error('proof_response_bounds');}chunks.push(part.value);}
+  if(!reader&&(ai||response.ok))throw Error('proof_empty_response');
+  for(;reader;){const part=await reader.read();if(part.done)break;size+=part.value.byteLength;if(size>limit){await reader.cancel();throw Error('proof_response_bounds');}chunks.push(part.value);}
   const bytes=Buffer.concat(chunks);
   // Only continuation AI checkpoints are retained: generated output/usage, never
   // provider headers, credentials or raw FSA bodies. They cannot authorise resend.
