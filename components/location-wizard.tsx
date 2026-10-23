@@ -62,7 +62,7 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
   </li>)}</ol></nav>
   <div className="wizard-layout"><section className={`wizard-panel wizard-stage wizard-stage-${step}`}>
    <header className="wizard-heading">
-    <h1 ref={heading} tabIndex={-1}>{step===0?'Find your property':step===1?'Choose your business':error?'Snapshot paused':'Preparing your Snapshot'}</h1>
+    <h1 ref={heading} tabIndex={-1}>{step===0?'Find your property':step===1?'Choose your business':error?'Check stopped':'Preparing your Snapshot'}</h1>
    </header>
    {step===0?<AddressLookup state={lookupState} setState={setLookupState} selected={property} initialSearch={initialSearch} onInitialSearch={consumeInitialSearch} transport={rehearsal?.transport}
     onSelect={selected=>{if(!rehearsal&&!proofStart)trackJourney('address_selected',selected.id);setProperty(selected);nonce.current=null;setError('');moveTo(1);}}/>:
@@ -80,7 +80,7 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
     </form>:<div className="wizard-processing">
      <div className="wizard-check-context"><Icon name="pin"/><p>{property?.formattedAddress}<small>{type?.label}</small></p></div>
      <div role="status" aria-live="polite" aria-atomic="true"><GenerationProgress view={snapshotView(progress,!!error)}/></div>
-     {error?<div className="wizard-paused"><p role="alert">{error}</p><Link href="/account" className="button button-secondary">Check saved status<Arrow/></Link></div>:<p className="wizard-session-note">{busy?'Keep this tab open.':'Snapshot saved.'}</p>}
+     {error?<div className="wizard-paused"><p role="alert">{error}</p><Link href="/account" className="button button-secondary">Check saved status<Arrow/></Link><a className="button button-text" href="mailto:info@sitefit.co.uk">Contact support<Arrow/></a></div>:<p className="wizard-session-note">{busy?'Keep this tab open.':'Snapshot saved.'}</p>}
     </div>}
   </section></div>
  </div>;

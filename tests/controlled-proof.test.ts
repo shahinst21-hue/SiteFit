@@ -69,3 +69,23 @@ test('a controlled Snapshot never performs the existing semantic repair loop',as
  const synthesis=invalid();await assert.rejects(runProofScope(h.scope,()=>synthesiseSections(sections.sections,synthesis)));
  assert.equal(synthesis.dispatches(),1);
 });
+
+test('completed source HTTP errors do not poison later AI admission or become success evidence',async()=>{
+ for(const status of [404,429,503]){
+  const h=harness();h.scope.fetcher=async(input)=>String(input).includes('energy-performance')?new Response(null,{status}):Response.json({status:'completed'});
+  const response=await runProofScope(h.scope,()=>proofFetch('https://api.get-energy-performance-data.communities.gov.uk/api/non-domestic/search?uprn=000123456789'));
+  assert.equal(response.status,status);assert.equal(response.ok,false);assert.equal([...h.journal.values()][0].state,'received');assert.equal(h.total(),0);
+  await runProofScope(h.scope,()=>proofFetch('https://api.openai.com/v1/responses',request));
+  assert.equal(h.journal.size,2);assert.ok(h.total()>0);
+ }
+});
+test('unknown source transport failures and AI HTTP failures still block redispatch with history retained',async()=>{
+ for(const ai of [false,true]){
+  const h=harness();h.scope.fetcher=async()=>{if(ai)return new Response(null,{status:503});throw Error('network lost');};
+  const url=ai?'https://api.openai.com/v1/responses':'https://api.get-energy-performance-data.communities.gov.uk/api/non-domestic/search?uprn=000123456789';
+  await assert.rejects(runProofScope(h.scope,()=>proofFetch(url,ai?request:undefined)),/reconciliation/);
+  assert.equal([...h.journal.values()][0].state,'ambiguous');const held=h.total();
+  await assert.rejects(runProofScope(h.scope,()=>proofFetch(url,ai?request:undefined)));
+  assert.equal(h.journal.size,1);assert.equal(h.total(),held);
+ }
+});
