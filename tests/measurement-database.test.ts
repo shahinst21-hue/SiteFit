@@ -40,5 +40,11 @@ test('real additive SQL claims serialize duplicate/retry submissions and enforce
  assert.equal(await claim('purchase','pi_test_one',owner,false,'G-ZRCDT4R80E'),null,'Debug authorisation cannot change payment mode');
  await assert.rejects(db.exec("update google_preview_debug_authorisations set expires_at=now()+interval '2 hours'"),/measurement_dispatch_history_immutable/);
  await db.exec('set role service_role');await assert.rejects(db.exec("insert into google_preview_debug_authorisations values('forged','G-ZRCDT4R80E',now(),now()+interval '1 hour')"),/permission denied/);await db.exec('reset role');
+ // Production measurement must never turn an owner proof into an advertising purchase.
+ await db.query("update payments set test_mode=false,payment_version=2,payment_reference='pi_live_proof' where id=$1",[payment]);
+ await db.query('insert into controlled_proof(payment_id,free_report_id) values($1,$2)',[payment,report]);
+ const beforeLive=(await db.query<{n:number}>('select count(*)::int n from google_measurement_dispatches')).rows[0].n;
+ assert.equal(await claim('purchase','pi_live_proof',owner,false,'G-ZRCDT4R80E'),null,'Controlled Live proof is excluded from production conversions');
+ assert.equal((await db.query<{n:number}>('select count(*)::int n from google_measurement_dispatches')).rows[0].n,beforeLive);
  }finally{await db.close();}
 });
