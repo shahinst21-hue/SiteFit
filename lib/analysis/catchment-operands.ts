@@ -61,7 +61,12 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
     typeof r.boundaryResidualAreaM2 === "number" && Number.isFinite(r.boundaryResidualAreaM2) &&
     close(r.boundaryResidualAreaM2, area - r.londonCoveredAreaM2));
   else requireOperand(close(area, r.londonCoveredAreaM2));
-  const boundaryMismatch = version2 && !close(area, r.londonCoveredAreaM2);
+  // BNG overlay/union operations need an AREA tolerance, independently of
+  // the strict operand reproduction tolerance above. Both the absolute cap
+  // (0.1 m²) and relative cap (one part in ten million) must be satisfied.
+  // Keep the signed residual; never redistribute population or mask missing OAs.
+  const overlayToleranceM2 = Math.max(1e-7, Math.min(0.1, (r.londonCoveredAreaM2 as number) * 1e-7));
+  const boundaryMismatch = version2 && Math.abs(area - (r.londonCoveredAreaM2 as number)) > overlayToleranceM2;
   const metrics = diagnostics.map((d, i) => {
     const published = object((r.censusEstimates as unknown[])[i]);
     requireOperand(published.columnOrdinal === d.columnOrdinal && nonnegative(published.knownContribution) &&

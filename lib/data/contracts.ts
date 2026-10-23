@@ -42,7 +42,8 @@ export type AreaPopulation = { schemaVersion: 1; kind: "area_population"; geogra
 export type TransportAccessPoints = { schemaVersion: 1; kind: "transport_access_points"; complete: boolean;
   items: { id: string; name: string; mode: "bus" | "rail" | "tube" | "tram" | "water" | "other"; originalMode: string; point: Point | null }[] };
 export type FoodEstablishments = { schemaVersion: 1; kind: "food_establishments"; complete: boolean;
-  items: { id: string; authorityId: string; name: string; businessType: string; point: Point | null; observedAt: string | null }[] };
+  items: { id: string; authorityId: string; name: string; businessType: string; point: Point | null; observedAt: string | null;
+    hygiene?: { scheme: "FHRS"; value: number; inspectedAt: string } }[] };
 export type PlanningConstraints = { schemaVersion: 1; kind: "planning_constraints";
   lookup: ReturnType<typeof import("./planning-constraints.ts").validateConstraintLookup> };
 export type WalkingGeometry = { schemaVersion: 1; kind: "walking_geometry";

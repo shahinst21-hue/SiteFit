@@ -1,4 +1,6 @@
 import type { FreeProjection } from "../analysis/projection.ts";
+import type {SnapshotAdvice,AdvisorResearch} from '../analysis/advisor.ts';
+import type {RecommendationDecision} from '../analysis/recommendation.ts';
 
 export type DataState = "available" | "unknown" | "unavailable" | "loading" | "locked" | "not_applicable";
 export type EvidenceQuality = "good" | "moderate" | "limited" | "insufficient";
@@ -16,6 +18,7 @@ export type ScoreMethod = {
 };
 export type SnapshotScore = { status: DataState; value: number | null; label: string; explanation: string; method: ScoreMethod | null };
 export type SnapshotFactor = {
+  competition?:FreeProjection["competition"]; residentialCatchment?:FreeProjection["residentialCatchment"]; residentialState?:FreeProjection["residentialState"];
   id: FactorId; title: string; status: DataState; meaning: ResultMeaning; quality: EvidenceQuality;
   finding: string | null; reason: string | null; question: string | null; metrics: SnapshotMetric[];
   score: number | null; details: FreeProjection["dimensions"][number]["why"] | null;
@@ -25,10 +28,14 @@ export type SnapshotMap = {
   status: DataState; description: string; bounds: [number, number, number, number] | null;
   layers: { id: string; label: string; kind: "property" | "catchment" | "competitor" | "complementary" | "transport";
     status: DataState; colour: string; points: [number, number][]; polygons: [number, number][][];
+    features?: {id:string;label:string;position:[number,number];category?:'food-service'|'takeaway'|'retail'|'other-food'|'transport'}[];
     polygonParts?: [number, number][][][] }[];
 };
 export type SnapshotTransport = { id: string; name: string; mode: string | null; distanceMetres: number | null; walkingMinutes: number | null; information: string | null; status: DataState };
 export type SnapshotView = {
+  recommendation?:RecommendationDecision;
+  advisor?:SnapshotAdvice;
+  advisorResearch?:AdvisorResearch[];
   schemaVersion: 1; mode: "production" | "demo"; generatedAt: string | null; analysisStatus: DataState;
   property: { address: string; confirmation: string; context: { label: string; value: string | null }[]; image: { src: string; alt: string } | null };
   businessType: string;
@@ -65,6 +72,8 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
   const bounds: SnapshotMap["bounds"] = coordinates.length ? [Math.min(...coordinates.map(p => p[0]))-.0002, Math.min(...coordinates.map(p => p[1]))-.0002,
     Math.max(...coordinates.map(p => p[0]))+.0002, Math.max(...coordinates.map(p => p[1]))+.0002] : null;
   return {
+    ...(report.recommendation?{recommendation:structuredClone(report.recommendation)}:{}),
+    ...(report.earlyView.advisor?{advisor:structuredClone(report.earlyView.advisor)}:{}),
     schemaVersion: 1, mode: "production", generatedAt: report.generatedAt, analysisStatus: "available",
     property: { address: report.property.address, confirmation: report.property.resolution === "provider_verified" ? "Postal address confirmed" : "Manually entered address",
       context: [{ label: "Location precision", value: report.property.precision === "postcode_centroid" ? "Postcode area" : report.property.precision.replaceAll("_", " ") }, { label: "Property use", value: null }], image: null },
@@ -87,7 +96,7 @@ export function snapshotFromStored(report: FreeProjection): SnapshotView {
           status: "available", evidenceQuality: qualities[d.strength], sourceType: "official", description: "Whole Census output area; not a walking catchment or current customer count." });
       }
       if (!metrics.length) metrics.push(emptyMetric(`${d.id}-gap`, d.why.unknowns[0] ?? "Verified local evidence"));
-      return { id: d.id, title: factorTitles[d.id], status: "available", finding: d.conclusion, reason: d.reason, question: d.why.unknowns[0] ?? d.question,
+      return { ...(d.id==="market-position"&&report.competition?{competition:report.competition}:{}), ...(d.id==="customer-base"&&report.residentialCatchment!==undefined?{residentialCatchment:report.residentialCatchment,residentialState:report.residentialState}:{}), id: d.id, title: factorTitles[d.id], status: "available", finding: d.conclusion, reason: d.reason, question: d.why.unknowns[0] ?? d.question,
         quality: qualities[d.strength], meaning: d.meaning as ResultMeaning, metrics, score: d.score, details: d.why, implication: d.implication, scoreNote: d.scoreNote };
     }),
     financialPreview: { status: "locked", inputs: { annualRent: null, averageSpend: null, tradingDays: null } },
@@ -138,7 +147,8 @@ export function validateSnapshotView(value: unknown, expectedMode: SnapshotView[
   }
   if (!row.map || !states.includes(row.map.status) || !Array.isArray(row.map.layers) || row.map.layers.length > 12 || !row.transport || !states.includes(row.transport.status) || !Array.isArray(row.transport.places) || row.transport.places.length > 30) throw new Error("invalid_snapshot_context");
   if (row.map.bounds !== null && (row.map.bounds.length !== 4 || !row.map.bounds.every(Number.isFinite) || row.map.bounds[0] >= row.map.bounds[2] || row.map.bounds[1] >= row.map.bounds[3])) throw new Error("invalid_map_bounds");
-  for (const l of row.map.layers) if (!text(l.id) || !text(l.label) || !states.includes(l.status) || !/^#[0-9a-f]{6}$/i.test(l.colour) || !Array.isArray(l.points) || !Array.isArray(l.polygons) ||
+  for (const l of row.map.layers) if (!text(l.id) || !text(l.label) || !['property','catchment','competitor','complementary','transport'].includes(l.kind) || !states.includes(l.status) || !/^#[0-9a-f]{6}$/i.test(l.colour) || !Array.isArray(l.points) || !Array.isArray(l.polygons) ||
+    l.features!==undefined&&(!Array.isArray(l.features)||l.features.length>200||l.features.some((f,i)=>!text(f.id)||!text(f.label)||f.category!==undefined&&!['food-service','takeaway','retail','other-food','transport'].includes(f.category)||f.position.length!==2||f.position.some((n,j)=>!Number.isFinite(n)||n!==l.points[i]?.[j]))) ||
     l.polygonParts !== undefined && (!Array.isArray(l.polygonParts) || l.polygonParts.length > 100 || l.polygonParts.some(p => !Array.isArray(p) || !p.length || p.some(r => !Array.isArray(r) || r.length < 4))) ||
     [...l.points, ...l.polygons.flat(), ...(l.polygonParts?.flat(2) ?? [])].some(p => p.length !== 2 || !p.every(Number.isFinite))) throw new Error("invalid_map_layer");
   for (const p of row.transport.places) if (!text(p.name) || !states.includes(p.status) || !number(p.distanceMetres) || !number(p.walkingMinutes) || p.status !== "available" && (p.distanceMetres !== null || p.walkingMinutes !== null)) throw new Error("invalid_transport");
@@ -148,7 +158,7 @@ export function validateSnapshotView(value: unknown, expectedMode: SnapshotView[
   return structuredClone({ ...row,
     map: { status: row.map.status, description: row.map.description, bounds: row.map.bounds,
       layers: row.map.layers.map(l => ({ id: l.id, label: l.label, kind: l.kind, status: l.status, colour: l.colour, points: l.points, polygons: l.polygons,
-        ...(l.polygonParts ? {polygonParts: l.polygonParts} : {}) })) },
+        ...(l.polygonParts ? {polygonParts: l.polygonParts} : {}), ...(l.features?{features:l.features.map(f=>({id:f.id,label:f.label,position:f.position,...(f.category?{category:f.category}:{})}))}:{}) })) },
     financialPreview: { status: row.financialPreview.status, inputs: { annualRent: row.financialPreview.inputs.annualRent, averageSpend: row.financialPreview.inputs.averageSpend, tradingDays: row.financialPreview.inputs.tradingDays } },
   });
 }

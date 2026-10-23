@@ -28,7 +28,7 @@ export function rentalReportProjection(propertyId:string,benchmark:(ReturnType<t
   if (valuation && valuation.propertyId!==propertyId) throw new Error("foreign_rental_valuation");
   if (benchmark && (!timestamp(benchmark.retrievedAt)||benchmark.kind!=="commercial_rent_candidate"||benchmark.admitted!==false||!["NIA","GIA"].includes(benchmark.areaBasis))) throw new Error("invalid_rental_benchmark");
   return {schemaVersion:1,propertyId,benchmark:benchmark?{classification:"local_modelled_asking_rent_benchmark",state:benchmark.pointsAnalysed>0&&benchmark.poundsPerSqftYear>0?"qualified":"unavailable",poundsPerSqftYear:benchmark.poundsPerSqftYear,averagePoundsYear:benchmark.poundsPerYear,
-    selectedPremisesRent:null,sample:benchmark.pointsAnalysed,areaBasis:benchmark.areaBasis,type:benchmark.type,retrievedAt:benchmark.retrievedAt,sourceDate:benchmark.sourceDate,
+    selectedPremisesRent:null,sample:benchmark.pointsAnalysed,averageSqft:benchmark.averageSqft,areaBasis:benchmark.areaBasis,type:benchmark.type,retrievedAt:benchmark.retrievedAt,sourceDate:benchmark.sourceDate,
     nativeRadius:benchmark.nativeRadius,radiusUnits:benchmark.radiusUnits,dispersion:benchmark.dispersion,policy:rentalPolicy,limitations:benchmark.missing}:null,
     valuation,propertySpecificState:valuation?"available":"unavailable",propertySpecificReason:valuation?null:"credible_compatible_exact_unit_area_or_valuation_unavailable",
     financialCalculationsIncluded:false,engineInputsRequired:false};

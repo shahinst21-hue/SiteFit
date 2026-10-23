@@ -1,3 +1,4 @@
+import {proofFetch} from '../../proof/context.ts';
 import "server-only";
 import { SourceError } from "../errors.ts";
 import { object } from "../validation.ts";
@@ -14,7 +15,7 @@ export type WalkingCatchments = {
 };
 
 async function boundedJson(url: URL, options: { fetcher?: typeof fetch }, signal: AbortSignal, body?: unknown): Promise<unknown> {
-  const response = await (options.fetcher ?? fetch)(url, { signal, redirect: "error", cache: "no-store",
+  const response = await (options.fetcher ?? proofFetch)(url, { signal, redirect: "error", cache: "no-store",
     method: body === undefined ? "GET" : "POST", headers: { Accept: "application/json", ...(body === undefined ? {} : { "Content-Type": "application/json" }) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
   if (!response.ok) throw new SourceError(response.status === 401 ? "authentication_failed" : response.status === 403 ? "permission_denied" : response.status === 429 ? "rate_limited" : "provider_unavailable", response.status);
@@ -32,7 +33,7 @@ async function boundedJson(url: URL, options: { fetcher?: typeof fetch }, signal
  */
 export function geoapifyWalking(options: { key: string | undefined; fetcher?: typeof fetch; now?: () => Date }) {
   return async (origin: Point, signal?: AbortSignal): Promise<WalkingCatchments> => {
-    if (!validPoint(origin) || origin.precision === "unknown" || origin.precision === "postcode_centroid") throw new SourceError("invalid_request");
+    if (!validPoint(origin) || origin.precision === "unknown" || origin.precision === "postcode_centroid" && origin.source !== "postio") throw new SourceError("invalid_request");
     if (!options.key || options.key.length > 256 || /\s/.test(options.key)) throw new SourceError("configuration_missing");
     const timeout = AbortSignal.timeout(8_000), combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
     if (combined.aborted) throw new SourceError("cancelled");

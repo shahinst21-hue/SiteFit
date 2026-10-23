@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "testOnly": true,
+  "cohortFrom": "2026-10-01T00:00:00Z",
+  "cohortTo": "2026-10-02T00:00:00Z",
+  "asOf": "2026-10-03T00:00:00Z",
+  "rows": [
+    { "campaign": "campaign-01", "snapshots": 5, "purchaseStarts": 3, "checkoutAttempts": 3, "confirmedPayments": 3, "paidAnalyses": 2, "retainedPayments": 2, "fullRefunds": 1, "uncertainReceipts": 0, "fullReportsReady": 2, "requestPayments": 1, "interruptedJobs": 0, "netReceiptsMinor": 5800 },
+    { "campaign": "campaign-02", "snapshots": 3, "purchaseStarts": 2, "checkoutAttempts": 2, "confirmedPayments": 1, "paidAnalyses": 1, "retainedPayments": 0, "fullRefunds": 0, "uncertainReceipts": 1, "fullReportsReady": 0, "requestPayments": 1, "interruptedJobs": 1, "netReceiptsMinor": null }
+  ]
+}

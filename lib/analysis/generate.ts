@@ -1,4 +1,6 @@
 import "server-only";
+import {snapshotExecution} from '../proof/repository.ts';
+import {proofFrozenInput} from '../proof/context.ts';
 import { createHash } from "node:crypto";
 import { frameworkClient } from "../data/server-client.ts";
 import { framework } from "../data/framework.ts";
@@ -20,18 +22,28 @@ import { packetDigest } from "./canonical.ts";
 import { selectEnrichmentReleases, prepareEnrichmentIdentity } from "../data/enrichment-preparation.ts";
 import { generateEnrichedSnapshot } from "./generate-enriched.ts";
 import type { ResolvedAddress } from "../addresses/model.ts";
+import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
 const json = (value: unknown) => value as Json;
 const dimensions: Dimension[] = ["customer-base", "market-position", "customer-access", "premises"];
-export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal) {
+export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal, observer?:SnapshotObserver) {
+  if (![ownerId,propertyId,nonce].every(uuid)||!["coffee-shop","restaurant","hair-salon","beauty-salon"].includes(businessType))throw Error('invalid_submission');
+  return snapshotExecution(ownerId,{propertyId,businessType:businessType as 'coffee-shop'|'restaurant'|'hair-salon'|'beauty-salon',nonce},
+    ()=>generateSnapshotOnce(ownerId,propertyId,businessType,nonce,signal,observer));
+}
+async function generateSnapshotOnce(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal, observer?:SnapshotObserver) {
+  const progress=snapshotMilestones(observer);
   if (![ownerId, propertyId, nonce].every(uuid) || !["coffee-shop", "restaurant", "hair-salon", "beauty-salon"].includes(businessType)) throw new Error("invalid_submission");
   const bound = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(110_000)]);
   const databaseBound = (milliseconds: number) => AbortSignal.any([bound, AbortSignal.timeout(milliseconds)]);
   const client = frameworkClient();
   const sha = createHash("sha256").update(JSON.stringify({ propertyId, businessType })).digest("hex");
-  const { data: analysis, error: submissionError } = await client.rpc("submit_sitefit_analysis", {
+  const recovery=proofFrozenInput();
+  const { data: analysis, error: submissionError } = recovery
+   ?await client.from('analyses').select('*').eq('id',recovery.analysisId).eq('owner_id',ownerId).abortSignal(databaseBound(8000)).single()
+   :await client.rpc("submit_sitefit_analysis", {
     p_owner: ownerId, p_property: propertyId, p_business: businessType, p_nonce: nonce, p_sha256: sha,
   }).abortSignal(databaseBound(2000));
-  if (submissionError || !analysis || analysis.owner_id !== ownerId) throw new Error("submission_unavailable");
+  if (submissionError || !analysis || analysis.owner_id !== ownerId||analysis.property_id!==propertyId||analysis.business_type!==businessType||analysis.submission_nonce!==nonce) throw new Error("submission_unavailable");
   const analysisId = analysis.id;
   const { data: ready, error: readError } = await client.from("reports").select("id,free_projection").eq("analysis_id", analysis.id).eq("tier", "free").eq("status", "ready").eq("schema_version", 2).abortSignal(databaseBound(8000)).maybeSingle();
   if (readError) throw new Error("report_read_unavailable");
@@ -67,15 +79,18 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
     const precise = enrichment.identity.point ? await spatial.geography(releases.geography, enrichment.identity.point) : geography;
     context = await data.repository.prepareEnriched(analysis.id, {}, {region: precise.region, geography: precise.geography, releases}, enrichment);
   }
+  if(recovery&&(context.analysisId!==recovery.analysisId||context.inputId!==recovery.inputId))throw Error('stored_input_read_unavailable');
   const { data: unfinished, error: unfinishedReadError } = await client.from("reports").select("provenance").eq("analysis_id", analysis.id).eq("version", 1).neq("status", "ready").abortSignal(databaseBound(8000)).maybeSingle();
   if (unfinishedReadError) throw new Error("stored_report_read_unavailable");
-  if (context.schemaVersion === 2) return generateEnrichedSnapshot(ownerId, context, bound, unfinished?.provenance);
+  progress.context();
+  if (context.schemaVersion === 2) return generateEnrichedSnapshot(ownerId, context, bound, unfinished?.provenance,observer);
   const collection = await data.collectSources(context, ["ons-population", "tfl-stop-points", "fsa-establishments"], "free-v1", bound);
   const snapshots = collection.outcomes.flatMap(outcome => outcome.snapshot ? [outcome.snapshot] : []);
   if (snapshots.length !== 3) throw new Error("source_persistence_incomplete");
+  progress.sources();
   const provenance = unfinished?.provenance as { partial?: { sections: ValidatedSection[]; evidence: Evidence[]; packets: InterpretationPacket[];
     residential: ReturnType<typeof residentialMetric>; comparison: unknown; dispatches: number; receipts?: AIReceipt[];
-    early?: Awaited<ReturnType<typeof synthesiseSections>>; earlyPacketDigest?: string } } | undefined;
+    early?: ReturnType<typeof restoreSynthesis>; earlyPacketDigest?: string } } | undefined;
   const prior = provenance?.partial;
   const ons = snapshots.find(snapshot => snapshot.result.meta.source === "ons-population")!;
   let comparison: Awaited<ReturnType<ReturnType<typeof comparisonRepository>["residential"]>> = null;
@@ -87,8 +102,8 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
     index: evidenceIndex(prior.evidence, context.analysisId, context.inputId, new Date()) } : sectionPackets(context, snapshots, residential, new Date());
   for (const packet of prepared.packets) validatePacket(packet, prepared.index);
   const ai = analysisAIProvider({ priorDispatches: prior?.dispatches ?? 0 });
-  const interpreted = await interpretSections(prepared.packets, prepared.index, ai, bound, prior?.sections ?? []);
-  async function preserveIncomplete(errors: unknown, early?: Awaited<ReturnType<typeof synthesiseSections>>) {
+  const interpreted = await interpretSections(prepared.packets, prepared.index, ai, bound, prior?.sections ?? [],progress.section);
+  async function preserveIncomplete(errors: unknown, early?: ReturnType<typeof restoreSynthesis>) {
     // Analytical content belongs to a private unfinished report, never operational logs.
     const { error } = await client.from("reports").upsert({ analysis_id: analysisId, input_id: context.inputId, version: 1, schema_version: 2,
       tier: "free", status: "failed", provenance: json({ partial: { sections: interpreted.sections, errors,
@@ -105,9 +120,10 @@ export async function generateSnapshot(ownerId: string, propertyId: string, busi
   try {
     if (prior?.early) {
       early = restoreSynthesis(prior.early, prior.earlyPacketDigest, interpreted.sections, prepared.index);
-    } else early = await synthesiseSections(interpreted.sections, ai, bound);
+    } else early = await synthesiseSections(interpreted.sections, ai, bound, businessType, prepared.evidence);
   }
   catch { await preserveIncomplete([{ section: "early-view", code: "synthesis_unavailable" }]); throw new Error("synthesis_incomplete"); }
+  progress.synthesis();
   const generatedAt = new Date().toISOString();
   const projection = validateFreeProjection(freeProjection(context, interpreted.sections, early, prepared.evidence, residential, generatedAt));
   // Exact cohort operands occur once, referenced by the descriptive metric.

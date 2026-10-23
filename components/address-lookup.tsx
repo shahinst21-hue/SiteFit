@@ -42,6 +42,7 @@ export function AddressLookup({
   onSelect,
   initialSearch,
   onInitialSearch,
+  transport,
 }: {
   state: AddressLookupState;
   setState: (state: AddressLookupState) => void;
@@ -49,12 +50,14 @@ export function AddressLookup({
   onSelect: (property: PropertySelection) => void;
   initialSearch: string;
   onInitialSearch: () => void;
+  transport?: typeof fetch;
 }) {
   const [busy, setBusy] = useState<
     "lookup" | "search" | "resolve" | "manual" | null
   >(null);
   const [pendingReference, setPendingReference] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [filter,setFilter]=useState("");
   const [fields, setFields] = useState<
     Partial<Record<keyof ManualAddress, string>>
   >({});
@@ -74,7 +77,7 @@ export function AddressLookup({
       setBusy(operation);
       setError("");
       try {
-        const response = await fetch(`/api/addresses/${operation}`, {
+        const response = await (transport??fetch)(`/api/addresses/${operation}`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(body),
@@ -105,7 +108,7 @@ export function AddressLookup({
         }
       }
     },
-    [],
+    [transport],
   );
   const lookup = useCallback(
     async (raw: string) => {
@@ -115,6 +118,7 @@ export function AddressLookup({
         document.getElementById("postcode")?.focus();
         return;
       }
+      setFilter("");
       setState({
         ...latest.current,
         postcode,
@@ -170,6 +174,7 @@ export function AddressLookup({
     setBusy(null);
     setError("");
     setFields({});
+    setFilter("");
     setState({ ...state, mode, candidates: null, resultPostcode: "" });
   }
   async function select(candidate: AddressCandidate) {
@@ -195,12 +200,10 @@ export function AddressLookup({
     const result = await request("manual", state.manual);
     if (result) onSelect(result.property);
   }
+  const visibleCandidates=state.candidates?.filter(candidate=>candidate.label.toLocaleLowerCase().includes(filter.trim().toLocaleLowerCase()))??[];
   return (
     <div className="address-lookup">
-      <p className="muted">
-        Find the postal address, then choose your business. No account or
-        financial details needed.
-      </p>
+
       {selected && (
         <div className="selected-property" role="status">
           <Icon name="check" />
@@ -285,6 +288,8 @@ export function AddressLookup({
                 value={state.postcode}
                 disabled={!!busy}
                 autoComplete="postal-code"
+                autoCapitalize="characters"
+                enterKeyHint="search"
                 spellCheck={false}
                 required
                 maxLength={20}
@@ -313,7 +318,7 @@ export function AddressLookup({
               </button>
             </div>
             <p className="field-help" id="postcode-help">
-              Search once, then select the exact premises from the address list.
+              Choose the unit or building that matches your listing.
             </p>
           </div>
         </form>
@@ -371,12 +376,15 @@ export function AddressLookup({
                   : "No matching addresses were found.")}
       </div>
       {state.candidates && state.candidates.length > 0 && (
+        <div className="address-picker">
+         <div className="address-picker-heading"><h2>Select your property</h2><span>{state.candidates.length} found</span></div>
+         {state.candidates.length>6&&<div className="address-filter"><Icon name="search"/><input type="search" aria-label="Filter these addresses" placeholder="Filter by building, number or name" value={filter} onChange={event=>setFilter(event.target.value)} autoComplete="off"/><span className="sr-only">Filters this list only; no new search request.</span></div>}
         <ul
           className="address-results"
           aria-label="Select the property"
           aria-busy={!!busy}
         >
-          {state.candidates.map((candidate) => (
+          {visibleCandidates.map((candidate) => (
             <li key={candidate.reference}>
               <button
                 type="button"
@@ -405,6 +413,9 @@ export function AddressLookup({
             </li>
           ))}
         </ul>
+        {!visibleCandidates.length&&<p className="address-filter-empty">No addresses match this filter. <button type="button" className="text-link" onClick={()=>setFilter("")}>Clear filter</button></p>}
+        <p className="field-help address-picker-note">Choose the property address, even if the current business name is different.</p>
+        </div>
       )}
       <div className="address-alternatives">
         {state.mode !== "postcode" && (

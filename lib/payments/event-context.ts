@@ -7,8 +7,8 @@ export function validPaymentEventContext(event: {
   livemode: boolean;
   account?: string;
   api_version?: string | null;
-}) {
-  return !event.livemode && !event.account &&
+},live=false) {
+  return event.livemode===live && !event.account &&
     event.api_version === STRIPE_WEBHOOK_API_VERSION &&
     /^evt_[A-Za-z0-9]+$/.test(event.id);
 }

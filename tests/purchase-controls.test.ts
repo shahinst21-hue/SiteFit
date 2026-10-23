@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import ts from "typescript";
-import { purchaseNavigation } from "../lib/payments/purchase-navigation.ts";
+import { retryPurchaseNavigation,purchaseNavigation } from "../lib/payments/purchase-navigation.ts";
 import { purchaseAvailableOnHost } from "../lib/payments/config.ts";
 const origin="https://preview.example.org", report="00000000-0000-4000-8000-000000000001";
 test("purchase presentation is unavailable for missing Test credentials, wrong Preview host and Production",()=>{
@@ -19,13 +19,14 @@ test("Snapshot desktop and mobile purchase controls share report-bound purchase 
     if(ts.isJsxSelfClosingElement(node)&&node.tagName.getText(source)==="PurchaseButton"){
       const attributes=node.attributes.properties.filter(ts.isJsxAttribute);
       const id=attributes.find(a=>a.name.getText(source)==="controlId")?.initializer;
-      if(id&&ts.isStringLiteral(id))controls.push(id.text);
-      assert.equal(attributes.find(a=>a.name.getText(source)==="report")?.initializer?.getText(source),"{!demo ? purchaseReport : undefined}");
+      assert.ok(id?.getText(source).includes('snapshot-purchase-'));
+      assert.equal(attributes.find(a=>a.name.getText(source)==="report")?.initializer?.getText(source).replace(/\s/g,''),"{!demo?purchaseReport:undefined}");
     }
+    if(ts.isCallExpression(node)&&node.expression.getText(source)==='purchase'&&node.arguments[0]&&ts.isStringLiteral(node.arguments[0]))controls.push(`snapshot-purchase-${node.arguments[0].text}`);
     if(ts.isJsxElement(node)&&node.openingElement.tagName.getText(source)==="a"&&node.getText(source).includes("Check the Full Case"))priceAnchors++;
     ts.forEachChild(node,visit);
   }
-  visit(source);assert.deepEqual(controls.sort(),["snapshot-purchase-mobile","snapshot-purchase-primary"]);assert.equal(priceAnchors,0);
+  visit(source);assert.deepEqual(controls.sort(),["snapshot-purchase-brief","snapshot-purchase-mobile","snapshot-purchase-primary"]);assert.equal(priceAnchors,0);
 });
 test("purchase start preserves report identity and only accepts real authentication/resume destinations",async()=>{
   for(const destination of ["/purchase/auth",`/purchase/resume?report=${report}`]){
@@ -37,7 +38,40 @@ test("purchase start preserves report identity and only accepts real authenticat
 });
 test("verified checkout uses its separate POST and rejects page anchors, non-Stripe redirects and failed responses",async()=>{
   assert.equal(await purchaseNavigation(report,true,origin,async(url,init)=>{assert.equal(url,"/purchase/checkout");assert.deepEqual(JSON.parse(String(init?.body)),{reportId:report});return Response.json({url:"https://checkout.stripe.com/c/pay/synthetic_test_only"});}),"https://checkout.stripe.com/c/pay/synthetic_test_only");
-  for(const destination of ["#full-case","/purchase/auth","https://checkout.stripe.com/not-checkout"])
+  for(const destination of ["#full-case","/purchase/auth?next=https://evil.example","https://checkout.stripe.com/not-checkout"])
     await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})));
   await assert.rejects(()=>purchaseNavigation(report,false,origin,async()=>Response.json({url:"/purchase/auth"},{status:503})));
+});
+
+test("verified Stripe Checkout preserves provider fragment while internal anchors and credential URLs remain rejected",async()=>{
+  const destination="https://checkout.stripe.com/c/pay/synthetic_test_only#synthetic-provider-state";
+  assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),destination);
+  for(const url of ["https://user:password@checkout.stripe.com/c/pay/synthetic_test_only#state","https://checkout.stripe.com.evil.example/c/pay/test#state"])
+    await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
+  await assert.rejects(()=>purchaseNavigation(report,false,origin,async()=>Response.json({url:"/purchase/resume#state"})));
+});
+
+test('checkout permits only the fixed login continuation and preserved guest claim, never an arbitrary internal redirect',async()=>{
+ for(const destination of ['/login?next=%2Fpurchase%2Fcontinue','/purchase/auth'])assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),origin+destination);
+ for(const destination of ['/login?next=https://evil.example','/login?next=%2Fpurchase%2Fcontinue&extra=1','/login?next=%2Fpurchase%2Fcontinue#fragment','/purchase/auth#fragment','https://evil.example/login?next=%2Fpurchase%2Fcontinue'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})));
+});
+
+test('client accepts the verified f/pay Stripe format and keeps provider fragment state',async()=>{
+ const destination='https://checkout.stripe.com/f/pay/cs_live_synthetic#synthetic-provider-state';
+ assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:destination})),destination);
+ for(const url of ['https://checkout.stripe.com:8443/f/pay/example','https://checkout.stripe.com.evil.example/f/pay/example','https://user@checkout.stripe.com/f/pay/example','https://checkout.stripe.com/f/pay/','https://checkout.stripe.com/f/other/example'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
+});
+
+test('bounded Checkout recovery errors explain the saved state without forwarding provider details',async()=>{
+ const fetcher=(code:string)=>async()=>new Response(JSON.stringify({error:'private provider details must not surface',code}),{status:409});
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('checkout_reconciliation_required') as typeof fetch),/previous payment attempt needs verification/);
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_budget_exhausted') as typeof fetch),/AI test budget has no capacity/);
+ await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('trial_full_slots_committed') as typeof fetch),/All three controlled Full Report purchases/);
+ try{await purchaseNavigation(report,true,origin,fetcher('secret-provider-code') as typeof fetch);assert.fail();}catch(e){assert.ok(e instanceof Error);assert.doesNotMatch(e.message,/private provider|secret-provider/);}
+});
+
+test('payment retry uses owner-scoped POST and validates secure recovery destinations',async()=>{
+ for(const url of ['https://checkout.stripe.com/c/pay/synthetic',`/purchase/return?purchase=${report}`,`/snapshots/${report}?purchase=1`])assert.equal(await retryPurchaseNavigation(report,report,origin,async(path,init)=>{assert.equal(path,'/purchase/retry');assert.equal(init?.method,'POST');assert.deepEqual(JSON.parse(String(init?.body)),{purchaseId:report});return Response.json({url});}),new URL(url,origin).href);
+ for(const url of ['https://evil.example/','/account','javascript:alert(1)',`/snapshots/${report}?purchase=1#unsafe`])await assert.rejects(()=>retryPurchaseNavigation(report,report,origin,async()=>Response.json({url})));
+ await assert.rejects(()=>retryPurchaseNavigation(report,report,origin,async()=>Response.json({error:'uncertain'},{status:409})));
 });

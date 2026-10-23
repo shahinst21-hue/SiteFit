@@ -10,7 +10,7 @@ export function PurchaseClaim(){
    const data=await response.json();
    if(!response.ok||typeof data.url!=="string"||!/^\/purchase\/resume\?report=[a-f0-9-]+$/.test(data.url))throw Error("unavailable");
    window.location.assign(data.url);
-  }catch{setError("We could not save this connection. Please retry in the same browser.");setBusy(false);}
+  }catch{setError("We could not link your Snapshot to your account. Try again in this browser.");setBusy(false);}
  },[]);
  useEffect(()=>{if(!started.current){started.current=true;void connect();}},[connect]);
  return <><p>Your sign-in is verified. Save this Snapshot to your account to continue.</p><button type="button" className="button" disabled={busy} onClick={connect}>{busy?"Saving…":"Save and continue"}</button><p role="status">{error}</p></>;

@@ -15,5 +15,5 @@ export default async function PurchaseAuthPage({searchParams}:{searchParams:Prom
  if(claim.state==="completed"&&claim.target_id===user.id)redirect(`/purchase/resume?report=${claim.report_id}`);
  if(claim.guest_id!==user.id||claim.state!=="pending")notFound();
  const params=await searchParams;
- return <div className="page-wrap narrow-page">{params.error&&<p role="alert" className="field-error">Sign-in did not complete. Keep this browser open and try again, or return to your Snapshot.</p>}<PurchaseAuth/></div>;
+ return <div className="page-wrap narrow-page">{params.error&&<p role="alert" className="field-error">Sign-in did not complete. Keep this browser open and try again, or return to your Snapshot.</p>}<PurchaseAuth test={process.env.VERCEL_ENV!=="production"}/></div>;
 }

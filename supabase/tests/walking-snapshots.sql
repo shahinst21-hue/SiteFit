@@ -21,6 +21,9 @@ begin
  begin perform public.validate_sitefit_walking_geometry('00000000-0000-4000-8000-000000000121',bad); raise exception 'Outside origin accepted'; exception when check_violation then null; end;
  bad:=jsonb_set(w,'{polygons,0,seconds}',to_jsonb(301));
  begin perform public.validate_sitefit_walking_geometry('00000000-0000-4000-8000-000000000121',bad); raise exception 'Wrong duration accepted'; exception when check_violation then null; end;
+ perform public.validate_sitefit_walking_geometry('00000000-0000-4000-8000-000000000121',jsonb_set(jsonb_set(w,'{origin,source}','"postio"'),'{origin,precision}'::text[],'"postcode_centroid"'));
+ if source_data.contextual_walking_origin('{"schemaVersion":2,"selectedProperty":{"resolution":"manual_unverified","point":{"source":"postio","precision":"postcode_centroid"}}}') is not null then raise exception 'Unverified origin accepted';end if;
+ if source_data.contextual_walking_origin('{"schemaVersion":2,"selectedProperty":{"resolution":"provider_verified","point":{"source":"postio","precision":"postcode_centroid"}}}') is null then raise exception 'Verified postal origin rejected';end if;
  if has_function_privilege('anon','public.validate_sitefit_walking_geometry(uuid,jsonb)','EXECUTE') or has_function_privilege('authenticated','public.validate_sitefit_walking_geometry(uuid,jsonb)','EXECUTE') then raise exception 'Geometry RPC exposed'; end if;
 end $$;
 rollback;

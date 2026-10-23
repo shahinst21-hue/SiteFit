@@ -1,6 +1,22 @@
-# Phase 12: AI interpretation and report intelligence — implementation proposal
+# Phase 12 implementation plan
 
-Prepared 10 October 2026. **Planning only; implementation and paid verification await owner approval.** Phases 8–11 are complete. D78/D79/D80, D82 and D83 remain authoritative. D84 changes the internal capacity checkpoint only; D85 records the dashboard/product clarification. No source coverage, scoring calibration, payment policy or Production activation is proposed here.
+## Current authority: D89
+
+Owner accepts the current V1 structure, Executive Summary, Scenario Fit and concept-specific reasoning. The editorial/manual-three-concept acceptance requirements below are historical and closed by that decision, supported by existing frozen-source fixtures. Do not request another rewrite or three more manually reviewed reports. Mandatory technical delivery/lifecycle/security gates are retained. No increased spending is approved. Phase 13 is authorised only after Phase 12 is formally complete. See [V1 release contract and backlog](full-report-v1-release.md).
+
+**11 October consultant-output amendment, D88:** [Consultant model v1](report-consultant-model-v1.md) supersedes the atom-only final prose described below for **new** preparations. Keep two grouped evidence selections plus one synthesis; the final call writes evidence-linked analysis for all eight pages and the three-line Verdict/strengths/risks/Priority Action. Runtime reference/slot checks do not establish semantic truth: actual content review remains mandatory. Operator comparison distinguishes total, offers/strength, brand, customer reputation and hygiene; restaurant operating scenarios remain gated. No automatic paid repair for this version. Groups retain 20 KB requests/3,000 output caps; narrative synthesis uses 28 KB/6,000 tokens and 120 seconds. Route configuration is 200 seconds after three actual 60-second timeouts; deployed behavior remains open. All old ready editions replay unchanged. Web competition discovery can prepare candidates, but is not automatically dispatched/admitted or newly budget-approved. The aggregate US$1 ceiling remains binding.
+
+**Owner-approved 11 October 2026 amendment:** [Scenario-fit evaluator v1](scenario-fit-v1.md) adds a shared versioned operating-format decision to new Full Report preparations. The Executive Summary and all report views must use that decision and its evidence ledger. The Phase 11 index remains context-only; an overall numerical score remains inactive. The existing two analysis groups plus synthesis architecture and US$1 live verification ceiling remain. Existing assessments/ready reports are not rewritten. This amendment does not approve Phase 13 implementation.
+
+## Authoritative owner amendments — 10 October 2026
+
+Owner approves implementation Steps 12.0–12.9 with three amendments. **Report quality outweighs test counts:** the nominal three calls must supply specific analytical content for all eight pages (Appendix remains deterministic). Reject generic statements that merely say population is suitable or further checks are needed; real QA must demonstrate evidence-specific comparisons, business implications, material trade-offs and decision-changing actions. Call count is a bounded baseline, not permission to publish inadequate content; if it cannot produce acceptable content, document the actual failure and seek a scoped resolution rather than silently widening spending or weakening admission.
+
+**Persistent interruption safety:** browser closure and server interruption must not lose report identity, pinned inputs, stages, dispatch reservations, accepted outputs or receipts. Persist intent before every provider dispatch, and accepted output before advancing. An interrupted/ambiguous dispatch is never automatically reissued by reopen, duplicate start, resume, restart or deployment. Safe manual reconciliation remains possible; never claim exactly-once external execution. Resume only demonstrably never-dispatched stages under the original binding and remaining allowance.
+
+**US$1 aggregate live Phase 12 verification ceiling**, replacing the proposed US$2. All real AI tests, including failed/ambiguous calls and Q&A, share this phase budget. Reserve the conservative maximum before dispatch and retain unknown charges. Prior phase budgets do not add allowance. Three reports at a $0.30 reserve plus one $0.04 question fit only if actual configured/request bounds justify it. If essential valid verification cannot fit, stop only that paid dependency and obtain explicit approval before additional spending. No additional providers/purchases/Production/Phase 13 authorised. See D86 and [actual status](phase-12-status.md).
+
+Prepared 10 October 2026. **Implementation authorised under D86; aggregate live verification ceiling US$1.** Phases 8–11 are complete. D78/D79/D80, D82 and D83 remain authoritative. D84 changes the internal capacity checkpoint only; D85 records the dashboard/product clarification. No source coverage, scoring calibration, payment policy or Production activation is proposed here.
 
 Read with [reuse audit](phase-12-design-audit.md), [reference-based Phase 13 handoff](phase-13-design-handoff.md), [capacity policy](infrastructure.md#current-capacity-policy--10-october-2026), [Product Contract](product.md) and [Phase 11 completion](phase-11-status.md). All eight supplied reference pages are received, reviewed and owner-confirmed complete. Their numbers, claims, tab wording and example data are not product evidence.
 
@@ -67,7 +83,7 @@ Nominal **3 calls**, fewer when a group is entirely unsupported. **Maximum 4 dis
 
 Proposed new prompt versions: `full-context-v1`, `full-premises-rent-v1`, `full-decision-v1`; Q&A `report-answer-v1`. Keep legacy `section-analyst-v3` and validated-synthesis receipts unchanged. Freeze exact instructions/schema digests, actual model/version returned, configuration and packet digests. An alias does not promise rerun reproducibility; historical reproducibility means replaying the stored validated edition with its original receipts.
 
-### 4.1 Useful AI analysis without unverifiable prose
+### 4.1 Original atom-only design — superseded for new D88 preparations
 
 AI selects, ranks and reconciles **reviewed evidence-linked claim and implication atoms**; it does not author numerical facts. Extend the existing proposition approach only for currently supported report facts and conditional business implications. Every factual or inferential sentence is represented by admitted fact/claim IDs and an approved composition/rule, with scope/limitation IDs. Deterministic rendering supplies numbers, units, dates and required caveats. Business-specific implications must state their condition, not predict customers or profit.
 
@@ -76,6 +92,8 @@ Permit connective/editorial wording only through bounded reviewed variants; unsu
 Mandatory hard checks: closed JSON schema/lengths, valid same-edition IDs, exact claim role, admitted rule and prerequisites, numeric/date equality, scope compatibility, material opposition and unknown preservation, no legal clearance from history, no unsupported score/probability, no economics leakage and no source instruction execution. [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs) supplies schema constraints, not factual validation. A model refusal/incomplete response fails safely.
 
 ## 5. Structured report and dashboard contracts
+
+New D88 preparations additionally bind `consultant-narrative-v1`, eight ordered section commentaries and the ranked Executive Summary. Deterministic numbers are resolved from same-edition references and formatted approximately for readers; source operands and material cautions remain exact. The original group selections remain internal checkpoint/preparation content rather than duplicated final prose. See the versioned model for current timeout, cost, source and QA rules; the original estimates below are historical candidate estimates, not measurements of the larger narrative.
 
 `FullReportV1`: report/analysis/input version binding; generated/analysis timestamps; business identity; manifest and assessment digests; source/release/method/config versions; group/synthesis receipts; section order; index with publication reason; independent premises/readiness; supporting/opposing claim IDs; material unknowns; ranked actions; source/evidence directory; content digest. No HTML, executable Markdown, frontend code or private chain-of-thought.
 
@@ -102,6 +120,8 @@ Forward migration responsibilities:
 Owned ready reads return the stored safe projection and terminate before constructing collectors, comparison engines or AI clients. No refresh on GET, status polling, Q&A or PDF export. A new business check creates a new analysis, not a replacement edition of the earlier history. Pipeline retries are the same edition/pinned inputs, not a chance to refresh datasets.
 
 Store compact catalog/receipts/validated selections, referencing existing SQL-verified originals. Avoid duplicating raw envelopes, full geometries or repeated claim prose in provenance and sections. Target additional report storage **80–200 KB including estimated index/TOAST overhead**, provisional until actual measurement; cap structured report payload at 128 KB and bounded checkpoint content at 64 KB, with mandatory findings never truncated. Measure actual database and relation sizes before/after representative writes; roll back synthetic QA where possible.
+
+Implementation bound clarification: the frozen preparation is capped at 128,000 serialized bytes to include existing validated Census table operands alongside the admitted catalog. Store column dictionaries once; no geometry/raw API bodies in the preparation. Checkpoint/final projection bounds and AI request/cost ceilings remain unchanged. Preparation and final output both preserve source lineage; no report read reruns the operand projection.
 
 At 374,855,347 bytes, the 400,000,000 checkpoint leaves **25,144,653 bytes**. A rough 80–200 KB/edition projection permits around **125–314 editions** if nothing else grows; this is not a capacity guarantee. Native source growth and PostgreSQL overhead consume that margin too. Recheck before hosted writes, reserve known migration/QA growth, and stop the dependent write if the essential measured footprint would exceed the checkpoint. No upgrade, pruning historical reports or automatic expiry is authorised.
 
@@ -148,7 +168,7 @@ Optimisations: reuse exact stored evidence/assessment, two parallel groups, dete
 
 ## 10. Execution steps and required verification
 
-Implementation is not yet authorised. After approval create and maintain `docs/phase-12-status.md`, record each step's actual results/deviations and proceed in this order. Use Node 24/npm 11 and `npm ci`; run focused tests, lint/types for relevant changes; full build/regression at integration/final delivery, not repeatedly for unchanged work.
+Implementation is authorised. Maintain `docs/phase-12-status.md`, record each step's actual results/deviations and proceed in this order. Use Node 24/npm 11 and `npm ci`; run focused tests, lint/types for relevant changes; full build/regression at integration/final delivery, not repeatedly for unchanged work.
 
 | Step | Defined scope | Evidence required to close |
 | --- | --- | --- |
@@ -163,7 +183,7 @@ Implementation is not yet authorised. After approval create and maintain `docs/p
 | **12.8** | Proportionate real intelligence QA/security/capacity | Three existing-evidence reports, one per concept; one bounded real Q&A if budget approved; fixed failure/contradiction cases mocked. Independent manual claim/value/scope/material-risk review, actual receipts/latency, browser/HTTP response and artifact privacy; no raw private captures |
 | **12.9** | Final regression and protected delivery | `npm run check`, fresh DB/security + hosted changed SQL proof, running build/public HTTP, applicable protected Preview private API checks, exact-head required CI, protected PR merge/post-main CI, local main=origin and clean tree; complete status/limits |
 
-Live generation/Q&A verification budget proposal: **up to US$2 total**, separately approved only when needed (three reports reserved at $0.30 + one $0.04 answer; remaining allowance covers known metering uncertainty, not additional calls). Nominal nine generation calls plus one Q&A, maximum thirteen including shared repairs. No new source API calls. If access/budget remains pending, finish mocks/contracts/security independently; do not mark live quality/latency verified. Do not substitute synthetic evidence for a real-source packet. Test entitlement remains authoritative for development; Production disabled.
+Live generation/Q&A verification budget: **up to US$1 total**, owner-approved under D86 (three reports reserved at $0.30 + one $0.04 answer; the $0.06 remaining reserve is not permission for additional requests). Nominal nine generation calls plus one Q&A, maximum thirteen including shared repairs. No new source API calls. If access/budget remains pending, finish mocks/contracts/security independently; do not mark live quality/latency verified. Do not substitute synthetic evidence for a real-source packet. Test entitlement remains authoritative for development; Production disabled.
 
 Manual QA is about decision value and factual scope: opening answers whether to pursue and why; each prominent sentence maps to permitted evidence/rule; strongest contrary evidence visible; unknown permissions not refusals; no fabricated customer counts/closure reasons; actions specific and decision-changing; source dates and rental kinds correct. Have the owner review the three representative outputs as content acceptance; automated pass is not customer acceptance or UI launch approval.
 
@@ -178,13 +198,13 @@ Manual QA is about decision value and factual scope: opening answers whether to 
 - [ ] Actual background leave-page completion and truthful interruption/recovery verified on the configured protected Preview; no durable execution claim unsupported by evidence.
 - [ ] Grounded question contract/service verified, with approved live allowance or an explicitly owner-approved deterministic-only first-release resolution; no report mutation or hidden recurring AI spend.
 - [ ] Dashboard and per-tab/full-report PDF contracts complete against all eight references; no Phase 13 UI/PDF implemented.
-- [ ] Security/RLS, secret/private-payload, ownership/refund, changed SQL and full regression gates pass; measured database stays within 400,000,000 bytes.
+- [ ] Security/RLS, secret/private-payload, ownership/refund, changed SQL and full regression gates pass; measured database stays within D99's 450,000,000-byte checkpoint.
 - [ ] Exact-head CI, protected merge, post-main CI and clean matching main evidenced.
 - [ ] Limitations/cost/sample latency documented; no new provider, purchase, Production/live payment, Financial Engine embedding or later phase.
 
 ## 12. Approval questions, risks and explicit exclusions
 
-Approve the Phase 12 plan before implementation. Review the three-call architecture, narrowly persisted execution checkpoint, constrained useful prose, question-answer boundary and proposed Rent & Lease Context label. Owner confirmation that references are complete is already received; no repeated reference request is necessary. A separate live development budget is needed before paid QA, not during planning. Production hosting commercial-use suitability, direct Live Stripe launch gate and final retention/customer terms remain pre-launch decisions, not permission to upgrade now.
+Phase 12 implementation is approved under D86. Preserve the three-call architecture, narrowly persisted execution checkpoint, constrained useful prose, question-answer boundary and proposed Rent & Lease Context label. Owner confirmation that references are complete is already received; no repeated reference request is necessary. The aggregate US$1 live development budget is approved; additional spending requires explicit prior approval. Production hosting commercial-use suitability, direct Live Stripe launch gate and final retention/customer terms remain pre-launch decisions, not permission to upgrade now.
 
 Risks: evidence gaps and rights limit richness; small remaining capacity; anchored prose may need bounded variants to avoid repetition; existing historical inputs may lack required checksums; provider outages/ambiguous dispatch may require safe manual recovery; deployment duration is unverified until Step 12.5; model alias behavior and pricing can change; no exact-unit photos/visibility data or admitted overall score. None is cured by invented UI figures or newer-wins source selection.
 
@@ -193,3 +213,13 @@ Exclusions: new data providers or paid retrieval, renewed scoring/prompt calibra
 ## Planning validation record
 
 10 October 2026: read existing documentation/code and external prompt package; inspected all eight attached UI references; owner confirmed completeness and clarified images are design-only. Read-only hosted SQL measured **374,855,347 bytes**. Official model/lifecycle sources reviewed; no paid calls, hosted writes, migration, source change or service configuration. The planning PR contains documentation only; its approval is separate from implementation authority. Existing historical 375 MB records/applied SQL remain unchanged; a future approved forward change is required if an old ingestion gate itself must be raised.
+
+## 11 October owner content amendment
+
+Accepted structure for future reports: three-line Consultant Verdict; prioritised Key Strengths and Weaknesses/Risks; one Priority Action; ranked actions with explicit consequences for the lease decision. Exact-unit permission/layout, genuine offer differentiation, frontage/routes and lease terms remain distinct. Binding constraints take precedence.
+
+Implemented candidate: decision-summary-v2 and qualified FSA register-shortlist projection. Same-owner/input snapshots must match assessment source checksums and allowed retention; denied evidence cannot inject records. Names, categories, points/precision, dates, native IDs and provenance survive into the stored report shortlist. AI receives bounded names/categories and source links, not point coordinates. Full 200 source records remain immutable; the first-12 provider-order shortlist is explicitly incomplete with omitted count, never a nearest/strength ranking. Food-register records cannot identify salon competitors. No claims of activity, prices, reviews, direct competition or unique competitor totals are inferred.
+
+A forward migration adds existing FSA snapshot material to the existing protected server preparation function; historical ready editions and v1 summary replay remain unchanged. The TS007A subgroup label is corrected for new preparations. No provider or AI retrieval, paid request, new scoring, UI or later-phase functionality.
+
+Three same-property editorial review reports are stored in docs/reviews/phase12/. They reuse frozen original coffee-shop evidence under distinct review concepts; they are not three newly persisted analyses or live AI outputs. Do not relabel historical input contexts. Owner acceptance and actual amended-generation gates remain open.

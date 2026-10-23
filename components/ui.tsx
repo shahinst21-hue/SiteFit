@@ -1,25 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { Icon } from "./icon";
 
 export function Arrow({ className = "" }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      aria-hidden="true"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M5 12h14m-6-6 6 6-6 6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <Icon name="arrow" className={className} />
   );
 }
 export function ButtonLink({
@@ -62,15 +48,15 @@ export function ClosingCTA() {
   return (
     <section className="closing-cta">
       <div>
-        <p className="eyebrow">YOUR NEXT SPACE DESERVES A CLOSER LOOK</p>
+        <p className="eyebrow">BEFORE YOU SIGN</p>
         <h2>
-          Start with the address.
+          Found your next premises?
           <br />
-          Know what to check.
+          Start with a free check.
         </h2>
         <p>
-          Start with the location and business type for your coffee shop,
-          restaurant or salon.
+          Enter your London property and business type. No account or card
+          needed for your Free Snapshot.
         </p>
       </div>
       <ButtonLink href="/check-location">Check a Location</ButtonLink>

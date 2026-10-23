@@ -1,6 +1,12 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+import "./brand.css";
+import "./journey.css";
+import "./snapshot-decision.css";
+import "./measurement.css";
+import {MeasurementControls} from "@/components/measurement-controls";
+import {readPublicSupabaseConfig} from "@/lib/supabase/config";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { websiteOrigin } from "@/lib/seo";
@@ -14,6 +20,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+export const viewport: Viewport = { themeColor: "#eaeaea", viewportFit: "cover" };
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en-GB" data-scroll-behavior="smooth">
@@ -21,11 +29,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
-        <SiteHeader />
+        <SiteHeader authConfig={readPublicSupabaseConfig(process.env)} />
         <main id="main-content" tabIndex={-1}>
           <LocationEntryProvider>{children}</LocationEntryProvider>
         </main>
         <SiteFooter />
+        <MeasurementControls/>
       </body>
     </html>
   );

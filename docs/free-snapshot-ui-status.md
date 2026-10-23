@@ -1,4 +1,11 @@
-# Free Snapshot UI refinement — 2026-10-06
+# Current owner-requested Snapshot presentation — 18 October 2026
+
+The [decision experience](snapshot-decision-experience.md) supersedes the score
+slot, empty-map panel and conversion layout below. The older notes remain historical
+evidence. Reports/sources are not regenerated. Ask SiteFit uses saved answers;
+café lenses are local verification prompts, not capacity or preferred-format advice.
+
+# Free Snapshot UI refinement — 2026-10-06 (historical)
 
 Owner authority: the attached Kingston redesign prompt, with the owner's Persian clarification taking priority. Scope is the Free Snapshot presentation, reusable components and its normalised view/isolated fixture. Phase 7/8 and new providers remain unauthorised.
 

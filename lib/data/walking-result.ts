@@ -12,7 +12,7 @@ export function validateWalkingCatchments(value: unknown, expectedOrigin?: Point
   demand(r.schemaVersion === 1 && r.provider === "geoapify" && r.mode === "walk" && r.type === "time" &&
     timestamp(r.retrievedAt) && r.routingVersion === null && r.snappedOrigin === null && validPoint(r.origin));
   const origin = r.origin;
-  demand(origin.source === "os-open-uprn" && origin.precision === "building");
+  demand(origin.source === "os-open-uprn" && origin.precision === "building" || origin.source === "postio" && origin.precision === "postcode_centroid");
   if (expectedOrigin) demand(validPoint(expectedOrigin) && origin.longitude === expectedOrigin.longitude && origin.latitude === expectedOrigin.latitude &&
     origin.precision === expectedOrigin.precision && origin.source === expectedOrigin.source && origin.crs === expectedOrigin.crs);
   const credits = object(r.credits); fields(credits, "expected observed"); demand(credits.expected === 6 && credits.observed === null);

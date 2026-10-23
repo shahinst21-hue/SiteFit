@@ -25,47 +25,45 @@ export default function Methodology() {
         <div className="prose">
           <h2>Relevance before volume</h2>
           <p>
-            Assess a source for its date, geographic coverage, business
-            relevance, permitted use and limitations. A source is useful only if
-            it helps answer a decision-relevant question. Current location
-            briefs use the details you enter; schematic visuals and Sample
-            Reports are explicitly illustrative.
+            Reports use source observations with their dates, areas covered
+            and limitations. The analysis connects these to your intended
+            business. A source record can inform a decision without answering
+            every question about the property.
           </p>
           <h2>Coverage follows geography</h2>
           <p>
-            England, Scotland, Wales and Northern Ireland can require different
-            evidence sources. A regional transport indicator cannot stand in for
-            national coverage. Source claims must identify the actual geography
-            and retrieval behind them.
+            Analysis covers Greater London. An area’s population or workplace
+            figures describe that area, not the people passing your door.
+            Modelled walking areas indicate possible routes, not observed visits.
           </p>
           <h2>Separate observation from interpretation</h2>
           <p>
-            Official or commercial describes provenance. Observed, estimated,
-            user-supplied or inferred describes the claim. A reliable source
-            does not establish that a business will succeed at a particular
-            property.
+            A published record, a modelled estimate and an AI interpretation
+            are different kinds of information. Your report keeps them
+            distinct. None establishes that a business will succeed here.
           </p>
           <h2>State the evidence gap precisely</h2>
           <p>
-            Insufficient verified evidence is a valid outcome. It is different
-            from verified absence. Transport activity is not measured premises
-            footfall; a business listing does not establish sales or a cause of
-            closure.
+            “Unknown” means the available evidence cannot answer the question;
+            it does not mean there is no risk. A station’s activity does not
+            measure pedestrians outside the shop. A business listing does not
+            show sales or explain a closure.
           </p>
-          <h2>Transparent financial reasoning</h2>
+          <h2>Rental context, not a lease quotation</h2>
           <p>
-            Financial conclusions require explicit inputs, units and
-            deterministic methods. Missing inputs should omit or qualify
-            dependent calculations. Scenario assumptions must be visible and
-            must not be presented as forecasts.
+            Where supported, rental benchmarks and estimates appear with
+            their source, date, units and limits. They are not agreed rent or
+            a complete account of lease costs. Ask the landlord for the actual
+            terms. Business financial calculations are not part of the
+            Full Report or its PDF.
           </p>
           <h2>AI acts as an analyst</h2>
           <p>
-            The analysis standard is source data, normalised data, deterministic
-            metrics, evidence, AI interpretation and a validated report. AI can
-            compare signals, identify contradictions and explain implications.
-            It must not invent history, data, sources, financial results or
-            success probabilities.
+            AI helps connect the evidence, explain trade-offs and suggest
+            practical checks. The report undergoes structural and data-integrity
+            checks; these do not independently certify every interpretation.
+            AI analysis can be inaccurate. Verify material facts before
+            committing; your statutory rights remain unaffected.
           </p>
           <h2>Verify before committing</h2>
           <p>

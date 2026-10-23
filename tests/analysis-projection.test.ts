@@ -1,3 +1,4 @@
+import {residentialScore} from '../lib/analysis/residential-catchment.ts';
 import assert from "node:assert/strict";
 import test from "node:test";
 import { validateFreeProjection, type FreeProjection } from "../lib/analysis/projection.ts";
@@ -18,7 +19,8 @@ test("customer read route contains only stored projection access, never analytic
   assert.ok(code.includes('rpc("read_sitefit_free"'));
   for (const importName of ["generateSnapshot", "framework(", "residentialMetric(", "analysisAIProvider(", "synthesiseSections("]) assert.ok(!code.includes(importName));
   const ui = await readFile(new URL("../components/free-snapshot.tsx", import.meta.url), "utf8");
-  assert.ok(ui.includes("Why this result?")); assert.ok(!ui.includes("SnapshotFinancePreview")); assert.ok(ui.includes("Qualified commercial rental context")); assert.ok(!ui.includes("Financial scenarios and daily transactions")); assert.ok(ui.includes("Purchasing is not enabled"));
+  const evidenceDialog=await readFile(new URL("../components/snapshot-evidence-dialog.tsx",import.meta.url),"utf8");
+  assert.ok(evidenceDialog.includes("Explore the evidence")); assert.ok(!ui.includes("SnapshotFinancePreview")); assert.ok(ui.includes("Rent benchmarks depend on available qualified evidence")); assert.ok(!ui.includes("Financial scenarios and daily transactions")); assert.ok(ui.includes("Full Report purchasing is not open yet"));
   assert.ok(!ui.includes("Economics optional"));
 });
 
@@ -40,4 +42,11 @@ test("enriched stored projection preserves holes, disconnected parts and no-rout
   const open = structuredClone(input); open.spatial.catchments[0].geometry.coordinates[0][0].pop();
   assert.throws(() => validateFreeProjection(open));
   assert.ok((await readFile(new URL("../components/snapshot-map.tsx", import.meta.url), "utf8")).includes('fillRule="evenodd"'));
+});
+
+test('residential calculation survives immutable projection and view replay; historical reports remain unchanged',()=>{
+ const legacy=fixture(),before=JSON.stringify(legacy);assert.equal(snapshotFromStored(validateFreeProjection(legacy)).factors[0].residentialCatchment,undefined);
+ const score=residentialScore([3500,9000,25000],{evidenceIds:['synthetic'],snapshotIds:[],releaseIds:[],precision:'postcode_centroid',referencePeriod:'2021-03-21',retrievedAt:[],point:{longitude:0,latitude:51}})!;
+ const stored=validateFreeProjection({...legacy,residentialCatchment:score});assert.deepEqual(stored.residentialCatchment,score);assert.equal(snapshotFromStored(stored).factors[0].residentialCatchment?.score,65);
+ assert.throws(()=>validateFreeProjection({...legacy,residentialCatchment:{...score,score:90}}));assert.equal(JSON.stringify(legacy),before);
 });

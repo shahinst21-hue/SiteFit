@@ -1,1 +1,2 @@
 * text=auto eol=lf
+supabase/migrations/20261017130000_controlled_proof_budget_v2.sql -text whitespace=cr-at-eol

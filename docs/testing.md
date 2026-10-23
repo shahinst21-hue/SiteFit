@@ -1,5 +1,13 @@
 # Future testing strategy
 
+D99 adds no-spend regressions for explicit negative scope statements versus unsupported affirmative/mixed outcomes; seven-page generated contract plus deterministic Appendix versus unexpected/unsafe pages; successful/failing synthesis and immutable eight-page exports; qualified/missing/foreign/expired rental evidence, owner Preview-only rental PDF versus denied Full export. Fresh PostgreSQL verifies all effective capacity gates are 450 MB and source/ownership/security/budgets remain. Actual results in [D99 record](phase-12-d99-corrections.md); no new live AI proof is authorised.
+
+## D97 no-spend reproducible regression — 12 October
+
+Run `node --conditions=react-server --test tests/report-intelligence-narrative.test.ts tests/report-intelligence-generation.test.ts tests/report-rental-preparation.test.ts tests/rental-fallback.test.ts tests/report-dashboard.test.ts tests/web-evidence.test.ts`. The fixtures use mocked provider/HTTP responses, not real credentials or paid calls. Actual TSX and customer-readable PDF assertions cover qualified rent, dates, native area basis, absent/rejected prices and source-type distinctions. The eight-page regression reproduces the former risk-/desk-based false rejection through export/replay; an invalid synthesis preserves only rule/path diagnostics and never retries.
+
+`npm run check:database` rebuilds the actual migration history and runs transactional source/owner/grant/reservation/immutability tests. Never seed a real rent-search approval or reset unknown Phase 12 reservations to run a probe. The separately recorded hosted no-spend audit uses actual owned reads, denial checks and predicates without creating a grant or dispatching AI/providers. See [actual results](phase-12-rent-synthesis-hardening.md).
+
 ## Current Phase 12 planned gates — 10 October 2026
 
 [Phase 12 proposal](phase12_plan.md#10-execution-steps-and-required-verification) defines finite three-concept real-source intelligence QA, deterministic claim/value/scope/opposition validation, mocked failure/injection controls, fresh/hosted changed SQL/security, stored replay without external calls, actual background completion/recovery, bounded questions and protected CI delivery. Planning runs no paid calls or implementation tests. D78/D79 forbid low-value exhaustive QA, not these essential accuracy/privacy/history requirements. D84 capacity checkpoint is 400,000,000 bytes and must be measured before writes.

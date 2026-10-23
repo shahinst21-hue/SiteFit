@@ -18,13 +18,13 @@ export const publicPages = [
     path: "/",
     title: "Check a commercial location before you commit",
     description:
-      "Assess a commercial location in the UK before committing to a lease. Frame demand, competition, access and costs with SiteFit.",
+      "Assess a London commercial location before committing to a lease. Understand customer context, competition, access, premises and available rental evidence.",
   },
   {
     path: "/how-it-works",
     title: "How it works",
     description:
-      "Start with an address and business type, review a Free Snapshot, then explore deeper evidence and optional economics.",
+      "Check a London property for your coffee shop, restaurant or salon. Start free, then explore strengths, risks and priority checks in the Full Report.",
   },
   {
     path: "/pricing",
@@ -42,7 +42,7 @@ export const publicPages = [
     path: "/login",
     title: "Login",
     description:
-      "Sign in securely to your SiteFit account with a one-time email link. No password required.",
+      "Sign in with Google or a one-time email link to revisit your saved SiteFit Snapshots and Full Reports.",
   },
   {
     path: "/methodology",
@@ -60,7 +60,7 @@ export const publicPages = [
     path: "/privacy",
     title: "Privacy",
     description:
-      "Understand how SiteFit handles location entries, optional financial details, account information and session cookies.",
+      "Read SiteFit privacy information covering location checks, account details, purchases and cookies.",
   },
   {
     path: "/terms",
@@ -78,6 +78,6 @@ export const publicPages = [
     path: "/sample-report",
     title: "Sample Report",
     description:
-      "Explore a clearly labelled fictional SiteFit report: key opportunities, risks, evidence, financial assumptions and practical lease questions.",
+      "Explore a clearly labelled fictional SiteFit report: key opportunities, risks, evidence and practical lease questions.",
   },
 ] as const;

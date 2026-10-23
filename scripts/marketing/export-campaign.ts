@@ -1,0 +1,16 @@
+import "server-only";
+import { writeFile } from "node:fs/promises";
+import nextEnv from "@next/env";
+import { frameworkClient } from "../../lib/data/server-client.ts";
+import { validateCampaignExport } from "../../lib/marketing/results.ts";
+const [from, to, output, mode] = process.argv.slice(2);
+if (!from || !to || !output || ![5,6].includes(process.argv.length)||mode!==undefined&&mode!=="live" || !Number.isFinite(Date.parse(from)) || !Number.isFinite(Date.parse(to))) throw Error("Usage: node --conditions=react-server scripts/marketing/export-campaign.ts FROM TO output.json [live]");
+nextEnv.loadEnvConfig(process.cwd());
+if (process.env.VERCEL_ENV === "production" && mode!=="live") throw Error("Do not present Test data as Production sales");
+type Rpc = { rpc(name: string, args: Record<string, unknown>): { abortSignal(signal: AbortSignal): PromiseLike<{ data: unknown; error: unknown }> } };
+const result = await (frameworkClient() as unknown as Rpc).rpc(mode==="live"?"sitefit_live_campaign_results":"sitefit_campaign_results", { p_from: from, p_to: to }).abortSignal(AbortSignal.timeout(10000));
+if (result.error) throw Error("Campaign aggregate export unavailable; raw diagnostics withheld");
+const aggregate=validateCampaignExport(result.data);
+if(aggregate.testOnly!==(mode!=="live"))throw Error("Campaign export mode mismatch");
+await writeFile(output, JSON.stringify(aggregate, null, 2) + "\n");
+console.log("Aggregate exported in the requested explicit mode. No customer identifiers or raw payloads exported.");

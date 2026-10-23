@@ -27,7 +27,7 @@ export function premisesAdapter(id: "propertydata-premises" | "propertydata-floo
       else if (id === "propertydata-flood") r.payload = {schemaVersion: 1, kind: "property_fact", binding,
         operation: "flood-risk", facts: await provider.flood(selected, execution.signal)};
       else r.payload = {schemaVersion: 1, kind: "property_fact", binding,
-        operation: "rents-commercial", facts: await provider.rent(selected, "restaurants", execution.signal)};
+        operation: "rents-commercial", facts: await provider.rent(selected, request.context.category === "hair-beauty-salon" ? "retail" : "restaurants", execution.signal)};
       r.outcome = "partial";
       r.meta.sourceRetrievedAt = r.payload.facts.retrievedAt;
       r.meta.quality.missing = ["source_publication_date", "source_model_vintage", "verified_trading_unit_extent"];

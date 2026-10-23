@@ -54,7 +54,7 @@ export function LocationEntry() {
   }
   return (
     <form className="hero-entry" onSubmit={submit} noValidate>
-      <label htmlFor="hero-address">Enter a UK postcode</label>
+      <label htmlFor="hero-address">Enter the property’s postcode</label>
       <div className="hero-entry-controls">
         <span className="entry-search">
           <Icon name="pin" />
@@ -81,7 +81,7 @@ export function LocationEntry() {
         </p>
       )}
       <p className="hero-footnote" id="hero-entry-note">
-        Two details. No account or financial inputs needed.
+        London analysis · No account or card needed for your Free Snapshot.
       </p>
     </form>
   );

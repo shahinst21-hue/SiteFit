@@ -2,7 +2,8 @@
 import { useEffect,useRef,useState,type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { PageIntro } from "@/components/ui";
-export function PurchaseAuth(){
+import { Icon } from "./icon";
+export function PurchaseAuth({test=true}:{test?:boolean}){
  const router=useRouter();const sentHeading=useRef<HTMLHeadingElement>(null);
  const [email,setEmail]=useState("");const [token,setToken]=useState("");const [busy,setBusy]=useState(false);const [sent,setSent]=useState(false);const [existingEmail,setExistingEmail]=useState(false);const [error,setError]=useState<string|null>(null);
  useEffect(()=>{
@@ -23,11 +24,11 @@ export function PurchaseAuth(){
   }catch{setError("We could not reach sign-in. Please try again.");}finally{setBusy(false);}
  }
  function submit(event: FormEvent){event.preventDefault();void action("email");}
- return <><PageIntro eyebrow="KEEP YOUR REPORT" title={sent?"Check your email.":"Create your account to keep your report and access it later."}><p>{sent?"Open the verification link in this browser. You will return to SiteFit before continuing to Checkout.":"Your Free Snapshot stays the same. Sign in securely before Checkout."}</p></PageIntro><p className="field-help">Test Mode · No real payment is taken. Full Report generation is not enabled.</p><section className="simple-panel" aria-busy={busy}>
+ return <><PageIntro eyebrow="KEEP YOUR REPORT" title={sent?"Check your email.":"Sign in to keep your report."}><p>{sent?"Open the verification link in this browser. You will return to SiteFit before continuing to Checkout.":"Your Free Snapshot stays saved. Sign in to purchase a Full Report and return to it later."}</p></PageIntro>{test&&<p className="field-help">Test Mode · No real payment is taken.</p>}<section className="simple-panel" aria-busy={busy}>
   {!sent&&<>
-  <button className="button button-primary" disabled={busy} onClick={()=>void action("google")}>Continue with Google</button>
+  <button className="button button-primary" disabled={busy} onClick={()=>void action("google")}><Icon name="login"/>Continue with Google</button><div className="auth-divider">or use email</div>
   <form onSubmit={submit}><div className="field"><label htmlFor="purchase-email">Email address</label><input id="purchase-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} disabled={busy||sent}/></div>
-   <button className="button button-secondary" type="submit" disabled={busy||sent}>Continue with email</button></form>
+   <button className="button button-secondary" type="submit" disabled={busy||sent}><Icon name="email"/>Continue with email</button></form>
   <details><summary>Already have an account? Sign in</summary><p>Use your existing account to keep this Snapshot with your history.</p><button className="button button-secondary" disabled={busy} onClick={()=>void action("existing_google")}>Sign in with Google</button><button className="button button-secondary" disabled={busy||!email} onClick={()=>void action("existing_email")}>Sign in with email</button></details>
   </>}
   {sent&&<><h2 ref={sentHeading} tabIndex={-1}>Verification email sent</h2><p role="status">Check your inbox and spam folder. Your Snapshot is still saved. Verifying your email does not take a payment.</p>{!existingEmail&&<details><summary>Use an email verification code instead</summary><p>If your email includes a code, enter it here.</p><div className="field"><label htmlFor="purchase-token">Email verification code</label><input id="purchase-token" inputMode="numeric" autoComplete="one-time-code" value={token} maxLength={10} disabled={busy} onChange={e=>setToken(e.target.value)}/></div><button className="button button-secondary" disabled={busy||!token} onClick={()=>void action("verify_email")}>Verify email</button></details>}<button className="button button-secondary" disabled={busy} onClick={()=>router.refresh()}>I opened the verification link</button><p className="field-help">If you opened the link in another tab, return here to continue. Only a verified sign-in can proceed.</p></>}

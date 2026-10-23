@@ -6,6 +6,7 @@ import { contextIndex,contextPolicy,validateDensityRank,type DensityRank } from 
 import { decisionAssessment } from "./decision-assessment.ts";
 import { validateHistory,type HistoryBundle } from "../premises-history/model.ts";
 import { validateEconomicBundle,type EconomicBundle } from "../economics/bundle.ts";
+import { privateReportData } from "../data/private-text.ts";
 
 export type AssessmentSupplement={kind:"history";bundle:HistoryBundle}|{kind:"rental";bundle:EconomicBundle};
 export type AssessmentEvidenceReference={id:string;snapshotId:string|null;digest:string;source:Evidence["source"];kind:Evidence["kind"];scope:string;value:Evidence["value"];units:string|null;effectiveAt:string|null;statistical:unknown;parents:string[];licence:{policyId:string;version:number;expiresAt:string|null}};
@@ -18,11 +19,13 @@ const keys=(v:Record<string,unknown>,expected:string[])=>{if(Object.keys(v).leng
 export function validateAssessment(value:unknown):AssessmentBundle {
   const b=object(value);keys(b,"schemaVersion analysisId inputId propertyId business contextDigest generatedAt methodVersion configDigest sourceBindings evidence index decision supplements".split(" "));
   const json=JSON.stringify(b);
-  if(Buffer.byteLength(json)>65536||/(sb_secret_|sk-(proj-)?|sk_(live|test)_|Bearer\s|rawResponse|authorization|guestClaim)/i.test(json)||b.schemaVersion!==1||
+  if(Buffer.byteLength(json)>65536||privateReportData(b)||b.schemaVersion!==1||
     ![b.analysisId,b.inputId,b.propertyId].every(uuid)||!timestamp(b.generatedAt)||!sha(b.contextDigest)||!sha(b.configDigest)||b.methodVersion!==contextPolicy.methodVersion||
     !["coffee-shop","restaurant","hair-beauty-salon"].includes(String(b.business))||!Array.isArray(b.sourceBindings)||b.sourceBindings.length>32||!Array.isArray(b.evidence)||b.evidence.length>64||!Array.isArray(b.supplements)||b.supplements.length>4)throw Error("invalid_assessment");
   const sourceIds=new Set<string>();for(const item of b.sourceBindings){const s=object(item);keys(s,["snapshotId","checksum"]);if(!uuid(s.snapshotId)||!sha(s.checksum)||sourceIds.has(s.snapshotId as string))throw Error("invalid_assessment_source");sourceIds.add(s.snapshotId as string);}
-  const ids=new Set<string>();for(const item of b.evidence){const e=object(item);keys(e,"id snapshotId digest source kind scope value units effectiveAt statistical parents licence".split(" "));if(!uuid(e.id)||!sha(e.digest)||!(e.snapshotId===null||uuid(e.snapshotId)&&sourceIds.has(e.snapshotId))||ids.has(String(e.id))||!Array.isArray(e.parents)||e.parents.some(p=>!uuid(p))||typeof e.scope!=="string"||e.scope.length>500||!(e.value===null||typeof e.value==="number"&&Number.isFinite(e.value)||typeof e.value==="string"&&e.value.length<=500))throw Error("foreign_assessment_evidence");ids.add(String(e.id));}
+  // Unavailable capability envelopes retain their snapshot reference but have no payload checksum.
+  // SQL freezing still verifies every complete reference against the exact owned evidence row.
+  const ids=new Set<string>();for(const item of b.evidence){const e=object(item);keys(e,"id snapshotId digest source kind scope value units effectiveAt statistical parents licence".split(" "));if(!uuid(e.id)||!sha(e.digest)||!(e.snapshotId===null||uuid(e.snapshotId)&&(sourceIds.has(e.snapshotId)||e.kind==="capability"&&e.value===null&&e.effectiveAt===null&&Array.isArray(e.parents)&&e.parents.length===0))||ids.has(String(e.id))||!Array.isArray(e.parents)||e.parents.some(p=>!uuid(p))||typeof e.scope!=="string"||e.scope.length>500||!(e.value===null||typeof e.value==="number"&&Number.isFinite(e.value)||typeof e.value==="string"&&e.value.length<=500))throw Error("foreign_assessment_evidence");ids.add(String(e.id));}
   const idx=object(b.index);keys(idx,"label methodVersion configDigest hypotheticalPolicy state display exact components methodValidated reasons scope exclusions".split(" "));
   if(idx.label!==contextPolicy.label||idx.methodVersion!==b.methodVersion||idx.configDigest!==b.configDigest||idx.hypotheticalPolicy!==true||!["available","withheld"].includes(String(idx.state))||typeof idx.methodValidated!=="boolean"||!Array.isArray(idx.components)||idx.components.length!==2||!Array.isArray(idx.reasons)||!Array.isArray(idx.exclusions)||idx.scope!==contextPolicy.scope)throw Error("invalid_context_index");
   const ratio=(v:unknown)=>{const r=object(v);keys(r,["numerator","denominator"]);if(!/^\d{1,20}$/.test(String(r.numerator))||! /^[1-9]\d{0,19}$/.test(String(r.denominator)))throw Error("invalid_exact_index");};

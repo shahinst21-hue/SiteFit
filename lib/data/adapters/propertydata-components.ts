@@ -1,3 +1,4 @@
+import {proofFetch} from '../../proof/context.ts';
 import "server-only";
 import { SourceError } from "../errors.ts";
 import { object, text } from "../validation.ts";
@@ -24,7 +25,7 @@ export function propertyDataComponents(options: { key: string | undefined; fetch
     try {
       const url = new URL("https://api.propertydata.co.uk/uprns");
       url.searchParams.set("postcode", canonical); url.searchParams.set("strict", "true"); url.searchParams.set("results", "200");
-      const r = await (options.fetcher ?? fetch)(url, { signal: combined, redirect: "error", cache: "no-store", headers: { "X-API-Key": options.key, Accept: "application/json" } });
+      const r = await (options.fetcher ?? proofFetch)(url, { signal: combined, redirect: "error", cache: "no-store", headers: { "X-API-Key": options.key, Accept: "application/json" } });
       if (!r.ok) throw new SourceError(r.status === 401 ? "authentication_failed" : r.status === 403 ? "permission_denied" : r.status === 429 ? "rate_limited" : "provider_unavailable", r.status);
       if (!r.body || !/^(application|text)\/json(?:;|$)/i.test(r.headers.get("content-type") ?? "") || Number(r.headers.get("content-length")) > 1_000_000) throw new SourceError("invalid_response");
       const reader = r.body.getReader(), chunks: Uint8Array[] = []; let bytes = 0;

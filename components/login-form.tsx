@@ -2,8 +2,12 @@
 import { useRef, useState, type FormEvent } from "react";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import type { PublicSupabaseConfig } from "@/lib/supabase/config";
-import { emailInput } from "@/lib/auth/flow";
-export function LoginForm({ config,google=false }: { config: PublicSupabaseConfig | null;google?:boolean }) {
+import { authDestination,emailInput } from "@/lib/auth/flow";
+import { Icon } from "./icon";
+export function LoginForm({ config,google=false,next }: { config: PublicSupabaseConfig | null;google?:boolean;next?:string }) {
+  const destination=authDestination(next);
+  const callback=()=>`${window.location.origin}/auth/callback`;
+  const prepareReturn=async()=>{const response=await fetch('/auth/continuation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({next:destination})});if(!response.ok)throw Error('sign_in_continuation_unavailable');};
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -11,8 +15,9 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
   async function googleSignIn(){
     if(!config||state==='sending')return;setState('sending');setError(null);
     try{
+      await prepareReturn();
       const client=createBrowserSupabase(config);
-      const {error:failure}=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:`${window.location.origin}/auth/callback`,queryParams:{prompt:'select_account'}}});
+      const {error:failure}=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:callback(),queryParams:{prompt:'select_account'}}});
       if(failure)throw Error('unavailable');
     }catch{setError('Google sign-in is unavailable. Please try again.');setState('idle');}
   }
@@ -28,11 +33,12 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
     setError(null);
     setState("sending");
     try {
+      await prepareReturn();
       const client = createBrowserSupabase(config);
       const { error: failure } = await client.auth.signInWithOtp({
         email: checked,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: callback(),
           shouldCreateUser: true,
         },
       });
@@ -52,8 +58,8 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
     }
   }
   return (
-    <section className="simple-panel" aria-label="Email sign-in">
-      {google&&<button type="button" className="button button-secondary" disabled={!config||state==='sending'} onClick={googleSignIn}>Continue with Google</button>}
+    <section className="simple-panel" aria-label={google ? "Sign-in options" : "Email sign-in"}>
+      {google&&<><button type="button" className="button button-secondary" disabled={!config||state==='sending'} onClick={googleSignIn}><Icon name="login"/>Continue with Google</button><div className="auth-divider">or use email</div></>}
       {!config && (
         <p role="status">
           We could not connect to sign-in. Please try again later, or start a
@@ -112,6 +118,7 @@ export function LoginForm({ config,google=false }: { config: PublicSupabaseConfi
             type="submit"
             disabled={!config || state === "sending"}
           >
+            <Icon name="email"/>
             {state === "sending"
               ? "Sending your link…"
               : "Email me a sign-in link"}

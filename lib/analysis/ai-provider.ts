@@ -1,9 +1,11 @@
 import "server-only";
+import {proofFetch,inControlledProof} from '../proof/context.ts';
+import {proofLimits} from '../proof/limits.ts';
 import { createHash } from "node:crypto";
 
 // Owner-mandated model. No automatic model fallback or provider substitution.
 export const analysisAI = Object.freeze({ provider: "openai", model: "gpt-6.1-sol", promptVersion: "section-analyst-v3",
-  schemaVersion: 1, maxDispatches: 8, maxPacketBytes: 12_000, maxInstructionsBytes: 4000, maxSchemaBytes: 4000, maxOutputTokens: 1800, timeoutMs: 25_000 });
+  schemaVersion: 1, maxDispatches: 8, maxPacketBytes: 12_000, maxAdvisorPacketBytes: 24_000, maxInstructionsBytes: 4000, maxSchemaBytes: 4000, maxOutputTokens: 1800, timeoutMs: 25_000 });
 export type AIReceipt = { provider: string; requestedModel: string; returnedModel: string; promptVersion: string;
   schemaVersion: number; generatedAt: string; packetDigest: string; inputTokens: number; outputTokens: number;
   durationMs: number; dispatch: number; store: false };
@@ -13,7 +15,7 @@ export class AnalysisAIError extends Error {
 }
 type Fetch = typeof fetch;
 export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?: () => Date; priorDispatches?: number } = {}) {
-  const fetcher = options.fetch ?? fetch; const now = options.now ?? (() => new Date());
+  const fetcher = options.fetch ?? proofFetch; const now = options.now ?? (() => new Date());
   let dispatches = options.priorDispatches ?? 0;
   const receipts: AIReceipt[] = [];
   if (!Number.isInteger(dispatches) || dispatches < 0 || dispatches > analysisAI.maxDispatches) throw new AnalysisAIError("dispatch_limit");
@@ -24,19 +26,21 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
       const key = options.key ?? process.env.OPENAI_API_KEY;
       if (!key || !key.startsWith("sk-")) throw new AnalysisAIError("configuration_missing");
       const input = JSON.stringify(packet);
-      if (Buffer.byteLength(input) > analysisAI.maxPacketBytes || Buffer.byteLength(instructions) > analysisAI.maxInstructionsBytes ||
+      if (Buffer.byteLength(input) > (["snapshot-advisor-v1","snapshot-advisor-v2"].includes(String(packet.version)) ? analysisAI.maxAdvisorPacketBytes : analysisAI.maxPacketBytes) || Buffer.byteLength(instructions) > analysisAI.maxInstructionsBytes ||
         Buffer.byteLength(JSON.stringify(schema)) > analysisAI.maxSchemaBytes || /"(?:formattedAddress|postcode|uprn|ownerId|email|providerAddressId|latitude|longitude|secret|apiKey)"\s*:/i.test(input)) throw new AnalysisAIError("invalid_packet");
       if (dispatches >= analysisAI.maxDispatches) throw new AnalysisAIError("dispatch_limit");
       if (signal?.aborted) throw new AnalysisAIError("timeout");
+      const requestBody=JSON.stringify({ model: analysisAI.model, service_tier: "default", store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
+        instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
+        text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } });
+      if(inControlledProof()&&Buffer.byteLength(requestBody)>proofLimits.maxEncodedAiBytes)throw new AnalysisAIError('invalid_packet');
       const dispatch = ++dispatches; const started = now().getTime();
-      const bounded = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(analysisAI.timeoutMs)]);
+      const bounded = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(["snapshot-advisor-v1","snapshot-advisor-v2"].includes(String(packet.version)) ? 60_000 : analysisAI.timeoutMs)]);
       let response: Response;
       try {
         response = await fetcher("https://api.openai.com/v1/responses", { method: "POST", redirect: "error", signal: bounded,
           headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ model: analysisAI.model, store: false, reasoning: { effort: "low" }, max_output_tokens: analysisAI.maxOutputTokens,
-            instructions, input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
-            text: { format: { type: "json_schema", name: "sitefit_analysis", strict: true, schema } } }) });
+          body:requestBody });
       } catch { throw new AnalysisAIError(bounded.aborted ? "timeout" : "provider_unavailable"); }
       if (!response.ok) { await response.body?.cancel(); throw new AnalysisAIError("provider_unavailable"); }
       if (!response.headers.get("content-type")?.includes("application/json") || Number(response.headers.get("content-length")) > 128_000) { await response.body?.cancel(); throw new AnalysisAIError("invalid_response"); }
@@ -66,7 +70,7 @@ export function analysisAIProvider(options: { fetch?: Fetch; key?: string; now?:
       let output: unknown;
       try { output = JSON.parse(outputTexts[0]); } catch { throw new AnalysisAIError("invalid_response"); }
       const receipt: AIReceipt = { provider: analysisAI.provider, requestedModel: analysisAI.model, returnedModel: body.model,
-        promptVersion: packet.version === "validated-synthesis-v1" ? "synthesis-analyst-v3" : analysisAI.promptVersion,
+        promptVersion: ["snapshot-advisor-v1","snapshot-advisor-v2"].includes(String(packet.version)) ? String(packet.version) : packet.version === "validated-synthesis-v1" ? "synthesis-analyst-v3" : analysisAI.promptVersion,
         schemaVersion: 1, generatedAt: now().toISOString(), packetDigest: createHash("sha256").update(input).digest("hex"),
         inputTokens: Number(usage.input_tokens), outputTokens: Number(usage.output_tokens), durationMs: now().getTime() - started, dispatch, store: false };
       receipts.push(receipt);

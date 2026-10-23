@@ -1,27 +1,40 @@
 "use client";
-import { useState } from "react";
-import { Icon } from "./icon";
-import type { SnapshotMap } from "@/lib/snapshot/model";
-export function SnapshotMapPanel({ map, demo }: { map: SnapshotMap; demo: boolean }) {
-  const [hidden, setHidden] = useState<string[]>([]);
-  const [zoom, setZoom] = useState(1);
-  const available = map.status === "available" && map.bounds !== null && map.layers.some(l => l.status === "available");
-  const project = ([lon, lat]: [number, number]) => { const [west, south, east, north] = map.bounds!; return `${(lon - west) / (east - west) * 800},${(north - lat) / (north - south) * 420}`; };
-  return <figure className={`sf-map ${available ? "sf-map-populated" : ""}`} aria-labelledby="map-caption">
-    {map.status === "loading" ? <div className="sf-map-empty" role="status"><span className="sf-skeleton sf-skeleton-map" /><p>Loading location context…</p></div> : available ? <>
-      <svg viewBox="0 0 800 420" role="img" aria-label={demo ? "Schematic demo catchments and example places. Not a real street map." : map.description}>
-        <rect width="800" height="420" fill="#eef2ef" />
-        {demo && <g aria-hidden="true"><g fill="#e0e6e2" stroke="#fff" strokeWidth="3">{Array.from({ length: 48 }, (_, i) => <rect key={i} x={i % 8 * 108 - 25} y={Math.floor(i / 8) * 86 - 18} width="86" height="64" rx="2" transform={`rotate(-12 ${i % 8 * 108} ${Math.floor(i / 8) * 86})`} />)}</g><path d="M-50 340C80 275 180 355 310 297S510 350 620 285 780 250 850 330" stroke="#bcdbe8" strokeWidth="35" fill="none" /><g stroke="white" strokeWidth="9"><path d="M-30 70 840 325M-30 220 810 30M150-20 540 450M640-20 280 450M-30 385 850 150" /></g></g>}
-        <g transform={`translate(400 210) scale(${zoom}) translate(-400 -210)`}>{map.layers.filter(l => l.status === "available" && !hidden.includes(l.id)).map(layer => <g key={layer.id}>
-          {layer.polygons.map((p, i) => <polygon key={i} points={p.map(project).join(" ")} fill={layer.colour} fillOpacity=".2" stroke={layer.colour} strokeWidth="1.5"><title>{layer.label}</title></polygon>)}
-          {layer.polygonParts?.map((rings, i) => <path key={`part-${i}`} d={rings.map(r => `M${r.map(project).join("L")}Z`).join(" ")} fillRule="evenodd" fill={layer.colour} fillOpacity=".2" stroke={layer.colour} strokeWidth="1.5"><title>{layer.label}</title></path>)}
-          {layer.points.map((p, i) => { const [x, y] = project(p).split(",").map(Number); return layer.kind === "property" ? <g key={i} transform={`translate(${x} ${y})`}><path d="M0 0C-5-8-15-18-15-27a15 15 0 0 1 30 0C15-18 5-8 0 0Z" fill={layer.colour} stroke="white" strokeWidth="2" /><circle cx="0" cy="-27" r="5" fill="white" /><title>{layer.label}</title></g> : <circle key={i} cx={x} cy={y} r="5" fill={layer.colour} stroke="white" strokeWidth="1.5"><title>{layer.label}</title></circle>; })}
-        </g>)}</g>
-      </svg>
-      <div className="sf-map-controls"><button type="button" aria-label="Zoom in on diagram" disabled={zoom >= 1.8} onClick={() => setZoom(v => Math.min(1.8, v + .2))}>+</button><button type="button" aria-label="Zoom out on diagram" disabled={zoom <= 1} onClick={() => setZoom(v => Math.max(1, v - .2))}>−</button></div>
-      <details className="sf-map-legend" open><summary>Map layers</summary><div>{map.layers.map(layer => <label key={layer.id}><input type="checkbox" checked={!hidden.includes(layer.id)} disabled={layer.status !== "available"} onChange={() => setHidden(v => v.includes(layer.id) ? v.filter(id => id !== layer.id) : [...v, layer.id])} /><span style={{ background: layer.colour }} />{layer.label}{layer.status !== "available" ? " · Not available" : ""}</label>)}</div></details>
-      <span className="sf-map-marker">{demo ? "Demo diagram" : "Stored location layers"}</span>
-    </> : <div className="sf-map-empty"><span className="sf-map-empty-pin"><Icon name="pin" /></span><p className="eyebrow">LOCATION CONTEXT</p><h3>Map layers not available</h3><p>{map.description}</p><div className="sf-map-awaiting"><span>Walking catchments</span><span>Nearby businesses</span><span>Transport routes</span></div></div>}
-    <figcaption id="map-caption">{demo ? "Illustrative geometry · not a real street map or measured catchment" : available ? "Stored modelled walking layers · building and station points are not confirmed entrances." : "No estimated routes or property point substituted for missing map data."}</figcaption>
-  </figure>;
+import {useState,useRef,useEffect} from 'react';
+import {Icon,type IconName} from './icon';
+import type {SnapshotMap} from '@/lib/snapshot/model';
+import {mapViewport} from '@/lib/report-dashboard/geography';
+import {snapshotTilePath} from '@/lib/snapshot/tiles';
+import {mapCategories,mapRecords,clusterRecords,distanceRing,straightLine,distanceLabel,type MapCategory} from '@/lib/snapshot/visuals';
+export function SnapshotMapPanel({map,demo,reportId}:{map:SnapshotMap;demo:boolean;reportId?:string}){
+ const [hidden,setHidden]=useState<MapCategory[]>([]),[zoom,setZoom]=useState(0),[pan,setPan]=useState(0),[selected,setSelected]=useState(''),[failed,setFailed]=useState(false);
+ const [tileAttempt,setTileAttempt]=useState(0),[retryReady,setRetryReady]=useState(false);
+ useEffect(()=>{if(!failed)return;const timer=setTimeout(()=>setRetryReady(true),11000);return ()=>clearTimeout(timer);},[failed]);
+ const frame=useRef<HTMLElement>(null),[canvasWidth,setCanvasWidth]=useState<number|null>(null);
+ useEffect(()=>{const el=frame.current;if(!el)return;const observer=new ResizeObserver(()=>setCanvasWidth(Math.max(280,el.clientWidth-2)));observer.observe(el);return ()=>observer.disconnect();},[]);
+ const width=canvasWidth??800,height=width<520?300:320;
+ const available=map.status==='available'&&map.bounds!==null&&map.layers.some(l=>l.status==='available');
+ const original=map.bounds??[-.1,51.5,-.09,51.51],w=(original[2]-original[0])/2**zoom,h=(original[3]-original[1])/2**zoom,cx=(original[0]+original[2])/2+pan*(original[2]-original[0]),cy=(original[1]+original[3])/2;
+ const view=mapViewport([cx-w/2,cy-h/2,cx+w/2,cy+h/2],width,height),records=mapRecords(map);
+ const originLayer=map.layers.find(l=>l.kind==='property'&&l.status==='available'),origin=originLayer?.points[0];
+ const postcode=originLayer?.label.includes('Postcode'),originName=postcode?'postcode centre':'recorded point';
+ const visible=records.filter(r=>!hidden.includes(r.category)),clusters=clusterRecords(visible,view.project,44,width,height);
+ const selection=visible.find(r=>r.id===selected);
+ const categories=(Object.keys(mapCategories) as MapCategory[]).filter(id=>records.some(r=>r.category===id));
+ return <figure ref={frame} className="sf-map" aria-labelledby="map-caption">
+ {available?<><div className="sf-map-filterbar" role="group" aria-label="Map categories">{categories.map(id=><button key={id} type="button" aria-pressed={!hidden.includes(id)} onClick={()=>{setHidden(v=>v.includes(id)?v.filter(x=>x!==id):[...v,id]);setSelected('');}}><span style={{background:mapCategories[id].colour}}><Icon name={mapCategories[id].icon as IconName}/></span>{mapCategories[id].label}<strong>{records.filter(r=>r.category===id).length}</strong></button>)}</div>
+ <div className="sf-map-window"><svg className="sf-map-canvas" viewBox={`0 0 ${width} ${height}`} style={{aspectRatio:`${width}/${height}`,height}} role="group" aria-label={demo?'Illustrative location diagram':map.description}>
+  <rect width={width} height={height} fill="#eef0e9"/>
+  {canvasWidth!==null&&reportId&&!demo&&view.tiles.map(t=><image key={t.url+tileAttempt} href={snapshotTilePath(reportId,t.url)} x={t.x} y={t.y} width={t.size+.5} height={t.size+.5} onError={()=>setFailed(true)}/>)}
+  {map.layers.filter(l=>l.status==='available').map(layer=><g key={layer.id}>{layer.polygons.map((p,i)=><polygon key={i} points={p.map(p=>view.project(p).join(',')).join(' ')} fill="#60646c" fillOpacity=".1" stroke="#60646c"/>)}{layer.polygonParts?.map((rings,i)=><path key={'part-'+i} d={rings.map(r=>'M'+r.map(p=>view.project(p).join(',')).join('L')+'Z').join(' ')} fillRule="evenodd" fill="#60646c" fillOpacity=".1" stroke="#60646c"/>)}</g>)}
+  {origin&&[250,500].map(m=>{const ring=distanceRing(origin,m),label=view.project(ring[0]);return <g key={m}><path d={'M'+ring.map(p=>view.project(p).join(',')).join('L')+'Z'} fill="#b2f34c" fillOpacity={m===250?'.06':'.02'} stroke="#60646c" strokeOpacity=".65" strokeDasharray="4 6"/><text x={label[0]} y={label[1]+12} textAnchor="middle" fontSize="11" fill="#0d1400" stroke="white" strokeWidth="4" paintOrder="stroke">{m} m</text></g>;})}
+  {clusters.map(cluster=>{const first=cluster.records[0],active=cluster.records.some(r=>r.id===selected),c=mapCategories[cluster.category];return <g key={first.id} transform={`translate(${cluster.x} ${cluster.y})`} className="sf-map-feature" role="button" tabIndex={0} aria-label={`${first.label}${cluster.records.length>1?` and ${cluster.records.length-1} nearby ${c.label} records`:''}`} onClick={()=>setSelected(first.id)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setSelected(first.id);}}}>
+   <circle r="22" fill="transparent"/><circle r="15" fill={active?'#b2f34c':c.colour} stroke={active?'#0d1400':'white'} strokeWidth="2"/><g transform="translate(-8 -8) scale(.667)" color="#0d1400"><Icon name={c.icon as IconName}/></g>{cluster.records.length>1&&<g><circle cx="12" cy="-12" r="9" fill="#0d1400" stroke="white" strokeWidth="1"/><text x="12" y="-9" fill="white" textAnchor="middle" fontSize="9" fontWeight="600">{cluster.records.length}</text></g>}<title>{c.detail+' · '+first.label+(origin?' · '+distanceLabel(straightLine(origin,first.position))+' from '+originName:'')+(cluster.records.length>1?' · grouped records; zoom for detail':'')}</title></g>;})}
+  {origin&&(()=>{const [x,y]=view.project(origin);return <g transform={`translate(${x} ${y})`}><circle r="23" fill="#b2f34c" fillOpacity=".35"/><circle r="15" fill="#b2f34c" stroke="#fff" strokeWidth="3"/><g transform="translate(-9 -9) scale(.75)"><Icon name="pin"/></g><text x="24" y="4" fontSize="12" fontWeight="600" fill="#0d1400" stroke="white" strokeWidth="5" paintOrder="stroke">{postcode?'Postcode centre':'Recorded location'}</text></g>;})()}
+ </svg><div className="sf-map-tools"><button aria-label="Zoom in on map" disabled={zoom>=3} onClick={()=>setZoom(v=>v+1)}><Icon name="add"/></button><button aria-label="Zoom out on map" disabled={zoom<=0} onClick={()=>setZoom(v=>v-1)}><Icon name="minus"/></button><button aria-label="Pan map west" disabled={pan<=-.5} onClick={()=>setPan(v=>v-.25)}><Icon name="back"/></button><button aria-label="Pan map east" disabled={pan>=.5} onClick={()=>setPan(v=>v+.25)}><Icon name="arrow"/></button><button aria-label="Reset map" onClick={()=>{setZoom(0);setPan(0);setHidden([]);setSelected('');}}><Icon name="reset"/></button></div>
+ {!demo&&reportId&&<div className="sf-tile-attribution"><a href="https://www.geoapify.com/" target="_blank" rel="noreferrer">Geoapify</a> · © <a href="https://openmaptiles.org/" target="_blank" rel="noreferrer">OpenMapTiles</a> · © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a></div>}</div>
+ <div className="sf-map-record-picker"><label><span>Explore a record</span><select value={selection?.id??''} onChange={e=>{setSelected(e.target.value);setZoom(0);setPan(0);}}><option value="">{visible.length} mapped records</option>{visible.map(r=><option key={r.id} value={r.id}>{r.label}{origin?' · '+distanceLabel(straightLine(origin,r.position)):''}</option>)}</select></label><span>250 / 500 m guides · straight line from {originName}</span></div>
+ {selection&&<div className="sf-map-selection" aria-live="polite"><span style={{background:mapCategories[selection.category].colour}}><Icon name={mapCategories[selection.category].icon as IconName}/></span><div><strong>{selection.label}</strong><small>{mapCategories[selection.category].detail}{origin?' · '+distanceLabel(straightLine(origin,selection.position))+' from '+originName:''}</small></div><button aria-label="Close selected map record" onClick={()=>setSelected('')}><Icon name="close"/></button></div>}
+ </>:<div className="sf-map-empty"><Icon name="pin"/><p>{map.status==='loading'?'Preparing saved location evidence…':'No qualified coordinates were retained for this Snapshot.'}</p></div>}
+ <figcaption id="map-caption" className="sf-map-caption">{demo?'Illustrative geometry only.':<>{postcode?'Postcode-level context; premises entrance unverified. ':'Recorded source points; entrances unverified. '}Distances are approximate straight lines, not walking routes or catchments. Native FSA types are not confirmed direct competitors.</>}{failed&&<span role="status"> Some street tiles could not load; saved records remain visible.</span>}{failed&&tileAttempt<2&&<button type="button" className="sf-inline-button" disabled={!retryReady} onClick={()=>{setFailed(false);setRetryReady(false);setTileAttempt(v=>v+1);}}>Reload street map</button>}</figcaption>
+ </figure>;
 }

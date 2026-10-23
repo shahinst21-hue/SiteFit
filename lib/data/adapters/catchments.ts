@@ -1,3 +1,5 @@
+import { nativeRead } from "../native-read.ts";
+import { queryPoint } from "../query-point.ts";
 import "server-only";
 import columns from "../census-columns.json" with { type: "json" };
 import type { DataAdapter, StoredSnapshot } from "../contracts.ts";
@@ -24,7 +26,7 @@ export function catchmentAdapter(id: "ons-catchments" | "overture-catchments", s
       parent.collectionKey !== request.collectionKey || validated.meta.source !== "geoapify-walking" ||
       payload?.kind !== "walking_geometry" || payload.topology.geographyReleaseId !== releases.geographyReleaseId ||
       !validated.meta.checksum || !["success", "partial"].includes(validated.outcome)) throw new SourceError("invalid_request");
-    validateWalkingCatchments(payload.walking, context.enrichment!.identity.point!);
+    validateWalkingCatchments(payload.walking, queryPoint(context)!);
     const started = performance.now(), lineage = { snapshotId: parent.id, checksum: validated.meta.checksum };
     let successes = 0;
     if (id === "ons-catchments") {
@@ -34,7 +36,7 @@ export function catchmentAdapter(id: "ons-catchments" | "overture-catchments", s
         for (let index = 0; index < catchmentDatasets.length; index++) {
           const dataset = catchmentDatasets[index], releaseId = releases[catchmentReleaseKeys[index]];
           try {
-            const measured = await repository({ ...releases, censusReleaseId: releaseId }).catchment(polygon.geometry, columns[dataset].columns.length, execution.signal);
+            const measured = await nativeRead(() => repository({ ...releases, censusReleaseId: releaseId }).catchment(polygon.geometry, columns[dataset].columns.length, execution.signal), execution.signal);
             statistics.push({ dataset, releaseId, referencePeriod: "2021-03-21", outcome: "success", operands: measured.operands, error: null }); successes++;
           } catch (error) { statistics.push({ dataset, releaseId, referencePeriod: "2021-03-21", outcome: "unavailable", operands: null, error: safeError(error) }); }
         }
@@ -54,7 +56,7 @@ export function catchmentAdapter(id: "ons-catchments" | "overture-catchments", s
     }
     result.outcome = successes === (id === "ons-catchments" ? 12 : 3) ? "success" : successes ? "partial" : "unavailable";
     if (!successes) result.error = { code: "provider_unavailable", retryable: false, status: null };
-    result.meta.quality.precision = "building"; result.meta.cache.state = "local_release";
+    result.meta.quality.precision = queryPoint(context)!.precision; result.meta.cache.state = "local_release";
     result.meta.quality.missing = id === "ons-catchments" ? ["within_area_distribution", "current_population", "pedestrian_footfall"] : ["unique_business_count", "entity_review", "validated_comparator_cohort"];
     result.limitations = id === "ons-catchments" ? ["Area allocation assumes uniform distribution; retained native operands are not observed walking-catchment population.",
       "Income is native non-additive MSOA context; employee jobs are not footfall. Independent failed reads remain unavailable."] :

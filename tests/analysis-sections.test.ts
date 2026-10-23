@@ -1,3 +1,6 @@
+import {advisorFixture} from './fixtures/snapshot-advisor.ts';
+import {recommendationFromScores,recommendationStance,type RecommendationDecision} from '../lib/analysis/recommendation.ts';
+const policyAdvice=(decision:RecommendationDecision=recommendationFromScores(null,undefined))=>({...advisorFixture(),version:'snapshot-advisor-v2',stance:recommendationStance(decision.status),recommendation:{...advisorFixture().recommendation,text:decision.title}});
 import assert from "node:assert/strict";
 import test from "node:test";
 import { context, result, ids } from "./fixtures/data/framework.ts";
@@ -10,7 +13,7 @@ function provider(invalid = false) {
   return analysisAIProvider({ key: "sk-fixture", fetch: async (_url, init) => {
     const input = JSON.parse(String(init?.body)); const packet = JSON.parse(input.input[0].content[0].text);
     let selection: unknown;
-    if (packet.version === "validated-synthesis-v1") selection = { headlineId: "case-open", supportingSectionIds: packet.sections.map((s: { id: string }) => s.id), unknownSectionIds: packet.sections.map((s: { id: string }) => s.id) };
+    if (packet.version === "snapshot-advisor-v2") selection = policyAdvice(packet.policyDecision);
     else {
       const p = packet as InterpretationPacket;
       const pick = (role: string) => p.propositions.find(prop => prop.role === role)!.id;
@@ -22,13 +25,30 @@ function provider(invalid = false) {
     return Response.json({ status: "completed", model: "gpt-6.1-sol", output: [{ type: "message", content: [{ type: "output_text", text: JSON.stringify(selection) }] }], usage: { input_tokens: 500, output_tokens: 100 } });
   } });
 }
+test('synthesis removes redundant selection metadata while preserving every finding and evidence link',async()=>{
+ const prepared=sectionPackets(context(),[],null,new Date());
+ const {sections}=await interpretSections(prepared.packets,prepared.index,provider());
+ let sends=0;
+ const ai=analysisAIProvider({key:'sk-fixture',fetch:async(_url,init)=>{
+  sends++;const request=JSON.parse(String(init?.body)),packet=JSON.parse(request.input[0].content[0].text);
+  assert.ok(Buffer.byteLength(String(init?.body))<30000);
+  for(const [i,s] of sections.entries()){
+   assert.deepEqual(packet.sections[i].conclusion,{text:s.conclusion.text,meaning:s.conclusion.meaning,evidenceIds:s.conclusion.evidenceIds});
+   assert.equal(packet.sections[i].unknowns.length,s.unknowns.length);
+   assert.deepEqual(packet.sections[i].unknowns.map((p:{text:string})=>p.text),s.unknowns.map(p=>p.text));
+   assert.equal(packet.sections[i].conclusion.role,undefined);assert.equal(packet.sections[i].conclusion.kind,undefined);
+  }
+  return Response.json({status:'completed',model:'gpt-6.1-sol',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(policyAdvice(packet.policyDecision))}]}],usage:{input_tokens:500,output_tokens:100}});
+ }});
+ await synthesiseSections(sections,ai);assert.equal(sends,1);
+});
 test("missing sources preserve four useful explicit gaps with no wasted dimension AI call", async () => {
   const c = context(); const prepared = sectionPackets(c, [], null, new Date()); const ai = provider();
   const output = await interpretSections(prepared.packets, prepared.index, ai);
   assert.equal(ai.dispatches(), 0); assert.equal(output.sections.length, 4); assert.equal(output.errors.length, 0);
   assert.ok(output.sections.every(s => s.score === null && s.strength === "insufficient"));
   const early = await synthesiseSections(output.sections, ai);
-  assert.equal(ai.dispatches(), 1); assert.equal(early.headline, "Local evidence does not yet establish the customer case.");
+  assert.equal(ai.dispatches(), 1); assert.equal(early.headline, "Insufficient evidence");
   assert.equal(early.unknownSections.length, 4);
   assert.ok(early.supportingSections.includes("premises"), "Unverified premises can support an open case without becoming favourable evidence");
   const stored = restoreSynthesis(early, packetDigest(output.sections), output.sections, prepared.index);
@@ -71,4 +91,18 @@ test("stored validated sections replay without another AI dispatch and reject ch
   assert.equal(jsonbReplay.sections.length, 4); assert.equal(replayProvider.dispatches(), 0);
   const changed = structuredClone(prepared.packets); changed[0].businessType = "restaurant";
   await assert.rejects(interpretSections(changed, prepared.index, replayProvider, undefined, initial.sections), /stored_section_packet_mismatch/);
+});
+
+test('dense postcode synthesis retains each observation and limitation without duplicating boilerplate beyond the budget',async()=>{
+ const prepared=sectionPackets(context(),[],null,new Date()),{sections}=await interpretSections(prepared.packets,prepared.index,provider());
+ const limitations=Array.from({length:8},(_,i)=>`Source qualification ${i}: `+'Dated native evidence and estimation limitations. '.repeat(3));
+ const evidence=Array.from({length:24},(_,i)=>({sections:['customer-base'],source:{dataset:`Native walking observation ${i}`},value:i,units:'estimated residents',scope:'Modelled walking catchment',effectiveAt:'2021-03-21',quality:{available:true,limitations:[...limitations]},licence:{representationAllowed:true}})) as unknown as Parameters<typeof synthesiseSections>[4];
+ let sends=0;const ai=analysisAIProvider({key:'sk-fixture',fetch:async(_url,init)=>{
+  sends++;assert.ok(Buffer.byteLength(String(init?.body))<30000);
+  const packet=JSON.parse(JSON.parse(String(init?.body)).input[0].content[0].text);
+  assert.equal(packet.observations.length,24);assert.deepEqual(packet.limitationNotes,limitations);
+  for(const observation of packet.observations)assert.deepEqual(observation.limitationIds.map((id:number)=>packet.limitationNotes[id]),limitations);
+  return Response.json({status:'completed',model:'gpt-6.1-sol',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(policyAdvice(packet.policyDecision))}]}],usage:{input_tokens:500,output_tokens:100}});
+ }});
+ await synthesiseSections(sections,ai,undefined,'coffee-shop',evidence);assert.equal(sends,1);
 });

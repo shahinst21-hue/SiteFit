@@ -1,3 +1,4 @@
+export const AUTH_RETURN_COOKIE='sitefit_auth_return';
 export type AuthFailure = "invalid-link" | "unavailable" | "sign-out-failed";
 export const authMessages: Record<AuthFailure, string> = {
   "invalid-link":
@@ -20,7 +21,9 @@ export function emailInput(value: unknown): string | null {
 // Only explicit local destinations; no open redirect or authentication loop.
 export function authDestination(
   value: unknown,
-): "/account" | "/check-location" {
+): string {
+  if(value==='/purchase/continue')return value;
+  if(typeof value==='string'&&/^\/purchase\/resume\?report=[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(value))return value;
   return value === "/check-location" ? value : "/account";
 }
 export function callbackCredentials(

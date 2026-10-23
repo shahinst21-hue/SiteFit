@@ -1,4 +1,75 @@
-# Decisions
+## 22 October — Google launch measurement preparation
+
+Owner supplied the existing shared Google Tag GT-NBBS5VJ4, Ads installation AW-18530541419, linked GA4 G-ZRCDT4R80E and Ads account 855-719-5993. Reuse this single loader/destinations; do not create/replace tags, add a second GA4 config speculatively, activate campaigns or deploy Production. Implement conservative consent and trusted paid conversions; mark external receiving/conversion settings unverified until actually observed. [Architecture and release gates](google-launch-measurement.md). This authority does not open commercial sales or change spending limits.
+
+22 October owner amendment: Recommendation and Summary must use the same validated Residential Catchment and Competition Headroom scores. The ordered [Recommendation Engine v1 policy](recommendation-engine-v1.md) fixes the outcome; AI explains it without changing category or scores. Historical Ready records remain immutable; current-policy renderings are labelled. Implementation candidate; verification and release receipts are recorded separately.
+
+18 October owner amendment: Snapshot is a decision adviser. New synthesis must provide a clear pursuit recommendation, integrated rationale, counterargument, decision-changing condition and concrete action. Targeted research is allowed inside the existing US$0.65 Snapshot ceiling including prior holds; no invented facts, automatic retry, historical rewrite or commercial activation. [Implementation and boundaries](snapshot-advisor.md).
+
+# Accepted decisions
+
+## Owner Snapshot decision-experience feedback — 18 October 2026
+
+The owner requests the 15-point redesign of the real 67B Free Snapshot: decision
+brief, no empty score/map, scoped business implications, saved-answer exploration,
+prioritised verification, optional café planning lens, honest Full Report value and
+sample, consistent monochrome/lime identity and minimal consent-based conversion
+observations. Preserve frozen findings, source limitations, ownership and all paid
+execution/launch gates. No fresh AI, provider calls or public sales activation.
+Implementation/measurement boundaries: [decision experience](snapshot-decision-experience.md).
+
+## Public/private legal separation — 17 October 2026
+
+Owner authorises the smallest Development correction retaining the public name Shahin Shahmir trading as SiteFit, withholding the personal address and unapproved public legal wording, and preserving complete private contracts/policy snapshots/history. Test the publication and client-asset boundaries, run CI and repeat full corrected-target Production preflight. No deployment (including automatic Preview), Production migration, policy approval, paid request, commercial activation or infrastructure change follows. Commercial mandatory seller disclosures remain unresolved independently of the non-commercial correction. [Actual scope and evidence](public-legal-publication.md).
+
+## Controlled proof protected integration — 17 October 2026
+
+Owner authorises exact PR63 review, targeted recovery rehearsal, migration20261017120000 to verified Development only, hosted synthetic concurrency/restart/rights checks, normal protected merge and exact-head/post-merge CI. US$0.95 is the aggregate reservation for one Snapshot plus corresponding Full; Full's US$0.30 is included, never additional. Preserve existing histories/unknown holds, no real-user deletion or paid requests. Production migration/application release, case activation, real payment, provider/AI spending, subscriptions and upgrades remain unauthorised. [Actual Development evidence and Production recommendation](controlled-proof-development-verification.md).
+
+## Stage1 contract/Zoho review — 16 October 2026
+
+Owner authorises narrow protected Development/Preview contractual reconciliation, synthetic Zoho attachment rehearsal to the previously approved owner recipient, read-only Production storage/queue/security verification and a PR. Existing seller Shahin Shahmir trading as SiteFit, full14-day consumer refund including after supply, £29,30 days from immutable Ready, purpose-based retention and unchecked supply request remain approved. Owner reconfirms Dower House, Manorgate Rd, Kingston upon Thames, KT2 7UA accurate for the activity/address question and declines a public telephone number. Do not invent a number or certify a legal exemption if one is available. Preserve earlier payment-based formation/prompt delivery approval without invented minutes. New review text must not activate the old policy or rewrite historical contracts. Production gates stay disabled; no new paid calls, genuine customer mail, payment or unapproved legal publication. [Actual results and remaining decisions](stage1-contract-readiness.md). Existing Hobby remains owner-selected without purchase; internal contractual restriction remains documented, not provider commercial approval.
+
+## Launch price, access and primary archive — 16 October 2026
+
+Owner confirms£29 final customer total with no additional Checkout fee; new online report access30 days; SiteFit is a sole-trader activity, not a registered company. Personal particulars remain unpublished under the prior instruction. Use Ready time as the start to avoid consuming access during preparation; preserve historic terms/reports and downloaded PDF copies. Supabase Production is primary record/file storage, using private Storage and limited access. Independent backup purchase is deferred until actual sales/data value justify a decision; do not label same-project Storage an independent backup or unperformed restore a pass. Prepare the versioned unapproved launch contract, access enforcement and private PDF/receipt archive in protected Development/Preview. Existing final policy/release/paid execution approvals stay denied; no new subscription, Production activation, Live payment or source/AI spend. [Current execution](launch-execution-checkpoint.md).
+
+## Manual Zoho confirmation preparation — 16 October 2026
+
+Owner confirms Zoho Mail Free sends/receives for info@sitefit.co.uk and authorises checking the proposed manual contract-confirmation path and a narrow necessary correction. Prepare without buying or assuming SMTP availability. Fix pending-confirmation queue stranding through a forward protected-development change; retain all consent, approved policy/channel, payment, ownership, per-dispatch, cost and immutable-history controls. No real email, policy approval, support identity, receipt archive, hosted mutation, Production deployment or Live/AI activation is authorised. Actual operator export/channel/archive and delivery proof remain launch dependencies. [Bounded result](manual-contract-confirmation.md).
+
+## D108 — Bounded non-commercial Production deployment (14 October 2026)
+
+Owner explicitly approves a new Production build/deployment of reviewed PR50 after exact-head CI and protected merge to the gated Development branch, without main merge. Use separately configured Production environment, never promote the Development-configured Preview artifact. Purpose is HTTPS/Google verification only. Checkout, Live payments, paid AI, collection, fulfilment scheduler, indexing, campaign measurement/advertising and purchases remain disabled/unapproved. This is not commercial launch authority or resolution of existing launch exceptions.
+
+## D107 — DNS/Google completion and Phase17 verification (14 October 2026)
+
+Owner confirms GoDaddy A-record changes, preserved Development OAuth callback and enabled Google on the separate Production project. Continue DNS/TLS/Auth verification and Production London-data preparation on existing Hobby/Fluid, without new spending, paid AI/providers, Live payments or campaigns. This does not authorise main merge/application Production promotion or close commercial activation gates. Reuse only already approved retained London source releases, preserving source identities/licences/vintages and keeping customer/Test history isolated. [Actual receipts and unresolved deployment/login gate](phase17-dns-auth-london.md).
+
+## D99 — No-spend Phase 12 completion corrections (accepted, 12 October 2026)
+
+Owner authorises checkpoint **450,000,000 bytes** after confirming unchanged Free hosting allowance; adjust effective database/application gates via forward migration, no purchase. Fix demonstrated generator/validator incompatibilities with deterministic regression and versioned deterministic Appendix where appropriate. All model claims remain validated; no ignored bad output or admission weakening. New preparations use seven generated commercial pages plus fixed methodology Appendix; final report still has eight sections. Historical contracts/editions remain immutable; D98's unretained rejected sentence remains undiagnosed.
+
+Qualified PropertyData evidence is independent of AI publication and may be read/exported within the **existing** authorised owner Preview Rent & Lease tab/PDF endpoint when a Full edition is Draft. No failed narrative, Full projection, customer publication or full-report PDF before Ready. Preserve paid ownership/refund/session/source/privacy guards, source dates/native units and independently qualified cohorts; omit missing figures. No new page/route/dashboard, paid AI/retry/provider/search/spending or Phase 13 reopening. Phase 12 closes only on genuinely successful new V1 Ready/replay; main/Production/customer paid release and Phase 14 remain prohibited. [Actual implementation](phase-12-d99-corrections.md).
+
+## D89 — Accepted Full Report V1 baseline and conditional Phase 13 implementation — 11 October 2026
+
+The owner accepts the current report structure, three-line Consultant Verdict, prioritised strengths/risks, one Priority Action, Scenario Fit withholding architecture and concept-specific reasoning as V1. Stop editorial cycles and requests for three more manually reviewed concept reports. Only release-blocking rendering, factual, security and integrity defects justify this final hardening pass. Preserve eight sections, evidence admission, source snapshots, historical editions and the unchanged Phase 11 context index. No fabricated capacity, overall score, reviews, footfall, rent or permissions; no new provider, Financial Engine embedding or unapproved payment.
+
+Content acceptance is not technical completion. Mandatory security/ownership/entitlement, lifecycle/recovery, persistence/replay, build, exact-head CI and protected merge remain gates. The US$1 verification ceiling is unchanged; unknown charges keep their reservations. After these gates close, freeze/version the V1 contract, record a prioritised versioned-enhancement backlog, close Phase 12 and implement the eight-page Phase 13 dashboard against the complete approved UI references. Phase 13 implementation is conditional on Phase 12 completion, not authorised to bypass an open blocker. No further editorial acceptance request is needed.
+## D88 accepted consultant content and operator comparison amendment — 2026-10-11
+
+Owner requires a commercially useful, property/concept-specific Full Report, with an integrated three-line Verdict, strengths/risks, one Priority Action and decision-consequence actions. Coffee and restaurant competition must address genuine count, propositions/strength, customer ratings and recognised brands using admitted exact-operator evidence. Unknowns remain explicit: names/register categories do not prove current offers, customer reputation or chain affiliation; hygiene is not a customer rating. Restaurants must compare kitchen/extraction, hot cooking, lunch, evening dining, seating, collection/delivery and operational restrictions. Customer prose rounds numbers; exact operands and lineage remain frozen.
+
+Accept revision of the report output model and bounded AI/search capability where necessary, within existing source rights and the **unchanged US$1 Phase 12 aggregate budget**. This is not uncapped search/inference, a provider purchase or authority to fill evidence gaps from model memory. New structured consultant synthesis is a reviewable candidate; reference checks do not prove semantic truth. Historical ready reports, scenario gates, Phase 11 index and the separate Financial Engine remain unchanged. See [versioned model](report-consultant-model-v1.md). Revised three-concept editorial reviews and failed live attempts must not be labelled successful model output or owner acceptance. Phase 13 remains excluded.
+
+## D87 accepted shared scenario-fit decision amendment — 2026-10-11
+
+Owner approves implementing [scenario-fit-v1](scenario-fit-v1.md) as part of the authorised Phase 12 design. Physical feasibility, commercial context, format comparison and Executive Summary use one versioned decision. Confirmed blockers take precedence; missing evidence withholds capacity, a leading format or any future overall score as appropriate. Phase 11's Resident & Workplace Context Index is unchanged. No new overall score, historical rewrite, extra normal AI call, provider purchase, Production or Phase 13 implementation is authorised.
+
+## D86 accepted Phase 12 implementation, quality and interruption/budget amendments — 2026-10-10
+
+Owner authorises Steps 12.0–12.9 under the amended [Phase 12 plan](phase12_plan.md). Specific useful analysis across eight pages is the acceptance priority, not test quantity or a three-call checkbox; Appendix is factual/deterministic. Preserve pinned inputs/stages/dispatch reservations/accepted results across browser/server interruption; ambiguous external calls must never be automatically repeated. Aggregate real Phase 12 AI verification budget is **US$1**, including failed/unknown requests and Q&A, replacing the $2 proposal. Obtain approval before any excess, continue independent work. No new provider/purchase, financial report embedding, Production or Phase 13 implementation authorised.
 
 ## D84 accepted internal capacity policy and Phase 12 planning — 2026-10-10
 
@@ -281,3 +352,149 @@ Owner follow-up: use public data at this pre-revenue stage; reassess data invest
 ## D82 — Phase 10 separate prepopulated Economic Engine — accepted 9 October 2026
 
 Owner authorises full revised Steps 10.0–10.9 under D78/D79/D80. Source-first, AI-native prepopulation uses verified evidence/qualified estimates and explicitly illustrative scenarios for missing operating assumptions. Deterministic calculations remain authoritative. Financial Engine is separate, never embedded in Snapshot, Full Report or PDF, and never required for purchase/delivery; Phase 10 builds backend capabilities without final UI. Full Report independently receives qualified rents-commercial benchmarks and valuation-commercial-rent estimates only with credible compatible exact-unit GIA/NIA inputs, retaining provider error. Unknown area falls back to benchmark. Reuse Phase 9.5 admitted evidence; no new historical-name integration. At most six existing trial credits, no new purchase/subscription/paid AI authority and no Phase 11+. Preserve immutable history, access/security and protected delivery gates.
+
+### Phase 12 owner content amendment — accepted 11 October 2026
+
+Preserve three-line Consultant Verdict, prioritised strengths and weaknesses/risks, one Priority Action, and ranked actions with a specific decision consequence in future report contracts. Preserve admitted named operator register fields through projection; name/type alone must not establish current activity, prices, reviews or direct competition. Same-property coffee-shop, restaurant and salon content comparisons are requested without rewriting historical reports or inventing absent evidence. Review artifacts do not substitute for live-generation quality acceptance.
+
+## D90 — Final Phase 12 technical proof budget (accepted, 11 October 2026)
+
+Owner approves a total US$1.24 conservative development ceiling for one final technical Full Report proof on the existing frozen case, at most three bounded GPT 6.1 Sol requests, no retry, web search or provider retrieval. Previous US$0.94 reservations remain intact, including unknown usage. The new US$0.30 reservation exhausts this allowance. This does not authorise editorial rewrites, subscriptions, Production or further paid requests.
+
+## D91 — Bounded synthesis correction accepted; Phase 13 approval separate (11 October 2026)
+
+Owner accepts the local synthesis contract corrections without reopening editorial reviews or redesigning the reporting engine. Complete exact-head CI and remaining no-spend checks. The previous live rejection remains retrospectively undiagnosed; the reproduced regex defect is not its confirmed cause. Preserve all evidence/security/validation guards and US$1.24 reservations, including unknown charges. Any further paid proof requires explicit approval of the exact increase before dispatch; no automatic retry or reservation release. The frozen V1 contracts may be assessed for dashboard development readiness, but Phase 13 requires separate owner approval, superseding D89's conditional start instruction. Customer-facing paid release remains disabled while the mandatory live-validation gate is unresolved.
+
+# D92 — Phase 13 development authorised independently of open Phase 12 release gate
+
+Accepted 11 October 2026 by the owner's Full Implementation Brief and Emil Skills addendum. Develop the eight-page interactive decision workspace and immutable multi-level PDF exports against frozen V1, using existing Ready reports and explicitly labelled fixtures. Dedicated stacked branch/PR depends on draft PR #35; do not merge unfinished Phase 12 into main. Preserve unresolved new Ready/replay proof, budget/unknown reservations, evidence admission, Scenario Fit, limited Phase 11 index, ownership/entitlement and no Production paid release. No new paid inference/provider usage, subscription, financial calculations in report or speculative backend intelligence. Research 8–12 products; apply inspected pinned Emil skills; verify rendered interface, not just compilation. Owner design acceptance and technical release gates are separate. [Plan](phase13_plan.md), [status](phase-13-status.md), [research](phase-13-research.md).
+
+
+
+## D92 implementation refinement — decision-first visual redesign (accepted, 11 October 2026)
+
+Owner authorises a substantial eight-tab visual and interaction redesign, compact first viewport, two distinct Overview prototypes with independent selection, active Emil skills and current product research. Detailed methodology/external evidence references belong in Appendix; decision-changing qualifications and map attribution remain in context. Shared presentation must preserve frozen conclusions, missingness and withholding; cross-tab controls lead to corresponding explanations and existing actions. Snapshot scope remains narrowly reusable presentation only. Actual desktop/mobile, difficult/empty data, interaction and real 200% verification are required; compilation is not customer acceptance. No additional conceptual planning/approval cycle, new paid requests, evidence engine changes or waiver of the open Phase 12 release gate.
+
+## D93 — SiteFit brand identity V1 (accepted, 11 October 2026)
+
+Owner requires all supplied colour, typography and spacing/shape sheets, primary #b2f34c and Astra Icons to define the official brand identity. Exact values, roles, responsive/accessibility rules and retained reference images are recorded in [brand-identity.md](brand-identity.md). This supersedes conflicting earlier visual tokens, without changing evidence admission, frozen conclusions, security, phase scope or release gates. All eight Phase 13 tabs use the shared identity; other surfaces follow their separately authorised scope.
+
+## D94 — Site-wide brand application (accepted, 11 October 2026)
+
+Owner explicitly extends the approved identity to the whole website: every page, navigation/hamburger menu, shared controls and details at mobile, tablet and desktop sizes, using the re-supplied `SiteFit logo.svg` and appropriate Astra icons. This authorises presentation and navigation refinement on existing surfaces; it does not change frozen report reasoning, data admission, purchase/authentication authority, prices, budgets, provider coverage or Production activation. Existing Phase 12 live-validation/privacy/launch gates remain open independently of this work. No additional conceptual approval cycle is required.
+
+Current-version acceptance follow-up: the owner replied «okeye» to the explicit Phase 13 real-phone, real desktop 200% and current interface visual/usability acceptance request during the closing audit. Record those requested acceptance checks as passed by the owner for this version. This is not a waiver of authenticated Network verification, Phase 12 live-validation, protected merge, spending constraints or Production approval. See [delivery report](phase-13-delivery-report.md).
+
+## D95 — Qualified rent, PropertyData first; omit absent pricing (accepted, 11 October 2026)
+
+Owner requests non-definitive rental context from existing PropertyData first, real AI web discovery only when structured rental evidence is absent, and no customer-facing price/empty-price placeholder if neither yields an admitted amount. Local per-square-foot benchmarks remain distinct from property model estimates and quoted/agreed lease rent; retain native GIA/NIA, dates and reported error. Do not manufacture a unit total. Existing immutable reports and underlying missingness remain intact; consolidate the frozen empty-rent assessment in Appendix rather than rewriting it. Keep decision-changing lease risks/actions available.
+
+The fallback is an authorised product requirement, **not permission for uncapped or recurring expenditure**. Phase 9.5's one US$0.50 search permission is consumed; Phase 12's US$1.24 reservations are unrelated and unchanged. Owner subsequently approves a **new US$0.50 one-shot rent proof** for 67 Broadway Market, London E8 4PH, without retry. That proof is now consumed: one real search, empty candidates, no admitted amount. No recurring search budget/runtime enablement exists. The existing public-source verifier admits FSA business names only, not rental prices; independent exact-unit/date/source/reuse validation and immutable rental admission remain required before any web price can be displayed. Do not claim automatic rental fallback is operational. Provider/search retrieval belongs in authorised new paid preparation, never dashboard/PDF reopening or Free Snapshot generation.
+
+## D96 — Independent Phase 12 technical proof (accepted, 12 October 2026)
+
+Owner replies «تاییده» to the explicit US$0.30 increase: total conservative Phase 12 ceiling **US$1.54**, one independent execution on the existing frozen real-source coffee case, at most three bounded GPT 6.1 Sol calls, no retry, web search, new source or real payment. Preserve all previous US$1.24 reservations, including unknown charges. Increase only the report-start ceiling through a forward migration; question ceiling stays US$1.24, with no new Q&A allowance. Capacity remains 400,000,000 bytes. A private operator-only `verificationRunId` distinguishes the new immutable preparation from an earlier failed binding; it changes no evidence, assessment, scenario, prompt or AI packet and never enters customer content. No editorial cycle, admission weakening or historical mutation. Successful Ready/replay, security and protected delivery remain required. The authenticated Network gate is independent.
+
+Phase 13 controlled-verification follow-up: the owner answered «خودت انجام بده» to the exact temporary development callback request `http://localhost:3015/auth/callback`, authorising its addition and removal for actual owner browser wire inspection. Only that development allowlist field changed; all 20 prior URLs and undeclared settings were preserved. The callback was removed and inspector stopped after the completed check. No wildcard, Production, new credential or expanded account scope.
+
+## D97 — No-spend Synthesis diagnosis and rental fallback correction (accepted, 12 October 2026)
+
+Owner requests a technical audit of Synthesis, claim/evidence binding and validation, an offline reproducible regression and a defensible small fix before requesting a paid rerun. First diagnose the existing PropertyData path; implement PropertyData-first AI web-search fallback but keep spending disabled pending explicit budget and permitted-source approval. Display valid qualified estimates with source, dates and comparison limitations. This authorises correction and protected delivery, not paid requests, new grants, providers, subscriptions, Production, historical rewriting or a reporting-engine redesign. [Actual audit](phase-12-rent-synthesis-hardening.md) distinguishes locally established causes from the unretained D96 text. Phase 12's US$1.54 reservations and release blocker remain intact; no proposed US$1.84 increase is approved by this decision.
+
+## D98 — Commercial rental comparables and one technical proof (accepted, 12 October 2026)
+
+Owner authorises independent concept-relevant commercial cohorts and exactly one new proof: total conservative ceiling **US$1.84**, an additional **US$0.30**, at most three bounded GPT 6.1 Sol calls, standard tier, no retry. Prior US$1.54 reservations, including unknown charges, remain intact. Question spending unchanged. No fresh PropertyData retrieval, paid search, new source, historical rewrite, main merge, Production/customer paid activation or Phase 14 is authorised.
+
+Coffee compares separately qualified restaurant and retail property cohorts; restaurants use restaurant cohorts, salons use retail. These are property-market comparables, not named business competitors. Never sum populations, infer missing radius units, derive unit rent from unverified area or convert GIA/NIA. George observations are owner-supplied leads, not API admission. Actual selected-case source inventory contains only restaurant data. Preserve supported average area/annual quoting figures, dates, native basis and missingness. Provider modelled quoting rents are not live listings, achieved rent or verified lease obligations. Remove repetitive empty pricing cards; lease checks belong in Actions. [Implementation and actual proof](phase-12-rental-comparables-proof.md).
+
+
+## D100 — Phase 14 Development/Preview and one D99 proof (12 October 2026)
+
+Owner approves Phase 14 reliability, recovery, cost controls and minimal support in protected Development/Preview. Verify actual hosting plans, execution limits and scheduling first; no infrastructure purchase, main merge, Production or Phase 15. Paid execution defaults disabled; ambiguous dispatch stops for intervention. Support defaults denied until exact account IDs are separately approved. Phase 13 milestone remains closed. Phase 12 new V1 Ready/replay/PDF remains separate. Earlier live rejection is retrospectively undiagnosed; the locally reproduced regex defect is not its confirmed cause.
+
+Owner separately approves exactly one D99 proof: additional US$0.30, total conservative Phase 12 ceiling US$2.14; at most three bounded GPT 6.1 Sol calls, no retry, search or source request. Prior US$1.84 reservations remain intact. Success requires new Ready, immutable replay and PDF; failure stops at its specific error. No Phase 14 operating budget is granted.
+
+
+## D101 — Essential intelligence validation (owner authorised)
+
+New preparations use `consultant-narrative-v2`; historical v1 reports and snapshots are unchanged. All eight sections and supported concepts use the same essential contract. Schema/order/required fields, admitted reference IDs, operator source lineage, bound numerical slots, private-text safety, immutable digests, ownership, entitlement and Ready publication requirements remain enforced. Blanket digit rejection, broad outcome/format keyword policing and mandatory sentence-level references for ordinary qualitative advice are removed for v2. Critical numerical assertions must still use admitted evidence slots; dates and ordinary context labels do not automatically invalidate prose. Structured source mapping, units, dates and limitations remain authoritative; no independent re-proof of provider observations or additional AI validator is introduced.
+
+A concise indicative AI disclaimer is included in the application-produced Appendix through shared dashboard/PDF exports, preserving statutory consumer rights. Structured Scenario Fit withholding and qualified rental evidence remain unchanged. No paid calls, retries, provider retrievals, reservation release or spending were performed for this correction. D100's prior live failure remains retrospectively undiagnosed. The successful new V1 Ready → immutable replay → PDF live gate remains OPEN; offline validation does not close it. Phase 14 remains Development/Preview only, support default-denied, with no main merge, Production activation or Phase 15 authority.
+
+Verification: npm run check passed: lint, strict types, 329 tests (including PostgreSQL/security fixtures) and production build. After the final dispatch-version binding correction, strict types and 14 narrative regressions passed again. Protected exact-head CI and Preview delivery remain pending.
+
+
+## D102 — One v2 technical proof and continued Phase 14
+
+Owner explicitly approved one new bounded US$0.30 proof on 12 October 2026, raising the conservative Phase 12 total to US$2.44. All prior US$2.14 reservations remain held. Maximum three existing-model requests, output caps 3000/3000/6000, no retry, search, source acquisition or Production. Frozen-data dry preflight: request bytes 14109/6130/22090; conservative cost bound US$0.29125. This is a cap estimate, not billed usage. A forward development migration changes only the Full-report reservation ceiling; question and operational spending are unchanged. A failed proof stops and receives offline diagnosis. Phase 14 independent implementation continues; PR43 is not assignment completion. Main merge, Production, customer release, support account grants and Phase 15 remain excluded.
+
+
+## D106 — Isolated Production database/configuration setup (owner authorised)
+
+Owner confirms sitefit.co.uk and sitefit-prod / vsfkkroxgntoumoqcfcy. Authorises exact-target Free-capacity verification, existing migrations, Auth/RLS/database configuration, secure Production-only Vercel variables/domain staging and schema/security/connectivity checks. Preserve sitefit-dev and all histories; no Test/customer data copying. Existing Hobby/Fluid retained. No Live payments, sales, paid AI/source calls, public campaigns, purchase or main/application activation follows from this setup authority. External DNS/OAuth/SMTP action must use precise instructions without secrets in chat.
+
+## D105 — Phase17 continuation on existing Hobby (owner accepted)
+
+Owner selects existing Vercel Hobby and preserves Fluid Compute. No Pro upgrade, hosting migration or new subscription; do not reopen hosting comparisons or pause independent technical work. Continue commercial configuration/readiness, fulfilment/recovery and reporting preparation, using no-spend verification/protected CI. Document the actual non-commercial hosting restriction without claiming eligibility. No additional paid API costs or purchase authority; Production/Live operational activation and its bounded proof remain separate from readiness work. Do not reopen Phase15/16, change accepted reports or erase historical records/reservations.
+
+## D104 — Phase17 commercial implementation approval (13 October 2026)
+
+Owner approves 17.0–17.5 implementation and 17.6 release preparation using the existing £29 London product after accepted Phase16 PR46. No new planning cycle; Phase15 Closed with Exceptions and Phase16 acceptance stand. Stage Live-compatible payments, commercial fulfilment and real-mode conversion reporting in protected Development/Preview. Preparation does not authorise hosting purchase, paid requests, Live charges/refunds, advertising, main merge or Production activation. A genuine operational payment-to-Ready/replay/PDF proof requires a separately approved exact cost ceiling; simulated/Test success is insufficient. Preserve launch dependencies, historical editions and held reservations. Phase17 stays open before real launch/market evidence.
+
+## D103 — Phase15 implementation authority
+
+Owner approves Phase15 security/testing/production-readiness in protected Development/Preview only. Preserve Phase12 v2 and Phase13/14 delivery. Vercel Hobby remains subject to usage terms; compliant commercial hosting (upgrade or alternative) is mandatory for Phase17, without current purchase authority. SiteFit serves B2B and B2C; a business declaration does not remove applicable consumer rights. V1 consumers have an additional contractual 14-day cancellation right even after immediate delivery, without excluding statutory rights. Draft Privacy/Retention/Terms and versioned sale/confirmation controls are required. Seller identity, contacts, tax, retention, classification and durable delivery remain pending owner approval. No fabricated particulars, paid call/retry/new source, Live payments, main/Production activation or later phase.
+
+## Phase15 owner privacy amendment — 13 October 2026
+Owner instructs no personal legal particulars on the website, superseding prior address-publication permission. Keep SiteFit trading name and public contact email; remove personal correspondence address from public pages. This instruction does not establish compliant seller/controller disclosure or authorise Production/new sales. Preserve unapproved policy and supply fences; record outstanding mandatory Phase15 gates honestly.
+
+## Phase15 formal owner acceptance — 13 October 2026
+Status: Owner-Accepted / Closed with Exceptions. Owner accepts current development implementation and known limitations; stop further Phase15 cycles. Preserve records, historical reports and controls. Complete protected development PR/CI only; no main merge or Production permission. Original unmet DoD checks remain outstanding/deferred in launch-gate-register.md; closure is not compliance certification.
+
+## Phase16 implementation authority — 13 October 2026
+
+Owner approves existing roadmap Phase16: necessary SEO/private indexing checks, truthful marketing claims, minimal campaign attribution/conversion, reproducible results and 2–3 campaign briefs. Reuse existing infrastructure/product contracts; no analytics dashboard, paid requests/providers/advertising, Production or Live activation. Development/protected Preview only. Implement optional explicit session consent, allowlisted campaign values, private first-touch analysis associations and trusted Test payment/report aggregates; no visitor identifier/event stream or raw sensitive-input analytics. Channel traffic/spend remain declared manual inputs. Commercial retention/privacy and Live counting are separately gated in Phase17. Phase15 remains closed with exceptions and no original gate is silently passed.
+
+## Website copy owner authority — 14 October 2026
+
+Owner explicitly requests repository-wide audit, public benchmark research, customer wording implementation, prompt style and demo review. Preserve the £29 configured product, London analysis, supported concepts, source qualification, schema, calculations, security/payment/consent/publication controls and historical reports. Deliver through protected Development/Preview; no new features, major redesign, migrations, provider/AI spend, Production copy deployment or commercial activation. Phase15/16 remain closed/accepted. Evidence and verification limits: docs/copy-audit.md. Future v2 prose style is tagged consultant-copy-2026-10-14 in the digest-bound instructions; no historical regeneration or paid validation.
+
+## Final launch no-spend authority — 16 October 2026
+
+Owner accepts and closes website copy/product scope. Existing Vercel/Supabase plans and configurations remain unchanged; infrastructure upgrades deferred until review after campaign01, with no automatic purchase. Keep infrastructure risks/contractual exceptions internal, with no public website messaging. Existing B2B/consumer distinction, explicit unchecked immediate-supply consent and statutory/contractual rights remain. Owner approves execution of the no-additional-expenditure preparation only. Read-only inventory and local fixtures do not authorise Production configuration/deployment/activation, Live payments/refunds, paid AI/provider requests, real data export, new support identities or campaigns. Those steps require separately scoped approval. Actual results and remaining dependencies: [no-spend readiness](launch-no-spend-readiness.md). Do not reopen Phase15/16, create features or redesign accepted components.
+
+## Owner seller, progress and email clarification — 16 October 2026
+
+Owner explicitly approves publishing Shahin Shahmir as seller/controller trading as SiteFit and confirms Dower House, Manorgate Rd, Kingston upon Thames, KT2 7UA. This supersedes the previous personal-name restriction. Refund provisions and retention criteria approved; no invented universal retention duration. Owner requests accurate logo/percentage loading for both report tiers and, after receiving the plain rehearsal, branded email/PDF correction. Authorised synthetic email goes only from info@sitefit.co.uk to the owner's specified Gmail address; no purchase or legal acceptance is created. Fastest practical preparation is not an approved numerical SLA. Existing no-deployment/no-paid-activation boundaries remain. See [implementation and actual checks](launch-progress-confirmation.md).
+
+The owner subsequently accepts the corrected email/PDF and directs continuation of the announced protected PR/CI handover. Deliver to the gated development branch and protected Preview; do not deploy Production or activate sales/paid execution. Record actual remote CI results separately from local checks.
+
+## Final narrow contract approval and provider audit — 16 October 2026
+
+Owner approves digital-content treatment, formation on verified successful payment, supply without undue delay following the required contract confirmation, full14-day cancellation retained, and no invented minutes guarantee. This is contract-wording approval only, not Production, payment or spending authority. Owner requests a read-only audit of the actual Postio/PropertyData/Geoapify/TfL integrations, necessity, keys, dispatch bounds and stored-data alternatives; do not call providers or enable gates. See [provider audit](production-provider-audit.md). PR58/default-tier preflight merged atf2d14ee with both post-merge CIs passed. Source account entitlements/credits remain unverified.
+
+
+## Owner seller-address publication and revised controlled-proof configuration — 17 October 2026
+
+Owner explicitly approves exact existing seller geographical address and Shahin Shahmir trading as SiteFit in appropriate public legal/contact/purchase disclosures. This supersedes the earlier address suppression; it does not approve the staged sale policy or private review text. Owner approves component reservation ceilings SnapshotUS$0.65 / FullUS$1.00 within aggregateUS$1.65, not spending. Preserve legacy holds and migrate forward from already-applied20261017120000. Authorised protected PR/CI, hosted Development checks, required related migrations and non-commercial Production deployment are conditional on exact-target/recovery/security/gate verification. No payment, Checkout Session, provider/AI dispatch, retry, commercial activation, subscription or campaign. [Evidence and current delivery state](public-legal-publication.md).
+
+## Owner-authorised distinct 67B proof correction — 17 October 2026
+
+The owner separately approves exactly one real Free Snapshot for provider-verified
+67B Broadway Market, London E8 4PH, independent café: AI at mostUS$0.65, existing
+verified source credits only, no automatic retry or new purchase/top-up. Exact
+identity was verified through two Postio requests; no AI dispatched. The old67
+authority is disabled in intervention and cannot be reused for67B. Owner subsequently
+authorises only the limited Development correction that retains terminal proof
+history while allowing one current authority slot. Production migration/release
+and successor provisioning require the next explicit approval after Development
+verification. Preserve all other launch gates and accepted phases.
+[Exact migration, tests and remaining approval](controlled-proof-safety.md).
+# Free Snapshot approved final composition — 18 October 2026
+
+Owner's attached final brief replaces the Snapshot Ask SiteFit presentation with
+Key Unknowns and approves recommendation/summary, four compact cards, geographic
+context and contextual £29 locks. Reuse qualified stored evidence; no invented
+weekly demand, direct-competitor counts or precise property pin. Development and
+protected Preview only; no Full Report/PDF redesign or commercial activation.
+[Implementation boundary and verification](free-snapshot-final-design.md).
