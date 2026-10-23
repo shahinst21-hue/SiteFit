@@ -471,3 +471,4 @@ end$$;
 
 -- Do not mutate global commercial release switches. Capacity is now settled usage
 -- plus still-active reservations, so completed Full reports release unused holds.
+

@@ -318,3 +318,9 @@ Forward 20261012160000 creates private RLS sale_policies/sale_contracts/purchase
 
 
 Forward controlled-proof configuration20261017130000 updates new one-case aggregate1650000 and overlapping Full1000000 limits, with Snapshot650000. Legacy950000/300000 cases and all historical holds remain immutable; ordinary commercial envelopes remain300000. No RLS/ACL weakening, seed or activation. Migration20261017120000 remains byte-identical; pending Production migrations must be applied in order under the authorised preflight/recovery process. [Current verification](public-legal-publication.md).
+
+## Controlled-trial Ready settlement binding — 2026-10-21
+
+Migration `20261021130000_trial_ready_settlement_binding.sql` retries the existing receipt-validated usage reconciliation when a controlled trial case binds its Ready Free Snapshot. Finalisation can mark the report Ready before `finish_sitefit_controlled_proof` stores that report ID on the case, so the report-status trigger alone may run too early. The binding trigger uses the same settlement function; its trial-row lock, unique event keys and immutable budget-event table preserve idempotency and serialize concurrent settlement attempts. Invalid or incomplete receipts still fail closed. The existing controlled-trial SQL suite exercises direct-Ready ordering, actual receipt-derived settlement, unused-envelope release and replay without duplicate events.
+
+Production migration history reconciliation — 2026-10-21: the linked `sitefit-prod` migration ledger contains `20261021100000`, whose source was absent from `main`. The original migration file was recovered from the Production migration history and compared with its Git-history copy; the SQL bodies match (only blank-line formatting differs). The recovered source is committed unchanged in `20261021100000_competition_headroom.sql`, so future `db push` runs recognize the already-applied version and do not replay it.

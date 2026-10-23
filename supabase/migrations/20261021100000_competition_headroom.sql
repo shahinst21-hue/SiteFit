@@ -120,7 +120,6 @@ end$$;
 create trigger competition_report_binding before insert or update on public.reports for each row execute function public.guard_sitefit_competition_report();
 revoke all on function public.claim_sitefit_competition(uuid,uuid,uuid,uuid,uuid),public.reserve_sitefit_competition_page(uuid,uuid,uuid,integer),public.settle_sitefit_competition_page(uuid,uuid,uuid,uuid,text,jsonb,text),public.finish_sitefit_competition(uuid,uuid,uuid,jsonb),public.guard_sitefit_competition_report() from public,anon,authenticated;
 grant execute on function public.claim_sitefit_competition(uuid,uuid,uuid,uuid,uuid),public.reserve_sitefit_competition_page(uuid,uuid,uuid,integer),public.settle_sitefit_competition_page(uuid,uuid,uuid,uuid,text,jsonb,text),public.finish_sitefit_competition(uuid,uuid,uuid,jsonb) to service_role;
-
 -- Both reservation paths lock the same case, so optional Places cannot race the existing governor.
 alter function public.reserve_sitefit_proof_dispatch(uuid,uuid,text,text,text,text,bigint) rename to reserve_sitefit_proof_dispatch_pre_competition;
 revoke all on function public.reserve_sitefit_proof_dispatch_pre_competition(uuid,uuid,text,text,text,text,bigint) from public,anon,authenticated,service_role;
@@ -136,7 +135,6 @@ language plpgsql security definer set search_path='' as $$declare c public.contr
 end$$;
 revoke all on function public.reserve_sitefit_proof_dispatch(uuid,uuid,text,text,text,text,bigint) from public,anon,authenticated;
 grant execute on function public.reserve_sitefit_proof_dispatch(uuid,uuid,text,text,text,text,bigint) to service_role;
-
 alter function public.read_sitefit_full_material(uuid,uuid) rename to read_sitefit_full_material_pre_competition;
 revoke all on function public.read_sitefit_full_material_pre_competition(uuid,uuid) from public,anon,authenticated,service_role;
 create function public.read_sitefit_full_material(p_owner uuid,p_free uuid) returns jsonb language plpgsql security definer set search_path='' as $$
@@ -147,7 +145,6 @@ declare m jsonb;r jsonb;begin
 end$$;
 revoke all on function public.read_sitefit_full_material(uuid,uuid) from public,anon,authenticated;
 grant execute on function public.read_sitefit_full_material(uuid,uuid) to service_role;
-
 create function public.guard_sitefit_competition_collection() returns trigger language plpgsql set search_path='' as $$begin
  if tg_op='DELETE' or old.state='finished' or row(new.id,new.owner_id,new.analysis_id,new.input_id,new.walking_id,new.population_id,new.walking_checksum,new.category,new.model,new.created_at) is distinct from row(old.id,old.owner_id,old.analysis_id,old.input_id,old.walking_id,old.population_id,old.walking_checksum,old.category,old.model,old.created_at) then raise exception 'competition_collection_frozen';end if;
  return new;

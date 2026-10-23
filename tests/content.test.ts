@@ -71,7 +71,10 @@ test("repository supports category, tags, pagination and related content without
     "high-footfall-location-business",
   );
   assert.equal((await repository.listPublished({ page: 100 })).posts.length, 0);
-  assert.equal((await repository.related(localPosts[0]!))[0]?.id, "assess-cafe-competition");
+  assert.equal(
+    (await repository.related(localPosts[0]!))[0]?.id,
+    "assess-cafe-competition",
+  );
 });
 test("duplicate slugs and incomplete SEO or image metadata fail content validation", () => {
   assert.throws(
@@ -160,8 +163,7 @@ test("indexing requires explicit production origin; Preview stays noindex even w
     publicIndexingEnabled({
       SITE_URL: "https://example.invalid",
       VERCEL_ENV: "production",
-      SITEFIT_PUBLIC_INDEXING_ENABLED:"1",
-    },{productionApproved:true,paidExecutionApproved:false,measurementApproved:false}),
+    }),
     true,
   );
   assert.equal(publicIndexingEnabled({ VERCEL_ENV: "production" }), false);
