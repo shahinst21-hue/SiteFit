@@ -1,3 +1,7 @@
+## 22 October — Google launch measurement preparation
+
+Owner supplied the existing shared Google Tag GT-NBBS5VJ4, Ads installation AW-18530541419, linked GA4 G-ZRCDT4R80E and Ads account 855-719-5993. Reuse this single loader/destinations; do not create/replace tags, add a second GA4 config speculatively, activate campaigns or deploy Production. Implement conservative consent and trusted paid conversions; mark external receiving/conversion settings unverified until actually observed. [Architecture and release gates](google-launch-measurement.md). This authority does not open commercial sales or change spending limits.
+
 22 October owner amendment: Recommendation and Summary must use the same validated Residential Catchment and Competition Headroom scores. The ordered [Recommendation Engine v1 policy](recommendation-engine-v1.md) fixes the outcome; AI explains it without changing category or scores. Historical Ready records remain immutable; current-policy renderings are labelled. Implementation candidate; verification and release receipts are recorded separately.
 
 18 October owner amendment: Snapshot is a decision adviser. New synthesis must provide a clear pursuit recommendation, integrated rationale, counterargument, decision-changing condition and concrete action. Targeted research is allowed inside the existing US$0.65 Snapshot ceiling including prior holds; no invented facts, automatic retry, historical rewrite or commercial activation. [Implementation and boundaries](snapshot-advisor.md).

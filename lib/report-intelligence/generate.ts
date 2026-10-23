@@ -5,7 +5,7 @@ import { type Catalog, type SectionKey, sectionKeys, catalogPacket } from "./cat
 import { reserveDispatch, settleDispatch, recoverCheckpoint, type Checkpoint, type Group } from "./execution.ts";
 import { fullProvider, fullRequest, type ProviderOutcome } from "./provider.ts";
 import { fullRepository, type StoredEdition } from "./repository.ts";
-import { groupInstructions, selectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
+import { groupInstructions, selectionSchema, groupSelectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
 import { compactSources, compactSectionAtoms } from "./export.ts";
 import { decisionSummary } from "./decision-summary.ts";
 import { narrativePacket, narrativeContract, validateGeneratedNarrative, validateNarrative, narrativeFailureCode, narrativeFailureDiagnostic, type ConsultantNarrative } from "./narrative.ts";
@@ -61,32 +61,36 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const pending: { group: Group; dispatch: ReturnType<typeof reserveDispatch>["dispatch"] }[] = [];
   for (const group of ["context", "premises"] as const) {
     const previous = edition.checkpoint.dispatches.filter(d => d.group === group);
-    const repair = options.allowSemanticRepair !== false && !edition.preparation.narrativeVersion && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
+    const repair = options.allowSemanticRepair !== false && (!edition.preparation.narrativeVersion || options.allowSemanticRepair === true) && previous.length > 0 && options.resume === true && !edition.checkpoint.repairUsed &&
       previous.every(d => d.state === "invalid" && (d.receipt as { validation?: string } | null)?.validation === "selection_rejected");
     if (previous.length && !repair) continue;
     const packet = catalogPacket(edition.preparation.catalog, groupKeys[group], edition.preparation.identityOmissions);
     if (packetDigest(packet) !== edition.preparation.packetDigests[group]) throw Error("stored_packet_changed");
-    fullRequest(group, packet, groupInstructions, selectionSchema);
-    const reserved = reserveDispatch(edition.checkpoint, group, packet, groupInstructions, selectionSchema, repair);
+    const schema=groupSelectionSchema(edition.preparation.catalog,groupKeys[group]);
+    fullRequest(group, packet, groupInstructions, schema);
+    const reserved = reserveDispatch(edition.checkpoint, group, packet, groupInstructions, schema, repair);
     try { edition = await repo.checkpoint(edition, reserved.checkpoint); pending.push({ group, dispatch: reserved.dispatch }); }
     catch { return repo.read(reportId); } // A duplicate worker has not acquired dispatch authority.
   }
   await Promise.allSettled(pending.map(async ({ group, dispatch }) => {
     const catalog = edition.preparation.catalog, keys = groupKeys[group], packet = catalogPacket(catalog, keys, edition.preparation.identityOmissions);
     const supported = catalog.atoms.some(a => keys.includes(a.section) && a.role === "reason");
-    const outcome: ProviderOutcome = supported ? await provider.interpret(dispatch, packet, groupInstructions, selectionSchema) :
+    const outcome: ProviderOutcome = supported ? await provider.interpret(dispatch, packet, groupInstructions, groupSelectionSchema(catalog,keys)) :
       { state: "received", output: { sections: keys.map(key => ({ key, lead: "unavailable", reasons: [], implications: [],
         actions: catalog.atoms.filter(a => a.section === key && a.role === "action").slice(0, 3).map(a => a.id) })) },
         receipt: { model: "none", promptVersion: "deterministic-unavailable-v1", generatedAt: new Date().toISOString(),
           durationMs: 0, inputTokens: 0, outputTokens: 0, estimatedMicros: 0, requestDigest: packetDigest(packet), store: false } };
-    let accepted: Selection | null = null;
+    let accepted: Selection | null = null;let validationReason: string | undefined;
     if (outcome.state === "received") {
-      try { accepted = validateSelection(outcome.output, edition.preparation.catalog, groupKeys[group]); } catch { /* Paid semantic failure retains receipt. */ }
+      try { accepted = validateSelection(outcome.output, edition.preparation.catalog, groupKeys[group]); } catch(error) {
+        const code=error instanceof Error?error.message:'';
+        if(['invalid_selection','unsupported_selection','unsupported_lead','lead_evidence_missing','analytical_content_missing'].includes(code))validationReason=code;
+      }
     }
     await commit(repo, reportId, c => settleDispatch(c, dispatch.ordinal,
       accepted ? { state: "accepted", output: accepted, receipt: outcome.receipt } :
         { state: outcome.state === "ambiguous" ? "ambiguous" : "invalid", receipt: outcome.state === "received" ?
-          { ...outcome.receipt, validation: "selection_rejected" } : outcome.receipt }));
+          { ...outcome.receipt, validation: "selection_rejected",...(validationReason?{validationReason}:{}) } : outcome.receipt }));
   }));
   edition = await repo.read(reportId);
   const groups = ["context", "premises"].map(group => edition.checkpoint.dispatches.find(d => d.group === group && d.state === "accepted"));

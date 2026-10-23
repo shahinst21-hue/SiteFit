@@ -18,6 +18,7 @@
     "check:supabase": "node scripts/check-supabase.ts",
     "check:release": "node scripts/check-release.ts",
     "check:public": "node scripts/check-public-site.ts",
+    "check:measurement": "node scripts/check-measurement.ts",
     "check:marketing": "node scripts/check-marketing.ts",
     "check:auth:hosted": "node scripts/check-auth-hosted.ts",
     "check:database": "node --test tests/database.test.ts",

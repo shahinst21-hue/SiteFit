@@ -37,7 +37,9 @@ test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected on
   }} as unknown as ReturnType<typeof fullProvider>;
   const result=await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider});assert.equal(calls,3);
   if(changeTitle){assert.equal(result.status,'draft');assert.equal(result.checkpoint.dispatches[2].state,'invalid');assert.equal(result.checkpoint.dispatches[2].output,null);}
-  else{assert.equal(result.status,'ready');const dashboard=dashboardFromStored(result.projection);assert.deepEqual(dashboard.recommendation,decision);assert.equal(dashboard.summary?.verdict[0],decision.title);assert.ok(exportParagraphs(dashboard,'overview').some(r=>r.text===decision.title));}
+  else{assert.equal(result.status,'ready');const dashboard=dashboardFromStored(result.projection);assert.deepEqual(dashboard.recommendation,decision);assert.equal(dashboard.summary?.verdict[0],decision.title);assert.ok(exportParagraphs(dashboard,'overview').some(r=>r.text===decision.title));
+   assert.equal(dashboard.rental.length,0);const rent=exportParagraphs(dashboard,'rental-context');assert.ok(rent.length>2);assert.ok(rent.some(r=>r.text==='Rental evidence unavailable'));assert.ok(rent.some(r=>r.text.includes('No qualified rental observation')));
+  }
   await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true});assert.equal(calls,3);
  }
 });
@@ -58,6 +60,27 @@ function store(supported = false) {
   }, async freeze(e: StoredEdition, p: unknown) { assert.equal(e.revision, value.revision); value = { ...value, status: "ready", projection: p }; return structuredClone(value); } };
   return { repo: repo as unknown as ReturnType<typeof fullRepository>, value: () => value };
 }
+
+test('narrative group recovery requires explicit operator repair and preserves the rejected receipt and successful group',async()=>{
+ const db=store(true);db.value().preparation.narrativeVersion='consultant-narrative-v2';db.value().checkpoint=newCheckpoint(db.value().preparation);
+ let calls=0,contextCalls=0;
+ const provider={async interpret(d:{group:string},packet:ReturnType<typeof catalogPacket>){
+  calls++;if(d.group==='synthesis')throw Error('bounded-synthesis-stop');
+  if(d.group==='context')contextCalls++;
+  return {state:'received',output:{sections:packet.sections.map(key=>({key,
+   lead:d.group==='context'&&contextCalls===1?'not-an-admitted-atom':String(packet.atoms.find(a=>a[1]===key&&a[2]==='conclusion')?.[0]??'unavailable'),
+   reasons:packet.atoms.filter(a=>a[1]===key&&a[2]==='reason').map(a=>String(a[0])),implications:[],actions:[]}))},receipt:{estimatedMicros:1}};
+ }} as unknown as ReturnType<typeof fullProvider>;
+ await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,allowSemanticRepair:false});
+ const failed=structuredClone(db.value().checkpoint.dispatches[0]);assert.equal(failed.state,'invalid');
+ assert.equal((failed.receipt as {validationReason:string}).validationReason,'unsupported_lead');
+ await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true});assert.equal(calls,2);
+ await assert.rejects(generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true,allowSemanticRepair:true}),/bounded-synthesis-stop/);
+ assert.equal(contextCalls,2);assert.equal(calls,4);assert.equal(db.value().checkpoint.repairUsed,true);
+ assert.deepEqual(db.value().checkpoint.dispatches[0],failed);assert.equal(db.value().checkpoint.dispatches[1].state,'accepted');
+ assert.equal(db.value().checkpoint.dispatches[2].state,'accepted');
+ await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true,allowSemanticRepair:true});assert.equal(calls,4);
+});
 test("group failure preserves successes; explicit interrupted recovery cannot redispatch", async () => {
   const db = store(true); let calls = 0;
   const provider = { async interpret(d: { group: string }, packet: ReturnType<typeof catalogPacket>) {

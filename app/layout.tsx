@@ -4,6 +4,8 @@ import "./globals.css";
 import "./brand.css";
 import "./journey.css";
 import "./snapshot-decision.css";
+import "./measurement.css";
+import {MeasurementControls} from "@/components/measurement-controls";
 import {readPublicSupabaseConfig} from "@/lib/supabase/config";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -32,6 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <LocationEntryProvider>{children}</LocationEntryProvider>
         </main>
         <SiteFooter />
+        <MeasurementControls/>
       </body>
     </html>
   );

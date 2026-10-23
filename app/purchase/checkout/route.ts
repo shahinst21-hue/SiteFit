@@ -59,6 +59,6 @@ export async function POST(request:Request){
    validate:async session=>{await verifiedSession(stripe,session.id,binding);},
   },session=>bindCheckout(payment.id,session,config.live));
   (await cookies()).set(CHECKOUT_INTENT_COOKIE,'',{httpOnly:true,secure:process.env.VERCEL_ENV==='production'||new URL(request.url).protocol==='https:',sameSite:'lax',path:'/purchase',maxAge:0});
-  return paymentReply({url});
+  return paymentReply({url,measurement:{paymentId:payment.id}});
  }catch(error){const code=error instanceof Error&&['checkout_reconciliation_required','proof_payment_denied','trial_full_budget_exhausted','trial_full_slots_committed','payment_confirmation_required','sale_changed_replay'].includes(error.message)?error.message:'purchase_unavailable';console.warn('sitefit_checkout_failure',{stage,code});return paymentReply({error:"Checkout could not continue. Your saved Snapshot is unchanged.",code},409);}
 }

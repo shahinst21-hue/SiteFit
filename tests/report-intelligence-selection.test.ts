@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { buildAssessment } from "../lib/analysis/assessment.ts";
 import { context, date } from "./fixtures/data/framework.ts";
 import { buildCatalog, catalogPacket, modelSafeText } from "../lib/report-intelligence/catalog.ts";
-import { validateSelection, renderSelection } from "../lib/report-intelligence/selection.ts";
+import { validateSelection, renderSelection, groupSelectionSchema } from "../lib/report-intelligence/selection.ts";
 
 test("a favourable selected lead cannot remove mandatory opposition or substitute another section's evidence",()=>{
  const c=buildCatalog(buildAssessment(context(),[],[],[],null,null,false,[],new Date(date)),[],new Date(date));
@@ -25,4 +25,17 @@ test("AI projection omits exact premises identity inside source prose without re
  assert.doesNotMatch(packet,/99 Synthetic Street|W1D 1BS/);assert.match(packet,/2020-04-01; 82 sqm/);
  assert.equal(c.atoms.at(-1)!.text,text);
  assert.equal(modelSafeText("[selected premises]",["[selected premises]"]),"[selected premises]");
+});
+
+test('provider group schema admits only same-section role IDs and requires analytical content without weakening validation',()=>{
+ const c=buildCatalog(buildAssessment(context(),[],[],[],null,null,false,[],new Date(date)),[],new Date(date));
+ c.atoms.push({id:'r',section:'access',role:'reason',text:'Stored evidence',factIds:[],rule:'test'},
+  {id:'c',section:'access',role:'conclusion',text:'Qualified conclusion',factIds:[],rule:'test'},
+  {id:'i',section:'access',role:'implication',text:'Conditional implication',factIds:[],rule:'test'},
+  {id:'foreign',section:'competition',role:'reason',text:'Other section',factIds:[],rule:'test'});
+ const schema=groupSelectionSchema(c,['access']),p=schema.properties.sections.items.anyOf[0].properties;
+ assert.deepEqual(p.key.enum,['access']);assert.deepEqual(p.lead.enum,['c']);assert.deepEqual(p.reasons.items.enum,['r']);
+ assert.equal(p.reasons.minItems,1);assert.equal(p.implications.minItems,1);assert.equal(p.actions.maxItems,c.atoms.filter(a=>a.section==='access'&&a.role==='action').length);
+ assert.doesNotMatch(JSON.stringify(schema),/foreign/);assert.ok(JSON.stringify(schema).length<4000);
+ assert.throws(()=>validateSelection({sections:[{key:'access',lead:'c',reasons:['r'],implications:[],actions:[]}]},c,['access']),/analytical_content_missing/);
 });

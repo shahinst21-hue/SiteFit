@@ -17,7 +17,7 @@ import { validateDiscovery } from "../web-evidence/model.ts";
 import { validateFullProjection } from "./export.ts";
 import { storedProfiles, profileFocus } from "./profiles.ts";
 import { fullRequest } from "./provider.ts";
-import { groupInstructions, selectionSchema } from "./selection.ts";
+import { groupInstructions, groupSelectionSchema } from "./selection.ts";
 import { evaluateScenarioFit, type ScenarioFit } from "./scenario-fit.ts";
 import { projectOperators } from "./operators.ts";
 import { privateTokenText } from "../data/private-text.ts";
@@ -155,7 +155,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       // Protect against identity hidden in free source text, not just named JSON fields.
       if (identityOmissions.some(v => encoded.toLowerCase().includes(v.toLowerCase())) || /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i.test(encoded) ||
         privateTokenText(encoded) || /guestClaim|authorization/i.test(encoded)) throw Error("full_packet_identity_rejected");
-      fullRequest(keys.includes("premises") ? "premises" : "context", projected, groupInstructions, selectionSchema);
+      fullRequest(keys.includes("premises") ? "premises" : "context", projected, groupInstructions, groupSelectionSchema(catalog,keys));
       return projected;
     };
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
