@@ -10,6 +10,7 @@ import {reportPages,readableNumber,displayDate} from './model.ts';
 import type {SectionKey} from '../report-intelligence/catalog.ts';
 import {rentalCards} from './rental.ts';
 import {dashboardRecommendation,dashboardDecisionNarrative} from './presentation.ts';
+export const reportPdfVersion='report-pdf-v2';
 
 /** One display contract for immutable tab and full exports. No private preparation/checkpoints or external resources. */
 export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;heading?:boolean}[]{
@@ -53,6 +54,12 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
     for(const t of report.timeline)add(`${displayDate(t.date)} · ${t.fact}. ${t.dateMeaning}; ${t.scope}. Source reference ${t.referenceId}.`);
   }
   if(key==='rental-context'){
+    if(emptyPricing){
+      add('Rental evidence unavailable',true);
+      add('No qualified rental observation is stored for this edition. Obtain the asking rent and lease terms before comparing the commitment.');
+      add(p.conclusion);p.analysis.forEach(s=>add(s.text));if(p.test)add(p.test.text);
+      p.cautions.forEach(s=>add(s.text));p.unknowns.forEach(u=>add(u));
+    }
     for(const r of rentalCards(report)){
       add(`${r.label}: ${r.amount} ${r.unit}; ${r.areaBasis}. ${r.dates}. ${r.margin??''} ${r.qualification}`);
       for(const d of r.details)add(`${d.label}: ${d.value}.`);

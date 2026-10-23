@@ -37,7 +37,9 @@ test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected on
   }} as unknown as ReturnType<typeof fullProvider>;
   const result=await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider});assert.equal(calls,3);
   if(changeTitle){assert.equal(result.status,'draft');assert.equal(result.checkpoint.dispatches[2].state,'invalid');assert.equal(result.checkpoint.dispatches[2].output,null);}
-  else{assert.equal(result.status,'ready');const dashboard=dashboardFromStored(result.projection);assert.deepEqual(dashboard.recommendation,decision);assert.equal(dashboard.summary?.verdict[0],decision.title);assert.ok(exportParagraphs(dashboard,'overview').some(r=>r.text===decision.title));}
+  else{assert.equal(result.status,'ready');const dashboard=dashboardFromStored(result.projection);assert.deepEqual(dashboard.recommendation,decision);assert.equal(dashboard.summary?.verdict[0],decision.title);assert.ok(exportParagraphs(dashboard,'overview').some(r=>r.text===decision.title));
+   assert.equal(dashboard.rental.length,0);const rent=exportParagraphs(dashboard,'rental-context');assert.ok(rent.length>2);assert.ok(rent.some(r=>r.text==='Rental evidence unavailable'));assert.ok(rent.some(r=>r.text.includes('No qualified rental observation')));
+  }
   await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true});assert.equal(calls,3);
  }
 });

@@ -21,9 +21,9 @@ test('all eight customer-readable exports preserve frozen findings without objec
   for(const report of fixtures){
     const original=JSON.stringify(report);
     for(const page of reportPages){const rows=exportParagraphs(report,page.key),text=rows.map(r=>r.text).join('\n');
-      if(page.key!=='rental-context'||report.rental.length)assert.ok(text.includes(report.pages.find(p=>p.key===page.key)!.conclusion));
+      assert.ok(text.includes(report.pages.find(p=>p.key===page.key)!.conclusion));
       assert.doesNotMatch(text,/\[object Object\]|\bundefined\b|\bNaN\b/);
-      if(page.key==='rental-context')assert.doesNotMatch(text,/No qualified rental figure|no conclusion about rent attractiveness|does not establish this unit's actual rent/i);
+      if(page.key==='rental-context'&&!report.rental.length)assert.match(text,/Rental evidence unavailable/);
       if(page.key==='appendix')assert.ok(text.includes(report.pages.find(p=>p.key==='rental-context')!.conclusion));
       if(page.key==='premises')assert.match(text,/Capacity withheld/);
       if(page.key==='overview'){assert.match(text,/Consultant Verdict/);assert.match(text,/Priority action/);}
