@@ -26,6 +26,22 @@ Follow-up: the actual paid dashboard opened on Preview `cc10315`, with no horizo
 
 Actual Stripe API readback confirmed Sandbox, GBP2900, paid. A genuine completed Stripe event was processed twice through the actual database reducer; the original paid entitlement remained active. The provider's actual failed-payment event confirmed the test decline. These are event-processor replay tests, not externally delivered signed HTTP webhook replays. A proposed additional Sandbox transaction for simultaneous DebugView/Tag Assistant proof was rejected by automatic approval review as outside the clearly authorised existing test; no extra purchase was created. Explicit permission was requested; do not bypass that refusal. No Ads bidding conversion is activated.
 
+### Final Preview follow-up — 23 October 2026
+
+Code `e714f090703bf8264eefb1c2826047cb368af62c` passed both required lint/types/tests/build checks and Vercel Preview Comments. Local `npm run check` passed all483 tests, lint, strict types and build. Actual Preview `https://sitefit-l2tbxmwcg-shahinst21-hues-projects.vercel.app` is Ready at that commit. PR126 remains unmerged; Production is unchanged.
+
+Actual hosted PDFv2: full export131244bytes/39pages, Overview35224bytes/4pages, both HTTP200 and parseable. Full export replay returned identical bytes. The corrected rental page30 was rendered and inspected: it now includes the unavailable-evidence explanation and frozen conclusions/actions without clipping. The owned dashboard has no horizontal overflow at390px; desktop1280px was captured.
+
+The owner subsequently explicitly authorised one additional GBP29 Sandbox payment, resolving the prior automatic-review refusal. The old owner Snapshot's ordinary new-consent checkout conflicted with its saved historical consent; no payment was created by those attempts. Its normal saved-purchase retry reused the original consent safely, retained the old failed attempt and created successful Test payment `2db00669-672a-436c-b957-766a481292d3`. No Snapshot or AI was generated. Original synthetic purchase/report remain untouched.
+
+Actual collector responses HTTP204 show page_view, begin_checkout and purchase to G-ZRCDT4R80E. Purchase transaction is `sf_2db00669-672a-436c-b957-766a481292d3`, GBP29. Actual database readback confirms test_mode=true, succeeded, GBP2900. Persistent dispatch records contain exactly one begin_checkout and one purchase for that payment/destination, with GBP29 payload. Two return-page reads/refreshes sent no purchase. Tag Assistant visibly recorded the purchase. Its own Google's diagnostic telemetry destinations are separate from the SiteFit event destination, not duplicate SiteFit installations.
+
+GA4 web stream16180329740 was independently read back as G-ZRCDT4R80E and reports Data flowing. Both Internal Traffic and SiteFit Developer Traffic remain Exclude/Testing. However the current DebugView still shows zero devices; direct DebugView purchase/parameters visibility is NOT verified despite collector acceptance. Do not label external Analytics verification complete. No Primary Ads conversion, advertising campaign or Production measurement was activated. Existing shared-tag Ads destination visibility is not evidence of an Ads conversion; no claim about Ads-side processing is inferred without an actual account readback.
+
+A fresh append-only Development debug authorisation `pr126-owner-debug-20261023-extra-sandbox` bounds this test until2026-10-23T08:49:55.958Z. Branch-scoped Preview flags enforce the same deadline; advertising consent stays denied. Production budget and settings remain unchanged. No additional payment is authorised by this receipt.
+
+Remaining acceptance gaps: current DebugView purchase visibility, external signed HTTP webhook redelivery (actual reducer replay passed), and truly automatic end-to-end fulfilment (the earlier Ready report used an audited operator-driven worker). Campaign activation still needs a numeric approved spend envelope. Vercel/Zoho changes stay outside this workstream.
+
 ## Historical receipt — 16 October 2026
 
 Owner asks to complete the existing launch sequence in order, continuing independent no-spend work. Keep closed phases/copy/design closed. No new subscriptions, paid AI/source requests, Live payment, campaign or commercial Production activation follows from this preparation.
