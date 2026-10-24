@@ -27,16 +27,31 @@ const paths = [
 ];
 const titles = new Set<string>();
 const links = new Set<string>();
+const scripts = new Set<string>();
+function assertSecurityHeaders(response: Response, route: string) {
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff", `${route}: MIME sniffing protection missing`);
+  assert.equal(response.headers.get("x-frame-options"), "DENY", `${route}: framing protection missing`);
+  const directives = (response.headers.get("content-security-policy") ?? "").split(";").map(value => value.trim());
+  for (const required of ["frame-ancestors 'none'", "object-src 'none'", "base-uri 'self'"])
+    assert.ok(directives.includes(required), `${route}: required CSP directive missing: ${required}`);
+}
 async function get(path: string, manual = false) {
-  return fetch(new URL(path, base), {
+  const response = await fetch(new URL(path, base), {
     redirect: manual ? "manual" : "error",
     signal: AbortSignal.timeout(15000),
   });
+  assertSecurityHeaders(response, path);
+  return response;
 }
 for (const path of paths) {
   const response = await get(path);
   assert.equal(response.status, 200, `${path}: expected HTTP 200`);
   const html = await response.text();
+  for (const match of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) {
+    const resource = new URL(match[1].replaceAll("&amp;", "&"), base);
+    assert.equal(resource.origin, base.origin, `${path}: unexpected external script in initial HTML`);
+    scripts.add(resource.pathname + resource.search);
+  }
   if(!legalPublicationReady()){
     if(['/terms','/privacy','/contact'].includes(path))assert.ok(html.includes(seller.address),path+': approved seller address missing');
     else assert.ok(!html.includes(seller.address.split(',')[0]),path+': seller address outside intended legal/contact locations');
@@ -106,6 +121,12 @@ for (const path of paths) {
 }
 for (const link of links)
   assert.equal((await get(link)).status, 200, `Broken internal link: ${link}`);
+for (const script of scripts) {
+  const response = await get(script);
+  assert.equal(response.status, 200, `Unavailable application script: ${script}`);
+  assert.match(response.headers.get("content-type") ?? "", /(?:text|application)\/javascript/, `${script}: expected JavaScript MIME type`);
+  await response.arrayBuffer();
+}
 for (const path of ["/missing-public-page", "/blog/missing-article"]) {
   const response = await get(path);
   assert.equal(response.status, 404, `${path}: expected HTTP 404`);
@@ -167,6 +188,7 @@ for (const operation of ["lookup", "search", "resolve", "manual"]) {
     redirect: "error",
     signal: AbortSignal.timeout(10000),
   });
+  assertSecurityHeaders(unsupported, route.pathname);
   assert.equal(unsupported.status, 405);
   const invalid = await fetch(route, {
     method: "POST",
@@ -175,6 +197,7 @@ for (const operation of ["lookup", "search", "resolve", "manual"]) {
     redirect: "error",
     signal: AbortSignal.timeout(10000),
   });
+  assertSecurityHeaders(invalid, route.pathname);
   assert.equal(invalid.status, 400);
   assert.match(invalid.headers.get("cache-control") ?? "", /no-store/);
   const crossOrigin = await fetch(route, {
@@ -187,6 +210,7 @@ for (const operation of ["lookup", "search", "resolve", "manual"]) {
     redirect: "error",
     signal: AbortSignal.timeout(10000),
   });
+  assertSecurityHeaders(crossOrigin, route.pathname);
   assert.equal(crossOrigin.status, 403);
 }
 if(!legalPublicationReady()&&['localhost','127.0.0.1','[::1]'].includes(base.hostname)){
@@ -196,5 +220,5 @@ if(!legalPublicationReady()&&['localhost','127.0.0.1','[::1]'].includes(base.hos
   for(const file of assets){const text=await readFile(path.join(root,file),'utf8');assert.ok(!text.includes(seller.address)&&!text.includes(seller.address.split(',')[0]),'Private seller address in a public client asset');assert.ok(!text.includes(formationRule)&&!text.includes(deliveryCommitment),'Unpublished contract wording in a public client asset');}
 }
 console.log(
-  `PASS: ${paths.length} public pages/articles, ${links.size} internal paths, metadata, JSON-LD, sitemap, robots, social image, 404s, public legal/client-asset privacy and four safe address-route boundaries.`,
+  `PASS: ${paths.length} public pages/articles, ${links.size} internal paths, ${scripts.size} same-origin scripts, security headers on pages/assets/redirects/404s/API errors, metadata, JSON-LD, sitemap, robots, social image, public legal/client-asset privacy and four safe address-route boundaries.`,
 );
