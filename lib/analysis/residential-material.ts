@@ -44,8 +44,9 @@ export function residentialWithExtent(context:CollectionContext,snapshots:readon
    const part=object(proof.parts[i]),range=source.ranges[i],table=range.statistics[0];
    if(part.seconds!==range.seconds||table.dataset!=='TS007A'||table.outcome!=='success')return original;
    const raw=object(table.operands);
-   if(raw.schemaVersion!==2||raw.methodVersion!=='area-uniform-bng2')return original;
-   const certified={...raw,schemaVersion:3,methodVersion:'area-uniform-bng3',coverageExtent:{version:'ons-london-bfe-2021-v1',sha256:'955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd',outsideAreaM2:part.outsideAreaM2,clippedGapAreaM2:Math.max(0,Number(raw.catchmentAreaM2)-Number(raw.londonCoveredAreaM2))}};
+   if(!(raw.schemaVersion===2&&raw.methodVersion==='area-uniform-bng2'||raw.schemaVersion===3&&raw.methodVersion==='area-uniform-bng3'))return original;
+   const partition=part.allocationCoverage;
+   const certified={...raw,schemaVersion:partition?4:3,methodVersion:partition?'area-uniform-bng4':'area-uniform-bng3',...(partition?{allocationCoverage:partition}:{}),coverageExtent:{version:'ons-london-bfe-2021-v1',sha256:'955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd',outsideAreaM2:part.outsideAreaM2,clippedGapAreaM2:Math.max(0,Number(raw.catchmentAreaM2)-Number(raw.londonCoveredAreaM2))}};
    const allocation=catchmentAllocationOperands(certified,{...source.releases,censusReleaseId:table.releaseId},censusColumns.TS007A.columns.length);
    // TS007A column count comes from the admitted source, not a missing-as-zero rule.
    if(allocation.metrics[0].state!=='available')return original;

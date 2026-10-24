@@ -84,3 +84,16 @@ test('administrative extent certificate separates clipped footprint from missing
  assert.throws(()=>catchmentAllocationOperands({...value,coverageExtent:null},releases,2));
  assert.equal(catchmentAllocationOperands({...value,schemaVersion:2,methodVersion:'area-uniform-bng2'},releases,2).metrics[0].state,'partial');
 });
+
+test('native partition certificate explains source-edge slivers without admitting missing OA coverage or overlapping allocation',()=>{
+ const base=fixture(),covered=20.0326558926608413;
+ const value={...base,schemaVersion:4,methodVersion:'area-uniform-bng4',catchmentAreaM2:100,londonCoveredAreaM2:covered,londonCoverageFraction:covered/100,allocationCoveredAreaM2:20,boundaryResidualAreaM2:20-covered,
+  coverageExtent:{version:'ons-london-bfe-2021-v1',sha256:'955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd',outsideAreaM2:0,clippedGapAreaM2:100-covered},
+  allocationCoverage:{version:'ons-oa-partition-bng-v1',geographyReleaseId:releases.geographyReleaseId,unionAreaM2:20,regionalGapAreaM2:.04,unexplainedGapAreaM2:0,boundaryToleranceMetres:.001}};
+ const original=JSON.stringify(value),result=catchmentAllocationOperands(value,releases,2);
+ assert.equal(result.metrics[0].state,'available');assert.equal(result.metrics[0].knownContribution,20);
+ assert.equal(result.metrics[1].state,'partial');assert.equal(result.boundaryResidualAreaM2,20-covered);assert.equal(JSON.stringify(value),original);
+ for(const allocationCoverage of [{...value.allocationCoverage,unionAreaM2:19},{...value.allocationCoverage,unexplainedGapAreaM2:.02}])assert.equal(catchmentAllocationOperands({...value,allocationCoverage},releases,2).metrics[0].state,'partial');
+ for(const allocationCoverage of [{...value.allocationCoverage,geographyReleaseId:'wrong'},{...value.allocationCoverage,boundaryToleranceMetres:1},{...value.allocationCoverage,unexplainedGapAreaM2:-1},{...value.allocationCoverage,extra:true}])assert.throws(()=>catchmentAllocationOperands({...value,allocationCoverage},releases,2));
+ assert.equal(catchmentAllocationOperands({...value,schemaVersion:3,methodVersion:'area-uniform-bng3'},releases,2).metrics[0].state,'partial');
+});
