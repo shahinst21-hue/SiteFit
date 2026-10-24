@@ -1,4 +1,5 @@
 import 'server-only';
+import {earlyReportSection} from '../analysis/report-section.ts';
 import {frameworkClient} from '../data/server-client.ts';
 import {decodeSnapshot} from '../data/snapshot-repository.ts';
 import {validateContext,uuid} from '../data/validation.ts';
@@ -67,7 +68,7 @@ export async function recoverSourceSnapshot(owner:string,caseId:string,signal?:A
    ai:{receipts:[...prior.receipts,...ai.receipts()],dispatches:ai.dispatches()},sourceSnapshotIds:permit.snapshotIds,inputContext:context,
    enrichmentVersion:'phase8-observations-1',candidateScoringActivated:false,deferredEconomics:built.deferredEconomics,
    recovery:{id,failedReportId:permit.failedReportId,sourceRequests:0,restoredSections:0}};
-  const sections=[{section:'early-view',...early},...interpreted.sections.map(s=>({...s,evidenceIds:[...new Set([s.conclusion,...s.reasons,...s.support,...s.opposition,...s.alternatives,...s.unknowns,s.implication,s.question].flatMap(p=>p.evidenceIds))]}))];
+  const sections=[earlyReportSection(early),...interpreted.sections.map(s=>({...s,evidenceIds:[...new Set([s.conclusion,...s.reasons,...s.support,...s.opposition,...s.alternatives,...s.unknowns,s.implication,s.question].flatMap(p=>p.evidenceIds))]}))];
   const reportId=await rpc('finish_sitefit_source_recovery',{...common,p_evidence:prior.evidence as unknown as Json,p_sections:sections as unknown as Json,p_projection:projection as unknown as Json,p_provenance:audit as unknown as Json});
   if(!uuid(reportId))throw Error('recovery_finalisation_failed');
   return {reportId,replay:false};
