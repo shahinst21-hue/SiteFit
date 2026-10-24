@@ -19,7 +19,8 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
   for (const key of ["geographyReleaseId", "nativeReleaseId", "censusReleaseId", "incomeReleaseId", "bresReleaseId"] as const) {
     const id = releases[key]; requireOperand(uuid(id) && r[key] === id);
   }
-  const version2 = r.schemaVersion === 2 && r.methodVersion === "area-uniform-bng2";
+  const version3 = r.schemaVersion === 3 && r.methodVersion === "area-uniform-bng3";
+  const version2 = r.schemaVersion === 2 && r.methodVersion === "area-uniform-bng2" || version3;
   requireOperand((r.schemaVersion === 1 && r.methodVersion === "area-uniform-bng1" || version2) &&
     r.allocation === "uniform_within_native_area_estimate" && nonnegative(r.catchmentAreaM2) && r.catchmentAreaM2 > 0 &&
     nonnegative(r.londonCoveredAreaM2) && r.londonCoveredAreaM2 <= r.catchmentAreaM2 * (1 + 1e-8) &&
@@ -67,16 +68,27 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
   // Keep the signed residual; never redistribute population or mask missing OAs.
   const overlayToleranceM2 = Math.max(1e-7, Math.min(0.1, (r.londonCoveredAreaM2 as number) * 1e-7));
   const boundaryMismatch = version2 && Math.abs(area - (r.londonCoveredAreaM2 as number)) > overlayToleranceM2;
+  let outsideCoverage = (r.londonCoverageFraction as number) < 1 - 1e-8;
+  if (version3) {
+    const extent = object(r.coverageExtent);
+    requireOperand(Object.keys(extent).length === 4 && extent.version === 'ons-london-bfe-2021-v1' &&
+      extent.sha256 === '955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd' &&
+      nonnegative(extent.outsideAreaM2) && extent.outsideAreaM2 <= r.catchmentAreaM2 &&
+      nonnegative(extent.clippedGapAreaM2) && close(extent.clippedGapAreaM2, Math.max(0, r.catchmentAreaM2 - r.londonCoveredAreaM2)));
+    // This certificate is computed from the exact polygon by the private SQL
+    // source adapter. Never infer administrative coverage from a percentage.
+    outsideCoverage = extent.outsideAreaM2 > Math.max(1e-7, Math.min(0.1, r.catchmentAreaM2 * 1e-7));
+  }
   const metrics = diagnostics.map((d, i) => {
     const published = object((r.censusEstimates as unknown[])[i]);
     requireOperand(published.columnOrdinal === d.columnOrdinal && nonnegative(published.knownContribution) &&
       nonnegative(published.missingAreaM2) && close(published.knownContribution, d.knownContribution) &&
       close(published.missingAreaM2, d.missingAreaM2) && published.state === (d.missingAreaM2 > 0 ? "partial" : "available"));
-    return { ...d, state: boundaryMismatch || d.missingAreaM2 > 0 || (r.londonCoverageFraction as number) < 1 - 1e-8 ? "partial" as const : "available" as const,
+    return { ...d, state: boundaryMismatch || d.missingAreaM2 > 0 || outsideCoverage ? "partial" as const : "available" as const,
       partialAllocationShare: d.knownContribution === 0 ? null : d.partiallyAllocatedCount / d.knownContribution,
       upperEnvelopeScope: "known_intersecting_native_areas_only" as const };
   });
-  return { methodVersion: version2 ? "area-uniform-bng2" : "area-uniform-bng1", releases: structuredClone(releases), metrics,
+  return { methodVersion: version3 ? "area-uniform-bng3" : version2 ? "area-uniform-bng2" : "area-uniform-bng1", releases: structuredClone(releases), metrics,
     boundaryResidualAreaM2: version2 ? r.boundaryResidualAreaM2 as number : null,
     allocationCoveredAreaM2: version2 ? r.allocationCoveredAreaM2 as number : null,
     londonCoverageFraction: r.londonCoverageFraction as number, comparator: null, score: null,

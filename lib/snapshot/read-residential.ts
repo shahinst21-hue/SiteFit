@@ -4,7 +4,8 @@ import type {Database} from '../supabase/database.types.ts';
 import {frameworkClient} from '../data/server-client.ts';
 import {decodeSnapshot} from '../data/snapshot-repository.ts';
 import {validateContext,uuid} from '../data/validation.ts';
-import {residentialMaterial} from '../analysis/residential-material.ts';
+import {residentialMaterial,residentialWithExtent} from '../analysis/residential-material.ts';
+import type {Json} from '../supabase/database.types.ts';
 import type {FreeProjection} from '../analysis/projection.ts';
 /** Automatic, read-only recovery for a withheld historical display. Authorise
  * the exact Ready report before privileged reads; only its frozen source IDs
@@ -28,7 +29,15 @@ export async function readResidential(session:SupabaseClient<Database>,id:string
   if((sources.data??[]).some(row=>row.expires_at&&Date.parse(row.expires_at)<=Date.now()))return {...projection,residentialState:'source_unavailable'};
   const context=validateContext(input.data.resolved_context);
   if(context.analysisId!==projection.analysisId||context.inputId!==report.input_id||context.businessType!==projection.businessType)return {...projection,residentialState:'invalid_evidence'};
-  const material=residentialMaterial(context,(sources.data??[]).map(decodeSnapshot),new Date());
+  const snapshots=(sources.data??[]).map(decodeSnapshot);
+  let material=residentialMaterial(context,snapshots,new Date());
+  if(material.state==='partial_coverage'){
+   const identity=await session.auth.getUser();
+   if(identity.error||!identity.data.user)return temporary();
+   const rpc=client as unknown as {rpc:(name:string,args:Record<string,Json>)=>{abortSignal:(signal:AbortSignal)=>PromiseLike<{data:unknown;error:unknown}>}};
+   const proof=await rpc.rpc('read_sitefit_report_extent',{p_owner:identity.data.user.id,p_report:id}).abortSignal(AbortSignal.timeout(8000));
+   if(!proof.error)material=residentialWithExtent(context,snapshots,new Date(),proof.data);
+  }
   return {...projection,residentialCatchment:material.score,residentialState:material.state};
  }catch{return temporary();}
 }
