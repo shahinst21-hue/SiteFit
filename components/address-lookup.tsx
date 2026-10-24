@@ -2,6 +2,7 @@
 import {
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
   type FormEvent,
@@ -58,6 +59,9 @@ export function AddressLookup({
   const [pendingReference, setPendingReference] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [filter,setFilter]=useState("");
+  const [showAllAddresses, setShowAllAddresses] = useState(false);
+  const addressListId = useId();
+  const addressList = useRef<HTMLUListElement>(null);
   const [fields, setFields] = useState<
     Partial<Record<keyof ManualAddress, string>>
   >({});
@@ -119,6 +123,7 @@ export function AddressLookup({
         return;
       }
       setFilter("");
+      setShowAllAddresses(false);
       setState({
         ...latest.current,
         postcode,
@@ -175,6 +180,7 @@ export function AddressLookup({
     setError("");
     setFields({});
     setFilter("");
+    setShowAllAddresses(false);
     setState({ ...state, mode, candidates: null, resultPostcode: "" });
   }
   async function select(candidate: AddressCandidate) {
@@ -378,9 +384,15 @@ export function AddressLookup({
       {state.candidates && state.candidates.length > 0 && (
         <div className="address-picker">
          <div className="address-picker-heading"><h2>Select your property</h2><span>{state.candidates.length} found</span></div>
-         {state.candidates.length>6&&<div className="address-filter"><Icon name="search"/><input type="search" aria-label="Filter these addresses" placeholder="Filter by building, number or name" value={filter} onChange={event=>setFilter(event.target.value)} autoComplete="off"/><span className="sr-only">Filters this list only; no new search request.</span></div>}
+         {state.candidates.length>6&&<div className="address-filter"><Icon name="search"/><input type="search" aria-label="Filter these addresses" placeholder="Building name or number" value={filter} onChange={event=>setFilter(event.target.value)} autoComplete="off"/><span className="sr-only">Filters this list only; no new search request.</span></div>}
+        <p className="address-picker-guidance" role="status">
+          {filter.trim() ? `${visibleCandidates.length} matching ${visibleCandidates.length === 1 ? "address" : "addresses"}. ` : ""}
+          Choose your address from the list below.
+        </p>
         <ul
-          className="address-results"
+          id={addressListId}
+          ref={addressList}
+          className={`address-results${showAllAddresses ? " address-results-expanded" : ""}`}
           aria-label="Select the property"
           aria-busy={!!busy}
         >
@@ -413,6 +425,22 @@ export function AddressLookup({
             </li>
           ))}
         </ul>
+        {visibleCandidates.length > 4 && !showAllAddresses && (
+          <button
+            type="button"
+            className="address-show-all"
+            aria-controls={addressListId}
+            aria-expanded={false}
+            onClick={() => {
+              setShowAllAddresses(true);
+              requestAnimationFrame(() => {
+                addressList.current?.querySelector<HTMLButtonElement>("li:nth-child(5) button")?.focus();
+              });
+            }}
+          >
+            Show all {visibleCandidates.length} addresses <Arrow />
+          </button>
+        )}
         {!visibleCandidates.length&&<p className="address-filter-empty">No addresses match this filter. <button type="button" className="text-link" onClick={()=>setFilter("")}>Clear filter</button></p>}
         <p className="field-help address-picker-note">Choose the property address, even if the current business name is different.</p>
         </div>
