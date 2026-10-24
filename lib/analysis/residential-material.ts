@@ -22,7 +22,7 @@ export function residentialMaterial(context:CollectionContext,snapshots:readonly
   const {evidence}=enrichedEvidence(context,pair,at);
   // Stable source/path identifiers for this read projection; these are not new
   // persisted evidence rows and cannot alter the historical AI's evidence IDs.
-  for(const e of evidence)if(e.kind==='derived')e.id=`${e.snapshotId}:${e.source.dataset}`;
+  for(const e of evidence)if(e.kind==='derived')e.id=`${e.snapshotId}:${encodeURIComponent(e.source.dataset)}`;
   const score=residentialFromEvidence(evidence,context.businessType,queryPoint(context),at);
   if(score)return {score,state:'ready'};
   const rows=evidence.filter(e=>e.source.dataset.startsWith('TS007A total,'));
@@ -51,9 +51,9 @@ export function residentialWithExtent(context:CollectionContext,snapshots:readon
    if(allocation.metrics[0].state!=='available')return original;
    const row=evidence.find(e=>e.source.dataset===`TS007A total, ${range.seconds/60} minute walking estimate`);
    if(!row)return original;
-   row.value=allocation.metrics[0].knownContribution;row.quality.available=true;
+   row.value=(raw.censusEstimates as {knownContribution:number}[])[0].knownContribution;row.quality.available=true;
   }
-  for(const e of evidence)if(e.kind==='derived')e.id=`${e.snapshotId}:${e.source.dataset}`;
+  for(const e of evidence)if(e.kind==='derived')e.id=`${e.snapshotId}:${encodeURIComponent(e.source.dataset)}`;
   const score=residentialFromEvidence(evidence,context.businessType,queryPoint(context),at);
   return score?{score,state:'ready'}:original;
  }catch{return original;}
