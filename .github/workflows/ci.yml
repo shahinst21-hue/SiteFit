@@ -26,6 +26,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Audit dependencies for high and critical vulnerabilities
+        run: npm audit --audit-level=high
       - name: Lint
         run: npm run lint
       - name: Type check
