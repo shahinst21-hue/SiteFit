@@ -7,6 +7,7 @@ import {validateContext,uuid} from '../data/validation.ts';
 import {residentialMaterial,residentialWithExtent} from '../analysis/residential-material.ts';
 import type {Json} from '../supabase/database.types.ts';
 import type {FreeProjection} from '../analysis/projection.ts';
+import {materialiseResidential} from './materialise-residential.ts';
 /** Automatic, read-only recovery for a withheld historical display. Authorise
  * the exact Ready report before privileged reads; only its frozen source IDs
  * qualify. Historical report, recommendation and sources remain immutable. */
@@ -38,6 +39,6 @@ export async function readResidential(session:SupabaseClient<Database>,id:string
    const proof=await rpc.rpc('read_sitefit_report_extent',{p_owner:identity.data.user.id,p_report:id}).abortSignal(AbortSignal.timeout(8000));
    if(!proof.error)material=residentialWithExtent(context,snapshots,new Date(),proof.data);
   }
-  return {...projection,residentialCatchment:material.score,residentialState:material.state};
+  return materialiseResidential(projection,material);
  }catch{return temporary();}
 }
