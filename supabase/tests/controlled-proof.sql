@@ -62,8 +62,11 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uu
  oldheld:=(select reserved_micros from public.controlled_proof);
  d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('2',64),'api.propertydata.co.uk',repeat('2',64),0);
  perform public.settle_sitefit_proof_dispatch(c,t,d,'ambiguous',null);
- begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('3',64),'ai',repeat('3',64),1);raise exception 'ambiguous dispatch resumed';exception when insufficient_privilege then null;end;
- if (select reserved_micros from public.controlled_proof)<>oldheld or (select state from public.controlled_proof)<>'intervention' then raise exception 'unknown hold released';end if;
+ if (select reserved_micros from public.controlled_proof)<>oldheld or (select state from public.controlled_proof)<>'snapshot_running' then raise exception 'source failure changed AI hold or stopped independent work';end if;
+ d:=public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('3',64),'ai',repeat('3',64),1);
+ perform public.settle_sitefit_proof_dispatch(c,t,d,'ambiguous',null);
+ begin perform public.reserve_sitefit_proof_dispatch(c,t,'snapshot',repeat('4',64),'ai',repeat('4',64),1);raise exception 'ambiguous AI resumed';exception when insufficient_privilege then null;end;
+ if (select reserved_micros from public.controlled_proof)<>oldheld+1 or (select state from public.controlled_proof)<>'intervention' then raise exception 'unknown AI hold released';end if;
  begin update public.controlled_proof set reserved_micros=0;raise exception 'reservation reset';exception when others then if sqlerrm='reservation reset' then raise;end if;end;
 end$$;
 rollback;

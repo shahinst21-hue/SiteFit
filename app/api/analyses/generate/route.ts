@@ -7,7 +7,8 @@ import {snapshotStream} from '@/lib/analysis/progress-stream';
 import type {SnapshotObserver} from '@/lib/analysis/progress';
 import {controlledSnapshotConfigured} from '@/lib/proof/authority';
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
-import {assertTrialOwner,trialSnapshotPause} from '@/lib/proof/trial';
+import {assertTrialOwner,trialSnapshotPause,trialSourceRecoveryCandidate} from '@/lib/proof/trial';
+import {recoverSourceSnapshot} from '@/lib/proof/recover-source-snapshot';
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
@@ -36,9 +37,19 @@ export async function POST(request: Request) {
     const active = await client.rpc("sitefit_session_available");
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const owner=user.id;
-    if(trial){const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);if(paused)return reply(paused,409);}
+    let recoveryCase:string|null=null;
+    if(trial){
+      const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);
+      if(paused){
+        const candidate=await trialSourceRecoveryCandidate(owner,input.propertyId,input.businessType);
+        if(!candidate)return reply(paused,409);
+        recoveryCase=candidate;
+      }
+    }
     const produce=async(observer?:SnapshotObserver)=>{
-      const result=await ownedGeneration(owner,input,()=>generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer));
+      const result=await ownedGeneration(owner,input,()=>recoveryCase
+        ?recoverSourceSnapshot(owner,recoveryCase,request.signal,observer)
+        :generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer));
       await observeCampaign(owner,result.reportId);return {reportId:result.reportId};
     };
     if(request.headers.get('accept')==='application/x-ndjson')return snapshotStream(produce,generationFailure);
