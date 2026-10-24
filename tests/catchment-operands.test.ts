@@ -69,3 +69,18 @@ test("sub-decimetre BNG overlay noise does not suppress complete population, whi
   assert.equal(result.metrics[0].knownContribution,20);assert.equal(result.boundaryResidualAreaM2,residual);
  }
 });
+
+test('administrative extent certificate separates clipped footprint from missing population for every location',()=>{
+ const base=fixture();
+ const total=100,covered=20;
+ const value={...base,schemaVersion:3,methodVersion:'area-uniform-bng3',catchmentAreaM2:total,londonCoveredAreaM2:covered,londonCoverageFraction:covered/total,allocationCoveredAreaM2:covered,boundaryResidualAreaM2:0,
+ coverageExtent:{version:'ons-london-bfe-2021-v1',sha256:'955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd',outsideAreaM2:0,clippedGapAreaM2:80}};
+ const certified=catchmentAllocationOperands(value,releases,2);
+ assert.equal(certified.metrics[0].state,'available');
+ assert.equal(certified.metrics[0].knownContribution,20);
+ assert.equal(certified.metrics[1].state,'partial'); // Real missing cell remains missing.
+ assert.equal(catchmentAllocationOperands({...value,coverageExtent:{...value.coverageExtent,outsideAreaM2:1}},releases,2).metrics[0].state,'partial');
+ for(const coverageExtent of [{...value.coverageExtent,sha256:'0'.repeat(64)},{...value.coverageExtent,clippedGapAreaM2:0},{...value.coverageExtent,outsideAreaM2:-1},{...value.coverageExtent,extra:true}])assert.throws(()=>catchmentAllocationOperands({...value,coverageExtent},releases,2));
+ assert.throws(()=>catchmentAllocationOperands({...value,coverageExtent:null},releases,2));
+ assert.equal(catchmentAllocationOperands({...value,schemaVersion:2,methodVersion:'area-uniform-bng2'},releases,2).metrics[0].state,'partial');
+});

@@ -1,0 +1,8 @@
+{
+  "source": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Regions_December_2021_EN_BFE_2022/FeatureServer/0",
+  "sha256": "955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd",
+  "retrievedAt": "2026-10-24T08:50:57.134Z",
+  "bytes": 409560,
+  "regionCode": "E12000007",
+  "referencePeriod": "2021-12"
+}

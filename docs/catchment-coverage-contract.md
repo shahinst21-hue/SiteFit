@@ -1,0 +1,15 @@
+# Catchment coverage contract correction — 24 October 2026
+
+Implementation in progress; not a Production release receipt.
+
+Read-only diagnosis of the owner's TW1 1RD and TW9 3PZ reports found received walking geometry and successful Census reads, no missing TS007A source cells, and 15-minute clipped-footprint coverage of 0.969126733410414 and 0.996783720150614. Neither percentage proves an unsupported location. The official ONS December 2021 London BFE extent covers all six frozen contours exactly (outside area 0 m²). The approved population and Competition scoring formulae are unchanged.
+
+The existing statistical region and OA boundaries are BFC (clipped at Mean High Water); ONS explicitly distinguishes this from BFE administrative extent. Source: https://www.ons.gov.uk/methodology/geography/geographicalproducts/digitalboundaries . The exact matching-year BFE reference was downloaded once from the official endpoint in `lib/data/reference/london-extent-2021.json`; its response SHA256 and retrieval date are retained. No customer coordinates or other data were transmitted during that download. No new paid provider is introduced.
+
+New `area-uniform-bng3` private operands add a server-computed administrative extent certificate. Existing Census values, allocation fractions, signed overlay residuals, missing cells and clipped footprint area remain unchanged. Qualification requires complete native operands and acceptable overlay arithmetic AND an administrative contour inside the official extent. The old percent-coverage test remains for uncertified legacy operands. This is not a generic 95/97/99% threshold or postcode exception. Clipped gaps are not assigned invented population.
+
+A service-only read RPC binds the certificate to an owned Ready Free report and the exact two frozen source IDs/checksums. Historical null-score read materialisation revalidates the original snapshots, uses the certificate only in memory, and does not rewrite source, report, AI text, recommendation or financial history. Non-null historical scores replay unchanged. Wrong owners/bindings, missing Census cells, invalid geometry and genuine administrative overflow remain denied/partial.
+
+All future normal collection consumers (Snapshot, Competition prerequisites and later Full Report material) use the shared validator. Historical Ready Competition is still immutable: this correction does not silently initiate Places calls or manufacture historical competitor counts. Any separately governed new evidence edition must preserve that history and existing provider limits. This outstanding integration must be completed before claiming the entire recovery experience verified.
+
+Verification so far: focused operand/material tests pass; real Production transaction rehearses installation and exact-report certificates then rolls back. No permanent Production migration or deployment, paid AI, provider request, payment or advertising change has occurred during this correction. Full validation and release remain pending.

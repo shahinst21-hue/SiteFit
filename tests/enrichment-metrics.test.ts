@@ -1,5 +1,5 @@
 import {enrichedEvidence} from '../lib/analysis/enriched-evidence.ts';
-import {residentialMaterial} from '../lib/analysis/residential-material.ts';
+import {residentialMaterial,residentialWithExtent} from '../lib/analysis/residential-material.ts';
 import {packetDigest} from '../lib/analysis/canonical.ts';
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -87,4 +87,17 @@ test('population contract distinguishes real incomplete cells from received sour
  const raw=f.p.ranges[0].statistics[0].operands as {oaOperands:{values:(number|null)[];missingReasons:(string|null)[]}[];censusEstimates:{knownContribution:number;missingAreaM2:number;state:string}[]};
  raw.oaOperands[0].values[0]=null;raw.oaOperands[0].missingReasons[0]='source_blank';raw.censusEstimates[0]={...raw.censusEstimates[0],knownContribution:0,missingAreaM2:10,state:'partial'};f.seal();
  const result=residentialMaterial(f.c,[f.parent,f.s],at);assert.equal(result.state,'partial_coverage');assert.equal(result.score,null);
+});
+
+
+test('certified BFE read restores complete clipped populations without rewriting saved evidence',()=>{
+ const f=populationPair(),at=new Date('2026-10-08T10:01:00Z');
+ for(const range of f.p.ranges)for(const table of range.statistics){const raw=table.operands as Record<string,unknown>;Object.assign(raw,{schemaVersion:2,methodVersion:'area-uniform-bng2',catchmentAreaM2:11,londonCoverageFraction:10/11,allocationCoveredAreaM2:10,boundaryResidualAreaM2:0});}
+ f.seal();const before=JSON.stringify(f),proof={walkingId:f.parent.id,populationId:f.s.id,walkingChecksum:f.parent.result.meta.checksum,populationChecksum:f.s.result.meta.checksum,parts:[300,600,900].map(seconds=>({seconds,outsideAreaM2:0}))};
+ assert.equal(residentialMaterial(f.c,[f.parent,f.s],at).state,'partial_coverage');
+ assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,proof).state,'ready');
+ assert.equal(JSON.stringify(f),before);
+ assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,{...proof,populationChecksum:'wrong'}).state,'partial_coverage');
+ const outside=structuredClone(proof);outside.parts[2].outsideAreaM2=1;
+ assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,outside).state,'partial_coverage');
 });

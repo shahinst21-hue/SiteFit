@@ -122,6 +122,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
         ).rows[0].count,
         0,
       );
+    await db.exec(await readFile(new URL('../supabase/tests/catchment-extent.sql', import.meta.url), 'utf8'));
     // Isolated recovery proof using synthetic data, never a hosted dump or credential export.
     const recoveryFixture = await readFile(new URL("../supabase/tests/full-intelligence.sql", import.meta.url), "utf8");
     await db.exec(recoveryFixture.replace(/rollback;\s*$/i, "commit;"));
