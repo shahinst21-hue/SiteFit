@@ -1,4 +1,5 @@
 import "server-only";
+import {earlyReportSection} from './report-section.ts';
 import {competitionForSnapshot} from "../competition/repository.ts";
 import { framework } from "../data/framework.ts";
 import { frameworkClient } from "../data/server-client.ts";
@@ -82,7 +83,7 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
     metrics:built.metrics.map(m=>({id:m.id,version:m.version,sourceSnapshotId:m.sourceSnapshotId,score:null,direction:"unreviewed"})),comparison:null,
     ai:{receipts:[...(prior?.receipts??[]),...ai.receipts()],dispatches:ai.dispatches()},sourceSnapshotIds:snapshots.map(s=>s.id),inputContext:context,
     enrichmentVersion:"phase8-observations-1",candidateScoringActivated:false,deferredEconomics:built.deferredEconomics};
-  const sections=[{section:"early-view",...early},...interpreted.sections.map(s=>({...s,evidenceIds:[...new Set([s.conclusion,...s.reasons,...s.support,...s.opposition,...s.alternatives,...s.unknowns,s.implication,s.question].flatMap(p=>p.evidenceIds))]}))];
+  const sections=[earlyReportSection(early),...interpreted.sections.map(s=>({...s,evidenceIds:[...new Set([s.conclusion,...s.reasons,...s.support,...s.opposition,...s.alternatives,...s.unknowns,s.implication,s.question].flatMap(p=>p.evidenceIds))]}))];
   const {data:reportId,error}=await client.rpc("finalise_sitefit_free",{p_owner:owner,p_analysis:context.analysisId,p_input:context.inputId,
     p_evidence:json(prepared.evidence),p_sections:json(sections),p_projection:json(projection),p_provenance:json(audit)}).abortSignal(AbortSignal.any([signal,AbortSignal.timeout(8000)]));
   if(error||!reportId){await preserve([{section:"early-view",code:"report_persistence_failed"}],early);throw new Error("report_persistence_failed");}
