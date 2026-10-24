@@ -1,0 +1,24 @@
+{
+  "catchmentMeasurement": true,
+  "competitionClaim": false,
+  "competitionCollections": false,
+  "databaseBytes": 382662323,
+  "extentRead": false,
+  "observedAt": "2026-10-24T19:35:37.26914+00:00",
+  "sourceRecovery": false,
+  "trialBudget": false,
+  "appliedCount": 98,
+  "missingVersions": [
+    "20261021100000",
+    "20261021120000",
+    "20261021130000",
+    "20261021140000",
+    "20261023210000",
+    "20261024090000",
+    "20261024110000",
+    "20261024130000",
+    "20261024150000"
+  ],
+  "previewIsSeparateDevelopment": true,
+  "incrementalPaidCalls": 0
+}

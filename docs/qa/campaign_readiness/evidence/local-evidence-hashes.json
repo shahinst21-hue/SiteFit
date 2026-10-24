@@ -1,0 +1,22 @@
+[
+  {
+    "path": ".vercel/independent-unit-baseline.log",
+    "sha256": "81295b182098f97ed2f929950b03d1f433e32de37c53ea2c90e7d9f3c562ad80"
+  },
+  {
+    "path": ".vercel/audit-acceptance-probes.log",
+    "sha256": "109a3c2d7ba9b8170e51a1332bb5e18d24923e4a4a8e6d8055db1046e31f08d3"
+  },
+  {
+    "path": ".vercel/audit-public-http.log",
+    "sha256": "7ebb011a71f1cc05d3999e1364ed10fae694083bd0c126c20dd7cb4f775f2427"
+  },
+  {
+    "path": ".vercel/audit-operating-state.json",
+    "sha256": "d09339be40e1d1eef2e05ab2a159ac82f7680a24586acb268ec7ae7b23532296"
+  },
+  {
+    "path": ".vercel/audit-capacity.json",
+    "sha256": "547ddaea0b1f32dbc7df953232b66ad9439cf9745864e47e39a2282fb30e56a7"
+  }
+]
