@@ -1,3 +1,8 @@
+import {materialiseResidential} from '../lib/snapshot/materialise-residential.ts';
+import {decisionFixture} from './fixtures/snapshot-decision.ts';
+import {snapshotFromStored} from '../lib/snapshot/model.ts';
+import {snapshotRecommendation,scoreSummary} from '../lib/snapshot/decision.ts';
+import {validateFreeProjection} from '../lib/analysis/projection.ts';
 import {recommendationFromScores} from '../lib/analysis/recommendation.ts';
 import {enrichedEvidence} from '../lib/analysis/enriched-evidence.ts';
 import {residentialMaterial,residentialWithExtent} from '../lib/analysis/residential-material.ts';
@@ -101,6 +106,14 @@ test('certified BFE read restores complete clipped populations without rewriting
  assert.equal(recovered.state,'ready');
  assert.doesNotThrow(()=>recommendationFromScores(recovered.score,undefined));
  assert.ok(recovered.score!.metadata.evidenceIds.every(id=>!/[<>\s]/u.test(id)&&id.length<=120));
+ const old={...decisionFixture(),residentialCatchment:null,recommendation:recommendationFromScores(null,undefined)};
+ const frozen=JSON.stringify(old),view=materialiseResidential(old,recovered);
+ validateFreeProjection(view);
+ const snapshot=snapshotFromStored(view),decision=snapshotRecommendation(snapshot);
+ assert.equal(decision!.inputs.demand!.score,recovered.score!.score);
+ assert.equal(decision!.status,'insufficient_evidence');
+ assert.match(scoreSummary(snapshot.factors.find(f=>f.id==='customer-base')!)!.label,/\/100/);
+ assert.equal(view.earlyView.advisor,undefined);assert.match(view.earlyView.coverage,/Current evidence interpretation/);assert.equal(JSON.stringify(old),frozen);
  assert.equal(JSON.stringify(f),before);
  assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,{...proof,populationChecksum:'wrong'}).state,'partial_coverage');
  const outside=structuredClone(proof);outside.parts[2].outsideAreaM2=1;
