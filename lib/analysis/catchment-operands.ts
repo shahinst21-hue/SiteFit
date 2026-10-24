@@ -19,7 +19,8 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
   for (const key of ["geographyReleaseId", "nativeReleaseId", "censusReleaseId", "incomeReleaseId", "bresReleaseId"] as const) {
     const id = releases[key]; requireOperand(uuid(id) && r[key] === id);
   }
-  const version3 = r.schemaVersion === 3 && r.methodVersion === "area-uniform-bng3";
+  const version4 = r.schemaVersion === 4 && r.methodVersion === "area-uniform-bng4";
+  const version3 = r.schemaVersion === 3 && r.methodVersion === "area-uniform-bng3" || version4;
   const version2 = r.schemaVersion === 2 && r.methodVersion === "area-uniform-bng2" || version3;
   requireOperand((r.schemaVersion === 1 && r.methodVersion === "area-uniform-bng1" || version2) &&
     r.allocation === "uniform_within_native_area_estimate" && nonnegative(r.catchmentAreaM2) && r.catchmentAreaM2 > 0 &&
@@ -67,7 +68,20 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
   // (0.1 m²) and relative cap (one part in ten million) must be satisfied.
   // Keep the signed residual; never redistribute population or mask missing OAs.
   const overlayToleranceM2 = Math.max(1e-7, Math.min(0.1, (r.londonCoveredAreaM2 as number) * 1e-7));
-  const boundaryMismatch = version2 && Math.abs(area - (r.londonCoveredAreaM2 as number)) > overlayToleranceM2;
+  let boundaryMismatch = version2 && Math.abs(area - (r.londonCoveredAreaM2 as number)) > overlayToleranceM2;
+  if (version4) {
+    const partition = object(r.allocationCoverage);
+    requireOperand(Object.keys(partition).length === 6 && partition.version === 'ons-oa-partition-bng-v1' &&
+      partition.geographyReleaseId === releases.geographyReleaseId && partition.boundaryToleranceMetres === 0.001 &&
+      nonnegative(partition.unionAreaM2) && partition.unionAreaM2 <= r.catchmentAreaM2 * (1 + 1e-8) &&
+      nonnegative(partition.regionalGapAreaM2) && partition.regionalGapAreaM2 <= r.londonCoveredAreaM2 &&
+      nonnegative(partition.unexplainedGapAreaM2) && partition.unexplainedGapAreaM2 <= partition.regionalGapAreaM2);
+    // Compare the allocation sum with the independent union of ALL official OA
+    // intersections, not a differently tessellated region coastline. Missing
+    // memberships/overlaps still fail. Only coverage diagnostics use the explicit
+    // 1 mm source-boundary strip; allocation/catchment/provider polygons never do.
+    boundaryMismatch = Math.abs(area - partition.unionAreaM2) > overlayToleranceM2 || partition.unexplainedGapAreaM2 > overlayToleranceM2;
+  }
   let outsideCoverage = (r.londonCoverageFraction as number) < 1 - 1e-8;
   if (version3) {
     const extent = object(r.coverageExtent);
@@ -88,7 +102,7 @@ export function catchmentAllocationOperands(value: unknown, releases: CatchmentR
       partialAllocationShare: d.knownContribution === 0 ? null : d.partiallyAllocatedCount / d.knownContribution,
       upperEnvelopeScope: "known_intersecting_native_areas_only" as const };
   });
-  return { methodVersion: version3 ? "area-uniform-bng3" : version2 ? "area-uniform-bng2" : "area-uniform-bng1", releases: structuredClone(releases), metrics,
+  return { methodVersion: version4 ? "area-uniform-bng4" : version3 ? "area-uniform-bng3" : version2 ? "area-uniform-bng2" : "area-uniform-bng1", releases: structuredClone(releases), metrics,
     boundaryResidualAreaM2: version2 ? r.boundaryResidualAreaM2 as number : null,
     allocationCoveredAreaM2: version2 ? r.allocationCoveredAreaM2 as number : null,
     londonCoverageFraction: r.londonCoverageFraction as number, comparator: null, score: null,

@@ -118,4 +118,13 @@ test('certified BFE read restores complete clipped populations without rewriting
  assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,{...proof,populationChecksum:'wrong'}).state,'partial_coverage');
  const outside=structuredClone(proof);outside.parts[2].outsideAreaM2=1;
  assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,outside).state,'partial_coverage');
+ // A newly stored v3 result can have a source-boundary residual while every
+ // native cell is present. The independent partition proof qualifies it without
+ // changing original operands, parent hashes or the saved Recommendation.
+ for(const range of f.p.ranges)for(const table of range.statistics){const raw=table.operands as Record<string,unknown>;Object.assign(raw,{schemaVersion:3,methodVersion:'area-uniform-bng3',londonCoveredAreaM2:10.03265589266084,londonCoverageFraction:10.03265589266084/11,boundaryResidualAreaM2:10-10.03265589266084,coverageExtent:{version:'ons-london-bfe-2021-v1',sha256:'955fbae44301c2191d0c20f1fdfefb53c07a953a19b484f99003b0f15cd135cd',outsideAreaM2:0,clippedGapAreaM2:11-10.03265589266084}});}
+ f.seal();const frozenV3=JSON.stringify(f),partitionProof={...proof,populationChecksum:f.s.result.meta.checksum,parts:proof.parts.map(p=>({...p,allocationCoverage:{version:'ons-oa-partition-bng-v1',geographyReleaseId:f.c.region.boundaryReleaseId,unionAreaM2:10,regionalGapAreaM2:.04,unexplainedGapAreaM2:0,boundaryToleranceMetres:.001}}))};
+ assert.equal(residentialMaterial(f.c,[f.parent,f.s],at).state,'partial_coverage');
+ const current=residentialWithExtent(f.c,[f.parent,f.s],at,partitionProof);assert.equal(current.state,'ready');
+ const currentView=materialiseResidential(old,current);validateFreeProjection(currentView);assert.doesNotThrow(()=>snapshotRecommendation(snapshotFromStored(currentView)));
+ assert.equal(JSON.stringify(f),frozenV3);
 });
