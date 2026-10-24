@@ -1,3 +1,4 @@
+import {recommendationFromScores} from '../lib/analysis/recommendation.ts';
 import {enrichedEvidence} from '../lib/analysis/enriched-evidence.ts';
 import {residentialMaterial,residentialWithExtent} from '../lib/analysis/residential-material.ts';
 import {packetDigest} from '../lib/analysis/canonical.ts';
@@ -76,6 +77,7 @@ test('population contract recovers the frozen pair deterministically for all cat
  const f=populationPair(),at=new Date('2026-10-08T10:01:00Z'),before=JSON.stringify(f);
  enrichedEvidence(f.c,[f.parent,f.s],at);
  const first=residentialMaterial(f.c,[f.parent,f.s],at);assert.equal(first.state,'ready');assert.ok(first.score);
+ assert.doesNotThrow(()=>recommendationFromScores(first.score,undefined));
  assert.deepEqual(residentialMaterial(f.c,[f.parent,f.s],at),first);assert.equal(JSON.stringify(f),before);
  for(const businessType of ['coffee-shop','restaurant','hair-salon','beauty-salon'] as const)assert.equal(residentialMaterial({...f.c,businessType,category:businessType.includes('salon')?'hair-beauty-salon':businessType as 'coffee-shop'|'restaurant'},[f.parent,f.s],at).state,'ready');
  assert.equal(residentialMaterial(f.c,[f.parent],at).state,'source_unavailable');
@@ -95,7 +97,10 @@ test('certified BFE read restores complete clipped populations without rewriting
  for(const range of f.p.ranges)for(const table of range.statistics){const raw=table.operands as Record<string,unknown>;Object.assign(raw,{schemaVersion:2,methodVersion:'area-uniform-bng2',catchmentAreaM2:11,londonCoverageFraction:10/11,allocationCoveredAreaM2:10,boundaryResidualAreaM2:0});}
  f.seal();const before=JSON.stringify(f),proof={walkingId:f.parent.id,populationId:f.s.id,walkingChecksum:f.parent.result.meta.checksum,populationChecksum:f.s.result.meta.checksum,parts:[300,600,900].map(seconds=>({seconds,outsideAreaM2:0}))};
  assert.equal(residentialMaterial(f.c,[f.parent,f.s],at).state,'partial_coverage');
- assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,proof).state,'ready');
+ const recovered=residentialWithExtent(f.c,[f.parent,f.s],at,proof);
+ assert.equal(recovered.state,'ready');
+ assert.doesNotThrow(()=>recommendationFromScores(recovered.score,undefined));
+ assert.ok(recovered.score!.metadata.evidenceIds.every(id=>!/[<>\s]/u.test(id)&&id.length<=120));
  assert.equal(JSON.stringify(f),before);
  assert.equal(residentialWithExtent(f.c,[f.parent,f.s],at,{...proof,populationChecksum:'wrong'}).state,'partial_coverage');
  const outside=structuredClone(proof);outside.parts[2].outsideAreaM2=1;
