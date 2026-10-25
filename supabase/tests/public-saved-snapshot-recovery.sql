@@ -43,6 +43,18 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();t uuid;p uu
   raise exception 'rollback_ambiguous_fixture';
  exception when others then if sqlerrm<>'rollback_ambiguous_fixture' then raise;end if;end;
  perform public.interrupt_sitefit_controlled_proof(c,tok);
+
+ -- Expired execution authority must not make received output undeliverable.
+ -- Composite private-helper check mirrors the actual expired owner case; the
+ -- public finaliser below still requires frozen graph/receipts and current rights.
+ declare expired public.controlled_proof;begin
+ select * into expired from public.controlled_proof where id=c;
+ expired.expires_at:=now()-interval '1 day';expired.owner_id:='00000000-0000-4000-8000-000000000099';
+ update public.controlled_trials set expires_at=now()-interval '1 day' where id=t;
+ if public.sitefit_trial_active(t,expired.owner_id) then raise exception 'expired dispatch authority revived';end if;
+ perform source_data.assert_saved_snapshot_owner(expired.owner_id,expired);
+ begin perform source_data.assert_saved_snapshot_owner(other,expired);raise exception 'expired output foreign owner admitted';exception when insufficient_privilege then null;end;
+ end;
  select to_jsonb(q) into before_report from public.reports q where id=f;
  digest:=encode(sha256(convert_to(before_report::text,'UTF8')),'hex');
  select array_agg(x order by x) into ids from unnest(ids)x;
