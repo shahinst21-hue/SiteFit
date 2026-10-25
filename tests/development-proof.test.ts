@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {developmentProofConfigured} from '../lib/proof/development-authority.ts';
+import {fulfilmentExecutionApproved} from '../lib/fulfilment/policy.ts';
 const now=Date.UTC(2026,9,25,12);
 const host='sitefit-acceptance-example.vercel.app';
 const env={VERCEL_ENV:'preview',SITEFIT_DEVELOPMENT_ACCEPTANCE_ENABLED:'1',SITEFIT_CONTROLLED_PROOF_ENABLED:'1',
@@ -22,4 +23,14 @@ test('Development acceptance is bound to expiring Preview, exact Development and
  }
  assert.equal(developmentProofConfigured(env,'sitefit.co.uk',now),false);
  assert.equal(developmentProofConfigured(env,'another.vercel.app',now),false);
+});
+test('a generic Preview runner cannot authorise paid execution without the bounded acceptance gate',()=>{
+ const active={...env,SITEFIT_FULFILMENT_ENABLED:'1',SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT:new Date(Date.now()+3600000).toISOString()};
+ assert.equal(fulfilmentExecutionApproved(active,host),true);
+ assert.equal(fulfilmentExecutionApproved({...active,SITEFIT_FULFILMENT_ENABLED:'0'},host),false);
+ assert.equal(fulfilmentExecutionApproved({...active,SITEFIT_DEVELOPMENT_ACCEPTANCE_ENABLED:'0'},host),false);
+ assert.equal(fulfilmentExecutionApproved({...active,VERCEL_ENV:'production'},host),false);
+ assert.equal(fulfilmentExecutionApproved({...active,STRIPE_SECRET_KEY:'sk_live_synthetic'},host),false);
+ assert.equal(fulfilmentExecutionApproved(active,'another.vercel.app'),false);
+ assert.equal(fulfilmentExecutionApproved({...active,SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT:new Date(0).toISOString()},host),false);
 });

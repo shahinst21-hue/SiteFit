@@ -1,5 +1,6 @@
 import { commercialExecution } from "../release/policy.ts";
 import {controlledTrialConfigured} from '../proof/trial-policy.ts';
+import {developmentProofConfigured} from '../proof/development-authority.ts';
 export const fulfilmentPolicy = Object.freeze({ version: "fulfilment-v1", leaseSeconds: 300,
   maxJobsPerInvocation: 1, maxOwnerStartsPerTenMinutes: 5, databaseCheckpointBytes: 450_000_000 });
 
@@ -10,6 +11,12 @@ export function developmentFulfilment(env: Record<string, string | undefined>, h
 }
 export function runnerEnabled(env:Record<string,string|undefined>,hostname:string){
  return developmentFulfilment(env,hostname)||commercialExecution(env,hostname)||controlledTrialConfigured(env,hostname);
+}
+/** Runtime approval only; the worker still checks the database lease, paid
+ * entitlement, supply consent, exact proof binding and budget before dispatch. */
+export function fulfilmentExecutionApproved(env:Record<string,string|undefined>,hostname:string){
+ return commercialExecution(env,hostname)||controlledTrialConfigured(env,hostname)||
+  developmentFulfilment(env,hostname)&&developmentProofConfigured(env,hostname);
 }
 
 export type Completion = { state: "ready" | "intervention" | "awaiting_authorisation";
