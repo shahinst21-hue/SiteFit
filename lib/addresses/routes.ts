@@ -3,10 +3,11 @@ import { handleAddressOperation, type AddressOperation } from "./http";
 import { addressProvider } from "./server-provider";
 import { propertyRepository } from "./repository";
 import { sourceCollectionAllowed } from "../release/policy";
-import {controlledTrialConfigured} from '../proof/trial-policy';
+import {controlledTrialConfigured,publicCustomersConfigured} from '../proof/trial-policy';
 import {assertTrialOwner} from '../proof/trial';
 import {trialAddressFetch} from '../proof/trial-address';
 import {verifiedUser} from '../supabase/server';
+import {sameOrigin} from '../analysis/http';
 const windows = new Map<string, { count: number; until: number }>();
 let total = { count: 0, until: 0 };
 function allow(request: Request, operation: AddressOperation) {
@@ -38,7 +39,13 @@ function allow(request: Request, operation: AddressOperation) {
 export async function addressRoute(request: Request, operation: AddressOperation) {
   if(controlledTrialConfigured(process.env,new URL(request.url).hostname)){
     try{
-      const {user}=await verifiedUser();await assertTrialOwner(user,new URL(request.url).hostname);
+      const verified=await verifiedUser();let user=verified.user;
+      if(!user&&publicCustomersConfigured(process.env,new URL(request.url).hostname)){
+        if(request.method!=='POST'||!sameOrigin(request)||verified.unavailable||!verified.client)throw Error('session_unavailable');
+        const guest=await verified.client.auth.signInAnonymously();if(guest.error)throw Error('session_unavailable');
+        const checked=await verified.client.auth.getUser();user=checked.error?null:checked.data.user;
+      }
+      await assertTrialOwner(user,new URL(request.url).hostname);
       return handleAddressOperation(request,operation,{provider:()=>addressProvider(trialAddressFetch(user!.id)),repository:propertyRepository,allow,
         log:event=>console.warn('address_operation',JSON.stringify(event))});
     }catch{return Response.json({error:'Sign in to the authorised account to check a location.'},{status:403,headers:{'Cache-Control':'private, no-store'}});}

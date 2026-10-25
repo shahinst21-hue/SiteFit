@@ -58,6 +58,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-continuation.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-advisor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/controlled-trial.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/public-customers.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/trial-address-cap.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/checkout-successors.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/owner-three-full-slots.sql',import.meta.url),'utf8'));

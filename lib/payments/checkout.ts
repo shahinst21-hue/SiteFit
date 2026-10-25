@@ -6,7 +6,11 @@ export async function openCheckout(attempt:CheckoutAttempt,provider:{
  retrieve:(id:string)=>Promise<CheckoutSession>;
  create:(parameters:Stripe.Checkout.SessionCreateParams,key:string)=>Promise<CheckoutSession>;
  validate:(session:CheckoutSession)=>Promise<void>;
+ admit?:()=>Promise<void>;
 },bind:(id:string)=>Promise<void>,now=Math.floor(Date.now()/1000)){
+ // A funded reservation cannot make a disabled delivery runner available.
+ // Recheck before creating OR returning an existing unpaid Checkout.
+ await provider.admit?.();
  let session:CheckoutSession;
  if(attempt.session)session=await provider.retrieve(attempt.session);
  else{

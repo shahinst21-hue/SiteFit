@@ -1,7 +1,10 @@
 export type PublicSupabaseConfig = { url: string; key: string };
 export const PRODUCTION_SUPABASE_REF='vsfkkroxgntoumoqcfcy';
 export function productionSupabaseTarget(env:Record<string,string|undefined>,url:URL){
- return env.VERCEL_ENV!=='production'||url.hostname===`${PRODUCTION_SUPABASE_REF}.supabase.co`;
+ const production=url.hostname===`${PRODUCTION_SUPABASE_REF}.supabase.co`;
+ // A missing runtime marker is Local, never permission to use Production.
+ // Read-only operator diagnostics use the separate CLI, not application clients.
+ return env.VERCEL_ENV==='production'?production:!production;
 }
 // Deliberately public Auth configuration. Privileged keys are never accepted.
 export function readPublicSupabaseConfig(

@@ -4,6 +4,7 @@ import type { Database,Json } from "../supabase/database.types.ts";
 import { checkoutParameters } from "./parameters.ts";
 import { isDeepStrictEqual } from "node:util";
 import { PRODUCT } from "./config.ts";
+import {zohoMailConfig} from '../legal/zoho-mail.ts';
 type Payment=Database["public"]["Tables"]["payments"]["Row"] & {stripe_account_id?:string|null};
 export function storedParameters(payment:Payment,origin:string,live=false,accountId?:string|null){
  if(live&&(!accountId||payment.stripe_account_id!==accountId))throw Error("payment_account_mismatch");
@@ -21,6 +22,14 @@ export async function preparePayment(input:{owner:string;report:string;id:string
  }
  const {data,error}=await frameworkClient().rpc("prepare_sitefit_payment",{p_owner:input.owner,p_report:input.report,p_id:input.id,p_price:input.price,p_parameters:JSON.parse(JSON.stringify(input.parameters)) as Json,p_expiry:new Date(input.expires*1000).toISOString()});
  if(error||!data)throw Error("purchase_unavailable");return data;
+}
+/** Read-only admission; budget/storage reservations remain atomic in the existing payment RPC. */
+export async function requireLiveDelivery(){
+ if(process.env.SITEFIT_ZOHO_EMAIL_ENABLED!=='1'||!process.env.OPENAI_API_KEY?.trim()||!process.env.SITEFIT_FULFILMENT_RUNNER_SECRET?.trim())throw Error('delivery_capacity_unavailable');
+ zohoMailConfig(process.env);
+ type Rpc={rpc(name:string,args:Record<string,Json>):PromiseLike<{data:unknown;error:unknown}>};
+ const {data,error}=await (frameworkClient() as unknown as Rpc).rpc('sitefit_checkout_delivery_ready',{});
+ if(error||data!==true)throw Error('delivery_capacity_unavailable');
 }
 export async function bindCheckout(id:string,session:string,live=false){
  if(live){

@@ -25,6 +25,7 @@ export function validateResidentialScore(value:unknown):ResidentialScore{
  const v=value as ResidentialScore;
  if(!v||v.version!==residentialModel.version||v.origin!=='deterministic'||!v.metadata||!Array.isArray(v.populations))throw Error('invalid_residential_score');
  const m=v.metadata;
+ if(!Array.isArray(m.evidenceIds)||!m.evidenceIds.length||new Set(m.evidenceIds).size!==m.evidenceIds.length||m.evidenceIds.some(id=>typeof id!=='string'||!id.length||/[<>\s]/u.test(id)))throw Error('invalid_residential_metadata');
  if(!['unknown','postcode_centroid','building','rooftop'].includes(m.precision)||m.referencePeriod!=='2021-03-21'||!['evidenceIds','snapshotIds','releaseIds','retrievedAt'].every(k=>Array.isArray(m[k as keyof typeof m])&&(m[k as keyof typeof m] as unknown[]).length<=32&&(m[k as keyof typeof m] as unknown[]).every(x=>typeof x==='string'&&x.length<=120))||!m.point||!Number.isFinite(m.point.longitude)||!Number.isFinite(m.point.latitude)||Math.abs(m.point.longitude)>180||Math.abs(m.point.latitude)>90)throw Error('invalid_residential_metadata');
  const expected=residentialScore(v.populations,m);
  if(!expected||v.rawScore!==expected.rawScore||v.score!==expected.score||v.rating!==expected.rating||JSON.stringify(v.bands)!==JSON.stringify(expected.bands)||JSON.stringify(v.components)!==JSON.stringify(expected.components))throw Error('invalid_residential_score');

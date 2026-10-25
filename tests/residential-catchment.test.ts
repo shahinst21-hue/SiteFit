@@ -27,6 +27,8 @@ test('invalid and non-monotonic inputs never produce plausible scores; tampered 
  const r=residentialScore([3500,9000,25000],metadata)!;
  for(const delta of [{score:80},{rating:'Strong'},{bands:[1,2,3]},{components:[100,100,100]},{version:'AI-invented'},{rawScore:65}])assert.throws(()=>validateResidentialScore({...r,...delta}));
  assert.throws(()=>validateResidentialScore({...r,metadata:{...metadata,point:{longitude:999,latitude:51}}}));
+ for(const evidenceIds of [[],['duplicate','duplicate'],['invalid identifier'],['<unsafe>'],['']])
+  assert.throws(()=>validateResidentialScore({...r,metadata:{...metadata,evidenceIds}}),/invalid_residential_metadata/);
 });
 function evidence():EnrichedEvidence[]{return [5,10,15].map((n,i)=>({schemaVersion:2,id:`e-${i}`,snapshotId:'same-snapshot',source:{provider:'ons',dataset:`TS007A total, ${n} minute walking estimate`,releaseId:'same-release'},kind:'derived',geography:{precision:'postcode_centroid',statistical:{unit:'network_catchment'}},quality:{available:true},licence:{representationAllowed:true,expiresAt:null},parents:['statistics','walking-geometry'],lineage:{parentSnapshots:[{id:'walking',checksum:'frozen'}]},effectiveAt:'2021-03-21',retrievedAt:'2026-10-19',value:[3500,9000,25000][i]}) as EnrichedEvidence);}
 test('only qualified cumulative ONS walking evidence is reused; missing, ambiguous, expired and non-network inputs fail closed',()=>{

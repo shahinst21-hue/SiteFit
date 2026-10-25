@@ -38,10 +38,15 @@ export async function collectCompetition(input:CompetitionInputs,ledger:PlacesLe
   records.push({id:p.id!,name:p.name.slice(0,120),categories:p.categories.slice(0,4),longitude:p.point![0],latitude:p.point![1],band:in5?5:in10?10:15});
  }
  result.records=records.sort((a,b)=>a.band-b.band||a.id.localeCompare(b.id)).slice(0,40);result.recordTotal=records.length;
- result.counts=spatial&&!invalid?counts:null;result.provenance.complete=complete;result.provenance.spatialVerified=spatial;result.provenance.coverageVerified=complete&&spatial&&!invalid&&!ambiguity&&(input.category!=='beauty-salon'||beautyConfirmed);
+ // A bare empty response establishes pagination, not usable source coverage.
+ // A valid zero can still follow a completed search with spatially verified,
+ // category-supported records explicitly excluded by the classification rules.
+ const coverageObserved=seenProviderIds.size>0;
+ result.counts=spatial&&!invalid?counts:null;result.provenance.complete=complete;result.provenance.spatialVerified=spatial;result.provenance.coverageVerified=complete&&spatial&&!invalid&&!ambiguity&&coverageObserved&&(input.category!=='beauty-salon'||beautyConfirmed);
  if(complete){
   if(invalid)bad('invalid_coordinates','Some candidate records lacked a stable identity, valid coordinates or consistent duplicate data.');
   else if(ambiguity||input.category==='beauty-salon'&&!beautyConfirmed)bad('classification_ambiguous','Provider categories or explicit source tags do not establish sufficiently reliable category coverage.');
+  else if(!coverageObserved)bad('collection_unconfirmed','The completed search identified zero matches, but usable provider coverage could not be verified. Zero identified matches is not evidence that no competitors exist.');
   else if(spatial){const score=competitionScore(input.populations,counts);if(score){result={...result,...score,state:'ready',reason:'Completed category search; counts identify source records, not all real-world competitors.'};}else bad('population_unavailable','Valid cumulative walking populations and positive effective population are required.');}
  }
  return result;
