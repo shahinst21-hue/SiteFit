@@ -48,3 +48,14 @@ test('actual retry route checks owner, origin, uncertainty and delegates repeate
 test('a stale cancellation return follows the newer paid attempt while historical contract reads stay bound',()=>{
  const r=spawnSync(process.execPath,['tests/fixtures/stale-purchase-return.mjs'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);
 });
+
+test('completed delivery recovery is explicit and never appears as another purchase action',()=>{
+ const id='ffc2fa96-1f39-49ba-aeda-ee3ada803300';
+ const r=spawnSync(process.execPath,['tests/fixtures/render-purchase-status.mjs'],{encoding:'utf8',input:JSON.stringify({id,report:id,status:'succeeded',access:'active',test:false,fulfilment:{state:'intervention',reportId:null}})});
+ assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/Recover completed report/);assert.doesNotMatch(r.stdout,/Try payment again|Open your Full Report/);
+});
+
+test('actual recovery routes bind session identity, reject forged owners and cannot call external transports',()=>{
+ const r=spawnSync(process.execPath,['--conditions=react-server','tests/fixtures/recovery-routes.mjs'],{encoding:'utf8'});
+ assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/"externalRequests":0/);
+});

@@ -9,6 +9,7 @@ import {controlledSnapshotConfigured} from '@/lib/proof/authority';
 import {controlledTrialConfigured,publicCustomersConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner,trialSnapshotPause,trialSourceRecoveryCandidate} from '@/lib/proof/trial';
 import {recoverSourceSnapshot} from '@/lib/proof/recover-source-snapshot';
+import {savedSnapshotMaterial,recoverSavedSnapshot} from '@/lib/proof/recover-saved-snapshot';
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
@@ -38,16 +39,20 @@ export async function POST(request: Request) {
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const owner=user.id;
     let recoveryCase:string|null=null;
+    let savedMaterial:Awaited<ReturnType<typeof savedSnapshotMaterial>>=null;
     if(trial){
-      const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);
-      if(paused){
-        const candidate=await trialSourceRecoveryCandidate(owner,input.propertyId,input.businessType);
-        if(!candidate)return reply(paused,409);
-        recoveryCase=candidate;
+      savedMaterial=await savedSnapshotMaterial(owner,input.propertyId,input.businessType);
+      if(!savedMaterial){
+        const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);
+        if(paused){
+          const candidate=await trialSourceRecoveryCandidate(owner,input.propertyId,input.businessType);
+          if(!candidate)return reply(paused,409);
+          recoveryCase=candidate;
+        }
       }
     }
     const produce=async(observer?:SnapshotObserver)=>{
-      const result=await ownedGeneration(owner,input,()=>recoveryCase
+      const result=await ownedGeneration(owner,input,()=>savedMaterial?recoverSavedSnapshot(owner,savedMaterial,observer):recoveryCase
         ?recoverSourceSnapshot(owner,recoveryCase,request.signal,observer)
         :generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer));
       await observeCampaign(owner,result.reportId);return {reportId:result.reportId};

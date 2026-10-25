@@ -51,6 +51,10 @@ subject uuid;claim public.guest_account_claims;payment uuid:=gen_random_uuid();p
  perform public.start_sitefit_claim_auth(claim.id,g,repeat('a',64),repeat('b',64),'google',null);
  perform public.verify_sitefit_claim_auth(claim.id,u,repeat('a',64),repeat('b',64),'google');
  perform public.complete_sitefit_claim(claim.id,u,repeat('a',64),repeat('b',64));
+ before_budget:=public.sitefit_trial_budget_snapshot(t);
+ v:=public.claim_sitefit_trial(t,u,'snapshot',p,gen_random_uuid(),'coffee-shop',null);
+ if v->>'reportId' is distinct from guest_r::text or (select count(*) from public.controlled_proof where trial_id=t and property_id=p)<>2
+ or public.sitefit_trial_budget_snapshot(t) is distinct from before_budget then raise exception 'claimed guest Snapshot duplicated case, report or reservation';end if;
  if (select owner_id from public.controlled_proof where id=guest_c)<>g or (select owner_id from public.analyses where id=guest_a)<>g then raise exception 'historical ownership changed';end if;
  perform set_config('request.jwt.claim.sub',u::text,true);
  if public.read_sitefit_free(guest_r) is null or public.read_sitefit_free(other_r) is not null then raise exception 'customer report isolation failed';end if;

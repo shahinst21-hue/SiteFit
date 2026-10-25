@@ -1,5 +1,10 @@
 # Snapshot launch reliability review — 25 October 2026
 
+The subsequent owner-authorised remediation is recorded in
+[public report recovery](public-report-recovery-20261025.md), including actual
+multi-connection Development proofs. The findings below retain the earlier
+PR140 checkpoint; they do not claim those later changes are installed in Production.
+
 **Broad public-launch sign-off: withheld.** The owner requests prevention of
 recurring failed checks, not a new paid test, budget increase or activation.
 PR140 contains the narrow correction and additional release gates. No Production

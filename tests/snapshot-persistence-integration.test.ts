@@ -35,9 +35,10 @@ async function storage(){
 test('normal Snapshot engine persists honest gaps, checkpoints a failed save and reuses received output without another AI call',async t=>{
  const names=['SUPABASE_URL','SUPABASE_SECRET_KEY','OPENAI_API_KEY','VERCEL_ENV'],saved=names.map(n=>[n,process.env[n]] as const),fetcher=globalThis.fetch;
  process.env.SUPABASE_URL='https://database.example.invalid';process.env.SUPABASE_SECRET_KEY='sb_secret_synthetic_fixture';process.env.OPENAI_API_KEY='sk-synthetic-fixture';delete process.env.VERCEL_ENV;
- try{for(const scenario of ['missing-five-minute','all-unavailable-salon','save-failure','cancelled'] as const)await t.test(scenario,async()=>{
+ try{for(const scenario of ['missing-five-minute','all-unavailable-salon','save-failure','checkpoint-response-loss','disconnect-after-checkpoint','cancelled'] as const)await t.test(scenario,async()=>{
   const db=await storage(),owner=crypto.randomUUID(),f=persistenceFixture(scenario==='all-unavailable-salon'?'hair-salon':'coffee-shop',scenario==='all-unavailable-salon');
-  const {c,snapshots}=f;let calls=0,saves=0,failSave=scenario==='save-failure';
+  const {c,snapshots}=f;let calls=0,saves=0,failSave=scenario==='save-failure',interruptCheckpoint=true;
+  const caller=new AbortController();
   try{
    await db.query('insert into public.analyses values($1,$2,2,$3,null)',[c.analysisId,owner,'collecting_free_data']);
    await db.query('insert into public.analysis_inputs values($1,$2,$3)',[c.inputId,c.analysisId,c]);
@@ -61,13 +62,20 @@ test('normal Snapshot engine persists honest gaps, checkpoints a failed save and
      return Response.json([{id:s.id,analysis_id:s.analysisId,input_id:s.inputId,collection_key:s.collectionKey,request_sha256:url.searchParams.get('request_sha256')?.replace(/^eq\./,''),source,dataset_release_id:s.result.meta.datasetReleaseId,normalised_data:s.result.payload,provider_metadata:s.result}]);
     }
     if(op==='finalise_sitefit_free'){
+     const checkpoint=(await db.query<{provenance:{partial:{early:unknown;errors:unknown;competition:unknown}}}>('select provenance from public.reports')).rows[0];
+     assert.ok(checkpoint?.provenance.partial.early,'Received synthesis must be durable before finalisation starts');
+     assert.deepEqual(checkpoint.provenance.partial.errors,[{section:'early-view',code:'report_persistence_pending'}]);
+     assert.deepEqual(checkpoint.provenance.partial.competition,body.p_projection.competition);
      saves++;if(failSave)return Response.json({code:'XX000',message:'Synthetic save failure'},{status:400});
      try{const id=await db.transaction(async tx=>(await tx.query<{id:string}>('select public.finalise_sitefit_free($1,$2,$3,$4,$5,$6,$7) id',[body.p_owner,body.p_analysis,body.p_input,body.p_evidence,body.p_sections,body.p_projection,body.p_provenance])).rows[0].id);return Response.json(id);}
      catch(error){return Response.json({code:'23514',message:error instanceof Error?error.message:'SQL rejected report'},{status:400});}
     }
     if(op==='reports'&&init?.method==='POST'){
      await db.query(`insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,provenance) values($1,$2,$3,$4,$5,$6,$7)
-      on conflict(analysis_id,version) do update set provenance=excluded.provenance,status=excluded.status`,[body.analysis_id,body.input_id,body.version,body.schema_version,body.tier,body.status,body.provenance]);return Response.json(null);
+      on conflict(analysis_id,version) do update set provenance=excluded.provenance,status=excluded.status`,[body.analysis_id,body.input_id,body.version,body.schema_version,body.tier,body.status,body.provenance]);
+     if(interruptCheckpoint&&scenario==='checkpoint-response-loss'){interruptCheckpoint=false;throw new TypeError('Synthetic lost checkpoint response');}
+     if(interruptCheckpoint&&scenario==='disconnect-after-checkpoint'){interruptCheckpoint=false;caller.abort();}
+     return Response.json(null);
     }
     assert.fail('Unexpected engine operation: '+op);
    };
@@ -75,10 +83,11 @@ test('normal Snapshot engine persists honest gaps, checkpoints a failed save and
     await assert.rejects(generateEnrichedSnapshot(owner,c,AbortSignal.abort(),null));
     assert.equal(calls,0);assert.equal(saves,0);assert.equal((await db.query<{n:number}>('select count(*)::int n from public.reports')).rows[0].n,0);return;
    }
-   if(failSave){
-    await assert.rejects(generateEnrichedSnapshot(owner,c,AbortSignal.timeout(10000),null),/report_persistence_failed/);
+   if(failSave||scenario==='checkpoint-response-loss'||scenario==='disconnect-after-checkpoint'){
+    await assert.rejects(generateEnrichedSnapshot(owner,c,caller.signal,null),/report_persistence_failed/);
     const failed=(await db.query<{status:string;provenance:unknown}>('select status,provenance from public.reports')).rows[0];
     assert.equal(failed.status,'failed');assert.ok((failed.provenance as {partial:{early:unknown}}).partial.early);
+    if(scenario!=='save-failure')assert.equal(saves,0,'An interrupted checkpoint cannot enter the final transaction');
     const before=calls;failSave=false;
     await generateEnrichedSnapshot(owner,c,AbortSignal.timeout(10000),failed.provenance);
     assert.equal(calls,before,'Engine-only received checkpoint replay cannot send another AI request');
