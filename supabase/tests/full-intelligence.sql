@@ -1,6 +1,9 @@
 begin;
-do $$ declare owner uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;g uuid:=gen_random_uuid();report uuid;payment uuid:=gen_random_uuid();run uuid:=gen_random_uuid();e uuid;b jsonb;c public.analysis_inputs;ctx text;par jsonb; prep text; cp jsonb; edition jsonb; fid uuid; step integer; dg jsonb; projection jsonb; job jsonb; jid uuid; lease uuid;
+do $$ declare owner uuid:=gen_random_uuid();other uuid:=gen_random_uuid();p uuid;a uuid;i uuid;g uuid:=gen_random_uuid();report uuid;payment uuid:=gen_random_uuid();run uuid:=gen_random_uuid();e uuid;b jsonb;c public.analysis_inputs;ctx text;par jsonb; prep text; cp jsonb; edition jsonb; fid uuid; step integer; dg jsonb; projection jsonb; job jsonb; jid uuid; lease uuid; recovery_case uuid; recovery_state text; recovery_trial uuid; recovery_admin uuid;
 begin
+ if has_function_privilege('anon','public.recover_sitefit_ready_fulfilment(uuid,uuid,boolean)','EXECUTE') or
+ has_function_privilege('authenticated','public.recover_sitefit_ready_fulfilment(uuid,uuid,boolean)','EXECUTE') or
+ has_function_privilege('service_role','source_data.ready_paid_full_case(uuid,uuid)','EXECUTE') then raise exception 'stored Full recovery authority exposed';end if;
  if exists(select 1 from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','source_data')
    and p.prokind='f' and (p.prosrc like '%375000000%' or p.prosrc like '%400000000%')) then raise exception 'Old capacity gate remains';end if;
  if position('450000000' in pg_get_functiondef('public.start_sitefit_full(uuid,uuid,text,text)'::regprocedure))=0 then raise exception '450 MB gate missing';end if;
@@ -13,7 +16,7 @@ begin
  has_table_privilege('authenticated','public.economic_models','SELECT') then raise exception 'Browser economics exposed';end if;
  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(owner,'assessment@example.invalid',now(),false),(other,'other@example.invalid',now(),false);
  insert into public.properties(formatted_address,postcode,post_town,address_resolution_state,resolved_at) values('Synthetic assessment fixture','E8 4PH','London','manual_unverified',now()) returning id into p;
- insert into public.analyses(owner_id,property_id,business_type,business_category) values(owner,p,'coffee-shop','coffee-shop') returning id into a;
+ insert into public.analyses(owner_id,property_id,business_type,business_category,submission_nonce,submission_sha256) values(owner,p,'coffee-shop','coffee-shop',gen_random_uuid(),repeat('a',64)) returning id into a;
  insert into source_data.dataset_releases(id,provider_id,dataset_id,version,subset_id,sha256,schema_version,source_url,retrieved_at,licence_metadata,manifest)
  values(g,'synthetic','london-geography',g::text,'london',repeat('e',64),1,'https://example.org/synthetic',now(),'{"normalised":{"allowed":true}}','{}');
  insert into source_data.geography_features(release_id,geography_type,geography_code,name,geometry,source_reference)
@@ -83,6 +86,7 @@ begin
  if job is null or public.claim_sitefit_fulfilment() is not null then raise exception 'Confirmed lease absent or not exclusive';end if;
  if not public.authorise_sitefit_supply(jid,lease) then raise exception 'Approved confirmed fixture supply rejected';end if;
  perform public.bind_sitefit_fulfilment(jid,lease,fid);
+ begin perform public.recover_sitefit_ready_fulfilment(owner,payment,true);raise exception 'Draft or active worker recovered';exception when others then if sqlerrm<>'ready_fulfilment_unavailable' then raise;end if;end;
  begin perform public.finish_sitefit_fulfilment(jid,lease,'ready',null);raise exception 'Draft published';exception when raise_exception then if sqlerrm='Draft published' then raise;end if;end;
  begin perform public.bind_sitefit_fulfilment(jid,gen_random_uuid(),fid);raise exception 'Wrong lease admitted';exception when serialization_failure then null;end;
  perform public.request_sitefit_cancellation(owner,payment,'change_of_mind');
@@ -98,7 +102,7 @@ begin
   cp:=jsonb_set(jsonb_set(cp,'{revision}',to_jsonb(step*2-1)),'{dispatches}',(cp->'dispatches')||jsonb_build_array(dg));cp:=jsonb_set(cp,'{state}','"running"');
   edition:=public.checkpoint_sitefit_full(owner,fid,step*2-2,cp::text);
   begin perform public.checkpoint_sitefit_full(owner,fid,step*2-2,cp::text);raise exception 'Stale CAS accepted';exception when serialization_failure then null;end;
-  dg:=dg||jsonb_build_object('state','accepted','output',jsonb_build_object('sections','[]'::jsonb,'summary','A risk-based desk-based review'),'receipt',jsonb_build_object('model','gpt-6.1-sol','inputTokens',0,'outputTokens',0));
+  dg:=dg||jsonb_build_object('state','accepted','output',jsonb_build_object('sections','[]'::jsonb,'summary','A risk-based desk-based review'),'receipt',jsonb_build_object('model','gpt-6.1-sol','inputTokens',100,'outputTokens',50,'estimatedMicros',750));
   cp:=jsonb_set(jsonb_set(cp,array['dispatches',(step-1)::text],dg),'{revision}',to_jsonb(step*2));
   edition:=public.checkpoint_sitefit_full(owner,fid,step*2-1,cp::text);
  end loop;
@@ -110,6 +114,46 @@ begin
  update public.report_fulfilment set state='running',lease_token=gen_random_uuid(),lease_until=now()-interval '1 second' where id=jid;
  job:=public.claim_sitefit_fulfilment();
  if job is not null or (select state from public.report_fulfilment where id=jid)<>'intervention' then raise exception 'Expired execution redispatched';end if;
+ -- Current controlled-case graph: received output can complete; intent or
+ -- ambiguous Full dispatches retain intervention. Each synthetic branch rolls back.
+ foreach recovery_state in array array['received','ambiguous','intent'] loop
+ begin
+  recovery_admin:=gen_random_uuid();
+  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(recovery_admin,'shahinst21@gmail.com',now(),false);
+  insert into public.controlled_trials(owner_id,expires_at,total_limit_micros,policy_version,tariff_verified,tariff_digest,input_rate,output_rate,enabled,execution_enabled,public_customers_enabled)
+  values(recovery_admin,now()+interval '1 hour',10000000,'synthetic-phase15',true,repeat('a',64),2.5,10,true,true,true) returning id into recovery_trial;
+  insert into public.controlled_proof(singleton,trial_id,owner_id,property_id,business_type,nonce,policy_version,policy_snapshot,policy_digest,
+   enabled,expires_at,tariff_verified,tariff_digest,ai_limit_micros,reserved_micros,state,token,free_report_id,full_report_id,payment_id)
+  select false,recovery_trial,owner,p,'coffee-shop',q.submission_nonce,'synthetic-phase15',pol.snapshot,encode(sha256(convert_to(pol.snapshot::text,'UTF8')),'hex'),
+   true,now()+interval '1 hour',true,repeat('a',64),1650000,30000,'intervention',gen_random_uuid(),report,fid,payment
+  from public.analyses q cross join public.sale_policies pol where q.id=a and pol.version='synthetic-phase15' returning id into recovery_case;
+  perform public.reserve_sitefit_trial_budget(recovery_trial,recovery_case,'full',payment,1000000,'full:'||payment::text);
+  insert into public.proof_dispatches(case_id,stage,request_key,kind,request_digest,reserved_micros,state,response_digest)
+  select recovery_case,'full',lpad(k::text,64,'0'),'ai',repeat('a',64),10000,case when k=1 then recovery_state else 'received' end,
+   case when k=1 and recovery_state<>'received' then null else repeat('b',64) end from generate_series(1,3)k;
+  if recovery_state='received' then
+   if public.recover_sitefit_ready_fulfilment(owner,payment,true)<>fid then raise exception 'controlled Ready recovery failed';end if;
+   if (select state from public.controlled_proof where id=recovery_case)<>'complete' then raise exception 'received Full case remained interrupted';end if;
+   if (public.sitefit_trial_budget_snapshot(recovery_trial)->>'settledMicros')::bigint<>2250 or (public.sitefit_trial_budget_snapshot(recovery_trial)->>'activeReservedMicros')::bigint<>0 then raise exception 'received Full usage was not settled exactly';end if;
+  else
+   begin perform public.recover_sitefit_ready_fulfilment(owner,payment,true);raise exception 'unknown Full dispatch recovered';exception when others then if sqlerrm<>'ready_fulfilment_proof_denied' then raise;end if;end;
+   if (select state from public.controlled_proof where id=recovery_case)<>'intervention' or (select state from public.report_fulfilment where id=jid)<>'intervention' then raise exception 'unknown dispatch changed delivery state';end if;
+   if (public.sitefit_trial_budget_snapshot(recovery_trial)->>'activeReservedMicros')::bigint<>1000000 then raise exception 'unknown Full cost hold was released';end if;
+  end if;
+  raise exception 'rollback_controlled_ready_fixture';
+ exception when others then if sqlerrm<>'rollback_controlled_ready_fixture' then raise;end if;end;
+ end loop;
+ -- Public recovery needs an existing immutable Ready edition, never support
+ -- authority to restart generation. It preserves output and every prior intent.
+ begin perform public.recover_sitefit_ready_fulfilment(other,payment,true);raise exception 'foreign Ready delivery admitted';exception when insufficient_privilege then null;end;
+ begin perform public.recover_sitefit_ready_fulfilment(owner,payment,false);raise exception 'cross-environment Ready delivery admitted';exception when insufficient_privilege then null;end;
+ if public.recover_sitefit_ready_fulfilment(owner,payment,true)<>fid then raise exception 'public Ready recovery failed';end if;
+ if public.recover_sitefit_ready_fulfilment(owner,payment,true)<>fid then raise exception 'public Ready replay changed report';end if;
+ if (select count(*) from public.system_events where report_id=fid and event_type='fulfilment-stored-ready-recovery')<>1
+ or (select full_projection from public.reports where id=fid)<>projection
+ then raise exception 'public Ready delivery changed output or duplicated recovery';end if;
+ -- Keep the independent operator recovery regression as a separate control.
+ update public.report_fulfilment set state='intervention',reason='execution_interrupted' where id=jid;
  insert into public.fulfilment_support_accounts(owner_id) values(owner);
  perform public.resume_sitefit_fulfilment(owner,jid);
  if public.read_sitefit_fulfilment(owner,payment)->>'state'<>'ready' then raise exception 'Stored Ready recovery failed';end if;
@@ -163,6 +207,7 @@ begin
  if (select sum((safe_metadata->>'reservedMicros')::bigint) from public.system_events where event_type in ('phase12-report-reserved','phase12-question-reserved'))<>2300000 then raise exception 'Search altered Full reservations';end if;
  perform public.confirm_sitefit_payment(payment,'evt_fullrefund','refund.updated',2,'cs_test_assessmentfixture','pi_assessmentfixture','paid','full_refund');
  begin perform public.read_sitefit_full(owner,fid);raise exception 'Refund read accepted';exception when insufficient_privilege then null;end;
+ begin perform public.recover_sitefit_ready_fulfilment(owner,payment,true);raise exception 'Refund recovery accepted';exception when insufficient_privilege then null;end;
  if (select full_projection from public.reports where id=fid)<>projection then raise exception 'Refund erased report';end if;
 end $$;
 rollback;

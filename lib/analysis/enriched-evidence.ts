@@ -126,7 +126,7 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
           effectiveAt: "2021-03-21", scope: `${range.seconds / 60} minute cumulative walking scope; not current customers or a measured catchment`,
           geography: {...root.geography, statistical: {...root.geography.statistical, estimated: true}},
           quality: {...root.quality, partial: true, limitations: [...new Set([...root.quality.limitations, "Uniform population within each native area is an estimation assumption; cumulative contours must not be summed."])].slice(0, 32)}},
-          `ranges/${i}/statistics/${j}/operands/censusEstimates/0`, value !== null, [geometryRoot.id]);
+          stored ? `ranges/${i}/statistics/${j}/operands/censusEstimates/0` : `ranges/${i}/statistics/${j}/operands`, value !== null, [geometryRoot.id]);
       }));
     } else {
       const source = byId.get(metric.sourceSnapshotId)?.result.payload;
@@ -135,7 +135,7 @@ export function enrichedEvidence(input: CollectionContext, snapshots: readonly S
         units: "native mapped records, not unique businesses", scope: `${range.seconds / 60} minute cumulative routing polygon; incomplete community inventory`,
         quality: {...root.quality, partial: true, limitations: [...new Set([...root.quality.limitations,
           "Native taxonomy records are not a complete deduplicated competitor inventory or evidence of saturation."])].slice(0, 32)}},
-        `ranges/${i}/inventory/${source?.kind === "catchment_places" && source.ranges[i].inventory?.schemaVersion === 2 ? "groups" : "items"}`, range.operands !== null, [geometryRoot.id]));
+        range.operands === null ? `ranges/${i}/inventory` : `ranges/${i}/inventory/${source?.kind === "catchment_places" && source.ranges[i].inventory?.schemaVersion === 2 ? "groups" : "items"}`, range.operands !== null, [geometryRoot.id]));
     }
   }
   for (const snapshot of snapshots) {

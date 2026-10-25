@@ -8,6 +8,7 @@ import {PurchaseRequest} from './purchase-request';
 import {GenerationProgress} from './generation-progress';
 import {fullView} from '../lib/generation-progress';
 import {parseProgress,type Progress} from '../lib/fulfilment/policy';
+import {StoredFullRecovery} from './stored-full-recovery';
 type State={paymentState?:CheckoutObservation;test?:boolean;id:string;report:string;status:string;access:string;confirmationAvailable?:boolean;confirmationDelivered?:boolean|null;confirmationEmailState?:string|null;fulfilment?:Progress|null};
 export function PurchaseStatus({initial,cancelled}:{initial:State;cancelled:boolean}){
  return <PurchaseStatusSession key={initial.id} initial={initial} cancelled={cancelled}/>;
@@ -59,6 +60,7 @@ function PurchaseStatusSession({initial,cancelled}:{initial:State;cancelled:bool
   <GenerationProgress view={view} stale={stale}/>
   {stale&&<button type="button" className="button button-secondary" onClick={()=>setRefresh(n=>n+1)}>Refresh saved status</button>}
   <div className="purchase-progress-actions">{confirmed&&state.fulfilment?.state==='ready'&&state.fulfilment.reportId&&<Link className="button button-primary" href={`/reports/${state.fulfilment.reportId}`}>Open your Full Report</Link>}
+   {confirmed&&(state.fulfilment?.state==='intervention'||stale&&state.fulfilment?.state==='running')&&<StoredFullRecovery paymentId={state.id}/>}
    <Link className="button button-secondary" href={`/snapshots/${state.report}`}>Return to your Snapshot</Link><Link className="button button-secondary" href="/account">Your account</Link>
    {confirmed&&state.confirmationAvailable&&<a className="button button-secondary" href={`/purchase/confirmation?purchase=${state.id}`}>Download contract confirmation</a>}
   </div>{state.status==='succeeded'&&<PurchaseRequest purchase={state.id}/>}

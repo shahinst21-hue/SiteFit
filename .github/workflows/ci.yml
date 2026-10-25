@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -26,6 +27,10 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Check immutable migration identities and open PR collisions
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/check-migration-identities.ts --github
       - name: Audit dependencies for high and critical vulnerabilities
         run: npm audit --audit-level=high
       - name: Lint

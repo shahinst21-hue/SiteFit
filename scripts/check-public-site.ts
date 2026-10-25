@@ -213,6 +213,15 @@ for (const operation of ["lookup", "search", "resolve", "manual"]) {
   assertSecurityHeaders(crossOrigin, route.pathname);
   assert.equal(crossOrigin.status, 403);
 }
+// Recovery must never execute via GET or a cross-site POST, including keyless builds.
+for(const recoveryPath of ['/api/analyses/recover','/api/reports/recover']){
+const recoveryURL=new URL(recoveryPath,base);
+const recoveryGet=await fetch(recoveryURL,{redirect:'error',signal:AbortSignal.timeout(10000)});
+assert.equal(recoveryGet.status,405);assertSecurityHeaders(recoveryGet,recoveryURL.pathname);
+const recoveryCross=await fetch(recoveryURL,{method:'POST',headers:{origin:'https://foreign.invalid','content-type':'application/json'},body:'{}',redirect:'error',signal:AbortSignal.timeout(10000)});
+assert.equal(recoveryCross.status,403);assert.match(recoveryCross.headers.get('cache-control')??'',/no-store/);
+assertSecurityHeaders(recoveryCross,recoveryURL.pathname);
+}
 if(!legalPublicationReady()&&['localhost','127.0.0.1','[::1]'].includes(base.hostname)){
   const root=path.resolve('.next/static');
   const assets=(await readdir(root,{recursive:true})).filter(name=>/\.(?:js|map)$/.test(name));

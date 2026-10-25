@@ -59,6 +59,8 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-advisor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/controlled-trial.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/public-customers.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/public-saved-snapshot-recovery.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/public-entry-capacity.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/trial-address-cap.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/checkout-successors.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/owner-three-full-slots.sql',import.meta.url),'utf8'));
@@ -66,6 +68,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       await db.exec(await readFile(new URL('../supabase/tests/trial-snapshot-pause.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/trial-synthesis-recovery.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/census-unavailable-evidence.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/unavailable-catchment-evidence.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL("../supabase/tests/source-reuse.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/commercial-release.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/verification/contract-confirmation-queue.sql", import.meta.url), "utf8"));

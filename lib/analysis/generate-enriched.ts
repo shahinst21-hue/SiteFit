@@ -23,6 +23,7 @@ import {traceCollection,reportMissingSources} from './collection-diagnostics.ts'
 import {residentialFromEvidence} from './residential-catchment.ts';
 import {queryPoint} from '../data/query-point.ts';
 import {recommendationFromScores} from './recommendation.ts';
+import {reportSnapshotPersistenceFailure} from './persistence-diagnostics.ts';
 
 type Early = ReturnType<typeof restoreSynthesis>;
 type Partial = {enrichmentVersion: "phase8-observations-1"; evidence: Evidence[]; packets: InterpretationPacket[];
@@ -59,15 +60,17 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
   for (const p of prepared.packets) validatePacket(p,prepared.index);
   const ai = analysisAIProvider({priorDispatches: prior?.dispatches ?? 0});
   const interpreted = await interpretSections(prepared.packets,prepared.index,ai,signal,prior?.sections ?? [],progress.section);
+  const savedContext:{competition?:Awaited<ReturnType<typeof competitionForSnapshot>>}={};
   async function preserve(errors: unknown, early?: Early) {
     const {error} = await client.from("reports").upsert({analysis_id: context.analysisId,input_id: context.inputId,version:1,schema_version:2,tier:"free",status:"failed",
       provenance:json({partial:{enrichmentVersion:"phase8-observations-1",evidence:prepared.evidence,packets:prepared.packets,sections:interpreted.sections,
-        dispatches:ai.dispatches(),receipts:[...(prior?.receipts??[]),...ai.receipts()],errors,...(early ? {early,earlyPacketDigest:packetDigest(interpreted.sections)} : {})}})},
+        dispatches:ai.dispatches(),receipts:[...(prior?.receipts??[]),...ai.receipts()],errors,...(early ? {early,earlyPacketDigest:packetDigest(interpreted.sections)} : {}),...(savedContext.competition?{competition:savedContext.competition}:{})}})},
       {onConflict:"analysis_id,version"}).abortSignal(AbortSignal.timeout(8000));
     if(error)throw new Error("partial_report_persistence_failed");
   }
   if(interpreted.errors.length){await preserve(interpreted.errors);throw new Error("section_analysis_incomplete");}
   const competition=await competitionForSnapshot(owner,context,snapshots,signal);
+  savedContext.competition=competition;
   const residential=residentialFromEvidence(prepared.evidence,context.businessType,queryPoint(context),new Date());
   // Source adapters do not currently establish exact-unit legal clearance or
   // favourable usable journeys. Keep these unresolved/conditional, never infer them.
@@ -84,8 +87,11 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
     ai:{receipts:[...(prior?.receipts??[]),...ai.receipts()],dispatches:ai.dispatches()},sourceSnapshotIds:snapshots.map(s=>s.id),inputContext:context,
     enrichmentVersion:"phase8-observations-1",candidateScoringActivated:false,deferredEconomics:built.deferredEconomics};
   const sections=[earlyReportSection(early),...interpreted.sections.map(s=>({...s,evidenceIds:[...new Set([s.conclusion,...s.reasons,...s.support,...s.opposition,...s.alternatives,...s.unknowns,s.implication,s.question].flatMap(p=>p.evidenceIds))]}))];
+  // Preserve every received output BEFORE the final transaction. A terminated
+  // invocation must not leave only a paid dispatch digest and lose its synthesis.
+  await preserve([{section:'early-view',code:'report_persistence_pending'}],early);
   const {data:reportId,error}=await client.rpc("finalise_sitefit_free",{p_owner:owner,p_analysis:context.analysisId,p_input:context.inputId,
     p_evidence:json(prepared.evidence),p_sections:json(sections),p_projection:json(projection),p_provenance:json(audit)}).abortSignal(AbortSignal.any([signal,AbortSignal.timeout(8000)]));
-  if(error||!reportId){await preserve([{section:"early-view",code:"report_persistence_failed"}],early);throw new Error("report_persistence_failed");}
+  if(error||!reportId){reportSnapshotPersistenceFailure(error);await preserve([{section:"early-view",code:"report_persistence_failed"}],early);throw new Error("report_persistence_failed");}
   return {reportId,replay:false};
 }

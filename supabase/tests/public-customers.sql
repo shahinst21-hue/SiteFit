@@ -16,6 +16,22 @@ subject uuid;claim public.guest_account_claims;payment uuid:=gen_random_uuid();p
  v:=public.reserve_sitefit_trial_address(t,g,repeat('1',64));perform public.settle_sitefit_trial_address(t,g,(v->>'id')::uuid,(v->>'token')::uuid,'{"synthetic":true}');
  insert into public.properties(formatted_address,postcode,post_town,address_resolution_state,address_provider,provider_address_id,udprn,resolved_at)
  values('Synthetic public property','E8 4PH','London','provider_verified','postio','88990011','88990011',now()) returning id into p;
+ -- Record the remaining launch gap without widening recovery authority: the
+ -- existing saved-completion operator is still restricted to the trial owner.
+ begin
+  n:=gen_random_uuid();v:=public.claim_sitefit_trial(t,g,'snapshot',p,n,'coffee-shop',null);c:=(v->>'id')::uuid;tok:=(v->>'token')::uuid;
+  insert into public.analyses(owner_id,property_id,business_type,business_category,status,submission_nonce,submission_sha256)
+   values(g,p,'coffee-shop','coffee-shop','collecting_free_data',n,repeat('a',64)) returning id into a;
+  insert into public.analysis_inputs(analysis_id,version,user_supplied) values(a,1,'{}') returning id into i;
+  insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,provenance)
+   values(a,i,1,2,'free','failed','{}') returning id into r;
+  perform public.interrupt_sitefit_controlled_proof(c,tok);
+  begin
+   perform source_data.complete_saved_trial_free(c,r,(select encode(sha256(convert_to(to_jsonb(q)::text,'UTF8')),'hex') from public.reports q where q.id=r),'{}','{}');
+   raise exception 'ordinary customer recovery unexpectedly admitted';
+  exception when others then if sqlerrm<>'saved_completion_authority_denied' then raise;end if;end;
+  raise exception 'rollback_public_recovery_probe';
+ exception when others then if sqlerrm<>'rollback_public_recovery_probe' then raise;end if;end;
  -- Two ordinary customers checking the same property have separate proof/report graphs.
  foreach subject in array array[g,other] loop
  n:=gen_random_uuid();v:=public.claim_sitefit_trial(t,subject,'snapshot',p,n,'coffee-shop',null);c:=(v->>'id')::uuid;tok:=(v->>'token')::uuid;
@@ -35,6 +51,10 @@ subject uuid;claim public.guest_account_claims;payment uuid:=gen_random_uuid();p
  perform public.start_sitefit_claim_auth(claim.id,g,repeat('a',64),repeat('b',64),'google',null);
  perform public.verify_sitefit_claim_auth(claim.id,u,repeat('a',64),repeat('b',64),'google');
  perform public.complete_sitefit_claim(claim.id,u,repeat('a',64),repeat('b',64));
+ before_budget:=public.sitefit_trial_budget_snapshot(t);
+ v:=public.claim_sitefit_trial(t,u,'snapshot',p,gen_random_uuid(),'coffee-shop',null);
+ if v->>'reportId' is distinct from guest_r::text or (select count(*) from public.controlled_proof where trial_id=t and property_id=p)<>2
+ or public.sitefit_trial_budget_snapshot(t) is distinct from before_budget then raise exception 'claimed guest Snapshot duplicated case, report or reservation';end if;
  if (select owner_id from public.controlled_proof where id=guest_c)<>g or (select owner_id from public.analyses where id=guest_a)<>g then raise exception 'historical ownership changed';end if;
  perform set_config('request.jwt.claim.sub',u::text,true);
  if public.read_sitefit_free(guest_r) is null or public.read_sitefit_free(other_r) is not null then raise exception 'customer report isolation failed';end if;

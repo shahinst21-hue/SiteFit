@@ -96,6 +96,26 @@ test('population contract distinguishes real incomplete cells from received sour
  const result=residentialMaterial(f.c,[f.parent,f.s],at);assert.equal(result.state,'partial_coverage');assert.equal(result.score,null);
 });
 
+test('unavailable Census tables cite their stored null outcome without inventing a numeric operand',()=>{
+ const f=populationPair(),at=new Date('2026-10-08T10:01:00Z');
+ for(const table of f.p.ranges[0].statistics){table.operands=null;table.outcome='unavailable';table.error={code:'invalid_response',retryable:false,status:null};}
+ f.s.result.outcome='partial';f.seal();const before=JSON.stringify(f);
+ const evidence=enrichedEvidence(f.c,[f.parent,f.s],at).evidence.filter(e=>e.kind==='derived');
+ const missing=evidence.filter(e=>e.source.dataset.includes(', 5 minute'));
+ assert.equal(missing.length,4);
+ for(const [j,e] of missing.entries()){
+  assert.equal(e.value,null);assert.equal(e.quality.available,false);assert.equal(e.lineage.missingState,'unavailable');
+  assert.deepEqual(e.lineage.operandPaths,[`ranges/0/statistics/${j}/operands`]);
+ }
+ for(const e of evidence)for(const path of e.lineage.operandPaths){
+  let value:unknown=f.p;for(const part of path.split('/'))value=(value as Record<string,unknown>)[part];
+  assert.notEqual(value,undefined,'every citation resolves in the frozen source, including explicit null');
+ }
+ assert.equal(evidence.filter(e=>e.quality.available).length,8);
+ assert.equal(residentialMaterial(f.c,[f.parent,f.s],at).score,null);
+ assert.equal(JSON.stringify(f),before);
+});
+
 
 test('certified BFE read restores complete clipped populations without rewriting saved evidence',()=>{
  const f=populationPair(),at=new Date('2026-10-08T10:01:00Z');
