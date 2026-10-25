@@ -10,3 +10,7 @@ export function controlledTrialConfigured(env: Readonly<Record<string, string | 
 export function verifiedTrialIdentity(user: { id: string; email?: string; email_confirmed_at?: string; is_anonymous?: boolean } | null) {
   return !!user && user.is_anonymous === false && user.email?.toLowerCase() === 'shahinst21@gmail.com' && !!user.email_confirmed_at;
 }
+/** Owner-authorised public admission uses the existing durable shared envelopes. */
+export function publicCustomersConfigured(env: Readonly<Record<string,string|undefined>>, hostname='sitefit.co.uk') {
+  return controlledTrialConfigured(env,hostname);
+}

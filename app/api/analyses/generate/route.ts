@@ -6,7 +6,7 @@ import { sourceCollectionAllowed, commercialExecution } from "@/lib/release/poli
 import {snapshotStream} from '@/lib/analysis/progress-stream';
 import type {SnapshotObserver} from '@/lib/analysis/progress';
 import {controlledSnapshotConfigured} from '@/lib/proof/authority';
-import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
+import {controlledTrialConfigured,publicCustomersConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner,trialSnapshotPause,trialSourceRecoveryCandidate} from '@/lib/proof/trial';
 import {recoverSourceSnapshot} from '@/lib/proof/recover-source-snapshot';
 export const runtime = "nodejs";
@@ -25,8 +25,7 @@ export async function POST(request: Request) {
   try {
     const verified = await client.auth.getUser();
     let user = verified.error ? null : verified.data.user;
-    if(trial){try{await assertTrialOwner(user,new URL(request.url).hostname);}catch{return reply({error:'Sign in to the authorised account for this controlled check.'},403);}}
-    if(proof&&(!user||user.is_anonymous))return reply({error:"Sign in to the authorised account for this controlled check."},403);
+    if(proof&&!publicCustomersConfigured(process.env,new URL(request.url).hostname)&&(!user||user.is_anonymous))return reply({error:"Sign in to the authorised account for this controlled check."},403);
     if (!user) {
       if (verified.error && verified.error.name !== "AuthSessionMissingError") return reply({ error: "Your session could not be verified. Reload and try again." }, 503);
       const guest = await client.auth.signInAnonymously();
@@ -34,6 +33,7 @@ export async function POST(request: Request) {
       const reverified = await client.auth.getUser(); user = reverified.error ? null : reverified.data.user;
       if (!user) return reply({ error: "Your session could not be verified." }, 503);
     }
+    if(trial){try{await assertTrialOwner(user,new URL(request.url).hostname);}catch{return reply({error:'Location analysis is temporarily unavailable.'},503);}}
     const active = await client.rpc("sitefit_session_available");
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const owner=user.id;

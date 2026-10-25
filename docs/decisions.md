@@ -498,3 +498,11 @@ context and contextual £29 locks. Reuse qualified stored evidence; no invented
 weekly demand, direct-competitor counts or precise property pin. Development and
 protected Preview only; no Full Report/PDF redesign or commercial activation.
 [Implementation boundary and verification](free-snapshot-final-design.md).
+
+## Public customer admission — owner instruction, 25 October 2026
+
+The owner authorises opening SiteFit to ordinary customers, the smallest safe removal of owner-only admission, one necessary new ordinary Free Snapshot verification, and existing Production delivery. Reuse the already verified Live transaction; no new real or Sandbox purchase is required. Hosting is resolved by owner confirmation and must not be reopened.
+
+Public admission participates in the existing shared receipt ledger (effective US$23.39) and separate US$10 commercial Full fence; these overlap and are not additive allowances. Preserve every amount, settlement, legacy reservation and the original owner's three-Full counter/donor rules. Ordinary customer reservations are recorded per owned case/payment in the existing shared ledger instead of changing that historical owner counter. The owner's rehearsal expiry stays unchanged; ordinary cases have a bounded 30-day execution permit, consistent with the existing 30-day report access policy, and remain subject to the same global monetary ceilings and stop controls. No additional credits, tariff, provider, source permission, service plan or campaign activation.
+
+The forward migration and application release must pass protected CI and hosted verification before public launch is reported. Independent technical security readiness does not assert Google Ads policy approval. All campaigns remain paused with zero spend. See [actual readiness evidence](commercial-launch-readiness-20261025.md).

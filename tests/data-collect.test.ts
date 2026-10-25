@@ -107,7 +107,7 @@ test("unprepared/tampered context, unknown policy and failed persistence yield n
   a.value.retrieve = raw; s.repository.append = async () => { throw new SourceError("persistence_failed"); };
   const failed = await run.collectSources(context(), ["tfl-stop-points"], "persist"); assert.equal(failed.outcomes[0].snapshot, null); assert.equal(failed.outcomes[0].error?.code, "persistence_failed");
 });
-test("batch deadline/caller cancellation stop ignored-signal work, clear flights and prevent late persistence", async () => {
+test("provider deadline saves unavailable once, prevents late replacement and preserves caller cancellation", async () => {
   const s = store(), a = adapter(), options = opts(); let finish: (() => void) | undefined;
   a.value.retrieve = async (r,e) => { await new Promise<void>(resolve => { finish = resolve; }); return initialResult(a.value.source,r,e); };
   const run = collector(s.repository, [a.value], { ...options, deadlineMs: 20 });
@@ -115,9 +115,25 @@ test("batch deadline/caller cancellation stop ignored-signal work, clear flights
   const keep = setInterval(() => {}, 100);
   try {
     const failed = await run.collectSources(context(), ["tfl-stop-points"], "deadline"); assert.equal(failed.outcomes[0].error?.code, "timeout");
-    assert.equal(options.coordination.size(), 0); finish!(); await new Promise(resolve => setTimeout(resolve, 5)); assert.equal(s.rows.size, 0);
+    assert.equal(options.coordination.size(), 0);
+    const saved=failed.outcomes[0].snapshot!; assert.ok(saved); assert.equal(saved.result.outcome,'unavailable');
+    assert.equal(saved.result.payload,null);assert.deepEqual(saved.result.observations,[]);assert.equal(saved.result.meta.cost.category,'unknown');
+    finish!(); await new Promise(resolve => setTimeout(resolve, 5)); assert.equal(s.rows.size, 1);
+    assert.deepEqual([...s.rows.values()][0],saved,'late provider data cannot replace the unavailable history');
+    const replay=await run.collectSources(context(),['tfl-stop-points'],'deadline');assert.deepEqual(replay.outcomes[0].snapshot,saved);
     const abort = new AbortController(); abort.abort(); await assert.rejects(run.collectSources(context(), ["tfl-stop-points"], "abort", abort.signal));
   } finally { clearInterval(keep); }
+});
+
+test('caller cancellation and failed outcome persistence never manufacture a stored source',async()=>{
+ const s=store(),a=adapter(),cancel=new AbortController();
+ a.value.retrieve=async(r,e)=>{cancel.abort();return initialResult(a.value.source,r,e);};
+ const cancelled=await collector(s.repository,[a.value],opts()).collectSources(context(),['tfl-stop-points'],'cancel',cancel.signal);
+ assert.equal(cancelled.outcomes[0].snapshot,null);assert.equal(s.rows.size,0);
+ const failed=store(),b=adapter();b.value.retrieve=async()=>{throw new SourceError('timeout');};
+ failed.repository.append=async()=>{throw new SourceError('persistence_failed');};
+ const result=await collector(failed.repository,[b.value],opts()).collectSources(context(),['tfl-stop-points'],'save-failed');
+ assert.equal(result.outcomes[0].snapshot,null);assert.equal(result.outcomes[0].error?.code,'persistence_failed');
 });
 test("per-source serial bound holds across distinct collections; telemetry failure cannot erase history", async () => {
   const s = store(), a = adapter(), options = opts(); let active = 0, maximum = 0; const retrieve = a.value.retrieve;

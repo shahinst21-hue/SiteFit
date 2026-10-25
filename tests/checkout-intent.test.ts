@@ -24,8 +24,8 @@ test('purchase login returns only to the exact continuation or an owned report r
  for(const path of ['https://evil.example/purchase/continue','//evil.example','/purchase/continue?next=https://evil.example','/purchase/resume?report='+report+'&next=evil','/purchase/resume?report='+report+'#state'])assert.equal(authDestination(path),'/account');
 });
 
-test('actual Checkout route sends signed-out users to login, sends the verified owner to Stripe, and rejects other/cross-origin users',()=>{
- for(const mode of ['signed-out','owner','other-owner','cross-origin']){
+test('actual Checkout route sends signed-out users to login, admits the verified owner and ordinary customers, and rejects denied/cross-origin requests',()=>{
+ for(const mode of ['signed-out','owner','ordinary','admission-denied','cross-origin','delivery-unavailable','delivery-lost-after-reservation']){
  const r=spawnSync(process.execPath,['--conditions=react-server','tests/fixtures/checkout-route.mjs',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/"externalRequests":0/);
  }
 });
@@ -33,3 +33,4 @@ test('actual Checkout route sends signed-out users to login, sends the verified 
 test('authentication return respects canonical HTTPS behind the proxy and rejects cross-origin or arbitrary destinations',()=>{
  for(const mode of ['return-proxy','return-cross','return-invalid']){const r=spawnSync(process.execPath,['--conditions=react-server','tests/fixtures/checkout-route.mjs',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);}
 });
+

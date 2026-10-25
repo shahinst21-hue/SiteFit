@@ -1,7 +1,7 @@
 import 'server-only';
 import { frameworkClient } from '../data/server-client.ts';
 import type { Json } from '../supabase/database.types.ts';
-import { controlledTrialConfigured, verifiedTrialIdentity } from './trial-policy.ts';
+import { controlledTrialConfigured, publicCustomersConfigured, verifiedTrialIdentity } from './trial-policy.ts';
 import {uuid} from '../data/validation.ts';
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): { abortSignal(signal: AbortSignal): PromiseLike<{ data: unknown; error: unknown }> } };
 export async function trialRpc(name: string, args: Record<string, Json | null>) {
@@ -10,8 +10,13 @@ export async function trialRpc(name: string, args: Record<string, Json | null>) 
   return result.data;
 }
 export async function assertTrialOwner(user: Parameters<typeof verifiedTrialIdentity>[0], hostname = 'sitefit.co.uk') {
-  if (!controlledTrialConfigured(process.env, hostname) || !verifiedTrialIdentity(user)) throw Error('controlled_trial_denied');
+  if (!controlledTrialConfigured(process.env, hostname) || !user || !uuid(user.id) ||
+    !(verifiedTrialIdentity(user) || publicCustomersConfigured(process.env,hostname) &&
+      (user.is_anonymous===true || user.is_anonymous===false && !!user.email_confirmed_at))) throw Error('controlled_trial_denied');
   if (await trialRpc('authorise_sitefit_trial_owner', { p_trial: process.env.SITEFIT_CONTROLLED_TRIAL_ID!, p_owner: user!.id }) !== true) throw Error('controlled_trial_denied');
+}
+export async function publicCustomersAvailable(){
+  return publicCustomersConfigured(process.env) && await trialRpc('sitefit_public_customers_available',{p_trial:process.env.SITEFIT_CONTROLLED_TRIAL_ID!})===true;
 }
 
 /** Read-only preflight after verified trial-owner admission. Never reclaims a failed case. */

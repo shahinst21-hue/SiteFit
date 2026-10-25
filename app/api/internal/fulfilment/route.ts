@@ -7,6 +7,7 @@ import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
 import {stripeClient,verifiedPrice,verifiedStripeAccount} from '@/lib/payments/stripe';
 import {stripeConfig} from '@/lib/payments/config';
 import {inspectWebhookConfiguration} from '@/lib/payments/webhook-readiness';
+import {requireLiveDelivery} from '@/lib/payments/repository';
 export const runtime = "nodejs";
 export const maxDuration = 300;
 /** Read-only deployed-runtime check; never creates a Session, claims a job or
@@ -17,13 +18,14 @@ export async function GET(request:Request){
   const headers={'Cache-Control':'private, no-store','X-Robots-Tag':'noindex, nofollow'};
   let stage='configuration';
   try{
+    stage='delivery-admission';await requireLiveDelivery();
     const config=stripeConfig(process.env),stripe=stripeClient();
     stage='account';await verifiedStripeAccount(stripe,config.accountId!);stage='price';await verifiedPrice(stripe,config.priceId,true);
     stage='webhook';
     const {webhook,webhookInspection}=await inspectWebhookConfiguration(()=>stripe.webhookEndpoints.list({limit:100}),config.origin);
     const providers=['POSTIO_API_KEY','PROPERTYDATA_API_KEY','GEOAPIFY_API_KEY','TFL_APP_KEY','OPENAI_API_KEY'].every(k=>!!process.env[k]?.trim());
     const project=process.env.SUPABASE_URL==='https://vsfkkroxgntoumoqcfcy.supabase.co';
-    return Response.json({price29:true,accountReady:true,accountId:config.accountId,webhook,webhookInspection,signingSecretPresent:!!process.env.STRIPE_WEBHOOK_SECRET?.startsWith('whsec_'),providersConfigured:providers,productionProject:project,paidDispatches:0},{headers});
+    return Response.json({deliveryReady:true,price29:true,accountReady:true,accountId:config.accountId,webhook,webhookInspection,signingSecretPresent:!!process.env.STRIPE_WEBHOOK_SECRET?.startsWith('whsec_'),providersConfigured:providers,productionProject:project,paidDispatches:0},{headers});
   }catch(error){const status=(error as {statusCode?:number})?.statusCode;return Response.json({ready:false,stage,upstreamStatus:status&&[401,403,404,429].includes(status)?status:null,paidDispatches:0},{status:503,headers});}
 }
 export async function POST(request: Request) {

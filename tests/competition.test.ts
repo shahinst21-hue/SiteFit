@@ -47,8 +47,11 @@ test('Polygon/MultiPolygon holes and boundary membership; byte/positions/rings a
  const dense={type:'Polygon',coordinates:[Array.from({length:10001},(_,i)=>i===10000?[-.1,51.5]:[-.1+Math.sin(i)*.001,51.5+Math.cos(i)*.001])]};dense.coordinates[0][0]=[-.1,51.5];assert.equal(inlineGeometry(dense),null);
  assert.equal(inlineGeometry({...shape,coordinates:[[[0,0],[1,0],[1,1],[0,0]]]} as PolygonGeometry)?.type,'Polygon');
 });
-test('complete zero only; pagination, stable IDs, duplicate ordering and same-position distinct businesses',async()=>{
- for(const category of ['coffee-shop','restaurant','hair-salon'] as const){const l=ledger();const r=await collectCompetition({...inputs(),category},l.store,'synthetic',AbortSignal.timeout(3000),async()=>Response.json(features(0)));assert.equal(r.score,100);assert.equal(r.provenance.complete,true);}
+test('bare empty response is unconfirmed; classified zero retains100; complete pagination and stable IDs',async()=>{
+ for(const category of ['coffee-shop','restaurant','hair-salon'] as const){const l=ledger();const r=await collectCompetition({...inputs(),category},l.store,'synthetic',AbortSignal.timeout(3000),async()=>Response.json(features(0)));assert.equal(r.score,null);assert.equal(r.state,'collection_unconfirmed');assert.equal(r.provenance.coverageVerified,false);assert.equal(r.provenance.complete,true);}
+ const excluded=features(1);excluded.features[0].properties.categories=['catering.cafe','catering.cafe.ice_cream'];
+ const verifiedZero=await collectCompetition(inputs(),ledger().store,'synthetic',AbortSignal.timeout(3000),async()=>Response.json(excluded));
+ assert.deepEqual(verifiedZero.counts,[0,0,0]);assert.equal(verifiedZero.score,100);assert.equal(verifiedZero.provenance.coverageVerified,true);
  const b=await collectCompetition({...inputs(),category:'beauty-salon'},ledger().store,'synthetic',AbortSignal.timeout(3000),async()=>Response.json(features(0)));assert.equal(b.score,null);
  let calls=0;const l=ledger();const result=await collectCompetition(inputs(),l.store,'synthetic',AbortSignal.timeout(3000),async(_u,init)=>{const body=JSON.parse(String(init?.body));assert.deepEqual(body.categories,['catering.cafe']);assert.deepEqual(body.filter.geometry,shape);calls++;return Response.json(calls===1?features(500):features(2,499));});assert.equal(calls,2);assert.deepEqual(result.counts,[501,501,501]);assert.equal(result.score!==null,true);
  const response=features(2);response.features.push(response.features[0]);const a=await collectCompetition(inputs(),ledger().store,'synthetic',AbortSignal.timeout(3000),async()=>Response.json(response));const z=await collectCompetition(inputs(),ledger().store,'synthetic',AbortSignal.timeout(3000),async()=>Response.json({...response,features:[...response.features].reverse()}));assert.deepEqual(a.counts,[2,2,2]);assert.deepEqual(a,z);
@@ -79,5 +82,6 @@ test('actual Snapshot card shows dynamic score and counts; unavailable retains e
 test('Competition evidence presents readable provenance without exposing internal IDs',()=>{
  const r=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','competition-details'],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);
  assert.match(r.stdout,/Source: Geoapify Places and OpenStreetMap/);assert.match(r.stdout,/Postcode-centre coordinates/);assert.match(r.stdout,/provider classifications and supported tags/);
+ assert.match(r.stdout.replace(/<[^>]*>/g,''),/Residential population evidence: available for all three walking bands/);
  assert.doesNotMatch(r.stdout,/00000000-0000-4000-8000-/);assert.doesNotMatch(r.stdout,/f00d0000-0000-4000-8000-/);assert.doesNotMatch(r.stdout,/geoapify-category-match-v1|Walking evidence:|Population evidence:/);assert.doesNotMatch(r.stdout,/Geoapify place ID/);
 });

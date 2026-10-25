@@ -1,5 +1,7 @@
 # First paid Full Report preparation — 20 October 2026
 
+25 October read-only follow-up: **the existing Live payment journey is verified**, including real Stripe payment, recorded signed webhook, frozen confirmation delivery, matching owned Ready Full report and existing authenticated PDF delivery. The historical recovery discussion below is preserved, not a remaining request for another payment. See [current evidence and actual launch prerequisites](commercial-launch-readiness-20261025.md). No new purchase was executed.
+
 Payment 63af9bfe-eda8-4c8e-81e8-6c3a6d9b9d5f was confirmed by the real signed checkout.session.completed webhook and independently read as complete/paid/succeeded at Stripe (£29, correct Live account/price). The owner explicitly authorised sending its existing frozen confirmation. It was sent from info@sitefit.co.uk via the authenticated Zoho UI to the verified owner email. The full received Gmail MIME contains the exact PDF bytes read back from the immutable private contract archive. Received EML and hash receipt were archived privately with no overwrite; the existing confirm_sitefit_sale_delivery RPC recorded delivery. No fabricated receipt or consent change.
 
 The first eligible runner then stopped before creating a Full edition: foreign_assessment_evidence. Three unavailable capability envelopes correctly had null source payload checksums, so the assessment sourceBindings omitted them. Structural validation incorrectly required even these null-valued, undated, parentless capability references to have a payload checksum binding.
