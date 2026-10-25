@@ -24,10 +24,13 @@ export async function readSnapshotProof(owner:string){
 type Permit={id:string;token:string;inputRate:number;outputRate:number;reportId?:string;recoveryId?:string;analysisId?:string;inputId?:string};
 async function execution<T>(owner:string,args:Record<string,Json|null>,stage:'snapshot'|'full',run:()=>Promise<T>,report:(v:T)=>string){
  const trial=controlledTrialConfigured(process.env);
+ const acceptance=developmentProofConfigured(process.env);
  const configured=trial||process.env.SITEFIT_CONTROLLED_PROOF_ENABLED==='1';
  const continuation=!trial&&configured&&stage==='snapshot'&&controlledSnapshotConfigured(process.env,'sitefit.co.uk')
   ?await rpc('claim_sitefit_snapshot_continuation',{p_owner:owner,p_case:process.env.SITEFIT_CONTROLLED_PROOF_ID??null,...Object.fromEntries(Object.entries(args).filter(([k])=>k!=='p_report'))}):null;
- const raw=trial?await rpc('claim_sitefit_trial',{p_trial:process.env.SITEFIT_CONTROLLED_TRIAL_ID!,p_owner:owner,p_stage:stage,...args})
+ const raw=acceptance?await rpc('claim_sitefit_development_acceptance',{
+  p_allocation:process.env.SITEFIT_DEVELOPMENT_ACCEPTANCE_ALLOCATION_ID!,p_owner:owner,p_stage:stage,p_case:process.env.SITEFIT_CONTROLLED_PROOF_ID!,...args})
+  :trial?await rpc('claim_sitefit_trial',{p_trial:process.env.SITEFIT_CONTROLLED_TRIAL_ID!,p_owner:owner,p_stage:stage,...args})
   :continuation??await rpc('claim_sitefit_controlled_proof',{p_owner:owner,p_stage:stage,p_case:configured?process.env.SITEFIT_CONTROLLED_PROOF_ID??null:null,
    p_approved:configured&&(developmentProofConfigured(process.env)||process.env.VERCEL_ENV==='production'&&(stage==='snapshot'?controlledSnapshotConfigured(process.env,'sitefit.co.uk'):proofPolicy.activationApproved)),...args});
  if(raw===null){if(configured)throw Error('proof_not_approved');return runProcessingScope(()=>checkProcessing(owner),run);}
@@ -49,7 +52,7 @@ async function execution<T>(owner:string,args:Record<string,Json|null>,stage:'sn
   async reserve(key,kind,digest,micros){const id=await rpc('reserve_sitefit_proof_dispatch',{p_case:permit.id,p_token:permit.token,p_stage:stage,p_key:key,p_kind:kind,p_digest:digest,p_micros:micros});if(!uuid(id))throw Error('proof_dispatch_denied');return id;},
   async settle(id,state,digest){await rpc('settle_sitefit_proof_dispatch',{p_case:permit.id,p_token:permit.token,p_dispatch:id,p_state:state,p_digest:digest});},
  }};
- try{const value=await runProofScope(scope,run);await rpc('finish_sitefit_controlled_proof',{p_case:permit.id,p_token:permit.token,p_stage:stage,p_report:report(value)});return value;}
+ try{const value=await runProofScope(scope,run);await rpc(acceptance?'finish_sitefit_development_acceptance':'finish_sitefit_controlled_proof',{p_case:permit.id,p_token:permit.token,p_stage:stage,p_report:report(value)});return value;}
  catch{try{await rpc('interrupt_sitefit_controlled_proof',{p_case:permit.id,p_token:permit.token});}catch{/* intent cannot become a resend */}throw Error('proof_manual_reconciliation_required');}
 }
 export function snapshotExecution<T extends {reportId:string}>(owner:string,input:Submission,run:()=>Promise<T>){return execution(owner,{p_property:input.propertyId,p_nonce:input.nonce,p_business:input.businessType,p_report:null},'snapshot',run,v=>v.reportId);}

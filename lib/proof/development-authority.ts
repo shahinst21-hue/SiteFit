@@ -4,6 +4,7 @@ export function developmentProofConfigured(env:Readonly<Record<string,string|und
  if(env.VERCEL_ENV!=='preview'||env.SITEFIT_DEVELOPMENT_ACCEPTANCE_ENABLED!=='1'||
   env.SITEFIT_CONTROLLED_PROOF_ENABLED!=='1'||env.SUPABASE_URL!=='https://idlsjusbrmyucccostxt.supabase.co'||
   env.SITEFIT_TEST_PURCHASES_ENABLED!=='true'||!/^sk_test_[A-Za-z0-9]+$/.test(env.STRIPE_SECRET_KEY??'')||
+  !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(env.SITEFIT_DEVELOPMENT_ACCEPTANCE_ALLOCATION_ID??'')||
   !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(env.SITEFIT_CONTROLLED_PROOF_ID??''))return false;
  const expires=Date.parse(env.SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT??'');
  if(!Number.isFinite(expires)||expires<=now||expires-now>24*60*60*1000)return false;

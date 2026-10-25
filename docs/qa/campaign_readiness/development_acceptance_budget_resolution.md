@@ -1,6 +1,6 @@
 # PR138 Development acceptance — budget resolution
 
-25 October 2026. **Read-only investigation completed; new allocation proposed, NOT approved or applied.** Production is excluded. No fresh provider execution or Sandbox purchase was initiated.
+25 October 2026. **Read-only investigation completed; the owner explicitly approved the separate Development allocation, within the aggregate GBP5 ceiling. Implementation is in progress; no hosted allocation has been funded or activated.** Production is excluded. No fresh provider execution or Sandbox purchase was initiated.
 
 ## Verified baseline
 
@@ -35,7 +35,7 @@ Potential unused nominal capacity is at most1938845microUSD if the conservative 
 
 `start_sitefit_full` still counts the immutable `phase12-report-reserved` and `phase12-question-reserved` events against its3040000 ceiling. Neither a new arbitrary event nor a retry changes that calculation. No existing authorised safe release restores admission. All legacy events and the3040000 ceiling remain untouched.
 
-## Separate allocation proposed for explicit approval
+## Separate allocation explicitly approved
 
 **Approval key:** `development-acceptance-pr138-v1` (unique; replay returns the same grant or rejects differing parameters).
 
@@ -60,7 +60,7 @@ Prospective settlement must price validated tokens against the allocation's froz
 
 Account for expired, unstarted acceptance cases without enabling an expired proof or falsely completing a report. Any required narrow lifecycle amendment must preserve history guards and be limited to grant-bound, disabled, unstarted cases with zero dispatches. Do not disable triggers or use a writer override to bypass validation. Rehearse the actual schema and guard behaviour before hosted application.
 
-Verify SQL concurrency, insufficient capacity, expiry, repeated allocation, repeated Ready settlement, wrong owner/property/nonce, live-payment rejection, invalid receipt retention, crash-after-intent and unaffected legacy admission. Check no grants or reservations exist in Production. Applying definitions or a grant is pending this explicit approval; this document is not an applied migration or a claim that those future SQL tests have passed.
+Verify SQL concurrency, insufficient capacity, expiry, repeated allocation, repeated Ready settlement, wrong owner/property/nonce, live-payment rejection, invalid receipt retention, crash-after-intent and unaffected legacy admission. The owner approved implementation and Development application explicitly on25 October2026. This authorisation does not claim that a migration, grant, activation or future SQL test has already succeeded. No Production deployment or migration is authorised.
 
 ### Automatic delivery prerequisite
 
@@ -71,3 +71,15 @@ A demonstrated application wiring defect was independently corrected in PR138: t
 ## Acceptance status
 
 No new provider analyses, Sandbox purchases or fresh PDFs have been executed; incremental AI/provider spend isGBP0. Existing ordinary-customer sign-in and synthetic responsive verification remain valid evidence for their limited scopes. **NO GO** for campaign readiness until the approved allocation, automatic settlement and the requested two fresh ordinary-customer purchase/delivery/PDF journeys are actually verified. No manual report completion will count as acceptance.
+
+## Approved implementation follow-up
+
+Two new additive migration files define the private allocation/case/event ledger and a separately funded Full-start path. No grant or automatic funding is seeded. The original `start_sitefit_full` function is not replaced: hosted read-only preflight confirmed MD5 `79438d3c4e60a8e15542c589fcff1d91`, its3040000 ceiling and3040000 historical reservations. Development still has107 applied migrations; the proof remains disabled/issued/reserved0 and the runner disabled at preflight.
+
+The Preview gate additionally requires a valid allocation UUID. Claim and reservation execute atomically; denied claims roll back new reservations. Dispatches from manifest-bound cases require an unexpired, non-disabled allocation and the matching stage reservation, alongside the existing provider governor. Sandbox Test v1 payment authority is limited to those cases; Live v2 is rejected for them. Other payment paths retain the actual installed guard, including later checkout-successor amendments. An initial offline test caught an obsolete full-function copy; it was replaced with a narrowly asserted condition amendment before any hosted application.
+
+Ready settlement reads immutable report receipts, validates owner/property/nonce/stage and Sandbox payment, and uses the frozen allocation tariff with conservative upward rounding. Snapshot settlement runs when the case binds its Ready report. Full settlement and case completion run in the actual report Ready transaction; a crash before the worker callback cannot leave its reservation outstanding. The callback is idempotent. Missing/invalid receipts cannot obtain a settlement; expiry/disablement does not erase liabilities. The ledger retains both the actual cost and the unused-envelope release as separate append-only events.
+
+Offline synthetic SQL tests cover private grants, duplicate funding and parameter conflicts, foreign owners, unpaid Full rejection, atomic failed claims, repeated reservations, immutable history, valid Sandbox admission, automatic Snapshot/Full Ready settlement, fractional-token-cost rounding, callback replay and unchanged legacy Full function. These do not prove a real provider invoice, independent multi-connection concurrency, external Stripe payment, hosted migration or automatic external delivery. Those remaining verifications must be recorded separately.
+
+Vercel currently requires interactive email verification before editing existing Preview configuration. The existing account session independently denied another owner's Ready Full Report with the ordinary404 page. Its PDF navigation was blocked by the browser client, so that navigation is not claimed as a server-side PDF denial test.

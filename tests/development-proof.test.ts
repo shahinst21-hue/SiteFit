@@ -7,6 +7,7 @@ const host='sitefit-acceptance-example.vercel.app';
 const env={VERCEL_ENV:'preview',SITEFIT_DEVELOPMENT_ACCEPTANCE_ENABLED:'1',SITEFIT_CONTROLLED_PROOF_ENABLED:'1',
  SUPABASE_URL:'https://idlsjusbrmyucccostxt.supabase.co',SITEFIT_TEST_PURCHASES_ENABLED:'true',STRIPE_SECRET_KEY:'sk_test_synthetic',
  SITEFIT_CONTROLLED_PROOF_ID:'11111111-1111-4111-8111-111111111111',SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT:new Date(now+3600000).toISOString(),
+ SITEFIT_DEVELOPMENT_ACCEPTANCE_ALLOCATION_ID:'22222222-2222-4222-8222-222222222222',
  SITEFIT_PURCHASE_ORIGIN:`https://${host}`,VERCEL_BRANCH_URL:host};
 test('Development acceptance is bound to expiring Preview, exact Development and Sandbox',()=>{
  assert.equal(developmentProofConfigured(env,host,now),true);
@@ -14,6 +15,7 @@ test('Development acceptance is bound to expiring Preview, exact Development and
   {SUPABASE_URL:'https://vsfkkroxgntoumoqcfcy.supabase.co'},{SITEFIT_DEVELOPMENT_ACCEPTANCE_ENABLED:undefined},
   {STRIPE_SECRET_KEY:'sk_live_synthetic'},{SITEFIT_TEST_PURCHASES_ENABLED:'false'},
   {SITEFIT_CONTROLLED_PROOF_ID:''},{SITEFIT_CONTROLLED_PROOF_ENABLED:'0'},
+  {SITEFIT_DEVELOPMENT_ACCEPTANCE_ALLOCATION_ID:undefined},{SITEFIT_DEVELOPMENT_ACCEPTANCE_ALLOCATION_ID:'invalid'},
   {SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT:new Date(now).toISOString()},
   {SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT:new Date(now+86400001).toISOString()},
   {SITEFIT_DEVELOPMENT_ACCEPTANCE_EXPIRES_AT:'invalid'},

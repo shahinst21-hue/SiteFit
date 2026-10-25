@@ -1,4 +1,5 @@
 import {validateCompetition,type CompetitionResult} from '../competition/model.ts';
+import {developmentProofConfigured} from '../proof/development-authority.ts';
 import {bindRecommendation,recommendationFromScores,type RecommendationDecision} from '../analysis/recommendation.ts';
 import {validateFreeProjection} from '../analysis/projection.ts';
 import { queryPoint } from "../data/query-point.ts";
@@ -177,8 +178,10 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       packetDigests: { context: packetDigest(packet(["customer-context", "competition", "access"])), premises: packetDigest(packet(["premises", "rental-context"])) } };
     const checkpoint = newCheckpoint(preparation);
     if (Buffer.byteLength(canonicalJSON(preparation)) > intelligencePolicy.maxPreparationBytes) throw Error("full_preparation_bounds");
-    return validateStoredEdition(await invoke(process.env.VERCEL_ENV==="production"?"start_sitefit_commercial_full":"start_sitefit_full", { p_free: freeReportId,
-      p_preparation: canonicalJSON(preparation), p_checkpoint: canonicalJSON(checkpoint) }));
+    const acceptance=developmentProofConfigured(process.env);
+    return validateStoredEdition(await invoke(acceptance?"start_sitefit_development_acceptance_full":process.env.VERCEL_ENV==="production"?"start_sitefit_commercial_full":"start_sitefit_full", { p_free: freeReportId,
+      p_preparation: canonicalJSON(preparation), p_checkpoint: canonicalJSON(checkpoint),
+      ...(acceptance?{p_allocation:process.env.SITEFIT_DEVELOPMENT_ACCEPTANCE_ALLOCATION_ID!,p_case:process.env.SITEFIT_CONTROLLED_PROOF_ID!}:{}) }));
   }, async checkpoint(edition: StoredEdition, next: Checkpoint) {
     return validateStoredEdition(await invoke("checkpoint_sitefit_full", { p_report: edition.id, p_revision: edition.revision,
       p_checkpoint: canonicalJSON(validateCheckpoint(next)) }));
