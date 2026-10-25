@@ -50,6 +50,9 @@ grant execute on function public.claim_sitefit_development_acceptance(uuid,uuid,
 
 create function public.finish_sitefit_development_acceptance(p_case uuid,p_token uuid,p_stage text,p_report uuid) returns void
 language plpgsql security definer set search_path='' as $$declare c public.controlled_proof;begin
+ -- Match admission/Ready settlement lock order: allocation, then proof.
+ perform 1 from public.development_acceptance_allocations a join public.development_acceptance_cases b on b.allocation_id=a.id where b.case_id=p_case for update of a;
+ if not found then raise exception 'acceptance_finish_denied';end if;
  select * into strict c from public.controlled_proof where id=p_case for update;
  if c.token is distinct from p_token or p_token is null or not exists(select 1 from public.development_acceptance_cases where case_id=c.id) then raise exception 'acceptance_finish_denied';end if;
  if (p_stage='full' and c.state='complete' and c.full_report_id=p_report) or (p_stage='snapshot' and c.state in('snapshot_ready','full_running','complete') and c.free_report_id=p_report) then
@@ -66,7 +69,9 @@ declare b public.development_acceptance_cases;a public.development_acceptance_al
 begin
  select * into b from public.development_acceptance_cases where case_id=new.case_id;
  if not found then return new;end if;
- select * into strict a from public.development_acceptance_allocations where id=b.allocation_id for update;
+ -- Grant identity/ceiling are immutable. No financial arithmetic is performed
+ -- here; avoiding a second lock also preserves allocation-before-proof order.
+ select * into strict a from public.development_acceptance_allocations where id=b.allocation_id;
  if a.expires_at<=now() or exists(select 1 from public.development_acceptance_budget_events where allocation_id=a.id and event_kind='disable')
   or not exists(select 1 from public.development_acceptance_budget_events where allocation_id=a.id and case_id=new.case_id and stage=new.stage and event_kind='reserve')
   then raise exception 'acceptance_dispatch_not_funded';end if;
