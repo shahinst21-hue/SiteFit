@@ -66,6 +66,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       await db.exec(await readFile(new URL('../supabase/tests/trial-snapshot-pause.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/trial-synthesis-recovery.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/census-unavailable-evidence.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/unavailable-catchment-evidence.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL("../supabase/tests/source-reuse.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/commercial-release.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/verification/contract-confirmation-queue.sql", import.meta.url), "utf8"));

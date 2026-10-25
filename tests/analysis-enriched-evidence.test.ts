@@ -46,6 +46,14 @@ test("compact native inventory evidence resolves to stored groups without invent
     assert.equal(e.value,2); assert.equal(e.quality.partial,true);
     assert.match(e.units!,/not unique businesses/);
   }
+  const missing=structuredClone(places);
+  if(missing.result.payload?.kind!=='catchment_places')throw Error('fixture');
+  Object.assign(missing.result.payload.ranges[0],{outcome:'unavailable',inventory:null,error:{code:'invalid_response',retryable:false,status:null}});
+  missing.result.outcome='partial';missing.result.meta.checksum=packetDigest({payload:missing.result.payload,observations:missing.result.observations});
+  const withheld=enrichedEvidence(c,[parent,missing],new Date(date)).evidence.filter(e=>e.kind==='derived');
+  assert.deepEqual(withheld[0].lineage.operandPaths,['ranges/0/inventory']);
+  assert.equal(withheld[0].value,null);assert.equal(withheld[0].quality.available,false);
+  assert.equal(withheld[0].lineage.missingState,'unavailable');assert.equal(withheld[1].value,2);
 });
 test("enriched property evidence is owned, frozen, commercial and distinct from deferred Economics", async () => {
   const c = fixture(), factory = () => ({premises: async (selected: Parameters<ReturnType<typeof import("../lib/data/adapters/propertydata-facts.ts").propertyDataFacts>["premises"]>[0]) =>
