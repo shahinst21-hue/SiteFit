@@ -67,6 +67,9 @@ export function collector(repository: SnapshotRepository, adapters: DataAdapter[
     const requested = validateContext(input);
     if (!Array.isArray(ids) || ids.length < 1 || ids.length > 3 || new Set(ids).size !== ids.length || ids.some(id => !allowedSources.includes(id)) || !/^[A-Za-z0-9_-]{1,80}$/.test(collectionKey)) throw new SourceError("invalid_request");
     const batchSignal = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(deadlineMs)]);
+    // Provider work may time out while a bounded, honest unavailable outcome is
+    // still saved. Caller cancellation remains authoritative for both stages.
+    const persistenceSignal = AbortSignal.any([...(signal ? [signal] : []), AbortSignal.timeout(deadlineMs + 2000)]);
     const context = validateContext(await bounded(repository.context(requested.analysisId, requested.inputId, batchSignal), batchSignal));
     if (canonical(context) !== canonical(requested)) throw new SourceError("invalid_request");
     const outcomes = await Promise.all(ids.map(async (id): Promise<SourceOutcome> => {
@@ -102,9 +105,9 @@ export function collector(repository: SnapshotRepository, adapters: DataAdapter[
           }
           value = validateResult(value); assertPolicy(value.meta.licence);
           if (value.meta.source !== id || value.meta.provider !== adapter.source.provider || value.meta.operation !== adapter.source.operation || value.meta.adapterVersion !== adapter.source.adapterVersion || value.meta.normalisationVersion !== adapter.source.normalisationVersion || ![id, ...(id === "ons-population" ? ["ons-london"] : [])].includes(value.meta.licence.policyId)) throw new SourceError("invalid_response");
-          if (batchSignal.aborted) throw abortError(batchSignal);
+          if (signal?.aborted) throw abortError(signal);
           if (value.meta.checksum === null && value.payload) value.meta.checksum = digest({ payload: value.payload, observations: value.observations });
-          const snapshot = await bounded(repository.append(context, collectionKey, hash, value, batchSignal), batchSignal);
+          const snapshot = await bounded(repository.append(context, collectionKey, hash, value, persistenceSignal), persistenceSignal);
           cache.set(cacheKey, snapshot.result);
           // Telemetry is bounded and cannot change the already persisted outcome.
           try { await bounded(record(snapshot.result), batchSignal); } catch { /* Safe diagnostic failure only. */ }

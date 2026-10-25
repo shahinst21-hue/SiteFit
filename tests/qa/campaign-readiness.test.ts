@@ -1,4 +1,4 @@
-/** Independent acceptance probes. Run explicitly; known failures are preserved, not waived. */
+/** Independent acceptance regressions. Original red evidence is retained in the audit; these expectations are unchanged. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {productionSupabaseTarget,PRODUCTION_SUPABASE_REF} from '../../lib/supabase/config.ts';
