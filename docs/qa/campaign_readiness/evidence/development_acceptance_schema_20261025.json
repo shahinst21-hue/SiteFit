@@ -1,0 +1,34 @@
+{
+  "project": "idlsjusbrmyucccostxt",
+  "productionChanged": false,
+  "sourceCommit": "295ac429d9a31d1e324d5d93db39b47d1bc78907",
+  "ci": {
+    "requiredChecks": 2,
+    "successful": 2
+  },
+  "migrations": [
+    {
+      "version": "20261025120000",
+      "sha256": "e3bd5fe56e301511bd164c3ce394d30f3b363840844c8ddd4091793ffa86930d"
+    },
+    {
+      "version": "20261025121000",
+      "sha256": "a06504830cda3e04da3945a58928db09290518c5d2d8d01af81023fbfa4a62d5"
+    }
+  ],
+  "verified": {
+    "events": 0,
+    "fullHash": "79438d3c4e60a8e15542c589fcff1d91",
+    "grants": 0,
+    "legacyReserved": 3040000,
+    "migrations": 109,
+    "private": true,
+    "proofDisabled": true,
+    "runnerDisabled": true
+  },
+  "incrementalProviderSpendGbp": 0,
+  "freshAnalyses": 0,
+  "sandboxPurchases": 0,
+  "freshPdfs": 0,
+  "billingAccountVerified": false
+}
