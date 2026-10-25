@@ -25,7 +25,7 @@ test('the actual evidence trigger accepts qualified missing Census operands and 
   await db.query('insert into public.analysis_inputs values($1,$2,$3)',[input,analysis,{schemaVersion:2,enrichment:{releases}}]);
   await db.query('insert into public.data_snapshots values($1,$2,$3,$4,$5,$6,$7)',[snapshot,analysis,input,'synthetic','ons-catchments',payload,
    {meta:{provider:'ons',datasetReleaseId:release,checksum:'a'.repeat(64),licence:{policyId:'synthetic',version:1}}}]);
-  const insert=(e:unknown)=>db.query('insert into public.evidence_items values($1,$2,$3,$4,$5)',[crypto.randomUUID(),analysis,input,snapshot,e]);
+  const insert=(e:unknown,source=snapshot)=>db.query('insert into public.evidence_items values($1,$2,$3,$4,$5)',[crypto.randomUUID(),analysis,input,source,e]);
   await assert.rejects(insert(envelope),/enriched_evidence_operand_path/);
   await db.exec(await readFile(new URL('../supabase/migrations/20261025200000_unavailable_catchment_evidence.sql',import.meta.url),'utf8'));
   await insert(envelope);
@@ -43,7 +43,16 @@ test('the actual evidence trigger accepts qualified missing Census operands and 
    {...envelope,lineage:{...envelope.lineage,sourceChecksum:'b'.repeat(64)}},
    {...envelope,source:{...envelope.source,releaseId:crypto.randomUUID()}},
   ])await assert.rejects(insert(changed),/enriched_evidence_(operand_path|source_binding)/);
-  assert.equal((await db.query<{n:number}>('select count(*)::int n from public.evidence_items')).rows[0].n,2);
-  assert.deepEqual((await db.query<{normalised_data:unknown}>('select normalised_data from public.data_snapshots')).rows[0].normalised_data,payload);
+  const places=crypto.randomUUID();
+  await db.query('insert into public.data_snapshots values($1,$2,$3,$4,$5,$6,$7)',[places,analysis,input,'synthetic','overture-catchments',
+   {schemaVersion:1,kind:'catchment_places',ranges:[{outcome:'unavailable',inventory:null}]},
+   {meta:{provider:'overture',datasetReleaseId:release,checksum:'a'.repeat(64),licence:{policyId:'synthetic',version:1}}}]);
+  const unavailablePlaces={...envelope,snapshotId:places,sourceClass:'community_open',source:{...envelope.source,provider:'overture',dataset:'Native primary-family records, 5 minute walk'},
+   lineage:{...envelope.lineage,operandPaths:['ranges/0/inventory']}};
+  await insert(unavailablePlaces,places);
+  await assert.rejects(insert({...unavailablePlaces,value:0},places),/enriched_evidence_operand_value/);
+  await assert.rejects(insert({...unavailablePlaces,quality:{available:true}},places),/enriched_evidence_operand_value/);
+  assert.equal((await db.query<{n:number}>('select count(*)::int n from public.evidence_items')).rows[0].n,3);
+  assert.deepEqual((await db.query<{normalised_data:unknown}>('select normalised_data from public.data_snapshots where id=$1',[snapshot])).rows[0].normalised_data,payload);
  }finally{await db.close();}
 });
