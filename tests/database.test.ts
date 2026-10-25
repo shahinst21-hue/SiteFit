@@ -47,6 +47,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       'select approved,classification,confirmation_channel,snapshot from public.sale_policies where version=$1',[policyVersions.sale])).rows[0];
     assert.equal(review.approved,true);assert.equal(review.classification,'digital_content');assert.equal(review.confirmation_channel,'manual_zoho_pdf');
     assert.deepEqual(review.snapshot,launchPolicySnapshot());
+    await db.exec(await readFile(new URL('../supabase/tests/development-acceptance.sql',import.meta.url),'utf8'));
     assert.equal((await db.query<{count:number}>('select count(*)::int as count from public.sale_policies where approved')).rows[0].count,1);
     assert.equal((await db.query<{disabled:boolean}>("select not exists(select 1 from public.commercial_release_control where mode<>'test' or checkout_enabled or execution_enabled) as disabled")).rows[0].disabled,true);
     await db.exec(await readFile(new URL('../supabase/tests/optional-source-isolation.sql',import.meta.url),'utf8'));

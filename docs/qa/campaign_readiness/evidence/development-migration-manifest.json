@@ -1,0 +1,38 @@
+[
+  {
+    "file": "20261021100000_competition_headroom.sql",
+    "sha256": "5b706df2934019c4040767ebb8bde1c4b613fc5d0a8154810e1947389bbfe32f"
+  },
+  {
+    "file": "20261021120000_audited_trial_budget_reconciliation.sql",
+    "sha256": "678e2ca99f1abed168f23d9eac254a217f1a423e71725bc6a05f13adeb4982c2"
+  },
+  {
+    "file": "20261021130000_trial_ready_settlement_binding.sql",
+    "sha256": "d7999a47e39ac7c1b5dd5e8b1f1c2037f7b398fdbe6395365ff56f9d80cc2bed"
+  },
+  {
+    "file": "20261021140000_trial_address_cap_40_reconciliation.sql",
+    "sha256": "e9c4cde88f3d4e8d153c5185124e080eb401856ecb7ad4b70396a7e7e442918d"
+  },
+  {
+    "file": "20261023210000_optional_source_failure_isolation.sql",
+    "sha256": "971611ec9b062ca2e6ff4d64d7f5bd61ee2185a132e0478a91bba469204cb312"
+  },
+  {
+    "file": "20261024090000_stored_source_snapshot_recovery.sql",
+    "sha256": "0520fb0a7132abcca007baf557f44024e69a252ac18e047048d43e1957716dfb"
+  },
+  {
+    "file": "20261024110000_catchment_extent_coverage.sql",
+    "sha256": "cee79d086bba7b8a1c317413e8c16a14e57d36b7e899055c892b89a62f13798c"
+  },
+  {
+    "file": "20261024130000_native_census_coverage.sql",
+    "sha256": "1ba4118a55ab4a32e138d2fd65802fd8dffa580d3280a23009b72a99c6c3033d"
+  },
+  {
+    "file": "20261024150000_snapshot_policy_reference_storage.sql",
+    "sha256": "4396ae3cab1617c7c86856d65b73a282e30dea6f249e518810da6ca3a86b43f6"
+  }
+]

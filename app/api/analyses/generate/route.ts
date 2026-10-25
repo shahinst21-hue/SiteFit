@@ -6,6 +6,7 @@ import { sourceCollectionAllowed, commercialExecution } from "@/lib/release/poli
 import {snapshotStream} from '@/lib/analysis/progress-stream';
 import type {SnapshotObserver} from '@/lib/analysis/progress';
 import {controlledSnapshotConfigured} from '@/lib/proof/authority';
+import {developmentProofConfigured} from '@/lib/proof/development-authority';
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner,trialSnapshotPause,trialSourceRecoveryCandidate} from '@/lib/proof/trial';
 import {recoverSourceSnapshot} from '@/lib/proof/recover-source-snapshot';
@@ -14,7 +15,7 @@ export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
 export async function POST(request: Request) {
   const trial=controlledTrialConfigured(process.env,new URL(request.url).hostname);
-  const proof=trial||controlledSnapshotConfigured(process.env,new URL(request.url).hostname);
+  const proof=trial||controlledSnapshotConfigured(process.env,new URL(request.url).hostname)||developmentProofConfigured(process.env,new URL(request.url).hostname);
   if(!proof&&!sourceCollectionAllowed(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
   if(!proof&&process.env.VERCEL_ENV==="production"&&!commercialExecution(process.env,new URL(request.url).hostname))return reply({error:"Location analysis is not activated here."},503);
   if (!sameOrigin(request)) return reply({ error: "Reload this page and try again." }, 403);

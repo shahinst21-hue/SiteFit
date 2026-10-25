@@ -1,0 +1,46 @@
+{
+  "auditDate": "2026-10-24",
+  "baseline": "2d6cdbb08290cb00aa35e6a8d1f681be7faad923",
+  "currentProduction": "683c7f1847d0748e39d5005ca5d2cb1c25628d97",
+  "currentDeployment": "6Ay4Y5riwAw3SwHKX5pyewyUGend",
+  "budgetReadAt": "2026-10-24T13:42:50.588237+00:00",
+  "budgets": [
+    {
+      "activeReservedMicros": 0,
+      "adjustmentsMicros": 13390000,
+      "availableMicros": 22897997,
+      "baseLimitMicros": 10000000,
+      "effectiveLimitMicros": 23390000,
+      "settledMicros": 492003
+    }
+  ],
+  "adjustments": {
+    "count": 1,
+    "micros": 13390000
+  },
+  "capacityReadAt": "2026-10-24T19:14:30.021965+00:00",
+  "databaseBytes": 378574515,
+  "migrationCount": 107,
+  "cron": {
+    "jobs": [
+      {
+        "active": true,
+        "id": 1,
+        "schedule": "*/5 * * * *"
+      }
+    ],
+    "recentStates": {
+      "succeeded": 288
+    }
+  },
+  "dependencyVulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "incrementalPaidCost": 0,
+  "freshLocationAnalyses": 0
+}
