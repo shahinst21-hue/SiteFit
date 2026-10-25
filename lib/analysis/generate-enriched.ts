@@ -23,6 +23,7 @@ import {traceCollection,reportMissingSources} from './collection-diagnostics.ts'
 import {residentialFromEvidence} from './residential-catchment.ts';
 import {queryPoint} from '../data/query-point.ts';
 import {recommendationFromScores} from './recommendation.ts';
+import {reportSnapshotPersistenceFailure} from './persistence-diagnostics.ts';
 
 type Early = ReturnType<typeof restoreSynthesis>;
 type Partial = {enrichmentVersion: "phase8-observations-1"; evidence: Evidence[]; packets: InterpretationPacket[];
@@ -86,6 +87,6 @@ export async function generateEnrichedSnapshot(owner: string, context: Collectio
   const sections=[earlyReportSection(early),...interpreted.sections.map(s=>({...s,evidenceIds:[...new Set([s.conclusion,...s.reasons,...s.support,...s.opposition,...s.alternatives,...s.unknowns,s.implication,s.question].flatMap(p=>p.evidenceIds))]}))];
   const {data:reportId,error}=await client.rpc("finalise_sitefit_free",{p_owner:owner,p_analysis:context.analysisId,p_input:context.inputId,
     p_evidence:json(prepared.evidence),p_sections:json(sections),p_projection:json(projection),p_provenance:json(audit)}).abortSignal(AbortSignal.any([signal,AbortSignal.timeout(8000)]));
-  if(error||!reportId){await preserve([{section:"early-view",code:"report_persistence_failed"}],early);throw new Error("report_persistence_failed");}
+  if(error||!reportId){reportSnapshotPersistenceFailure(error);await preserve([{section:"early-view",code:"report_persistence_failed"}],early);throw new Error("report_persistence_failed");}
   return {reportId,replay:false};
 }

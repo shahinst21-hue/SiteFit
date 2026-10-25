@@ -27,7 +27,7 @@ test('the actual evidence trigger accepts qualified missing Census operands and 
    {meta:{provider:'ons',datasetReleaseId:release,checksum:'a'.repeat(64),licence:{policyId:'synthetic',version:1}}}]);
   const insert=(e:unknown)=>db.query('insert into public.evidence_items values($1,$2,$3,$4,$5)',[crypto.randomUUID(),analysis,input,snapshot,e]);
   await assert.rejects(insert(envelope),/enriched_evidence_operand_path/);
-  await db.exec(await readFile(new URL('../supabase/migrations/20261025120000_unavailable_catchment_evidence.sql',import.meta.url),'utf8'));
+  await db.exec(await readFile(new URL('../supabase/migrations/20261025200000_unavailable_catchment_evidence.sql',import.meta.url),'utf8'));
   await insert(envelope);
   // New generation cites the actual stored null; old received checkpoints retain
   // their immutable reference and are accepted only by the narrow missingness rule.

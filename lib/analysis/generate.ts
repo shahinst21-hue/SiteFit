@@ -23,6 +23,7 @@ import { selectEnrichmentReleases, prepareEnrichmentIdentity } from "../data/enr
 import { generateEnrichedSnapshot } from "./generate-enriched.ts";
 import type { ResolvedAddress } from "../addresses/model.ts";
 import {snapshotMilestones,type SnapshotObserver} from './progress.ts';
+import {reportSnapshotPersistenceFailure} from './persistence-diagnostics.ts';
 const json = (value: unknown) => value as Json;
 const dimensions: Dimension[] = ["customer-base", "market-position", "customer-access", "premises"];
 export async function generateSnapshot(ownerId: string, propertyId: string, businessType: string, nonce: string, signal?: AbortSignal, observer?:SnapshotObserver) {
@@ -141,6 +142,7 @@ async function generateSnapshotOnce(ownerId: string, propertyId: string, busines
     p_owner: ownerId, p_analysis: analysis.id, p_input: context.inputId, p_evidence: json(prepared.evidence), p_sections: json(sectionRows), p_projection: json(projection), p_provenance: json(audit),
   }).abortSignal(databaseBound(8000));
   if (finaliseError || !reportId) {
+    reportSnapshotPersistenceFailure(finaliseError);
     await preserveIncomplete([{ section: "early-view", code: "report_persistence_failed" }], early);
     throw new Error("report_persistence_failed");
   }

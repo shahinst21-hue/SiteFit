@@ -19,7 +19,7 @@ Census table and the existing null `inventory` for an unavailable Places range.
 Successful and partially qualified numerical operands retain their exact paths.
 Nulls remain unavailable; no population, competitor count or score is invented.
 
-Forward migration `20261025120000` additionally allows the old Census child path
+Forward migration `20261025200000` additionally allows the old Census child path
 only for explicitly unavailable, null-valued derived evidence matching the frozen
 table's dataset, release and walking duration, with a stored null operand and an
 unavailable table outcome. Existing source/checksum, owner/input, release, licence,
