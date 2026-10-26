@@ -75,7 +75,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
         begin perform public.finish_sitefit_saved_snapshot(o,c,f,digest,'{}','{}');raise exception 'expired recovery bypassed rights';exception when insufficient_privilege then null;end;
         end$$;rollback;`);
     await db.exec(await readFile(new URL('../supabase/tests/public-entry-capacity.sql',import.meta.url),'utf8'));
-    await db.exec(await readFile(new URL('../supabase/tests/trial-address-cap.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/address-dispatch.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/checkout-successors.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/owner-three-full-slots.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/owner-trial-count-amendment.sql',import.meta.url),'utf8'));

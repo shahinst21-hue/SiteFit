@@ -1,7 +1,7 @@
 /** Owner-authorised, private Production rehearsal. Public activation stays separate. */
 export const trialLimits = Object.freeze({
   totalMicros: 10_000_000, snapshotMicros: 650_000, fullMicros: 1_000_000,
-  snapshots: null, fullReports: null, addressRequests: 40,
+  snapshots: null, fullReports: null,
 });
 export function controlledTrialConfigured(env: Readonly<Record<string, string | undefined>>, hostname = 'sitefit.co.uk') {
   return env.VERCEL_ENV === 'production' && env.SITE_URL === 'https://sitefit.co.uk' && hostname === 'sitefit.co.uk' &&

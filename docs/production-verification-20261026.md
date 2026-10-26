@@ -1,5 +1,7 @@
 # Production verification — 26 October 2026
 
+Address-capacity follow-up: the owner subsequently confirmed that the 40-request ceiling was internal rehearsal policy, not a Postio provider limit. Its removal and separate release verification are tracked in [Postio cap removal](postio-cap-removal-20261026.md); the count-based restrictions below describe the earlier checkpoint.
+
 **PRODUCTION VERIFIED: GO FOR PUBLIC LAUNCH**, for an initial low-volume London launch within the existing approved capacity and operator monitoring below. This supersedes the predeployment NO GO checkpoints. Advertising campaigns remain paused; Google's external review is separate.
 
 ## Installed release
