@@ -1,7 +1,7 @@
 import type { Metadata, MetadataRoute } from "next";
 import type { BlogPost } from "./content/model.ts";
 import { publicPages, site } from "./site-config.ts";
-import { releasePolicy, type ReleaseAuthority } from "./release/policy.ts";
+import { productionOrigin, releasePolicy, type ReleaseAuthority } from "./release/policy.ts";
 
 export function websiteOrigin(
   env: Record<string, string | undefined> = process.env,
@@ -31,12 +31,9 @@ export function publicIndexingEnabled(
   env: Record<string, string | undefined> = process.env,
   authority:ReleaseAuthority=releasePolicy,
 ) {
-  return (
-    env.VERCEL_ENV === "production" &&
-    authority.productionApproved && env.SITEFIT_PUBLIC_INDEXING_ENABLED==="1" &&
-    Boolean(env.SITE_URL) &&
-    new URL(websiteOrigin(env)).protocol === "https:"
-  );
+  // Indexing has its own explicit approval switch. Reuse the admitted Production
+  // origin without granting unrelated payment, execution or collection authority.
+  return env.SITEFIT_PUBLIC_INDEXING_ENABLED === "1" && productionOrigin(env, authority) !== null;
 }
 export function publicRobotsRules(env: Record<string, string | undefined> = process.env,authority:ReleaseAuthority=releasePolicy): MetadataRoute.Robots["rules"] {
   return publicIndexingEnabled(env,authority) ? { userAgent: "*", allow: "/", disallow: [

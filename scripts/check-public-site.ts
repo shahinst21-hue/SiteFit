@@ -21,6 +21,9 @@ if (
     "Provide a site origin, never credentials or a query string.",
   );
 const posts = localPosts.filter((post) => isPublished(post));
+const indexingMode = process.argv[3];
+if (indexingMode !== undefined && !["indexed", "noindex"].includes(indexingMode))
+  throw Error("Indexing verification mode must be indexed or noindex.");
 const paths = [
   ...publicPages.map((page) => page.path),
   ...posts.map((post) => `/blog/${post.slug}`),
@@ -47,6 +50,13 @@ for (const path of paths) {
   const response = await get(path);
   assert.equal(response.status, 200, `${path}: expected HTTP 200`);
   const html = await response.text();
+  if (indexingMode) {
+    const shouldIndex = indexingMode === "indexed" && !["/login", "/check-location", "/privacy", "/terms"].includes(path);
+    const robotsMeta = html.match(/<meta name="robots" content="([^"]+)"/)?.[1]?.split(/,\s*/);
+    assert.ok(robotsMeta?.includes(shouldIndex ? "index" : "noindex"), `${path}: incorrect indexing metadata`);
+    assert.ok(robotsMeta?.includes(shouldIndex ? "follow" : "nofollow"), `${path}: incorrect follow metadata`);
+    if (shouldIndex) assert.doesNotMatch(response.headers.get("x-robots-tag") ?? "", /noindex/i, `${path}: public indexing blocked by header`);
+  }
   for (const match of html.matchAll(/<script\b[^>]*src="([^"]+)"/g)) {
     const resource = new URL(match[1].replaceAll("&amp;", "&"), base);
     assert.equal(resource.origin, base.origin, `${path}: unexpected external script in initial HTML`);
@@ -174,6 +184,12 @@ assert.ok(!xml.includes("/login") && !xml.includes("/check-location"));
 const robots = await (await get("/robots.txt")).text();
 assert.match(robots, /User-Agent: \*/);
 assert.match(robots, /Sitemap:/);
+if (indexingMode === "indexed") {
+  assert.match(robots, /^Allow: \/$/m);
+  assert.doesNotMatch(robots, /^Disallow: \/$/m);
+  for (const path of ["/login", "/account", "/reports/", "/snapshots/", "/purchase/", "/internal/", "/dev/", "/auth/", "/check-location", "/preview/", "/admin/", "/api/"])
+    assert.ok(robots.split(/\r?\n/).includes(`Disallow: ${path}`), `${path}: private crawl exclusion missing`);
+} else if (indexingMode === "noindex") assert.match(robots, /^Disallow: \/$/m);
 const image = await get("/social-image");
 assert.equal(image.status, 200);
 assert.match(image.headers.get("content-type") ?? "", /image\/png/);
