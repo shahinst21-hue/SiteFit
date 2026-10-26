@@ -86,7 +86,7 @@ subject uuid;claim public.guest_account_claims;payment uuid:=gen_random_uuid();p
  v:=public.claim_sitefit_trial(t,u,'full',null,null,null,f);
  if v->>'id'<>guest_c::text then raise exception 'public full execution lost guest binding';end if;
  update public.controlled_trials set expires_at=now()-interval '1 second' where id=t;
- if public.authorise_sitefit_trial_owner(t,o) or not public.authorise_sitefit_trial_owner(t,u)
+ if not public.authorise_sitefit_trial_owner(t,o) or not public.authorise_sitefit_trial_owner(t,u)
   or (select expires_at<=now() from public.controlled_proof where id=guest_c) then raise exception 'public admission inherited the historical owner expiry';end if;
  update public.controlled_trials set public_customers_enabled=false where id=t;
  if public.authorise_sitefit_trial_owner(t,u) or public.sitefit_public_customers_available(t) then raise exception 'paused public admission leaked';end if;
