@@ -116,7 +116,7 @@ begin
  if job is not null or (select state from public.report_fulfilment where id=jid)<>'intervention' then raise exception 'Expired execution redispatched';end if;
  -- Current controlled-case graph: received output can complete; intent or
  -- ambiguous Full dispatches retain intervention. Each synthetic branch rolls back.
- foreach recovery_state in array array['received','ambiguous','intent'] loop
+ foreach recovery_state in array array['received','ambiguous','intent','legacy-complete'] loop
  begin
   recovery_admin:=gen_random_uuid();
   insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(recovery_admin,'shahinst21@gmail.com',now(),false);
@@ -125,13 +125,18 @@ begin
   insert into public.controlled_proof(singleton,trial_id,owner_id,property_id,business_type,nonce,policy_version,policy_snapshot,policy_digest,
    enabled,expires_at,tariff_verified,tariff_digest,ai_limit_micros,reserved_micros,state,token,free_report_id,full_report_id,payment_id)
   select false,recovery_trial,owner,p,'coffee-shop',q.submission_nonce,'synthetic-phase15',pol.snapshot,encode(sha256(convert_to(pol.snapshot::text,'UTF8')),'hex'),
-   true,now()+interval '1 hour',true,repeat('a',64),1650000,30000,'intervention',gen_random_uuid(),report,fid,payment
+   true,now()+interval '1 hour',true,repeat('a',64),1650000,30000,case when recovery_state='legacy-complete' then 'complete' else 'intervention' end,gen_random_uuid(),report,fid,payment
   from public.analyses q cross join public.sale_policies pol where q.id=a and pol.version='synthetic-phase15' returning id into recovery_case;
-  perform public.reserve_sitefit_trial_budget(recovery_trial,recovery_case,'full',payment,1000000,'full:'||payment::text);
+  if recovery_state<>'legacy-complete' then perform public.reserve_sitefit_trial_budget(recovery_trial,recovery_case,'full',payment,1000000,'full:'||payment::text);end if;
   insert into public.proof_dispatches(case_id,stage,request_key,kind,request_digest,reserved_micros,state,response_digest)
-  select recovery_case,'full',lpad(k::text,64,'0'),'ai',repeat('a',64),10000,case when k=1 then recovery_state else 'received' end,
-   case when k=1 and recovery_state<>'received' then null else repeat('b',64) end from generate_series(1,3)k;
-  if recovery_state='received' then
+  select recovery_case,'full',lpad(k::text,64,'0'),'ai',repeat('a',64),10000,case when k=1 and recovery_state in('ambiguous','intent') then recovery_state else 'received' end,
+   case when k=1 and recovery_state in('ambiguous','intent') then null else repeat('b',64) end from generate_series(1,3)k;
+  if recovery_state='legacy-complete' then
+   update public.report_fulfilment set state='ready',reason=null where id=jid;
+   if public.recover_sitefit_ready_fulfilment(owner,payment,true)<>fid or public.recover_sitefit_ready_fulfilment(owner,payment,true)<>fid then raise exception 'legacy completed edition not replayed';end if;
+   if exists(select 1 from public.controlled_trial_budget_events where trial_id=recovery_trial)
+   or (select full_projection from public.reports where id=fid)<>projection then raise exception 'legacy replay invented settlement or rewrote content';end if;
+  elsif recovery_state='received' then
    if public.recover_sitefit_ready_fulfilment(owner,payment,true)<>fid then raise exception 'controlled Ready recovery failed';end if;
    if (select state from public.controlled_proof where id=recovery_case)<>'complete' then raise exception 'received Full case remained interrupted';end if;
    if (public.sitefit_trial_budget_snapshot(recovery_trial)->>'settledMicros')::bigint<>2250 or (public.sitefit_trial_budget_snapshot(recovery_trial)->>'activeReservedMicros')::bigint<>0 then raise exception 'received Full usage was not settled exactly';end if;
