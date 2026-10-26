@@ -67,13 +67,17 @@ do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();t uuid;p uu
  exception when others then if sqlerrm<>'rollback_ready_response_loss_fixture' then raise;end if;end; -- Expired execution authority must not make received output undeliverable.
  -- Composite private-helper check mirrors the actual expired owner case; the
  -- public finaliser below still requires frozen graph/receipts and current rights.
- declare expired public.controlled_proof;begin
+ declare expired public.controlled_proof;participation boolean;begin
  select * into expired from public.controlled_proof where id=c;
  expired.expires_at:=now()-interval '1 day';expired.owner_id:='00000000-0000-4000-8000-000000000099';
- update public.controlled_trials set expires_at=now()-interval '1 day' where id=t;
+ -- Private rehearsal expiry still denies new spending. Public participation
+ -- now deliberately admits the former owner under ordinary customer rules.
+ select public_customers_enabled into participation from public.controlled_trials where id=t;
+ update public.controlled_trials set expires_at=now()-interval '1 day',public_customers_enabled=false where id=t;
  if public.sitefit_trial_active(t,expired.owner_id) then raise exception 'expired dispatch authority revived';end if;
  perform source_data.assert_saved_snapshot_owner(expired.owner_id,expired);
  begin perform source_data.assert_saved_snapshot_owner(other,expired);raise exception 'expired output foreign owner admitted';exception when insufficient_privilege then null;end;
+ update public.controlled_trials set public_customers_enabled=participation where id=t;
  end;
 
  set local role service_role;

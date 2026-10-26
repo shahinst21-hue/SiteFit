@@ -59,6 +59,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL('../supabase/tests/snapshot-advisor.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/controlled-trial.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL('../supabase/tests/public-customers.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/owner-public-customer.sql',import.meta.url),'utf8'));
       const savedRecoverySql=await readFile(new URL('../supabase/tests/public-saved-snapshot-recovery.sql',import.meta.url),'utf8');
       await db.exec(savedRecoverySql);
       // The original public guest fixture also runs as the expired rehearsal
@@ -67,6 +68,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       const expiredOwnerSql=savedRecoverySql.slice(0,savedRecoverySql.indexOf(' account_claim:=public.prepare_sitefit_claim'))
         .replace('o uuid:=gen_random_uuid()',"o uuid:='00000000-0000-4000-8000-000000000099'")
         .replace('(o,null,null,true)',"(o,'shahinst21@gmail.com',now(),false)")
+        .replace('public_customers_enabled=true','public_customers_enabled=false')
         .replace(/ insert into auth.users\(id,email,email_confirmed_at,is_anonymous\) values\('00000000-0000-4000-8000-000000000099'.*;\r?\n/,'');
       await db.exec(expiredOwnerSql+`\n if public.sitefit_trial_active(t,o) then raise exception 'recovery revived expired spending';end if;
         begin perform public.claim_sitefit_trial(t,o,'snapshot',p,gen_random_uuid(),'coffee-shop',null);
