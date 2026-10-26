@@ -13,7 +13,7 @@ export default async function CheckLocation() {
   if(controlledTrialConfigured(process.env)){
     const client=await createServerSupabase();const verified=await client?.auth.getUser();let allowed=false;
     try{allowed=await publicCustomersAvailable();}catch{/* Missing migration or exhausted admission stays restricted. */}
-    if(verifiedTrialIdentity(verified?.data.user??null)&&!verified?.error)try{await assertTrialOwner(verified!.data.user!);allowed=true;}catch{/* Restricted server-side; never expose identity or budget. */}
+    if(verifiedTrialIdentity(verified?.data.user??null)&&!verified?.error)try{await assertTrialOwner(verified!.data.user!);allowed=true;}catch{allowed=false;/* Preserve the expired rehearsal account's separate execution limit. */}
     if(!allowed)return <div className="page-wrap"><section className="simple-panel"><h1>New location checks are temporarily unavailable.</h1><p>Your saved reports remain available in your account. Please try a new check later.</p><Link className="button button-secondary" href="/account">Check saved status</Link></section></div>;
   }else if(controlledSnapshotConfigured(process.env,'sitefit.co.uk')){
     const client=await createServerSupabase();const verified=await client?.auth.getUser();
