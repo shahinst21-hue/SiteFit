@@ -34,7 +34,6 @@ export async function POST(request: Request) {
       const reverified = await client.auth.getUser(); user = reverified.error ? null : reverified.data.user;
       if (!user) return reply({ error: "Your session could not be verified." }, 503);
     }
-    if(trial){try{await assertTrialOwner(user,new URL(request.url).hostname);}catch{return reply({error:'Location analysis is temporarily unavailable.'},503);}}
     const active = await client.rpc("sitefit_session_available");
     if (active.error || active.data !== true) return reply({ error: "Sign in to the account that now owns your Snapshots." }, 403);
     const owner=user.id;
@@ -43,6 +42,7 @@ export async function POST(request: Request) {
     if(trial){
       savedMaterial=await savedSnapshotMaterial(owner,input.propertyId,input.businessType);
       if(!savedMaterial){
+        try{await assertTrialOwner(user,new URL(request.url).hostname);}catch{return reply({error:'Location analysis is temporarily unavailable.'},503);}
         const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);
         if(paused){
           const candidate=await trialSourceRecoveryCandidate(owner,input.propertyId,input.businessType);

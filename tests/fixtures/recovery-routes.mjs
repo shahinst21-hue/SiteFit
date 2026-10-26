@@ -11,8 +11,7 @@ let user=permanent,active=true,calls=[];
 const client={auth:{getUser:async()=>({data:{user},error:null})},rpc:async name=>{assert.equal(name,'sitefit_session_available');return {data:active,error:null};}};
 globalThis.recoveryRouteFixture={server:async()=>client,verified:async()=>({client,user}),rpc(name,args){
  calls.push({name,args});let data=null,error=null;
- if(name==='authorise_sitefit_trial_owner')data=true;
- else if(name==='read_sitefit_saved_snapshot'){if(args.p_owner===owner&&args.p_property===property)data={reportId:report};}
+ if(name==='read_sitefit_saved_snapshot'){if(args.p_owner===owner&&args.p_property===property)data={reportId:report};}
  else if(name==='recover_sitefit_ready_fulfilment'){
   assert.equal(args.p_test,false);
   if(args.p_owner===owner&&args.p_payment===payment)data=report;else error={message:'Synthetic not owned'};

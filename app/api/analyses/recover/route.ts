@@ -1,7 +1,6 @@
 import {createServerSupabase} from '@/lib/supabase/server';
 import {sameOrigin,submissionBody} from '@/lib/analysis/http';
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
-import {assertTrialOwner} from '@/lib/proof/trial';
 import {savedSnapshotMaterial,recoverSavedSnapshot} from '@/lib/proof/recover-saved-snapshot';
 export const runtime='nodejs';
 export const maxDuration=60;
@@ -17,7 +16,6 @@ export async function POST(request:Request){
   const verified=await client.auth.getUser(),user=verified.error?null:verified.data.user;
   if(!user)return reply({error:'Sign in to the account that owns this check.'},403);
   const active=await client.rpc('sitefit_session_available');if(active.error||active.data!==true)return reply({error:'Sign in to the account that now owns this check.'},403);
-  await assertTrialOwner(user,host);
   const material=await savedSnapshotMaterial(user.id,input.propertyId,input.businessType);
   if(!material)return reply({error:'This check cannot be recovered automatically yet. Your saved records are retained; contact support.'},409);
   const result=await recoverSavedSnapshot(user.id,material);
