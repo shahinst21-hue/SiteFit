@@ -4,7 +4,7 @@ begin transaction read only;
 with health as (
  select now() observed_at,pg_database_size(current_database()) database_bytes,
  public.sitefit_public_customers_available('cf931ac6-558b-456c-921f-8f8436512098') public_entry_open,
- greatest(40-(select count(*) from public.trial_address_dispatches where trial_id='cf931ac6-558b-456c-921f-8f8436512098'),0) address_requests_remaining,
+ (select count(*) from public.trial_address_dispatches where trial_id='cf931ac6-558b-456c-921f-8f8436512098') address_requests_recorded,
  public.sitefit_trial_budget_snapshot('cf931ac6-558b-456c-921f-8f8436512098') budget,
  (select count(*) from public.report_fulfilment j join public.payments p on p.id=j.payment_id
   where p.status='succeeded' and p.access_state='active' and p.verified_at is not null
@@ -22,7 +22,6 @@ select to_jsonb(h)||jsonb_build_object('alerts',to_jsonb(array_remove(array[
  case when h.recent_stopped_snapshots>0 then 'recent_stopped_snapshot' end,
  case when not h.scheduler_active or h.scheduler_attention>0 then 'scheduler_attention' end,
  case when h.database_bytes+2000000>450000000 then 'storage_capacity_stop' end,
- case when h.address_requests_remaining<2 then 'address_capacity_stop' end,
  case when (h.budget->>'availableMicros')::bigint<650000 then 'ai_capacity_stop' end
 ],null))) health from health h;
 rollback;
