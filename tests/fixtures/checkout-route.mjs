@@ -11,11 +11,11 @@ const consent={version:'sitefit-sale-v1-20261019-affirmative',buyerKind:'consume
 const {salePolicy}=await import('../../lib/legal/sale.ts');consent.version=salePolicy.version;
 const jar=new Map();let stripeCalls=0,creates=0,sales=0,admissions=0;
 const user=mode==='signed-out'?null:{id:owner,is_anonymous:false,email_confirmed_at:'2026-10-19',email:mode==='ordinary'?'ordinary@example.invalid':'shahinst21@gmail.com',identities:[{provider:'google'}]};
-globalThis.checkoutFixture={jar,user,delivery:()=>{admissions++;if(mode==='delivery-unavailable'||mode==='delivery-lost-after-reservation'&&admissions===2)throw Error('delivery_capacity_unavailable');},verifyOwner:()=>{if(mode==='admission-denied')throw Error('controlled_trial_denied');},stripe:()=>{stripeCalls++;return {checkout:{sessions:{create:async()=>{creates++;return {id:'cs_live_synthetic',url:'https://checkout.stripe.com/c/pay/synthetic'};}}}};},recordSale:async(_owner,_id,c)=>{assert.deepEqual(c,consent);sales++;}};
+globalThis.checkoutFixture={jar,user,snapshot:{analysisId:'00000000-0000-4000-8000-000000000003',dimensions:[{why:{sources:[{provider:'synthetic'}],observations:[{value:mode==='insufficient-evidence'?null:0}]}}]},delivery:()=>{admissions++;if(mode==='delivery-unavailable'||mode==='delivery-lost-after-reservation'&&admissions===2)throw Error('delivery_capacity_unavailable');},verifyOwner:()=>{if(mode==='admission-denied')throw Error('controlled_trial_denied');},stripe:()=>{stripeCalls++;return {checkout:{sessions:{create:async()=>{creates++;return {id:'cs_live_synthetic',url:'https://checkout.stripe.com/c/pay/synthetic'};}}}};},recordSale:async(_owner,_id,c)=>{assert.deepEqual(c,consent);sales++;}};
 const mocks={
  'server-only':'export {};',
  'next/headers':'export const cookies=async()=>({set:(key,value,options)=>globalThis.checkoutFixture.jar.set(key,{value,options}),delete:key=>globalThis.checkoutFixture.jar.delete(key)});',
- '@/lib/supabase/server':'export const verifiedUser=async()=>({user:globalThis.checkoutFixture.user,client:{rpc:async()=>({data:{analysisId:"00000000-0000-4000-8000-000000000003"},error:null})}});',
+ '@/lib/supabase/server':'export const verifiedUser=async()=>({user:globalThis.checkoutFixture.user,client:{rpc:async()=>({data:globalThis.checkoutFixture.snapshot,error:null})}});',
  '@/lib/proof/trial':'export const assertTrialOwner=async()=>globalThis.checkoutFixture.verifyOwner();',
  '@/lib/proof/repository':'export const checkProcessing=async()=>{};',
  '@/lib/legal/repository':'export const recordSale=(...args)=>globalThis.checkoutFixture.recordSale(...args);',
@@ -36,6 +36,7 @@ if(mode.startsWith('return-')){
 const {POST}=await import('../../app/purchase/checkout/route.ts');
 const r=await POST(new Request('https://sitefit.co.uk/purchase/checkout',{method:'POST',headers:{origin:mode==='cross-origin'?'https://evil.example':'https://sitefit.co.uk','content-type':'application/json'},body:JSON.stringify({reportId:report,saleConsent:consent})}));
 const body=await r.json();
+if(mode==='insufficient-evidence'){assert.equal(r.status,409);assert.equal(body.code,'insufficient_report_evidence');assert.equal(admissions,0);}
 if(mode==='signed-out'){assert.equal(r.status,200);assert.equal(body.url,'/login?next=%2Fpurchase%2Fcontinue');assert.equal(stripeCalls,0);assert.equal(sales,0);const saved=jar.get('sitefit_checkout_intent');assert.ok(saved);assert.equal(saved.options.httpOnly,true);assert.equal(saved.options.secure,true);const {readCheckoutIntent}=await import('../../lib/auth/checkout-intent.ts');assert.deepEqual(readCheckoutIntent(saved.value,process.env.SUPABASE_SECRET_KEY),{report,consent});}
 else if(mode==='owner'||mode==='ordinary'){assert.equal(r.status,200);assert.equal(body.url,'https://checkout.stripe.com/c/pay/synthetic');assert.equal(creates,1);assert.equal(sales,1);assert.equal(jar.get('sitefit_checkout_intent').value,'');assert.equal(jar.get('sitefit_checkout_intent').options.maxAge,0);assert.equal(jar.get('sitefit_checkout_intent').options.path,'/purchase');}
 else if(mode==='delivery-lost-after-reservation'){assert.equal(r.status,409);assert.equal(admissions,2);assert.equal(creates,0);assert.equal(sales,1);}

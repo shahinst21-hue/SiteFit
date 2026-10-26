@@ -1,4 +1,5 @@
 import {PurchaseTerms} from '@/components/purchase-terms';
+import {snapshotHasUsableEvidence} from '@/lib/analysis/report-admission';
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
@@ -35,8 +36,9 @@ export default async function Snapshot({ params,searchParams }: { params: Promis
   report=await readResidential(client,id,report);
   const requestHeaders=await headers();
   const context=await readSnapshotContext(client,id);
-  let purchaseAllowed=purchaseAvailableOnHost(process.env,requestHeaders.get('host'));
+  const evidenceReady=snapshotHasUsableEvidence(report);
+  let purchaseAllowed=evidenceReady&&purchaseAvailableOnHost(process.env,requestHeaders.get('host'));
   if(purchaseAllowed&&controlledTrialConfigured(process.env))try{await assertTrialOwner(user);}catch{purchaseAllowed=false;}
   const purchase=(await searchParams).purchase==='1';
-  return <FreeSnapshot openPurchase={purchase} purchaseTerms={purchaseAllowed?<PurchaseTerms report={id}/>:undefined} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} />;
+  return <>{!evidenceReady&&<p role="status" className="container">There is not enough usable source evidence for a Full Report at this location. Purchasing is unavailable for this check.</p>}<FreeSnapshot openPurchase={purchase} purchaseTerms={purchaseAllowed?<PurchaseTerms report={id}/>:undefined} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} /></>;
 }
