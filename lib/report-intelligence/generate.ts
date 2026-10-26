@@ -11,6 +11,7 @@ import { decisionSummary } from "./decision-summary.ts";
 import { narrativePacket, narrativeContract, validateGeneratedNarrative, validateNarrative, narrativeFailureCode, narrativeFailureDiagnostic, type ConsultantNarrative } from "./narrative.ts";
 import { operatingComparison } from "./operating-comparison.ts";
 import { competitionBrief } from "./competition.ts";
+import {fullHasGroundedFindings} from '../analysis/report-admission.ts';
 
 const groupKeys: Record<Group, SectionKey[]> = { context: ["customer-context", "competition", "access"], premises: ["premises", "rental-context"], synthesis: ["overview", "actions"] };
 /** Synthesis can rank accepted evidence but cannot invent a stronger overall judgement. */
@@ -49,6 +50,7 @@ export async function generateFullIntelligence(owner: string, reportId: string,
   const repo = options.repository ?? fullRepository(owner);
   let edition = await repo.read(reportId);
   if (edition.status === "ready") return edition; // No packet/provider/calculator work on replay.
+  if(!fullHasGroundedFindings(edition.preparation.catalog))throw Error('insufficient_report_evidence');
   const provider = options.provider ?? fullProvider();
   if (!options.resume && edition.revision !== 0) return edition;
   if (options.resume && edition.checkpoint.dispatches.some(d => d.state === "intent")) {

@@ -46,9 +46,14 @@ test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected on
 
 function store(supported = false) {
   const a = buildAssessment(context(), [], [], [], null, null, false, [], new Date(date)), catalog = buildCatalog(a, [], new Date(date));
-  if (supported) for (const key of ["customer-context", "premises"] as const) catalog.atoms.push(
-    {id:`reason-${key}`,section:key,role:"reason",text:"Synthetic controlled support",factIds:[],rule:"synthetic"},
+  if (supported) for (const key of ["customer-context", "premises"] as const) {
+    catalog.facts.push({id:`fact-${key}`,evidenceId:`evidence-${key}`,section:key,dataset:'Synthetic fixture',value:0,units:'records',scope:'Synthetic test only',
+      effectiveAt:date,retrievedAt:date,limitations:[],source:{provider:'synthetic'},licence:{representationAllowed:true,expiresAt:null,policyId:'synthetic-test-only'},statistical:null,
+      strength:'limited',kind:'observed',sourceClass:'official',freshness:'fresh',precision:'area'} as unknown as Fact);
+    catalog.atoms.push(
+    {id:`reason-${key}`,section:key,role:"reason",text:"Synthetic controlled support",factIds:[`fact-${key}`],rule:"synthetic"},
     {id:`lead-${key}`,section:key,role:"conclusion",text:"Synthetic controlled conclusion",factIds:[],rule:"synthetic"});
+  }
   const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1", analysisId: ids.analysis,
     inputId: ids.input, assessmentId: ids.property, assessmentDigest: packetDigest(a), catalog, packetDigests: {
       context: packetDigest(catalogPacket(catalog, ["customer-context", "competition", "access"])),
@@ -60,6 +65,13 @@ function store(supported = false) {
   }, async freeze(e: StoredEdition, p: unknown) { assert.equal(e.revision, value.revision); value = { ...value, status: "ready", projection: p }; return structuredClone(value); } };
   return { repo: repo as unknown as ReturnType<typeof fullRepository>, value: () => value };
 }
+
+test('wholly unsupported Full output stops before reservation, AI or Ready delivery',async()=>{
+ const db=store(),before=structuredClone(db.value());let calls=0;
+ const provider={interpret(){calls++;throw Error('must not dispatch');}} as unknown as ReturnType<typeof fullProvider>;
+ await assert.rejects(generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider}),/insufficient_report_evidence/);
+ assert.equal(calls,0);assert.deepEqual(db.value(),before);
+});
 
 test('narrative group recovery requires explicit operator repair and preserves the rejected receipt and successful group',async()=>{
  const db=store(true);db.value().preparation.narrativeVersion='consultant-narrative-v2';db.value().checkpoint=newCheckpoint(db.value().preparation);

@@ -16,6 +16,7 @@ import { openCheckout } from "@/lib/payments/checkout";
 import { validateFreeProjection } from "@/lib/analysis/projection";
 import {controlledTrialConfigured,publicCustomersConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner} from '@/lib/proof/trial';
+import {snapshotHasUsableEvidence} from '@/lib/analysis/report-admission';
 export async function POST(request:Request){
  if(!purchaseSameOrigin(request,process.env))return paymentReply({error:"Purchasing is unavailable."},403);
  if(!salePolicy.approved)return paymentReply({error:"New Checkout is unavailable while the sale policy and immediate-supply requirements await approval."},503);
@@ -38,7 +39,8 @@ export async function POST(request:Request){
   stage='ownership';
   const {data,error}=await client.rpc("read_sitefit_free",{p_report:body.reportId});
   if(error||!data||typeof data!=="object"||Array.isArray(data)||!purchaseUuid(data.analysisId))throw Error("snapshot_unavailable");
-  validateFreeProjection(data);
+  const snapshot=validateFreeProjection(data);
+  if(!snapshotHasUsableEvidence(snapshot))return paymentReply({error:'There is not enough usable source evidence for a Full Report at this location. No payment has been started.',code:'insufficient_report_evidence'},409);
   const config=stripeConfig(process.env);
   stage='delivery-admission';
   if(config.live)await requireLiveDelivery();
