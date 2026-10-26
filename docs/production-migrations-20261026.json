@@ -1,0 +1,41 @@
+{
+  "installedToProduction": true,
+  "versions": 117,
+  "migrations": [
+    {
+      "file": "20261025200000_unavailable_catchment_evidence.sql",
+      "bytes": 7250,
+      "sha256": "a17305166bc049ad8c1d2d64d0be06355405ab7c2b919790944a60131553ca8a"
+    },
+    {
+      "file": "20261025210000_public_saved_snapshot_recovery.sql",
+      "bytes": 18903,
+      "sha256": "82643d3e468cc015caa84bff102ec40d9dcc1e857729c087681428eb49250514"
+    },
+    {
+      "file": "20261025220000_public_entry_capacity.sql",
+      "bytes": 917,
+      "sha256": "2c6c7807cc5fbc39b36d0918b94efa4fc7e425ef82160cf6f9f844cb3c7dd1e0"
+    },
+    {
+      "file": "20261025230000_stored_ready_full_delivery.sql",
+      "bytes": 8729,
+      "sha256": "7557a7abc28e2995bca57bc05ba4835925e78f95bb916c71b75b28e160bb3edd"
+    },
+    {
+      "file": "20261025233000_claimed_snapshot_continuity.sql",
+      "bytes": 6946,
+      "sha256": "37ee38236078d14a829c984e9bf715a6d2aa4d1ee5e6fa527025fdb26a02ac4e"
+    },
+    {
+      "file": "20261025235000_expired_saved_output_delivery.sql",
+      "bytes": 12748,
+      "sha256": "626b533be655d7d1bd7ba7bfdecf29a88599f8f16c71fd66afad1b5f5e991071"
+    },
+    {
+      "file": "20261026003000_ready_paid_replay.sql",
+      "bytes": 3133,
+      "sha256": "a62b6671951fd868792369ca43627fa9adcb90202d85b1eea0bf12cef915b013"
+    }
+  ]
+}

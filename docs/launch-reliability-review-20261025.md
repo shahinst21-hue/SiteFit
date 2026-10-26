@@ -1,5 +1,7 @@
 # Snapshot launch reliability review — 25 October 2026
 
+Historical review. The completed remediation and superseding installed-release decision are in [Production verification, 26 October](production-verification-20261026.md).
+
 The subsequent owner-authorised remediation is recorded in
 [public report recovery](public-report-recovery-20261025.md), including actual
 multi-connection Development proofs. The findings below retain the earlier

@@ -1,5 +1,7 @@
 # Public report recovery and launch remediation — 25 October 2026
 
+Historical predeployment checkpoint. [Production verification, 26 October](production-verification-20261026.md) records the installed release and superseding launch decision.
+
 **Release status: NO GO.** Implementation depends on PR140's unavailable-operand correction. These are Development/PR changes, not a Production release. This work made no Production write, purchase, paid AI/source call, allowance increase or service upgrade.
 
 ## Corrected failures
