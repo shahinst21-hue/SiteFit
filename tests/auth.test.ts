@@ -125,3 +125,15 @@ test("browser config accepts only publishable keys and safe origins", () => {
     assert.equal(readPublicSupabaseConfig({ ...env, SUPABASE_URL: url }), null);
   assert.equal(readPublicSupabaseConfig({}), null);
 });
+
+
+test('real Supabase PKCE email TokenHash is verified as email, never exchanged as an OAuth code',async()=>{
+ const value='pkce_'+'a'.repeat(56);
+ const credentials=callbackCredentials(new URLSearchParams({token_hash:value,type:'email'}));
+ assert.deepEqual(credentials,{kind:'email',value});
+ let calls=0;
+ assert.equal(await completeAuthCallback(credentials!,{exchangeCodeForSession:async()=>{assert.fail('TokenHash is not an OAuth code');},verifyOtp:async input=>{calls++;assert.deepEqual(input,{token_hash:value,type:'email'});return {error:null};}}),true);
+ assert.equal(calls,1);
+ for(const token of ['pkce_','pkce_'+ 'a'.repeat(257),'pkce_not-a-hash','PKCE_'+'a'.repeat(56),'pkce_pkce_'+'a'.repeat(56)])assert.equal(callbackCredentials(new URLSearchParams({token_hash:token,type:'email'})),null);
+ assert.equal(callbackCredentials(new URLSearchParams({token_hash:value,type:'recovery'})),null);
+});
