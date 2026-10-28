@@ -32,6 +32,6 @@ export function PurchaseAuth({test=true}:{test?:boolean}){
   </>}
   {sent&&<><h2 ref={sentHeading} tabIndex={-1}>Verification email sent</h2><p role="status">Check your inbox and spam folder. Your Snapshot is still saved. Verifying your email does not take a payment.</p><button className="button button-secondary" disabled={busy} onClick={()=>router.refresh()}>I opened the verification link</button><p className="field-help">If you used another tab in this browser, refresh here. On another device, continue there; this browser is not signed in automatically.</p></>}
   {error&&<p className="field-error" role="alert">{error}</p>}
-  <button className="button button-secondary" disabled={busy} onClick={()=>{setSent(false);setError(null);}}>Use Google or request another link</button><button className="text-link" disabled={busy} onClick={()=>void action("cancel")}>Return to my Snapshot</button>
+  {sent&&<button className="button button-secondary" disabled={busy} onClick={()=>{setSent(false);setError(null);}}>Back to sign-in options</button>}<button className="text-link" disabled={busy} onClick={()=>void action("cancel")}>Return to my Snapshot</button>
  </section></>;
 }
