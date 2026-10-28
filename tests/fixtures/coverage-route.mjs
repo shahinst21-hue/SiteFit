@@ -1,4 +1,4 @@
-/* global Request, Response, AbortSignal */
+/* global Request, AbortSignal */
 import process from 'node:process';import console from 'node:console';
 import {registerHooks} from 'node:module';import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';
 import assert from 'node:assert/strict';
