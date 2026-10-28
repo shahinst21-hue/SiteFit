@@ -45,7 +45,7 @@ export function callbackCredentials(
     params.get("type") === "email" &&
     params.getAll("token_hash").length === 1 &&
     params.getAll("type").length === 1 &&
-    /^[a-fA-F0-9]{32,256}$/.test(token)
+    /^(?:pkce_)?[a-fA-F0-9]{32,256}$/.test(token)
   )
     return { kind: "email", value: token };
   return null;
