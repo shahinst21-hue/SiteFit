@@ -10,9 +10,14 @@ import {controlledTrialConfigured,publicCustomersConfigured} from '@/lib/proof/t
 import {assertTrialOwner,trialSnapshotPause,trialSourceRecoveryCandidate} from '@/lib/proof/trial';
 import {recoverSourceSnapshot} from '@/lib/proof/recover-source-snapshot';
 import {savedSnapshotMaterial,recoverSavedSnapshot} from '@/lib/proof/recover-saved-snapshot';
+import {assertSnapshotCoverage} from '@/lib/analysis/coverage';
 export const runtime = "nodejs";
 export const maxDuration = 120;
 const reply = (body: object, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" } });
+class SnapshotPause extends Error {
+ readonly response:Response;
+ constructor(body:object){super('saved_snapshot_paused');this.response=reply(body,409);}
+}
 export async function POST(request: Request) {
   const trial=controlledTrialConfigured(process.env,new URL(request.url).hostname);
   const proof=trial||controlledSnapshotConfigured(process.env,new URL(request.url).hostname);
@@ -43,18 +48,25 @@ export async function POST(request: Request) {
       savedMaterial=await savedSnapshotMaterial(owner,input.propertyId,input.businessType);
       if(!savedMaterial){
         try{await assertTrialOwner(user,new URL(request.url).hostname);}catch{return reply({error:'Location analysis is temporarily unavailable.'},503);}
-        const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);
-        if(paused){
-          const candidate=await trialSourceRecoveryCandidate(owner,input.propertyId,input.businessType);
-          if(!candidate)return reply(paused,409);
-          recoveryCase=candidate;
-        }
       }
     }
     const produce=async(observer?:SnapshotObserver)=>{
-      const result=await ownedGeneration(owner,input,()=>savedMaterial?recoverSavedSnapshot(owner,savedMaterial,observer):recoveryCase
-        ?recoverSourceSnapshot(owner,recoveryCase,request.signal,observer)
-        :generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer));
+      const result=await ownedGeneration(owner,input,async()=>{
+        if(trial&&!savedMaterial){
+          // Preserve the existing per-owner rate/concurrency gate even for
+          // rejected locations; never claim a case or reserve AI first.
+          await assertSnapshotCoverage(input.propertyId,request.signal);
+          const paused=await trialSnapshotPause(owner,input.propertyId,input.businessType);
+          if(paused){
+            const candidate=await trialSourceRecoveryCandidate(owner,input.propertyId,input.businessType);
+            if(!candidate)throw new SnapshotPause(paused);
+            recoveryCase=candidate;
+          }
+        }
+        return savedMaterial?recoverSavedSnapshot(owner,savedMaterial,observer):recoveryCase
+          ?recoverSourceSnapshot(owner,recoveryCase,request.signal,observer)
+          :generateSnapshot(owner,input.propertyId,input.businessType,input.nonce,request.signal,observer);
+      });
       await observeCampaign(owner,result.reportId);return {reportId:result.reportId};
     };
     if(request.headers.get('accept')==='application/x-ndjson')return snapshotStream(produce,generationFailure);
@@ -64,13 +76,14 @@ export async function POST(request: Request) {
   }
 }
 function generationFailure(error:unknown){
+    if(error instanceof SnapshotPause)return error.response;
     const code = error instanceof Error ? error.message : "unavailable";
     if(code==='proof_manual_reconciliation_required'||code==='proof_or_rights_authority_denied'||code==='controlled_trial_denied')return reply({error:"Preparation is paused for authorised review. Saved records are retained. Do not resubmit this check."},503);
     const safeCodes = new Set(["submission_unavailable", "report_read_unavailable", "analysis_configuration_missing", "property_unavailable",
       "outside_analysis_coverage", "location_precision_unavailable", "source_persistence_incomplete", "stored_section_packet_mismatch",
       "section_analysis_incomplete", "synthesis_incomplete", "partial_report_persistence_failed", "report_persistence_failed", "stored_input_read_unavailable", "stored_report_read_unavailable", "generation_busy", "generation_limit"]);
     console.warn("snapshot_generation", { code: safeCodes.has(code) ? code : "unavailable" });
-    if (code === "outside_analysis_coverage") return reply({ error: "Location analysis currently covers London. You can choose another address." }, 422);
+    if (code === "outside_analysis_coverage") return reply({ code, error: "Location analysis currently covers London. This address is outside our coverage. Please choose a London address." }, 422);
     if (code === "location_precision_unavailable") return reply({ error: "This address has no usable location point. Select a returned postal address to generate local analysis." }, 422);
     if (code === "generation_busy" || code === "generation_limit") return reply({ error: code === "generation_busy" ? "A Snapshot is already being prepared. Wait for it to finish before starting another." : "You have reached the current Snapshot limit. Please try again later." }, 429);
     return reply({ error: "We could not complete your Snapshot. Saved source results are retained; retrying this request will reuse them." }, 503);

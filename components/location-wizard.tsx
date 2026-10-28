@@ -13,7 +13,7 @@ import type {PropertySelection} from '@/lib/addresses/model';
 import {SavedSnapshotRecovery} from './saved-snapshot-recovery';
 import {GenerationProgress} from './generation-progress';
 import {snapshotView} from '../lib/generation-progress';
-import {readSnapshotProgress} from '../lib/snapshot-progress-client';
+import {readSnapshotProgress,SnapshotRequestError} from '../lib/snapshot-progress-client';
 import type {SnapshotTick} from '../lib/analysis/progress';
 
 /** Dependencies come only from the explicitly labelled, server-gated UI rehearsal. */
@@ -27,6 +27,7 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
  const consumeInitialSearch=useCallback(()=>setInitialSearch(''),[]);
  const [step,setStep]=useState(proofStart?1:0),[business,setBusiness]=useState<BusinessType|null>(proofStart?.business??null);
  const [error,setError]=useState(''),[busy,setBusy]=useState(false);
+ const [outsideCoverage,setOutsideCoverage]=useState(false);
  const [progress,setProgress]=useState<SnapshotTick|{stage:'ready';completed:8}>({stage:'identity',completed:0});
  const nonce=useRef<string|null>(proofStart?.nonce??null),heading=useRef<HTMLHeadingElement>(null),keyboard=useRef(false);
  const transition=useRef<ViewTransition|null>(null),previousStep=useRef(0);
@@ -43,7 +44,7 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
   else update();
  }
  async function generate(event:FormEvent){
-  event.preventDefault();if(busy||step===2)return;
+  event.preventDefault();if(busy||step===2||outsideCoverage)return;
   if(!property||!business){setError('Choose the business you want to open.');document.getElementById('businessType')?.focus();return;}
   nonce.current??=crypto.randomUUID();if(!rehearsal&&!proofStart)trackJourney('free_analysis_started',nonce.current,business);setBusy(true);setError('');setProgress({stage:'identity',completed:0});moveTo(2);
   let opening=false;
@@ -52,7 +53,7 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
    const response=await fetch('/api/analyses/generate',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/x-ndjson'},
     body:JSON.stringify({propertyId:property.id,businessType:business,nonce:nonce.current}),signal:AbortSignal.timeout(120000)});
    const reportId=await readSnapshotProgress(response,setProgress);if(!proofStart){trackJourney('free_analysis_completed',reportId,business);void bindAcquisition(reportId);}opening=true;router.push(`/snapshots/${reportId}`);
-  }catch(e){if(!rehearsal&&!proofStart)trackJourney('analysis_failed',nonce.current??'unknown',business,e instanceof DOMException&&e.name==='TimeoutError'?'timeout':'unavailable');setError(e instanceof Error?e.message:'Your Snapshot could not be confirmed. Check your account before starting again.');}
+  }catch(e){if(!rehearsal&&!proofStart)trackJourney('analysis_failed',nonce.current??'unknown',business,e instanceof DOMException&&e.name==='TimeoutError'?'timeout':'unavailable');setError(e instanceof Error?e.message:'Your Snapshot could not be confirmed. Check your account before starting again.');if(e instanceof SnapshotRequestError&&e.code==='outside_analysis_coverage'){setOutsideCoverage(true);moveTo(1);}}
   finally{if(!opening)setBusy(false);}
  }
  const type=businessTypes.find(t=>t.id===business);
@@ -66,18 +67,18 @@ export function LocationWizard({rehearsal,proofStart}:{rehearsal?:WizardRehearsa
     <h1 ref={heading} tabIndex={-1}>{step===0?'Find your property':step===1?'Choose your business':error?'Check stopped':'Preparing your Snapshot'}</h1>
    </header>
    {step===0?<AddressLookup state={lookupState} setState={setLookupState} selected={property} initialSearch={initialSearch} onInitialSearch={consumeInitialSearch} transport={rehearsal?.transport}
-    onSelect={selected=>{if(!rehearsal&&!proofStart)trackJourney('address_selected',selected.id);setProperty(selected);nonce.current=null;setError('');moveTo(1);}}/>:
+    onSelect={selected=>{if(!rehearsal&&!proofStart)trackJourney('address_selected',selected.id);setProperty(selected);nonce.current=null;setError('');setOutsideCoverage(false);moveTo(1);}}/>:
     step===1?<form onSubmit={generate}>
      <div className="wizard-property"><span className="wizard-property-icon"><Icon name="pin"/></span><div><small>YOUR PROPERTY</small><p>{property?.formattedAddress}</p></div>{!proofStart&&<button type="button" className="wizard-edit" onClick={()=>{setError('');moveTo(0);}}>Change<span className="sr-only"> property</span></button>}</div>
      {error&&<p className="error-summary" role="alert">{error}</p>}
      <fieldset><legend className="sr-only">Choose the business you want to open here</legend><div className="business-options" id="businessType" tabIndex={-1}>
       {businessTypes.map((t,index)=><label key={t.id} className={`business-option ${business===t.id?'selected':''}`}>
-       <input type="radio" name="businessType" value={t.id} checked={business===t.id} required disabled={!!proofStart&&t.id!==proofStart.business} onChange={()=>{if(!rehearsal&&!proofStart)trackJourney('business_selected',(property?.id??'choice')+':'+t.id,t.id);setBusiness(t.id);nonce.current=proofStart?.nonce??null;setError('');}}/>
+       <input type="radio" name="businessType" value={t.id} checked={business===t.id} required disabled={outsideCoverage||!!proofStart&&t.id!==proofStart.business} onChange={()=>{if(!rehearsal&&!proofStart)trackJourney('business_selected',(property?.id??'choice')+':'+t.id,t.id);setBusiness(t.id);nonce.current=proofStart?.nonce??null;setError('');}}/>
        <span className="business-icon" aria-hidden="true"><Icon name={(['coffee','restaurant','hair','beauty'] as IconName[])[index]}/></span>
        <span className="business-option-copy"><strong>{t.label}</strong></span><span className="business-choice-mark" aria-hidden="true"><Icon name="check"/></span>
       </label>)}
      </div></fieldset>
-     <div className="wizard-submit"><button className="button button-primary" type="submit" disabled={!business||busy}>Get my Free Snapshot<Arrow/></button></div>
+     <div className="wizard-submit">{outsideCoverage?<button className="button button-primary" type="button" onClick={()=>{setError('');moveTo(0);}}>Choose another address<Arrow/></button>:<button className="button button-primary" type="submit" disabled={!business||busy}>Get my Free Snapshot<Arrow/></button>}</div>
     </form>:<div className="wizard-processing">
      <div className="wizard-check-context"><Icon name="pin"/><p>{property?.formattedAddress}<small>{type?.label}</small></p></div>
      <div role="status" aria-live="polite" aria-atomic="true"><GenerationProgress view={snapshotView(progress,!!error)}/></div>
