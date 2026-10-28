@@ -147,7 +147,7 @@ body:has(.check-page .wizard-flow) > footer { display:none; }
 .wizard-processing .gp-dial { width:112px; }
 .wizard-processing .gp-value { font-size:40px; }
 .wizard-processing .gp-message h2 { font-size:20px; margin-bottom:6px; }
-.wizard-processing .gp-footer > span:last-child { display:none; }
+/* Keep the estimate label visible beside the confirmed milestone count. */
 .wizard-processing .wizard-session-note { margin-top:10px; }
 .wizard-paused { display:grid; gap:16px; margin-top:20px; font-size:13px; line-height:1.6; }
 .wizard-paused > p:first-child { color:var(--muted); }
