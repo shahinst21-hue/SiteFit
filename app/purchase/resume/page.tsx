@@ -30,7 +30,7 @@ export default async function Resume({searchParams}:{searchParams:Promise<{repor
   if(active)redirect(`/purchase/return?purchase=${active}`);
   const intent=readCheckoutIntent((await cookies()).get(CHECKOUT_INTENT_COOKIE)?.value,process.env.SUPABASE_SECRET_KEY??'');
   if(intent?.report===report)redirect('/purchase/continue');
-  redirect(`/snapshots/${report}?purchase=1`);
+  redirect(`/snapshots/${report}?purchase=1&signed_in=1`);
  }
  const proof=claimCookie((await cookies()).get(CLAIM_COOKIE)?.value);if(!proof)notFound();
  let claim;try{claim=await readClaim(proof);}catch{notFound();}

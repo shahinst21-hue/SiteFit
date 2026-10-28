@@ -14,4 +14,5 @@ export async function prepareGuestPurchase(user:{id:string},report:string,secure
   const proof=reusable??{id:randomUUID(),capability:newProof(),browser:newProof()};
   const claim=await prepareClaim(user.id,report,proof);
   jar.set(CLAIM_COOKIE,`${claim.id}.${proof.capability}.${proof.browser}`,{httpOnly:true,secure:secure,sameSite:"lax",path:"/purchase",maxAge:3600});
+  return {...proof,id:claim.id};
 }
