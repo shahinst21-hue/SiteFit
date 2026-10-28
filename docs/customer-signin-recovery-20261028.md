@@ -30,3 +30,8 @@ At implementation time targeted journey tests and the fresh PostgreSQL suite pas
 ## Actual inbox proof follow-up
 
 The single authorised email reached the owner's Gmail inbox with the SiteFit subject, wordmark and cross-device wording. A fresh HTTP client confirmed GET did not consume/authenticate, but the page rejected the actual provider token: its TokenHash has the explicit `pkce_` prefix plus 56 hexadecimal characters. Accept that bounded provider format in the existing email-only parser and still let Supabase verify/consume it; never exchange it as an OAuth code. Add a regression for that real shape and reject malformed/oversized/repeated prefixes and other token purposes. This follow-up does not change the installed migration or email settings and requires its own protected CI/release before the same unused link can finish the actual sign-in proof.
+
+
+## Invalid address bootstrap correction
+
+Final HTTP checks created four anonymous Auth users per run before returning invalid-input errors. No provider/report/payment work occurred, and synthetic rollback fixture accounts were absent. The public address wrapper authenticated/created guests before calling its existing bounded input and rate validation. Move that existing admission into an optional asynchronous hook after method/origin/body/operation validation and the unchanged rate limiter, before provider/repository access. Invalid and limited traffic must create zero guest accounts; valid public traffic keeps the existing verified anonymous-session admission. No rate limit, Postio quota, budget or schema setting changes. Re-run the real Production invalid boundaries and compare Auth user count as well as financial/report fingerprints.
