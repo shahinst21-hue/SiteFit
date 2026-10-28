@@ -9,5 +9,5 @@ export function CheckoutContinuation({report,consent}:{report:string;consent:Sal
  useEffect(()=>{if(started.current)return;started.current=true;
  void purchaseNavigation(report,true,window.location.origin,fetch,consent).then(url=>window.location.assign(url)).catch(()=>setError(true));
  },[report,consent]);
- return <div className="page-wrap narrow-page"><h1>{error?'Payment could not open.':'Opening secure payment…'}</h1><p role="status">{error?'Your Snapshot is saved. Return to it to continue.':'Your selected location and purchase choices have been kept.'}</p><Link className="text-link" href={`/snapshots/${report}?purchase=1`}>Return to your Snapshot</Link></div>;
+ return <div className="page-wrap narrow-page"><h1>{error?'Payment could not open.':"You're signed in. Continuing your purchase…"}</h1><p role="status">{error?'Your Snapshot is saved. Return to it to continue.':'Your original Snapshot and purchase choices are saved. Opening secure payment…'}</p><Link className="text-link" href={`/snapshots/${report}?purchase=1`}>Return to your Snapshot</Link></div>;
 }

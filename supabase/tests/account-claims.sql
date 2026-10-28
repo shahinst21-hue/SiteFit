@@ -35,8 +35,17 @@ do $$ declare aid uuid; iid uuid; rid uuid; c public.guest_account_claims; h tex
  c:=public.prepare_sitefit_claim(c.guest_id,rid,gen_random_uuid(),repeat('c',64),repeat('d',64));
  begin perform public.start_sitefit_claim_auth(c.id,c.guest_id,repeat('a',64),repeat('b',64),'google',null);
  raise exception 'Old rotated proof accepted'; exception when insufficient_privilege then null; end;
- -- Reset this isolated fixture's current proof for the remaining assertions.
- update public.guest_account_claims set capability_sha256=repeat('a',64),browser_sha256=repeat('b',64) where id=c.id;
+ -- A failed provider attempt may switch methods only by cancelling the
+ -- unverified intent and issuing fresh proofs through the existing graph.
+ perform public.start_sitefit_claim_auth(c.id,c.guest_id,repeat('c',64),repeat('d',64),'google',null);
+ perform public.cancel_sitefit_claim(c.id,c.guest_id,repeat('c',64),repeat('d',64));
+ c:=public.prepare_sitefit_claim(c.guest_id,rid,gen_random_uuid(),repeat('e',64),repeat('f',64));
+ perform pg_temp.claim_assert(c.id=(select claim_fixture.c from claim_fixture) and c.method is null and c.auth_target_id is null,'method change keeps original lineage and resets only unverified intent');
+ perform public.start_sitefit_claim_auth(c.id,c.guest_id,repeat('e',64),repeat('f',64),'email',encode(sha256(convert_to('claim-owner@example.invalid','UTF8')),'hex'));
+ begin perform public.verify_sitefit_claim_auth(c.id,'00000000-0000-4000-8000-000000000072',repeat('c',64),repeat('d',64),'google');
+ raise exception 'Old provider proof accepted after method switch';exception when insufficient_privilege then null;end;
+ perform public.cancel_sitefit_claim(c.id,c.guest_id,repeat('e',64),repeat('f',64));
+ c:=public.prepare_sitefit_claim(c.guest_id,rid,gen_random_uuid(),repeat('a',64),repeat('b',64));
  perform public.start_sitefit_claim_auth(c.id,c.guest_id,repeat('a',64),repeat('b',64),'email',encode(sha256(convert_to('claim-owner@example.invalid','UTF8')),'hex'));
  begin perform public.start_sitefit_claim_auth(c.id,c.guest_id,repeat('a',64),repeat('b',64),'google',null);
  raise exception 'Cross-method intent replaced'; exception when check_violation then null; end;
