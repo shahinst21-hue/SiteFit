@@ -38,7 +38,7 @@ export function LoginForm({ config,google=false,next }: { config: PublicSupabase
       const { error: failure } = await client.auth.signInWithOtp({
         email: checked,
         options: {
-          emailRedirectTo: callback(),
+          emailRedirectTo: `${window.location.origin}/auth/confirm?next=${encodeURIComponent(destination)}`,
           shouldCreateUser: true,
         },
       });
@@ -71,7 +71,7 @@ export function LoginForm({ config,google=false,next }: { config: PublicSupabase
           <h2>Check your inbox.</h2>
           <p>
             If email delivery is available for this address, a sign-in link is
-            on its way. Open it in the same browser you used here. Links expire
+            on its way. Open it on the device where you want to sign in. Links expire
             after one hour and work once.
           </p>
           <p className="field-help">

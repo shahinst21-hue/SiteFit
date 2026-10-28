@@ -1,0 +1,1 @@
+export default function LoadingPurchase(){return <div className="page-wrap narrow-page" role="status"><h1>Continuing your purchase…</h1><p>Checking your saved Snapshot and purchase status.</p></div>;}

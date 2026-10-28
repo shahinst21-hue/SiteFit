@@ -27,6 +27,8 @@ export function SiteHeader({authConfig=null}:{authConfig?:PublicSupabaseConfig|n
   const [open, setOpen] = useState(false), [resourceOpen, setResourceOpen] = useState(false);
   const [instant, setInstant] = useState(false);
   const [signedIn,setSignedIn]=useState(false);
+  const [openingAccount,setOpeningAccount]=useState(false);
+  useEffect(()=>{setOpeningAccount(false);},[pathname]);
   useEffect(()=>{
     if(!authConfig)return;
     const client=createBrowserSupabase(authConfig);
@@ -56,7 +58,7 @@ export function SiteHeader({authConfig=null}:{authConfig?:PublicSupabaseConfig|n
           </Popover.Popup>
         </Popover.Positioner></Popover.Portal>
       </Popover.Root>
-      <Link href={accountHref} className="login-link" aria-current={current(accountHref)}><Icon name={accountIcon}/> {accountLabel}</Link>
+      <Link href={accountHref} prefetch={false} onNavigate={()=>setOpeningAccount(true)} aria-busy={openingAccount} className="login-link" aria-current={current(accountHref)}><Icon name={accountIcon}/> {openingAccount?'Opening…':accountLabel}</Link>
       <Link href="/check-location" className="nav-cta">Check a Location <Arrow /></Link>
     </nav>
     <Dialog.Root open={open} onOpenChange={(next, details) => { setInstant(details.event instanceof KeyboardEvent || (details.event instanceof MouseEvent && details.event.detail === 0)); setOpen(next); }}>
@@ -66,15 +68,15 @@ export function SiteHeader({authConfig=null}:{authConfig?:PublicSupabaseConfig|n
           <div className="brand-menu-top"><Link href="/" aria-label="SiteFit home" onClick={close}><Wordmark/></Link><Dialog.Close className="brand-icon-button" aria-label="Close navigation menu"><Icon name="close"/></Dialog.Close></div>
           <Dialog.Title className="sr-only">SiteFit navigation</Dialog.Title>
           <Dialog.Description className="brand-menu-label">Check the location before you sign.</Dialog.Description>
+          <div className="brand-menu-actions"><Link href="/check-location" className="button button-primary" onClick={close}>Check a Location <Arrow/></Link><Link href={accountHref} prefetch={false} className="button button-secondary" aria-current={current(accountHref)} onNavigate={()=>setOpeningAccount(true)} onClick={close}><Icon name={accountIcon}/> {accountLabel}</Link></div>
           <nav aria-label="Mobile navigation" className="brand-mobile-links">
             {links.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><span className="brand-nav-icon"><Icon name={l.icon}/></span><span><b>{l.label}</b><small>{l.detail}</small></span><Arrow/></Link>)}
             <span className="brand-menu-label">EXPLORE SITEFIT</span>
             {resources.map(l => <Link key={l.href} href={l.href} aria-current={current(l.href)} onClick={close}><span className="brand-nav-icon"><Icon name={l.icon}/></span><span><b>{l.label}</b></span><Icon name="external"/></Link>)}
           </nav>
-          <div className="brand-menu-actions"><Link href={accountHref} className="button button-secondary" aria-current={current(accountHref)} onClick={close}><Icon name={accountIcon}/> {accountLabel}</Link><Link href="/check-location" className="button button-primary" onClick={close}>Check a Location <Arrow/></Link></div>
           <div className="brand-menu-legal"><Link href="/privacy" onClick={close}>Privacy</Link><Link href="/terms" onClick={close}>Terms</Link></div>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
-  </div></header>;
+  </div>{openingAccount&&<div className="account-navigation-status" role="status">Opening your {signedIn?'account':'sign-in options'}…</div>}</header>;
 }

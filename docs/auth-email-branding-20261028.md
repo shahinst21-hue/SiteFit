@@ -1,5 +1,7 @@
 # Authentication email branding — 28 October 2026
 
+Historical first branding release. The later owner-approved [cross-device correction](customer-signin-recovery-20261028.md) supersedes the ConfirmationURL-only and same-browser restrictions below.
+
 Owner confirms the sign-in test and requests SiteFit branding for authentication emails. Live readback also records the original guest purchase claim completed through Google, with verified authentication and the original report connection retained. This is observed claim completion, not a new payment test.
 
 `supabase/templates/account-access.html` is the shared branded signup-confirmation and magic-link email. It uses the approved lime/ink/neutral palette, readable system fonts, presentation tables and inline styles. The PNG wordmark is a deterministic raster export of the supplied SVG, preserving its exact shapes; it works in email clients without SVG support. No image-generation service, new dependency, tracking pixel, remote font or user metadata is introduced.

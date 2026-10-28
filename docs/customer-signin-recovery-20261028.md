@@ -1,0 +1,27 @@
+# Customer sign-in, Checkout and mobile correction — 28 October 2026
+
+## Authority and observed cause
+
+Owner approves the complete bounded correction and Production delivery, including cross-device magic links, Google continuation, removal of customer OTP entry, primary mobile actions and smooth estimated Snapshot progress. Continue independently; list genuine hardware/external limitations at the end. No new plan, budget, paid AI request or real payment is authorised. The second device continues the original Snapshot; the original browser is not silently authenticated.
+
+Live inspection found the reported 15:45 Google claim completed and a bound Stripe Session. A read-only retrieval found it expired/unpaid. Exact idempotent replay of its original, already-bound expired attempt (same key/parameters/API version, within 24 hours) returned the same Session's cached creation response: open/unpaid, `https://checkout.stripe.com/g/pay/<session>`. Existing validation accepted c/pay and f/pay only. This proves the server-side rejection after Session creation; it is not an inferred Google failure. No new Session, charge or analysis was created. Admit the observed g/pay format through the existing shared server/client predicate, preserving exact HTTPS host, port, credentials and path checks.
+
+## Authentication and ownership
+
+Both account email templates now send a SiteFit `/auth/confirm` TokenHash URL with the original requested return URL. GET displays confirmation only; a same-origin POST consumes the one-time token. Only allowlisted local return shapes are accepted. Purchase email return data contains a signed finite claim/report/capability/email-hash binding; no browser proof, address or session token is transferred. Google retains PKCE and its original browser checks. Previously issued ConfirmationURL/PKCE links retain their existing callback compatibility.
+
+Forward migration `20261028170000_cross_device_email_claim.sql` adds one service-only function. The alternative email path checks the capability, exact report, intended verified email and permanent identity, then reuses existing freshness, expiry, target, ownership and immutable lineage writers under their existing lock order. It never grants the browser access to raw claims or writers. No table, queue, provider or quota infrastructure is added. Replays cannot retarget or duplicate completion. Auth success followed by database failure gets a short signed target-bound HttpOnly retry receipt; retry uses fresh verified identity without consuming the email token again.
+
+Cross-device continuation returns the owned Snapshot purchase modal and renews consent on that device. The original browser must authenticate to the now-owned report. Expired/invalid callback recovery is branded rather than a generic missing page. Customer code entry and its verify_email API action are removed. Email delivery, rate limits, sender, one-hour OTP validity and confirmation requirements are retained; only subjects/HTML change in Auth settings.
+
+## Mobile and progress
+
+Move Check a Location and Account/Sign in above exploration links. Account navigation disables speculative prefetch and shows immediate pending feedback; a streamed loading boundary covers the account's verified history load. Keep Base UI Dialog/focus behavior, touch scroll and existing design tokens.
+
+Snapshot progress is explicitly estimated: 0–90% over the first 60 seconds, then approaches a 95% ceiling. Existing actual milestones remain separately labelled. Only validated saved Ready reaches 100%; a fast result does not wait for the estimate. Error/stale states stop the timer and keep real saved progress. A 90-second wait explains the delay and warns against duplicate checks. Full Report milestone authority is unchanged. No animation dependency or processing retry is added.
+
+## Validation and release status
+
+Local tests cover actual Auth actions on a fresh cookie jar/device, token replay/expiry/tamper, origin rejection, account/claim binding, database-outage retry, existing Google/PKCE compatibility and consent renewal. PostgreSQL rebuild/security tests exercise the forward function, foreign email/report, stale login, rotated capability, expiry, immutable history, idempotency and client-role denial. The real g/pay response shape has a server-to-client regression with zero new Sessions. Progress uses a deterministic-clock bounded/monotonic estimate test.
+
+At implementation time targeted journey tests and the fresh PostgreSQL suite pass. Full checks, protected CI, hosted migration verification, rollout, mobile browser and real email proof are subsequent gates; record their actual receipts in the PR. Never interpret a local preview as a received email or device emulation as a physical phone. Production state is not declared GO here.

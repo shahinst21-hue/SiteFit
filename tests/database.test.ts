@@ -110,6 +110,7 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
     await db.exec(await readFile(new URL("../supabase/tests/free-snapshot.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/account-claims.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL('../supabase/tests/purchase-signin-method-switch.sql',import.meta.url),'utf8'));
+    await db.exec(await readFile(new URL('../supabase/tests/cross-device-email-claim.sql',import.meta.url),'utf8'));
     await db.exec(await readFile(new URL("../supabase/tests/payments.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/purchase-history.sql", import.meta.url), "utf8"));
     await db.exec(await readFile(new URL("../supabase/tests/enrichment-polygon.sql", import.meta.url), "utf8"));

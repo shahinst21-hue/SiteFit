@@ -31,7 +31,7 @@ export default function Contact() {
           ],
           [
             "Your account",
-            "Sign in with Google or a one-time email link. Open email links in the same browser and request a new link if needed.",
+            "Sign in with Google or a one-time email link. Open your email link on the device where you want to sign in. Request a new link if it has expired.",
             "/login",
             "Account sign-in",
           ],
