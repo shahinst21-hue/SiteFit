@@ -1,0 +1,35 @@
+begin;
+do $$declare g uuid:=gen_random_uuid();u uuid:=gen_random_uuid();other_id uuid:=gen_random_uuid();aid uuid;iid uuid;rid uuid;c public.guest_account_claims;before_report jsonb;begin
+ insert into auth.users(id,email,is_anonymous,email_confirmed_at,last_sign_in_at) values(g,null,true,null,null),(u,'device-'||u||'@example.invalid',false,now(),now()),(other_id,'other-'||u||'@example.invalid',false,now(),now());
+ insert into public.analyses(owner_id,business_type,business_category,status) values(g,'coffee-shop','coffee-shop','free_ready') returning id into aid;
+ insert into public.analysis_inputs(analysis_id,version,user_supplied) values(aid,1,'{}') returning id into iid;
+ insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,free_projection) values(aid,iid,1,2,'free','ready',jsonb_build_object('schemaVersion',2,'analysisId',aid,'property',jsonb_build_object('address','Synthetic cross-device claim'))) returning id into rid;
+ select to_jsonb(r) into before_report from public.reports r where id=rid;
+ c:=public.prepare_sitefit_claim(g,rid,gen_random_uuid(),repeat('a',64),repeat('b',64));
+ perform public.start_sitefit_claim_auth(c.id,g,repeat('a',64),repeat('b',64),'google',null);
+ begin perform public.complete_sitefit_email_claim(c.id,u,repeat('a',64),rid);raise exception 'Google accepted without browser proof';exception when insufficient_privilege then null;end;
+ perform public.cancel_sitefit_claim(c.id,g,repeat('a',64),repeat('b',64));
+ c:=public.prepare_sitefit_claim(g,rid,gen_random_uuid(),repeat('c',64),repeat('d',64));
+ perform public.start_sitefit_claim_auth(c.id,g,repeat('c',64),repeat('d',64),'email',encode(sha256(convert_to('device-'||u||'@example.invalid','UTF8')),'hex'));
+ begin perform public.complete_sitefit_email_claim(c.id,other_id,repeat('c',64),rid);raise exception 'Foreign email accepted';exception when insufficient_privilege then null;end;
+ begin perform public.complete_sitefit_email_claim(c.id,u,repeat('a',64),rid);raise exception 'Rotated email proof accepted';exception when insufficient_privilege then null;end;
+ begin perform public.complete_sitefit_email_claim(c.id,u,repeat('c',64),gen_random_uuid());raise exception 'Foreign report accepted';exception when insufficient_privilege then null;end;
+ update auth.users set last_sign_in_at=now()-interval '1 day' where id=u;
+ begin perform public.complete_sitefit_email_claim(c.id,u,repeat('c',64),rid);raise exception 'Stale login accepted';exception when insufficient_privilege then null;end;
+ update auth.users set last_sign_in_at=now() where id=u;
+ update public.guest_account_claims set created_at=now()-interval '2 hours',expires_at=now()-interval '1 hour' where id=c.id;
+ begin perform public.complete_sitefit_email_claim(c.id,u,repeat('c',64),rid);raise exception 'Expired claim accepted';exception when insufficient_privilege then null;end;
+ update public.guest_account_claims set created_at=now(),expires_at=now()+interval '1 hour' where id=c.id;
+ if public.complete_sitefit_email_claim(c.id,u,repeat('c',64),rid)<>rid then raise exception 'Cross-device report lost';end if;
+ if public.complete_sitefit_email_claim(c.id,u,repeat('c',64),rid)<>rid then raise exception 'Idempotent replay lost';end if;
+ if (select count(*) from public.system_events where analysis_id=aid and event_type='purchase_account_linked')<>1 then raise exception 'Duplicate completion';end if;
+ if (select to_jsonb(r) from public.reports r where id=rid) is distinct from before_report or (select owner_id from public.analyses where id=aid)<>g then raise exception 'History rewritten';end if;
+ if public.sitefit_access_owner(g)<>u then raise exception 'Ownership lineage lost';end if;
+ begin perform public.complete_sitefit_email_claim(c.id,other_id,repeat('c',64),rid);raise exception 'Completed claim retargeted';exception when insufficient_privilege then null;end;
+end$$;
+set local role authenticated;
+do $$begin
+ begin perform public.complete_sitefit_email_claim(gen_random_uuid(),gen_random_uuid(),repeat('a',64),gen_random_uuid());raise exception 'Client called server writer';exception when insufficient_privilege then null;end;
+end$$;
+reset role;
+rollback;

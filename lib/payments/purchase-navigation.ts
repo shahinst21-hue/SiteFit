@@ -12,7 +12,8 @@ export async function purchaseNavigation(report: string, checkout: boolean, orig
   if (!response.ok || typeof data.url !== "string") {
     const messages:Record<string,string>={checkout_reconciliation_required:'Your previous payment attempt needs verification before another Checkout can open. Your Snapshot is saved; do not buy again.',proof_payment_denied:'Your existing purchase needs review before another Checkout can open. Your Snapshot is saved.',trial_full_budget_exhausted:'The controlled AI test budget has no capacity for another Full Report reservation. Your Snapshot is saved.',trial_full_slots_committed:'All three controlled Full Report purchases are paid or currently committed. Check your saved purchases before trying again.',payment_confirmation_required:'The previous Checkout has expired or changed. Check your saved purchase status before continuing.',sale_changed_replay:'Your saved purchase choices differ from this request. Return to the original purchase.'};
     messages.insufficient_report_evidence='There is not enough usable source evidence for a Full Report at this location. No payment has been started.';
-    throw new PurchaseNavigationError(typeof data.code==='string'&&messages[data.code]?messages[data.code]:'Checkout could not be opened. Your Snapshot is still saved. Return to it and try again shortly.');
+    const reference=typeof data.requestId==='string'&&/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(data.requestId)?` Support reference: ${data.requestId}.`:'';
+    throw new PurchaseNavigationError((typeof data.code==='string'&&messages[data.code]?messages[data.code]:'Checkout could not be opened. Your Snapshot is still saved. Return to it and try again shortly.')+reference);
   }
   const url = new URL(data.url, origin);
   // Stripe's server-validated Checkout URL includes provider-owned fragment

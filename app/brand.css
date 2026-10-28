@@ -383,3 +383,7 @@ input::placeholder,textarea::placeholder { color: var(--muted); }
   .hero-map-card-icon .icon { width:17px; height:17px; }
   .hero-map-card-arrow { display:none; }
 }
+
+/* Primary mobile actions precede exploration links and fit the visible phone viewport. */
+.brand-menu-actions{margin:0 0 20px}.account-navigation-status{padding:10px 24px;background:var(--mint);font-size:14px;border-top:1px solid var(--line)}
+.brand-menu-actions a{touch-action:manipulation}.brand-menu-actions a:active{opacity:.8}

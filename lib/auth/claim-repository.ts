@@ -37,3 +37,9 @@ export async function cancelClaim(proof: ClaimCookie,guest: string){
  const {error}=await frameworkClient().rpc("cancel_sitefit_claim",{p_id:claim.id,p_guest:guest,p_capability:hashProof(proof.capability),p_browser:hashProof(proof.browser)});
  if(error)throw Error("claim_unavailable");
 }
+export async function finishEmailClaim(claim:string,target:string,capability:string,report:string):Promise<string>{
+ type Rpc={rpc(name:string,args:Record<string,string>):PromiseLike<{data:unknown;error:unknown}>};
+ const {data,error}=await (frameworkClient() as unknown as Rpc).rpc('complete_sitefit_email_claim',{p_id:claim,p_target:target,p_capability:hashProof(capability),p_report:report});
+ if(error||data!==report)throw Error('claim_completion_unavailable');
+ return report;
+}

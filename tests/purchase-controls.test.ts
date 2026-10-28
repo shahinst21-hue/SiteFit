@@ -62,6 +62,17 @@ test('client accepts the verified f/pay Stripe format and keeps provider fragmen
  for(const url of ['https://checkout.stripe.com:8443/f/pay/example','https://checkout.stripe.com.evil.example/f/pay/example','https://user@checkout.stripe.com/f/pay/example','https://checkout.stripe.com/f/pay/','https://checkout.stripe.com/f/other/example'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
 });
 
+test('the real g/pay hosted Checkout format survives server validation and client navigation',async()=>{
+ const {openCheckout}=await import('../lib/payments/checkout.ts');
+ const destination='https://checkout.stripe.com/g/pay/cs_live_synthetic#synthetic-provider-state';
+ let created=0,bound=0;
+ const session={id:'cs_live_synthetic',status:'open',payment_status:'unpaid',expires_at:5000,url:destination};
+ const result=await openCheckout({id:report,key:'existing-synthetic-key',expires:5000,session:session.id,parameters:{}},{retrieve:async()=>session,create:async()=>{created++;return session;},validate:async()=>{}},async()=>{bound++;},1000);
+ assert.equal(result,destination);assert.equal(created,0);assert.equal(bound,1);
+ assert.equal(await purchaseNavigation(report,true,origin,async()=>Response.json({url:result})),destination);
+ for(const url of ['https://checkout.stripe.com.evil.invalid/g/pay/cs_live_synthetic','https://checkout.stripe.com:8443/g/pay/cs_live_synthetic','https://user@checkout.stripe.com/g/pay/cs_live_synthetic','https://checkout.stripe.com/g/other/cs_live_synthetic','https://checkout.stripe.com/h/pay/cs_live_synthetic'])await assert.rejects(()=>purchaseNavigation(report,true,origin,async()=>Response.json({url})));
+});
+
 test('bounded Checkout recovery errors explain the saved state without forwarding provider details',async()=>{
  const fetcher=(code:string)=>async()=>new Response(JSON.stringify({error:'private provider details must not surface',code}),{status:409});
  await assert.rejects(()=>purchaseNavigation(report,true,origin,fetcher('checkout_reconciliation_required') as typeof fetch),/previous payment attempt needs verification/);
