@@ -38,18 +38,22 @@ function allow(request: Request, operation: AddressOperation) {
 }
 export async function addressRoute(request: Request, operation: AddressOperation) {
   if(controlledTrialConfigured(process.env,new URL(request.url).hostname)){
-    try{
-      const verified=await verifiedUser();let user=verified.user;
-      if(!user&&publicCustomersConfigured(process.env,new URL(request.url).hostname)){
-        if(request.method!=='POST'||!sameOrigin(request)||verified.unavailable||!verified.client)throw Error('session_unavailable');
-        const guest=await verified.client.auth.signInAnonymously();if(guest.error)throw Error('session_unavailable');
-        const checked=await verified.client.auth.getUser();user=checked.error?null:checked.data.user;
-      }
-      await assertTrialOwner(user,new URL(request.url).hostname);
-      return handleAddressOperation(request,operation,{provider:()=>addressProvider(trialAddressFetch(user!.id)),repository:propertyRepository,allow,
-        log:event=>console.warn('address_operation',JSON.stringify(event))});
-    }catch{return Response.json({error:'Sign in to the authorised account to check a location.'},{status:403,headers:{'Cache-Control':'private, no-store'}});}
+    let owner:string|null=null;
+    return handleAddressOperation(request,operation,{
+      admit:async()=>{try{
+        const verified=await verifiedUser();let user=verified.user;
+        if(!user&&publicCustomersConfigured(process.env,new URL(request.url).hostname)){
+          if(!sameOrigin(request)||verified.unavailable||!verified.client)return false;
+          const guest=await verified.client.auth.signInAnonymously();if(guest.error)return false;
+          const checked=await verified.client.auth.getUser();user=checked.error?null:checked.data.user;
+        }
+        await assertTrialOwner(user,new URL(request.url).hostname);owner=user!.id;return true;
+      }catch{return false;}},
+      provider:()=>addressProvider(trialAddressFetch(owner!)),repository:propertyRepository,allow,
+      log:event=>console.warn('address_operation',JSON.stringify(event)),
+    });
   }
+
   // Proof uses a pre-approved canonical property, never a public address-spending switch.
   if(process.env.VERCEL_ENV==='production'&&process.env.SITEFIT_CONTROLLED_PROOF_ENABLED==='1')return Promise.resolve(Response.json({error:"Address capture is unavailable during the controlled proof."},{status:503,headers:{"Cache-Control":"private, no-store"}}));
   if(!sourceCollectionAllowed(process.env,new URL(request.url).hostname))return Promise.resolve(Response.json({error:"Address lookup is not activated here."},{status:503,headers:{"Cache-Control":"private, no-store"}}));

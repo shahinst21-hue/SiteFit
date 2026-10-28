@@ -18,6 +18,7 @@ import {
 export type AddressOperation = "lookup" | "search" | "resolve" | "manual";
 export type AddressRouteDependencies = {
   provider: () => AddressLookupProvider;
+  admit?: () => Promise<boolean>;
   repository: () => PropertyRepository;
   allow: (request: Request, operation: AddressOperation) => boolean;
   log: (event: {
@@ -128,6 +129,7 @@ export async function handleAddressOperation(
         );
     }
     if (!dependencies.allow(request, operation)) throw new AddressError("busy");
+    if(dependencies.admit&&!await dependencies.admit())return reply({error:"Sign in to the authorised account to check a location."},403);
     if (operation === "lookup") {
       const result = await dependencies
         .provider()
