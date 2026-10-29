@@ -1,4 +1,5 @@
 .cookie-preferences-link{border:0;background:none;padding:0;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:44px;text-align:left}
+.measurement-compact-preferences{display:none}body:has(.check-page .wizard-flow)>.measurement-compact-preferences,body:has(.dw-workspace)>.measurement-compact-preferences{display:block;padding:8px 20px;text-align:center;font-size:12px;background:#f4f5f2}
 .measurement-banner{position:fixed;z-index:80;bottom:16px;left:16px;right:16px;max-width:1000px;margin:auto;background:#fff;color:#0d1400;border:1px solid #dce1d5;border-radius:16px;padding:20px;box-shadow:0 12px 50px #0d140026;display:flex;align-items:center;gap:24px}
 .measurement-banner p{font-size:13px;line-height:1.6;margin:6px 0 0;max-width:65ch;color:#60646c}
 .measurement-actions{display:flex;gap:8px;flex-wrap:wrap}.measurement-actions button{border:1px solid #b9c3ac;background:white;color:#0d1400;border-radius:10px;padding:10px 14px;min-height:44px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;flex:1;white-space:nowrap}
