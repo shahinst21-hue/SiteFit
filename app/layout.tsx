@@ -25,7 +25,7 @@ export const viewport: Viewport = { themeColor: "#eaeaea", viewportFit: "cover" 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en-GB" data-scroll-behavior="smooth">
-      <body>
+      <body data-clarity-mask="true">
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>

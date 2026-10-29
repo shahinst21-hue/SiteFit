@@ -177,3 +177,5 @@ Intelligence route requests `maxDuration=200`; groups time out at 45 seconds, hi
 12 October launch dependency: verified [Vercel Hobby terms](https://vercel.com/docs/plans/hobby) restrict use to non-commercial personal projects. Commercial launch eligibility is not established by free execution capacity. No upgrade, trial or purchase is authorised or activated; owner must resolve this before public sales.
 
 25 October owner update: the hosting Hobby concern above is resolved. Do not reopen plan eligibility or require a hosting change for the current commercial launch; no plan purchase or configuration change is authorised or needed by this task.
+
+29 October Clarity: SITEFIT_CLARITY_MEASUREMENT=1 admits only exact-origin Production; SITEFIT_CLARITY_UI_REHEARSAL=1 is inert Local/Preview only. Existing project z574qs9jlu is public, not a secret. No paid service or migration. [Activation/rollback and verification](clarity-measurement.md).

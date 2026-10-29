@@ -1,3 +1,7 @@
+## 29 October — Limited Microsoft Clarity installation
+
+Owner authorises the proposed public-page Clarity installation using their existing account/project. Require a separate replay choice, preserve Google consent, mask content and exclude checker/private/auth/payment routes. Default off outside explicitly activated exact-origin Production; Local/Preview uses inert rehearsal only. No new cost, migration, provider/AI execution or commercial-gate change. [Implementation and actual verification](clarity-measurement.md).
+
 ## 22 October — Google launch measurement preparation
 
 Owner supplied the existing shared Google Tag GT-NBBS5VJ4, Ads installation AW-18530541419, linked GA4 G-ZRCDT4R80E and Ads account 855-719-5993. Reuse this single loader/destinations; do not create/replace tags, add a second GA4 config speculatively, activate campaigns or deploy Production. Implement conservative consent and trusted paid conversions; mark external receiving/conversion settings unverified until actually observed. [Architecture and release gates](google-launch-measurement.md). This authority does not open commercial sales or change spending limits.

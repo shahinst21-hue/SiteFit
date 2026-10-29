@@ -231,3 +231,5 @@ See [Phase 12 plan](phase12_plan.md) and [actual status](phase-12-status.md). Im
 
 
 19 October account navigation: the shared desktop/mobile header receives publishable Auth configuration only and observes the existing browser Auth client. Non-anonymous signed-in users see Account linking to /account; signed-out/anonymous users see Sign in. Auth events update navigation after login/logout across tabs; stale initial reads cannot override a newer event. This display state grants no access; server identity verification/RLS remain authoritative. Static public pages do not become cookie-personalised server caches. No migration or execution-gate change.
+
+29 October Clarity: separately consented, masked initial-public-page recording, guarded against SPA/private navigation and late vendor loading. Exact Production activation and inert Local/Preview rehearsal; no database changes. [Boundaries and verification](clarity-measurement.md).
