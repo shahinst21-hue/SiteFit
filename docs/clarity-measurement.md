@@ -18,7 +18,13 @@ Keep the existing Google installation and three-purpose consent contract. Add a 
 
 ## Verification and delivery
 
-Implementation candidate. Focused tests pass for environment isolation, explicit/expired consent, URL admission, single loading, terminal stop, stop-before-history ordering and late initialization. Full local/HTTP/browser checks, protected CI, merge and activation are recorded below when actually observed. Loader/unit tests do not prove dashboard receiving.
+Locally implemented and verified; protected delivery and activation receipts are maintained in [PR #158](https://github.com/shahinst21-hue/SiteFit/pull/158). Loader/unit tests do not prove dashboard receiving.
+
+- Node 24.12.0/npm 11.6.2, `npm ci`: 219 packages installed, zero reported audit vulnerabilities. `npm run check` passed lint, strict types, **535 tests** and Production build. Final lint/type checks and rebuild passed after the additional compact preference control; five focused Clarity tests passed again.
+- Built-server `check:public`, `check:measurement` and `check:marketing` passed. HTTP checks exercise explicit replay decisions, malformed bodies, first-party cookie clearing without Auth-cookie mutation and masked/no-loader initial HTML. No database rebuild is required by this schema-free change; the standard unit suite includes its existing database checks.
+- Actual browser at 360/390/768/1280px: dialog fits without horizontal overflow; reject persists on refresh; Google can be admitted with replay disabled; a separate replay grant adds exactly one inert marker; Escape closes the dialog and returns focus; recording stops before empty-checker navigation and remains excluded after reload. Query-bearing URLs and Privacy also have no Clarity marker. No browser console errors were observed. These are viewport checks, not physical-phone certification.
+- The existing checker/dashboard styles hide the main footer. A compact Cookie preferences control now remains available there; actual checker withdrawal and reload returned zero measurement markers. No lookup, analysis, payment or paid request was initiated.
+- Local/Preview rehearsals deliberately contact neither Microsoft nor Google. Actual Microsoft network/receiving, Production deployment and final protected-head CI require their separate observed receipts in the PR.
 
 Rollback: disable the Production Clarity flag and deploy the last verified application through the existing protected process. Retain privacy disclosure, consent choices and all audit/payment/report history. No new service credentials are required.
 

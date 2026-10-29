@@ -3,6 +3,7 @@ const origin=new URL(process.argv[2]??'http://127.0.0.1:3000');if(origin.usernam
 const base=origin.origin;
 const get=await fetch(base+'/api/measurement/consent');assert.equal(get.status,200);assert.equal(get.headers.get('set-cookie'),null);assert.match(get.headers.get('cache-control')??'',/no-store/);
 const initial=await get.json();assert.equal(initial.clarityConsent,null);assert.equal(typeof initial.clarity.enabled,'boolean');
+const publicHTML=await(await fetch(base+'/')).text();assert.match(publicHTML,/<body[^>]*data-clarity-mask="true"/);assert.doesNotMatch(publicHTML,/<script[^>]+src="https:\/\/(?:www\.clarity\.ms|scripts\.clarity\.ms)/);
 const post=(path:string,body:unknown,cookie?:string,source=base)=>fetch(base+path,{method:'POST',headers:{Origin:source,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{})},body:JSON.stringify(body)});
 assert.equal((await post('/api/measurement/consent',{preferences:{analytics:true,advertising:true,personalization:true}},undefined,'https://foreign.invalid')).status,403);
 assert.equal((await post('/api/measurement/consent',{preferences:{analytics:'yes',advertising:true,personalization:true}})).status,400);
