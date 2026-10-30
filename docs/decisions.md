@@ -1,3 +1,7 @@
+## 30 October — Source-based Sample revision
+
+Owner requests no sample export, no scoring formulas/baselines, the original report maps and tab UI/UX, a redesigned hero and hidden selected-business/property identity. Reuse the selected case's saved evidence; synthetic additions belong to Sample dataset provenance, never fabricated scientific source records. Repeated fictional/illustrative banners are removed in favour of the Sample Report context. The actual selected Free Snapshot is Ready; no paid Full edition or confirmed payment exists. The existing Full execution/entitlement fence is retained, and no new Full run is claimed. [Current implementation and actual gates](sample-report-redesign.md).
+
 ## 30 October — Interactive public Sample Report
 
 Owner approves and requests the complete implementation of the proposed coffee-shop demo using the current eight-section report dashboard, fictional score-bound inputs, free-check CTAs, real sample downloads and consented sample-only measurement. Reuse existing arithmetic, recommendation and PDF rendering; no real provider/AI/payment execution, model change, migration, customer-report redesign or Production release is authorised by this presentation task. [Implementation and verification](sample-report-redesign.md).

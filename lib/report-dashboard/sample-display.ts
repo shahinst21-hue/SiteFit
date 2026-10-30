@@ -5,9 +5,8 @@ import {residentialScore} from '../analysis/residential-catchment.ts';
 import {competitionScore} from '../competition/model.ts';
 import {decideRecommendation} from '../analysis/recommendation.ts';
 
-export const sampleVersion = 'public-sample-v1';
-export const sampleDisclosure = 'Fictional scenario · illustrative evidence. No real property, source retrieval or trading results are represented.';
-export const samplePdfPath = (section?:SectionKey) => `/samples/${sampleVersion}/${section ?? 'full-report'}.pdf`;
+export const sampleVersion = 'public-sample-v2';
+export const sampleDisclosure = 'Sample Report';
 export function sampleSection(section:unknown,hash=''):SectionKey {
   if(reportPages.some(p=>p.key===section))return section as SectionKey;
   const legacy=hash.match(/^#report-section-([0-7])$/);

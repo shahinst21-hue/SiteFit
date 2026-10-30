@@ -35,7 +35,7 @@ export function humanMeasure(label:string):string {
   return label.replace(/\bTS\d+[A-Z]?\b\s*/g,'').replace(/Native primary-family records/i,'Mapped business records').trim();
 }
 export function profileName(dataset:string):string {
-  return ({TS007A:'Resident age',TS066:'Economic activity',TS003:'Households',TS045:'Car availability',TS021:'Ethnic group',TS030:'Household composition',TS054:'Housing tenure'})[dataset]??'Local profile';
+  return ({'sample-age':'Resident age','sample-activity':'Economic activity',TS007A:'Resident age',TS066:'Economic activity',TS003:'Households',TS045:'Car availability',TS021:'Ethnic group',TS030:'Household composition',TS054:'Housing tenure'})[dataset]??'Local profile';
 }
 export function estimateNumber(value:number,units:string|null):string {
   const step=Math.abs(value)>=10000?1000:Math.abs(value)>=1000?100:1;

@@ -14,7 +14,7 @@ import { formatPrice, site } from "@/lib/site-config";
 const links: {href: string; label: string; icon: IconName; detail: string}[] = [
   {href: "/how-it-works", label: "How it works", icon: "evidence", detail: "From an address to a clearer decision"},
   {href: "/pricing", label: "Pricing", icon: "cost", detail: `Start free. Go deeper for ${formatPrice(site.pricing.fullReport)}`},
-  {href: "/sample-report", label: "Sample Report", icon: "document", detail: "Explore an illustrative example"},
+  {href: "/sample-report", label: "Sample Report", icon: "document", detail: "Explore the Full Report format"},
 ];
 const resources: {href: string; label: string; icon: IconName; detail: string}[] = [
   {href: "/blog", label: "Guides & articles", icon: "document", detail: "Practical reading before the lease"},

@@ -51,6 +51,6 @@ if(name==='competition-details'){
  const path=name==='home'?'app/page.tsx':`app/${name}/page.tsx`;
  const {default:Page}=await import(pathToFileURL(fileURLToPath(new URL(path,root))).href);
  const {LocationEntryProvider}=await import('../../components/location-entry.tsx');
- view=createElement(LocationEntryProvider,null,await Page());
+ view=createElement(LocationEntryProvider,null,await Page(name==='sample-report'?{searchParams:Promise.resolve({section:process.argv[3]})}:undefined));
 }
 process.stdout.write(renderToStaticMarkup(view));

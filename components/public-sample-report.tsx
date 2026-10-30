@@ -5,7 +5,6 @@ import {ReportDashboard} from './report-dashboard/dashboard';
 import {Icon} from './icon';
 import type {Dashboard} from '../lib/report-dashboard/model';
 import type {SectionKey} from '../lib/report-intelligence/catalog';
-import {sampleDisclosure} from '../lib/report-dashboard/sample-display';
 import {trackSample} from '../lib/measurement/client';
 import {formatPrice,site} from '../lib/site-config';
 
@@ -25,10 +24,9 @@ export function PublicSampleReport({report,initial}:{report:Dashboard;initial:Se
   const pricing=(placement:'hero'|'closing')=><Link className="text-link" href="/pricing" onClick={()=>trackSample('sample_cta_clicked',section,placement,'pricing')}>See what’s included for {formatPrice(site.pricing.fullReport)} <Icon name="arrow"/></Link>;
   return <div className="public-sample-report">
     <section className="sample-intro page-wrap" aria-labelledby="sample-title">
-      <div><p className="eyebrow">SAMPLE REPORT · FICTIONAL SCENARIO</p><h1 id="sample-title">Explore a SiteFit<br/>Full Report.</h1><p className="sample-lead">See how the evidence comes together before you commit to a lease. Explore the recommendation, the risks and the checks that could change your decision.</p><p className="sample-audience">For London coffee shops, restaurants and salons. This example explores a coffee shop.</p></div>
-      <div className="sample-intro-actions" ref={hero}>{start('hero')}<p>Free · No account or card needed</p>{pricing('hero')}<small>One-off payment · No subscription</small></div>
+      <div><p className="eyebrow">SAMPLE REPORT</p><h1 id="sample-title">One location.<br/><span>The full picture.</span></h1><p className="sample-lead">Explore the recommendation, the local context and the checks that matter before signing a lease.</p><div className="sample-hero-proof"><span>8 connected sections</span><span>Clear next steps</span><span>One-off · {formatPrice(site.pricing.fullReport)}</span></div></div>
+      <div className="sample-intro-actions" ref={hero}>{start('hero')}<p>Free · No account or card needed</p><a className="text-link" href="#sample-workspace">Explore the Sample Report <Icon name="down"/></a></div>
     </section>
-    <div className="sample-disclosure page-wrap"><span className="badge">Sample Report</span><p>{sampleDisclosure}</p><a className="text-link" href="#sample-workspace">Explore the eight sections <Icon name="down"/></a></div>
     <div id="sample-workspace"><ReportDashboard report={report} initial={initial} onSectionChange={setSection}/></div>
     <section className="sample-closing page-wrap" ref={closing} aria-labelledby="sample-closing-title"><div><p className="eyebrow">YOUR OWN LOCATION</p><h2 id="sample-closing-title">What could change<br/>your lease decision?</h2><p>Start with a Free Snapshot for the property you are considering. Explore the deeper investigation, prioritised checks and downloadable PDF in the {formatPrice(site.pricing.fullReport)} Full Report.</p></div><div className="sample-intro-actions">{start('closing')}<p>Free · No account or card needed</p>{pricing('closing')}<small>One-off payment · No subscription</small></div></section>
     {!heroVisible&&!closingVisible&&<aside className="sample-sticky" aria-label="Check your own property"><div><strong>Now check your own location.</strong><small>Free · No account or card needed</small></div>{start('sticky')}</aside>}

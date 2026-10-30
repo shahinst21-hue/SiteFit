@@ -1,13 +1,13 @@
 export const journeyEvents=['landing_view','check_started','address_selected','business_selected','free_analysis_started','free_analysis_completed','free_report_viewed','report_viewed','full_analysis_completed','pdf_downloaded','analysis_failed'] as const;
 export type JourneyEvent=typeof journeyEvents[number];
-export const sampleEvents=['sample_section_viewed','sample_cta_clicked','sample_pdf_clicked'] as const;
+export const sampleEvents=['sample_section_viewed','sample_cta_clicked'] as const;
 export type SampleEvent=typeof sampleEvents[number];
 export type SamplePlacement='navigation'|'hero'|'sticky'|'closing'|'export';
-export type SampleTarget='snapshot'|'pricing'|'full'|'section';
+export type SampleTarget='snapshot'|'pricing';
 export function safeSample(event:SampleEvent,section:string,placement:SamplePlacement,target:SampleTarget='snapshot') {
  if(!sampleEvents.includes(event)||!['overview','customer-context','competition','access','premises','rental-context','actions','appendix'].includes(section)||
-   !['navigation','hero','sticky','closing','export'].includes(placement)||!['snapshot','pricing','full','section'].includes(target)||
-   event==='sample_section_viewed'&&(placement!=='navigation'||target!=='snapshot')||event==='sample_pdf_clicked'&&(placement!=='export'||!['full','section'].includes(target))||
+   !['navigation','hero','sticky','closing','export'].includes(placement)||!['snapshot','pricing'].includes(target)||
+   event==='sample_section_viewed'&&(placement!=='navigation'||target!=='snapshot')||
    event==='sample_cta_clicked'&&(!['hero','sticky','closing'].includes(placement)||!['snapshot','pricing'].includes(target)))throw Error('invalid_sample_event');
  return {event,params:{section,placement,...(event==='sample_section_viewed'?{}:{target})}};
 }

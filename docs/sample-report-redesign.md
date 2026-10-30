@@ -1,4 +1,23 @@
-# Public Sample Report — 30 October 2026
+# Public Sample Report — current revision, 30 October 2026
+
+## Owner revision and current behaviour
+
+The owner's follow-up supersedes the V1 sample presentation below: remove every sample export, hide scoring formulas/baselines, use the original report maps and tab UX, remove repeated fictional/illustrative banners, redesign the hero and withhold the selected business/property identity. The Sample Report title remains the page-level context. Synthetic additions must not be credited as retrieved scientific evidence.
+
+The selected source case already has an immutable, real, Ready Free Snapshot. Read-only Production inspection found one Free report, no Full edition and no confirmed payment for that case. Its original observations were reused without a provider/AI dispatch, regeneration, payment or report/history mutation. The existing Full backend requires verified payment/entitlement; a new Full execution has not occurred. That part of the request remains dependent on the existing purchase completing or a separately scoped internal-generation decision. No payment/entitlement exception has been introduced.
+
+Current public sample V2 uses saved walking populations approximately 5,224 / 18,007 / 39,769 and category counts 4 / 20 / 40, yielding 98 Strong / 50 Moderate and Conditional shortlist under the unchanged arithmetic/policy. The original map component draws stored walking contours over the standard OSM background. The selected-property point layer, property name/address, report/analysis/source UUIDs and named businesses are absent from the public payload; surrounding geography remains visible in the street map.
+
+Two descriptive profiles, rental comparison, conditional layout capacities and generic transport examples are sample assumptions, recorded as Sample dataset rather than attributed to a real data provider. They do not establish the selected unit's rent, premises clearance, observed demand or commercial success. Existing permission/layout uncertainty stays intact. The eight views use the shared dashboard, charts, rental cards, map and standard mobile section navigation. Only exports, score-method detail and private identity are withheld in the public sample.
+
+The build no longer generates public sample PDFs. Previously generated files are removed, old sample download paths return 404, and the PDF renderer refuses `public-sample` inputs. Private paid-report exports remain unchanged. Only sample navigation/CTA events remain in the consented measurement allowlist.
+
+Validation: npm run check passed lint, strict types, 539 unit tests and the production build. Public/measurement/marketing HTTP checks passed, including retired sample PDFs returning 404. All eight tabs at 360/390/430/768/1440px passed 40 browser checks with no document overflow, export control or displayed score formulas. The real map background, catchments, profile chart, capacity comparison and rental card were inspected. Protected exact-head CI and updated Preview delivery are separate PR receipts; physical hardware/real 200% zoom remain unverified. No Production release is implied.
+
+---
+
+# Historical V1 implementation — superseded by the owner revision above
+
 
 ## Authority and implementation
 
