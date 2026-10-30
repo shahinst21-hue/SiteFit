@@ -1,3 +1,7 @@
+## 30 October — Interactive public Sample Report
+
+Owner approves and requests the complete implementation of the proposed coffee-shop demo using the current eight-section report dashboard, fictional score-bound inputs, free-check CTAs, real sample downloads and consented sample-only measurement. Reuse existing arithmetic, recommendation and PDF rendering; no real provider/AI/payment execution, model change, migration, customer-report redesign or Production release is authorised by this presentation task. [Implementation and verification](sample-report-redesign.md).
+
 ## 29 October — Limited Microsoft Clarity installation
 
 Owner authorises the proposed public-page Clarity installation using their existing account/project. Require a separate replay choice, preserve Google consent, mask content and exclude checker/private/auth/payment routes. Default off outside explicitly activated exact-origin Production; Local/Preview uses inert rehearsal only. No new cost, migration, provider/AI execution or commercial-gate change. [Implementation and actual verification](clarity-measurement.md).

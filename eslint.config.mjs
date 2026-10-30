@@ -5,7 +5,7 @@ import ts from "typescript-eslint";
 export default defineConfig([
   js.configs.recommended,
   ...ts.configs.recommended,
-  globalIgnores([".next/**", "out/**", "coverage/**", "next-env.d.ts", "supabase/.temp/**"]),
+  globalIgnores([".next/**", ".vercel/**", "out/**", "coverage/**", "next-env.d.ts", "supabase/.temp/**"]),
   {
     files: ["lib/**/*.{ts,tsx}"],
     rules: {

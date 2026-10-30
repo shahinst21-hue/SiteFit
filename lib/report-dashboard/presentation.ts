@@ -2,7 +2,9 @@ import type {Dashboard, Source, Statement} from './model.ts';
 import type {SectionKey} from '../report-intelligence/catalog.ts';
 import {readableNumber,displayDate} from './display.ts';
 import {bindRecommendation} from '../analysis/recommendation.ts';
+import {sampleRecommendation} from './sample-display.ts';
 export function dashboardRecommendation(report:Dashboard){
+ if(report.presentationMode==='public-sample')return sampleRecommendation(report);
  if(report.recommendation)return bindRecommendation(report.recommendation,report.residentialCatchment,report.competition);
  // Legacy paid editions can already have immutable archived PDFs keyed by their
  // original content digest. Do not add a new dashboard verdict to those editions.

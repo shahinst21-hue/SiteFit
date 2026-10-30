@@ -9,7 +9,7 @@ test('rendered public journey explains coverage, configured price, evidence limi
  const home=render('home');assert.match(home,/Found a property\? Check it before you commit/);assert.match(home,/London analysis/);
  const pricing=render('pricing');assert.ok(pricing.includes(formatPrice(site.pricing.fullReport)));assert.match(pricing,/one-off payment/);assert.match(pricing,/Do not purchase again/);
  const journey=render('how-it-works');assert.match(journey,/Sign in before Checkout/);assert.match(journey,/Financial calculations are not included/);
- const sample=render('sample-report');assert.equal((sample.match(/id="report-section-\d"/g)??[]).length,8);assert.match(sample,/Fictional scenario/);assert.match(sample,/No operating format can be selected/);assert.doesNotMatch(sample,/sixteen sections/);
+ const sample=render('sample-report');assert.match(sample,/data-presentation="public-sample"/);assert.match(sample,/Fictional scenario/);assert.match(sample,/Conditional shortlist/);assert.match(sample,/Download sample PDF/);assert.doesNotMatch(sample,/sixteen sections|Frozen development draft/);
  for(const html of [home,pricing,journey,sample])assert.doesNotMatch(html,/\[object Object\]|\bundefined\b|guaranteed success|measured pedestrian footfall/);
 });
 test('actual Snapshot states preserve demo/missingness disclosures and no longer claim Full Report and PDF are unimplemented',()=>{

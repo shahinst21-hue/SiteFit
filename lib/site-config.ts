@@ -78,6 +78,6 @@ export const publicPages = [
     path: "/sample-report",
     title: "Sample Report",
     description:
-      "Explore a clearly labelled fictional SiteFit report: key opportunities, risks, evidence and practical lease questions.",
+      "Explore an interactive fictional SiteFit Full Report: recommendation, catchment, competition, risks, actions and sample PDF downloads.",
   },
 ] as const;

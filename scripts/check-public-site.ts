@@ -8,6 +8,7 @@ import path from 'node:path';
 import {seller} from '../lib/legal/seller.ts';
 import {legalPublicationReady,publicSeller} from '../lib/legal/publication.ts';
 import {formationRule,deliveryCommitment} from '../lib/legal/policy-text.ts';
+import {samplePdfPath} from '../lib/report-dashboard/sample-display.ts';
 
 const base = new URL(process.argv[2] ?? "http://127.0.0.1:3000");
 if (
@@ -80,7 +81,17 @@ for (const path of paths) {
   if (path === "/sample-report") {
     assert.match(html, /Fictional scenario/);
     assert.match(html, /illustrative evidence/);
-    assert.equal((html.match(/class="report-section-body"/g) ?? []).length, reportPages.length);
+    assert.match(html,/data-presentation="public-sample"/);
+    for(const section of reportPages)assert.ok(html.includes(`?section=${section.key}`),`Sample navigation missing ${section.key}`);
+    assert.match(html,/Conditional shortlist/);
+    assert.match(html,/Download sample PDF/);
+    for(const section of [undefined,...reportPages.map(p=>p.key)]){
+      const pdf=await get(samplePdfPath(section));
+      assert.equal(pdf.status,200,'Sample PDF must be publicly downloadable');
+      assert.match(pdf.headers.get('content-type')??'',/application\/pdf/);
+      const bytes=new Uint8Array(await pdf.arrayBuffer());
+      assert.ok(bytes.length>10000&&new TextDecoder().decode(bytes.slice(0,5))==='%PDF-','Invalid sample PDF');
+    }
   }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `${path}: missing or duplicate title`);

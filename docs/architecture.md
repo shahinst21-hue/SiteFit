@@ -1,5 +1,9 @@
 # SiteFit architecture
 
+## Public sample presentation — 30 October 2026
+
+The shared Full Report dashboard has an explicit `public-sample` presentation mode for one independently authored, versioned fictional coffee-shop scenario. This flag is not restored from stored customer projections. Pure current arithmetic/recommendation functions illustrate scores without admitting synthetic inputs as source evidence. The map stays schematic with no external tiles; nine public PDFs are build outputs from the same inputs and existing renderer. Real report reads, private exports, source admission and historical records are unchanged. Sample events reuse the existing consent runtime with a separate finite allowlist. [Details, verification and release boundary](sample-report-redesign.md).
+
 D99 current implementation amendment: **450,000,000-byte** internal database/application checkpoint; independent qualified structured rental reads in existing owned Preview report/PDF, with Full Ready publication unchanged; versioned deterministic Appendix for new preparations. Historical contracts and the completed Phase 13 Preview milestone remain closed. [Technical correction](phase-12-d99-corrections.md).
 
 ## Current Phase 12 planning boundary — 10 October 2026
