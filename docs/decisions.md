@@ -527,3 +527,7 @@ Owner approves cross-device one-time email sign-in and continuation of the same 
 
 ### Sample Report internal Full and directory refinement — 31 October 2026
 The owner approved a one-off internal Full generation using the selected existing source case, without Stripe or customer entitlement mutation. Use the existing generator/validators and stored sources with local durable intents, max three AI dispatches and a US$1 ceiling, no automatic retry. Publish only reviewed anonymised output. Group nearby alternatives into exclusive walking bands with authored display names, and remove outer hero/closing grey gutters. This does not authorise merging, Production release, new source purchases or a general free Full endpoint. See sample-report-redesign.md.
+
+
+### Sample editorial and mobile tab refinement — 31 October 2026
+Owner requests finished Sample Report copy and contained mobile tabs. Remove technical availability badges from the public sample, use clear findings/actions, and preserve factual source scope and policy. Do not turn an absent permission or commercial observation into a verified one. Replace the sample horizontal mobile navigation with a contained responsive grid. Customer report defaults remain unchanged.

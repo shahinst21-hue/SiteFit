@@ -36,6 +36,7 @@ test('eight rendered tabs use the real workspace without export, score formulas 
   const result=spawnSync(process.execPath,['tests/fixtures/render-copy.mjs','sample-report',key],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);
   const html=result.stdout;assert.equal((html.match(/<h1\b/g)??[]).length,1);assert.match(html,/data-testid="report-dashboard"/);assert.match(html,/Sample Report/);assert.match(html,/Start a Free Snapshot/);
   assert.doesNotMatch(html,/class="dw-download"|Download sample PDF|How this sample score is calculated|Non-overlapping walking bands|50 ×|Ne =|fictional|illustrative/i);
+  assert.doesNotMatch(html,/>Partial<|>Stored<|>Unknown<|not stored|not recorded|No public source link|No safe public URL|report not Ready|No dated premises event|No external references were retrieved|source\/adapter|Source\/model date not supplied/i);
   if(key==='customer-context')assert.match(html,/Resident age/);if(key==='rental-context')assert.match(html,/PropertyData/);
   if(key==='competition'){assert.match(html,/Copper Finch Coffee/);assert.match(html,/Within 5 minutes/);assert.match(html,/5–10 minutes away/);assert.match(html,/10–15 minutes away/);assert.equal((html.match(/class="sample-alternative-count"/g)??[]).length,3);}
  }

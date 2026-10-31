@@ -1,3 +1,11 @@
+# Sample Report editorial and mobile navigation refinement — 31 October 2026
+
+The owner requested a finished report presentation without technical availability badges or wording that suggests generation failure. Public-sample presentation now omits Partial/Stored availability badges rather than relabelling partial evidence as complete. A sample-only editorial layer presents the eight sections, summary and actions in clear decision language. Operands, source periods, the 98/50 scores and Conditional shortlist policy are unchanged. Property checks remain concrete actions; no permission, lease clearance, observed customer demand or success probability is invented. Source dialogues retain provider, scope, real dates and relevant interpretation guidance while omitting internal adapter, retention and missing-link fields. Empty historical panels are omitted in the sample. Charts show published numerical categories with explicit category/universe context. The original local Full projection is preserved.
+
+Mobile sample navigation uses a contained two-column grid (four columns on tablet) with wrapped labels and fixed minimum touch targets, replacing the horizontally scrolling strip. Navigation stays in document flow so the site header and green active link cannot overlap or clip content after section focus. Desktop and paid customer presentation are preserved. Verification and exact-head protected delivery are recorded in the PR receipt.
+
+---
+
 # Public Sample Report — owner-approved internal Full and layout revision, 31 October 2026
 
 The owner approved the one-off internal generation route and requested a grouped, named Nearby alternatives directory and removal of the grey outer gutters. The hero and closing panels now fill the page width, with consistent internal spacing. Nearby alternatives uses authored café names and non-overlapping walking groups: 4 within 5 minutes, 16 additional within 5–10 minutes, and 20 additional within 10–15 minutes. The closest group opens initially; the others expand using native keyboard-accessible details. Paid customer directory presentation is unchanged.

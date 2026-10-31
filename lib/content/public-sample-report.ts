@@ -6,6 +6,7 @@ import {evaluateScenarioFit} from '../report-intelligence/scenario-fit.ts';
 import {sampleVersion} from '../report-dashboard/sample-display.ts';
 import source from './sample-source-v2.json' with {type:'json'};
 import full from './sample-full-v3.json' with {type:'json'};
+import {finishSampleCopy} from './sample-editorial.ts';
 import {sampleCafeNames} from './sample-businesses.ts';
 export {sampleVersion,sampleDisclosure} from '../report-dashboard/sample-display.ts';
 
@@ -28,5 +29,5 @@ export function createSampleReport():Dashboard {
  report.transport=[{id:'sample-transport-1',name:'Underground connection',mode:'tube',distanceMetres:620,walkingMinutes:8,information:'Sample dataset · route estimate; entrances need checking.',status:'available'},{id:'sample-transport-2',name:'Rail connection',mode:'rail',distanceMetres:840,walkingMinutes:11,information:'Sample dataset · route estimate; entrances need checking.',status:'available'},{id:'sample-transport-3',name:'Local bus connection',mode:'bus',distanceMetres:210,walkingMinutes:3,information:'Sample dataset · route estimate; entrances need checking.',status:'available'}];
  const bounds=report.map!.bounds!,x=(bounds[0]+bounds[2])/2,y=(bounds[1]+bounds[3])/2;
  report.map!.layers.push({id:'stations',label:'Transport connections',kind:'transport',status:'available',colour:'#287eaa',points:[[x+.004,y+.002],[x-.006,y-.003],[x+.001,y-.001]],polygons:[]});
- return report;
+ return finishSampleCopy(report);
 }
