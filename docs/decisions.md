@@ -523,3 +523,7 @@ The forward migration and application release must pass protected CI and hosted 
 ## Owner-approved customer sign-in recovery — 28 October 2026
 
 Owner approves cross-device one-time email sign-in and continuation of the same Snapshot on the receiving device, with renewed purchase consent there; the original device does not automatically authenticate. Preserve ownership, Google PKCE, idempotency and all financial/security ceilings. Remove customer OTP entry, prioritise Account/Check a Location in mobile navigation, and explicitly label smooth time-based Snapshot progress as estimated with 100% reserved for saved Ready. Independently complete code, tests, protected delivery and controlled Production verification; list unavailable real-device checks rather than blocking on the absent owner. See [implementation and evidence](customer-signin-recovery-20261028.md).
+
+
+### Sample Report internal Full and directory refinement — 31 October 2026
+The owner approved a one-off internal Full generation using the selected existing source case, without Stripe or customer entitlement mutation. Use the existing generator/validators and stored sources with local durable intents, max three AI dispatches and a US$1 ceiling, no automatic retry. Publish only reviewed anonymised output. Group nearby alternatives into exclusive walking bands with authored display names, and remove outer hero/closing grey gutters. This does not authorise merging, Production release, new source purchases or a general free Full endpoint. See sample-report-redesign.md.

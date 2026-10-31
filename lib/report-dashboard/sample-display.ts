@@ -5,7 +5,7 @@ import {residentialScore} from '../analysis/residential-catchment.ts';
 import {competitionScore} from '../competition/model.ts';
 import {decideRecommendation} from '../analysis/recommendation.ts';
 
-export const sampleVersion = 'public-sample-v2';
+export const sampleVersion = 'public-sample-v3';
 export const sampleDisclosure = 'Sample Report';
 export function sampleSection(section:unknown,hash=''):SectionKey {
   if(reportPages.some(p=>p.key===section))return section as SectionKey;
@@ -13,10 +13,10 @@ export function sampleSection(section:unknown,hash=''):SectionKey {
   if(legacy)return reportPages[Number(legacy[1])].key;
   return ({'#report-overview':'overview','#sample-evidence':'appendix','#report-next':'actions','#report-detail':'overview','#sample-next-step':'overview'} as Record<string,SectionKey>)[hash]??'overview';
 }
-/** Arithmetic-only demonstration. Never admits fictional inputs as retrieved evidence. */
+/** Sample arithmetic guard; stored-source provenance does not grant customer entitlement. */
 export function sampleRecommendation(report:Dashboard) {
   const r=report.residentialCatchment,c=report.competition;
-  if(report.reportId!==null||!report.demo||!r||!c||c.provenance.retrievedAt!==null||c.provenance.complete||report.sources.some(s=>s.retrievedAt||s.reference))throw Error('invalid_public_sample');
+  if(report.presentationMode!=='public-sample'||report.digest!==sampleVersion||report.reportId!==null||!report.demo||!r||!c||c.provenance.retrievedAt!==null||c.provenance.complete||report.sources.some(s=>s.reference))throw Error('invalid_public_sample');
   const population=residentialScore(r.populations,r.metadata),competition=competitionScore(c.populations??[],c.counts??[]);
   if(!population||!competition||population.score!==r.score||competition.score!==c.score||JSON.stringify(r.populations)!==JSON.stringify(c.populations))throw Error('invalid_sample_arithmetic');
   return decideRecommendation({demand:{score:population.score,rating:population.rating,version:r.version,evidenceIds:r.metadata.evidenceIds},competition:{score:competition.score,rating:competition.rating,version:c.version,evidenceIds:['sample:competition']},premises:{state:'unresolved',evidenceIds:[]},access:{state:'unresolved',evidenceIds:[]}});

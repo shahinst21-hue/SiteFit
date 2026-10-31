@@ -1,3 +1,21 @@
+# Public Sample Report — owner-approved internal Full and layout revision, 31 October 2026
+
+The owner approved the one-off internal generation route and requested a grouped, named Nearby alternatives directory and removal of the grey outer gutters. The hero and closing panels now fill the page width, with consistent internal spacing. Nearby alternatives uses authored café names and non-overlapping walking groups: 4 within 5 minutes, 16 additional within 5–10 minutes, and 20 additional within 10–15 minutes. The closest group opens initially; the others expand using native keyboard-accessible details. Paid customer directory presentation is unchanged.
+
+## Internal Full execution
+
+The selected existing Ready Free Snapshot's frozen context, 35 evidence items and 17 snapshots were read in a read-only transaction. No source recollection, database migration/write, payment, customer entitlement, fulfilment or Production deployment was performed. The owner-operated local script `scripts/sample/generate-full.ts` invokes the original Full generator/provider/validators with a durable local-file repository. It creates no customer Full edition and adds no web-accessible exception. Preparation reuses admitted stored profiles, operator context and rental supplements. Unavailable comparative density baselines remain withheld; no new lookup or calibration is introduced.
+
+The exact one-off execution reached Ready with all three context/premises/synthesis dispatches accepted and no repair/retry. Model: gpt-6.1-sol, store=false. The local journal reserved US$0.213610 conservatively under a US$1 ceiling; token-based usage estimate US$0.064724 is not a provider invoice. The original source request history and customer report remain unchanged. Private input, edition, intent/settlement journal and receipts stay under ignored `.vercel/`. A second execute refuses the existing run directory, including interrupted/ambiguous attempts. Build and page visits never invoke this command.
+
+The reviewed public `sample-full-v3.json` projection publishes the eight evidence-linked sections, four actions, 27 source entries, 12 genuine stored Census profile tables and the admitted PropertyData local benchmark. Source-case identity, private UUIDs, named businesses and exact-unit source links are removed. The saved walking scores remain 98 Strong / 50 Moderate and Conditional shortlist. Authored café display names, generic transport examples and conditional layout capacities remain separately identifiable as sample assumptions. Synthetic profiles and rental comparisons from V2 are replaced with the real stored outputs. The street map still reveals the surrounding area; it does not contain the selected-property pin.
+
+Public sample exports remain disabled, scoring formulas/baselines stay hidden, and customer report admission/payment/export paths are unchanged. Editorial review removed duplicated rental units and named-register claims after anonymisation; original private generated output is unchanged. Local npm run check passed lint, strict types, 539 tests and build; the updated source-binding/rental/profile checks and four-tab-contract test suite also passed. A second execution was refused with unchanged intent ledger and zero extra dispatches. Final built HTTP/browser checks and protected exact-head CI/Preview are separate delivery receipts. Physical-device and genuine 200% zoom verification remain outstanding.
+
+---
+
+# Historical V2 — superseded by the owner-approved internal route
+
 # Public Sample Report — current revision, 30 October 2026
 
 ## Owner revision and current behaviour
