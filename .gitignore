@@ -17,6 +17,7 @@ out/
 coverage/
 *.tsbuildinfo
 next-env.d.ts
+public/samples/public-sample-v1/*.pdf
 *.log
 .vercel/
 supabase/.temp/

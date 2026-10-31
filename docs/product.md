@@ -84,7 +84,7 @@ Use concise, natural British English. Every page explains what it is, why it mat
 
 Say “Insufficient verified evidence is available to assess this factor”, “No verified occupancy history was identified for this period” only when that search actually occurred, or precisely state evidence has not been verified. Measured footfall absence must not imply transport/activity proxies are measured footfall. Production source claims must reflect actual retrieval, not the candidate register.
 
-Sample Report content is visibly labelled Sample Report, with fictional scenario and illustrative evidence distinguished from real observations. Never attach sample findings to a customer's entered address. Before real retrieval exists, a Snapshot can organise the user-supplied brief and relevant verification questions, but cannot claim local demand, competitors or risks have been measured.
+Sample Report content is visibly labelled Sample Report. Under the 30 October owner revision, repeated fictional/illustrative banners are omitted; the evidence directory distinguishes de-identified stored area observations from sample dataset assumptions. Sample exports and scoring formulas/baselines are hidden, while the original report maps and tab experience are reused. Never attach sample findings to a customer's entered address. Before real retrieval exists, a Snapshot can organise the user-supplied brief and relevant verification questions, but cannot claim local demand, competitors or risks have been measured.
 
 ## Mobile First and visual quality
 

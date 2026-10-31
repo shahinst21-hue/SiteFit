@@ -1,10 +1,11 @@
-import type {JourneyEvent,Ecommerce} from './events.ts';
+import type {JourneyEvent,Ecommerce,SampleEvent,SamplePlacement,SampleTarget} from './events.ts';
 import type {GoogleMeasurement} from './runtime.ts';
 let runtime:GoogleMeasurement|null=null;
 export function installMeasurement(value:GoogleMeasurement){runtime=value;window.dispatchEvent(new Event('sitefit-google-ready'));}
 export const measurementAllowed=()=>runtime?.allowed()===true;
 export const measurementEligible=(at?:string)=>runtime?.eligible(at)===true;
 export function trackJourney(name:JourneyEvent,key:string,business?:string,reason?:string){runtime?.track(name,key,business,reason);}
+export function trackSample(name:SampleEvent,section:string,placement:SamplePlacement,target:SampleTarget='snapshot'){runtime?.sample(name,section,placement,target);}
 /** Server claims, not browser storage, are the purchase/checkout deduplication authority. Failure never blocks the product. */
 export async function trackEcommerce(paymentId:string,event:'purchase'|'begin_checkout'){
  if(!measurementAllowed()||!/^[0-9a-f-]{36}$/i.test(paymentId))return;

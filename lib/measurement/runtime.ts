@@ -1,6 +1,6 @@
 import type {MeasurementConfig} from './config.ts';
 import {canMeasure,deniedConsent,googleConsent,type Consent} from './consent.ts';
-import {safeJourney,safePage,admittedEcommerce,type JourneyEvent,type Ecommerce} from './events.ts';
+import {safeJourney,safePage,safeSample,admittedEcommerce,type JourneyEvent,type Ecommerce,type SampleEvent,type SamplePlacement,type SampleTarget} from './events.ts';
 import type {Acquisition} from './attribution.ts';
 export type TagSink={command:(...args:unknown[])=>void;load:(id:string,ready:()=>void)=>void;get:(key:string)=>string|null;set:(key:string,value:string)=>void;disable:(value:boolean)=>void};
 export class GoogleMeasurement {
@@ -28,5 +28,10 @@ export class GoogleMeasurement {
  navigate(path:string){this.page=path;if(!this.allowed())return;const p=safePage(path);this.sink.command('set',{page_location:this.location(p.path),page_title:p.title,page_referrer:''});if(this.once('page:'+p.path))this.send('page_view',{page_location:this.location(p.path),page_title:p.title,page_referrer:''});this.track('landing_view','landing');if(path==='/check-location')this.track('check_started','check');}
  private send(name:string,params:object){if(this.allowed())this.sink.command('event',name,{...params,deployment_environment:this.config.environment,...(this.config.environment==='test'?{debug_mode:true}:{}),transport_type:'beacon',send_to:this.config.analytics});}
  track(name:JourneyEvent,key:string,business?:string,reason?:string){if(!this.allowed()||!/^[a-zA-Z0-9:_-]{1,180}$/.test(key))return;const event=safeJourney(name,business,reason);if(this.once(name+':'+key))this.send(event.event,event.params);}
+ sample(name:SampleEvent,section:string,placement:SamplePlacement,target:SampleTarget='snapshot'){
+  if(!this.allowed()||safePage(this.page).path!=='/sample-report')return;
+  const event=safeSample(name,section,placement,target);
+  if(this.once(`${name}:${section}:${placement}:${target}`))this.send(event.event,event.params);
+ }
  ecommerce(name:'purchase'|'begin_checkout'|'refund',payload:Ecommerce){if(this.allowed())this.send(name,admittedEcommerce(payload,name));}
 }

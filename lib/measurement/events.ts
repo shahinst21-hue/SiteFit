@@ -1,5 +1,16 @@
 export const journeyEvents=['landing_view','check_started','address_selected','business_selected','free_analysis_started','free_analysis_completed','free_report_viewed','report_viewed','full_analysis_completed','pdf_downloaded','analysis_failed'] as const;
 export type JourneyEvent=typeof journeyEvents[number];
+export const sampleEvents=['sample_section_viewed','sample_cta_clicked'] as const;
+export type SampleEvent=typeof sampleEvents[number];
+export type SamplePlacement='navigation'|'hero'|'sticky'|'closing'|'export';
+export type SampleTarget='snapshot'|'pricing';
+export function safeSample(event:SampleEvent,section:string,placement:SamplePlacement,target:SampleTarget='snapshot') {
+ if(!sampleEvents.includes(event)||!['overview','customer-context','competition','access','premises','rental-context','actions','appendix'].includes(section)||
+   !['navigation','hero','sticky','closing','export'].includes(placement)||!['snapshot','pricing'].includes(target)||
+   event==='sample_section_viewed'&&(placement!=='navigation'||target!=='snapshot')||
+   event==='sample_cta_clicked'&&(!['hero','sticky','closing'].includes(placement)||!['snapshot','pricing'].includes(target)))throw Error('invalid_sample_event');
+ return {event,params:{section,placement,...(event==='sample_section_viewed'?{}:{target})}};
+}
 export const businessCategories=['coffee-shop','restaurant','hair-salon','beauty-salon'] as const;
 export type BusinessCategory=typeof businessCategories[number];
 export function safeJourney(name:JourneyEvent,business?:string,reason?:string){

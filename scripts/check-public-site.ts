@@ -78,9 +78,11 @@ for (const path of paths) {
     path + ": obsolete customer wording",
   );
   if (path === "/sample-report") {
-    assert.match(html, /Fictional scenario/);
-    assert.match(html, /illustrative evidence/);
-    assert.equal((html.match(/class="report-section-body"/g) ?? []).length, reportPages.length);
+    assert.match(html,/data-presentation="public-sample"/);
+    for(const section of reportPages)assert.ok(html.includes(`?section=${section.key}`),`Sample navigation missing ${section.key}`);
+    assert.match(html,/Conditional shortlist/);
+    assert.doesNotMatch(html,/class="dw-download"|Download sample PDF|How this sample score is calculated/);
+    for(const path of ['/samples/public-sample-v1/full-report.pdf','/samples/public-sample-v1/customer-context.pdf'])assert.equal((await get(path)).status,404,'Sample exports must not be available');
   }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `${path}: missing or duplicate title`);

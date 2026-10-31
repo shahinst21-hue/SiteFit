@@ -14,6 +14,7 @@ export const reportPdfVersion='report-pdf-v2';
 
 /** One display contract for immutable tab and full exports. No private preparation/checkpoints or external resources. */
 export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;heading?:boolean}[]{
+  if(report.presentationMode==='public-sample')throw Error('sample_exports_disabled');
   const p=report.pages.find(p=>p.key===key);if(!p)throw Error('invalid_export_section');
   const rows:{text:string;heading?:boolean}[]=[];
   const add=(text:string,heading=false)=>{if(text.trim()&&!rows.some(r=>r.text===text))rows.push({text,heading});};
@@ -86,6 +87,7 @@ export function exportParagraphs(report:Dashboard,key:SectionKey):{text:string;h
 }
 
 export async function renderReportPDF(report:Dashboard,key?:SectionKey){
+  if(report.presentationMode==='public-sample')throw Error('sample_exports_disabled');
   if(report.structuredPreview&&key!=='rental-context')throw Error('full_report_not_ready');
   const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);
   const font=await pdf.embedFont(await fs.readFile(path.join(process.cwd(),'public/fonts/DejaVuSans.ttf')),{subset:true});

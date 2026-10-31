@@ -19,7 +19,7 @@ registerHooks({resolve(s,c,next){
   const url=s.startsWith('@/')?new URL(s.slice(2),root):new URL(s,c.parentURL);
   for(const ext of ['.tsx','.ts','/index.ts'])if(fs.existsSync(url.href.startsWith('file:')?fileURLToPath(new URL(url.href+ext)):''))return next(url.href+ext,c);
  }return next(s,c);
-},load(url,c,next){if(url.endsWith('.tsx'))return {format:'module',shortCircuit:true,source:ts.transpileModule(fs.readFileSync(fileURLToPath(url),'utf8'),{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.ESNext}}).outputText};return next(url,c)}});
+},load(url,c,next){if(url.endsWith('.css'))return {format:'module',shortCircuit:true,source:''};if(url.endsWith('.tsx'))return {format:'module',shortCircuit:true,source:ts.transpileModule(fs.readFileSync(fileURLToPath(url),'utf8'),{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.ESNext}}).outputText};return next(url,c)}});
 globalThis.fetch=()=>{throw Error('Static copy verification must not request data');};
 const name=process.argv[2];
 if(!['home','pricing','how-it-works','sample-report','snapshot','snapshot-stored','competition-details','purchase','checkout'].includes(name))throw Error('Unknown fixture');
@@ -51,6 +51,6 @@ if(name==='competition-details'){
  const path=name==='home'?'app/page.tsx':`app/${name}/page.tsx`;
  const {default:Page}=await import(pathToFileURL(fileURLToPath(new URL(path,root))).href);
  const {LocationEntryProvider}=await import('../../components/location-entry.tsx');
- view=createElement(LocationEntryProvider,null,await Page());
+ view=createElement(LocationEntryProvider,null,await Page(name==='sample-report'?{searchParams:Promise.resolve({section:process.argv[3]})}:undefined));
 }
 process.stdout.write(renderToStaticMarkup(view));

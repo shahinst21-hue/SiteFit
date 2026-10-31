@@ -1,5 +1,9 @@
 # SiteFit architecture
 
+## Public sample presentation — 30 October 2026
+
+The shared Full Report dashboard has an explicit public-sample presentation mode, never restored from customer projections. The owner-approved local one-off Full execution uses the original generator/validators and stored source material, with local durable intents, three AI requests maximum, US$1 ceiling and no automatic retry. It creates no customer Full entitlement or database edition. Only the reviewed anonymised sample-full-v3 public projection is imported by the page: eight narrative sections, stored Census profiles and rental context. Authored café names, generic transport examples and layout assumptions stay separate from source evidence. The original street-map component uses saved walking geometry with the selected-property pin removed. Sample export/formula detail stays disabled; customer admission, payments, private exports and history remain unchanged. Sample events use the existing consent runtime and finite allowlist. [Details and delivery boundary](sample-report-redesign.md).
+
 D99 current implementation amendment: **450,000,000-byte** internal database/application checkpoint; independent qualified structured rental reads in existing owned Preview report/PDF, with Full Ready publication unchanged; versioned deterministic Appendix for new preparations. Historical contracts and the completed Phase 13 Preview milestone remain closed. [Technical correction](phase-12-d99-corrections.md).
 
 ## Current Phase 12 planning boundary — 10 October 2026

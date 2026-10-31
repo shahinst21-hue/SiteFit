@@ -19,7 +19,7 @@ export type Profile = {dataset:string; seconds:number; period:string; universe:s
   limitations:string[]; columns:{label:string; state:string; value:number|null; share:number|null}[]};
 export type Page = {key:SectionKey; conclusion:string; analysis:Statement[]; test:Statement|null; cautions:Statement[];
   factIds:string[]; referenceIds:string[]; unknowns:string[]; availability:string; direction:string};
-export type Dashboard = {version:'report-dashboard-v1'; reportId:string|null; digest:string; generatedAt:string;
+export type Dashboard = {version:'report-dashboard-v1'; presentationMode?:'public-sample'; sampleRental?:{benchmark:number;cohort:number;averageSqft:number;averageAnnual:number}; reportId:string|null; digest:string; generatedAt:string;
   recommendation?:RecommendationDecision; competition?:CompetitionResult; residentialCatchment?:ResidentialScore|null; structuredPreview?:{stage:string};
   address:string; business:string; businessLabel:string; precision:string; analysisTimestamp:string|null; editionLabel:string;
   pages:Page[]; sources:Source[]; references:Reference[]; summary:{verdict:string[]; strengths:Statement[]; risks:Statement[]; priority:string}|null;
