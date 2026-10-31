@@ -79,3 +79,7 @@ Physical-phone verification and genuine desktop 200% browser zoom were not perfo
 ## Delivery and rollback
 
 Delivery uses a protected PR and required CI, with an authenticated Vercel Preview. No Production deployment/configuration or merge is claimed from local tests. Rollback is the application revert through the same protected workflow; no database, customer history, credentials or budget state needs reversal.
+
+
+## Mobile strip correction — 31 October 2026
+The owner requested the original horizontal mobile navigation back and no other presentation/content changes. The sample-only grid override is removed. Links cannot flex-shrink; labels remain inside their backgrounds, and the active link is centred within the scroll container on selection, direct entry/history changes and resize. The strip remains sticky below the site header. All copy, scores, charts, data and other layout are preserved.
