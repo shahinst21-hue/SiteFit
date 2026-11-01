@@ -16,7 +16,7 @@ export async function readDecisionReport(id:string){
     const {user}=await verifiedUser();if(!user)return null;
     const edition=await fullRepository(user.id).read(id);
     const {decisionEdition,contentDigest:_,...parent}=edition.projection as Record<string,unknown>;void _;
-    if(decisionEdition){const report=await loadFrozenDecision(decisionEdition,packetDigest(parent));report.reportId=id;return {report:await hydrateDecisionGeography(report),archiveDocuments:result.archiveDocuments===true};}
+    if(decisionEdition){const report=await loadFrozenDecision(decisionEdition,packetDigest(parent));report.reportId=id;return {report:await hydrateDecisionGeography(report),archiveDocuments:true};}
     return {report:await decisionFromDashboard(result.dashboard),archiveDocuments:result.archiveDocuments===true};}
   catch{return null;}
 }
