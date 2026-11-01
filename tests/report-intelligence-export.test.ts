@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {compactSources,compactSectionAtoms,sectionExport,validateFullProjection} from '../lib/report-intelligence/export.ts';
+import {compactSources,compactSectionAtoms,sectionExport,validateFullProjection,compressSourceMetadata} from '../lib/report-intelligence/export.ts';
 import {sectionKeys,type Fact} from '../lib/report-intelligence/catalog.ts';
 import {packetDigest} from '../lib/analysis/canonical.ts';
 
@@ -19,6 +19,10 @@ test('compact report provenance and repeated analytical text export losslessly; 
   assert.deepEqual(exported.section.reasons,[atom]);
   assert.deepEqual(exported.section.cautions,[atom]);
   assert.equal(content.atomTexts.length,1);
+  const compressed={...content,...compressSourceMetadata(compactSources([fact]))};
+  assert.deepEqual(sectionExport({...compressed,contentDigest:packetDigest(compressed)},'customer-context').sources,[fact]);
+  const tampered=structuredClone(compressed);tampered.sourceMetadataCompressed.digest='0'.repeat(64);
+  assert.throws(()=>validateFullProjection({...tampered,contentDigest:packetDigest(tampered)}),/source_metadata/);
   const invalid=structuredClone(content); invalid.sourceDirectory[0].metadata.source=999;
   assert.throws(()=>validateFullProjection({...invalid,contentDigest:packetDigest(invalid)}));
   const invalidText=structuredClone(content);invalidText.atomTexts=[];

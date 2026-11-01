@@ -31,5 +31,13 @@ test('Development launch allowance is operator-gated, audited once and retains t
   await db.exec(recovery);await db.exec(recovery);await reserve(2740000);await assert.rejects(reserve(3040000),/phase12_budget_exhausted/);
   const audit=await db.query<{count:number;unallocated:number}>("select count(*)::int as count,min((safe_metadata->>'unallocatedMicros')::int) as unallocated from system_events where event_type='phase12-launch-budget-reallocated'");
   assert.equal(audit.rows[0].count,1);assert.equal(audit.rows[0].unallocated,372290);
+  await db.exec(`insert into public.system_events values('phase12-report-reserved','test','{"reservedMicros":300000}')`);
+  const decision=await readFile(new URL('../supabase/operations/development-decision-report-proof-budget.sql',import.meta.url),'utf8');
+  await assert.rejects(db.exec(decision),/verified_development_operator_required/);await db.exec('rollback');
+  await db.exec("set application_name='sitefit-development-decision-report'");
+  await db.exec(decision);await db.exec(decision);
+  await reserve(3040000);await assert.rejects(reserve(3340000),/phase12_budget_exhausted/);
+  const final=await db.query<{held:number;approvals:number}>(`select (select sum((safe_metadata->>'reservedMicros')::int) from system_events where event_type='phase12-report-reserved')::int as held,(select count(*) from system_events where event_type='decision-report-proof-budget-approved')::int as approvals`);
+  assert.deepEqual(final.rows,[{held:3040000,approvals:1}]);
  }finally{await db.close();}
 });

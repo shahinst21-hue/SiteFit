@@ -1,3 +1,5 @@
+Continuation: [automatic independent proof and latest dashboard-preservation instruction](decision-report-integration-20261101.md) supersede the proposed dashboard link/default integration. Historical evidence below remains the record of PR160.
+
 # Decision report edition — 1 November 2026
 
 ## Owner authority and boundaries

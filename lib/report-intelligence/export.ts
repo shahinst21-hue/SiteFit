@@ -12,6 +12,10 @@ import { expandedProfiles } from "./profiles.ts";
 import { validateNarrative, renderCommentary, type ConsultantNarrative } from "./narrative.ts";
 import type { ScenarioFit } from "./scenario-fit.ts";
 import { operatingFormatTable } from "./operating-comparison.ts";
+import {thawDecision} from '../decision-report/frozen.ts';
+import {validateDecisionArchive} from '../decision-report/archive.ts';
+import {jsonbStorageBytes} from './storage-size.ts';
+import {gzipSync,gunzipSync} from 'node:zlib';
 
 /** Lossless shared provenance: identical metadata is stored once, never omitted. */
 export function compactSources(facts: Fact[]) {
@@ -24,7 +28,17 @@ export function compactSources(facts: Fact[]) {
   return { sourceDirectory: facts.map(({ source, licence, statistical, limitations, ...fact }) => ({ ...fact,
     metadata: { source: reference(source), licence: reference(licence), statistical: reference(statistical), limitations: reference(limitations) } })), sourceMetadata };
 }
+export function compressSourceMetadata(sources:ReturnType<typeof compactSources>){
+  return {...sources,sourceMetadata:[],sourceMetadataCompressed:{encoding:'gzip-base64',digest:packetDigest(sources.sourceMetadata),body:gzipSync(JSON.stringify(sources.sourceMetadata),{level:9}).toString('base64')}};
+}
 function expandedSources(p: Record<string, unknown>) {
+  if(p.sourceMetadataCompressed){
+    const v=object(p.sourceMetadataCompressed);
+    if(v.encoding!=='gzip-base64'||typeof v.body!=='string'||v.body.length>100000)throw Error('invalid_source_metadata');
+    const metadata=JSON.parse(gunzipSync(Buffer.from(v.body,'base64'),{maxOutputLength:1000000}).toString());
+    if(!Array.isArray(metadata)||metadata.length>5000||packetDigest(metadata)!==v.digest||!Array.isArray(p.sourceMetadata)||p.sourceMetadata.length)throw Error('invalid_source_metadata');
+    p={...p,sourceMetadata:metadata};
+  }
   return (p.sourceDirectory as unknown[]).map(value => {
     const fact = object(value); if (!fact.metadata) return fact;
     const {metadata,...rest}=fact, refs=object(metadata);
@@ -70,8 +84,13 @@ export function validateFullProjection(value: unknown) {
   if (p.version !== "full-report-v1" || p.financialEngineIncluded !== false || typeof p.bindingDigest !== "string" ||
     !/^[a-f0-9]{64}$/.test(p.bindingDigest) || contentDigest !== packetDigest(content) || !Array.isArray(p.sections) ||
     p.sections.length !== 8 || !Array.isArray(p.sourceDirectory) || !Array.isArray(p.supplementReferences) ||
-    Buffer.byteLength(JSON.stringify(value)) > 131072) throw Error("invalid_full_projection");
+    jsonbStorageBytes(value) > 131072) throw Error("invalid_full_projection");
   const competition=object(p.presentation??{}).competition;
+  if(p.decisionEdition!==undefined){
+    const {decisionEdition,...parent}=content;
+    const frozen=object(decisionEdition).version==='archived-decision-v1'?validateDecisionArchive(decisionEdition,packetDigest(parent)):thawDecision(decisionEdition,packetDigest(parent));
+    if(frozen.business!==p.business||frozen.address!==object(object(p.presentation).property).label||frozen.date!==p.generatedAt)throw Error('invalid_full_decision_binding');
+  }
   if(competition!==undefined)validateCompetition(competition);
   const residential=object(p.presentation??{}).residentialCatchment;
   if(residential!==undefined&&residential!==null)validateResidentialScore(residential);

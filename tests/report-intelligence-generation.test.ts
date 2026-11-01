@@ -16,6 +16,7 @@ import { renderReportPDF, exportParagraphs } from "../lib/report-dashboard/pdf.t
 import { PDFDocument } from "pdf-lib";
 import { sectionExport, validateFullProjection } from "../lib/report-intelligence/export.ts";
 import {recommendationFixture} from './fixtures/recommendation.ts';
+import {thawDecision} from '../lib/decision-report/frozen.ts';
 
 test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected once and cannot fulfil or redispatch',async()=>{
  for(const changeTitle of [false,true]){
@@ -23,6 +24,7 @@ test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected on
   p.narrativeVersion='consultant-narrative-v2';p.scenarioFit=evaluateScenarioFit({businessType:'coffee-shop',facts:[]});
   p.presentation={recommendation:decision,residentialCatchment:residential,competition,freeReportId:ids.correlation,analysisTimestamp:date,
     property:{id:ids.property,label:'Synthetic policy regression unit',precision:'postcode_centroid'},spatial:{reportId:ids.correlation,digest:null,state:'unavailable'},photo:{state:'unavailable'}};
+  p.decisionPreparation={version:'automatic-decision-v1',business:'coffee-shop',input:null,map:null};
   db.value().checkpoint=newCheckpoint(p);
   const claim={text:'Daytime customer activity and exact-unit premises conditions remain unverified.',kind:'unknown',factIds:[],operatorIds:[],referenceIds:[]};
   const lead={...claim,text:changeTitle?'Conditional shortlist':decision.title};
@@ -38,6 +40,12 @@ test('Full synthesis keeps the Snapshot policy; a changed verdict is rejected on
   const result=await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider});assert.equal(calls,3);
   if(changeTitle){assert.equal(result.status,'draft');assert.equal(result.checkpoint.dispatches[2].state,'invalid');assert.equal(result.checkpoint.dispatches[2].output,null);}
   else{assert.equal(result.status,'ready');const dashboard=dashboardFromStored(result.projection);assert.deepEqual(dashboard.recommendation,decision);assert.equal(dashboard.summary?.verdict[0],decision.title);assert.ok(exportParagraphs(dashboard,'overview').some(r=>r.text===decision.title));
+   const {decisionEdition,contentDigest:discard,...parent}=result.projection as unknown as Record<string,unknown>;void discard;
+   const frozen=thawDecision(decisionEdition,packetDigest(parent));assert.equal(frozen.recommendation,decision.title);
+   assert.notDeepEqual(frozen.scenarios.map(s=>s.daily),[200,124,79]);
+   validateFullProjection(result.projection);
+   const changed={...parent,generatedAt:'2026-11-01T00:00:00.000Z',decisionEdition};
+   assert.throws(()=>validateFullProjection({...changed,contentDigest:packetDigest(changed)}),/frozen_decision/);
    assert.equal(dashboard.rental.length,0);const rent=exportParagraphs(dashboard,'rental-context');assert.ok(rent.length>2);assert.ok(rent.some(r=>r.text==='Rental evidence unavailable'));assert.ok(rent.some(r=>r.text.includes('No qualified rental observation')));
   }
   await generateFullIntelligence(ids.analysis,ids.property,{repository:db.repo,provider,resume:true});assert.equal(calls,3);

@@ -25,10 +25,19 @@ import { storedRentalSupplements } from "./rental-preparation.ts";
 import { rentalFallback, approvedRentalSources, type RentSourceAdapter, type RentalFallback } from "../web-evidence/rental-fallback.ts";
 import { webEvidenceSearch } from "../web-evidence/search.ts";
 import { applyRentalDiscovery } from "./rental-discovery.ts";
+import {prepareDecisionEdition,assertDecisionPreparationBudget} from '../decision-report/rollout.ts';
+import {validateEconomicBundle} from '../economics/bundle.ts';
+import type {EconomicInput} from '../economics/model.ts';
+import {snapshotFromStored,type SnapshotMap} from '../snapshot/model.ts';
+import {thawDecision} from '../decision-report/frozen.ts';
+import {acquireDecisionGeography,archiveDecisionCatchments,type DecisionGeography} from '../decision-report/geography.ts';
+import {automaticCompetitors} from '../decision-report/automatic.ts';
+import {validateDecisionArchive} from '../decision-report/archive.ts';
 
 type Rpc = { rpc(name: string, args: Record<string, Json | null>): PromiseLike<{ data: unknown; error: unknown }> };
 export type Preparation = { version: "full-preparation-v1"; configuration: "full-intelligence-v1";
   narrativeVersion?: "consultant-narrative-v1" | "consultant-narrative-v2";
+  decisionPreparation?: {version:'automatic-decision-v1';business:EconomicInput['business'];input:EconomicInput|null;map:SnapshotMap|null;catchmentsArtifact?:{path:string;digest:string};geography?:DecisionGeography};
   verificationRunId?: string;
   appendixPolicy?: "deterministic-appendix-v1";
   analysisId: string; inputId: string; assessmentId: string; assessmentDigest: string; catalog: Catalog;
@@ -57,6 +66,14 @@ export function validateStoredEdition(value: unknown): StoredEdition {
   }
   if (row.status === "ready") {
     const projection = validateFullProjection(row.projection);
+    if(p.decisionPreparation){
+      const {decisionEdition,contentDigest:_,...parent}=projection;void _;
+      const archived=object(decisionEdition).version==='archived-decision-v1'?validateDecisionArchive(decisionEdition,packetDigest(parent)):null;
+      const decision=archived?null:thawDecision(decisionEdition,packetDigest(parent));
+      const preparation=p.decisionPreparation as Preparation['decisionPreparation'];
+      if(preparation?.version!=='automatic-decision-v1'||(archived?.catchmentsDigest??decision?.catchmentsArtifact?.digest??packetDigest(decision?.catchments))!==(preparation.catchmentsArtifact?.digest??packetDigest(preparation.map))||
+        preparation.input&&(archived?.baselineInputDigest??packetDigest(decision?.scenarios.find(s=>s.id==='base')?.input))!==packetDigest(preparation.input))throw Error('invalid_decision_preparation_binding');
+    }
     if (packetDigest(projection.presentation??null)!==packetDigest(p.presentation??null) || projection.bindingDigest !== checkpoint.bindingDigest || packetDigest(projection.index) !== packetDigest(object(p.catalog).index) ||
       packetDigest(projection.readiness) !== packetDigest(object(p.catalog).readiness) ||
       p.scenarioFit && packetDigest(projection.scenarioFit) !== packetDigest(p.scenarioFit)) throw Error("invalid_full_replay");
@@ -113,6 +130,19 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     const free=await client.from('reports').select('free_projection,analysis_id,input_id').eq('id',freeReportId).eq('tier','free').eq('status','ready').abortSignal(AbortSignal.timeout(8000)).single();
     if(free.error||!free.data||free.data.analysis_id!==context.analysisId||free.data.input_id!==context.inputId)throw Error('full_snapshot_decision_unavailable');
     const snapshot=validateFreeProjection(free.data.free_projection);
+    let decisionPreparation:Preparation['decisionPreparation'];
+    if(prepareDecisionEdition(process.env)){
+      // Source intents cannot spend ahead of an already exhausted Full fence.
+      // The database still reserves and arbitrates the actual admission.
+      assertDecisionPreparationBudget(material.reservedMicros);
+      // Existing paid ownership was checked above. Bind any saved plan to this
+      // exact immutable input; never use a different property or old input.
+      const plans=await client.from('economic_models').select('outputs').eq('analysis_id',context.analysisId).eq('input_id',context.inputId).eq('model_version','economics-v1').order('created_at',{ascending:false}).limit(1);
+      if(plans.error)throw Error('decision_operating_plan_unavailable');
+      const plan=plans.data?.[0]?validateEconomicBundle(plans.data[0].outputs):null;
+      if(plan&&(plan.kind!=='financial_engine'||plan.contextDigest!==packetDigest(context)||plan.propertyId!==context.selectedProperty.id||plan.business!==context.businessType))throw Error('foreign_decision_operating_plan');
+      decisionPreparation={version:'automatic-decision-v1',business:context.businessType,input:plan?(plan.result as {baseline:{input:EconomicInput}}).baseline.input:null,map:snapshotFromStored(snapshot).map};
+    }
     const residentialCatchment=residentialFromEvidence(evidence,context.businessType,queryPoint(context)??null,preparedAt);
     const recommendation=snapshot.recommendation?bindRecommendation(snapshot.recommendation,residentialCatchment,competition):recommendationFromScores(residentialCatchment,competition);
     const rentalSupplements = storedRentalSupplements(context, assessment, Array.isArray(material.rentalSnapshots) ? material.rentalSnapshots : [], preparedAt);
@@ -144,6 +174,15 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     } : null);
     applyRentalDiscovery(context, catalog, fallback);
     projectOperators(context, assessment, catalog, Array.isArray(material.operatorSnapshots) ? material.operatorSnapshots : [], new Date());
+    if(decisionPreparation){
+      const origin=queryPoint(context);
+      if(origin&&!['unknown','postcode_centroid'].includes(origin.precision)){
+        const candidates=automaticCompetitors({business:catalog.business,address:context.selectedProperty.formattedAddress,competition,operators:catalog.operators??null,map:decisionPreparation.map,generatedAt:context.analysisTimestamp}).items;
+        decisionPreparation.geography=await acquireDecisionGeography({freeReportId,contextDigest:packetDigest(context),origin,candidates,key:process.env.GEOAPIFY_API_KEY});
+      }
+      decisionPreparation.catchmentsArtifact=await archiveDecisionCatchments(freeReportId,decisionPreparation.map);
+      decisionPreparation.map=null;
+    }
     const scenarioFit = evaluateScenarioFit({ businessType: context.businessType, facts: catalog.facts,
       history: catalog.timeline, rental: catalog.rentalObservations });
     const profiles = storedProfiles(context, assessment, Array.isArray(material.profileSnapshots) ? material.profileSnapshots : []);
@@ -160,6 +199,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     };
     const preparation: Preparation = { version: "full-preparation-v1", configuration: "full-intelligence-v1",
       narrativeVersion: "consultant-narrative-v2",
+      ...(decisionPreparation?{decisionPreparation}:{}),
       appendixPolicy: "deterministic-appendix-v1",
       ...(verificationRunId ? { verificationRunId } : {}),
       analysisId: assessment.analysisId, inputId: assessment.inputId, assessmentId: material.assessmentId,

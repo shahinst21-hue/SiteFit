@@ -533,3 +533,7 @@ The owner approved a one-off internal Full generation using the selected existin
 
 ### Sample editorial and mobile tab refinement — 31 October 2026
 Owner requests finished Sample Report copy and contained mobile tabs. Remove technical availability badges from the public sample, use clear findings/actions, and preserve factual source scope and policy. Do not turn an absent permission or commercial observation into a verified one. Replace the sample horizontal mobile navigation with a contained responsive grid. Customer report defaults remain unchanged.
+
+
+### Decision-report proof and dashboard preservation — 1 November 2026
+The owner approves the additional US$0.30 Development Full reservation, raising the existing held ceiling from US$3.04 to US$3.34, with prior holds preserved. The same instruction explicitly excludes changes to the paid customer dashboard. This supersedes the earlier default-dashboard integration request for this delivery. Continue independent report generation and protected verification; public replacement and Production activation remain closed. [Evidence and boundaries](decision-report-integration-20261101.md).
