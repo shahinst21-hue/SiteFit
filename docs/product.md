@@ -14,6 +14,8 @@ Current D103 update (historical): Phase12 Ready/replay/dashboard/PDF technical g
 
 # SiteFit Product Contract
 
+**1 November 2026 owner instruction:** implement a separate, decision-grade paid report edition, including researched conditional break-even, verified relevant alternatives and genuine street context. This narrowly supersedes earlier report/economics separation for the new paid edition; Free Snapshot, historical customer reports and security/cost controls remain unchanged. Production deployment or migration requires explicit subsequent approval. [Method, scope and source rules](decision-report-method-20261101.md).
+
 D99 (12 October): internal checkpoint **450,000,000 bytes**, no upgrade. Qualified structured rental evidence may remain visible/exportable within an authorised owner's existing Preview Rent & Lease tab while the Full edition is Draft. This is explicitly not a Ready/customer report; Full export/publication still requires Ready. New report Appendix is deterministic methodology; eight-section/V1 evidence and historical guarantees remain. No new spending or Phase 13 reopening. See [correction record](phase-12-d99-corrections.md).
 
 D95 (11 October 2026): rental pricing uses qualified existing PropertyData first and separately validated real-web discovery when absent. Display estimates as estimates; if no admitted price exists, omit pricing and empty-price placeholders. Preserve material lease actions, frozen evidence/missingness in Appendix and immutable historical editions. Additional search spending/runtime enablement remains separately gated; see [decision D95](decisions.md).
