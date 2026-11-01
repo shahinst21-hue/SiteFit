@@ -1,7 +1,7 @@
 import {packetDigest} from '../analysis/canonical.ts';
 import type {Dashboard} from '../report-dashboard/model.ts';
 import {sourceURL} from '../report-dashboard/display.ts';
-import {coffeeScenarios,coffeeSensitivity} from './economics.ts';
+import {coffeeScenarios,coffeeSensitivity} from './presets.ts';
 import type {DecisionReport,ResearchPack,EvidenceRef,Finding} from './types.ts';
 import coffeeMethodReferences from './research/coffee-method-references-20261101.json' with {type:'json'};
 

@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {PDFDocument} from 'pdf-lib';
 import {buildDecisionReport,validateResearch} from '../lib/decision-report/model.ts';
 import {coffeeInput,economicScenario,coffeeScenarios,coffeeSensitivity} from '../lib/decision-report/economics.ts';
+import {coffeeScenarios as savedScenarios,coffeeSensitivity as savedSensitivity} from '../lib/decision-report/presets.ts';
 import {mapProject,mapMarkers,sourceNumbers,walkLabel} from '../lib/decision-report/display.ts';
 import {renderDecisionPDF} from '../lib/decision-report/pdf.ts';
 import type {Dashboard} from '../lib/report-dashboard/model.ts';
@@ -13,6 +14,7 @@ const fixture=(name='coffee-shop')=>JSON.parse(fs.readFileSync(`tests/fixtures/d
 const research=JSON.parse(fs.readFileSync('lib/decision-report/research/ruislip-coffee-20261101.json','utf8')) as ResearchPack;
 test('contribution model includes owner pay, removes VAT from receipts and rounds required transactions upwards',()=>{
   const cases=coffeeScenarios();assert.deepEqual(cases.map(s=>s.daily),[200,124,79]);
+  assert.deepEqual(savedScenarios(),cases);assert.deepEqual(savedSensitivity(),coffeeSensitivity());
   const base=cases[1];assert.equal(base.annualFixed,131000);assert.equal(base.contribution,3.41);assert.equal(base.withoutOwnerDaily,97);
   // Independent cash reconciliation at the threshold, rather than a copy of model internals.
   assert.ok(124*312*3.41>=131000);assert.ok(123*312*3.41<131000);
@@ -74,5 +76,6 @@ test('new routes retain one owned read boundary and separate immutable artifact 
   assert.match(route,/readDecisionReport\(id\)/);assert.match(route,/result\.report\.digest/);assert.match(route,/decisionPdfVersion/);
   assert.match(route,/private, no-store/);assert.match(route,/noindex, nofollow/);
   assert.doesNotMatch(fs.readFileSync('lib/report-dashboard/pdf.ts','utf8'),/decision-report/);
+  assert.doesNotMatch(fs.readFileSync('lib/decision-report/model.ts','utf8'),/from ['"].*economics|calculateEconomics/);
   const publicSample=fs.readFileSync('lib/content/public-sample-report.ts','utf8');assert.doesNotMatch(publicSample,/decision-report\/research/);
 });

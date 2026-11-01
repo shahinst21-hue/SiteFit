@@ -1,0 +1,423 @@
+{
+  "version": "coffee-planning-assumptions-2026-11-01",
+  "modelVersion": "economics-v1",
+  "scenarios": [
+    {
+      "id": "conservative",
+      "label": "Higher cost / lower basket",
+      "input": {
+        "schemaVersion": 1,
+        "business": "coffee-shop",
+        "vat": "registered",
+        "costBasis": "net_recoverable",
+        "tradeUnit": "transaction",
+        "otherFixedIncludes": [
+          "business rates",
+          "service charge",
+          "utilities",
+          "insurance",
+          "repairs",
+          "cleaning",
+          "accountancy",
+          "software",
+          "marketing"
+        ],
+        "operands": {
+          "rent": {
+            "value": "30000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "staff": {
+            "value": "70000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "otherFixed": {
+            "value": "28000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "ownerAllowance": {
+            "value": "30000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "grossSpend": {
+            "value": "5",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "grossMarginBps": {
+            "value": "6500",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "variableNetBps": {
+            "value": "0",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "variablePerTrade": {
+            "value": "0",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "cardGrossBps": {
+            "value": "150",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "annualOpenDays": {
+            "value": "300",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "dailyTrade": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "annualGrossSales": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "capacityPerDay": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "unitsPerCustomer": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "targetSurplus": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "standardRatedShareBps": {
+            "value": "10000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          }
+        }
+      },
+      "daily": 200,
+      "contribution": 2.63,
+      "annualFixed": 158000,
+      "annualGross": 300000,
+      "withoutOwnerDaily": 163
+    },
+    {
+      "id": "base",
+      "label": "Working case",
+      "input": {
+        "schemaVersion": 1,
+        "business": "coffee-shop",
+        "vat": "registered",
+        "costBasis": "net_recoverable",
+        "tradeUnit": "transaction",
+        "otherFixedIncludes": [
+          "business rates",
+          "service charge",
+          "utilities",
+          "insurance",
+          "repairs",
+          "cleaning",
+          "accountancy",
+          "software",
+          "marketing"
+        ],
+        "operands": {
+          "rent": {
+            "value": "24000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "staff": {
+            "value": "56000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "otherFixed": {
+            "value": "23000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "ownerAllowance": {
+            "value": "28000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "grossSpend": {
+            "value": "6",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "grossMarginBps": {
+            "value": "7000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "variableNetBps": {
+            "value": "0",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "variablePerTrade": {
+            "value": "0",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "cardGrossBps": {
+            "value": "150",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "annualOpenDays": {
+            "value": "312",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "dailyTrade": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "annualGrossSales": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "capacityPerDay": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "unitsPerCustomer": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "targetSurplus": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "standardRatedShareBps": {
+            "value": "10000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          }
+        }
+      },
+      "daily": 124,
+      "contribution": 3.41,
+      "annualFixed": 131000,
+      "annualGross": 230498.53,
+      "withoutOwnerDaily": 97
+    },
+    {
+      "id": "upside",
+      "label": "Lower cost / stronger basket",
+      "input": {
+        "schemaVersion": 1,
+        "business": "coffee-shop",
+        "vat": "registered",
+        "costBasis": "net_recoverable",
+        "tradeUnit": "transaction",
+        "otherFixedIncludes": [
+          "business rates",
+          "service charge",
+          "utilities",
+          "insurance",
+          "repairs",
+          "cleaning",
+          "accountancy",
+          "software",
+          "marketing"
+        ],
+        "operands": {
+          "rent": {
+            "value": "18000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "staff": {
+            "value": "42000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "otherFixed": {
+            "value": "18000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "ownerAllowance": {
+            "value": "26000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "grossSpend": {
+            "value": "7",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "grossMarginBps": {
+            "value": "7500",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "variableNetBps": {
+            "value": "0",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "variablePerTrade": {
+            "value": "0",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "cardGrossBps": {
+            "value": "150",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "annualOpenDays": {
+            "value": "312",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          },
+          "dailyTrade": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "annualGrossSales": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "capacityPerDay": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "unitsPerCustomer": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "targetSurplus": {
+            "value": null,
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": "Not needed for break-even"
+          },
+          "standardRatedShareBps": {
+            "value": "10000",
+            "origin": "illustrative_assumption",
+            "reference": "coffee-planning-assumptions-2026-11-01",
+            "reason": null
+          }
+        }
+      },
+      "daily": 79,
+      "contribution": 4.27,
+      "annualFixed": 104000,
+      "annualGross": 170491.8,
+      "withoutOwnerDaily": 59
+    }
+  ],
+  "sensitivity": [
+    {
+      "label": "Rent £18,000 / year",
+      "daily": 118
+    },
+    {
+      "label": "Working case",
+      "daily": 124
+    },
+    {
+      "label": "Rent £30,000 / year",
+      "daily": 129
+    },
+    {
+      "label": "Basket £5 incl. VAT",
+      "daily": 148
+    },
+    {
+      "label": "Basket £7 incl. VAT",
+      "daily": 106
+    },
+    {
+      "label": "Gross margin 65%",
+      "daily": 133
+    },
+    {
+      "label": "Gross margin 75%",
+      "daily": 115
+    },
+    {
+      "label": "Staff £42,000 / year",
+      "daily": 110
+    },
+    {
+      "label": "Staff £70,000 / year",
+      "daily": 137
+    },
+    {
+      "label": "Drinks-only basket £3.50",
+      "daily": 212
+    }
+  ]
+}

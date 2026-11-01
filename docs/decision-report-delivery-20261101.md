@@ -2,6 +2,8 @@
 
 Implementation is prepared for protected review. Production deployment, migration, billing, advertising and historical report changes are not part of this release. See [method, research, assumptions and cost assessment](decision-report-method-20261101.md).
 
+Protected delivery: [PR #160](https://github.com/shahinst21-hue/SiteFit/pull/160). Required exact-head CI and Preview receipts are available on that PR; local checks below do not substitute for them.
+
 ## Delivered product
 
 - A separate 14-page decision edition for the specified Ruislip coffee-shop proposal, produced from the validated original Ready projection and a digest-bound research pack. Final PDF is delivered privately, not committed to the public repository.
