@@ -66,7 +66,9 @@ begin
   end loop;
   if k=2 then
    perform public.interrupt_sitefit_controlled_proof(c,tok);
-   perform public.finish_sitefit_fulfilment((job->>'id')::uuid,(job->>'token')::uuid,'intervention','validation_failed');
+   -- The actual worker catches the proof wrapper's non-Ready exception and
+   -- reports this conservative label. Stored invalid + received proves failure.
+   perform public.finish_sitefit_fulfilment((job->>'id')::uuid,(job->>'token')::uuid,'intervention','execution_interrupted');
    if public.read_sitefit_testing_credits(o)->>'remaining'<>'3' then raise exception 'confirmed failure spent credit';end if;
    continue;
   end if;
