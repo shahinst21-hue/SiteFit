@@ -537,3 +537,8 @@ Owner requests finished Sample Report copy and contained mobile tabs. Remove tec
 
 ### Decision-report proof and dashboard preservation — 1 November 2026
 The owner approves the additional US$0.30 Development Full reservation, raising the existing held ceiling from US$3.04 to US$3.34, with prior holds preserved. The same instruction explicitly excludes changes to the paid customer dashboard. This supersedes the earlier default-dashboard integration request for this delivery. Continue independent report generation and protected verification; public replacement and Production activation remain closed. [Evidence and boundaries](decision-report-integration-20261101.md).
+
+
+## Owner-authorised three complimentary Full testing credits — 1 November 2026
+
+Exactly three credits may be provisioned once to the verified immutable Production owner identity. Reuse normal generation, economics, Decision Edition, ownership and PDF flow; atomically reserve and consume on Ready, return only on confirmed terminal failure, preserve recovery and historical access. No fake Stripe payment, revenue, public promotion, provider ceiling or price change. Minimal Production schema/release and the scoped dashboard exception are explicitly authorised. [Mechanism, checks and release status](owner-testing-credits-20261101.md).

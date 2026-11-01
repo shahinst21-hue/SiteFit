@@ -43,6 +43,24 @@ test("migrations rebuild PostgreSQL; real policies enforce owners and Blog visib
       }
       await db.exec(sql);
     }
+    await db.exec(await readFile(new URL('../supabase/tests/owner-testing-credits.sql',import.meta.url),'utf8'));
+    const provision=(await readFile(new URL('../supabase/operations/provision-owner-three-full-credits.sql',import.meta.url),'utf8'))
+      .replace(/^begin;\r?$/m,'').replace(/^commit;\s*$/m,'');
+    await db.exec('create table if not exists auth.identities(user_id uuid,provider text);');
+    for(const identity of ['missing','different','unverified','verified']){
+      await db.exec('begin;');
+      if(identity!=='missing'){
+        const id=identity==='different'?'00000000-0000-4000-8000-000000000088':'09d24746-3f49-4f77-9900-8ba428992dee';
+        await db.query("insert into auth.users(id,email,email_confirmed_at,is_anonymous) values($1,'shahinst21@gmail.com',$2,false)",[id,identity==='unverified'?null:new Date()]);
+        await db.query("insert into auth.identities(user_id,provider) values($1,'google')",[id]);
+      }
+      if(identity==='verified'){
+        await db.exec(provision);await db.exec(provision);
+        const balance=(await db.query<{balance:unknown}>("select public.read_sitefit_testing_credits('09d24746-3f49-4f77-9900-8ba428992dee') as balance")).rows[0].balance;
+        assert.deepEqual(balance,{granted:3,remaining:3,reserved:0,consumed:0});
+      }else await assert.rejects(db.exec(provision),/owner_verified_identity_mismatch/);
+      await db.exec('rollback;');
+    }
     const review=(await db.query<{approved:boolean;classification:string;confirmation_channel:string;snapshot:unknown}>(
       'select approved,classification,confirmation_channel,snapshot from public.sale_policies where version=$1',[policyVersions.sale])).rows[0];
     assert.equal(review.approved,true);assert.equal(review.classification,'digital_content');assert.equal(review.confirmation_channel,'manual_zoho_pdf');

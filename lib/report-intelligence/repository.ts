@@ -131,10 +131,10 @@ export function fullRepository(owner: string, client = frameworkClient()) {
     if(free.error||!free.data||free.data.analysis_id!==context.analysisId||free.data.input_id!==context.inputId)throw Error('full_snapshot_decision_unavailable');
     const snapshot=validateFreeProjection(free.data.free_projection);
     let decisionPreparation:Preparation['decisionPreparation'];
-    if(prepareDecisionEdition(process.env)){
+    if(prepareDecisionEdition(process.env)||material.testingCredit===true){
       // Source intents cannot spend ahead of an already exhausted Full fence.
       // The database still reserves and arbitrates the actual admission.
-      assertDecisionPreparationBudget(material.reservedMicros);
+      if(material.testingCredit!==true)assertDecisionPreparationBudget(material.reservedMicros);
       // Existing paid ownership was checked above. Bind any saved plan to this
       // exact immutable input; never use a different property or old input.
       const plans=await client.from('economic_models').select('outputs').eq('analysis_id',context.analysisId).eq('input_id',context.inputId).eq('model_version','economics-v1').order('created_at',{ascending:false}).limit(1);
@@ -178,7 +178,7 @@ export function fullRepository(owner: string, client = frameworkClient()) {
       const origin=queryPoint(context);
       if(origin&&!['unknown','postcode_centroid'].includes(origin.precision)){
         const candidates=automaticCompetitors({business:catalog.business,address:context.selectedProperty.formattedAddress,competition,operators:catalog.operators??null,map:decisionPreparation.map,generatedAt:context.analysisTimestamp}).items;
-        decisionPreparation.geography=await acquireDecisionGeography({freeReportId,contextDigest:packetDigest(context),origin,candidates,key:process.env.GEOAPIFY_API_KEY});
+        decisionPreparation.geography=await acquireDecisionGeography({freeReportId,contextDigest:packetDigest(context),origin,candidates,key:process.env.GEOAPIFY_API_KEY,testingCredit:material.testingCredit===true});
       }
       decisionPreparation.catchmentsArtifact=await archiveDecisionCatchments(freeReportId,decisionPreparation.map);
       decisionPreparation.map=null;
