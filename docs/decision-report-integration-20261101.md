@@ -66,4 +66,4 @@ Targeted regression checks pass, including exact calculation, category/input iso
 - Ready content is unchanged after web views/downloads. The browser-downloaded PDF and direct renderer output are byte-identical. The final 16-page PDF uses renderer `decision-pdf-2026-11-01.5`; SHA-256 `8706f497a6928fb3371be91e05990af739dc22c76806f698a827f67f74b761d1`. Every page was rendered and visually inspected; final paragraph pagination is also checked.
 - `git diff origin/main` is empty for the existing paid dashboard component, original report page, original PDF route and dashboard reader. Authentication, price and Stripe implementation are unchanged.
 
-Protected PR / exact-head CI / Preview deployment receipts are pending at this local checkpoint. No merge or Production deployment is claimed.
+Protected integration and the current exact-head CI/Preview status are tracked in [PR161](https://github.com/shahinst21-hue/SiteFit/pull/161). The branch Preview has Development-only read credentials and its read flag; intelligence dispatch and new Decision preparation are explicitly disabled there. Production variables were not changed. No merge or Production deployment is claimed.
