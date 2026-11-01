@@ -1,5 +1,11 @@
 # SiteFit operating instructions
 
+1 November 2026 owner testing-credit authority: the owner authorises the minimal protected Production implementation and one idempotent grant of exactly three complimentary Full credits to the existing verified owner account. This permits scoped account balance/actions and Decision Edition for those credits only; no general public replacement, Stripe price, provider ceiling or unrelated setting change. See `docs/owner-testing-credits-20261101.md`.
+
+1 November 2026 continuation: the owner approves one additional US$0.30 Development Full proof (total held ceiling US$3.34) and explicitly requires the paid customer dashboard to remain unchanged. Keep public replacement closed, preserve prior reports and use the separate owned report for review. [Implementation, evidence and remaining gates](docs/decision-report-integration-20261101.md).
+
+1 November 2026 report-upgrade authority: the owner requests a separate decision-grade paid report edition, including conditional economics in that edition. Preserve original Ready projections/PDFs, ownership and cost controls. Research is bounded to £10; no subscription or Production deployment/migration is authorised. See `docs/decision-report-method-20261101.md` for the supersession of earlier report/economics separation and implementation boundaries.
+
 Read all files in `docs/` before making changes. `docs/product.md` is the Product Contract; `docs/decisions.md` records approved decisions; `docs/roadmap.md` defines phase gates.
 
 ## Current state

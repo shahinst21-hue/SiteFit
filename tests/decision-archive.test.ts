@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {automaticDecision} from '../lib/decision-report/automatic.ts';
+import {freezeDecision} from '../lib/decision-report/frozen.ts';
+import {archiveFrozenDecision,loadFrozenDecision,validateDecisionArchive} from '../lib/decision-report/archive.ts';
+import type {GeographyBucket} from '../lib/decision-report/geography.ts';
+import type {Dashboard} from '../lib/report-dashboard/model.ts';
+test('large editions append an owned private analytical artifact; repeated reads preserve every result and reject corruption',async()=>{
+ const files=new Map<string,Uint8Array>();let uploads=0;
+ const store:GeographyBucket={async download(path){return files.has(path)?{data:new Blob([files.get(path)! as BlobPart]),error:null}:{data:null,error:{statusCode:404}};},async upload(path,bytes){uploads++;if(files.has(path))throw Error('Overwrite attempted');files.set(path,bytes);return {error:null};}};
+ const d=JSON.parse(fs.readFileSync('tests/fixtures/dashboard/coffee-shop.json','utf8')) as Dashboard;
+ const report=automaticDecision(d,'coffee-shop'),frozen=freezeDecision(report);
+ const ref=await archiveFrozenDecision('00000000-0000-4000-8000-000000000001',frozen,store);
+ assert.deepEqual(await loadFrozenDecision(ref,d.digest,store),report);
+ assert.deepEqual(await archiveFrozenDecision('00000000-0000-4000-8000-000000000001',frozen,store),ref);assert.equal(uploads,1);
+ assert.throws(()=>validateDecisionArchive(ref,'0'.repeat(64)),/archive/);
+ files.set(ref.path,Buffer.from('{}'));await assert.rejects(loadFrozenDecision(ref,d.digest,store),/integrity/);
+ const denied:GeographyBucket={...store,async download(){return {data:null,error:{statusCode:403}};}};
+ await assert.rejects(archiveFrozenDecision('00000000-0000-4000-8000-000000000001',frozen,denied),/read_unavailable/);
+});

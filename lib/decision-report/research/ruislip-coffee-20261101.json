@@ -1,0 +1,551 @@
+{
+  "version": "decision-research-v1",
+  "id": "ruislip-coffee-2026-11-01",
+  "parentDigest": "07bf2940cef9024c1bc0718adb2b6e3912493c57e306a386aaa891b1e89a2eaf",
+  "business": "coffee-shop",
+  "createdAt": "2026-11-01T12:18:38.562Z",
+  "refs": [
+    {
+      "id": "china",
+      "label": "China Garden ordering page",
+      "url": "https://chinagarden-ruislip.com/china-garden/contact",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Page undated; checked 1 November 2026",
+      "scope": "132 Manor Way",
+      "qualification": "Advertised pick-up/delivery hours, not proof of current occupancy, turnover or authorised planning use.",
+      "notices": []
+    },
+    {
+      "id": "costa",
+      "label": "Costa official store page",
+      "url": "https://www.costa.co.uk/stores/ruislip-manor",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Page undated; checked 1 November 2026",
+      "scope": "66 Victoria Road",
+      "qualification": "Current branch listing and stated offer. Opening hours were not available in the readable page; no customer review data reused.",
+      "notices": []
+    },
+    {
+      "id": "wenzels",
+      "label": "Wenzel’s official menu and branch list",
+      "url": "https://www.wenzels.co.uk/menu/",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Page undated; checked 1 November 2026",
+      "scope": "31 Victoria Road branch; chain menu",
+      "qualification": "Chain menu prices, not a verified branch till-price or transaction average.",
+      "notices": []
+    },
+    {
+      "id": "uses",
+      "label": "Government use-class guidance",
+      "url": "https://www.gov.uk/government/publications/healthy-weight-environments-using-the-planning-system/addendum-hot-food-takeaways-use-in-the-new-use-class-order",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Guidance published 2021; checked 1 November 2026",
+      "scope": "England planning classes",
+      "qualification": "Cafés/restaurants and hot-food takeaways can occupy different use classes. This guidance is not an exact-unit planning decision.",
+      "notices": []
+    },
+    {
+      "id": "rates",
+      "label": "HMRC small business rates relief guidance",
+      "url": "https://www.gov.uk/business-rates-relief/small-business-rate-relief",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Checked 1 November 2026",
+      "scope": "England",
+      "qualification": "Relief depends on rateable value and occupier eligibility. No selected-unit rates bill or relief award has been verified.",
+      "notices": []
+    },
+    {
+      "id": "payroll",
+      "label": "HMRC employer rates 2026–27",
+      "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2026–27 tax year",
+      "scope": "UK payroll",
+      "qualification": "Adult minimum wage £12.71/hour; employer NI and pension/holiday coverage must be budgeted. The report is not a payroll calculation.",
+      "notices": []
+    },
+    {
+      "id": "vat",
+      "label": "HMRC catering VAT guidance",
+      "url": "https://www.gov.uk/guidance/catering-takeaway-food-and-vat-notice-7091",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Updated 8 June 2026; checked 1 November 2026",
+      "scope": "UK catering VAT",
+      "qualification": "Hot drinks are standard-rated. The model assumes registered sales with a fully standard-rated mix and net recoverable costs; actual sales mix and recovery can differ.",
+      "notices": []
+    },
+    {
+      "id": "cvp",
+      "label": "ACCA cost-volume-profit method",
+      "url": "https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f5/technical-articles/CVP-analysis.html",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Checked 1 November 2026",
+      "scope": "Conditional operating model",
+      "qualification": "Contribution method; constant basket, mix and cost assumptions over the modelled operating range. Not a sales prediction.",
+      "notices": []
+    },
+    {
+      "id": "margin",
+      "label": "Sage coffee-shop costing guidance",
+      "url": "https://www.sage.com/en-gb/blog/how-much-profit-coffee-shops-annually/",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2026 guidance; checked 1 November 2026",
+      "scope": "UK hospitality planning context",
+      "qualification": "Drinks and food have different margins. Scenario margins are planning assumptions, not surveyed local performance.",
+      "notices": []
+    },
+    {
+      "id": "route",
+      "label": "Geoapify pedestrian route matrix",
+      "url": "https://apidocs.geoapify.com/docs/route-matrix/",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2026-11-01T12:14:05.239Z",
+      "scope": "Recorded building point to FSA business points and TfL station point",
+      "qualification": "Walking-network model; approximate register positions and snapped endpoints, not verified shop/station entrances. Routing vintage unavailable.",
+      "notices": [
+        "Powered by Geoapify",
+        "© OpenStreetMap contributors"
+      ]
+    },
+    {
+      "id": "tfl",
+      "label": "TfL Ruislip Manor station record",
+      "url": "https://tfl.gov.uk/tube/stop/940GZZLURSM/ruislip-manor-underground-station",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "Checked 1 November 2026",
+      "scope": "Station register point",
+      "qualification": "Station presence and location, not footfall past the shop or a verified station entrance.",
+      "notices": []
+    },
+    {
+      "id": "fsa-811858",
+      "label": "FSA: Star Coffee",
+      "url": "https://ratings.food.gov.uk/business/811858",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2025-10-03 inspection; register retrieved 1 November 2026",
+      "scope": "21 Victoria Road, HA4 9AA",
+      "qualification": "Regulatory inspection record, not customer reviews or proof of current trading. Source coordinate accuracy unspecified.",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ]
+    },
+    {
+      "id": "fsa-518807",
+      "label": "FSA: Costa Verde",
+      "url": "https://ratings.food.gov.uk/business/518807",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2026-06-02 inspection; register retrieved 1 November 2026",
+      "scope": "33 Victoria Road, HA4 9AB",
+      "qualification": "Regulatory inspection record, not customer reviews or proof of current trading. Source coordinate accuracy unspecified.",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ]
+    },
+    {
+      "id": "fsa-1097681",
+      "label": "FSA: Costa Coffee",
+      "url": "https://ratings.food.gov.uk/business/1097681",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2025-10-03 inspection; register retrieved 1 November 2026",
+      "scope": "66 Victoria Road, HA4 0AH",
+      "qualification": "Regulatory inspection record, not customer reviews or proof of current trading. Source coordinate accuracy unspecified.",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ]
+    },
+    {
+      "id": "fsa-518816",
+      "label": "FSA: Victoria Cafe & Restaurant",
+      "url": "https://ratings.food.gov.uk/business/518816",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2025-11-06 inspection; register retrieved 1 November 2026",
+      "scope": "65 Victoria Road, HA4 9BH",
+      "qualification": "Regulatory inspection record, not customer reviews or proof of current trading. Source coordinate accuracy unspecified.",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ]
+    },
+    {
+      "id": "fsa-1077512",
+      "label": "FSA: Wenzels",
+      "url": "https://ratings.food.gov.uk/business/1077512",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2026-08-11 inspection; register retrieved 1 November 2026",
+      "scope": "31 Victoria Road, HA4 9AB",
+      "qualification": "Regulatory inspection record, not customer reviews or proof of current trading. Source coordinate accuracy unspecified.",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ]
+    },
+    {
+      "id": "fsa-518789",
+      "label": "FSA: J J Moons",
+      "url": "https://ratings.food.gov.uk/business/518789",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2025-12-05 inspection; register retrieved 1 November 2026",
+      "scope": "12 Victoria Road, HA4 0AA",
+      "qualification": "Regulatory inspection record, not customer reviews or proof of current trading. Source coordinate accuracy unspecified.",
+      "notices": [
+        "Contains public sector information licensed under the Open Government Licence v3.0. Source: Food Standards Agency."
+      ]
+    },
+    {
+      "id": "victoria-seating",
+      "label": "Hillingdon Victoria Café pavement application",
+      "url": "https://www.hillingdon.gov.uk/media/12566/Victoria-Cafe--Restaurant---Ruislip---Pavement-licence-renewal/pdf/rtVictoria_Cafe___Restaurant_-_Ruislip_-_Pavement_licence_renewal.pdf",
+      "observedAt": "2026-11-01T12:18:38.562Z",
+      "period": "2023 application; checked 1 November 2026",
+      "scope": "65 Victoria Road",
+      "qualification": "Historic application describes seating; not evidence of a current licence grant.",
+      "notices": []
+    }
+  ],
+  "competitors": [
+    {
+      "id": "811858",
+      "name": "Star Coffee",
+      "address": "21 Victoria Road, HA4 9AA",
+      "relationship": "Coffee candidate",
+      "offer": "Coffee-named café register entry; menu and service format not independently verified.",
+      "status": "FSA entry inspected 3 October 2025; trading today unconfirmed.",
+      "strength": "Closest coffee-named alternative in the reviewed set.",
+      "limitation": "Current menu, seating, speed and opening periods remain unverified.",
+      "implication": "Compare the morning service directly before assuming a convenient-coffee gap.",
+      "point": [
+        -0.412861,
+        51.57346
+      ],
+      "metres": 186,
+      "seconds": 165,
+      "hours": "Current shop hours not verified",
+      "price": "Comparable current price not verified",
+      "reviews": "Customer rating and review count not licensed/verified for reuse",
+      "refs": [
+        "fsa-811858",
+        "route"
+      ]
+    },
+    {
+      "id": "518807",
+      "name": "Costa Verde",
+      "address": "33 Victoria Road, HA4 9AB",
+      "relationship": "Café alternative",
+      "offer": "Costa Verde café/restaurant; current menu not independently verified.",
+      "status": "FSA entry inspected 2 June 2026; trading today unconfirmed.",
+      "strength": "A separately registered café alternative on Victoria Road.",
+      "limitation": "Do not confuse Costa Verde with the Costa Coffee chain. Price, service and seating quality remain unverified.",
+      "implication": "Test whether your proposed food-and-coffee occasion is already served here.",
+      "point": [
+        -0.412354,
+        51.572708
+      ],
+      "metres": 277,
+      "seconds": 241,
+      "hours": "Current shop hours not verified",
+      "price": "Comparable current price not verified",
+      "reviews": "Customer rating and review count not licensed/verified for reuse",
+      "refs": [
+        "fsa-518807",
+        "route"
+      ]
+    },
+    {
+      "id": "1097681",
+      "name": "Costa Coffee",
+      "address": "66 Victoria Road, HA4 0AH",
+      "relationship": "Direct coffee offer",
+      "offer": "Chain counter service: hot and cold drinks, snacks and sandwiches.",
+      "status": "Official Costa branch page available on 1 November 2026.",
+      "strength": "Recognisable brand with a defined coffee-and-snack offer.",
+      "limitation": "Live opening hours, queue speed and branch till prices not verified.",
+      "implication": "A generic branded-style coffee offer already has a nearby alternative.",
+      "refs": [
+        "fsa-1097681",
+        "route",
+        "costa"
+      ],
+      "point": [
+        -0.412475,
+        51.57172
+      ],
+      "metres": 389,
+      "seconds": 333,
+      "hours": "Current shop hours not verified",
+      "price": "Comparable current price not verified",
+      "reviews": "Customer rating and review count not licensed/verified for reuse"
+    },
+    {
+      "id": "518816",
+      "name": "Victoria Cafe & Restaurant",
+      "address": "65 Victoria Road, HA4 9BH",
+      "relationship": "Café alternative",
+      "offer": "Café/restaurant register entry. A 2023 council pavement application describes outdoor seating.",
+      "status": "FSA entry inspected 6 November 2025; trading today unconfirmed.",
+      "strength": "Evidence of a food-led café use and a historic seating proposal.",
+      "limitation": "An application does not establish present seating permission, availability or service quality.",
+      "implication": "Include it when testing breakfast or seated daytime differentiation.",
+      "point": [
+        -0.411594,
+        51.571735
+      ],
+      "metres": 426,
+      "seconds": 368,
+      "hours": "Current shop hours not verified",
+      "price": "Comparable current price not verified",
+      "reviews": "Customer rating and review count not licensed/verified for reuse",
+      "refs": [
+        "fsa-518816",
+        "route",
+        "victoria-seating"
+      ]
+    },
+    {
+      "id": "1077512",
+      "name": "Wenzels",
+      "address": "31 Victoria Road, HA4 9AB",
+      "relationship": "Bakery alternative",
+      "offer": "Bakery with barista drinks and breakfast/food bundles.",
+      "status": "Official branch appears in Wenzel’s menu directory on 1 November 2026.",
+      "strength": "Coffee paired with a low-ticket food offer.",
+      "limitation": "Chain menu shows flat white £2.75 and breakfast meal deal £3.95; branch prices and bundle details may differ.",
+      "implication": "A £6–£7 basket requires a reason to buy beyond a basic drink or value breakfast.",
+      "refs": [
+        "fsa-1077512",
+        "route",
+        "wenzels"
+      ],
+      "price": "Chain menu: flat white £2.75; breakfast meal deal £3.95. Branch price unverified.",
+      "point": [
+        -0.4124446,
+        51.5728719
+      ],
+      "metres": 258,
+      "seconds": 225,
+      "hours": "Current shop hours not verified",
+      "reviews": "Customer rating and review count not licensed/verified for reuse"
+    },
+    {
+      "id": "518789",
+      "name": "J J Moons",
+      "address": "12 Victoria Road, HA4 0AA",
+      "relationship": "Pub alternative",
+      "offer": "Pub/bar register entry; current coffee/breakfast offer not verified.",
+      "status": "FSA entry inspected 5 December 2025; trading today unconfirmed.",
+      "strength": "A potential alternative venue for daytime visits near the station.",
+      "limitation": "Not counted as a verified specialist coffee competitor.",
+      "implication": "Check it as an alternative customer occasion, not as an equivalent coffee shop.",
+      "point": [
+        -0.4135546,
+        51.5733185
+      ],
+      "metres": 304,
+      "seconds": 258,
+      "hours": "Current shop hours not verified",
+      "price": "Comparable current price not verified",
+      "reviews": "Customer rating and review count not licensed/verified for reuse",
+      "refs": [
+        "fsa-518789",
+        "route"
+      ]
+    }
+  ],
+  "findings": {
+    "overview": [
+      {
+        "title": "A shortlist candidate, not a lease-ready opportunity",
+        "finding": "The saved five-minute area contains about 1,400 estimated residents. Several separately identified coffee and café alternatives sit a short modelled walk away.",
+        "implication": "There is a neighbourhood audience to test, but a generic coffee offer has no demonstrated competitive gap.",
+        "action": "Keep negotiations conditional on a differentiated repeat-visit proposition, a workable unit and affordable actual terms.",
+        "confidence": "Conditional commercial judgement; sales and pedestrian flow are unmeasured.",
+        "refs": [
+          "saved-f13",
+          "fsa-811858",
+          "costa",
+          "wenzels"
+        ]
+      }
+    ],
+    "customers": [
+      {
+        "title": "Most of the resident base sits beyond the immediate five-minute walk",
+        "finding": "The Census-based estimates grow from about 1,400 at five minutes to about 5,200 at ten and 11,600 at fifteen. These are overlapping totals.",
+        "implication": "The larger outer figure does not create an equally convenient daily customer base. A repeat-visit offer must earn the additional walk.",
+        "action": "Test a short-walk neighbourhood proposition first; use the outer catchment only where customers give a specific reason to visit.",
+        "confidence": "Limited: 2021 Census allocated to walking contours, not a present-day market survey.",
+        "refs": [
+          "saved-f13",
+          "saved-f16",
+          "saved-f29"
+        ]
+      },
+      {
+        "title": "Daytime employment does not establish a morning queue",
+        "finding": "The saved BRES context contains about 1,000 employee jobs in its native statistical area; wider-area modelled household income is about £50,000.",
+        "implication": "Neither number identifies workers passing the door, office attendance or disposable coffee budgets. Premium pricing cannot be justified by this income figure.",
+        "action": "Interview nearby workers about break patterns and their actual route, then test the proposed basket against their usual purchase.",
+        "confidence": "Dated contextual indicators; no local spend or journey survey.",
+        "refs": [
+          "saved-f35",
+          "saved-f9"
+        ]
+      },
+      {
+        "title": "Neighbourhood occasions are more useful than a demographic stereotype",
+        "finding": "The ten-minute household profile includes one-person households and households without a car.",
+        "implication": "These are reasons to test convenient repeat visits and an accessible social stop; they do not prove social demand, poverty or willingness to pay.",
+        "action": "Ask residents to choose between a fast coffee visit, food pairing and a seated catch-up. Select the layout only after a clear preference and usable plan.",
+        "confidence": "Census estimates; household traits are not buying behaviour.",
+        "refs": [
+          "saved-f33",
+          "saved-f11"
+        ]
+      }
+    ],
+    "competition": [
+      {
+        "title": "A coffee gap has not been established",
+        "finding": "The reviewed set separates one verified chain coffee offer, one coffee-named candidate, two café alternatives, one bakery alternative and one pub alternative. China Garden is excluded.",
+        "implication": "The bakery’s published chain menu creates a concrete value comparison. A higher basket needs product, service or food value that customers recognise.",
+        "action": "Audit Star Coffee first, then Costa and Wenzel’s at the intended trading times; compare menu, queue, seating and actual shop prices.",
+        "confidence": "Scope is a targeted relevant shortlist, not a complete competitor census.",
+        "refs": [
+          "fsa-811858",
+          "fsa-518807",
+          "fsa-518816",
+          "costa",
+          "wenzels",
+          "fsa-518789"
+        ]
+      },
+      {
+        "title": "Differentiate by an occasion that is still missing",
+        "finding": "Existing evidence cannot verify a specialty-coffee, quiet seating, early opening or food-quality gap.",
+        "implication": "A plausible proposition is a neighbourhood coffee stop with one strong repeat-purchase reason, but no specific format has won the evidence test.",
+        "action": "Adopt a feature only when competitor visits and customer interviews reveal that it is valued and currently inconvenient to obtain.",
+        "confidence": "Proposition hypothesis; current offer quality and trading hours remain unresolved.",
+        "refs": [
+          "costa",
+          "wenzels",
+          "fsa-811858"
+        ]
+      }
+    ],
+    "access": [
+      {
+        "title": "The station is nearby; passing trade remains a separate test",
+        "finding": "The new pedestrian route model reaches the TfL Ruislip Manor station point in about three minutes from the recorded building point. Coffee alternatives also lie around Victoria Road.",
+        "implication": "Transport proximity supports an access hypothesis, but the customer may reach an alternative without passing this frontage.",
+        "action": "Walk the station approaches in both directions at 07:30–09:00 and lunchtime. Record which paths pass the shop, crossings, visibility and the detour to enter.",
+        "confidence": "Modelled route to a station point; entrance, crossings and volumes not field-verified.",
+        "refs": [
+          "route",
+          "tfl",
+          "costa",
+          "fsa-811858"
+        ]
+      },
+      {
+        "title": "Compare the frontage with the Victoria Road alternatives",
+        "finding": "This address is on Manor Way; the reviewed alternatives are on Victoria Road. The saved catchments and street map show their relative positions.",
+        "implication": "A nearby location can lose convenience to a shop on the customer’s natural route. A lower rent could compensate, but actual terms are unknown.",
+        "action": "Compare visibility, approach direction and stopping convenience on site; do not pay a prime-frontage rent on the strength of a radius count.",
+        "confidence": "Geographic comparison, not a measured footfall ranking.",
+        "refs": [
+          "saved-f31",
+          "route"
+        ]
+      }
+    ],
+    "premises": [
+      {
+        "title": "The current takeaway offer does not establish café permission",
+        "finding": "China Garden’s own page advertises evening collection and delivery at 132 Manor Way. Government guidance distinguishes hot-food takeaway use from café/restaurant use.",
+        "implication": "Existing food service is not proof that a daytime seated café or the proposed operations can occupy the unit without further checks.",
+        "action": "Ask for the lawful-use evidence, planning decision notices and conditions; confirm the exact proposed coffee/food/seating use with Hillingdon before signing.",
+        "confidence": "Business-page observation plus national guidance; the exact unit’s lawful use remains unverified.",
+        "refs": [
+          "china",
+          "uses",
+          "saved-f6"
+        ]
+      },
+      {
+        "title": "Choose the format after the measured plan",
+        "finding": "No verified usable floor area, customer facilities or equipment/service layout is stored for this unit. An Article 4 area record is present, with scope unresolved.",
+        "implication": "A takeaway counter needs queue, wash-up and storage; a seated concept also needs viable circulation and facilities. Neither is automatically cheaper to fit out.",
+        "action": "Request a measured plan, electrical capacity, water/drainage, ventilation, accessibility, waste arrangements and landlord alteration consent. Cost the actual scheme before committing.",
+        "confidence": "Material unit evidence missing; an area designation is not an exact-use refusal.",
+        "refs": [
+          "saved-f6",
+          "saved-f15"
+        ]
+      }
+    ],
+    "economics": [
+      {
+        "title": "Use the local benchmark as context, not this shop’s rent",
+        "finding": "The saved PropertyData restaurant cohort reports £28 per sq ft per year on an NIA basis, with 20 properties and an average modelled annual quote of about £27,600.",
+        "implication": "It is a different-use cohort with unknown model date, radius units and price spread. It cannot price this unit or prove that £24,000 is fair.",
+        "action": "Replace the planning rent with the agent’s actual annual quote and compare a verified compatible floor area; keep service charge, rates and repair liability separate.",
+        "confidence": "Provider modelled quoting context, not achieved rent or a statistical valuation.",
+        "refs": [
+          "saved-reference-1"
+        ]
+      },
+      {
+        "title": "A drinks-only business and a food-paired business need different volumes",
+        "finding": "The model separates customer-paid prices from net sales, stock margin, card fees, staff, owner time and occupancy overhead.",
+        "implication": "A low drink-only basket needs more transactions to cover the same rota and lease. The menu must earn its assumed basket rather than inherit it from a benchmark.",
+        "action": "Test real basket choices at the proposed price and replace every scenario input with the written lease, supplier quotes and a costed rota.",
+        "confidence": "Deterministic conditional model; no selected-property costs or sales are observed.",
+        "refs": [
+          "cvp",
+          "vat",
+          "margin",
+          "payroll",
+          "wenzels"
+        ]
+      }
+    ],
+    "discovery": [
+      {
+        "title": "The existing food business gives no evidence of a morning coffee market",
+        "finding": "The selected business advertises service from 17:00, while the proposed coffee shop depends on a different daytime occasion. The same address also sits a few modelled minutes from established coffee and bakery alternatives.",
+        "implication": "The current food-business presence cannot validate morning customers or daytime café permission. Taking over food premises can therefore leave both demand and lawful use unresolved.",
+        "action": "Make daytime frontage observation and exact-use confirmation conditions of the deal, before spending on a café fit-out.",
+        "confidence": "The opening times are advertised, not observed; lawful use and morning flow remain unknown.",
+        "refs": [
+          "china",
+          "uses",
+          "costa",
+          "wenzels",
+          "route"
+        ]
+      }
+    ]
+  },
+  "advantages": [
+    "A real residential base within the saved short walking areas.",
+    "Modelled station access is about three minutes; useful for testing a convenience proposition."
+  ],
+  "concerns": [
+    "No verified café-use permission or usable measured layout.",
+    "No measured morning flow, conversion or defensible competitive gap.",
+    "Actual rent, rates, fit-out and staffing requirements remain unknown."
+  ],
+  "map": {
+    "center": [
+      -0.4141922,
+      51.5744871
+    ],
+    "zoom": 15,
+    "width": 1000,
+    "height": 640,
+    "asset": "ruislip-20261101.png",
+    "sha256": "d42902e95132605f917f75d05dd89930434d1aa5b7d88bad718d391c61b7fe03",
+    "attribution": "Powered by Geoapify · © OpenStreetMap contributors · © OpenMapTiles",
+    "observedAt": "2026-11-01T12:18:38.562Z",
+    "tileSize": 512
+  }
+}

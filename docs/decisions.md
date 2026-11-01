@@ -1,3 +1,5 @@
+1 November 2026 owner-authorised report upgrade: implement a separate paid decision edition, with conditional economics and bounded additional research up to £10. Preserve historical Ready reports, security, price and all existing financial ceilings. No new subscription, Production deployment or migration is authorised. This instruction supersedes earlier report/economics separation only for this new paid edition. Method and delivery: [decision-report-method-20261101.md](decision-report-method-20261101.md).
+
 ## 30 October — Source-based Sample revision
 
 Owner requests no sample export, no scoring formulas/baselines, the original report maps and tab UI/UX, a redesigned hero and hidden selected-business/property identity. Reuse the selected case's saved evidence; synthetic additions belong to Sample dataset provenance, never fabricated scientific source records. Repeated fictional/illustrative banners are removed in favour of the Sample Report context. The actual selected Free Snapshot is Ready; no paid Full edition or confirmed payment exists. The existing Full execution/entitlement fence is retained, and no new Full run is claimed. [Current implementation and actual gates](sample-report-redesign.md).
@@ -531,3 +533,12 @@ The owner approved a one-off internal Full generation using the selected existin
 
 ### Sample editorial and mobile tab refinement — 31 October 2026
 Owner requests finished Sample Report copy and contained mobile tabs. Remove technical availability badges from the public sample, use clear findings/actions, and preserve factual source scope and policy. Do not turn an absent permission or commercial observation into a verified one. Replace the sample horizontal mobile navigation with a contained responsive grid. Customer report defaults remain unchanged.
+
+
+### Decision-report proof and dashboard preservation — 1 November 2026
+The owner approves the additional US$0.30 Development Full reservation, raising the existing held ceiling from US$3.04 to US$3.34, with prior holds preserved. The same instruction explicitly excludes changes to the paid customer dashboard. This supersedes the earlier default-dashboard integration request for this delivery. Continue independent report generation and protected verification; public replacement and Production activation remain closed. [Evidence and boundaries](decision-report-integration-20261101.md).
+
+
+## Owner-authorised three complimentary Full testing credits — 1 November 2026
+
+Exactly three credits may be provisioned once to the verified immutable Production owner identity. Reuse normal generation, economics, Decision Edition, ownership and PDF flow; atomically reserve and consume on Ready, return only on confirmed terminal failure, preserve recovery and historical access. No fake Stripe payment, revenue, public promotion, provider ceiling or price change. Minimal Production schema/release and the scoped dashboard exception are explicitly authorised. [Mechanism, checks and release status](owner-testing-credits-20261101.md).

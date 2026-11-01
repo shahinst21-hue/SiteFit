@@ -1,0 +1,52 @@
+[
+  {
+    "id": "rates",
+    "label": "HMRC small business rates relief guidance",
+    "url": "https://www.gov.uk/business-rates-relief/small-business-rate-relief",
+    "observedAt": "2026-11-01T12:18:38.562Z",
+    "period": "Checked 1 November 2026",
+    "scope": "England",
+    "qualification": "Relief depends on rateable value and occupier eligibility. No selected-unit rates bill or relief award has been verified.",
+    "notices": []
+  },
+  {
+    "id": "payroll",
+    "label": "HMRC employer rates 2026–27",
+    "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
+    "observedAt": "2026-11-01T12:18:38.562Z",
+    "period": "2026–27 tax year",
+    "scope": "UK payroll",
+    "qualification": "Adult minimum wage £12.71/hour; employer NI and pension/holiday coverage must be budgeted. The report is not a payroll calculation.",
+    "notices": []
+  },
+  {
+    "id": "vat",
+    "label": "HMRC catering VAT guidance",
+    "url": "https://www.gov.uk/guidance/catering-takeaway-food-and-vat-notice-7091",
+    "observedAt": "2026-11-01T12:18:38.562Z",
+    "period": "Updated 8 June 2026; checked 1 November 2026",
+    "scope": "UK catering VAT",
+    "qualification": "Hot drinks are standard-rated. The model assumes registered sales with a fully standard-rated mix and net recoverable costs; actual sales mix and recovery can differ.",
+    "notices": []
+  },
+  {
+    "id": "cvp",
+    "label": "ACCA cost-volume-profit method",
+    "url": "https://www.accaglobal.com/gb/en/student/exam-support-resources/fundamentals-exams-study-resources/f5/technical-articles/CVP-analysis.html",
+    "observedAt": "2026-11-01T12:18:38.562Z",
+    "period": "Checked 1 November 2026",
+    "scope": "Conditional operating model",
+    "qualification": "Contribution method; constant basket, mix and cost assumptions over the modelled operating range. Not a sales prediction.",
+    "notices": []
+  },
+  {
+    "id": "margin",
+    "label": "Sage coffee-shop costing guidance",
+    "url": "https://www.sage.com/en-gb/blog/how-much-profit-coffee-shops-annually/",
+    "observedAt": "2026-11-01T12:18:38.562Z",
+    "period": "2026 guidance; checked 1 November 2026",
+    "scope": "UK hospitality planning context",
+    "qualification": "Drinks and food have different margins. Scenario margins are planning assumptions, not surveyed local performance.",
+    "notices": []
+  }
+]

@@ -1,3 +1,7 @@
+1 November 2026 owner testing-credit authority: implement and release the limited three-credit facility for the existing verified owner account through protected CI. Scoped account controls and Decision Edition are authorised for those credits; general public replacement, £29 price, provider ceilings and other entitlements remain unchanged. [Implementation and actual release gates](owner-testing-credits-20261101.md).
+
+1 November 2026 continuation: the owner approves one additional US$0.30 Development Full proof (total held ceiling US$3.34) and explicitly requires the paid customer dashboard to remain unchanged. Keep public replacement closed, preserve prior reports and use the separate owned report for review. [Implementation, evidence and remaining gates](decision-report-integration-20261101.md).
+
 23 October final MVP authority: complete PR126 and protected main integration; deploy only when the existing hosting arrangement permits. Existing payment/consent/Tag Assistant/deduplication evidence is sufficient for MVP measurement; DebugView uncertainty is nonblocking and troubleshooting stops. No new features, costs, real payment or advertising activation. [Release record](mvp-release-20261023.md).
 
 22 October Google launch-measurement owner instruction: prepare shared-tag Google Analytics/Ads measurement, Basic Consent Mode, consent-aware funnel/attribution and one server-verified purchase-dispatch path. Implementation and isolated verification only; **no Production deployment/configuration, campaigns, advertising spend, paid service or live-payment changes are authorised**. [Current design, verification and launch gates](google-launch-measurement.md).
@@ -13,6 +17,8 @@ Current D103 update (historical): Phase12 Ready/replay/dashboard/PDF technical g
 12 October D100: Phase 14 is authorised for protected Development/Preview only; [plan](phase14_plan.md), [status](phase-14-status.md). One separately approved D99 proof failed the customer-context literal-number gate; [actual result](phase-12-d100-proof.md). Phase 12 new V1 Ready/replay/PDF stays BLOCKED; total conservative reservations US$2.14 retained. No further paid calls, main merge, Production or Phase 15. Phase 13 milestone remains closed.
 
 # SiteFit Product Contract
+
+**1 November 2026 owner instruction:** implement a separate, decision-grade paid report edition, including researched conditional break-even, verified relevant alternatives and genuine street context. This narrowly supersedes earlier report/economics separation for the new paid edition; Free Snapshot, historical customer reports and security/cost controls remain unchanged. Production deployment or migration requires explicit subsequent approval. [Method, scope and source rules](decision-report-method-20261101.md).
 
 D99 (12 October): internal checkpoint **450,000,000 bytes**, no upgrade. Qualified structured rental evidence may remain visible/exportable within an authorised owner's existing Preview Rent & Lease tab while the Full edition is Draft. This is explicitly not a Ready/customer report; Full export/publication still requires Ready. New report Appendix is deterministic methodology; eight-section/V1 evidence and historical guarantees remain. No new spending or Phase 13 reopening. See [correction record](phase-12-d99-corrections.md).
 

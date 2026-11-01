@@ -6,12 +6,18 @@ import { reserveDispatch, settleDispatch, recoverCheckpoint, type Checkpoint, ty
 import { fullProvider, fullRequest, type ProviderOutcome } from "./provider.ts";
 import { fullRepository, type StoredEdition } from "./repository.ts";
 import { groupInstructions, selectionSchema, groupSelectionSchema, validateSelection, renderSelection, type Selection } from "./selection.ts";
-import { compactSources, compactSectionAtoms } from "./export.ts";
+import { compactSources, compactSectionAtoms,compressSourceMetadata } from "./export.ts";
 import { decisionSummary } from "./decision-summary.ts";
 import { narrativePacket, narrativeContract, validateGeneratedNarrative, validateNarrative, narrativeFailureCode, narrativeFailureDiagnostic, type ConsultantNarrative } from "./narrative.ts";
 import { operatingComparison } from "./operating-comparison.ts";
 import { competitionBrief } from "./competition.ts";
 import {fullHasGroundedFindings} from '../analysis/report-admission.ts';
+import {dashboardFromStored} from '../report-dashboard/model.ts';
+import {automaticDecision} from '../decision-report/automatic.ts';
+import {freezeDecision} from '../decision-report/frozen.ts';
+import {readDecisionCatchments} from '../decision-report/geography.ts';
+import {archiveFrozenDecision} from '../decision-report/archive.ts';
+import {jsonbStorageBytes} from './storage-size.ts';
 
 const groupKeys: Record<Group, SectionKey[]> = { context: ["customer-context", "competition", "access"], premises: ["premises", "rental-context"], synthesis: ["overview", "actions"] };
 /** Synthesis can rank accepted evidence but cannot invent a stronger overall judgement. */
@@ -178,16 +184,32 @@ export async function generateFullIntelligence(owner: string, reportId: string,
     const ids = [...new Set([...(Array.isArray((s as { factIds?: string[] }).factIds) ? (s as { factIds: string[] }).factIds : []), ...claims.flatMap(c => c.factIds)])];
     Object.assign(s, { factIds: ids, evidenceIds: catalog.facts.filter(f => ids.includes(f.id)).map(f => f.evidenceId) });
   }
-  const content = { version: "full-report-v1" as const, bindingDigest: edition.checkpoint.bindingDigest, generatedAt: new Date().toISOString(),
+  const synthesisTime=edition.preparation.decisionPreparation?(dispatch.receipt as {generatedAt?:string}|null)?.generatedAt:undefined;
+  const content = { version: "full-report-v1" as const, bindingDigest: edition.checkpoint.bindingDigest, generatedAt: synthesisTime&&Number.isFinite(Date.parse(synthesisTime))?synthesisTime:new Date().toISOString(),
     business: catalog.business, index: catalog.index, readiness: catalog.readiness, premises: catalog.premises, stance: catalog.stance, ...compactSectionAtoms(sections),
     ...(edition.preparation.scenarioFit ? { scenarioFit: edition.preparation.scenarioFit } : {}),
     ...(narrative ? { narrative, operatingComparison: operatingComparison(catalog, edition.preparation.scenarioFit!) } : {}),
     presentation: edition.preparation.presentation ?? null,
     chartOperands: catalog.facts.filter(f => typeof f.value === "number").map(f => ({ factId: f.id, value: f.value,
       unit: f.units, period: f.effectiveAt, scopeFactId: f.id, comparator: null, available: true })),
-    ...compactSources(catalog.facts), supplementReferences: catalog.supplementReferences, financialEngineIncluded: false as const };
-  const projection: FullProjection = { ...content, contentDigest: packetDigest(content) };
-  if (Buffer.byteLength(JSON.stringify(projection)) > 131072) throw Error("full_report_bounds");
+    ...(edition.preparation.decisionPreparation?compressSourceMetadata(compactSources(catalog.facts)):compactSources(catalog.facts)), supplementReferences: catalog.supplementReferences, financialEngineIncluded: false as const };
+  const original:FullProjection={...content,contentDigest:packetDigest(content)};
+  const preparation=edition.preparation.decisionPreparation;
+  const decisionEdition=preparation?await(async()=>{
+    const dashboard=dashboardFromStored(original);dashboard.map=preparation.catchmentsArtifact?await readDecisionCatchments(preparation.catchmentsArtifact):preparation.map;
+    const report=automaticDecision(dashboard,preparation.business,preparation.input,preparation.geography??null);
+    // Large licensed geometry already has a digest-bound immutable artifact.
+    // Keep its reference in the edition, rather than duplicating every vertex.
+    if(preparation.catchmentsArtifact){
+      report.catchments=null;report.catchmentsArtifact=preparation.catchmentsArtifact;
+      const {digest:_,...body}=report;void _;report.digest=packetDigest({...body,reportId:null});
+    }
+    return freezeDecision(report);
+  })():undefined;
+  const archived=decisionEdition&&jsonbStorageBytes({...content,decisionEdition,contentDigest:'0'.repeat(64)})>131072?await archiveFrozenDecision(edition.id,decisionEdition):null;
+  const complete={...content,...(decisionEdition?{decisionEdition:archived??decisionEdition}:{})};
+  const projection: FullProjection = { ...complete, contentDigest: packetDigest(complete) };
+  if (jsonbStorageBytes(projection) > 131072) throw Error("full_report_bounds");
   if (edition.checkpoint.state !== "validating") edition = await commit(repo, reportId, c => ({ ...c, revision: c.revision + 1, state: "validating" }));
   return repo.freeze(edition, projection);
 }
