@@ -17,6 +17,8 @@ export async function readDecisionReport(id:string){
     const edition=await fullRepository(user.id).read(id);
     const {decisionEdition,contentDigest:_,...parent}=edition.projection as Record<string,unknown>;void _;
     if(decisionEdition){const report=await loadFrozenDecision(decisionEdition,packetDigest(parent));report.reportId=id;return {report:await hydrateDecisionGeography(report),archiveDocuments:true};}
-    return {report:await decisionFromDashboard(result.dashboard),archiveDocuments:result.archiveDocuments===true};}
+    const reviewed=await decisionFromDashboard(result.dashboard);
+    if(!reviewed.researchDigest)return null; // Historical reports need an explicit reviewed edition; never attach generic Ruislip economics.
+    return {report:reviewed,archiveDocuments:result.archiveDocuments===true};}
   catch{return null;}
 }

@@ -34,7 +34,7 @@ test('new decision editions compile deterministically without changing original 
     const d=fixture(name),before=JSON.stringify(d),r=buildDecisionReport(d);
     assert.equal(JSON.stringify(d),before);assert.deepEqual(buildDecisionReport(d),r);
     assert.equal(r.parentDigest,d.digest);assert.equal(r.researchDigest,null);assert.equal(r.competitors.length,0);assert.equal(r.map,null);
-    assert.equal(r.scenarios.length,name==='coffee-shop'?3:0);
+    assert.equal(r.scenarios.length,0);
     if(name==='coffee-shop')assert.ok(['cvp','vat','margin','payroll','rates'].every(id=>r.refs.some(s=>s.id===id)));
     assert.equal(r.recommendation,d.summary?.verdict[0]??d.pages[0].conclusion);
     assert.doesNotMatch(JSON.stringify(r.sections),/China Garden|Manor Way|Star Coffee/);

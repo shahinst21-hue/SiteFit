@@ -28,7 +28,7 @@ One bounded static-map request and one eight-target walking matrix use the exist
 
 ## Defects found and corrected
 
-- The original compiler offered frozen Ruislip economics to unrelated coffee cases. Automatic generation now uses the selected category and saved inputs, with clearly labelled stress cases.
+- The original compiler offered frozen Ruislip economics to unrelated coffee cases. Automatic generation now uses the selected category and saved inputs, with clearly labelled stress cases. The unreviewed legacy compiler no longer attaches those scenarios, and the separate owned route withholds legacy editions without an exact reviewed pack; original purchased reports/exports remain accessible.
 - Preparation duplicated large contours, and compact JSON understated PostgreSQL `jsonb::text` size. Digest-bound artifacts, lossless metadata compression and PostgreSQL-compatible size admission resolve both without raising limits or rerunning AI. Completion time is derived from the saved synthesis receipt, making interrupted finalisation reproducible.
 - A generic PDF paragraph still named Costa/Wenzel's. It is removed; activity claims now come from the actual case's entries. No Ruislip competitor, map, conclusion or scenario result transfers.
 - Broad FSA Restaurant/Cafe/Canteen categories could look like verified coffee competitors. Shared web/PDF labels now distinguish food-service alternatives and name-only café candidates. Current menus, hours, ratings and activity remain unknown unless supported.
