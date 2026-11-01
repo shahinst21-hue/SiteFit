@@ -2,7 +2,7 @@
 begin;
 do $$declare o uuid:=gen_random_uuid();other uuid:=gen_random_uuid();unverified uuid:=gen_random_uuid();
 t uuid:=gen_random_uuid();p uuid;n uuid;v jsonb;c uuid;tok uuid;a uuid;i uuid;f uuid;r uuid;d uuid;use_id uuid;job jsonb;
-cp jsonb;projection jsonb;receipt jsonb:='{"estimatedMicros":100,"inputTokens":10,"outputTokens":2}';step integer;k integer;before_budget jsonb;old_reports uuid[]:='{}';
+cp jsonb;projection jsonb;receipt jsonb:='{"estimatedMicros":100,"inputTokens":10,"outputTokens":2}';step integer;k integer;before_budget jsonb;old_reports uuid[]:='{}';attempt uuid;params jsonb;
 begin
  insert into auth.users(id,email,email_confirmed_at,is_anonymous) values(o,'shahinst21@gmail.com',now(),false),(other,'other@example.invalid',now(),false),(unverified,'unverified@example.invalid',null,false);
  insert into public.owner_full_credit_grant(owner_id,grant_key) values(o,'owner-three-full-20261101');
@@ -38,6 +38,13 @@ begin
   v:=public.reserve_sitefit_testing_credit(o,f);use_id:=(v->>'id')::uuid;
   before_budget:=public.sitefit_trial_budget_snapshot(t);
   if public.reserve_sitefit_testing_credit(o,f)->>'id'<>use_id::text or public.sitefit_trial_budget_snapshot(t)<>before_budget then raise exception 'request replay consumed twice';end if;
+  if k=2 then
+   attempt:=gen_random_uuid();params:=jsonb_build_object('mode','payment','customer_email','shahinst21@gmail.com','success_url','https://sitefit.co.uk/purchase/return?purchase='||attempt::text,
+   'cancel_url','https://sitefit.co.uk/purchase/return?purchase='||attempt::text||'&cancel=1','metadata',jsonb_build_object('purchase_id',attempt,'analysis_id',a,'version','2'));
+   begin perform public.prepare_sitefit_live_payment(o,f,attempt,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');raise exception 'conflicting checkout admitted';
+   exception when check_violation then if sqlerrm<>'complimentary_report_already_reserved' then raise;end if;end;
+   if exists(select 1 from public.payments where id=attempt) or (select payment_id from public.controlled_proof where id=c) is not null then raise exception 'conflicting checkout left payment authority';end if;
+  end if;
   if k=1 then
    perform public.release_sitefit_testing_credit(use_id,'cancelled_before_dispatch');
    perform public.release_sitefit_testing_credit(use_id,'cancelled_before_dispatch');
@@ -56,17 +63,19 @@ begin
    cp:=jsonb_set(cp,'{revision}',to_jsonb((step-1)*2+1));cp:=jsonb_set(cp,'{state}','"running"');
    cp:=jsonb_set(cp,'{dispatches}',(cp->'dispatches')||jsonb_build_array(jsonb_build_object('ordinal',step,'group',(array['context','premises','synthesis'])[step],'packetDigest',repeat('a',64),'instructionsDigest',repeat('a',64),'schemaDigest',repeat('a',64),'state','intent','output',null,'receipt',null)));
    perform public.checkpoint_sitefit_full(o,r,(step-1)*2,cp::text);
-   d:=public.reserve_sitefit_proof_dispatch(c,tok,'full',encode(sha256(convert_to(step::text,'UTF8')),'hex'),'ai',repeat('a',64),100000);
+   if not(k=4 and step=2) then d:=public.reserve_sitefit_proof_dispatch(c,tok,'full',encode(sha256(convert_to(step::text,'UTF8')),'hex'),'ai',repeat('a',64),100000);end if;
    begin perform public.release_sitefit_testing_credit(use_id,'validation_failed');raise exception 'uncertain failure released';exception when others then if sqlerrm<>'testing_failure_not_confirmed' then raise;end if;end;
-   perform public.settle_sitefit_proof_dispatch(c,tok,d,'received',repeat('b',64));
+   if not(k=4 and step=2) then perform public.settle_sitefit_proof_dispatch(c,tok,d,'received',repeat('b',64));end if;
    cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'state'],case when k=2 then '"invalid"' else '"accepted"' end::jsonb);
    cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'output'],case when k=2 then 'null' else '{}' end::jsonb);
-   cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'receipt'],receipt);
+   cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'receipt'],case when k=4 and step=2 then '{"model":"none","promptVersion":"deterministic-unavailable-v1","inputTokens":0,"outputTokens":0,"estimatedMicros":0}'::jsonb else receipt end);
    cp:=jsonb_set(cp,'{revision}',to_jsonb(step*2));perform public.checkpoint_sitefit_full(o,r,step*2-1,cp::text);
   end loop;
   if k=2 then
    perform public.interrupt_sitefit_controlled_proof(c,tok);
-   perform public.finish_sitefit_fulfilment((job->>'id')::uuid,(job->>'token')::uuid,'intervention','validation_failed');
+   -- The actual worker catches the proof wrapper's non-Ready exception and
+   -- reports this conservative label. Stored invalid + received proves failure.
+   perform public.finish_sitefit_fulfilment((job->>'id')::uuid,(job->>'token')::uuid,'intervention','execution_interrupted');
    if public.read_sitefit_testing_credits(o)->>'remaining'<>'3' then raise exception 'confirmed failure spent credit';end if;
    continue;
   end if;
