@@ -56,12 +56,12 @@ begin
    cp:=jsonb_set(cp,'{revision}',to_jsonb((step-1)*2+1));cp:=jsonb_set(cp,'{state}','"running"');
    cp:=jsonb_set(cp,'{dispatches}',(cp->'dispatches')||jsonb_build_array(jsonb_build_object('ordinal',step,'group',(array['context','premises','synthesis'])[step],'packetDigest',repeat('a',64),'instructionsDigest',repeat('a',64),'schemaDigest',repeat('a',64),'state','intent','output',null,'receipt',null)));
    perform public.checkpoint_sitefit_full(o,r,(step-1)*2,cp::text);
-   d:=public.reserve_sitefit_proof_dispatch(c,tok,'full',encode(sha256(convert_to(step::text,'UTF8')),'hex'),'ai',repeat('a',64),100000);
+   if not(k=4 and step=2) then d:=public.reserve_sitefit_proof_dispatch(c,tok,'full',encode(sha256(convert_to(step::text,'UTF8')),'hex'),'ai',repeat('a',64),100000);end if;
    begin perform public.release_sitefit_testing_credit(use_id,'validation_failed');raise exception 'uncertain failure released';exception when others then if sqlerrm<>'testing_failure_not_confirmed' then raise;end if;end;
-   perform public.settle_sitefit_proof_dispatch(c,tok,d,'received',repeat('b',64));
+   if not(k=4 and step=2) then perform public.settle_sitefit_proof_dispatch(c,tok,d,'received',repeat('b',64));end if;
    cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'state'],case when k=2 then '"invalid"' else '"accepted"' end::jsonb);
    cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'output'],case when k=2 then 'null' else '{}' end::jsonb);
-   cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'receipt'],receipt);
+   cp:=jsonb_set(cp,array['dispatches',(step-1)::text,'receipt'],case when k=4 and step=2 then '{"model":"none","promptVersion":"deterministic-unavailable-v1","inputTokens":0,"outputTokens":0,"estimatedMicros":0}'::jsonb else receipt end);
    cp:=jsonb_set(cp,'{revision}',to_jsonb(step*2));perform public.checkpoint_sitefit_full(o,r,step*2-1,cp::text);
   end loop;
   if k=2 then
