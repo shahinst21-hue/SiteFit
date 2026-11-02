@@ -11,5 +11,5 @@ export default async function Report({params,searchParams}:{params:Promise<{id:s
   const {id}=await params,result=await readDashboard(id);if(!result)notFound();
   if(!result.dashboard)return <div className="rd-shell"><span className="rd-kicker">REPORT STATUS</span><h1>Your report is not ready to open.</h1><p>Saved stage: {result.status.stage.replaceAll('-',' ')}.</p><p>Completed steps: {result.status.completed.join(', ')||'none'}. Closing this page does not remove saved progress.</p><p>Checking status does not restart preparation or take another payment.</p><a className="rd-button" href={`/reports/${id}`}>Check progress</a><a className="rd-button" href="/account">Return to your account</a></div>;
   const {section}=await searchParams,initial=reportPages.some(p=>p.key===section)?section as SectionKey:result.dashboard.structuredPreview?'rental-context':'overview';
-  return <ReportDashboard report={result.dashboard} initial={initial}/>;
+  return <ReportDashboard report={result.dashboard} initial={initial} decisionAvailable={!result.dashboard.structuredPreview&&'frozenDecision' in result&&!!result.frozenDecision}/>;
 }

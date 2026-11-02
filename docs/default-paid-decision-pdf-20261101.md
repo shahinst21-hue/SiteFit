@@ -1,5 +1,13 @@
 # Default paid PDF finalisation — 1 November 2026
 
+## 2 November — compact report actions
+
+The owner authorises a scoped change to report access controls, superseding the earlier dashboard-preservation restriction for these controls only. Two adjacent, naturally sized controls use the existing white surface, fine border, typography and restrained green accent: “Full report PDF” downloads the complete existing PDF directly; “Decision Edition” opens the saved edition and its PDF access in a new tab. The description reads “All sections, evidence & action plan”. The Export dropdown and current-page choices are removed. Report section navigation is unchanged; public samples and incomplete previews do not advertise complete downloads.
+
+The Decision action appears only when the verified owned Ready report has its frozen edition. The server passes a boolean to the dashboard, never private archive metadata. Account history reuses the same existing owned report lookup to expose that edition for eligible purchased and complimentary reports, without extra generation or RPCs. Account/credit-offer Decision links also open in a new tab with opener protection and an accessible announcement. Historical reports without the edition retain their existing complete PDF and do not gain an unavailable edition link.
+
+This is presentation and read-only link metadata: the existing PDF/Decision routes, frozen edition selection, historical PDF fallback, ownership, measurement/consent, authentication, prices, credits and generation pipeline remain unchanged. No schema change, report generation, AI/source call or Production release is required to prepare it. Protected delivery and mandatory checks apply; actual verification is recorded in the delivery PR. Production activation requires separate explicit release approval.
+
 ## Scope and authority
 
 The owner's finalisation instruction authorises the minimum backend integration for future eligible paid Full Reports. The existing dashboard, navigation, report display, account, authentication, payment and £29 price remain unchanged. Production deployment and schema application require a later explicit approval. This supersedes the earlier PDF-default restriction, not the dashboard-preservation rule. No new report page or download control is added.
