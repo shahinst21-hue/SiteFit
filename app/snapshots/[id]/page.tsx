@@ -15,6 +15,10 @@ import {readSnapshotContext} from '@/lib/snapshot/read-context';
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner} from '@/lib/proof/trial';
 import {permanentIdentity} from '@/lib/auth/purchase-flow';
+import {testingCreditOffer,ownerTestingAccount} from '@/lib/testing-credits/offer';
+import {TestingCreditOffer} from '@/components/testing-credit-offer';
+import {TestingCreditButton} from '@/components/testing-credit-button';
+import Link from 'next/link';
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Your Free Snapshot", robots: { index: false, follow: false }, referrer: "no-referrer" };
 export default async function Snapshot({ params,searchParams }: { params: Promise<{ id: string }>;searchParams:Promise<{purchase?:string;signed_in?:string}> }) {
@@ -40,6 +44,14 @@ export default async function Snapshot({ params,searchParams }: { params: Promis
   const evidenceReady=snapshotHasUsableEvidence(report);
   let purchaseAllowed=evidenceReady&&purchaseAvailableOnHost(process.env,requestHeaders.get('host'));
   if(purchaseAllowed&&controlledTrialConfigured(process.env))try{await assertTrialOwner(user);}catch{purchaseAllowed=false;}
+  let creditAction,creditTerms;
+  if(evidenceReady&&permanentIdentity(user)&&user.id===ownerTestingAccount){
+   try{const offer=await testingCreditOffer(user.id,id);if(offer){
+    creditTerms=<TestingCreditOffer reportId={id} {...offer}/>;
+    creditAction=offer.use?<Link className="button button-primary" href={offer.use.reportId?`/reports/${offer.use.reportId}/decision`:'/account'}>View saved Full Report</Link>:<><TestingCreditButton reportId={id}/><small>{offer.balance.remaining} credits remaining · No payment required</small></>;
+   }}
+   catch{purchaseAllowed=false;creditAction=<p role="status">Full Report credit status is temporarily unavailable. Your Snapshot is saved; please try again shortly.</p>;}
+  }
   const query=await searchParams,purchase=query.purchase==='1';
-  return <>{query.signed_in==='1'&&permanentIdentity(user)&&<p role="status" className="container">You're signed in. Your original Snapshot is saved. Continue your purchase below.</p>}{!evidenceReady&&<p role="status" className="container">There is not enough usable source evidence for a Full Report at this location. Purchasing is unavailable for this check.</p>}<FreeSnapshot openPurchase={purchase} purchaseTerms={purchaseAllowed?<PurchaseTerms report={id}/>:undefined} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} /></>;
+  return <>{query.signed_in==='1'&&permanentIdentity(user)&&<p role="status" className="container">You're signed in. Your original Snapshot is saved. Continue your purchase below.</p>}{!evidenceReady&&<p role="status" className="container">There is not enough usable source evidence for a Full Report at this location. Purchasing is unavailable for this check.</p>}<FreeSnapshot creditAction={creditAction} openPurchase={purchase} purchaseTerms={creditTerms??(purchaseAllowed?<PurchaseTerms report={id}/>:undefined)} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} /></>;
 }
