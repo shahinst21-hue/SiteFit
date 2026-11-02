@@ -1,10 +1,12 @@
 # Default paid PDF finalisation — 1 November 2026
 
-## 2 November — direct Full Report download control
+## 2 November — compact report actions
 
-The owner now authorises a scoped change to the purchased-report download control, superseding the earlier dashboard-preservation restriction for this control only. Replace the Export dropdown with one compact, clearly labelled “Download full report” PDF link using the existing white surface, fine border and restrained green accent and the description “All sections, evidence & action plan”. Remove the Full/current-page submenu and all section-specific download choices from this dashboard. Public samples and incomplete/structured previews do not advertise a complete report download. Report section navigation is unchanged.
+The owner authorises a scoped change to report access controls, superseding the earlier dashboard-preservation restriction for these controls only. Two adjacent, naturally sized controls use the existing white surface, fine border, typography and restrained green accent: “Full report PDF” downloads the complete existing PDF directly; “Decision Edition” opens the saved edition and its PDF access in a new tab. The description reads “All sections, evidence & action plan”. The Export dropdown and current-page choices are removed. Report section navigation is unchanged; public samples and incomplete previews do not advertise complete downloads.
 
-This is presentation only: the existing owned `/reports/[id]/pdf` destination, frozen Decision Edition selection, historical PDF fallback, measurement/consent handling, authentication, prices, credits and generation pipeline remain unchanged. No schema change, report generation, AI/source call or Production release is required to prepare it. Protected delivery and existing mandatory checks apply; actual verification is recorded in the delivery PR. Production activation requires separate explicit release approval.
+The Decision action appears only when the verified owned Ready report has its frozen edition. The server passes a boolean to the dashboard, never private archive metadata. Account history reuses the same existing owned report lookup to expose that edition for eligible purchased and complimentary reports, without extra generation or RPCs. Account/credit-offer Decision links also open in a new tab with opener protection and an accessible announcement. Historical reports without the edition retain their existing complete PDF and do not gain an unavailable edition link.
+
+This is presentation and read-only link metadata: the existing PDF/Decision routes, frozen edition selection, historical PDF fallback, ownership, measurement/consent, authentication, prices, credits and generation pipeline remain unchanged. No schema change, report generation, AI/source call or Production release is required to prepare it. Protected delivery and mandatory checks apply; actual verification is recorded in the delivery PR. Production activation requires separate explicit release approval.
 
 ## Scope and authority
 
