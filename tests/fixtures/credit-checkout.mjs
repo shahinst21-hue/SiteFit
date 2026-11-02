@@ -1,4 +1,5 @@
 import {registerHooks} from 'node:module';
+import console from 'node:console';
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';
 import assert from 'node:assert/strict';
 const owner='09d24746-3f49-4f77-9900-8ba428992dee',free='00000000-0000-4000-8000-000000000001',id='00000000-0000-4000-8000-000000000002';
