@@ -387,3 +387,23 @@ input::placeholder,textarea::placeholder { color: var(--muted); }
 /* Primary mobile actions precede exploration links and fit the visible phone viewport. */
 .brand-menu-actions{margin:0 0 20px}.account-navigation-status{padding:10px 24px;background:var(--mint);font-size:14px;border-top:1px solid var(--line)}
 .brand-menu-actions a{touch-action:manipulation}.brand-menu-actions a:active{opacity:.8}
+
+/* Account: compact saved-report cards using the existing brand palette. */
+.account-page{max-width:960px}
+.account-page .simple-panel{margin-bottom:20px;padding:28px}
+.account-page .simple-panel>h2{font-size:24px;line-height:1.25;margin:12px 0 20px;letter-spacing:-.025em}
+.account-page .simple-panel>.icon-disc{width:40px;height:40px;border-radius:12px}
+.account-page .account-history{gap:12px;margin:20px 0}
+.account-page .account-history>li{padding:20px 22px;border-color:var(--line);border-radius:14px;background:#fff}
+.account-page .account-history>li>p:first-child{margin:0 0 4px;color:var(--ink);font-size:15px;line-height:1.5}
+.account-page .account-history>li>p:nth-child(2){margin:0 0 12px;font-size:12px;color:var(--muted)}
+.account-page .account-history p{margin-top:4px;margin-bottom:4px;line-height:1.5}
+.account-page .account-history a{font-size:13px;font-weight:550;gap:7px;min-height:40px}
+.account-page .account-history a .icon{width:17px;height:17px}
+.account-page .account-history>li>div:has(a){display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px}
+.account-page .account-history>li>div:has(a)>p{margin:0}
+.account-page .account-history a[target="_blank"]{color:#38572a}
+.account-page .account-history .field-help{font-size:12px;color:var(--muted);margin-top:10px}
+.account-page .account-controls{padding-top:20px;margin-top:20px;border-top:1px solid var(--line);gap:12px}
+@media(hover:hover) and (pointer:fine){.account-page .account-history a:hover{text-decoration:underline;text-underline-offset:4px}}
+@media(max-width:620px){.account-page .simple-panel{padding:20px}.account-page .simple-panel>h2{font-size:21px}.account-page .account-history>li{padding:16px}.account-page .account-history a{min-height:44px}.account-page .account-history>li>div:has(a){gap:2px 14px}}

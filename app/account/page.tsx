@@ -53,7 +53,7 @@ export default async function Account({searchParams}:{searchParams:Promise<{page
   if(controlledTrialConfigured(process.env,host))try{savedChecks=await savedSnapshotChecks(user.id);}catch{recoveryUnavailable=true;}
   const fullReports=dashboardEnabled(process.env,host)&&!user.is_anonymous&&user.email_confirmed_at?await Promise.all(reports.map(report=>findReadyDashboard(user.id,report.id))):[];
   return (
-    <div className="page-wrap narrow-page">
+    <div className="page-wrap narrow-page account-page">
       <div className="auth-brand">
         <Wordmark />
         <span className="badge positive">{user.is_anonymous ? "Guest session" : "Signed in"}</span>
