@@ -70,6 +70,7 @@ begin
    continue;
   end if;
   job:=public.claim_sitefit_fulfilment();if job is null or not public.authorise_sitefit_supply((job->>'id')::uuid,(job->>'token')::uuid) then raise exception 'credit queue unavailable';end if;
+  if k=4 and (public.read_sitefit_full_material(o,f)->>'testingCredit'<>'true' or public.read_sitefit_full_material(o,f)->>'decisionPreparationAllowed'<>'true') then raise exception 'expired Checkout blocked real credit material preparation';end if;
   perform set_config('sitefit.full_writer','admitted',true);
   cp:=jsonb_build_object('version','full-intelligence-v1','bindingDigest',repeat('b',64),'revision',0,'state','prepared','dispatches','[]'::jsonb,'repairUsed',false);
   insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,full_binding,full_revision,provenance)

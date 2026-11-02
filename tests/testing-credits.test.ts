@@ -13,5 +13,5 @@ test('eligible Snapshot replaces desktop, mobile and dialog payment actions with
  const html=execFileSync(process.execPath,['tests/fixtures/render-copy.mjs','snapshot-credit'],{encoding:'utf8'});
  assert.match(html,/3 Full Report testing credits remaining/);
  assert.ok((html.match(/Use 1 Full Report testing credit/g)??[]).length>=3);
- assert.doesNotMatch(html,/Get the Full Report ·|one-time payment|Continue to secure payment/);
+ assert.doesNotMatch(html,/Get the Full Report ·|one-time payment|Continue to secure payment|£29|30 days/);
 });
