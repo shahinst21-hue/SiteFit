@@ -4,14 +4,14 @@ import console from 'node:console';
 import {registerHooks} from 'node:module';
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';
 import assert from 'node:assert/strict';
-const mode=process.argv[2],report='00000000-0000-4000-8000-000000000001',owner='00000000-0000-4000-8000-000000000002';
+const mode=process.argv[2],report='00000000-0000-4000-8000-000000000001',owner=mode.startsWith('credit-')?'09d24746-3f49-4f77-9900-8ba428992dee':'00000000-0000-4000-8000-000000000002';
 process.env.VERCEL_ENV='production';process.env.SITE_URL='https://sitefit.co.uk';process.env.SITEFIT_CONTROLLED_TRIAL_ENABLED='1';process.env.SITEFIT_CONTROLLED_TRIAL_ID=report;process.env.SUPABASE_SECRET_KEY='synthetic-signing-secret';
 process.env.STRIPE_SECRET_KEY='rk_live_synthetic';process.env.STRIPE_FULL_REPORT_PRICE_ID='price_synthetic';process.env.STRIPE_ACCOUNT_ID='acct_synthetic';
 const consent={version:'sitefit-sale-v1-20261019-affirmative',buyerKind:'consumer',termsAccepted:true,immediateRequested:true,acknowledgement:true};
 const {salePolicy}=await import('../../lib/legal/sale.ts');consent.version=salePolicy.version;
 const jar=new Map();let stripeCalls=0,creates=0,sales=0,admissions=0;
 const user=mode==='signed-out'?null:{id:owner,is_anonymous:false,email_confirmed_at:'2026-10-19',email:mode==='ordinary'?'ordinary@example.invalid':'shahinst21@gmail.com',identities:[{provider:'google'}]};
-globalThis.checkoutFixture={jar,user,snapshot:{analysisId:'00000000-0000-4000-8000-000000000003',dimensions:[{why:{sources:[{provider:'synthetic'}],observations:[{value:mode==='insufficient-evidence'?null:0}]}}]},delivery:()=>{admissions++;if(mode==='delivery-unavailable'||mode==='delivery-lost-after-reservation'&&admissions===2)throw Error('delivery_capacity_unavailable');},verifyOwner:()=>{if(mode==='admission-denied')throw Error('controlled_trial_denied');},stripe:()=>{stripeCalls++;return {checkout:{sessions:{create:async()=>{creates++;return {id:'cs_live_synthetic',url:'https://checkout.stripe.com/c/pay/synthetic'};}}}};},recordSale:async(_owner,_id,c)=>{assert.deepEqual(c,consent);sales++;}};
+globalThis.checkoutFixture={creditRpc:async(name)=>{if(mode==='credit-unavailable')return {data:null,error:{}};return {error:null,data:name==='read_sitefit_testing_credits'?{granted:3,remaining:mode==='credit-exhausted'?0:3,reserved:0,consumed:mode==='credit-exhausted'?3:0}:[]};},jar,user,snapshot:{analysisId:'00000000-0000-4000-8000-000000000003',dimensions:[{why:{sources:[{provider:'synthetic'}],observations:[{value:mode==='insufficient-evidence'?null:0}]}}]},delivery:()=>{admissions++;if(mode==='delivery-unavailable'||mode==='delivery-lost-after-reservation'&&admissions===2)throw Error('delivery_capacity_unavailable');},verifyOwner:()=>{if(mode==='admission-denied')throw Error('controlled_trial_denied');},stripe:()=>{stripeCalls++;return {checkout:{sessions:{create:async()=>{creates++;return {id:'cs_live_synthetic',url:'https://checkout.stripe.com/c/pay/synthetic'};}}}};},recordSale:async(_owner,_id,c)=>{assert.deepEqual(c,consent);sales++;}};
 const mocks={
  'server-only':'export {};',
  'next/headers':'export const cookies=async()=>({set:(key,value,options)=>globalThis.checkoutFixture.jar.set(key,{value,options}),delete:key=>globalThis.checkoutFixture.jar.delete(key)});',
@@ -19,12 +19,13 @@ const mocks={
  '@/lib/proof/trial':'export const assertTrialOwner=async()=>globalThis.checkoutFixture.verifyOwner();',
  '@/lib/proof/repository':'export const checkProcessing=async()=>{};',
  '@/lib/legal/repository':'export const recordSale=(...args)=>globalThis.checkoutFixture.recordSale(...args);',
+ '@/lib/marketing/repository':'export const observeCampaign=async()=>{};',
  '@/lib/analysis/projection':'export const validateFreeProjection=v=>v;',
  '@/lib/payments/stripe':'export const stripeClient=()=>globalThis.checkoutFixture.stripe();export const verifiedPrice=async()=>{};export const verifiedStripeAccount=async()=>{};export const verifiedSession=async()=>{};',
  '@/lib/payments/repository':'export const requireLiveDelivery=async()=>globalThis.checkoutFixture.delivery();export const preparePayment=async v=>({id:v.id,analysis_id:"00000000-0000-4000-8000-000000000003",price_reference:v.price,idempotency_key:"synthetic",checkout_reference:null,parameters:v.parameters});export const storedParameters=p=>p.parameters;export const bindCheckout=async()=>{};',
  '@/lib/payments/checkout':'export const openCheckout=async(p,ops)=>{await ops.admit?.();const s=await ops.create(p.parameters,p.key);return s.url;};',
 };
-registerHooks({resolve(s,c,next){if(mocks[s])return {url:'data:text/javascript,'+encodeURIComponent(mocks[s]),shortCircuit:true};if(s.startsWith('@/')||s.startsWith('.')){const base=s.startsWith('@/')?path.resolve(s.slice(2)):path.resolve(path.dirname(fileURLToPath(c.parentURL)),s);if(!path.extname(base))for(const ext of ['.ts','.tsx'])if(fs.existsSync(base+ext))return next(pathToFileURL(base+ext).href,c);}return next(s,c);}});
+registerHooks({resolve(s,c,next){if(mocks[s])return {url:'data:text/javascript,'+encodeURIComponent(mocks[s]),shortCircuit:true};if(s.startsWith('@/')||s.startsWith('.')){const base=s.startsWith('@/')?path.resolve(s.slice(2)):path.resolve(path.dirname(fileURLToPath(c.parentURL)),s);if(base.replaceAll('\\','/').endsWith('/lib/data/server-client.ts'))return {url:'data:text/javascript,'+encodeURIComponent('export const frameworkClient=()=>({rpc:(...a)=>globalThis.checkoutFixture.creditRpc(...a)});'),shortCircuit:true};if(!path.extname(base))for(const ext of ['.ts','.tsx'])if(fs.existsSync(base+ext))return next(pathToFileURL(base+ext).href,c);}return next(s,c);}});
 globalThis.fetch=async()=>{throw Error('External calls forbidden in synthetic test');};
 if(mode.startsWith('return-')){
  const {POST}=await import('../../app/auth/continuation/route.ts');
@@ -33,12 +34,14 @@ if(mode.startsWith('return-')){
  if(mode==='return-proxy'){const saved=jar.get('sitefit_auth_return');assert.equal(saved.value,'/purchase/continue');assert.equal(saved.options.path,'/auth');assert.equal(saved.options.httpOnly,true);assert.equal(saved.options.secure,true);}
  console.log(JSON.stringify({mode,status:response.status,externalRequests:0}));
 }else{
-const {POST}=await import('../../app/purchase/checkout/route.ts');
-const r=await POST(new Request('https://sitefit.co.uk/purchase/checkout',{method:'POST',headers:{origin:mode==='cross-origin'?'https://evil.example':'https://sitefit.co.uk','content-type':'application/json'},body:JSON.stringify({reportId:report,saleConsent:consent})}));
+const start=mode==='credit-start';
+const {POST}=await import(start?'../../app/purchase/start/route.ts':'../../app/purchase/checkout/route.ts');
+const r=await POST(new Request('https://sitefit.co.uk/purchase/'+(start?'start':'checkout'),{method:'POST',headers:{origin:mode==='cross-origin'?'https://evil.example':'https://sitefit.co.uk','content-type':'application/json'},body:JSON.stringify({reportId:report,...(!start?{saleConsent:consent}:{})})}));
 const body=await r.json();
 if(mode==='insufficient-evidence'){assert.equal(r.status,409);assert.equal(body.code,'insufficient_report_evidence');assert.equal(admissions,0);}
 if(mode==='signed-out'){assert.equal(r.status,200);assert.equal(body.url,'/login?next=%2Fpurchase%2Fcontinue');assert.equal(stripeCalls,0);assert.equal(sales,0);const saved=jar.get('sitefit_checkout_intent');assert.ok(saved);assert.equal(saved.options.httpOnly,true);assert.equal(saved.options.secure,true);const {readCheckoutIntent}=await import('../../lib/auth/checkout-intent.ts');assert.deepEqual(readCheckoutIntent(saved.value,process.env.SUPABASE_SECRET_KEY),{report,consent});}
-else if(mode==='owner'||mode==='ordinary'){assert.equal(r.status,200);assert.equal(body.url,'https://checkout.stripe.com/c/pay/synthetic');assert.equal(creates,1);assert.equal(sales,1);assert.equal(jar.get('sitefit_checkout_intent').value,'');assert.equal(jar.get('sitefit_checkout_intent').options.maxAge,0);assert.equal(jar.get('sitefit_checkout_intent').options.path,'/purchase');}
+else if(mode==='credit-owner'||mode==='credit-start'){assert.equal(r.status,200);assert.equal(body.url,`/snapshots/${report}?credit=1`);assert.equal(stripeCalls,0);assert.equal(sales,0);assert.equal(admissions,0);}
+else if(mode==='owner'||mode==='ordinary'||mode==='credit-exhausted'){assert.equal(r.status,200);assert.equal(body.url,'https://checkout.stripe.com/c/pay/synthetic');assert.equal(creates,1);assert.equal(sales,1);assert.equal(jar.get('sitefit_checkout_intent').value,'');assert.equal(jar.get('sitefit_checkout_intent').options.maxAge,0);assert.equal(jar.get('sitefit_checkout_intent').options.path,'/purchase');}
 else if(mode==='delivery-lost-after-reservation'){assert.equal(r.status,409);assert.equal(admissions,2);assert.equal(creates,0);assert.equal(sales,1);}
 else{assert.ok(r.status>=400);assert.equal(creates,0);assert.equal(sales,0);assert.equal(stripeCalls,0);}
 console.log(JSON.stringify({mode,status:r.status,syntheticSessionCreates:creates,externalRequests:0}));

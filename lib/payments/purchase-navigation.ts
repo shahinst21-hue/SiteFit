@@ -20,8 +20,9 @@ export async function purchaseNavigation(report: string, checkout: boolean, orig
   // state. Preserve it; only internal purchase anchors represent the circular
   // Snapshot navigation defect. Never allow credentials or a foreign host.
   const login=checkout&&url.origin===origin&&!url.hash&&(url.pathname==='/login'&&url.search==='?next=%2Fpurchase%2Fcontinue'||url.pathname==='/purchase/auth'&&!url.search);
-  if (url.username || url.password || (checkout ? !login&&!stripeCheckoutUrl(url) :
-    !!url.hash || url.origin !== origin || !["/purchase/auth", "/purchase/resume"].includes(url.pathname))) throw Error("invalid_purchase_redirect");
+  const credit=url.origin===origin&&!url.hash&&url.pathname===`/snapshots/${report}`&&url.search==='?credit=1';
+  if (url.username || url.password || (!credit&&(checkout ? !login&&!stripeCheckoutUrl(url) :
+    !!url.hash || url.origin !== origin || !["/purchase/auth", "/purchase/resume"].includes(url.pathname)))) throw Error("invalid_purchase_redirect");
   if(checkout&&stripeCheckoutUrl(url)&&data.measurement?.paymentId)await trackEcommerce(data.measurement.paymentId,'begin_checkout');
   return url.href;
 }

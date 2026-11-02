@@ -6,7 +6,7 @@ export function TestingCreditButton({reportId,recover=false}:{reportId:string;re
  async function start(){
   if(busy)return;setBusy(true);setError('');
   try{const response=await fetch('/api/reports/testing-credit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reportId,action:recover?'recover':'start'})});
-   if(!response.ok)throw Error();router.refresh();
+   if(!response.ok){const data=await response.json();if(['testing_checkout_pending','testing_checkout_review'].includes(data.code)&&typeof data.error==='string'){setError(data.error);return;}throw Error();}router.push('/account');router.refresh();
   }catch{setError('Could not update this report. Check your balance and saved status before trying again.');}
   finally{setBusy(false);}
  }

@@ -9,6 +9,7 @@ import { validateFreeProjection } from "@/lib/analysis/projection";
 import { observeCampaign } from "@/lib/marketing/repository";
 import {controlledTrialConfigured} from '@/lib/proof/trial-policy';
 import {assertTrialOwner} from '@/lib/proof/trial';
+import {testingCreditOffer,testingCreditDestination} from '@/lib/testing-credits/offer';
 export async function POST(request: Request){
  if(!purchaseSameOrigin(request,process.env))return paymentReply({error:"Purchasing is not available here."},403);
  try{
@@ -19,6 +20,7 @@ export async function POST(request: Request){
   validateFreeProjection(data);
   await observeCampaign(user.id,body.reportId,true);
   if(permanentIdentity(user)){
+   if(await testingCreditOffer(user.id,body.reportId))return paymentReply({url:testingCreditDestination(body.reportId)});
    (await cookies()).set(RESUME_COOKIE,body.reportId,{httpOnly:true,secure:request.url.startsWith("https:"),sameSite:"strict",path:"/purchase",maxAge:600});
    return paymentReply({url:`/purchase/resume?report=${body.reportId}`});
   }

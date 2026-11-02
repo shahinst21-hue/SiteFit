@@ -25,7 +25,7 @@ test('purchase login returns only to the exact continuation or an owned report r
 });
 
 test('actual Checkout route sends signed-out users to login, admits the verified owner and ordinary customers, and rejects denied/cross-origin requests',()=>{
- for(const mode of ['signed-out','owner','ordinary','admission-denied','cross-origin','delivery-unavailable','delivery-lost-after-reservation']){
+ for(const mode of ['signed-out','owner','ordinary','admission-denied','cross-origin','delivery-unavailable','delivery-lost-after-reservation','credit-owner','credit-start','credit-exhausted','credit-unavailable']){
  const r=spawnSync(process.execPath,['--conditions=react-server','tests/fixtures/checkout-route.mjs',mode],{encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.match(r.stdout,/"externalRequests":0/);
  }
 });

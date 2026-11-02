@@ -5,6 +5,15 @@ import ts from "typescript";
 import { retryPurchaseNavigation,purchaseNavigation } from "../lib/payments/purchase-navigation.ts";
 import { purchaseAvailableOnHost } from "../lib/payments/config.ts";
 const origin="https://preview.example.org", report="00000000-0000-4000-8000-000000000001";
+
+test('credit redirect is restricted to this Snapshot and never starts Checkout measurement',async()=>{
+ for(const checkout of [false,true]){
+  const url=`/snapshots/${report}?credit=1`;
+  assert.equal(await purchaseNavigation(report,checkout,origin,async()=>Response.json({url,measurement:{paymentId:report}})),origin+url);
+  for(const bad of [url+'&extra=1',url+'#fragment',url.replace(report,'00000000-0000-4000-8000-000000000002'),'https://foreign.invalid'+url])
+   await assert.rejects(()=>purchaseNavigation(report,checkout,origin,async()=>Response.json({url:bad})));
+ }
+});
 test("purchase presentation is unavailable for missing Test credentials, wrong Preview host and Production",()=>{
   const env={VERCEL:"1",VERCEL_ENV:"preview",SITEFIT_TEST_PURCHASES_ENABLED:"true",SITEFIT_PURCHASE_ORIGIN:origin,STRIPE_SECRET_KEY:"sk_test_synthetic",STRIPE_FULL_REPORT_PRICE_ID:"price_synthetic"};
   assert.equal(purchaseAvailableOnHost(env,"preview.example.org"),true);

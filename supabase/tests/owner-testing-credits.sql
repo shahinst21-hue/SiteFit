@@ -35,6 +35,24 @@ begin
    begin perform public.authorise_sitefit_economics(o,a,i);raise exception 'fourth report payment bypass';exception when insufficient_privilege then null;end;
    continue;
   end if;
+  if k=4 then
+   attempt:=gen_random_uuid();params:=jsonb_build_object('mode','payment','customer_email','shahinst21@gmail.com','success_url','https://sitefit.co.uk/purchase/return?purchase='||attempt::text,
+    'cancel_url','https://sitefit.co.uk/purchase/return?purchase='||attempt::text||'&cancel=1','metadata',jsonb_build_object('purchase_id',attempt,'analysis_id',a,'version','2'));
+   perform public.prepare_sitefit_live_payment(o,f,attempt,'price_synthetic',params,now()+interval '1 hour','acct_synthetic');
+   perform public.bind_sitefit_live_checkout(attempt,'cs_live_creditrecovery');
+   perform public.record_sitefit_sale(o,attempt,'sitefit-sale-v1-20261016-review',jsonb_build_object('version','sitefit-sale-v1-20261016-review','buyerKind','consumer','termsAccepted',true,'immediateRequested',true,'acknowledgement',true));
+   begin perform public.reserve_sitefit_testing_credit(o,f);raise exception 'pending Checkout bypassed';exception when check_violation then if sqlerrm<>'existing_full_or_purchase' then raise;end if;end;
+   -- A genuine paid observation must still block complimentary funding.
+   begin
+    perform public.confirm_sitefit_live_payment(attempt,'evt_creditpaid','checkout.session.completed',(select revision from public.payments where id=attempt),'cs_live_creditrecovery','pi_creditpaid','paid','none');
+    begin perform public.reserve_sitefit_testing_credit(o,f);raise exception 'paid Checkout bypassed';exception when check_violation then if sqlerrm<>'existing_full_or_purchase' then raise;end if;end;
+    raise exception 'rollback_paid_fixture';
+   exception when raise_exception then if sqlerrm<>'rollback_paid_fixture' then raise;end if;end;
+   perform public.confirm_sitefit_live_payment(attempt,'evt_creditfailed','payment_intent.payment_failed',(select revision from public.payments where id=attempt),'cs_live_creditrecovery',null,'failed','none');
+   begin perform public.reserve_sitefit_testing_credit(o,f);raise exception 'failure without expiry bypassed';exception when insufficient_privilege then if sqlerrm<>'testing_case_unavailable' then raise;end if;end;
+   perform public.confirm_sitefit_live_payment(attempt,'obs_'||repeat('f',64),'checkout.session.reconciled',(select revision from public.payments where id=attempt),'cs_live_creditrecovery',null,'expired','none');
+   params:=jsonb_build_object('payment',(select to_jsonb(payrow) from public.payments payrow where id=attempt),'hold',(select to_jsonb(z) from public.commercial_payment_reservations z where payment_id=attempt));
+  end if;
   v:=public.reserve_sitefit_testing_credit(o,f);use_id:=(v->>'id')::uuid;
   before_budget:=public.sitefit_trial_budget_snapshot(t);
   if public.reserve_sitefit_testing_credit(o,f)->>'id'<>use_id::text or public.sitefit_trial_budget_snapshot(t)<>before_budget then raise exception 'request replay consumed twice';end if;
@@ -93,12 +111,14 @@ begin
   perform public.finish_sitefit_controlled_proof(c,tok,'full',r);
   perform public.finish_sitefit_fulfilment((job->>'id')::uuid,(job->>'token')::uuid,'ready',null);
   perform public.recover_sitefit_testing_report(o,f);perform public.freeze_sitefit_full(o,r,6,projection::text);
+  if k=4 and (params<>jsonb_build_object('payment',(select to_jsonb(payrow) from public.payments payrow where id=attempt),'hold',(select to_jsonb(z) from public.commercial_payment_reservations z where payment_id=attempt)) or (select payment_id from public.controlled_proof where id=c)<>attempt) then raise exception 'credit recovery changed historical payment, binding or budget hold';end if;
   if public.read_sitefit_testing_credits(o)->>'remaining'<>(5-k)::text then raise exception 'reopening consumed twice';end if;
   begin perform public.read_sitefit_full(other,r);raise exception 'foreign full leaked';exception when insufficient_privilege then null;end;
   old_reports:=array_append(old_reports,r);
  end loop;
  foreach r in array old_reports loop perform public.read_sitefit_full(o,r);end loop;
  if public.read_sitefit_testing_credits(o)<> '{"granted":3,"remaining":0,"reserved":0,"consumed":3}' then raise exception 'final credit balance wrong';end if;
- if exists(select 1 from public.payments where owner_id=o) or exists(select 1 from public.commercial_payment_reservations where owner_id=o) or exists(select 1 from public.controlled_trial_budget_events where trial_id=t and payment_id is not null) then raise exception 'complimentary report created payment revenue';end if;
+ if (select count(*) from public.payments where owner_id=o)<>1 or exists(select 1 from public.payments where owner_id=o and (status<>'failed' or access_state<>'none' or verified_at is not null or expired_at is null or payment_reference is not null))
+ or (select count(*) from public.commercial_payment_reservations where owner_id=o)<>1 then raise exception 'complimentary report created payment revenue';end if;
 end$$;
 rollback;
