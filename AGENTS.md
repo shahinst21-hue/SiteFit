@@ -1,5 +1,7 @@
 # SiteFit operating instructions
 
+1 November 2026 PDF finalisation: owner authorises the minimal backend default Decision PDF integration for future eligible paid Full Reports, reusing PR160/161. Preserve dashboard/account/authentication/payment journeys and historical PDFs. No Production deployment or schema application until explicit approval. See `docs/default-paid-decision-pdf-20261101.md`.
+
 1 November 2026 owner testing-credit authority: the owner authorises the minimal protected Production implementation and one idempotent grant of exactly three complimentary Full credits to the existing verified owner account. This permits scoped account balance/actions and Decision Edition for those credits only; no general public replacement, Stripe price, provider ceiling or unrelated setting change. See `docs/owner-testing-credits-20261101.md`.
 
 1 November 2026 continuation: the owner approves one additional US$0.30 Development Full proof (total held ceiling US$3.34) and explicitly requires the paid customer dashboard to remain unchanged. Keep public replacement closed, preserve prior reports and use the separate owned report for review. [Implementation, evidence and remaining gates](docs/decision-report-integration-20261101.md).

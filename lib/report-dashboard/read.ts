@@ -45,5 +45,9 @@ export async function readDashboard(id:string) {
       }
     }catch{/* A failed map binding remains unavailable; the historical text is preserved. */}
   }
-  return {status,dashboard,archiveDocuments:edition.archiveDocuments===true};
+  // Server-only export metadata. Dashboard pages pass only `dashboard` to the
+  // existing client component; private frozen artifact references stay here.
+  const {decisionEdition,contentDigest:discard,...parent}=edition.projection as Record<string,unknown>;void discard;
+  return {status,dashboard,archiveDocuments:edition.archiveDocuments===true,
+    frozenDecision:decisionEdition===undefined?null:{edition:decisionEdition,parentDigest:packetDigest(parent)}};
 }

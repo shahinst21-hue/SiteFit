@@ -35,8 +35,8 @@ export async function readDecisionCatchments(artifact:{path:string;digest:string
 /** Approved proof or exact server-authorised testing credit. One immutable intent per source BEFORE dispatch.
  * Lost responses, HTTP errors and expired acknowledgements never authorise retry.
  * Reuses the existing private document bucket and walking adapter. */
-export async function acquireDecisionGeography(args:{freeReportId:string;contextDigest:string;origin:Point;candidates:Competitor[];key:string|undefined;testingCredit?:boolean;store?:GeographyBucket;fetcher?:typeof fetch;now?:()=>Date}){
-  if(process.env.VERCEL_ENV==='production'&&args.testingCredit!==true)throw Error('decision_geography_not_released');
+export async function acquireDecisionGeography(args:{freeReportId:string;contextDigest:string;origin:Point;candidates:Competitor[];key:string|undefined;testingCredit?:boolean;admittedSupply?:boolean;store?:GeographyBucket;fetcher?:typeof fetch;now?:()=>Date}){
+  if(process.env.VERCEL_ENV==='production'&&args.testingCredit!==true&&args.admittedSupply!==true)throw Error('decision_geography_not_released');
   if(!/^[a-f0-9-]{36}$/.test(args.freeReportId)||!/^[a-f0-9]{64}$/.test(args.contextDigest)||!validPoint(args.origin)||['unknown','postcode_centroid'].includes(args.origin.precision))throw Error('geography_origin_unqualified');
   if(!args.key||/\s/.test(args.key))throw Error('geography_configuration_missing');
   const candidates=args.candidates.slice(0,8),candidateIds=candidates.map(c=>c.id);

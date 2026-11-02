@@ -1,3 +1,5 @@
+1 November 2026 PDF finalisation: prepare the existing Full PDF action to serve saved Decision Editions for eligible new paid reports, with the dashboard and historical exports unchanged. Production application/schema release requires explicit approval. [Scope and reused evidence](default-paid-decision-pdf-20261101.md).
+
 1 November 2026 owner testing-credit authority: implement and release the limited three-credit facility for the existing verified owner account through protected CI. Scoped account controls and Decision Edition are authorised for those credits; general public replacement, £29 price, provider ceilings and other entitlements remain unchanged. [Implementation and actual release gates](owner-testing-credits-20261101.md).
 
 1 November 2026 continuation: the owner approves one additional US$0.30 Development Full proof (total held ceiling US$3.34) and explicitly requires the paid customer dashboard to remain unchanged. Keep public replacement closed, preserve prior reports and use the separate owned report for review. [Implementation, evidence and remaining gates](decision-report-integration-20261101.md).
