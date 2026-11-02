@@ -65,6 +65,7 @@ test('independent property gate cannot be opened by a Production environment swi
   assertDecisionPreparationBudget(3040000);
   for(const amount of [3340000,undefined,-1,Number.NaN])assert.throws(()=>assertDecisionPreparationBudget(amount),/budget_unavailable/);
   assert.equal(prepareDecisionEdition({VERCEL_ENV:'production',SITEFIT_DECISION_REPORT_PROOF_ENABLED:'1'}),false);
+  assert.equal(prepareDecisionEdition({VERCEL_ENV:'production'},true),true);
   assert.equal(prepareDecisionEdition({VERCEL_ENV:'preview',SITEFIT_DECISION_REPORT_PROOF_ENABLED:'1'}),true);
   assert.equal(prepareDecisionEdition({}),false);
   const reader=fs.readFileSync('lib/report-dashboard/read.ts','utf8');

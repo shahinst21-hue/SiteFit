@@ -52,8 +52,13 @@ before_budget jsonb;before_trial jsonb;address jsonb;begin
  select * into pay from public.payments where id=payment;
  perform public.confirm_sitefit_live_payment(payment,'evt_ordinaryowner','checkout.session.completed',pay.revision,'cs_live_ordinaryowner','pi_ordinaryowner','paid','none');
  update public.fulfilment_control set enabled=true;
+ if public.read_sitefit_full_material(o,r)->>'decisionPreparationAllowed'<>'false' then raise exception 'PDF preparation admitted before supply/lease';end if;
  perform public.confirm_sitefit_sale_delivery(o,payment,'manual_zoho_pdf',repeat('c',64));
  job:=public.claim_sitefit_fulfilment();if job is null or job->>'ownerId'<>o::text then raise exception 'ordinary owner fulfilment unavailable';end if;
+ if public.read_sitefit_full_material(o,r)->>'decisionPreparationAllowed'<>'true' then raise exception 'owned paid PDF preparation not admitted';end if;
+ update public.report_fulfilment set lease_until=now()-interval '1 second' where id=(job->>'id')::uuid;
+ if public.read_sitefit_full_material(o,r)->>'decisionPreparationAllowed'<>'false' then raise exception 'expired PDF preparation lease admitted';end if;
+ update public.report_fulfilment set lease_until=now()+interval '5 minutes' where id=(job->>'id')::uuid;
  perform set_config('sitefit.full_writer','admitted',true);
  insert into public.reports(analysis_id,input_id,version,schema_version,tier,status,full_binding,full_revision,provenance)
  values(a,i,2,3,'full','draft',repeat('b',64),0,'{"checkpoint":{"dispatches":[]}}') returning id into f;

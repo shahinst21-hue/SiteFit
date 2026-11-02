@@ -542,3 +542,8 @@ The owner approves the additional US$0.30 Development Full reservation, raising 
 ## Owner-authorised three complimentary Full testing credits — 1 November 2026
 
 Exactly three credits may be provisioned once to the verified immutable Production owner identity. Reuse normal generation, economics, Decision Edition, ownership and PDF flow; atomically reserve and consume on Ready, return only on confirmed terminal failure, preserve recovery and historical access. No fake Stripe payment, revenue, public promotion, provider ceiling or price change. Minimal Production schema/release and the scoped dashboard exception are explicitly authorised. [Mechanism, checks and release status](owner-testing-credits-20261101.md).
+
+
+## Default paid Decision PDF finalisation — 1 November 2026
+
+Owner authorises backend-only integration of existing frozen Decision Edition preparation/export for new eligible paid reports. Preserve the current dashboard/download action, account/authentication/Stripe flow, £29 price, historical reports/PDFs and spending controls. Reuse accepted PR160/161 evidence; no new generation or research without a demonstrated critical need. Production release requires explicit deployment approval. See [implementation and gates](default-paid-decision-pdf-20261101.md).
