@@ -1,5 +1,11 @@
 # Default paid PDF finalisation — 1 November 2026
 
+## 2 November — direct Full Report download control
+
+The owner now authorises a scoped change to the purchased-report download control, superseding the earlier dashboard-preservation restriction for this control only. Replace the Export dropdown with one prominent “Download full report” PDF link and the description “All sections, evidence & action plan”. Remove the Full/current-page submenu and all section-specific download choices from this dashboard. Public samples and incomplete/structured previews do not advertise a complete report download. Report section navigation is unchanged.
+
+This is presentation only: the existing owned `/reports/[id]/pdf` destination, frozen Decision Edition selection, historical PDF fallback, measurement/consent handling, authentication, prices, credits and generation pipeline remain unchanged. No schema change, report generation, AI/source call or Production release is required to prepare it. Protected delivery and existing mandatory checks apply; actual verification is recorded in the delivery PR. Production activation requires separate explicit release approval.
+
 ## Scope and authority
 
 The owner's finalisation instruction authorises the minimum backend integration for future eligible paid Full Reports. The existing dashboard, navigation, report display, account, authentication, payment and £29 price remain unchanged. Production deployment and schema application require a later explicit approval. This supersedes the earlier PDF-default restriction, not the dashboard-preservation rule. No new report page or download control is added.
