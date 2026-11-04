@@ -1354,6 +1354,47 @@ details[open] > summary {
 .article-page {
   max-width: 1050px;
 }
+.blog-scroll-cta {
+  position: fixed;
+  z-index: 35;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid #e0e1e6;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px #0d14001c;
+}
+.blog-scroll-cta > div { display: grid; gap: 5px; }
+.blog-scroll-cta strong, .blog-scroll-cta .button { font-size: 14px; }
+.blog-scroll-cta small { font-size: 12px; color: var(--muted); }
+.blog-scroll-cta .button {
+  min-height: 48px;
+  justify-content: center;
+  background: #b2f34c;
+  color: #0d1400;
+}
+body:has([role="dialog"]) .blog-scroll-cta,
+body:has(dialog[open]) .blog-scroll-cta,
+body:has(.measurement-banner) .blog-scroll-cta { display: none; }
+html:has(.article-page) { scroll-padding-bottom: 150px; }
+.article-page :is(a, button, [tabindex]) { scroll-margin-bottom: 150px; }
+@media (max-width: 620px) {
+  .blog-scroll-cta {
+    width: calc(100% - 24px);
+    max-width: 430px;
+    padding: 12px;
+    gap: 0;
+  }
+  .blog-scroll-cta > div { display: none; }
+  .blog-scroll-cta .button { width: 100%; }
+}
 .article-header {
   max-width: 900px;
   margin: 12px auto 28px;
