@@ -1,5 +1,6 @@
 
 import { Icon } from "@/components/icon";
+import { BlogScrollCTA } from "@/components/blog-scroll-cta";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -27,6 +28,7 @@ export default async function Article({ params }: ArticleProps) {
   const related = await contentRepository.related(post);
   return (
     <div className="page-wrap article-page">
+      <BlogScrollCTA key={post.slug} />
       <Link href="/blog" className="text-link back-link">
         <Icon name="back"/> Back to Resources
       </Link>

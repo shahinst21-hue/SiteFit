@@ -1,5 +1,13 @@
 # Blog and editorial content architecture
 
+## Article scroll CTA — 4 November 2026
+
+Published article pages include a small client-side scroll CTA matching the Sample Report presentation. It appears only after the article header has passed above the viewport while the article remains visible. Visible in-article CTAs or the site footer suppress it; it disappears outside the article reading area. Dialogs and the measurement consent banner suppress the floating control as well. Mobile uses a full-width button within safe-area gutters; desktop includes supporting copy. The link uses the existing `/check-location` flow. Article content, structured CTA data, metadata and repository reads remain server-rendered. No new tracking or service calls are added. Local validation is recorded with delivery; no Production deployment is implied.
+
+Local browser verification confirmed desktop placement, the 390px mobile button with no horizontal document overflow, hidden state at the top and footer, reappearance on scrolling back into the article, and keyboard activation reaching `/check-location`. Observers remount for each post slug. Physical-device verification remains separate.
+
+Validation: Node 24.12.0/npm 11.6.2; `npm ci --no-audit --no-fund` completed after the initial audited install stalled. `npm run check` passed lint, strict types, all 559 tests and the production build. `npm run check:public -- http://127.0.0.1:3001` passed against the locally running production build. Hosted CI/Preview and Production delivery are separate gates.
+
 Implemented in Phase 2 on 2026-10-03 under the user's additional Blog/SEO requirement. Phase 3 adds migration-managed Blog persistence and RLS. No CMS, content-write API, agent, scheduler, upload backend or publication service is implemented.
 
 ## Current read boundary
