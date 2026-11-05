@@ -483,4 +483,475 @@ export const localPosts: BlogPost[] = [
       ],
     ),
   },
+
+  {
+    ...shared,
+    id: "choose-salon-location-london",
+    slug: "how-to-choose-a-salon-location-in-london",
+    featured: false,
+    title: "How to Choose a Salon Location in London",
+    excerpt: "A practical location checklist for hair and beauty salons, from repeat clients and easy journeys to treatment permissions and premises costs.",
+    seoTitle: "How to Choose a Salon Location in London",
+    seoDescription: "Choosing a London hair or beauty salon location? Check client journeys, nearby services, layout, permissions and costs before agreeing a lease.",
+    ogTitle: "How to Choose a Salon Location in London",
+    ogDescription: "Choosing a London hair or beauty salon location? Check client journeys, nearby services, layout, permissions and costs before agreeing a lease.",
+    category: "Choosing a location",
+    tags: ["salon", "location", "London"],
+    featuredImage: {"src": "/images/london-salon-location-checklist.webp", "width": 1200, "height": 1200},
+    featuredImageAlt: "A cup of coffee and a pastry on a café table beside a wooden chair.",
+    ogImage: {"src": "/images/london-salon-location-checklist.webp", "width": 1200, "height": 1200},
+    datePublished: "2026-11-05T00:00:00Z",
+    dateModified: "2026-11-05T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "Choosing a salon location in London starts with the people who could realistically become regular clients, the journeys they would make and whether the premises can support your services. A smart shopfront helps, but it cannot answer those questions on its own. Before you sign a lease, build a picture of an ordinary appointment, from booking to the journey home. This guide covers hair and beauty premises, including the different checks that treatment rooms can need. It is designed to help you shortlist locations and ask better questions, rather than predict bookings or replace professional advice about a particular property.",
+      [
+        {
+          heading: "Start with the salon you actually want to run",
+          paragraphs: [
+            "A neighbourhood hairdresser, a specialist colour studio and a beauty business offering longer treatments can need very different spaces. Write down your intended services, appointment lengths, opening hours and how clients will book. Include the time needed for consultations, cleaning, storage and staff breaks.",
+            "Think about the visit from your client's side. Someone popping in for a quick trim may value an easy stop on their usual route. A client booking a longer appointment may put more weight on reliable travel, comfort and privacy. It gives you a clear set of questions to investigate, and helps you avoid paying for features your business does not really need."
+          ]
+        },
+        {
+          heading: "Look for repeat customers, not just a busy pavement",
+          paragraphs: [
+            "Start with the people living and working within a realistic journey of the unit. Consider the services they can already reach, the times they might be free and whether your proposed offer has a clear place among those options. Local population figures can provide background, but they cannot tell you who wants a haircut next week or what someone will spend on a treatment.",
+            "Visit during the hours you expect to trade. A street can feel very different on a weekday morning, a late opening evening and a Saturday afternoon. Note what you can actually see without guessing people's income or preferences from their appearance. For more on that distinction, read [why high footfall does not automatically mean a good business location](https://sitefit.co.uk/blog/does-high-footfall-mean-a-good-business-location). Passing people are a useful observation; repeat bookings still need a separate case."
+          ]
+        },
+        {
+          heading: "Test the journey all the way to the door",
+          paragraphs: [
+            "An address described as near a station may still involve an awkward crossing, steps or a confusing entrance. Walk the route from the stops and streets your clients are likely to use. Check how obvious the frontage is from both directions, and whether someone arriving for the first time could find the door without ringing for directions.",
+            "Consider clients with different access needs. Look at the entrance, circulation space, toilet arrangements and the proposed route to treatment areas. Do not decide accessibility from a photograph or a quick glance at a step. Ask a suitable adviser what adjustments the premises and your service may require. If customers or staff may leave after dark, repeat the journey at that time. Record practical questions about lighting and transport rather than making unsupported claims about an area's safety."
+          ]
+        },
+        {
+          heading: "Compare competitors by service and experience",
+          paragraphs: [
+            "Put nearby salons on a simple list, then look beyond the total. Record services, advertised prices, opening hours, booking options and the experience each business presents. Check whether a supposed competitor is a barber, a specialist studio, a treatment room inside another business or a salon offering much the same service you plan to provide. Their relevance will differ.",
+            "Read recent public reviews for recurring questions about appointments, communication or convenience. Reviews are selective accounts, not a complete measure of service quality or commercial strength. Keep the date and source with each note, and avoid assuming that a gap in a menu means unmet demand. You can adapt the questions in [our guide to assessing café competition](https://sitefit.co.uk/blog/how-to-assess-competition-before-opening-a-cafe) to your own services. The useful outcome is a testable reason for clients to choose you."
+          ]
+        },
+        {
+          heading: "Check whether the layout works behind the mirror",
+          paragraphs: [
+            "A room can look generous until you account for everything needed during a working day. Sketch where consultations, washing, styling, treatments, clean supplies, used towels and staff belongings would go. Include movement between stations and the space needed to open doors or use equipment. Keep the sketch provisional until measurements and specialist requirements have been checked.",
+            "Ask about water supply, drainage, ventilation, electrical capacity and the condition of existing installations. A visible sink does not prove that the plumbing will support your layout, and a fitted treatment room does not establish that your services can operate there. Arrange appropriate surveys or inspections before relying on those features. Request written details of what the landlord includes, what belongs to the outgoing occupier and which alterations would need consent. Those answers can change an apparently attractive shortlist quickly."
+          ]
+        },
+        {
+          heading: "Confirm registration, treatment licences and permitted use",
+          paragraphs: [
+            "The checks depend on the services and the borough. [GOV.UK's hairdresser registration guidance](https://www.gov.uk/find-licences/register-a-hairdressing-business) says to check with the local council whether registration is required. Beauty treatments can bring additional requirements. For example, [Westminster's special treatment premises guidance](https://www.westminster.gov.uk/licensing/other-licence-and-business-permit-types/licensing/other-licence-and-business-permit-types/special-treatment-premises-licences) explains that certain treatments may require a premises licence, with exemptions and treatment-specific details to consider.",
+            "Send the relevant council your actual treatment list and address. Do not assume an answer from another borough applies, or that a previous salon's paperwork covers a new operator and different services. Separately, ask a planning adviser or the local planning authority to establish the lawful use and any conditions. Planning, the lease and treatment licensing answer different questions. Get each checked before the proposed services become the basis of a binding commitment."
+          ]
+        },
+        {
+          heading: "Put the whole occupancy cost beside the location",
+          paragraphs: [
+            "Compare rent with the rest of the cost of occupying the unit. Ask about business rates, service charges, insurance contributions, utilities, waste arrangements, repairs and proposed alterations. Make clear which figures are quotations, which are estimates and which are still unknown. An attractive rent is harder to judge while those other obligations remain blank.",
+            "Ask your solicitor or surveyor to explain the relevant lease terms, including repairs, alterations, rent review, breaks and what happens at the end. If you intend to rent chairs or rooms to other practitioners, explain that arrangement before agreeing terms so the necessary permissions and responsibilities can be checked. Read [our guide to business rates and service charges](https://sitefit.co.uk/blog/business-rates-and-service-charges-commercial-property-2026) for a practical document list. Keep any commercial forecast separate from verified property costs; neither should quietly stand in for the other."
+          ]
+        },
+        {
+          heading: "Consider neighbouring businesses without assuming referrals",
+          paragraphs: [
+            "A gym, café, workplace or other local business might give people a reason to visit the street. That is worth observing, but proximity does not establish a referral stream. Look at whether opening hours and customer journeys could sensibly fit together. A neighbouring business with a very different routine may have little bearing on your appointment diary.",
+            "Also notice potential friction: deliveries outside the entrance, noise reaching treatment rooms, shared access or limited storage. Ask how these arrangements work in practice and who is responsible for resolving problems. Where possible, speak to neighbouring occupiers with a few specific questions about the building and street. Treat their answers as dated accounts to follow up, rather than guarantees about your own trading conditions."
+          ]
+        },
+        {
+          heading: "Make a shortlist with clear next steps",
+          paragraphs: [
+            "Use the same headings for each address: client fit, journey, competition, layout, permissions and occupancy costs. Under each one, record what you know, what is assumed and what needs checking.",
+            "Then identify the question most likely to change your decision. It might be whether the ventilation can support a service, whether a treatment licence is needed or whether the repair obligation is manageable. Give that question an owner and a next action. [SiteFit's Free Snapshot](https://sitefit.co.uk/check-location) can help put a London address and business type into context while you organise the property checks. Use that context alongside visits and specialist advice, with unresolved premises questions still visible."
+          ]
+        },
+        {
+          heading: "Conclusion: choose a place clients can keep coming back to",
+          paragraphs: [
+            "The best salon location for your plan is one where the client journey, services, premises and obligations make sense together. A fashionable postcode or polished interior can draw your attention, but the decision becomes stronger when you can explain who the salon would serve and what still needs verification. Compare a small number of addresses consistently, walk the routes and ask for the documents behind the listing. Before committing, resolve the issues that could prevent your intended services or materially change the cost. That leaves you with a location decision grounded in your actual salon, rather than the promise of a busy street."
+          ]
+        }
+      ]
+    ),
+  },
+  {
+    ...shared,
+    id: "takeover-cafe-restaurant-premises",
+    slug: "taking-over-cafe-restaurant-premises-checklist",
+    featured: false,
+    title: "Taking Over a Café or Restaurant: Premises Checklist",
+    excerpt: "What to verify before inheriting a fitted café or restaurant, including the transaction, equipment, permissions, location and handover.",
+    seoTitle: "Taking Over a Café or Restaurant: Premises Checklist",
+    seoDescription: "Taking over café or restaurant premises? Check equipment ownership, planning, extraction, registration and lease costs before committing.",
+    ogTitle: "Taking Over a Café or Restaurant: Premises Checklist",
+    ogDescription: "Taking over café or restaurant premises? Check equipment ownership, planning, extraction, registration and lease costs before committing.",
+    category: "Before the lease",
+    tags: ["coffee-shop", "restaurant", "premises", "London"],
+    featuredImage: {"src": "/images/former-cafe-restaurant-premises.webp", "width": 1200, "height": 1200},
+    featuredImageAlt: "The frontage of a café with a green door, awning and outdoor tables.",
+    ogImage: {"src": "/images/former-cafe-restaurant-premises.webp", "width": 1200, "height": 1200},
+    datePublished: "2026-11-05T00:00:00Z",
+    dateModified: "2026-11-05T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "Taking over a former café or restaurant can look like a head start: there is already a counter, perhaps a kitchen, and a shopfront that people recognise. Before you agree terms, check what is actually included, what the premises can lawfully support and whether the location fits your own business. The previous occupier's setup is useful background, but it does not settle those questions. This checklist focuses on the property decision for London premises. Buying an existing trading business brings additional legal, financial and employment checks, which need advice specific to the transaction.",
+      [
+        {
+          heading: "Establish exactly what you are taking over",
+          paragraphs: [
+            "Ask the agent to describe the proposed transaction clearly. Are you taking a new lease of an empty unit, an assignment of an existing lease, selected equipment and fittings, or an operating business? These arrangements create different questions. A listing that mentions a premium or a fully fitted café does not tell you exactly which rights, assets or obligations would pass to you.",
+            "Request a written inventory and ask who owns each significant item. The coffee machine, extraction equipment, furniture or payment terminal might belong to someone other than the outgoing operator. Your solicitor should check the documents and any relevant contracts before you rely on the sales description. Keep property checks and business-purchase checks in view together, without assuming that agreement on one means the other is complete."
+          ]
+        },
+        {
+          heading: "Research the location as if the unit were empty",
+          paragraphs: [
+            "Existing tables can make it surprisingly easy to skip the location question. Step outside and ask who your own offer would serve, at which times, and why they would choose this address. A former breakfast café does not establish an evening market, and a previous restaurant does not prove that a smaller daytime offer will attract the same customers.",
+            "Walk the nearby streets during your intended opening hours. Look at the route from transport, the frontage and the businesses customers can already choose. Separate what you observe from anything an agent or seller tells you about trade. If useful, start with [how to choose a coffee shop location](https://sitefit.co.uk/blog/how-to-choose-a-coffee-shop-location-in-london) or [how to choose a restaurant location](https://sitefit.co.uk/blog/how-to-choose-a-restaurant-location-in-london). The fitted interior should be one part of the decision, rather than the reason to stop researching it."
+          ]
+        },
+        {
+          heading: "Treat the previous business's story carefully",
+          paragraphs: [
+            "Ask about the occupation history and why the premises are available, but avoid turning a short explanation into a firm conclusion. A closure could have several causes, and the public information may not establish any of them. A food register entry or an old review is not a trading account. Record gaps instead of filling them with a story about the street.",
+            "If turnover, profit or customer numbers form part of a business sale, have your accountant assess the underlying evidence and what it actually covers. Check the periods, business identity and whether exceptional circumstances affect the comparison. Even reliable historical figures do not forecast your results under a different menu, team, price or opening pattern. Keep a clear distinction between evidence about the outgoing business and the assumptions behind the business you intend to run."
+          ]
+        },
+        {
+          heading: "Verify planning use and the actual permissions",
+          paragraphs: [
+            "Ask for the planning history, decision notices and relevant conditions, including any restrictions on hours or equipment. The important question is whether your proposed operation is lawful at this address. Old signage, a restaurant listing or a previous tenant's menu cannot establish that. Ask the local planning authority or a qualified planning adviser to review the actual use and proposal.",
+            "In England, cafés and restaurants can fall within Class E, while hot food takeaway use is treated differently. The detail matters when cooking, delivery and on-site dining change. [Planning Portal's explanation](https://www.planningportal.co.uk/permission/common-projects/shops/i-want-to-convert-a-shop-to-a-cafe-public-house-or-takeaway/) outlines the distinction, and [our Class E guide](https://sitefit.co.uk/blog/class-e-planning-use-cafe-restaurant) explains the questions to take forward. Separately confirm landlord consent for the intended use and alterations. Planning permission and the lease do not substitute for each other."
+          ]
+        },
+        {
+          heading: "Inspect equipment before calling the fit-out a saving",
+          paragraphs: [
+            "A fitted kitchen can be valuable only if it is included, serviceable and suitable for your operation. Request maintenance records and relevant inspection documents. Ask appropriately qualified contractors to inspect the systems you would depend on, such as gas, electrical installations, ventilation and extraction. Do not treat equipment being switched on during a viewing as a condition survey.",
+            "Work through your proposed menu and layout with the relevant specialists. Ask about capacity, drainage, refrigeration, hot water and the route for replacement equipment. Identify anything needing repair, replacement or consent, then obtain quotations before calling the existing fit-out a saving. Keep assumptions visible if access or records are incomplete. An attractive collection of fittings can otherwise distract from a costly practical mismatch that only becomes obvious after you have committed to the premises."
+          ]
+        },
+        {
+          heading: "Follow the extraction route and shared-building arrangements",
+          paragraphs: [
+            "If you plan to cook, inspect more than the canopy inside the kitchen. Ask where the duct runs, where it discharges, who owns it and how maintenance access works. Have a competent specialist assess whether it is appropriate for your proposed use. Request the relevant permissions and any conditions, rather than assuming that a visible installation was approved or remains suitable.",
+            "Consider the whole building as well. Ask about flats above, shared yards, drainage, waste storage, deliveries and access outside opening hours. Find out who deals with shared systems and how costs are allocated. Neighbours' accounts may help identify questions, but they cannot prove that complaints, restrictions or defects are absent. Record what remains unverified, especially where your business depends on evening trading, cooking or regular collections."
+          ]
+        },
+        {
+          heading: "Check food registration and licensing for your operation",
+          paragraphs: [
+            "Taking over a food business requires attention to your own operator details. The [Food Standards Agency registration service](https://register.food.gov.uk/new) says that a new operator starting or taking over a food business must register with the local authority at least 28 days before trading. Ask the council how that applies to your proposed start date and operation. Do not rely on the outgoing business's registration as your own.",
+            "Where alcohol or other licensable activities are involved, ask for the full premises licence, plans and conditions, and have the proposed arrangements checked. A transfer or variation may be needed; [the Home Office provides the relevant premises licence forms](https://www.gov.uk/government/publications/premises-licence-application-forms). Check pavement seating separately too. An old outdoor table, licence summary or hygiene sticker is not evidence that every part of your proposed operation is authorised."
+          ]
+        },
+        {
+          heading: "Read the lease and the costs together",
+          paragraphs: [
+            "Ask your solicitor and surveyor to review the lease obligations alongside the physical condition. Clarify repairs, alterations, reinstatement, breaks, rent review and any conditions affecting transfer or future exit. Where an existing lease is assigned, the remaining term and its obligations deserve close attention. Do not judge the commitment only by the rent quoted in the listing.",
+            "Request the current rates information, service charge budget, available accounts and details of insurance or other landlord charges. Confirm which figures relate to the exact unit and which costs arise from your intended changes. [Our rates and service charge guide](https://sitefit.co.uk/blog/business-rates-and-service-charges-commercial-property-2026) sets out useful questions. Keep one-off takeover costs distinct from continuing occupancy costs, and ask your advisers how any premium, deposit or equipment purchase should be treated for the actual transaction."
+          ]
+        },
+        {
+          heading: "Turn the handover into a written checklist",
+          paragraphs: [
+            "Before agreeing a completion timetable, list the documents, inspections, consents and access arrangements still needed. Include meter readings, keys, alarm arrangements, equipment ownership and any agreed removal or repair work. Assign each item to a named person and record the evidence that will close it. Your solicitor should advise how important outstanding matters need to be addressed in the agreement.",
+            "Use the same approach for the location decision. [SiteFit](https://sitefit.co.uk/check-location) can help you examine a London address in the context of the business you propose, alongside your own visits and professional checks. Keep those questions separate enough to see clearly, then consider their combined effect before making your commitment."
+          ]
+        },
+        {
+          heading: "Conclusion: inherit the fittings, verify the case",
+          paragraphs: [
+            "A former café or restaurant deserves a fresh assessment against your plans. Establish what the transaction includes, test the location, inspect the systems and confirm the permissions and obligations that would apply to you. Treat the previous business's history as evidence to investigate, rather than a forecast or an explanation for every uncertainty. A sensible takeover decision is one you can support with documents, suitable advice and a practical operating plan. If a critical answer is still missing, make it a specific next check before allowing the fitted interior or a proposed opening date to drive the decision."
+          ]
+        }
+      ]
+    ),
+  },
+  {
+    ...shared,
+    id: "class-e-cafe-restaurant",
+    slug: "class-e-planning-use-cafe-restaurant",
+    featured: false,
+    title: "Class E Planning Use: Can You Open a Café or Restaurant?",
+    excerpt: "A plain-English guide to Class E, takeaway use, planning conditions and the separate lease and licensing checks for a London food business.",
+    seoTitle: "Class E Planning Use: Can You Open a Café or Restaurant?",
+    seoDescription: "Understand Class E for cafés and restaurants in England, the hot food takeaway distinction, and the property permissions to check before signing.",
+    ogTitle: "Class E Planning Use: Can You Open a Café or Restaurant?",
+    ogDescription: "Understand Class E for cafés and restaurants in England, the hot food takeaway distinction, and the property permissions to check before signing.",
+    category: "Before the lease",
+    tags: ["planning", "restaurant", "coffee-shop", "London"],
+    featuredImage: {"src": "/images/class-e-cafe-restaurant-planning.webp", "width": 1200, "height": 1200},
+    featuredImageAlt: "A café interior with woven chairs, brick walls, large windows and hanging plants.",
+    ogImage: {"src": "/images/class-e-cafe-restaurant-planning.webp", "width": 1200, "height": 1200},
+    datePublished: "2026-11-05T00:00:00Z",
+    dateModified: "2026-11-05T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "Class E can allow a café or restaurant use in England, but the label alone does not confirm that your proposed business can operate from a particular unit. The existing lawful use, planning conditions, intended activities and any building work all matter. Hot food takeaway use also raises a different planning question from food mainly consumed on the premises. Before signing a lease, describe what you actually intend to do and check it against the property's records. This guide explains that first conversation in plain English, with London premises in mind. It is general guidance, not a planning decision about your address.",
+      [
+        {
+          heading: "What does Class E mean for a café or restaurant?",
+          paragraphs: [
+            "Planning use classes group certain uses of land and buildings in England. Class E includes a range of commercial, business and service activities, including many shops, cafés and restaurants. That is why a commercial listing may describe a unit as Class E instead of using the older A1 or A3 descriptions you might still see in historical documents.",
+            "[Planning Portal explains](https://www.planningportal.co.uk/permission/common-projects/shops/i-want-to-convert-a-shop-to-a-cafe-public-house-or-takeaway/) that a change from a shop to a café within Class E will not normally need planning permission for the change of use, although associated works may need permission. The word normally matters. Ask an adviser to establish the lawful existing use and check the documents for restrictions relevant to your proposal. An agent's category is a starting point for questions, rather than a substitute for that review."
+          ]
+        },
+        {
+          heading: "Describe the operation before asking about permission",
+          paragraphs: [
+            "The council needs something more precise than 'a food business'. Write a short description covering the menu, cooking methods, intended hours, seating, takeaway orders, collections and deliveries. Mention alcohol, outdoor seating and any proposed extraction, signs or alterations. If the plan is still changing, say which elements are undecided rather than presenting guesses as a fixed specification.",
+            "For example, coffee and pastries served mainly to seated customers can raise different questions from a business built around evening hot-food deliveries. The distinction comes from the actual operation, not the name above the door. If your business will combine activities, explain the proposed balance and how the space will be used. A clear description lets a planning adviser identify the important questions before you spend money developing a layout that depends on unconfirmed assumptions."
+          ]
+        },
+        {
+          heading: "Understand the hot food takeaway distinction",
+          paragraphs: [
+            "Government guidance distinguishes cafés and restaurants within Class E from hot food takeaways, which are treated as sui generis, meaning a use outside the specified classes. [The official use-class comparison](https://www.gov.uk/government/publications/healthy-weight-environments-using-the-planning-system/addendum-hot-food-takeaways-use-in-the-new-use-class-order) describes the difference between food mainly consumed on the premises and hot food sold for consumption elsewhere. It is relevant when a proposed model relies heavily on collection or delivery.",
+            "Do not settle the classification by counting tables or choosing a particular business name. Nor should you assume a takeaway coffee automatically makes a café a hot food takeaway. Ask the local planning authority or a qualified adviser to assess the complete proposal and any mixed use. If the menu or delivery model changes during negotiations, revisit the advice; the earlier answer may have depended on a different operation."
+          ]
+        },
+        {
+          heading: "Read the planning history, not just the latest listing",
+          paragraphs: [
+            "Search the relevant borough's planning register for the exact address and any alternative descriptions of the unit. Ask for decision notices, approved plans and conditions associated with relevant permissions. Read the actual documents with suitable help, rather than treating a search-result heading as the complete planning position. Older records may use previous use-class terminology.",
+            "A condition might affect how an approved operation can run, so ask specifically about hours, extraction, deliveries and other matters central to your plan. A past permission also needs to be understood in context: which part of the building did it cover, and what was actually authorised? If the records are incomplete, record that gap. Failure to find a document online does not establish that no permission, condition or restriction exists. Your adviser can explain what further evidence is needed."
+          ]
+        },
+        {
+          heading: "Separate a change of use from building work",
+          paragraphs: [
+            "Even where a change of use does not need a planning application, works associated with it may raise separate requirements. Proposed ducts, external plant, frontage changes or alterations to a building should be assessed on their own facts. [GOV.UK's guidance on when permission is required](https://www.gov.uk/guidance/when-is-permission-required) distinguishes building operations and material changes of use within the broader planning framework.",
+            "Bring sketches and a clear equipment brief to the discussion. Ask whether the building's status, location or existing permissions affect what can be changed, and what other approvals need checking. Planning and building regulations are separate regimes; an answer under one does not resolve the other. Have the appropriate professionals assess structure, fire precautions, access and services for the proposed fit-out. This is especially useful before treating an empty shell as a straightforward conversion."
+          ]
+        },
+        {
+          heading: "Keep planning, the lease and licensing distinct",
+          paragraphs: [
+            "Landlord approval does not confirm planning permission, and a planning position does not override your lease. Ask your solicitor to check the permitted-use wording, alteration provisions and any other relevant restrictions. Explain the full operation, including deliveries, cooking, hours and outdoor areas, so the advice addresses what you intend rather than a narrower description.",
+            "Licensing and registration need separate attention too. Food-business registration belongs with the local authority; alcohol and certain other activities can require premises licensing. [The Home Office's premises licence guidance and forms](https://www.gov.uk/government/publications/premises-licence-application-forms) provide a useful starting point for that discussion. Ask about any proposed pavement seating with the relevant authority as well. Keep a separate answer for each requirement, with the document, responsible person and next action recorded."
+          ]
+        },
+        {
+          heading: "Treat an existing kitchen as a question to investigate",
+          paragraphs: [
+            "A former café or restaurant can appear ready to go, particularly when the counter and kitchen remain in place. Ask for the planning and licensing records supporting that setup, then check whether they cover the activities you propose. The presence of equipment does not establish lawful use, sufficient capacity, ownership or condition.",
+            "Ask a competent contractor to inspect extraction and other systems relevant to your menu. Check the route through the building, access for maintenance and any proposed changes. Keep technical suitability separate from planning and landlord consent, even when the same installation features in all three conversations. [Our former café and restaurant checklist](https://sitefit.co.uk/blog/taking-over-cafe-restaurant-premises-checklist) sets out a wider handover review. Reusing a previous fit-out can be practical, but only once the important assumptions have been examined for your operation."
+          ]
+        },
+        {
+          heading: "Allow the permissions position to shape negotiations",
+          paragraphs: [
+            "Before agreeing an opening date, identify which answers or approvals remain outstanding and who will obtain them. Ask your professional advisers about the implications for timing, cost and your commitment to the premises. If your proposal depends on a particular permission, make that dependency explicit while terms are being discussed.",
+            "Do not assume an application will succeed or use an advertised timetable as a guaranteed decision date. The right next step may be further records, specialist advice or a properly framed enquiry to the council. Ask your solicitor how any necessary conditions or protections should be documented. A rent-free period can help a fit-out timetable, but it does not establish that the intended use will be allowed. Commercial incentives should be considered alongside the permission risk, with neither left vague."
+          ]
+        },
+        {
+          heading: "Build a short evidence file for each unit",
+          paragraphs: [
+            "Keep the address, proposed operation, relevant plans, decision notices and adviser responses together. Mark each item as a verified document, a dated statement or an unresolved question. If someone says a restriction does not apply, ask which document or professional assessment supports that answer. This makes it easier to compare units without losing important details between viewings.",
+            "Pair that permission review with the location question. [SiteFit's Free Snapshot](https://sitefit.co.uk/check-location) helps put a London address and business type into context, while the property-specific permissions still need their own checks. A street that suits your customers is only part of the case. You also need a lawful and workable way to operate the business you have in mind, with any critical gaps identified before the commitment becomes binding."
+          ]
+        },
+        {
+          heading: "Conclusion: Class E is the opening question",
+          paragraphs: [
+            "Class E is useful context when searching for café or restaurant premises in England. The decision still depends on the actual property, its planning history and your proposed activities. Describe the operation clearly, investigate takeaway or mixed-use questions, and assess works, lease consent and licensing separately. Ask qualified advisers and the relevant council to resolve the issues that matter to your plan. Once those answers are documented, you can judge the premises on firmer ground and negotiate with a clearer understanding of what opening the doors would require."
+          ]
+        }
+      ]
+    ),
+  },
+  {
+    ...shared,
+    id: "research-commercial-catchment",
+    slug: "commercial-property-catchment-area-research",
+    featured: false,
+    title: "Commercial Property Catchment Area: How to Research a Location",
+    excerpt: "How to research the streets around a unit, interpret local data and compare customer journeys without confusing a map with future demand.",
+    seoTitle: "Commercial Property Catchment Area: How to Research a Location",
+    seoDescription: "Research a commercial property catchment area using local data, customer routes, timed visits and competing offers, with uncertainty kept visible.",
+    ogTitle: "Commercial Property Catchment Area: How to Research a Location",
+    ogDescription: "Research a commercial property catchment area using local data, customer routes, timed visits and competing offers, with uncertainty kept visible.",
+    category: "Research notes",
+    tags: ["catchment", "location", "London"],
+    featuredImage: {"src": "/images/commercial-property-catchment-research.webp", "width": 1200, "height": 1200},
+    featuredImageAlt: "A café interior looking towards the street through large front windows.",
+    ogImage: {"src": "/images/commercial-property-catchment-research.webp", "width": 1200, "height": 1200},
+    datePublished: "2026-11-05T00:00:00Z",
+    dateModified: "2026-11-05T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "A commercial property's catchment area is the area from which a business might draw customers. Researching it means looking at people, journeys, competing offers and the way the surrounding streets work at the times you intend to trade. A circle on a map is a starting point, not a customer forecast. In London, a short distance can hide a railway, an awkward crossing or a route that takes people past several alternatives. This guide shows how to build a useful picture of the area around a commercial unit before you rent or buy, while keeping observations, data and assumptions clearly identified.",
+      [
+        {
+          heading: "Begin with the customer journey you want to understand",
+          paragraphs: [
+            "Write down the business you are considering and the visit you expect someone to make. A quick coffee before work, a booked salon appointment and a restaurant dinner each involve different routines. Ask when the visit could happen, how people might travel and what would make the stop convenient. Keep those ideas as hypotheses until you have evidence to support them.",
+            "Choose a few practical questions rather than trying to collect everything about the postcode. You might ask whether the unit is visible from a station route, whether nearby residents have useful alternatives, or how an evening customer would get home. They also make it easier to recognise when a source is interesting background but does not help answer the location decision in front of you."
+          ]
+        },
+        {
+          heading: "Walk the streets before trusting a radius",
+          paragraphs: [
+            "Start at the actual entrance and walk the routes customers might use. Look for crossings, gradients, steps, railway lines, large roads and entrances that are less obvious than they appear on a map. Note where people can enter a station, shopping centre or estate; a building's nearest edge may not be its usable entrance.",
+            "Use [TfL's journey planner](https://tfl.gov.uk/plan-a-journey/) to explore journeys where relevant, then check the last part on foot. Keep a distinction between a planned route, your own timed walk and a broader catchment estimate. Each answers a slightly different question. Repeat important journeys at the hours that matter to the business, and consider different access needs. A neat boundary should help organise your enquiries, rather than imply that everyone inside it is equally likely to become a customer."
+          ]
+        },
+        {
+          heading: "Use population information as context",
+          paragraphs: [
+            "Population data can help describe the area around a unit, but check what geography and period the figures cover. A borough total may be too broad for a short walk from a shopfront. Residents, workers and visitors are also different groups, and a source covering one does not automatically describe the others.",
+            "[ONS Explore Local Statistics](https://www.ons.gov.uk/explore-local-statistics/indicators) offers local indicators with information about their sources and scope. Read those details before making comparisons. Do not turn a population count into expected customers or assume a demographic category establishes someone's preferences. Use the information to form questions you can investigate locally. For instance, a possible difference between weekday and weekend activity is a reason to revisit at both times. It is not a sales estimate hidden inside an official statistic."
+          ]
+        },
+        {
+          heading: "Observe more than one trading period",
+          paragraphs: [
+            "Build a small visiting plan around your proposed hours. Include different weekdays and a weekend period where relevant. Note the date, time, weather and anything unusual, such as roadworks, a nearby event or a disrupted transport service. These details help explain why one visit may not resemble another.",
+            "Write observations narrowly: a queue outside a particular business, an entrance that is difficult to spot, or a side street that feels quieter during the visit. If you count passers-by, state the position, duration and method. A short manual count cannot stand in for measured annual footfall, and it does not reveal buying intent. [Our high-footfall guide](https://sitefit.co.uk/blog/does-high-footfall-mean-a-good-business-location) explains why the type of journey and timing matter. Useful research becomes more honest when the limits of each observation stay attached to it."
+          ]
+        },
+        {
+          heading: "Map alternatives by what customers need",
+          paragraphs: [
+            "List nearby businesses that might meet the same need as your proposed offer. Include direct competitors and relevant alternatives: a bakery selling takeaway coffee, for example, may matter alongside dedicated coffee shops. A salon specialist may compete with businesses offering a broader treatment menu. Do not give every map pin the same commercial meaning.",
+            "Check current menus, advertised services, hours and access arrangements, then verify important details where possible. Online listings can be incomplete or out of date. Keep the source and date rather than presenting the map as a comprehensive register. For food businesses, [FSA hygiene ratings](https://ratings.food.gov.uk/) can provide a dated hygiene reference, but do not establish popularity or trading performance. The question is what choices customers can make, and whether your proposed offer has a reason to be considered among them."
+          ]
+        },
+        {
+          heading: "Look at the street's daily practicalities",
+          paragraphs: [
+            "Research needs to include the ordinary tasks behind opening the doors. Look at deliveries, waste collection, staff journeys and the route customers would take if they need step-free access. Ask about shared entrances, yards and loading arrangements. Confirm the rules with the appropriate people rather than assuming an observed delivery shows what your business will be allowed to do.",
+            "Notice nearby uses and their operating patterns without treating them as automatic benefits or problems. Offices, schools, shops and leisure businesses can create different routines. Whether those routines help your proposal needs investigation. Speak to neighbouring occupiers with specific questions about access and building arrangements. Their accounts can point to useful checks, but one person's experience does not establish that your own operation will run in the same way. Record the account and what would verify it."
+          ]
+        },
+        {
+          heading: "Check local changes without predicting their effect",
+          paragraphs: [
+            "Search the council's planning register for relevant proposals and check official transport or highway notices where a possible change could affect the unit. Separate a submitted application from an approved scheme, and an approval from work that has actually happened. Read dates and status carefully; a rendering in a letting brochure is not evidence of completed development.",
+            "Ask a practical question about each change: could it affect access, visibility, noise, delivery routes or the people visiting the street? Keep the possible effect conditional if the outcome or timetable is uncertain. Avoid converting planned homes or offices into a precise future customer number. If a change could materially alter your decision, discuss it with the appropriate adviser and obtain the relevant documents. Background regeneration claims become more useful when translated into an identifiable dependency to check."
+          ]
+        },
+        {
+          heading: "Organise findings so gaps remain visible",
+          paragraphs: [
+            "Create a short research sheet with five columns: question, observation or finding, source, date and next check. Mark estimates and inferences explicitly. If two sources disagree, retain both until you understand their different dates, definitions or coverage. A missing listing is not proof of an empty market, and an unanswered question is not a neutral result.",
+            "Put the most decision-relevant findings first. For example, an unconfirmed entrance arrangement may matter more than a large background population figure. Give each unresolved issue an action and a responsible person. [SiteFit's methodology](https://sitefit.co.uk/methodology) explains its approach to evidence and uncertainty. The aim of organising research is to make your judgement easier to inspect, including the reasons it might change, rather than to produce a confident-looking collection of numbers."
+          ]
+        },
+        {
+          heading: "Compare addresses using the same questions",
+          paragraphs: [
+            "When two units look promising, investigate the same business needs and relevant trading periods at each. Differences in research effort can otherwise look like differences between the locations. Keep route observations, customer context, alternatives and practical constraints beside each other, with uncertain answers marked consistently.",
+            "Use [our commercial property comparison guide](https://sitefit.co.uk/blog/how-to-compare-two-commercial-properties-for-your-business) to structure that review. You can also [start a Free Snapshot](https://sitefit.co.uk/check-location) for a London address and business type to put the location into context. Keep property permissions, surveys and lease advice alongside the area research; they resolve different parts of the commitment. A strong local story does not remove a premises problem, and favourable terms do not establish the right customer fit. Look at how those factors work together for your plan."
+          ]
+        },
+        {
+          heading: "Conclusion: research the journeys behind the postcode",
+          paragraphs: [
+            "Good catchment research explains who could realistically reach your business, how the area works and which assumptions still need checking. Combine local data with purposeful visits, current sources and a clear view of competing offers. Keep dates, geography and limitations with every important finding. Before committing, identify the uncertainty most likely to change your decision and take a concrete step to resolve it. You do not need a perfect map of future customers. You need a careful, practical account of why this address could fit your business, and what would make you reconsider it."
+          ]
+        }
+      ]
+    ),
+  },
+  {
+    ...shared,
+    id: "rates-service-charges-2026",
+    slug: "business-rates-and-service-charges-commercial-property-2026",
+    featured: false,
+    title: "Business Rates and Service Charges: What to Check in 2026",
+    excerpt: "A clear guide to current rates records, relief questions, service charge budgets and the lease obligations behind a commercial unit’s headline rent.",
+    seoTitle: "Business Rates and Service Charges: What to Check in 2026",
+    seoDescription: "Check business rates, the 2026 revaluation and commercial service charges. Know which documents and lease questions to review before committing.",
+    ogTitle: "Business Rates and Service Charges: What to Check in 2026",
+    ogDescription: "Check business rates, the 2026 revaluation and commercial service charges. Know which documents and lease questions to review before committing.",
+    category: "Before the lease",
+    tags: ["business-rates", "service-charges", "premises", "London"],
+    featuredImage: {"src": "/images/business-rates-service-charges-premises.webp", "width": 1200, "height": 1200},
+    featuredImageAlt: "Tables and customers inside a café, with board games on wooden shelves.",
+    ogImage: {"src": "/images/business-rates-service-charges-premises.webp", "width": 1200, "height": 1200},
+    datePublished: "2026-11-05T00:00:00Z",
+    dateModified: "2026-11-05T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "Business rates and service charges can materially change the cost of taking a commercial unit, even when the headline rent looks manageable. They are different charges, supported by different records, so ask for each separately before you commit. For premises in England, the business rates revaluation effective from April 2026 also makes old bills a poor starting assumption. This guide explains the questions to ask about a London café, restaurant or salon, and the documents that help your advisers answer them. It is a due-diligence checklist, not a calculation of your property's bill or individual tax, financial or legal advice.",
+      [
+        {
+          heading: "Keep rent, business rates and service charges separate",
+          paragraphs: [
+            "Rent is the amount agreed for occupying the premises under the lease. Business rates are a separate property tax generally charged on non-domestic premises. A service charge is a contribution towards services or costs recoverable under the lease, which may include shared-building or estate arrangements. Do not assume that one advertised figure covers all three.",
+            "Start a simple schedule with a separate line for each charge. Note the period, who supplied the figure and whether it is confirmed, estimated or unknown. Ask whether quoted amounts include any applicable VAT and have your adviser check the treatment for the actual transaction. If the agent says a cost is included, request written detail identifying which cost and the relevant lease provision. The purpose is to make the commitment legible before comparing it with another unit's apparently cheaper rent."
+          ]
+        },
+        {
+          heading: "Check the current rateable value for the exact premises",
+          paragraphs: [
+            "Use the [official business rates valuation service](https://www.gov.uk/find-business-rates) to find the relevant property entry. Check the address, description and extent against the unit being offered. Subdivision, combined units or an upstairs area can make an approximate address match misleading. Save the entry and its date, then ask about any discrepancy rather than choosing the figure that looks most favourable.",
+            "A rateable value is not the amount of the bill. Your actual liability depends on the applicable rules and circumstances, which need checking for the occupation you propose. Ask the council's business rates team how to confirm the position, and obtain specialist advice where necessary. A neighbouring business's payment or the outgoing occupier's recollection is not a substitute for establishing which rating entry and liability apply to your premises and occupation."
+          ]
+        },
+        {
+          heading: "Understand why the 2026 revaluation matters",
+          paragraphs: [
+            "[GOV.UK's revaluation guidance](https://www.gov.uk/guidance/help-with-the-2026-business-rates-revaluation) confirms that current rateable values took effect on 1 April 2026, using a valuation date of 1 April 2024. That makes the age of a rates document important. If a letting pack contains an older valuation or historic bill, ask for the current information before incorporating it into your decision.",
+            "The revaluation does not establish whether your own bill increased, decreased or stayed similar. Check the current entry, relevant year's rules and any relief or transitional arrangements with the council or your adviser. Avoid simply carrying forward last year's payment or applying a headline percentage to the quoted rent. Record which assumptions remain open, especially if the intended occupation, layout or property description differs from the circumstances shown in the documents you have received."
+          ]
+        },
+        {
+          heading: "Ask about relief without assuming eligibility",
+          paragraphs: [
+            "Reliefs and adjustments can affect the amount payable, but eligibility needs to be checked for your circumstances. [GOV.UK's business rates relief guidance](https://www.gov.uk/business-rates-relief) explains the available categories and routes to further information. Read the current rules, then ask the council what evidence it needs to assess your position. Do not assume that a seller's or previous tenant's relief continues for a new operator.",
+            "Give your adviser the relevant facts about your occupation and any other premises, rather than just asking whether a unit is 'rates free'. If a relief is important to affordability, keep it as unconfirmed until you have an appropriate answer. Ask what could change the position later and which dates or actions matter. Your cost review should show the dependency clearly, so a favourable assumption does not quietly become a guaranteed saving in negotiations."
+          ]
+        },
+        {
+          heading: "Request the service charge budget and accounts",
+          paragraphs: [
+            "Ask for the current budget, the explanation of what it covers and available accounts or reconciliations for previous periods. Confirm whether the figure in the listing is a budget, a fixed amount, a recent actual charge or an informal estimate.",
+            "Ask how the unit's share is determined and whether the building has vacant areas, changing occupancy or shared facilities that warrant further questions. The [RICS commercial service charge standard](https://www.rics.org/content/dam/ricsglobal/documents/standards/Service-charges-in-CP_2nd-ed_amended-Oct-2025.pdf), effective from 31 December 2025, provides a professional reference for transparency and management. Your lease remains central to what is recoverable. Have a solicitor or surveyor review the documents rather than treating professional guidance as a universal cap or a replacement for your agreement."
+          ]
+        },
+        {
+          heading: "Find out what is included and excluded",
+          paragraphs: [
+            "Ask for a practical breakdown: common-area cleaning, security, shared utilities, management costs, plant maintenance and other relevant services. Establish which items apply to this building and which are only examples. A generic agent description is not the same as the budget or lease for the unit you are considering.",
+            "Then ask what sits outside that charge. Insurance contributions, repairs, business waste, utilities or other obligations may be dealt with separately. Identify who arranges each service and who pays, including any shared meters or access arrangements. If an item appears in more than one document, ask your adviser how the provisions fit together. A clear breakdown is more useful than a reassuring statement that the charge is 'normal for the area'."
+          ]
+        },
+        {
+          heading: "Ask about major works and uncertain future costs",
+          paragraphs: [
+            "Request information about proposed or discussed works that could affect the building or services. Ask about the nature of the work, its current status, any available estimates and whether the proposed lease could make you responsible for a share. Keep a distinction between a confirmed project and an informal possibility. Neither should disappear from the decision file.",
+            "Ask your solicitor or surveyor to explain any reserve or sinking-fund provisions and how caps, exclusions or other negotiated terms would operate in this lease. Do not assume that a low current budget limits every later demand. Equally, an unanswered question about works is not evidence that a large bill is inevitable. Record the uncertainty, the person expected to answer it and the document or advice needed before you can judge its effect on the commitment."
+          ]
+        },
+        {
+          heading: "Put the charges beside the condition and lease terms",
+          paragraphs: [
+            "Costs make more sense when you understand the premises and your obligations. A repair provision, an alteration requirement or responsibility for a shared system can matter as much as the annual figures in a letting pack. Arrange the appropriate survey and ask your advisers to connect their findings with the lease wording.",
+            "For a former food business, [our takeover checklist](https://sitefit.co.uk/blog/taking-over-cafe-restaurant-premises-checklist) helps identify equipment, extraction and handover questions. For any unit, distinguish initial works and deposits from continuing costs. Keep proposed figures and quotations labelled, with their scope and dates. A location that looks promising still needs a manageable property commitment; a manageable commitment still needs a credible customer case. Comparing both together is useful, provided neither is used to excuse missing evidence about the other."
+          ]
+        },
+        {
+          heading: "Compare units on a consistent basis",
+          paragraphs: [
+            "Use the same period and cost headings for every shortlisted property. Record rent, the confirmed or unresolved rates position, service charges, insurance contributions and other relevant obligations. Keep differences in evidence visible: an estimate for one unit should not look as reliable as a documented figure for another. Ask your accountant to assess the wider affordability of the proposed business using appropriate assumptions.",
+            "You can use [our property comparison guide](https://sitefit.co.uk/blog/how-to-compare-two-commercial-properties-for-your-business) to organise the location questions alongside that review. [SiteFit's Free Snapshot](https://sitefit.co.uk/check-location) puts a London address and business type into context while your advisers verify property costs and terms. Before agreeing, identify which unresolved amount or obligation could change your decision most, then pursue that specific answer. A consistent comparison should make uncertainty easier to see, not hide it inside a single total."
+          ]
+        },
+        {
+          heading: "Conclusion: ask for the figures behind the rent",
+          paragraphs: [
+            "Before taking a commercial unit, establish the current rates position, understand the service charge documents and have the lease obligations reviewed. The 2026 revaluation makes document dates especially relevant, while relief eligibility and recoverable building costs need their own checks. Keep every figure attached to its period, source and level of certainty. Where an answer is missing, name the next action instead of guessing. This gives you a clearer basis for negotiations and helps you assess whether the property commitment fits the business you intend to run, before an attractive headline rent becomes an expensive assumption."
+          ]
+        }
+      ]
+    ),
+  },
 ];
