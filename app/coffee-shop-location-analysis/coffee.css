@@ -1,6 +1,6 @@
 /* Landing page uses the homepage canvas, type scale, hero and report-card vocabulary. */
-.coffee-page .coffee-hero-visual{min-width:0;margin:0;border-radius:32px;background:var(--paper);overflow:hidden}
-.coffee-page .coffee-hero-scene{position:relative;aspect-ratio:1;isolation:isolate}
+.coffee-page .coffee-hero-visual{background:var(--paper)}
+.coffee-page .coffee-hero-scene::after{content:none}
 .coffee-page .coffee-hero-architecture{object-fit:contain}
 .coffee-page .coffee-hero-reach{position:absolute;inset:0;z-index:1;pointer-events:none}
 .coffee-page .coffee-hero-reach i{position:absolute;left:51%;top:52%;width:56%;aspect-ratio:1;border:1px dashed #60646c80;border-radius:50%;background:#b2f34c08;transform:translate(-50%,-50%)}
@@ -10,7 +10,6 @@
 .coffee-page .coffee-hero-location-pin{position:absolute;width:11%;left:51%;top:47%;transform:translate(-50%,-50%);z-index:3;filter:drop-shadow(0 5px 9px #0d14001a)}
 .coffee-page .coffee-hero-scene .hero-map-card-bars i{animation:none;opacity:1}
 .coffee-page .coffee-hero-scene .hero-map-card-bars .coffee-bar-empty{background:color-mix(in srgb,var(--card-color) 15%,#eaeaea)}
-@media(max-width:767px){.coffee-page .coffee-hero-visual{border-radius:24px}}
 .coffee-page .coffee-container{width:100%;margin-inline:0}
 .coffee-page .coffee-hero-price{font-size:13px;color:var(--muted);margin-top:16px}
 .coffee-page .coffee-hero-price strong{font-weight:400;color:var(--ink)}
