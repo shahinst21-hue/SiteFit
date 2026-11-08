@@ -11,7 +11,7 @@ import {
 } from "@/components/blog-content";
 import { contentRepository } from "@/lib/content";
 import { readingMinutes, serialiseJsonLd } from "@/lib/content/safety";
-import { articleMetadata, blogPosting } from "@/lib/seo";
+import { articleBreadcrumbs, articleMetadata, blogPosting } from "@/lib/seo";
 type ArticleProps = { params: Promise<{ slug: string }> };
 export async function generateStaticParams() {
   const { posts } = await contentRepository.listPublished({ pageSize: 50 });
@@ -85,6 +85,10 @@ export default async function Article({ params }: ArticleProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serialiseJsonLd(blogPosting(post)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serialiseJsonLd(articleBreadcrumbs(post)) }}
       />
     </div>
   );
