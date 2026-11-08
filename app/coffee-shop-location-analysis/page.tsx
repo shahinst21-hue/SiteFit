@@ -2,7 +2,7 @@ import Link from "next/link";
 import { LocationEntry } from "@/components/location-entry";
 import { CoffeeLocationDemo } from "@/components/coffee-location-demo";
 import { CoffeeReportPreview } from "@/components/coffee-report-preview";
-import { HeroLocationVisual } from "@/components/hero-location-visual";
+import { CoffeeHeroVisual } from "@/components/coffee-hero-visual";
 import { createSampleReport } from "@/lib/content/public-sample-report";
 import { PricingCards } from "@/components/pricing-cards";
 import { Arrow, ButtonLink } from "@/components/ui";
@@ -45,7 +45,7 @@ export default function CoffeeShopLocationAnalysis() {
         <a className="text-link" href="#example">Explore an example first <Icon name="external" /></a>
         <p className="coffee-hero-price">Start free. Go deeper with a <strong>{formatPrice(site.pricing.fullReport)} one-off Full Report.</strong></p>
       </div>
-      <HeroLocationVisual />
+      <CoffeeHeroVisual />
     </section>
     <div className="coffee-evidence-strip"><div className="coffee-container"><span>LOCAL EVIDENCE. COMMERCIAL CONTEXT.</span><span><Icon name="demand" /> Customers</span><span><Icon name="shop" /> Competition</span><span><Icon name="access" /> Access</span><span><Icon name="cost" /> Rental evidence</span><Link href="/methodology">How we analyse <Arrow /></Link></div></div>
     <section className="coffee-section coffee-container" id="example" aria-labelledby="coffee-example-title">

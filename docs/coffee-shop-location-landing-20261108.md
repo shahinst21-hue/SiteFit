@@ -1,5 +1,9 @@
 # Coffee shop location landing page — 8 November 2026
 
+## Dedicated café artwork amendment
+
+The owner's next instruction replaces only this route's shared aerial hero with a dedicated isometric architectural café illustration in the supplied reference style. The rest of the brand-aligned page remains. See [asset, implementation and exact generation prompt](coffee-hero-art-direction-20261108.md). The homepage is not changed by this amendment.
+
 ## Owner visual correction — 8 November 2026
 
 The owner rejected the first hero illustration, schematic demo map and editorial-paper preview, and requested exact alignment with the existing homepage/brand. This supersedes the initial visual description below. The live local homepage, brand identity and neutral palette reference were inspected before revision: Drafting Gray canvas, white cards, shared system type and measured hierarchy, lime selection/CTA, and the existing category washes.
