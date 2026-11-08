@@ -24,8 +24,11 @@ for (const route of routes) {
   const data = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]));
   for (const item of data) assert.equal(item["@context"], "https://schema.org", `${route}: schema context`);
   if (route === "/") {
-    const graph = data.find(item => Array.isArray(item["@graph"]))?.["@graph"];
+    assert.equal(data.length, 1, "Homepage must contain one site identity graph");
+    const graph = data[0]?.["@graph"];
     assert.ok(graph, "Homepage graph must be in rendered HTML");
+    assert.equal(graph.length, 2, "Exactly one Website and Organization entity");
+    assert.equal(new Set(graph.map((item: Record<string, unknown>) => item["@id"])).size, 2);
     const website = graph.find((item: Record<string, unknown>) => item["@type"] === "WebSite");
     const organization = graph.find((item: Record<string, unknown>) => item["@type"] === "Organization");
     assert.equal(website.name, "SiteFit");
@@ -34,6 +37,8 @@ for (const route of routes) {
     assert.equal(website.publisher["@id"], organization["@id"]);
   }
   if (route.startsWith("/blog/")) {
+    assert.equal(data.filter(item => item["@type"] === "BlogPosting").length, 1);
+    assert.equal(data.filter(item => item["@type"] === "BreadcrumbList").length, 1);
     const article = data.find(item => item["@type"] === "BlogPosting");
     const breadcrumb = data.find(item => item["@type"] === "BreadcrumbList");
     assert.equal(article.mainEntityOfPage["@id"], canonical.href);

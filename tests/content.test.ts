@@ -15,6 +15,8 @@ import {
   pageMetadata,
   publicIndexingEnabled,
   websiteOrigin,
+  websiteStructuredData,
+  articleBreadcrumbs,
 } from "../lib/seo.ts";
 import { publicPages } from "../lib/site-config.ts";
 const post = () => structuredClone(localPosts[0]!);
@@ -148,6 +150,8 @@ test("JSON-LD is truthful and script-safe, with stable canonical and publication
 });
 test("indexing requires explicit production origin; Preview stays noindex even with SITE_URL", () => {
   assert.equal(websiteOrigin({}), "http://localhost:3000");
+  assert.equal(websiteOrigin({ VERCEL_ENV: "preview", VERCEL_URL: "temporary.vercel.app" }), "https://sitefit.co.uk");
+  assert.equal(publicIndexingEnabled({ VERCEL_ENV: "preview", VERCEL_URL: "temporary.vercel.app", SITEFIT_PUBLIC_INDEXING_ENABLED: "1" }), false);
   assert.equal(
     websiteOrigin({ VERCEL_URL: "preview.example.invalid" }),
     "https://preview.example.invalid",
@@ -172,6 +176,29 @@ test("indexing requires explicit production origin; Preview stays noindex even w
   assert.throws(() =>
     websiteOrigin({ SITE_URL: "https://example.invalid/subpath" }),
   );
+});
+
+test("site and article schemas preserve public identity, hierarchy and script safety", () => {
+  const origin = websiteOrigin({ VERCEL_ENV: "preview", VERCEL_URL: "temporary.vercel.app" });
+  const graph = websiteStructuredData(origin)["@graph"];
+  assert.equal(graph.length, 2);
+  assert.equal(new Set(graph.map(item => item["@id"])).size, 2);
+  const organization = graph.find(item => item["@type"] === "Organization")!;
+  const website = graph.find(item => item["@type"] === "WebSite")!;
+  assert.equal(website.url, "https://sitefit.co.uk/");
+  assert.equal(website.publisher?.["@id"], organization["@id"]);
+  const item = post();
+  item.title = "</script>\u2028\u2029";
+  const crumbs = articleBreadcrumbs(item, origin);
+  const encoded = serialiseJsonLd(crumbs);
+  assert.ok(!encoded.includes("</script>"));
+  assert.deepEqual(JSON.parse(encoded), crumbs);
+  assert.deepEqual(crumbs.itemListElement.map(crumb => crumb.position), [1, 2]);
+  assert.equal(crumbs.itemListElement[0].item, "https://sitefit.co.uk/blog");
+  assert.equal(crumbs.itemListElement[1].item, articleCanonical(item, origin));
+  assert.equal(crumbs.itemListElement[1].name, item.title);
+  item.canonicalUrl = "https://example.invalid/original";
+  assert.equal(articleBreadcrumbs(item, origin).itemListElement[1].item, item.canonicalUrl);
 });
 test("public pages have unique titles, descriptions and route-specific canonical metadata", () => {
   assert.equal(

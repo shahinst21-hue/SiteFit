@@ -42,7 +42,7 @@ The existing live browser session displayed one `gtag/js?id=AW-18530541419` scri
 
 - No original SEOptimer report was supplied; only the owner's summaries of analytics detection, strong performance and backlink weakness are available. Findings above come from current code and bounded public reads.
 - Login, checker, legal, account, report, payment, auth, internal and development indexing policies are retained. Robots is a crawler hint, not access control; existing authorisation remains responsible for private data.
-- Sitemap inclusion, redirects, query behaviour, origin configuration and public route URLs are unchanged. The new coffee landing page is local branch work and was absent from the currently deployed sitemap; that is a release difference, not a live sitemap defect to fix through configuration.
+- Sitemap inclusion, redirects, query behaviour and public route URLs are unchanged. The final review below corrects only the Preview metadata-origin fallback. The new coffee landing page is separate branch work and was absent from the currently deployed sitemap; that is a release difference, not a live sitemap defect to fix through configuration.
 - No SoftwareApplication offers/ratings or LocalBusiness markup: additional product/offer assertions add little value here and risk misrepresenting the service. No invented reviews, business addresses, social profiles, search action or ratings.
 - No cosmetic title-length optimisation, visible heading rewrites, content generation, menu changes or speculative performance changes.
 
@@ -64,7 +64,17 @@ Node 24.12.0/npm 11.6.2 match repository requirements. Initial root `npm ci --no
 
 The nested temporary workspace produced a Next.js multiple-lockfile/root-inference warning; builds and HTTP checks passed. No configuration change was made to silence a temporary-workspace warning. Test fixtures cover postcode validation, Free Snapshot/report ownership and generation, authentication, payment admission, PDF/replay and consent/deduplication. No live sign-in, report generation, paid API, Stripe transaction, receiving-side analytics or Google structured-data acceptance is claimed. Search Console and hosted delivery checks remain distinct.
 
-Protected delivery uses a separate branch from `origin/main`; the five-file SEO change excludes the unrelated coffee landing-page commits and working-tree changes. No merge or Production deployment is part of this task. Hosted CI status is reported separately with the PR.
+Protected delivery uses a separate branch from `origin/main`; the initial five-file SEO change excludes the unrelated coffee landing-page commits and working-tree changes. Hosted CI status is reported separately with the PR.
+
+## Final independent review and correction
+
+The owner subsequently authorised final review and protected merge of PR171, conditional on correct Preview output, green exact-head CI and no automatic Production release. Review of every changed file found no Coffee Shop landing page, application-service, dependency, schema or styling change. Existing BlogPosting remains one per article; the homepage graph has one WebSite and one Organization, and article breadcrumbs occur once. All new values use the existing safe serializer.
+
+Actual hosted Preview review of initial head `1ab87ce` found a pre-existing SEO-origin fallback issue: without `SITE_URL`, canonical URLs and schema IDs pointed to the temporary Vercel deployment. Preview was correctly noindex/nofollow. Corrected the metadata-only fallback for `VERCEL_ENV=preview` to the established `https://sitefit.co.uk` public origin. Explicit configured `SITE_URL`, Local behaviour, Production behaviour, authentication/payment origins and indexing gates are unchanged. This helper is used only by metadata, schema, robots' sitemap reference and sitemap URLs.
+
+Added direct regressions for Preview public-origin/noindex separation, graph identity, breadcrumb hierarchy/canonical override and script-safe serialization. Tightened the HTTP verifier to reject duplicate site/article schemas and connected it to the existing CI smoke step. The final diff therefore adds only the existing content-test file and CI verification line to the original five files. Eleven focused content/indexing tests passed. Updated exact-head CI and hosted Preview verification are separate required gates before merge.
+
+`vercel.json` on main and this branch explicitly sets `git.deploymentEnabled.main=false`; the sole GitHub workflow runs validation and contains no deployment/promotion command. This matches [Vercel's branch deployment configuration](https://vercel.com/docs/project-configuration/git-configuration). No hosting setting, indexing switch or protection is changed. A read-only Vercel project API attempt returned HTTP 403, so no live private-settings readback is claimed; the versioned branch deployment prohibition remains the merge safety control. No Production deployment/promotion is authorised by this review.
 
 ## Remaining recommendations — not implemented
 

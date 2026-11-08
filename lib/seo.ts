@@ -8,7 +8,9 @@ export function websiteOrigin(
 ) {
   const candidate =
     env.SITE_URL ||
-    (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:3000");
+    // Preview remains noindex, but its metadata identifies the public site.
+    (env.VERCEL_ENV === "preview" ? "https://sitefit.co.uk" :
+      env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:3000");
   const url = new URL(candidate);
   if (
     (url.protocol !== "https:" &&
