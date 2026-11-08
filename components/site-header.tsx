@@ -17,6 +17,7 @@ const links: {href: string; label: string; icon: IconName; detail: string}[] = [
   {href: "/sample-report", label: "Sample Report", icon: "document", detail: "Explore the Full Report format"},
 ];
 const resources: {href: string; label: string; icon: IconName; detail: string}[] = [
+  {href: "/coffee-shop-location-analysis", label: "Coffee Shop Location Analysis", icon: "coffee", detail: "Explore a location before opening your café"},
   {href: "/blog", label: "Guides & articles", icon: "document", detail: "Practical reading before the lease"},
   {href: "/methodology", label: "Methodology", icon: "shield", detail: "How evidence informs a decision"},
   {href: "/contact", label: "Help & contact", icon: "help", detail: "Find the right next step"},

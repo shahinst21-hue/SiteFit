@@ -87,7 +87,9 @@ for (const path of paths) {
   if (path === "/coffee-shop-location-analysis") {
     assert.match(html, /COFFEE SHOP LOCATION ANALYSIS/);
     assert.match(html, /Census 2021/);
-    assert.match(html, /Saved walking areas/);
+    assert.match(html, /Interactive sample/);
+    assert.match(html, /Customers, competition &amp; walking catchments/);
+    assert.doesNotMatch(html, /Illustrative café scenario/);
     assert.match(html, /OpenStreetMap contributors/);
     assert.match(html, /Residential Catchment/);
     assert.doesNotMatch(html, /ILLUSTRATIVE STREETS|SITEFIT \/ FIELD NOTES|coffee-orbit/);
