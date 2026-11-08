@@ -1,5 +1,19 @@
 # Coffee shop location landing page — 8 November 2026
 
+## Owner visual correction — 8 November 2026
+
+The owner rejected the first hero illustration, schematic demo map and editorial-paper preview, and requested exact alignment with the existing homepage/brand. This supersedes the initial visual description below. The live local homepage, brand identity and neutral palette reference were inspected before revision: Drafting Gray canvas, white cards, shared system type and measured hierarchy, lime selection/CTA, and the existing category washes.
+
+The route now uses `page-wrap home-page`, the unchanged shared `HeroLocationVisual`, standard `home-hero`/`hero-content` typography and postcode form. The custom Field Notes illustration, orbit drawing, olive palette and highlighted display text are removed. The surrounding page uses shared brand variables and the homepage card/section spacing.
+
+The interactive example uses the actual existing `ReportMap` with saved, already-public sample walking polygons and the renderer's OpenStreetMap street tiles. Selection displays the matching saved 5/10/15-minute layer. Property and generic transport point layers are withheld; no invented café markers or schematic streets remain. Attribution and map-failure behaviour are inherited. This does not collect new walking geometry, query business records, call an analytical provider or generate a report. `ReportMap`'s input type is narrowed to the five fields its existing implementation already reads; its rendering and customer behaviour are unchanged.
+
+`CoffeeReportPreview` uses the homepage's `home-preview` toolbar, official wordmark, score-card/scale presentation and real sample Residential Catchment 98 / Competition Headroom 50 values from `createSampleReport()`. Its links open the corresponding public sample sections. The existing Conditional shortlist and unresolved permission/layout conditions are retained. No private customer projection, exact property identity or paid PDF is imported. The initial quoted-paper mockup is removed.
+
+Revision validation: `npm run check` passed lint, strict types, **560/560 tests** and the production build. The final built server passed public checks (22 public pages/articles, 28 internal paths, 20 same-origin scripts), measurement and marketing checks. Desktop comparison confirmed the same #eaeaea canvas and 61.2px/600/-2.142px hero heading at 1440px as the existing homepage. Browser review covered 360/390/768/1440px without document overflow, actual street tiles loaded, 15-minute selection by Enter with 39,769 residents/40 category records, and working zoom/reset. The report preview was visually inspected at desktop/390px. The browser connection failed during final review and was recovered by resetting the automation session; no site, security or service setting was changed. The temporary development-port consent save failed; the final localhost:3007 build successfully saved rejection and dismissed the banner. Physical-phone and genuine 200% zoom checks remain unverified. No Production deployment or merge is authorised.
+
+## Initial implementation record
+
 ## Authority and implementation
 
 The owner requested implementation of `/coffee-shop-location-analysis` in the existing application. This is a marketing route, not new report-generation authority. Production deployment is explicitly excluded. Current Greater London analytical coverage remains authoritative; UK address acceptance is not described as UK-wide analysis.
