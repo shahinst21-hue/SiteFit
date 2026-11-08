@@ -45,6 +45,37 @@ export function absoluteUrl(path: string, origin = websiteOrigin()) {
   return new URL(path, origin).toString();
 }
 
+export function websiteStructuredData(origin = websiteOrigin()) {
+  const url = absoluteUrl("/", origin);
+  const organization = `${url}#organization`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "Organization", "@id": organization, name: site.name, url },
+      {
+        "@type": "WebSite",
+        "@id": `${url}#website`,
+        name: site.name,
+        url,
+        description: site.tagline,
+        inLanguage: "en-GB",
+        publisher: { "@id": organization },
+      },
+    ],
+  };
+}
+
+export function articleBreadcrumbs(post: BlogPost, origin = websiteOrigin()) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Resources", item: absoluteUrl("/blog", origin) },
+      { "@type": "ListItem", position: 2, name: post.title, item: articleCanonical(post, origin) },
+    ],
+  };
+}
+
 export function pageMetadata(path: string): Metadata {
   const page = publicPages.find((page) => page.path === path);
   if (!page) throw new Error("Missing public page metadata");

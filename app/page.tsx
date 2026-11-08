@@ -5,7 +5,8 @@ import { HomeReportPreview } from "@/components/home-report-preview";
 import { HeroLocationVisual } from "@/components/hero-location-visual";
 import { LocationEntry } from "@/components/location-entry";
 import { Icon, type IconName } from "@/components/icon";
-import { pageMetadata } from "@/lib/seo";
+import { pageMetadata, websiteStructuredData } from "@/lib/seo";
+import { serialiseJsonLd } from "@/lib/content/safety";
 export const metadata = pageMetadata("/");
 const checks: [IconName, string, string, string][] = [
   [
@@ -48,6 +49,10 @@ const checks: [IconName, string, string, string][] = [
 export default function Home() {
   return (
     <div className="page-wrap home-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serialiseJsonLd(websiteStructuredData()) }}
+      />
       <section className="home-hero">
         <div className="hero-content">
           <p className="eyebrow">COMMERCIAL LOCATION ANALYSIS · LONDON</p>
