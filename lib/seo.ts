@@ -8,7 +8,9 @@ export function websiteOrigin(
 ) {
   const candidate =
     env.SITE_URL ||
-    (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:3000");
+    // Preview remains noindex, but its metadata identifies the public site.
+    (env.VERCEL_ENV === "preview" ? "https://sitefit.co.uk" :
+      env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://localhost:3000");
   const url = new URL(candidate);
   if (
     (url.protocol !== "https:" &&
@@ -43,6 +45,37 @@ export function publicRobotsRules(env: Record<string, string | undefined> = proc
 }
 export function absoluteUrl(path: string, origin = websiteOrigin()) {
   return new URL(path, origin).toString();
+}
+
+export function websiteStructuredData(origin = websiteOrigin()) {
+  const url = absoluteUrl("/", origin);
+  const organization = `${url}#organization`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "Organization", "@id": organization, name: site.name, url },
+      {
+        "@type": "WebSite",
+        "@id": `${url}#website`,
+        name: site.name,
+        url,
+        description: site.tagline,
+        inLanguage: "en-GB",
+        publisher: { "@id": organization },
+      },
+    ],
+  };
+}
+
+export function articleBreadcrumbs(post: BlogPost, origin = websiteOrigin()) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Resources", item: absoluteUrl("/blog", origin) },
+      { "@type": "ListItem", position: 2, name: post.title, item: articleCanonical(post, origin) },
+    ],
+  };
 }
 
 export function pageMetadata(path: string): Metadata {

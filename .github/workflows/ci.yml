@@ -52,6 +52,7 @@ jobs:
             sleep 1
           done
           npm run check:public -- http://127.0.0.1:3000 noindex
+          node scripts/check-seo.ts http://127.0.0.1:3000
           npm run check:marketing
           npm run check:measurement
           node scripts/check-snapshot-ui.ts http://127.0.0.1:3000 production
