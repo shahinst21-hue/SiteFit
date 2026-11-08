@@ -4,7 +4,8 @@ import {Icon} from './icon';
 import type {Dashboard} from '@/lib/report-dashboard/model';
 import {readableNumber} from '@/lib/report-dashboard/display';
 import {mapViewport} from '@/lib/report-dashboard/geography';
-export function ReportMap({report,competition=false,selectedOperator,onInspectOperator}:{report:Dashboard;competition?:boolean;selectedOperator?:string|null;onInspectOperator?:(id:string|null)=>void}) {
+export type ReportMapData = Pick<Dashboard,'map'|'transport'|'operators'|'presentationMode'|'spatialNotices'>;
+export function ReportMap({report,competition=false,selectedOperator,onInspectOperator}:{report:ReportMapData;competition?:boolean;selectedOperator?:string|null;onInspectOperator?:(id:string|null)=>void}) {
   const [zoom,setZoom]=useState(1),[offset,setOffset]=useState<[number,number]>([0,0]),[hidden,setHidden]=useState<string[]>([]),[selected,setSelected]=useState<string|null>(null);
   const [tilesFailed,setTilesFailed]=useState(false);
   const labelId=useId(),map=report.map;

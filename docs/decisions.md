@@ -1,5 +1,9 @@
 1 November 2026 owner-authorised report upgrade: implement a separate paid decision edition, with conditional economics and bounded additional research up to £10. Preserve historical Ready reports, security, price and all existing financial ceilings. No new subscription, Production deployment or migration is authorised. This instruction supersedes earlier report/economics separation only for this new paid edition. Method and delivery: [decision-report-method-20261101.md](decision-report-method-20261101.md).
 
+## 8 November — Coffee shop SEO landing page
+
+The owner authorises implementation of `/coffee-shop-location-analysis` as a premium marketing/conversion page using existing report assets, labelled demonstrations and the existing Free Snapshot/£29 purchase journey. Greater London analytical coverage, historical reports, authentication, payments and execution controls remain unchanged. No Production deployment is authorised. [Implementation and verification](coffee-shop-location-landing-20261108.md).
+
 ## 30 October — Source-based Sample revision
 
 Owner requests no sample export, no scoring formulas/baselines, the original report maps and tab UI/UX, a redesigned hero and hidden selected-business/property identity. Reuse the selected case's saved evidence; synthetic additions belong to Sample dataset provenance, never fabricated scientific source records. Repeated fictional/illustrative banners are removed in favour of the Sample Report context. The actual selected Free Snapshot is Ready; no paid Full edition or confirmed payment exists. The existing Full execution/entitlement fence is retained, and no new Full run is claimed. [Current implementation and actual gates](sample-report-redesign.md).

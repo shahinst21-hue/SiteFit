@@ -1,0 +1,68 @@
+import Link from "next/link";
+import { LocationEntry } from "@/components/location-entry";
+import { CoffeeLocationDemo } from "@/components/coffee-location-demo";
+import { CoffeeReportPreview } from "@/components/coffee-report-preview";
+import { CoffeeHeroVisual } from "@/components/coffee-hero-visual";
+import { createSampleReport } from "@/lib/content/public-sample-report";
+import { PricingCards } from "@/components/pricing-cards";
+import { Arrow, ButtonLink } from "@/components/ui";
+import { Icon } from "@/components/icon";
+import { absoluteUrl, pageMetadata } from "@/lib/seo";
+import { formatPrice, site } from "@/lib/site-config";
+import sample from "@/lib/content/sample-source-v2.json";
+import "./coffee.css";
+
+export const metadata = pageMetadata("/coffee-shop-location-analysis");
+const questions = [
+  ["01", "Who could become a regular?", "Look beyond a busy pavement. Resident profiles and workplace context help you question whether the area suits a morning takeaway, a neighbourhood café or a sit-in offer.", "Customer context", "customer-context"],
+  ["02", "Why would they choose you?", "Nearby cafés can signal an established coffee offer and a crowded choice. Compare their formats, prices, seating and hours on a visit; a low listing count alone does not prove a gap.", "Competition & alternatives", "competition"],
+  ["03", "Will people pass your door?", "Stations and amenities provide context, but the last few minutes matter. Walk the actual approach, check crossings and sightlines, and observe your frontage at the times you plan to trade.", "Access & local activity", "access"],
+  ["04", "Does the unit work on its terms?", "Review available rental benchmarks alongside premises constraints. Ask for the actual rent, service charge, rates and repair obligations. An area estimate is not your lease or an affordability verdict.", "Premises & rental context", "rental-context"],
+];
+const faqs = [
+  ["What is coffee shop location analysis?", "It is a structured review of a proposed café site: the surrounding customers, competing offers, access, premises and commercial terms. SiteFit brings available evidence and its limitations together so you can identify strengths, risks and the questions to resolve before committing to a lease."],
+  ["How do I choose the best location to open a coffee shop?", "Start with your concept and trading hours. Compare who lives and works nearby, the offers already serving them and how people reach the frontage. Then verify permissions, a workable layout and the full occupancy costs. Visit at several trading periods. The best site for a fast morning takeaway may differ from one for a neighbourhood café with seating."],
+  ["Does SiteFit cover the whole UK?", "You can enter a UK postcode, but SiteFit’s current location analysis covers Greater London: all 32 boroughs and the City of London. Address acceptance does not imply analytical coverage. The existing checker confirms whether the selected property is eligible."],
+  ["Can SiteFit tell me how many coffees I will sell?", "No. Resident estimates, nearby businesses and transport activity are context, not measured frontage footfall or predicted sales. SiteFit does not give a probability of business success. Validate buying behaviour in person and build your own financial assumptions using verified costs."],
+  [`What does the ${formatPrice(site.pricing.fullReport)} Full Report add?`, `The ${formatPrice(site.pricing.fullReport)} one-off Full Report goes deeper into the case for and against the location across eight sections. It includes business-specific interpretation, available rental evidence, ranked checks and inspectable sources, with account access and a PDF download. Start with the Free Snapshot and review the purchase details before paying. There is no subscription.`],
+  ["Can I use it for coffee shop market research before signing a lease?", "Yes, as one part of your research. Use the findings to plan viewings, compare nearby offers and ask better questions of the agent or landlord. SiteFit does not replace a survey, legal advice, planning confirmation or a financial appraisal. Unavailable evidence remains unknown rather than being filled in."],
+  ["Are the example figures for my postcode?", "The example explores a London coffee shop from our Sample Report. Enter your postcode and select your property to get a Free Snapshot tailored to the location you are considering."],
+  ["Do I need an account or card for the Free Snapshot?", "No account or payment card is needed to start a Free Snapshot. Choose the property and Coffee Shop in the existing checker. A verified account is required before purchasing the Full Report so you can return to your saved report."],
+];
+
+export default function CoffeeShopLocationAnalysis() {
+  const report = createSampleReport();
+  const publicMap = report.map ? {...report.map, layers:report.map.layers.filter(layer=>layer.kind==='catchment')} : null;
+  const structuredData = {"@context":"https://schema.org","@type":"WebPage",name:"Coffee Shop Location Analysis in London | SiteFit",url:absoluteUrl('/coffee-shop-location-analysis'),description:"Explore customer context, competition and rental evidence before committing to a London café location.",about:{"@type":"Service",name:"SiteFit coffee shop location analysis",serviceType:"Commercial location analysis",areaServed:{"@type":"AdministrativeArea",name:"Greater London"},provider:{"@type":"Organization",name:site.name,url:absoluteUrl('/')}},breadcrumb:{"@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"Home",item:absoluteUrl('/')},{"@type":"ListItem",position:2,name:"Coffee shop location analysis",item:absoluteUrl('/coffee-shop-location-analysis')}]}};
+  return <div className="page-wrap home-page coffee-page">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structuredData).replace(/</g,'\\u003c')}} />
+    <section className="home-hero">
+      <div className="hero-content">
+        <p className="eyebrow">COFFEE SHOP LOCATION ANALYSIS · LONDON</p>
+        <h1>Is this the right location for your coffee shop?</h1>
+        <p className="hero-copy">Explore nearby customers, competing cafés and the checks that matter before you sign. Start with a Free Snapshot of the London property you are considering.</p>
+        <LocationEntry />
+        <a className="text-link" href="#example">Explore an example first <Icon name="external" /></a>
+        <p className="coffee-hero-price">Start free. Go deeper with a <strong>{formatPrice(site.pricing.fullReport)} one-off Full Report.</strong></p>
+      </div>
+      <CoffeeHeroVisual />
+    </section>
+    <div className="coffee-evidence-strip"><div className="coffee-container"><span>LOCAL EVIDENCE. COMMERCIAL CONTEXT.</span><span><Icon name="demand" /> Customers</span><span><Icon name="shop" /> Competition</span><span><Icon name="access" /> Access</span><span><Icon name="cost" /> Rental evidence</span><Link href="/methodology">How we analyse <Arrow /></Link></div></div>
+    <section className="coffee-section coffee-container" id="example" aria-labelledby="coffee-example-title">
+      <div className="coffee-section-heading"><div><p className="eyebrow">EXPLORE BEFORE YOU COMMIT</p><h2 id="coffee-example-title">One neighbourhood.<br />A more informed decision.</h2></div><p>Change the walking area to see the trade-off: a larger residential catchment also brings more coffee alternatives. Then ask what that means for your concept.</p></div>
+      <CoffeeLocationDemo map={publicMap} walks={sample.populations.map((residents,i)=>({minutes:[5,10,15][i],residents,competitors:sample.counts[i]}))}/>
+      <div className="coffee-takeaway"><span className="coffee-small-label">THE DECISION IS IN THE DETAIL</span><p>A promising catchment earns a closer look.<br /><strong>It does not settle the lease decision.</strong></p><a href="#checklist" className="text-link">What to check next <Arrow /></a></div>
+    </section>
+    <section className="coffee-dark"><div className="coffee-container coffee-dark-grid"><div><p className="eyebrow">WHY LOCATION MATTERS</p><h2>A busy street is<br />only the beginning.</h2></div><div><p>The same street can work very differently for a grab-and-go espresso bar and a café built around longer visits. A nearby station may help access, but it cannot tell you how many people pass your door or stop for coffee.</p><p>Coffee shop site selection means testing the fit between your offer, the neighbourhood and the unit. SiteFit helps you turn scattered location evidence into focused questions before the commitment becomes expensive.</p></div></div></section>
+    <section className="coffee-section coffee-container" aria-labelledby="coffee-analysis-title"><div className="coffee-section-heading"><div><p className="eyebrow">WHAT SITEFIT ANALYSES</p><h2 id="coffee-analysis-title">Four questions.<br />A stronger shortlist.</h2></div><p>Useful café location analysis connects the evidence to how you plan to trade. Explore the detail behind each question in our Sample Report.</p></div><div className="coffee-questions">{questions.map(([n,title,text,label,section])=><article key={n}><span className={`icon-disc ${["green","amber","blue","violet"][Number(n)-1]}`}><Icon name={(["demand","shop","access","cost"] as const)[Number(n)-1]} /></span><h3>{title}</h3><p>{text}</p><Link href={`/sample-report?section=${section}`} className="text-link">{label} <Arrow /></Link></article>)}</div></section>
+    <section className="sample-teaser home-report-showcase coffee-report-section" aria-labelledby="coffee-report-title">
+      <div className="teaser-copy"><p className="eyebrow">FROM EVIDENCE TO YOUR NEXT MOVE</p><h2 id="coffee-report-title">Explore the report.<br />See what matters.</h2><p>Customer context, competition, access and lease questions in one interactive report. Review the evidence, then use the ranked checks to prepare for your next viewing.</p><ButtonLink href="/sample-report">Explore the Sample Report</ButtonLink></div>
+      <CoffeeReportPreview report={report} />
+    </section>
+    <section className="coffee-section coffee-container" id="checklist"><div className="coffee-section-heading"><div><p className="eyebrow">TAKE THE ANALYSIS TO THE VIEWING</p><h2>Before you sign,<br />close the evidence gaps.</h2></div><p>Good coffee shop market research combines desk evidence with a site visit. Use this practical checklist alongside your report.</p></div><ol className="coffee-checklist">{[["Visit at your trading times", "Observe weekday mornings, lunchtime and a weekend. Count people at the actual frontage and note which side of the road they use."],["Try the competing offers", "Buy a coffee. Compare service speed, food, seats, prices and opening hours. Check whether listings still represent trading businesses."],["Check the space and permissions", "Obtain a measured plan. Verify permitted use, access, utilities, toilets and any restrictions with the appropriate advisers."],["Get the whole occupancy cost", "Request written rent, service charges, rates, deposit, repair liabilities and fit-out terms. Review these with your solicitor and financial adviser."]].map(([title,text],i)=><li key={title}><span>0{i+1}</span><div><h3>{title}</h3><p>{text}</p></div></li>)}</ol></section>
+    <section className="coffee-section coffee-container"><div className="coffee-section-heading"><div><p className="eyebrow">YOUR LOCATION, THREE STEPS</p><h2>From postcode<br />to a clearer next step.</h2></div></div><ol className="coffee-steps">{[["Find the premises", "Enter the postcode, select the commercial property and choose Coffee Shop. Current analysis covers Greater London."],["Read your Free Snapshot", "Get an initial view of the location, supporting context and the questions worth investigating. No account or card needed."],[`Go deeper for ${formatPrice(site.pricing.fullReport)}`, "If you want the Full Report, verify your account and follow the existing purchase journey. Review the evidence, actions and downloadable PDF."]].map(([title,text],i)=><li key={title}><span>0{i+1}</span><h3>{title}</h3><p>{text}</p></li>)}</ol></section>
+    <section className="coffee-section coffee-container" id="pricing"><div className="coffee-section-heading"><div><p className="eyebrow">A SMALL STEP BEFORE A BIG COMMITMENT</p><h2>Start free.<br />Choose the depth you need.</h2></div><p>Check the location first. The Full Report is {formatPrice(site.pricing.fullReport)} for one report, with no subscription. <Link className="text-link" href="/pricing">Compare all features <Arrow /></Link></p></div><PricingCards /></section>
+    <section className="coffee-section coffee-container coffee-faq" aria-labelledby="coffee-faq-title"><div><p className="eyebrow">BEFORE YOU START</p><h2 id="coffee-faq-title">Your questions,<br />answered.</h2><Link className="text-link" href="/contact">Ask us a question <Arrow /></Link></div><div>{faqs.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div></section>
+    <section className="coffee-final coffee-container"><p className="eyebrow">YOUR NEXT CAFÉ DESERVES A CLOSER LOOK</p><h2>Before the keys.<br />Before the commitment.<br /><span>Check the location.</span></h2><ButtonLink href="/check-location">Start your Free Snapshot</ButtonLink><p>Greater London · No account or card to start</p><Link className="text-link" href="/blog">Explore the SiteFit Journal <Arrow /></Link></section>
+  </div>;
+}
