@@ -9,8 +9,8 @@ const topics = [
 ] as const;
 
 export function CoffeeHeroVisual() {
-  return <figure className="coffee-hero-visual" aria-label="Illustrative café location analysis. The architectural scene and interface are fictional, not a property assessment.">
-    <div className="coffee-hero-scene">
+  return <figure className="hero-location-visual coffee-hero-visual" aria-label="Illustrative café location analysis. The architectural scene and interface are fictional, not a property assessment.">
+    <div className="hero-location-scene coffee-hero-scene">
       <Image src="/images/coffee-shop-isometric.webp" alt="" fill priority
         sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1099px) calc(100vw - 64px), 50vw"
         className="coffee-hero-architecture" />
