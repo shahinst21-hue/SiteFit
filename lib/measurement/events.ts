@@ -20,6 +20,7 @@ export function safeJourney(name:JourneyEvent,business?:string,reason?:string){
 /** Never export page query/hash, report IDs, user titles, addresses or raw referrers. */
 export function safePage(path:string){
  if(path==='/')return {path:'/',title:'SiteFit'};
+ if(path==='/coffee-shop-location-analysis')return {path,title:'Coffee shop location analysis | SiteFit'};
  if(path==='/check-location')return {path,title:'Check a location'};
  if(path.startsWith('/snapshots/'))return {path:'/snapshots/view',title:'Free Snapshot'};
  if(path.startsWith('/reports/'))return {path:'/reports/view',title:'Full Report'};

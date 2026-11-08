@@ -8,6 +8,12 @@ import {verifiedCommerce} from '../lib/measurement/commerce.ts';
 import type Stripe from 'stripe';
 const config={enabled:true,installation:'G-TESTONLY',analytics:'G-TESTONLY',environment:'test' as const,origin:'https://sitefit.co.uk',since:'2000-01-01T00:00:00Z'};
 const yes=()=>consentChoice({analytics:true,advertising:true,personalization:false});const no=()=>consentChoice({analytics:false,advertising:false,personalization:false});
+test('coffee landing attribution keeps its public route without leaking postcode queries',()=>{
+ const page=safePage('/coffee-shop-location-analysis');
+ assert.equal(page.path,'/coffee-shop-location-analysis');
+ assert.equal(page.title,'Coffee shop location analysis | SiteFit');
+ assert.deepEqual(safePage('/coffee-shop-location-analysis?postcode=SW1A%201AA'),{path:'/other',title:'SiteFit'});
+});
 test('new visits and failed withdrawals need a decision independently of measurement enablement',()=>{
  for(const enabled of [false,true]){
   const runtime=new GoogleMeasurement({...config,enabled},{command:()=>{},load:()=>assert.fail('No tag before consent'),get:()=>null,set:()=>{},disable:()=>{}});

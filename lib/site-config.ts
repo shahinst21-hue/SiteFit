@@ -15,6 +15,11 @@ export function formatPrice(minorUnits: number) {
 
 export const publicPages = [
   {
+    path: "/coffee-shop-location-analysis",
+    title: "Coffee Shop Location Analysis in London",
+    description: "Choosing where to open a coffee shop? Explore customers, competition and rental context for a London property. Start with a Free Snapshot; go deeper for £29.",
+  },
+  {
     path: "/",
     title: "Check a commercial location before you commit",
     description:

@@ -84,6 +84,22 @@ for (const path of paths) {
     assert.doesNotMatch(html,/class="dw-download"|Download sample PDF|How this sample score is calculated/);
     for(const path of ['/samples/public-sample-v1/full-report.pdf','/samples/public-sample-v1/customer-context.pdf'])assert.equal((await get(path)).status,404,'Sample exports must not be available');
   }
+  if (path === "/coffee-shop-location-analysis") {
+    assert.match(html, /COFFEE SHOP LOCATION ANALYSIS/);
+    assert.match(html, /Census 2021/);
+    assert.match(html, /Schematic map/);
+    assert.match(html, /id="hero-address"/);
+    assert.match(html, /href="\/check-location"/);
+    const renderedText = html.replace(/<!--[\s\S]*?-->/g, "");
+    assert.match(renderedText, /5 min walk/);
+    assert.match(renderedText, /15 min walk/);
+    const raw = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1];
+    assert.ok(raw, "Coffee landing page needs server-rendered structured data");
+    const data = JSON.parse(raw);
+    assert.equal(data["@type"], "WebPage");
+    assert.equal(data.about.areaServed.name, "Greater London");
+    assert.equal(data.breadcrumb.itemListElement.length, 2);
+  }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   assert.ok(title && !titles.has(title), `${path}: missing or duplicate title`);
   titles.add(title);

@@ -22,7 +22,7 @@ export function LocationEntryProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const clear = useCallback(() => setAddress(""), []);
   useEffect(() => {
-    if (pathname !== "/" && pathname !== "/check-location") clear();
+    if (!["/", "/check-location", "/coffee-shop-location-analysis"].includes(pathname)) clear();
   }, [pathname, clear]);
   return (
     <EntryContext.Provider value={{ address, setAddress, clear }}>
