@@ -35,6 +35,5 @@ export function CoffeeHeroVisual() {
         <Icon name="down" className="hero-map-card-arrow" />
       </div>)}
     </div>
-    <figcaption>Illustrative café scenario · Example indicators, not property scores</figcaption>
   </figure>;
 }

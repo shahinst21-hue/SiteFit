@@ -10,8 +10,7 @@
 .coffee-page .coffee-hero-location-pin{position:absolute;width:11%;left:51%;top:47%;transform:translate(-50%,-50%);z-index:3;filter:drop-shadow(0 5px 9px #0d14001a)}
 .coffee-page .coffee-hero-scene .hero-map-card-bars i{animation:none;opacity:1}
 .coffee-page .coffee-hero-scene .hero-map-card-bars .coffee-bar-empty{background:color-mix(in srgb,var(--card-color) 15%,#eaeaea)}
-.coffee-page .coffee-hero-visual figcaption{font-size:10px;color:var(--muted);text-align:center;padding:0 12px 16px}
-@media(max-width:767px){.coffee-page .coffee-hero-visual{border-radius:24px}.coffee-page .coffee-hero-visual figcaption{font-size:9px;padding-bottom:12px}}
+@media(max-width:767px){.coffee-page .coffee-hero-visual{border-radius:24px}}
 .coffee-page .coffee-container{width:100%;margin-inline:0}
 .coffee-page .coffee-hero-price{font-size:13px;color:var(--muted);margin-top:16px}
 .coffee-page .coffee-hero-price strong{font-weight:400;color:var(--ink)}

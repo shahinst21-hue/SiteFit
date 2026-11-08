@@ -24,7 +24,7 @@ export function CoffeeLocationDemo({ walks, map }: { walks: Walk[]; map: ReportM
   };
   return <div className="home-preview coffee-demo">
     <div className="home-preview-toolbar"><Wordmark /><span className="badge">Interactive sample</span></div>
-    <div className="coffee-demo-toolbar"><div><span className="icon-disc amber"><Icon name="coffee" /></span><div><h3>London coffee shop</h3><p>Public sample data · Saved walking areas</p></div></div><Link className="text-link" href="/sample-report?section=customer-context">Open full sample <Arrow /></Link></div>
+    <div className="coffee-demo-toolbar"><div><span className="icon-disc amber"><Icon name="coffee" /></span><div><h3>London coffee shop</h3><p>Customers, competition & walking catchments</p></div></div><Link className="text-link" href="/sample-report?section=customer-context">Open full sample <Arrow /></Link></div>
     <div className="coffee-demo-grid">
       <div className="coffee-map-panel">
         <div className="coffee-walk-controls" role="group" aria-label="Choose example walking area">

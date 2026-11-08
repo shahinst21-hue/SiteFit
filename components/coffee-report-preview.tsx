@@ -19,7 +19,7 @@ export function CoffeeReportPreview({ report }: {
     <header className="home-preview-toolbar"><Wordmark /><span className="badge">Sample Report</span></header>
     <div className="home-preview-title">
       <span className="icon-disc amber"><Icon name="coffee" /></span>
-      <div><h3>London coffee shop</h3><p>Anonymised public sample · Coffee shop analysis</p></div>
+      <div><h3>London coffee shop</h3><p>Your next viewing, better informed</p></div>
     </div>
     <div className="coffee-report-workspace">
       <nav aria-label="Explore sample report sections">
@@ -46,6 +46,6 @@ export function CoffeeReportPreview({ report }: {
         <div className="coffee-report-next"><span className="icon-disc"><Icon name="shield" /></span><div><p className="eyebrow">NEXT CHECK</p><p>Confirm permitted use and a measured layout before choosing the café format.</p></div></div>
       </div>
     </div>
-    <p className="coffee-report-disclosure">Public sample scores describe separate evidence dimensions, not business success or an overall location rating. <Link href="/sample-report?section=appendix">Sources & limitations <Icon name="arrow" /></Link></p>
+    <p className="coffee-report-disclosure"><Link href="/sample-report?section=appendix">Sources & limitations <Icon name="arrow" /></Link></p>
   </div>;
 }

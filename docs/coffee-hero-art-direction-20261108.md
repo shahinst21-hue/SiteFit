@@ -15,3 +15,5 @@ Create a NEW dedicated website hero background illustration for SiteFit coffee-s
 The generator returned 1254px square despite the requested sizing phrase; intrinsic dimensions above describe the actual delivered asset. Validation and protected delivery receipts are recorded separately. No Production deployment is authorised.
 
 Latest refinement validation: ESLint and isolated matching-lockfile strict type checks passed. Browser review at 1440px and 390px confirmed four contained cards, distinct filled-segment counts, and no horizontal page overflow. The local preview remains on port 3010. Required CI is verified separately after pushing; no Production deployment.
+
+Owner marketing-copy refinement: removed the hero disclosure caption and repetitive public/anonymised wording from preview subtitles. Retained concise Interactive sample / Sample Report labels, source details behind the existing disclosure, and factual accessible illustration context. Reworded the postcode FAQ as a positive invitation to check the visitor’s own property. Report evidence, values and generation flows are unchanged.
