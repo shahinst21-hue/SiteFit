@@ -10,6 +10,7 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { normalisePostcode } from "@/lib/addresses/model";
+import { trackJourney } from "@/lib/measurement/client";
 import { Arrow } from "./ui";
 import { Icon } from "./icon";
 const EntryContext = createContext<{
@@ -40,8 +41,10 @@ export function LocationEntry() {
   const [error, setError] = useState("");
   const entry = useLocationEntry();
   const router = useRouter();
+  const pathname = usePathname();
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    trackJourney("start_free_clicked", pathname === "/coffee-shop-location-analysis" ? "coffee" : "home");
     const postcode = normalisePostcode(value);
     if (!postcode) {
       setError("Enter a valid UK postcode.");
