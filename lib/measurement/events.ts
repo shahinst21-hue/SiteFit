@@ -1,4 +1,4 @@
-export const journeyEvents=['landing_view','check_started','address_selected','business_selected','free_analysis_started','free_analysis_completed','free_report_viewed','report_viewed','full_analysis_completed','pdf_downloaded','analysis_failed'] as const;
+export const journeyEvents=['landing_view','check_started','start_free_clicked','property_search_started','address_selected','business_selected','free_analysis_started','free_analysis_completed','free_report_viewed','full_report_offer_viewed','checkout_attempted','report_viewed','full_analysis_completed','pdf_downloaded','analysis_failed'] as const;
 export type JourneyEvent=typeof journeyEvents[number];
 export const sampleEvents=['sample_section_viewed','sample_cta_clicked'] as const;
 export type SampleEvent=typeof sampleEvents[number];

@@ -54,6 +54,23 @@ test('URLs, free text, identities and raw event parameters cannot enter the admi
  assert.deepEqual(safeJourney('business_selected','email@example.com'),{event:'business_selected',params:{}});assert.throws(()=>safeJourney('purchase' as never));
  const payload=ecommerce({total:1734,tax:134,shipping:0,currency:'gbp',transaction:'sf_00000000-0000-4000-8000-000000000001'});assert.equal(payload.value,16);assert.equal(admittedEcommerce(payload,'purchase').tax,1.34);assert.throws(()=>admittedEcommerce({...payload,email:'private'},'purchase'));assert.throws(()=>ecommerce({total:10,tax:11,shipping:0,currency:'GBP'}));assert.throws(()=>ecommerce({total:10,tax:0,shipping:0,currency:'USD'}));
 });
+
+test('acquisition milestones are consented, deduplicated and export no property input',()=>{
+ const calls:unknown[][]=[];
+ const runtime=new GoogleMeasurement(config,{command:(...args)=>calls.push(args),load:(_id,ready)=>ready(),get:()=>null,set:()=>{},disable:()=>{}});
+ const events=['start_free_clicked','property_search_started','full_report_offer_viewed','checkout_attempted'] as const;
+ for(const event of events)runtime.track(event,'milestone');
+ assert.equal(calls.filter(call=>call[0]==='event').length,0);
+ runtime.update(yes());
+ for(const event of events){
+  runtime.track(event,'milestone','private-address','private-property');
+  runtime.track(event,'milestone');
+  assert.deepEqual(calls.filter(call=>call[1]===event),[['event',event,{deployment_environment:'test',debug_mode:true,transport_type:'beacon',send_to:config.analytics}]]);
+ }
+ runtime.update(no());
+ runtime.track('checkout_attempted','after-withdrawal');
+ assert.equal(calls.filter(call=>call[1]==='checkout_attempted').length,1);
+});
 test('attribution is bounded/allowlisted, consented and private; unknown query data is dropped',()=>{
  const a=acquisitionFromSearch('?utm_source=google&utm_campaign=campaign-01&utm_term=owner%40example.com&email=secret&gclid=Abc_1234');assert.deepEqual(a,{utm_source:'google',utm_campaign:'campaign-01',gclid:'Abc_1234'});assert.deepEqual(acquisition(a,no()),{});assert.equal(acquisition(a,{analytics:true,advertising:false}).gclid,undefined);assert.deepEqual(acquisitionFromSearch('?utm_campaign=campaign-01&utm_campaign=campaign-02'),{});assert.deepEqual(parseAcquisition(JSON.stringify({at:0,values:a}),yes()),{});
 });

@@ -1,5 +1,6 @@
 "use client";
 import {MeasurementMilestone} from './measurement-milestone';
+import {trackJourney} from '@/lib/measurement/client';
 import {CompetitionHeadroom,CompetitionDetails} from './competition-headroom';
 import Link from "next/link";
 import {ResidentialCatchment,ResidentialDetails} from "./residential-catchment";
@@ -101,8 +102,17 @@ export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measu
  const factors=(Object.keys(factorTitles) as FactorId[]).map(id=>snapshot.factors.find(f=>f.id===id)??{id,title:factorTitles[id],status:'unavailable',meaning:'no_basis',quality:'insufficient',finding:null,reason:null,question:null,metrics:[],score:null,details:null,implication:null,scoreNote:null} as SnapshotFactor);
  const funding=creditAction?'1 testing credit · No payment required':`${price} one time · No subscription`;
  const purchase=(position:'brief'|'primary'|'mobile')=>position==='brief'&&purchaseTerms?purchaseTerms:creditAction??<><button type="button" className="button button-primary" data-testid={`snapshot-purchase-${position}`} data-snapshot-event="full_click" data-snapshot-detail={position} disabled={demo||!purchaseReport} onClick={()=>unlock('premises')}>Get the Full Report · {price}</button>{!purchaseReport&&<p role="status">Full Report purchasing is not open yet.</p>}</>;
- useEffect(()=>{if(openPurchase&&purchaseReport&&!dialog.current?.open)dialog.current?.showModal();},[openPurchase,purchaseReport]);
- function unlock(id:UnlockId){setSelected(id);dialog.current?.showModal();}
+ useEffect(()=>{
+  if(!openPurchase||!purchaseReport||!dialog.current||dialog.current.open)return;
+  dialog.current.showModal();
+  if(!demo&&!creditAction)trackJourney('full_report_offer_viewed','snapshot-offer');
+ },[openPurchase,purchaseReport,demo,creditAction]);
+ function unlock(id:UnlockId){
+  setSelected(id);
+  if(!dialog.current||dialog.current.open)return;
+  dialog.current.showModal();
+  if(!demo&&purchaseReport&&!creditAction)trackJourney('full_report_offer_viewed','snapshot-offer');
+ }
  return <div className="page-wrap sf-snapshot sf-decision-page" data-snapshot-root>
   {reportId&&!demo&&<MeasurementMilestone event="free_report_viewed" id={reportId} business={snapshot.businessType} at={snapshot.generatedAt??undefined}/>}
   {measurement&&reportId&&!demo&&<SnapshotMeasurement reportId={reportId}/>}
