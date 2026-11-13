@@ -1,5 +1,11 @@
 # SiteFit growth readiness improvements · 13 November 2026
 
+## Offer readiness follow-up
+
+The auto-open effect could run before the consent bootstrap installed the analytics runtime, or before the installed runtime's Google tag finished loading. Both paths previously discarded the event. The Snapshot page now supplies a boolean derived from validated saved consent. An early offer can retain a single in-memory flag, subject to the existing local withdrawal block and the bootstrap's current effective consent. The runtime flushes after tag readiness using the existing per-tab deduplication. Withdrawal, denied consent and failed bootstrap discard the flag. The event carries its existing fixed fields and retains no report or property identifiers.
+
+Controlled regression coverage exercises delayed and immediate readiness, denial, withdrawal and regrant, repeated calls, and a blocked loader. The synthetic offer fixture is confined to development and protected Preview. This entry records the fix in progress. Check and deployment evidence will follow below.
+
 ## Production release review
 
 **Release stopped before merge.** [Draft PR #173](https://github.com/shahinst21-hue/SiteFit/pull/173) was opened against protected main `b27fce768301e2874b07afd0caff40b727d3b968`. The candidate code tested on Vercel was `2cae0e5da9e23bf85b02185c87ef2207946534a7`. Production still serves the previous commit `b27fce768301e2874b07afd0caff40b727d3b968` (Vercel deployment `dpl_9vytErW1ogkmTi4f8jUheWxYDcAB`). No promotion or Production configuration change was made.
@@ -10,7 +16,7 @@
 - **Material event bug:** the initial automatic Full Report dialog open calls `trackJourney` from a mount effect. On a fresh document, the consent bootstrap and Google loader are asynchronous. The runtime discards the call before readiness even with saved consent. The effect does not retry when measurement becomes ready, and the existing test exercises the runtime after readiness only. Before release, record the still-visible automatic offer when consented measurement becomes ready, retaining per-tab deduplication and the demo/credit exclusions. Verify that path in a consented Preview rehearsal, plus the other three events and their payloads.
 - Vercel API returned HTTP 403 for project and environment readback. The authenticated dashboard remained available. A release still needs a verified deployment path, followed by exact commit readback and safe Production event smoke tests. GA4 receipt, hosted event deduplication and post-deployment smoke remain pending.
 
-Implemented locally on `codex/growth-readiness`, based on production revision `b27fce7`. The Search Console submission and crawl requests were performed on the live domain property. The code is ready for review and a separate release decision. The [acquisition plan](organic-customer-acquisition-plan.md) is registered with all stages Not Started.
+Implemented locally on `codex/growth-readiness`, based on production revision `b27fce7`. The Search Console submission and crawl requests were performed on the live domain property. The code is ready for review and a separate release decision. See the [acquisition plan](organic-customer-acquisition-plan.md) for current stage status.
 
 ## 1. Search Console and indexing
 

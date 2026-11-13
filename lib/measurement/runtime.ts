@@ -4,6 +4,7 @@ import {safeJourney,safePage,safeSample,admittedEcommerce,type JourneyEvent,type
 import type {Acquisition} from './attribution.ts';
 export type TagSink={command:(...args:unknown[])=>void;load:(id:string,ready:()=>void)=>void;get:(key:string)=>string|null;set:(key:string,value:string)=>void;disable:(value:boolean)=>void};
 export class GoogleMeasurement {
+ private pendingOffer=false;
  private consent:Consent|null=null;private injected=false;private ready=false;private seen=new Set<string>();private page='/';private campaign:Acquisition={};
  private config:MeasurementConfig;private sink:TagSink;private clock:()=>number;
  constructor(config:MeasurementConfig,sink:TagSink,clock:()=>number=Date.now){this.config=config;this.sink=sink;this.clock=clock;sink.command('consent','default',googleConsent(deniedConsent()));}
@@ -12,6 +13,7 @@ export class GoogleMeasurement {
  allowed(){return this.enabled()&&canMeasure(this.consent)&&this.ready;}
  update(c:Consent|null,campaign:Acquisition={}){
   this.consent=c;this.campaign=this.config.sharedDebug?{}:campaign;this.sink.disable(!this.enabled()||!canMeasure(c));
+  if(!this.enabled()||!canMeasure(c))this.pendingOffer=false;
   if(!this.enabled())return;
   // Defaults precede all config/event commands. A shared destination is never partially unblocked.
   this.sink.command('consent','update',{...googleConsent(c??deniedConsent()),...(this.config.sharedDebug?{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'}:{})});
@@ -21,7 +23,18 @@ export class GoogleMeasurement {
   this.sink.command('js',new Date());
   this.sink.command('set',{send_page_view:false,page_location:this.location(page.path),page_title:page.title,page_referrer:'',allow_google_signals:false,allow_ad_personalization_signals:this.config.sharedDebug?false:c!.personalization,ads_data_redaction:this.config.sharedDebug||!c!.advertising,url_passthrough:false,...(this.config.environment==='test'?{debug_mode:true}:{}),...(this.config.sharedDebug?{cookie_prefix:'sf_preview',cookie_domain:'none'}:{})});
   this.sink.command('config',this.config.installation,{send_page_view:false,allow_enhanced_conversions:false,cookie_expires:15552000,...(this.config.environment==='test'?{debug_mode:true}:{}),...(this.config.sharedDebug?{cookie_prefix:'sf_preview',cookie_domain:'none',campaign_source:'sitefit-preview-test',campaign_medium:'debug',ignore_referrer:true}:{})});
-  this.sink.load(this.config.installation,()=>{this.ready=true;if(this.allowed())this.navigate(this.page);});
+  this.sink.load(this.config.installation,()=>{this.ready=true;
+   const pending=this.pendingOffer;
+   this.pendingOffer=false;
+   if(this.allowed()){
+    this.navigate(this.page);
+    if(pending)this.offerViewed();
+   }});
+ }
+ offerViewed(){
+  if(!this.enabled()||!canMeasure(this.consent))return;
+  if(!this.ready){this.pendingOffer=true;return;}
+  this.track('full_report_offer_viewed','snapshot-offer');
  }
  private location(path:string){const url=new URL(path,this.config.origin);for(const [k,v] of Object.entries(this.campaign))url.searchParams.set(k,v);return url.href;}
  private once(key:string){if(this.seen.has(key)||this.seen.size>=1000)return false;try{if(this.sink.get('sf-ga:'+key))return false;this.sink.set('sf-ga:'+key,'1');}catch{/* Storage denial still prevents duplicates in this document. */}this.seen.add(key);return true;}

@@ -102,3 +102,92 @@ test('existing-property debugging expires, stays on its approved Preview branch,
  for(const c of calls.filter(c=>c[0]==='event'))assert.equal((c[2] as {send_to:string}).send_to,googleDestinations.analytics);
  clock=Date.parse(debug.debugUntil!)+1;assert.equal(runtime.allowed(),false);const count=calls.length;runtime.navigate('/pricing');runtime.update(yes());assert.equal(calls.length,count);
 });
+
+test('offer opened before the tag loads is delivered once after readiness',()=>{
+ const {runtime,events,ready,stored}=offerHarness();
+ runtime.update(yes());
+ runtime.offerViewed();
+ runtime.offerViewed();
+ assert.equal(events().length,0);
+ assert.equal(stored.has('sf-ga:full_report_offer_viewed:snapshot-offer'),false);
+ runtime.update(yes());
+ ready();
+ ready();
+ runtime.offerViewed();
+ assert.deepEqual(events(),[['event','full_report_offer_viewed',{deployment_environment:'test',debug_mode:true,transport_type:'beacon',send_to:config.analytics}]]);
+});
+
+test('offer opened after readiness is sent once immediately',()=>{
+ const {runtime,events,ready}=offerHarness();
+ runtime.update(yes());
+ ready();
+ runtime.offerViewed();
+ runtime.offerViewed();
+ assert.equal(events().length,1);
+});
+
+test('denied, withdrawn and blocked offer tracking never backfills an event',()=>{
+ const denied=offerHarness();
+ denied.runtime.update(no());
+ denied.runtime.offerViewed();
+ denied.runtime.update(yes());
+ denied.ready();
+ assert.equal(denied.events().length,0);
+ const revoked=offerHarness();
+ revoked.runtime.update(yes());
+ revoked.runtime.offerViewed();
+ revoked.runtime.update(no());
+ revoked.runtime.update(yes());
+ revoked.ready();
+ assert.equal(revoked.events().length,0);
+ const blocked=offerHarness();
+ blocked.runtime.update(yes());
+ for(let i=0;i<10;i++)blocked.runtime.offerViewed();
+ assert.equal(blocked.events().length,0);
+ assert.equal(blocked.stored.size,0);
+});
+
+test('offer bootstrap admits only a saved, unblocked choice and drains once',async()=>{
+ const {trackOfferViewed,installMeasurement,settleOfferBootstrap,discardEarlyOffer}=await import('../lib/measurement/client.ts');
+ const originalWindow=Object.getOwnPropertyDescriptor(globalThis,'window');
+ const originalStorage=Object.getOwnPropertyDescriptor(globalThis,'localStorage');
+ let blocked=false;
+ Object.defineProperty(globalThis,'window',{configurable:true,value:new EventTarget()});
+ Object.defineProperty(globalThis,'localStorage',{configurable:true,value:{getItem:()=>blocked?'1':null}});
+ try{
+  const {runtime,events,ready}=offerHarness();
+  trackOfferViewed(false);
+  blocked=true;
+  trackOfferViewed(true);
+  blocked=false;
+  trackOfferViewed(true);
+  discardEarlyOffer();
+  trackOfferViewed(true);
+  installMeasurement(runtime);
+  runtime.update(yes());
+  settleOfferBootstrap();
+  settleOfferBootstrap();
+  assert.equal(events().length,0);
+  ready();
+  assert.equal(events().length,1);
+ }finally{
+  if(originalWindow)Object.defineProperty(globalThis,'window',originalWindow);
+  else Reflect.deleteProperty(globalThis,'window');
+  if(originalStorage)Object.defineProperty(globalThis,'localStorage',originalStorage);
+  else Reflect.deleteProperty(globalThis,'localStorage');
+ }
+});
+
+function offerHarness(){
+ const calls:unknown[][]=[];
+ const stored=new Map<string,string>();
+ let onReady=()=>{};
+ const runtime=new GoogleMeasurement(config,{
+  command:(...args)=>calls.push(args),
+  load:(_id,ready)=>{onReady=ready;},
+  get:key=>stored.get(key)??null,
+  set:(key,value)=>{stored.set(key,value);},
+  disable:()=>{},
+ });
+ return {runtime,stored,ready:()=>onReady(),events:()=>calls.filter(call=>call[0]==='event'&&call[1]==='full_report_offer_viewed')};
+}

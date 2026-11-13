@@ -1,6 +1,6 @@
 "use client";
 import {MeasurementMilestone} from './measurement-milestone';
-import {trackJourney} from '@/lib/measurement/client';
+import {trackOfferViewed} from '@/lib/measurement/client';
 import {CompetitionHeadroom,CompetitionDetails} from './competition-headroom';
 import Link from "next/link";
 import {ResidentialCatchment,ResidentialDetails} from "./residential-catchment";
@@ -91,8 +91,8 @@ function LocationContext({snapshot,context,reportId}:{snapshot:SnapshotView;cont
   {context&&<details className="sf-map-source-notices"><summary>Map sources, dates & scope</summary><p>{map.description}</p>{context.foodDate&&<p>FSA retrieved {date(context.foodDate)}. Source observation date and coordinate accuracy unspecified.</p>}{context.foodGroups.length>0&&<p>FSA native categories: {context.foodGroups.map(g=>`${g.label}: ${g.count}`).join('; ')}. These are register classifications, not a direct-competitor assessment.</p>}{context.notices.map(n=><p key={n}>{n}</p>)}</details>}
  </section>;
 }
-export function FreeSnapshot({report,research,context,purchaseReport,reportId,measurement=false,purchaseTerms,creditAction,openPurchase=false}:{creditAction?:ReactNode;purchaseTerms?:ReactNode;openPurchase?:boolean;report:FreeProjection;research?:AdvisorResearch[];context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){return <FreeSnapshotView snapshot={{...snapshotFromStored(report),advisorResearch:research}} context={context} purchaseReport={purchaseReport} reportId={reportId} measurement={measurement} purchaseTerms={purchaseTerms} creditAction={creditAction} openPurchase={openPurchase}/>;}
-export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measurement=false,purchaseTerms,creditAction,openPurchase=false}:{creditAction?:ReactNode;purchaseTerms?:ReactNode;openPurchase?:boolean;snapshot:SnapshotView;context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){
+export function FreeSnapshot({report,research,context,purchaseReport,reportId,measurement=false,purchaseTerms,creditAction,openPurchase=false,savedOfferConsent=false}:{savedOfferConsent?:boolean;creditAction?:ReactNode;purchaseTerms?:ReactNode;openPurchase?:boolean;report:FreeProjection;research?:AdvisorResearch[];context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){return <FreeSnapshotView snapshot={{...snapshotFromStored(report),advisorResearch:research}} context={context} purchaseReport={purchaseReport} reportId={reportId} measurement={measurement} purchaseTerms={purchaseTerms} creditAction={creditAction} openPurchase={openPurchase} savedOfferConsent={savedOfferConsent}/>;}
+export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measurement=false,purchaseTerms,creditAction,openPurchase=false,savedOfferConsent=false}:{savedOfferConsent?:boolean;creditAction?:ReactNode;purchaseTerms?:ReactNode;openPurchase?:boolean;snapshot:SnapshotView;context?:SnapshotContext|null;purchaseReport?:string;reportId?:string;measurement?:boolean}){
  const [selected,setSelected]=useState<UnlockId>('premises');
  const dialog=useRef<HTMLDialogElement>(null);
  const price=formatPrice(site.pricing.fullReport),demo=snapshot.mode==='demo',checks=decisionChecks(snapshot),advice=snapshot.advisor;
@@ -105,13 +105,13 @@ export function FreeSnapshotView({snapshot,context,purchaseReport,reportId,measu
  useEffect(()=>{
   if(!openPurchase||!purchaseReport||!dialog.current||dialog.current.open)return;
   dialog.current.showModal();
-  if(!demo&&!creditAction)trackJourney('full_report_offer_viewed','snapshot-offer');
- },[openPurchase,purchaseReport,demo,creditAction]);
+  if(!demo&&!creditAction)trackOfferViewed(savedOfferConsent);
+ },[openPurchase,purchaseReport,demo,creditAction,savedOfferConsent]);
  function unlock(id:UnlockId){
   setSelected(id);
   if(!dialog.current||dialog.current.open)return;
   dialog.current.showModal();
-  if(!demo&&purchaseReport&&!creditAction)trackJourney('full_report_offer_viewed','snapshot-offer');
+  if(!demo&&purchaseReport&&!creditAction)trackOfferViewed(savedOfferConsent);
  }
  return <div className="page-wrap sf-snapshot sf-decision-page" data-snapshot-root>
   {reportId&&!demo&&<MeasurementMilestone event="free_report_viewed" id={reportId} business={snapshot.businessType} at={snapshot.generatedAt??undefined}/>}

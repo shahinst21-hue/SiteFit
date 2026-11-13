@@ -1,6 +1,21 @@
 import type {JourneyEvent,Ecommerce,SampleEvent,SamplePlacement,SampleTarget} from './events.ts';
 import type {GoogleMeasurement} from './runtime.ts';
 let runtime:GoogleMeasurement|null=null;
+let pendingOffer=false;
+let bootstrapFailed=false;
+export function trackOfferViewed(savedConsent:boolean){
+ if(runtime){runtime.offerViewed();return;}
+ // Only the server-read consent for this document can admit an early offer.
+ if(!savedConsent||bootstrapFailed)return;
+ try{if(localStorage.getItem('sitefit_measurement_block')!=='1')pendingOffer=true;}catch{/* Fail closed. */}
+}
+export function settleOfferBootstrap(){
+ const pending=pendingOffer;
+ pendingOffer=false;
+ if(pending)runtime?.offerViewed();
+}
+export function discardEarlyOffer(){pendingOffer=false;}
+export function failOfferBootstrap(){bootstrapFailed=true;discardEarlyOffer();}
 export function installMeasurement(value:GoogleMeasurement){runtime=value;window.dispatchEvent(new Event('sitefit-google-ready'));}
 export const measurementAllowed=()=>runtime?.allowed()===true;
 export const measurementEligible=(at?:string)=>runtime?.eligible(at)===true;
