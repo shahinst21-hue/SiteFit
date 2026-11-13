@@ -954,4 +954,199 @@ export const localPosts: BlogPost[] = [
       ]
     ),
   },
+  {
+    ...shared,
+    id: "best-london-areas-coffee-shops-cafes-bars-delis",
+    slug: "best-london-areas-coffee-shops-cafes-bars-delis",
+    title: "Best London Areas for Coffee Shops, Cafés, Bars and Delis",
+    seoTitle: "Best London Areas for Coffee Shops, Cafés, Bars and Delis",
+    excerpt: "Compare London neighbourhoods for coffee shops, cafés, bars and delis, with practical checks on customers, trading hours, premises and costs.",
+    seoDescription: "Compare London neighbourhoods for coffee shops, cafés, bars and delis, with practical checks on customers, trading hours, premises and costs.",
+    ogTitle: "Best London Areas for Coffee Shops, Cafés, Bars and Delis",
+    ogDescription: "Compare London neighbourhoods for coffee shops, cafés, bars and delis, with practical checks on customers, trading hours, premises and costs.",
+    featuredImage: {"src":"/images/london-hospitality-area-guide.webp","width":1200,"height":1200},
+    ogImage: {"src":"/images/london-hospitality-area-guide.webp","width":1200,"height":1200},
+    featuredImageAlt: "Café frontage with a pavement menu board, a wooden bench and plants in the window.",
+    featured: false,
+    category: "Choosing a location",
+    tags: ["coffee-shop","location","London"],
+    datePublished: "2026-11-13T00:00:00Z",
+    dateModified: "2026-11-13T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "The best London area for a coffee shop, café, bar or deli depends on when people would visit and what they would come for. A morning espresso counter needs a quick stop on an existing journey. A neighbourhood café needs people with time to sit down. A bar needs a credible evening trade and premises that can support it. A deli may rely on people coming back for their weekly shop. This guide gives you a London shortlist for each format and shows how to narrow it to properties worth viewing. The examples are starting points for research, rather than recommendations to sign a lease in a particular neighbourhood.",
+      [
+        {
+          "heading": "Start with the visit you want to earn",
+          "paragraphs": [
+            "Describe one ordinary visit before opening the listings. A takeaway customer wants to see the menu, order and get back on their way. A parent meeting a friend may want room for a buggy, a loo and somewhere to sit. An evening guest may plan the visit around dinner or a train home. Those are three different reasons to choose a premises, even when the customers live on the same road.",
+            "Write down two visits that could sustain your business on an ordinary day. For a deli, that could be a midweek lunch and a Saturday shop for dinner. Then decide which visit needs to happen most reliably. When comparing areas, look for a route, an hour and a reason to stop that fit that visit. A single busy hour can be useful, but it cannot answer for the rest of the week."
+          ]
+        },
+        {
+          "heading": "Coffee shops: test the morning route",
+          "paragraphs": [
+            "Start with the streets around London Bridge or Liverpool Street if your idea is a compact counter serving people on their way to work. These are examples of station districts to investigate. The decision is whether the door sits on a route your customers actually take. The far side of a junction can have a very different relationship with a station exit, even when both units are advertised as a two minute walk away.",
+            "Visit before the time you plan to open. Walk from the station to several obvious destinations and repeat the journey in reverse. Watch where people can see a menu without slowing everyone behind them, and where a queue could stand without blocking the pavement. If the unit only makes sense when the morning is exceptionally busy, investigate a second trading period before relying on it. For the premises checks, use [our London coffee shop location guide](https://sitefit.co.uk/blog/how-to-choose-a-coffee-shop-location-in-london)."
+          ]
+        },
+        {
+          "heading": "Cafés: look for ordinary repeat visits",
+          "paragraphs": [
+            "Put parts of Stoke Newington, Crouch End and Herne Hill on the first map if you want to test a neighbourhood café with seating. The aim is to see whether people already combine a local errand, a walk or a regular meeting with enough time to stop. Ask which surrounding streets provide those journeys and how straightforward it is to reach the front door. A nice looking stretch of shops is useful only when you can explain who would come back and when.",
+            "Check both a weekday and a Saturday. Notice whether there is room to wait, whether seated customers and takeaway customers would get in each other's way, and whether the layout allows staff to clear tables and serve comfortably. An all day menu introduces storage, preparation and cleaning requirements. Check those early rather than drawing a floor plan around the number of tables that happened to be there at the viewing."
+          ]
+        },
+        {
+          "heading": "Bars: check how the evening works",
+          "paragraphs": [
+            "Soho, Dalston and Peckham offer different places to investigate an evening proposition. Put a small drinks led bar and a restaurant with a bar on separate shortlists. Ask whether the evening relies on people deliberately travelling to you, passing between other venues or staying close to home. Return later than the agent's viewing slot. Check the journey back to transport, the neighbouring uses and where people would wait outside.",
+            "Speak to the borough about the proposed activities and hours before relying on a listing's description. The [Home Office premises licence guidance](https://www.gov.uk/government/publications/premises-licence-application-forms/premises-licence-guidance) covers alcohol and certain other licensable activities. Ask for the actual licence and conditions if there is one. Planning, licensing and the lease each need a separate answer. SiteFit's location tools do not assess bars as a separate business type; the bar examples here are for your own research and professional checks."
+          ]
+        },
+        {
+          "heading": "Delis: test the basket as well as the lunch queue",
+          "paragraphs": [
+            "Start with neighbourhood shopping routes in Hampstead, Marylebone or East Dulwich if you expect a mix of food to take home and lunchtime sales. These are places to walk, rather than evidence that a deli is missing. Observe whether people naturally combine food shopping with other errands and whether they could carry a bag home easily. A lunch queue tells you little about whether people will buy cheese, bread or dinner ingredients later in the day.",
+            "Decide what share of the space your proposed shelves, refrigeration and preparation would use before getting attached to the frontage. Check delivery access and where stock and packaging will go. A good window can help people understand the offer, but practical storage affects what you can keep in stock. For a food business, check [Food Standards Agency registration](https://register.food.gov.uk/new) with the relevant local authority and ask about any additional requirements for your operation."
+          ]
+        },
+        {
+          "heading": "Use area data to plan visits",
+          "paragraphs": [
+            "The [London High Streets Data Explorer](https://apps.london.gov.uk/high-streets-explorer/) is a place to explore area patterns in footfall and spending where figures are available. Read the geography and period before comparing results. An area measure can help you decide when to visit, but it cannot tell you how many people pass the entrance of an individual unit. [TfL open data](https://tfl.gov.uk/info-for/open-data-users/our-open-data) adds station and journey context; a station entry or exit is a transport event.",
+            "Keep a simple log with the source, date, area and question you are trying to answer. For example, if a source suggests a strong daytime pattern, test a lunchtime walk at the exact property and then try the same route after work. Record separately what you saw and what you think it means. That distinction matters especially when an event, works or a service disruption made the day unusual."
+          ]
+        },
+        {
+          "heading": "Compare two properties before comparing two postcodes",
+          "paragraphs": [
+            "When an area looks promising, pick two actual units and make the same checks at both. Look at the approach, the nearest alternatives, the shape of the space and where deliveries and waste would go. Ask for the rateable value, service charge budget, draft lease and details of works you would be responsible for. The [SiteFit guide to business rates and service charges](https://sitefit.co.uk/blog/business-rates-and-service-charges-commercial-property-2026) explains which documents to request and why the date matters.",
+            "For an existing food premises, find out what equipment is included, who owns it and whether the proposed menu works with the installation. For a new fit out, find out which consents and surveys are needed. Record open questions as open. A lower headline rent deserves a second look if there is still no answer on extraction, opening hours or a repair that could affect the timetable."
+          ]
+        },
+        {
+          "heading": "Turn the shortlist into a decision",
+          "paragraphs": [
+            "Give each area one sentence that explains why it made your list. Then write the strongest reason it might fail. A commuter street may work on the way into the station but feel empty in your proposed second trading period. A neighbourhood unit may suit a seated café while giving very little room for a counter queue. If the biggest uncertainty is the proposed trading hours, ask the council and landlord about those hours specifically.",
+            "Choose the next action that could actually change the decision. That could be a return visit in the rain, a walk from a different station exit or a request for the full service charge accounts. The [ten streets guide](https://sitefit.co.uk/blog/london-coffee-shop-streets-2026) gives coffee operators a starting list. If you have a London coffee shop or restaurant address in mind, [check the location](https://sitefit.co.uk/check-location) to put the surroundings into context before taking the property checks further."
+          ]
+        },
+        {
+          "heading": "Conclusion: choose the routine before the area",
+          "paragraphs": [
+            "Shortlist station routes for quick coffee, neighbourhood errands for cafés and delis, and genuine evening journeys for bars. Then see which specific door can serve that routine within the hours, costs and permissions the business needs. Use area data to choose the questions and times for your visits; use the actual unit, the documents and professional advice to make the commitment. A useful shortlist should leave you with fewer addresses and a clearer idea of what would make you walk away."
+          ]
+        }
+      ],
+    ),
+  },
+  {
+    ...shared,
+    id: "london-coffee-shop-streets-2026",
+    slug: "london-coffee-shop-streets-2026",
+    title: "10 London Streets to Consider for a Coffee Shop in 2026",
+    seoTitle: "10 London Streets for a Coffee Shop Shortlist (2026)",
+    excerpt: "Explore ten London streets for a coffee shop, with 2026 public data context and practical checks on customer routes, competition and premises.",
+    seoDescription: "Explore ten London streets for a coffee shop, with 2026 public data context and practical checks on customer routes, competition and premises.",
+    ogTitle: "10 London Streets to Consider for a Coffee Shop in 2026",
+    ogDescription: "Explore ten London streets for a coffee shop, with 2026 public data context and practical checks on customer routes, competition and premises.",
+    featuredImage: {"src":"/images/london-coffee-street-shortlist.webp","width":1200,"height":1200},
+    ogImage: {"src":"/images/london-coffee-street-shortlist.webp","width":1200,"height":1200},
+    featuredImageAlt: "Orange espresso bar frontage in Hampstead with two stools and a pavement sign.",
+    featured: false,
+    category: "Choosing a location",
+    tags: ["coffee-shop","location","London"],
+    datePublished: "2026-11-13T00:00:00Z",
+    dateModified: "2026-11-13T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent(
+      "If you are looking for the best street to open a coffee shop in London, begin with a shortlist you can walk. These ten streets offer different location questions, from catching a station crowd to giving neighbours a place they can come back to. The list is editorial and unranked. It uses public evidence available in November 2026 to frame the checks, including a recent update on Oxford Street. There is no comparable 2026 sales or shopfront footfall series here for all ten streets. The goal is to help you choose which premises to investigate and what to check before making an offer.",
+      [
+        {
+          "heading": "How the shortlist works",
+          "paragraphs": [
+            "We picked examples with distinct reasons for a coffee stop: work journeys, local errands, market visits and trips that mix shopping with leisure. For each street, there is a proposed coffee format, a route to walk and a reason to reject an unsuitable unit. These are hypotheses to test. The numbers help you navigate the list and do not indicate performance or relative quality.",
+            "Use [GLA high street boundaries and open data](https://data.london.gov.uk/high-street-data-service/open-data) to check how an area is defined, and [TfL's open data](https://tfl.gov.uk/info-for/open-data-users/our-open-data) for transport context. Write down each figure's period and what it counts. A number published in 2026 can describe an earlier period, and neither a station total nor spending across a shopping district is a count of coffee customers at a door."
+          ]
+        },
+        {
+          "heading": "1. Borough High Street, Southwark",
+          "paragraphs": [
+            "Investigate a quick counter for morning and lunchtime trade. Walk from London Bridge towards Borough, then approach your unit from the opposite direction. Check whether the crossing you naturally use puts you on the right side of the road, and whether you can spot the entrance in time to change course. Walk it again at lunch when there may be a different reason to stop.",
+            "A location near the market can bring a different sort of visit from an office trip. Compare the weekday and weekend rather than assuming one predicts the other. If customers would have to double back or stand awkwardly outside to order, that is a practical reason to compare another frontage."
+          ]
+        },
+        {
+          "heading": "2. Brushfield Street, Spitalfields",
+          "paragraphs": [
+            "Test a compact coffee shop with a distinct reason to stop on the way between Liverpool Street and Spitalfields Market. Try the walk from more than one exit and note where people turn into the market or towards their next destination. Check whether you would be competing with businesses already on that route before people see your door.",
+            "Separate weekday breakfast from weekend browsing. Those visits may call for different service speeds and different use of the space. If you would need seats to make the weekend offer work, check the floor plan before assuming a narrow counter unit can do both jobs."
+          ]
+        },
+        {
+          "heading": "3. Exmouth Market, Clerkenwell",
+          "paragraphs": [
+            "Compare a small sit down café and a takeaway counter on the same stretch. Visit before lunch and again after it. Look at how people move between doors and whether there is a place to wait without obstructing neighbours. Check the layout in bad weather, when an outside table may not help your seating plan.",
+            "A row of food businesses can give people a reason to visit and give them alternatives to your offer. Record what the closest substitutes actually serve and when. A gap in opening hours is a question to investigate, rather than proof of unserved demand."
+          ]
+        },
+        {
+          "heading": "4. Broadway Market, Hackney",
+          "paragraphs": [
+            "Start with a coffee and pastry proposition that has a credible weekday routine. Walk the approaches from the canal and the surrounding residential streets. Compare a regular weekday with a market day and keep the observations separate. A visitor browsing stalls has a different reason to stop from a neighbour buying a coffee on the way to work.",
+            "Look at how stalls or temporary activity affect the sightline to the premises, where applicable. Ask how deliveries and waste collection would work during the hours you intend to use. If the plan only holds together on market day, treat that dependency as a risk to investigate before pricing the lease."
+          ]
+        },
+        {
+          "heading": "5. Stoke Newington Church Street, Hackney",
+          "paragraphs": [
+            "Investigate a neighbourhood café with a mix of short visits and sit down trade. Pick a stretch and walk it from the side streets as well as along the main road. Note whether people could easily find the entrance from the nearest crossing and whether the pavement outside can accommodate a queue.",
+            "Check the route at the times you would open, then look at what a repeat customer can already buy nearby. Give yourself a clear reason someone might choose your offer, such as a quicker visit or a menu that suits the time of day. Treat that reason as something to validate, rather than as a sales forecast."
+          ]
+        },
+        {
+          "heading": "6. Hampstead High Street, Camden",
+          "paragraphs": [
+            "Compare a compact espresso bar with a small café where people can linger. Walk downhill and uphill from the Tube and see which doors you notice from each direction. The gradient, steps and available space at the entrance are worth inspecting in person, particularly if your plan depends on easy access or outdoor seating.",
+            "Try a weekday morning and a weekend afternoon. Look for a plausible local repeat visit as well as a leisure visit. Before paying for an attractive frontage, confirm what can be changed and what is included in the lease. A small space can work for fast service, provided the queue, counter and storage fit the plan."
+          ]
+        },
+        {
+          "heading": "7. Marylebone High Street, Westminster",
+          "paragraphs": [
+            "Look for a coffee offer that fits a shopping trip, a local appointment or a short work break. Choose a particular block rather than treating the whole street as one location. Walk from both directions and note where people stop, cross or turn away before reaching the unit.",
+            "Check how easily a customer could see prices and decide whether to come in. Inside, test whether a queue and seated service would share the room comfortably. Ask for the rates and service charge documents alongside the rent. If a high occupancy cost needs consistently strong trade, the burden is on your own evidence to support that assumption."
+          ]
+        },
+        {
+          "heading": "8. Lordship Lane, East Dulwich",
+          "paragraphs": [
+            "Consider a local coffee shop where customers could combine a visit with everyday errands. Because this is a long road, choose a short stretch around an actual unit and draw the approach on a map. Compare the two sides, including where people can cross and how far they have to walk from a bus stop.",
+            "Return on an ordinary weekday after the first rush. Test the case for a second useful trading period, whether that is takeaway lunch or a quieter seated visit. Record the operational limits too: delivery access, food preparation, storage and the position of the door can all change the kind of shop the unit can support."
+          ]
+        },
+        {
+          "heading": "9. Brixton Station Road, Lambeth",
+          "paragraphs": [
+            "Investigate a quick coffee offer that could work alongside a station or market trip. Walk the connection from Brixton Road and check where your proposed customers turn. A unit near a station on a map may sit off the easiest path, so watch the actual approach rather than counting everyone entering the station as part of your audience.",
+            "Compare a weekday rush with a different trading window. Check the nearby choices for a quick drink and how long you expect your own service to take. If the premises only works with a queue outside, find out who controls that space and what is allowed before relying on it."
+          ]
+        },
+        {
+          "heading": "10. Oxford Street, Westminster",
+          "paragraphs": [
+            "Oxford Street belongs on a 2026 watchlist because its routes are changing. [City Hall's 9 November update](https://www.london.gov.uk/overwhelmingly-positive-impact-first-week-oxford-street-pedestrianisation-hailed-mayor-london-sadiq) reported that aggregate spending rose 12% in the first week compared with the previous week. That short comparison does not isolate coffee sales, establish the cause of the change or tell you how any particular door performed.",
+            "Walk the block you are considering and compare it with a nearby side street. Check crossing routes, delivery arrangements and any transitional street works. Keep the broader spending figure as context for the visit. An independent operator still needs to make the case for a particular unit at its actual cost."
+          ]
+        },
+        {
+          "heading": "Conclusion: make the shortlist earn a viewing",
+          "paragraphs": [
+            "Pick three streets that fit your intended customer visit, then compare actual units at matching times. Record the approach, alternatives, practical limits and full occupancy costs. Ask which missing answer would make you walk away, and resolve that one first. For a wider choice of neighbourhood and trading format, read [our London areas guide](https://sitefit.co.uk/blog/best-london-areas-coffee-shops-cafes-bars-delis). Once you have an address, [check the location](https://sitefit.co.uk/check-location) for local context and take the property documents to the appropriate advisers before committing."
+          ]
+        }
+      ],
+    ),
+  },
 ];
