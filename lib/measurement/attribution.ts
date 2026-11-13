@@ -1,6 +1,6 @@
 import type {Consent} from './consent.ts';
 export type Acquisition=Partial<Record<'utm_source'|'utm_medium'|'utm_campaign'|'utm_content'|'utm_term'|'gclid'|'gbraid'|'wbraid',string>>;
-const allow:Record<string,readonly string[]>={utm_source:['google','bing','newsletter','linkedin','sitefit'],utm_medium:['cpc','ppc','paid-search','paid_search','email','social'],utm_campaign:['campaign-01','campaign-02','campaign-03'],utm_content:['search','responsive-search','coffee-shop','restaurant','salon','ad-01','ad-02','ad-03'],utm_term:['coffee-shop-location','restaurant-location','salon-location','commercial-property-report','location-analysis']};
+const allow:Record<string,readonly string[]>={utm_source:['google','bing','newsletter','linkedin','sitefit'],utm_medium:['cpc','ppc','paid-search','paid_search','email','social','referral'],utm_campaign:['campaign-01','campaign-02','campaign-03'],utm_content:['search','responsive-search','coffee-shop','restaurant','salon','ad-01','ad-02','ad-03'],utm_term:['coffee-shop-location','restaurant-location','salon-location','commercial-property-report','location-analysis']};
 export function acquisition(value:unknown,c:Pick<Consent,'analytics'|'advertising'>):Acquisition{
  if(!c.analytics||!value||typeof value!=='object'||Array.isArray(value))return {};
  const r=value as Record<string,unknown>,out:Acquisition={};
