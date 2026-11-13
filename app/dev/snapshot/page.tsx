@@ -22,6 +22,14 @@ export default async function SnapshotDemo({ searchParams }: { searchParams: Pro
     return <><aside role="note">Synthetic decision regression fixture · no provider, AI or payment execution</aside><FreeSnapshot report={report}/></>;
   }
   if(state==='opening'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview'))return <OpeningProgress kind="saved Snapshot"/>;
+  if(state==='offer-measurement'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
+    const {cookies}=await import('next/headers');
+    const {canMeasure,CONSENT_COOKIE,parseConsent}=await import('@/lib/measurement/consent');
+    const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;
+    const savedOfferConsent=canMeasure(parseConsent((await cookies()).get(CONSENT_COOKIE)?.value));
+    const snapshot=snapshotDemo(fixture,'development',undefined);
+    return <><aside role="note">Synthetic offer measurement fixture. Checkout is unavailable.</aside><FreeSnapshotView snapshot={{...snapshot,mode:'production',property:{...snapshot.property,address:'Synthetic offer fixture'}}} openPurchase purchaseReport="synthetic-offer" savedOfferConsent={savedOfferConsent} purchaseTerms={<p>£29 one time · Synthetic offer</p>}/></>;
+  }
   if(state==='supply'&&(process.env.NODE_ENV==='development'||process.env.VERCEL_ENV==='preview')){
     const fixture=(await import('@/fixtures/free_snapshot/kingston_coffee_shop.json')).default;
     return <><aside role="note">Synthetic consent UI verification only. Invalid report reference; no purchase or contract.</aside><FreeSnapshotView snapshot={snapshotDemo(fixture,'development',undefined)} openPurchase purchaseReport="synthetic-consent-preview" purchaseTerms={<PurchaseTerms report="synthetic-consent-preview"/>}/></>;

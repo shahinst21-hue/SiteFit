@@ -9,6 +9,7 @@ import {
 } from "react";
 import { Arrow } from "./ui";
 import { Icon } from "./icon";
+import { trackJourney } from "@/lib/measurement/client";
 import {
   emptyManualAddress,
   manualErrors,
@@ -81,6 +82,9 @@ export function AddressLookup({
       setBusy(operation);
       setError("");
       try {
+        if (!transport && (operation === "lookup" || operation === "search")) {
+          trackJourney("property_search_started", "checker");
+        }
         const response = await (transport??fetch)(`/api/addresses/${operation}`, {
           method: "POST",
           headers: { "content-type": "application/json" },

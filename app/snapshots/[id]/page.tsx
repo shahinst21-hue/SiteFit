@@ -2,7 +2,8 @@ import {PurchaseTerms} from '@/components/purchase-terms';
 import {snapshotHasUsableEvidence} from '@/lib/analysis/report-admission';
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { headers } from "next/headers";
+import { canMeasure,CONSENT_COOKIE,parseConsent } from "@/lib/measurement/consent";
+import { cookies,headers } from "next/headers";
 import { verifiedUser } from "@/lib/supabase/server";
 import { validateFreeProjection } from "@/lib/analysis/projection";
 import { FreeSnapshot } from "@/components/free-snapshot";
@@ -53,5 +54,6 @@ export default async function Snapshot({ params,searchParams }: { params: Promis
    catch{purchaseAllowed=false;creditAction=<p role="status">Full Report credit status is temporarily unavailable. Your Snapshot is saved; please try again shortly.</p>;}
   }
   const query=await searchParams,purchase=query.purchase==='1';
-  return <>{query.signed_in==='1'&&permanentIdentity(user)&&<p role="status" className="container">You're signed in. Your original Snapshot is saved. Continue your purchase below.</p>}{!evidenceReady&&<p role="status" className="container">There is not enough usable source evidence for a Full Report at this location. Purchasing is unavailable for this check.</p>}<FreeSnapshot creditAction={creditAction} openPurchase={purchase} purchaseTerms={creditTerms??(purchaseAllowed?<PurchaseTerms report={id}/>:undefined)} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} /></>;
+  const savedOfferConsent=purchaseAllowed&&canMeasure(parseConsent((await cookies()).get(CONSENT_COOKIE)?.value));
+  return <>{query.signed_in==='1'&&permanentIdentity(user)&&<p role="status" className="container">You're signed in. Your original Snapshot is saved. Continue your purchase below.</p>}{!evidenceReady&&<p role="status" className="container">There is not enough usable source evidence for a Full Report at this location. Purchasing is unavailable for this check.</p>}<FreeSnapshot savedOfferConsent={savedOfferConsent} creditAction={creditAction} openPurchase={purchase} purchaseTerms={creditTerms??(purchaseAllowed?<PurchaseTerms report={id}/>:undefined)} report={report} context={context} research={research} reportId={id} measurement={measurementEnabled(process.env)} purchaseReport={purchaseAllowed?id:undefined} /></>;
 }
