@@ -560,50 +560,80 @@ details[open] > summary {
   line-height: 1.7;
   margin-bottom: 25px;
 }
+.hero-entry {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+}
 .hero-entry label {
   display: block;
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 7px;
+  margin-bottom: 8px;
 }
 .hero-entry-controls {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 8px;
-  border: 1px solid #ccd3de;
-  border-radius: 13px;
-  background: white;
-  box-shadow: 0 5px 18px #181e2805;
 }
 .entry-search {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  padding-left: 8px;
+  padding-inline: 12px;
+  border: 1px solid var(--muted);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.entry-search:focus-within {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.entry-search-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
 }
 .entry-search .icon {
   width: 20px;
   height: 20px;
+  flex-shrink: 0;
 }
 .entry-search input {
   min-width: 0;
   width: 100%;
   border: 0;
   background: transparent;
-  min-height: 48px;
+  min-height: 46px;
   padding: 8px 0;
   font-size: 16px;
 }
-.entry-search input::placeholder {
+.entry-search input:focus {
+  outline: none;
+}
+.entry-search input:not(:focus)::placeholder {
+  color: transparent;
+}
+.postcode-example {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
   font-size: 14px;
-  color: #798292;
+  white-space: nowrap;
+}
+.entry-search input:focus + .postcode-example,
+.entry-search input:not(:placeholder-shown) + .postcode-example {
+  display: none;
 }
 .hero-footnote {
   color: var(--muted);
   font-size: 11px;
-  margin: 8px 2px 5px;
+  margin: 8px 0 0;
 }
 .hero-benefits {
   display: flex;
@@ -1766,7 +1796,7 @@ th {
 }
 .field input[aria-invalid="true"],
 .field textarea[aria-invalid="true"],
-.entry-search input[aria-invalid="true"] {
+.entry-search[data-invalid="true"] {
   border-color: var(--danger);
 }
 .field-help {
@@ -2211,9 +2241,6 @@ th {
     gap: 8px;
     flex-shrink: 0;
   }
-  .entry-search input::placeholder {
-    font-size: 12px;
-  }
 }
 @media (min-width: 768px) {
   .page-wrap {
@@ -2242,9 +2269,6 @@ th {
     font-size: 14px;
     padding: 14px 18px;
     gap: 12px;
-  }
-  .entry-search input::placeholder {
-    font-size: 14px;
   }
   .map-card {
     padding: 16px 14px;
@@ -2597,9 +2621,6 @@ th {
   .hero-entry-controls .button {
     padding: 14px 18px;
     font-size: 14px;
-  }
-  .entry-search input::placeholder {
-    font-size: 13px;
   }
   .hero-benefits {
     gap: 16px;

@@ -63,9 +63,6 @@ export default function Home() {
             what to check before signing a lease.
           </p>
           <LocationEntry />
-          <Link className="text-link" href="/sample-report">
-            Explore a Sample Report <Icon name="external"/>
-          </Link>
           <div className="hero-benefits">
             <span>
               <Icon name="pin" />

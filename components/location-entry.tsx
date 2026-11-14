@@ -13,6 +13,64 @@ import { normalisePostcode } from "@/lib/addresses/model";
 import { trackJourney } from "@/lib/measurement/client";
 import { Arrow } from "./ui";
 import { Icon } from "./icon";
+
+const postcodeExamples = ["KT2 7AU", "SW1A 1AA", "SE1 7PB"];
+
+function PostcodeExample({ active }: { active: boolean }) {
+  const [example, setExample] = useState(postcodeExamples[0]);
+
+  useEffect(() => {
+    if (!active) return;
+
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let timer: number;
+
+    function start() {
+      window.clearTimeout(timer);
+      setExample(postcodeExamples[0]);
+      if (motion.matches || document.hidden) return;
+
+      let index = 0;
+      let length = postcodeExamples[index].length;
+      let deleting = true;
+
+      function tick() {
+        length += deleting ? -1 : 1;
+        const postcode = postcodeExamples[index];
+        setExample(postcode.slice(0, length));
+
+        if (deleting && length === 0) {
+          index = (index + 1) % postcodeExamples.length;
+          deleting = false;
+          timer = window.setTimeout(tick, 250);
+        } else if (!deleting && length === postcode.length) {
+          deleting = true;
+          timer = window.setTimeout(tick, 1800);
+        } else {
+          timer = window.setTimeout(tick, deleting ? 55 : 100);
+        }
+      }
+
+      timer = window.setTimeout(tick, 1800);
+    }
+
+    start();
+    motion.addEventListener("change", start);
+    document.addEventListener("visibilitychange", start);
+    return () => {
+      window.clearTimeout(timer);
+      motion.removeEventListener("change", start);
+      document.removeEventListener("visibilitychange", start);
+    };
+  }, [active]);
+
+  return (
+    <span className="postcode-example" aria-hidden="true">
+      e.g. {active ? example : postcodeExamples[0]}
+    </span>
+  );
+}
+
 const EntryContext = createContext<{
   address: string;
   setAddress: (address: string) => void;
@@ -39,6 +97,7 @@ export function useLocationEntry() {
 export function LocationEntry() {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+  const [focused, setFocused] = useState(false);
   const entry = useLocationEntry();
   const router = useRouter();
   const pathname = usePathname();
@@ -57,22 +116,32 @@ export function LocationEntry() {
   }
   return (
     <form className="hero-entry" onSubmit={submit} noValidate>
-      <label htmlFor="hero-address">Enter the property’s postcode</label>
+      <label htmlFor="hero-address">Property postcode</label>
       <div className="hero-entry-controls">
-        <span className="entry-search">
+        <span className="entry-search" data-invalid={error ? "true" : undefined}>
           <Icon name="pin" />
-          <input
-            id="hero-address"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            required
-            maxLength={20}
-            autoComplete="postal-code"
-            spellCheck={false}
-            placeholder="e.g. KT2 7AU"
-            aria-invalid={!!error}
-            aria-describedby={error ? "hero-address-error" : "hero-entry-note"}
-          />
+          <span className="entry-search-field">
+            <input
+              id="hero-address"
+              value={value}
+              onChange={(event) => {
+                setValue(event.target.value);
+                setError("");
+              }}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              required
+              maxLength={20}
+              autoComplete="postal-code"
+              autoCapitalize="characters"
+              enterKeyHint="search"
+              spellCheck={false}
+              placeholder="Enter postcode"
+              aria-invalid={!!error}
+              aria-describedby={error ? "hero-address-error hero-entry-note" : "hero-entry-note"}
+            />
+            <PostcodeExample active={!focused && !value} />
+          </span>
         </span>
         <button className="button button-primary" type="submit">
           Start free <Arrow />
