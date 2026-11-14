@@ -560,6 +560,12 @@ details[open] > summary {
   line-height: 1.7;
   margin-bottom: 25px;
 }
+.hero-entry {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+}
 .hero-entry label {
   display: block;
   font-size: 13px;
@@ -570,11 +576,6 @@ details[open] > summary {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 8px;
-  border: 1px solid #ccd3de;
-  border-radius: 13px;
-  background: white;
-  box-shadow: 0 5px 18px #181e2805;
 }
 .entry-search {
   display: flex;
@@ -632,7 +633,7 @@ details[open] > summary {
 .hero-footnote {
   color: var(--muted);
   font-size: 11px;
-  margin: 8px 2px 5px;
+  margin: 8px 0 0;
 }
 .hero-benefits {
   display: flex;

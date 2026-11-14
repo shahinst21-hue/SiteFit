@@ -84,7 +84,7 @@ input::placeholder,textarea::placeholder { color: var(--muted); }
 .article-body h2,.prose h2 { font-size: 28px; font-weight: 600; }
 .article-callout,.article-cta { background: var(--paper); }
 .article-body blockquote { background: var(--mint); border-color: var(--ink); }
-.resource-search,.hero-entry-controls { border-color: var(--line); border-radius: 16px; box-shadow: none; }
+.resource-search { border-color: var(--line); border-radius: 16px; box-shadow: none; }
 .resource-search input::placeholder { font-size: 14px; color: var(--muted); }
 .filter-chip { background: var(--paper); border-radius: 12px; color: var(--ink); font-size: 14px; }
 .filter-chip[aria-pressed="true"] { color: var(--ink); }
