@@ -117,7 +117,17 @@ export function LocationEntry() {
   }
   return (
     <form className="hero-entry" onSubmit={submit} noValidate>
-      <label htmlFor="hero-address">Property postcode</label>
+      <div className="hero-entry-label">
+        <label htmlFor="hero-address">Property postcode</label>
+        <button
+          className="postcode-example-toggle"
+          type="button"
+          onClick={() => setPaused(!paused)}
+          hidden={!!value}
+        >
+          {paused ? "Play examples" : "Pause examples"}
+        </button>
+      </div>
       <div className="hero-entry-controls">
         <span className="entry-search" data-invalid={error ? "true" : undefined}>
           <Icon name="pin" />
@@ -143,15 +153,6 @@ export function LocationEntry() {
             />
             <PostcodeExample active={!focused && !value && !paused} />
           </span>
-          <button
-            className="postcode-example-toggle"
-            type="button"
-            aria-label={paused ? "Play postcode examples" : "Pause postcode examples"}
-            onClick={() => setPaused(!paused)}
-            hidden={!!value}
-          >
-            <Icon name={paused ? "play" : "pause"} />
-          </button>
         </span>
         <button className="button button-primary" type="submit">
           Start free <Arrow />

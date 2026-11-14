@@ -560,11 +560,18 @@ details[open] > summary {
   line-height: 1.7;
   margin-bottom: 25px;
 }
+.hero-entry-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  column-gap: 8px;
+  margin-bottom: 8px;
+}
 .hero-entry label {
   display: block;
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 7px;
 }
 .hero-entry-controls {
   display: flex;
@@ -581,7 +588,7 @@ details[open] > summary {
   align-items: center;
   gap: 8px;
   min-width: 0;
-  padding-inline: 12px 4px;
+  padding-inline: 12px;
   border: 1px solid var(--muted);
   border-radius: 12px;
   background: var(--paper);
@@ -630,16 +637,11 @@ details[open] > summary {
   display: none;
 }
 .postcode-example-toggle {
-  display: grid;
-  place-items: center;
-  flex: 0 0 44px;
-  min-height: 44px;
+  min-height: 24px;
   border-radius: 6px;
   color: var(--muted);
-}
-.postcode-example-toggle .icon {
-  width: 16px;
-  height: 16px;
+  font-size: 12px;
+  text-decoration: underline;
 }
 .postcode-example-toggle[hidden] {
   display: none;
