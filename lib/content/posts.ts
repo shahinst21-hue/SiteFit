@@ -1149,4 +1149,90 @@ export const localPosts: BlogPost[] = [
       ],
     ),
   },
+  {
+    ...shared,
+    id: "free-restaurant-location-analysis-london",
+    slug: "free-restaurant-location-analysis-london",
+    title: "Free Restaurant Location Analysis in London",
+    seoTitle: "Free Restaurant Location Analysis in London",
+    excerpt: "Check a London restaurant address for free and learn how to use the result to assess customer routes, nearby alternatives and what to verify before signing.",
+    seoDescription: "Check a London restaurant address for free and learn how to use the result to assess customer routes, nearby alternatives and what to verify before signing.",
+    ogTitle: "Free Restaurant Location Analysis in London",
+    ogDescription: "Check a London restaurant address for free and learn how to use the result to assess customer routes, nearby alternatives and what to verify before signing.",
+    featuredImage: {"src":"/images/free-restaurant-location-london.webp","width":1200,"height":1200},
+    ogImage: {"src":"/images/free-restaurant-location-london.webp","width":1200,"height":1200},
+    featuredImageAlt: "Restaurant dining room with white tablecloths, a chalkboard menu and diners seated at several tables.",
+    featured: false,
+    category: "Choosing a location",
+    tags: ["restaurant","location","London"],
+    datePublished: "2026-11-14T00:00:00Z",
+    dateModified: "2026-11-14T00:00:00Z",
+    cta: editorialCta,
+    content: editorialContent("If you have found a restaurant unit in London, you can start checking the location before paying for a full report or agreeing a lease. Enter the commercial address in SiteFit, choose Restaurant and start a Free Snapshot. You do not need an account, a card or financial figures to begin. The point is to get a first view of the location and decide what to investigate next. This guide shows how to make that first check useful, how to read the result and where you still need a site visit, documents or professional advice.",
+      [
+        {
+          "heading": "What a free restaurant location analysis is for",
+          "paragraphs": [
+            "A location check helps you decide whether an address merits more time. That could mean arranging a second viewing, walking the area after dark or asking the agent a question before spending money on a survey. Start with the decision you are trying to make. If you already have a shortlist, the useful question may be which of two units is worth investigating first. If you have only seen the listing, you may simply want to know whether there is a plausible customer journey to the door.",
+            "Treat the result as a starting point. It cannot tell you how many covers you will serve, what your takings will be or whether the landlord will agree to your plans. If you are still deciding which neighbourhoods to explore, start with [our guide to choosing a restaurant location in London](https://sitefit.co.uk/blog/how-to-choose-a-restaurant-location-in-london), then return once you have a specific address."
+          ]
+        },
+        {
+          "heading": "How to check a London restaurant address for free",
+          "paragraphs": [
+            "Open [Check a Location](https://sitefit.co.uk/check-location), enter the postcode or commercial address and select the right premises from the results. Be careful with units that share a postcode, entrances on the side of a building and listings that describe a whole building when only the ground floor is available. If you cannot tell which unit is being offered, ask the agent for the exact address and floor before relying on the comparison.",
+            "Choose Restaurant and start the Free Snapshot. SiteFit’s analysis covers London; being able to enter a UK address does not mean the analysis is available everywhere. Keep the listing and floor plan handy so you can compare the location findings with what the unit actually offers. There is no need to decide your final menu before you start, but it helps to know whether you are mainly considering weekday lunch, evening dining or a mix."
+          ]
+        },
+        {
+          "heading": "Read the result against an ordinary service",
+          "paragraphs": [
+            "Picture the service you expect to repeat every week. A quick weekday lunch spot needs people who can get to the door, order and eat within the time they have. A neighbourhood restaurant that takes bookings needs customers to find it easily and make the journey at dinner time. A room that feels close to an office district on a map may be a poor fit for evening trade if your customers would need to cross a road or walk away from the route they normally use.",
+            "Read the available customer, competition and access context with that service in mind. If an observation looks promising, ask what would have to be true for it to help you. Nearby workplaces may be relevant to lunch, for instance, but they do not tell you how often people eat out or whether they would choose your menu. Write down one assumption you can investigate on your next visit."
+          ]
+        },
+        {
+          "heading": "Check the route, not just the distance",
+          "paragraphs": [
+            "Start at a nearby station, bus stop or street you think customers will use and walk all the way to the entrance. Repeat the approach from another direction. Notice the crossing, the visibility of the door and where someone might turn off before reaching you. When looking at evening trade, walk the route at the relevant hour too. Think about the journey home and how easy it is to find the entrance when some neighbouring businesses are shut.",
+            "[TfL’s journey planner](https://tfl.gov.uk/plan-a-journey/) can help you plan the trip. The journey on the screen and the journey on the pavement are different checks. A station count would describe transport activity; it would not tell you how many people pass your door. If you take a short manual count, keep the exact place, time and day with it. [Our footfall guide](https://sitefit.co.uk/blog/does-high-footfall-mean-a-good-business-location) explains why a busy road can still be a poor match."
+          ]
+        },
+        {
+          "heading": "See what customers can choose instead",
+          "paragraphs": [
+            "Make a short list of the places that could serve the same occasion. If your proposed restaurant sells a quick lunch, the alternatives might include a bakery, a takeaway and a supermarket meal deal as well as other restaurants. For a Saturday dinner, the useful comparison may be with venues people book in advance. Note the menu, advertised prices, opening hours and the route to the door. Check anything important in person if a listing looks out of date.",
+            "Nearby businesses can bring people to a street and give them other places to spend their money. What matters is whether you have a credible reason for someone to choose you. If you think there is a gap for a certain meal or time of day, look for evidence of the visit itself. Finding nobody selling a particular dish does not establish that people are looking for it."
+          ]
+        },
+        {
+          "heading": "Give the premises its own checklist",
+          "paragraphs": [
+            "A promising location still needs a unit that works for the operation. Before relying on the layout, ask what is included, what needs replacing and whether the kitchen can support your proposed menu. Check where deliveries arrive and where waste, stock and cleaning equipment would go. A former restaurant might already have extraction, but its presence does not establish that it is suitable, in good condition or authorised for your proposed use. Ask for records and arrange appropriate specialist checks.",
+            "Confirm planning, lease consent and licensing separately with the relevant advisers and council. Explain the proposed hours, cooking, seating and any delivery or collection activity. [Our Class E guide](https://sitefit.co.uk/blog/class-e-planning-use-cafe-restaurant) explains why the description in a listing is only the start of that conversation. A free location result cannot settle these questions or tell you that you can open."
+          ]
+        },
+        {
+          "heading": "Compare the cost of two real units",
+          "paragraphs": [
+            "If you have two addresses, start a separate check for each and visit them at comparable times. Use the same questions: who could come for the service you plan, how they reach the door, what else they can choose and what could make the premises difficult to operate. Leave gaps visible. A lower rent is less useful if you still do not know what you would spend fitting out the kitchen or what the lease says about repairs.",
+            "Ask for current rates information and the service charge documents, then have the terms reviewed. [Our guide to business rates and service charges](https://sitefit.co.uk/blog/business-rates-and-service-charges-commercial-property-2026) explains what to request. The free check puts the location in context; ask your advisers to help assess the occupancy costs and your accountant to review the assumptions behind the business plan. Keep the figures and their sources beside the location notes so you can tell which parts are still estimates."
+          ]
+        },
+        {
+          "heading": "When is the free check enough?",
+          "paragraphs": [
+            "The Free Snapshot can be enough to decide whether an address deserves a closer look. If it points to a question about access, walk the route. If you see a possible lunch opportunity but have only visited on a Saturday, go back before making much of it. An unanswered question is a reason to get better evidence, especially if the answer could stop the business from operating as planned.",
+            "If the address stays on the shortlist and you want more detail, the optional [Full Report](https://sitefit.co.uk/pricing) is a separate one-off purchase. It can help you explore the available evidence and prioritise checks. You may already know the next useful move, such as getting the lease or checking the extraction. In that case, do that first. The right amount of research depends on the decision you still need to make."
+          ]
+        },
+        {
+          "heading": "Conclusion: use the free result to choose your next check",
+          "paragraphs": [
+            "Start with the exact property, select Restaurant and read the result against the kind of service you want to run. Walk the customer route, compare the real alternatives and check that the premises, permissions and costs fit your plan. Before committing, name the one missing answer most likely to change your decision. That could be a question for the council, the landlord or another visit. A good first check leaves you with a clearer idea of whether to keep looking at that unit and what evidence would justify the next step."
+          ]
+        }
+      ],
+    ),
+  },
 ];
