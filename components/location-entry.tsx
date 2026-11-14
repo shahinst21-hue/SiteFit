@@ -154,7 +154,7 @@ export function LocationEntry() {
           </button>
         </span>
         <button className="button button-primary" type="submit">
-          Find address <Arrow />
+          Start free <Arrow />
         </button>
       </div>
       {error && (
