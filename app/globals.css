@@ -579,26 +579,75 @@ details[open] > summary {
 .entry-search {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  padding-left: 8px;
+  padding-inline: 12px 4px;
+  border: 1px solid var(--muted);
+  border-radius: 12px;
+  background: var(--paper);
+}
+.entry-search:focus-within {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.entry-search-field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
 }
 .entry-search .icon {
   width: 20px;
   height: 20px;
+  flex-shrink: 0;
 }
 .entry-search input {
   min-width: 0;
   width: 100%;
   border: 0;
   background: transparent;
-  min-height: 48px;
+  min-height: 46px;
   padding: 8px 0;
   font-size: 16px;
 }
-.entry-search input::placeholder {
+.entry-search input:focus {
+  outline: none;
+}
+.entry-search input:not(:focus)::placeholder {
+  color: transparent;
+}
+.postcode-example {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted);
   font-size: 14px;
-  color: #798292;
+  white-space: nowrap;
+}
+.entry-search input:focus + .postcode-example,
+.entry-search input:not(:placeholder-shown) + .postcode-example {
+  display: none;
+}
+.postcode-example-toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  min-height: 44px;
+  border-radius: 6px;
+  color: var(--muted);
+}
+.postcode-example-toggle .icon {
+  width: 16px;
+  height: 16px;
+}
+.postcode-example-toggle[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .postcode-example-toggle {
+    display: none;
+  }
 }
 .hero-footnote {
   color: var(--muted);
@@ -1766,7 +1815,7 @@ th {
 }
 .field input[aria-invalid="true"],
 .field textarea[aria-invalid="true"],
-.entry-search input[aria-invalid="true"] {
+.entry-search[data-invalid="true"] {
   border-color: var(--danger);
 }
 .field-help {
@@ -2211,9 +2260,6 @@ th {
     gap: 8px;
     flex-shrink: 0;
   }
-  .entry-search input::placeholder {
-    font-size: 12px;
-  }
 }
 @media (min-width: 768px) {
   .page-wrap {
@@ -2242,9 +2288,6 @@ th {
     font-size: 14px;
     padding: 14px 18px;
     gap: 12px;
-  }
-  .entry-search input::placeholder {
-    font-size: 14px;
   }
   .map-card {
     padding: 16px 14px;
@@ -2597,9 +2640,6 @@ th {
   .hero-entry-controls .button {
     padding: 14px 18px;
     font-size: 14px;
-  }
-  .entry-search input::placeholder {
-    font-size: 13px;
   }
   .hero-benefits {
     gap: 16px;
