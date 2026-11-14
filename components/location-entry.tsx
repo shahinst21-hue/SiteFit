@@ -98,7 +98,6 @@ export function LocationEntry() {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const [focused, setFocused] = useState(false);
-  const [paused, setPaused] = useState(false);
   const entry = useLocationEntry();
   const router = useRouter();
   const pathname = usePathname();
@@ -117,17 +116,7 @@ export function LocationEntry() {
   }
   return (
     <form className="hero-entry" onSubmit={submit} noValidate>
-      <div className="hero-entry-label">
-        <label htmlFor="hero-address">Property postcode</label>
-        <button
-          className="postcode-example-toggle"
-          type="button"
-          onClick={() => setPaused(!paused)}
-          hidden={!!value}
-        >
-          {paused ? "Play examples" : "Pause examples"}
-        </button>
-      </div>
+      <label htmlFor="hero-address">Property postcode</label>
       <div className="hero-entry-controls">
         <span className="entry-search" data-invalid={error ? "true" : undefined}>
           <Icon name="pin" />
@@ -151,7 +140,7 @@ export function LocationEntry() {
               aria-invalid={!!error}
               aria-describedby={error ? "hero-address-error hero-entry-note" : "hero-entry-note"}
             />
-            <PostcodeExample active={!focused && !value && !paused} />
+            <PostcodeExample active={!focused && !value} />
           </span>
         </span>
         <button className="button button-primary" type="submit">
